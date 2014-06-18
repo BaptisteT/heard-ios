@@ -1,5 +1,5 @@
 //
-//  HeardViewController.h
+//  PhoneViewController.h
 //  Heard
 //
 //  Created by Bastien Beurier on 6/17/14.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HeardViewController : UIViewController
+@interface PhoneViewController : UIViewController
 
 @end

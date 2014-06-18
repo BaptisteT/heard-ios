@@ -6,24 +6,18 @@
 //  Copyright (c) 2014 streetshout. All rights reserved.
 //
 
-#import "HeardViewController.h"
+#import "WelcomeViewController.h"
 
-@interface HeardViewController ()
+@interface WelcomeViewController ()
 
 @end
 
-@implementation HeardViewController
+@implementation WelcomeViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end
