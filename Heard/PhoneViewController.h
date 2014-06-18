@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PhoneViewController : UIViewController
+@interface PhoneViewController : UIViewController <UITextFieldDelegate>
 
 @end
