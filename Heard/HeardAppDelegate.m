@@ -7,12 +7,16 @@
 //
 
 #import "HeardAppDelegate.h"
+#import "AFNetworkActivityIndicatorManager.h"
+
 
 @implementation HeardAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    // Manage the network activity indicator
+    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
+    
     return YES;
 }
 							
