@@ -6,13 +6,14 @@
 //  Copyright (c) 2014 streetshout. All rights reserved.
 //
 
-#import "PhoneViewController.h"
+#import "PhoneNumberViewController.h"
 #import "NBAsYouTypeFormatter.h"
 #import "NBPhoneNumber.h"
 #import "NBPhoneNumberUtil.h"
 #import "GeneralUtils.h"
+#import "CodeConfirmationViewController.h"
 
-@interface PhoneViewController ()
+@interface PhoneNumberViewController ()
 @property (weak, nonatomic) IBOutlet UIView *navigationContainer;
 @property (weak, nonatomic) IBOutlet UIView *textFieldContainer;
 @property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
@@ -21,7 +22,7 @@
 
 @end
 
-@implementation PhoneViewController
+@implementation PhoneNumberViewController
 
 - (void)viewDidLoad
 {
@@ -67,14 +68,14 @@
                             defaultRegion:@"US" error:&aError];
     
     if (!aError && [util isValidNumber:phoneNumber]) {
-        [GeneralUtils showMessage:nil withTitle:[NSString stringWithFormat:@"VALID: %@", phoneNumber.nationalNumber]];
+        [self performSegueWithIdentifier:@"Code Confirmation Push Segue" sender:phoneNumber];
     } else {
         [GeneralUtils showMessage:nil withTitle:@"Invalid phone number"];
     }
 }
 
 - (IBAction)countryCodeButtonClicked:(id)sender {
-    
+    //Allow French numbers
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -86,6 +87,15 @@
     }
     
     return NO;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSString * segueName = segue.identifier;
+    
+    if ([segueName isEqualToString: @"Code Confirmation Push Segue"]) {
+        ((CodeConfirmationViewController *) [segue destinationViewController]).phoneNumber = [NSString stringWithFormat:@"+%@%@", ((NBPhoneNumber *)sender).countryCode, ((NBPhoneNumber *)sender).nationalNumber];
+    }
 }
 
 @end
