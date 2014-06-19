@@ -17,6 +17,12 @@
     // Manage the network activity indicator
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     
+    // todo BT : if sign in, register for remote, else do it after sign in
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert)];
+    
+    // todo BT (later)
+    // Check if we come from a notif
+    
     return YES;
 }
 							
@@ -46,5 +52,43 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+
+// Delegation methods
+- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
+    // Convert the binary data token into an NSString
+    NSString *deviceTokenAsString = stringFromDeviceTokenData(devToken);
+    
+    // Show the device token obtained from apple to the log
+    NSLog(@"deviceToken: %@", deviceTokenAsString);
+    
+    // todo BT
+    // send it to the server
+}
+
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+    // todo BT (later)
+    // Handle this case to ask the user to change his mind
+    NSLog(@"Error in registration. Error: %@", err);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    // todo BT
+    // The user receives a notif while using the app
+}
+
+
+NSString* stringFromDeviceTokenData(NSData *deviceToken)
+{
+    const char *data = [deviceToken bytes];
+    NSMutableString* token = [NSMutableString string];
+    for (int i = 0; i < [deviceToken length]; i++) {
+        [token appendFormat:@"%02.2hhX", data[i]];
+    }
+    
+    return token;
+}
+
+
 
 @end
