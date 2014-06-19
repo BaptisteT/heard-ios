@@ -1,0 +1,137 @@
+//
+//  RequestUserInfoViewController.m
+//  Heard
+//
+//  Created by Bastien Beurier on 6/19/14.
+//  Copyright (c) 2014 streetshout. All rights reserved.
+//
+
+#import "RequestUserInfoViewController.h"
+#import "GeneralUtils.h"
+#import "ImageUtils.h"
+
+#define BORDER_SIZE 0.5
+#define ACTION_SHEET_OPTION_1 @"Camera"
+#define ACTION_SHEET_OPTION_2 @"Library"
+#define ACTION_SHEET_CANCEL @"Cancel"
+#define PROFILE_PICTURE_SIZE 200
+
+@interface RequestUserInfoViewController ()
+
+@property (weak, nonatomic) IBOutlet UIView *navigationContainer;
+@property (weak, nonatomic) IBOutlet UIView *profilePictureContainer;
+@property (weak, nonatomic) IBOutlet UIView *firstNameTextFieldContainer;
+@property (weak, nonatomic) IBOutlet UIView *lastNameTextFieldContainer;
+@property (weak, nonatomic) IBOutlet UITextField *firstNameTextField;
+@property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
+@property (strong, nonatomic) UIActionSheet *pictureActionSheet;
+@property (weak, nonatomic) IBOutlet UIImageView *profilePictureImageView;
+
+@property (strong, nonatomic) UIImagePickerController *imagePickerController;
+@property (strong, nonatomic) UIImage *squareImage;
+
+@end
+
+@implementation RequestUserInfoViewController
+
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [GeneralUtils addBottomBorder:self.navigationContainer borderSize:BORDER_SIZE];
+    [GeneralUtils addBottomBorder:self.firstNameTextFieldContainer borderSize:BORDER_SIZE];
+    [GeneralUtils addBottomBorder:self.lastNameTextFieldContainer borderSize:BORDER_SIZE];
+    
+    self.profilePictureContainer.layer.cornerRadius = self.profilePictureContainer.bounds.size.height/2;
+    self.profilePictureContainer.layer.borderWidth = 0.5;
+    self.profilePictureContainer.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    
+    self.firstNameTextField.delegate = self;
+    self.lastNameTextField.delegate = self;
+    
+    [self.firstNameTextField becomeFirstResponder];
+}
+
+- (IBAction)backButtonPressed:(id)sender {
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
+- (IBAction)nextButtonPressed:(id)sender {
+}
+
+- (IBAction)profilePicturePressed:(id)sender {
+    self.pictureActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                       delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
+                                         destructiveButtonTitle:nil
+                                              otherButtonTitles:ACTION_SHEET_OPTION_1, ACTION_SHEET_OPTION_2, nil];
+    
+    [self.pictureActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
+    
+    if ([buttonTitle isEqualToString:ACTION_SHEET_CANCEL]) {
+        return;
+    }
+    
+    if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_1]) {
+        [self showImagePickerForSourceType:UIImagePickerControllerSourceTypeCamera];
+    } else {
+        [self showImagePickerForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+    }
+}
+
+
+- (BOOL)textFieldShouldReturn:(UITextField *)theTextField {
+    if (theTextField == self.firstNameTextField) {
+        [self.lastNameTextField becomeFirstResponder];
+    } else if (theTextField == self.lastNameTextFieldContainer) {
+        [self.lastNameTextField resignFirstResponder];
+    }
+    
+    return YES;
+}
+
+// --------------------------
+// Profile picture change
+// --------------------------
+
+
+- (void)showImagePickerForSourceType:(UIImagePickerControllerSourceType)sourceType
+{
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    imagePickerController.sourceType = sourceType;
+    imagePickerController.delegate = self;
+    
+    self.imagePickerController = imagePickerController;
+    [self presentViewController:self.imagePickerController animated:YES completion:nil];
+}
+
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image =  [info objectForKey:UIImagePickerControllerOriginalImage];
+    
+    CGSize rescaleSize = {PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE};
+    
+    if (image) {
+        self.profilePictureImageView.image = [ImageUtils imageWithImage:[ImageUtils cropBiggestCenteredSquareImageFromImage:image withSide:image.size.width] scaledToSize:rescaleSize];
+    } else {
+        NSLog(@"Failed to get image");
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:NULL];
+    [self.firstNameTextField becomeFirstResponder];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self dismissViewControllerAnimated:YES completion:NULL];
+    [self.firstNameTextField becomeFirstResponder];
+}
+
+@end

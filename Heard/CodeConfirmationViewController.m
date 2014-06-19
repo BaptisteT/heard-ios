@@ -14,6 +14,7 @@
 #import "NBPhoneNumberUtil.h"
 
 #define CONFIMATION_CODE_DIGITS 5
+#define BORDER_SIZE 0.5
 
 @interface CodeConfirmationViewController ()
 
@@ -46,17 +47,8 @@
     
     self.codeTextField.delegate = self;
     
-    float borderSize = 0.5;
-    
-    CALayer *bottomBorder = [CALayer layer];
-    bottomBorder.frame = CGRectMake(0.0f, self.navigationContainer.frame.size.height - borderSize, self.navigationContainer.frame.size.width, borderSize);
-    bottomBorder.backgroundColor = [UIColor lightGrayColor].CGColor;
-    [self.navigationContainer.layer addSublayer:bottomBorder];
-    
-    bottomBorder = [CALayer layer];
-    bottomBorder.frame = CGRectMake(0.0f, self.textFieldContainer.frame.size.height - borderSize, self.textFieldContainer.frame.size.width, borderSize);
-    bottomBorder.backgroundColor = [UIColor lightGrayColor].CGColor;
-    [self.textFieldContainer.layer addSublayer:bottomBorder];
+    [GeneralUtils addBottomBorder:self.navigationContainer borderSize:BORDER_SIZE];
+    [GeneralUtils addBottomBorder:self.textFieldContainer borderSize:BORDER_SIZE];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -67,7 +59,7 @@
 }
 
 - (IBAction)backButtonClicked:(id)sender {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -107,12 +99,25 @@
     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     
     if ([self.userCode intValue] == [self.serverCode intValue]) {
-        [GeneralUtils showMessage:@"VALIIIID" withTitle:nil];
+        //TODO BB: save phoneNumber
+        //TODO BB: if signin, go to main screen directly
+        [self performSegueWithIdentifier:@"Request User Info Push Segue" sender:nil];
+        
         return YES;
     } else {
         [GeneralUtils showMessage:@"Invalid code, please try again." withTitle:nil];
         self.codeTextField.text = @"";
         return NO;
+    }
+}
+
+- (IBAction)nextButtonClicked:(id)sender {
+    self.userCode = self.codeTextField.text;
+    
+    if (self.serverCode) {
+        [self validateCode];
+    } else {
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     }
 }
 

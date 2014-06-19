@@ -21,7 +21,7 @@
 		0BD758E11950F91B00CF0D85 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD758C31950F91B00CF0D85 /* UIKit.framework */; };
 		0BD758E91950F91B00CF0D85 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0BD758E71950F91B00CF0D85 /* InfoPlist.strings */; };
 		0BD758EB1950F91B00CF0D85 /* HeardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BD758EA1950F91B00CF0D85 /* HeardTests.m */; };
-		0BD758F719511A4000CF0D85 /* PhoneNumberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BD758F619511A4000CF0D85 /* PhoneNumberViewController.m */; };
+		0BD758F719511A4000CF0D85 /* RequestPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BD758F619511A4000CF0D85 /* RequestPhoneViewController.m */; };
 		0BDB64CC19521A7C00223093 /* NBPhoneNumberMetadata.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64B919521A7C00223093 /* NBPhoneNumberMetadata.plist */; };
 		0BDB64CD19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64BA19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist */; };
 		0BDB64CE19521A7C00223093 /* PhoneNumberMetaData.json in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64BB19521A7C00223093 /* PhoneNumberMetaData.json */; };
@@ -47,6 +47,8 @@
 		0BDB64FD1952688300223093 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64FC1952688300223093 /* Constants.m */; };
 		0BDB650119528F4600223093 /* CodeConfirmationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB650019528F4600223093 /* CodeConfirmationViewController.m */; };
 		0BDB6505195295A800223093 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB6504195295A800223093 /* MBProgressHUD.m */; };
+		0BDB650819535CCC00223093 /* RequestUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB650719535CCC00223093 /* RequestUserInfoViewController.m */; };
+		0BDB650D195375B100223093 /* ImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB650C195375B100223093 /* ImageUtils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,8 +81,8 @@
 		0BD758E61950F91B00CF0D85 /* HeardTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HeardTests-Info.plist"; sourceTree = "<group>"; };
 		0BD758E81950F91B00CF0D85 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0BD758EA1950F91B00CF0D85 /* HeardTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HeardTests.m; sourceTree = "<group>"; };
-		0BD758F519511A4000CF0D85 /* PhoneNumberViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneNumberViewController.h; sourceTree = "<group>"; };
-		0BD758F619511A4000CF0D85 /* PhoneNumberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneNumberViewController.m; sourceTree = "<group>"; };
+		0BD758F519511A4000CF0D85 /* RequestPhoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestPhoneViewController.h; sourceTree = "<group>"; };
+		0BD758F619511A4000CF0D85 /* RequestPhoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestPhoneViewController.m; sourceTree = "<group>"; };
 		0BDB64B919521A7C00223093 /* NBPhoneNumberMetadata.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = NBPhoneNumberMetadata.plist; sourceTree = "<group>"; };
 		0BDB64BA19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = NBPhoneNumberMetadataForTesting.plist; sourceTree = "<group>"; };
 		0BDB64BB19521A7C00223093 /* PhoneNumberMetaData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PhoneNumberMetaData.json; sourceTree = "<group>"; };
@@ -129,6 +131,10 @@
 		0BDB650019528F4600223093 /* CodeConfirmationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CodeConfirmationViewController.m; sourceTree = "<group>"; };
 		0BDB6503195295A800223093 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		0BDB6504195295A800223093 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		0BDB650619535CCC00223093 /* RequestUserInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestUserInfoViewController.h; sourceTree = "<group>"; };
+		0BDB650719535CCC00223093 /* RequestUserInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestUserInfoViewController.m; sourceTree = "<group>"; };
+		0BDB650B195375B100223093 /* ImageUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUtils.h; sourceTree = "<group>"; };
+		0BDB650C195375B100223093 /* ImageUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUtils.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,10 +240,12 @@
 			children = (
 				0BD758D41950F91B00CF0D85 /* WelcomeViewController.h */,
 				0BD758D51950F91B00CF0D85 /* WelcomeViewController.m */,
-				0BD758F519511A4000CF0D85 /* PhoneNumberViewController.h */,
-				0BD758F619511A4000CF0D85 /* PhoneNumberViewController.m */,
+				0BD758F519511A4000CF0D85 /* RequestPhoneViewController.h */,
+				0BD758F619511A4000CF0D85 /* RequestPhoneViewController.m */,
 				0BDB64FF19528F4600223093 /* CodeConfirmationViewController.h */,
 				0BDB650019528F4600223093 /* CodeConfirmationViewController.m */,
+				0BDB650619535CCC00223093 /* RequestUserInfoViewController.h */,
+				0BDB650719535CCC00223093 /* RequestUserInfoViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -303,6 +311,8 @@
 				0BDB64F91952680C00223093 /* ApiUtils.m */,
 				0BDB64D819521F8700223093 /* GeneralUtils.h */,
 				0BDB64D919521F8700223093 /* GeneralUtils.m */,
+				0BDB650B195375B100223093 /* ImageUtils.h */,
+				0BDB650C195375B100223093 /* ImageUtils.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -450,7 +460,7 @@
 				0BDB64EF195267CC00223093 /* AFHTTPRequestOperation.m in Sources */,
 				0BD758CC1950F91B00CF0D85 /* main.m in Sources */,
 				0BDB64FA1952680C00223093 /* ApiUtils.m in Sources */,
-				0BD758F719511A4000CF0D85 /* PhoneNumberViewController.m in Sources */,
+				0BD758F719511A4000CF0D85 /* RequestPhoneViewController.m in Sources */,
 				0BDB64F7195267CC00223093 /* AFURLSessionManager.m in Sources */,
 				0BDB64FD1952688300223093 /* Constants.m in Sources */,
 				0BD758D01950F91B00CF0D85 /* HeardAppDelegate.m in Sources */,
@@ -462,8 +472,10 @@
 				0BDB650119528F4600223093 /* CodeConfirmationViewController.m in Sources */,
 				0BD758D61950F91B00CF0D85 /* WelcomeViewController.m in Sources */,
 				0BDB64F3195267CC00223093 /* AFSecurityPolicy.m in Sources */,
+				0BDB650D195375B100223093 /* ImageUtils.m in Sources */,
 				0BDB64D319521A7C00223093 /* NBPhoneNumber.m in Sources */,
 				0BDB64F5195267CC00223093 /* AFURLRequestSerialization.m in Sources */,
+				0BDB650819535CCC00223093 /* RequestUserInfoViewController.m in Sources */,
 				0BDB6505195295A800223093 /* MBProgressHUD.m in Sources */,
 				0BDB64D019521A7C00223093 /* NBAsYouTypeFormatter.m in Sources */,
 				0BDB64F6195267CC00223093 /* AFURLResponseSerialization.m in Sources */,

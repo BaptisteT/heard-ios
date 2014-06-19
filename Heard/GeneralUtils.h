@@ -12,4 +12,8 @@
 
 + (void)showMessage:(NSString *)text withTitle:(NSString *)title;
 
++ (void)addBottomBorder:(UIView *)view borderSize:(float)borderSize;
+
++ (void)addRightBorder:(UIView *)view borderSize:(float)borderSize;
+
 @end

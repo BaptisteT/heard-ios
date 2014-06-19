@@ -6,23 +6,25 @@
 //  Copyright (c) 2014 streetshout. All rights reserved.
 //
 
-#import "PhoneNumberViewController.h"
+#import "RequestPhoneViewController.h"
 #import "NBAsYouTypeFormatter.h"
 #import "NBPhoneNumber.h"
 #import "NBPhoneNumberUtil.h"
 #import "GeneralUtils.h"
 #import "CodeConfirmationViewController.h"
 
-@interface PhoneNumberViewController ()
+#define BORDER_SIZE 0.5
+
+@interface RequestPhoneViewController ()
 @property (weak, nonatomic) IBOutlet UIView *navigationContainer;
 @property (weak, nonatomic) IBOutlet UIView *textFieldContainer;
 @property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
-@property (weak, nonatomic) IBOutlet UIButton *counterCodeButton;
+@property (weak, nonatomic) IBOutlet UIButton *countryCodeButton;
 @property (strong, nonatomic) NBAsYouTypeFormatter *formatter;
 
 @end
 
-@implementation PhoneNumberViewController
+@implementation RequestPhoneViewController
 
 - (void)viewDidLoad
 {
@@ -32,22 +34,9 @@
     
     self.phoneTextField.delegate = self;
     
-    float borderSize = 0.5;
-    
-    CALayer *bottomBorder = [CALayer layer];
-    bottomBorder.frame = CGRectMake(0.0f, self.navigationContainer.frame.size.height - borderSize, self.navigationContainer.frame.size.width, borderSize);
-    bottomBorder.backgroundColor = [UIColor lightGrayColor].CGColor;
-    [self.navigationContainer.layer addSublayer:bottomBorder];
-    
-    bottomBorder = [CALayer layer];
-    bottomBorder.frame = CGRectMake(0.0f, self.textFieldContainer.frame.size.height - borderSize, self.textFieldContainer.frame.size.width, borderSize);
-    bottomBorder.backgroundColor = [UIColor lightGrayColor].CGColor;
-    [self.textFieldContainer.layer addSublayer:bottomBorder];
-    
-    CALayer *rightBorder = [CALayer layer];
-    rightBorder.frame = CGRectMake(self.counterCodeButton.frame.size.width - borderSize, 0.0f, borderSize, self.counterCodeButton.frame.size.height);
-    rightBorder.backgroundColor = [UIColor lightGrayColor].CGColor;
-    [self.counterCodeButton.layer addSublayer:rightBorder];
+    [GeneralUtils addBottomBorder:self.navigationContainer borderSize:BORDER_SIZE];
+    [GeneralUtils addBottomBorder:self.textFieldContainer borderSize:BORDER_SIZE];
+    [GeneralUtils addRightBorder:self.countryCodeButton borderSize:BORDER_SIZE];
 }
 
 - (void)viewDidAppear:(BOOL)animated
