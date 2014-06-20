@@ -237,8 +237,6 @@
 			children = (
 				0BDB64B21952150D00223093 /* Libraries */,
 				0BD758F919511A6500CF0D85 /* Interface */,
-				0BD758CE1950F91B00CF0D85 /* HeardAppDelegate.h */,
-				0BD758CF1950F91B00CF0D85 /* HeardAppDelegate.m */,
 				0BDB64D719521F7300223093 /* Utils */,
 				0BD758F419511A1E00CF0D85 /* Controllers */,
 				3CB8B7E9195346520090D657 /* Models */,
@@ -334,6 +332,8 @@
 		0BDB64D719521F7300223093 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				0BD758CE1950F91B00CF0D85 /* HeardAppDelegate.h */,
+				0BD758CF1950F91B00CF0D85 /* HeardAppDelegate.m */,
 				0BDB64FB1952688300223093 /* Constants.h */,
 				0BDB64FC1952688300223093 /* Constants.m */,
 				0BDB64F81952680C00223093 /* ApiUtils.h */,
@@ -465,7 +465,7 @@
 				ORGANIZATIONNAME = streetshout;
 				TargetAttributes = {
 					0BD758BB1950F91B00CF0D85 = {
-						DevelopmentTeam = 9688VHJV6U;
+						DevelopmentTeam = Y7RQR83KUE;
 					};
 					0BD758DC1950F91B00CF0D85 = {
 						TestTargetID = 0BD758BB1950F91B00CF0D85;
@@ -684,12 +684,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (63863BWF5M)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ECFA20B7-073A-4C04-B891-12CDCFF4F927";
+				PROVISIONING_PROFILE = "9FADCC52-2A13-45FE-967E-06E0B8B26653";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -699,11 +699,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "9FADCC52-2A13-45FE-967E-06E0B8B26653";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

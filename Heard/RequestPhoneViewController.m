@@ -68,6 +68,7 @@
 
 - (IBAction)countryCodeButtonClicked:(id)sender {
     //Allow French numbers
+    // todo
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string

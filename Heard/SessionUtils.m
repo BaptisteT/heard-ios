@@ -9,6 +9,7 @@
 #import "SessionUtils.h"
 
 #define USER_AUTH_TOKEN_PREF @"User authentication token preference"
+#define USER_ID_PREF @"User id preference"
 
 @implementation SessionUtils
 
@@ -28,6 +29,25 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     return [prefs objectForKey:USER_AUTH_TOKEN_PREF];
+}
+
+// Save user id
++ (void)saveCurrentUserId:(NSInteger)currentUserId
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    NSNumber *userId = [NSNumber numberWithLong:currentUserId];
+    [prefs setObject:userId forKey:USER_ID_PREF];
+    
+    [prefs synchronize];
+}
+
+// Get user id
++ (NSInteger)getCurrentUserId
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    return [[prefs objectForKey:USER_ID_PREF] integerValue];
 }
 
 // Check User and token are stored in the phone

@@ -26,7 +26,7 @@
                          lastName:(NSString *)lastName
                           picture:(NSString *)picture
                              code:(NSString *)code
-                          success:(void(^)(NSString *authToken))successBlock
+                          success:(void(^)(NSString *authToken, NSInteger userId))successBlock
                           failure:(void(^)())failureBlock;
 
 + (void)sendMessage:(NSData *)audioData
@@ -34,5 +34,7 @@
              toUser:(NSInteger)receiverId
             success:(void(^)())successBlock
             failure:(void (^)())failureBlock;
+
++ (void)updatePushToken:(NSString *)token ofUser:(NSInteger)user_id success:(void(^)())successBlock failure:(void(^)())failureBlock;
 
 @end

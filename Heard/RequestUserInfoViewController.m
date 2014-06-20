@@ -79,11 +79,12 @@
 {
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
-    typedef void (^SuccessBlock)(NSString *authToken);
-    SuccessBlock successBlock = ^(NSString *authToken) {
+    typedef void (^SuccessBlock)(NSString *authToken, NSInteger userId);
+    SuccessBlock successBlock = ^(NSString *authToken, NSInteger userId) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         [SessionUtils securelySaveCurrentUserToken:authToken];
-        
+        [SessionUtils saveCurrentUserId:userId];
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert)];
         [self performSegueWithIdentifier:@"Dashboard Push Segue" sender:nil];
     };
     
@@ -148,7 +149,9 @@
     imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
     imagePickerController.sourceType = sourceType;
     imagePickerController.delegate = self;
-    
+    if (sourceType == UIImagePickerControllerSourceTypeCamera) {
+        imagePickerController.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+    }
     self.imagePickerController = imagePickerController;
     [self presentViewController:self.imagePickerController animated:YES completion:nil];
 }

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RequestUserInfoViewController : UIViewController <UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate>
+@interface RequestUserInfoViewController : UIViewController <UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (strong, nonatomic) NSString *phoneNumber;
 @property (strong, nonatomic) NSString *smsCode;

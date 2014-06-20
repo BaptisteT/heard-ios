@@ -100,13 +100,12 @@
     }];
 }
 
-
 + (void)createUserWithPhoneNumber:(NSString *)phoneNumber
                         firstName:(NSString *)firstName
                          lastName:(NSString *)lastName
                           picture:(NSString *)picture
                              code:(NSString *)code
-                          success:(void(^)(NSString *authToken))successBlock
+                          success:(void(^)(NSString *authToken, NSInteger userId))successBlock
                           failure:(void(^)())failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users.json"];
@@ -124,9 +123,10 @@
         NSDictionary *result = [JSON valueForKeyPath:@"result"];
         
         NSString *authToken = [result objectForKey:@"auth_token"];
+        NSInteger userId = [[result objectForKey:@"user_id"] integerValue];
         
         if (successBlock) {
-            successBlock(authToken);
+            successBlock(authToken, userId);
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (failureBlock) {
@@ -157,12 +157,34 @@
                               if (successBlock) {
                                   successBlock();
                               }
-                          } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                         }failure:^(NSURLSessionDataTask *task, NSError *error) {
                               NSLog(@"ERROR: %@, %@", task.description, error);
                               if (failureBlock) {
                                   failureBlock();
                               }
                           }];
 }
+
+// Update token
++ (void)updatePushToken:(NSString *)token ofUser:(NSInteger)user_id success:(void(^)())successBlock failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/update_push_token.json"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setObject:[NSNumber numberWithLong:user_id] forKey:@"user_id"];
+    [parameters setObject:token forKey:@"push_token"];
+    
+    [[ApiUtils sharedClient] PATCH:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        if (successBlock) {
+            successBlock();
+        }
+    }failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"ERROR: %@, %@", task.description, error);
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
 
 @end
