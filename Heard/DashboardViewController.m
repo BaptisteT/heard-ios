@@ -8,6 +8,7 @@
 
 #import "DashboardViewController.h"
 #import "FriendBubbleView.h"
+#import "ApiUtils.h"
 
 @interface DashboardViewController ()
 
@@ -24,7 +25,7 @@
     [super viewDidLoad];
     
     // Query all unread message
-    
+    [ApiUtils getUnreadMessagesAndExecuteSuccess:nil failure:nil];
     
     // test (to delete)
     self.exampleBubble = [self.exampleBubble initBubbleViewWithFriendId:6];

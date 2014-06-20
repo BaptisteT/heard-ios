@@ -15,6 +15,16 @@
 
 @implementation Message
 
++ (NSArray *)rawMessagesToInstances:(NSArray *)rawMessages
+{
+    NSMutableArray *messages = [[NSMutableArray alloc] init];
+    
+    for (NSDictionary *rawMessage in rawMessages) {
+        [messages addObject:[Message rawMessageToInstance:rawMessage]];
+    }
+    return messages;
+}
+
 + (Message *)rawMessageToInstance:(id)rawMessage;
 {
     Message *message = [[Message alloc] init];

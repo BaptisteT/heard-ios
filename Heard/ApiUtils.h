@@ -35,6 +35,8 @@
             success:(void(^)())successBlock
             failure:(void (^)())failureBlock;
 
-+ (void)updatePushToken:(NSString *)token ofUser:(NSInteger)user_id success:(void(^)())successBlock failure:(void(^)())failureBlock;
++ (void)updatePushToken:(NSString *)token success:(void(^)())successBlock failure:(void(^)())failureBlock;
+
++ (void)getUnreadMessagesAndExecuteSuccess:(void(^)(NSArray *messages))successBlock failure:(void(^)())failureBlock;
 
 @end

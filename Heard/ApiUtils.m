@@ -9,6 +9,7 @@
 #import "ApiUtils.h"
 #import "Constants.h"
 #import "SessionUtils.h"
+#import "Message.h"
 
 @implementation ApiUtils
 
@@ -166,12 +167,12 @@
 }
 
 // Update token
-+ (void)updatePushToken:(NSString *)token ofUser:(NSInteger)user_id success:(void(^)())successBlock failure:(void(^)())failureBlock
++ (void)updatePushToken:(NSString *)token success:(void(^)())successBlock failure:(void(^)())failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/update_push_token.json"];
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    [parameters setObject:[NSNumber numberWithLong:user_id] forKey:@"user_id"];
+    [parameters setObject:[NSNumber numberWithLong:[SessionUtils getCurrentUserId]] forKey:@"user_id"];
     [parameters setObject:token forKey:@"push_token"];
     
     [[ApiUtils sharedClient] PATCH:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
@@ -180,6 +181,31 @@
         }
     }failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"ERROR: %@, %@", task.description, error);
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
+// Get unread messages
++ (void)getUnreadMessagesAndExecuteSuccess:(void(^)(NSArray *messages))successBlock failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/unread_messages.json"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    
+    [parameters setObject:[NSNumber numberWithLong:[SessionUtils getCurrentUserId]] forKey:@"user_id"];
+
+    
+    [[ApiUtils sharedClient] GET:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        NSDictionary *result = [JSON valueForKeyPath:@"result"];
+        
+        NSArray *rawMessages = [result objectForKey:@"messages"];
+        
+        if (successBlock) {
+            successBlock([Message rawMessagesToInstances:rawMessages]);
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (failureBlock) {
             failureBlock();
         }

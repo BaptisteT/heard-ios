@@ -10,6 +10,7 @@
 
 @interface Message : NSObject
 
++ (NSArray *)rawMessagesToInstances:(NSArray *)rawMessages;
 + (Message *)rawMessageToInstance:(id)rawMessage;
 - (NSURL *)getMessageURL;
 

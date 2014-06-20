@@ -47,7 +47,7 @@
     NSLog(@"deviceToken: %@", deviceTokenAsString);
     
     // Send push token
-    [ApiUtils updatePushToken:deviceTokenAsString ofUser:[SessionUtils getCurrentUserId] success:nil failure:nil];
+    [ApiUtils updatePushToken:deviceTokenAsString success:nil failure:nil];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {

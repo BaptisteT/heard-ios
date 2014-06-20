@@ -76,6 +76,9 @@
 // ----------------------------------------------------------
 - (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer
 {
+    // todo BT (later)
+    // check micro is available, else warm user
+    
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         // Create Timer
         self.maxDurationtimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(stopAndSendRecording) userInfo:nil repeats:NO];
