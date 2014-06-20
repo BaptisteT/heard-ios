@@ -13,6 +13,7 @@
 #import "NBPhoneNumber.h"
 #import "NBPhoneNumberUtil.h"
 #import "RequestUserInfoViewController.h"
+#import "SessionUtils.h"
 
 #define CONFIMATION_CODE_DIGITS 5
 #define BORDER_SIZE 0.5
@@ -22,9 +23,8 @@
 @property (weak, nonatomic) IBOutlet UIView *navigationContainer;
 @property (weak, nonatomic) IBOutlet UIView *textFieldContainer;
 @property (weak, nonatomic) IBOutlet UITextField *codeTextField;
-@property (strong, nonatomic) NSString *userCode;
-@property (strong, nonatomic) NSString *serverCode;
 @property (weak, nonatomic) IBOutlet UILabel *phoneNumberLabel;
+@property (nonatomic) BOOL existingUser;
 
 @end
 
@@ -33,8 +33,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    [self requestConfirmationCode];
     
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
     
@@ -65,61 +63,37 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    if (textField.text.length + string.length >= CONFIMATION_CODE_DIGITS) {
-        self.userCode = [textField.text stringByAppendingString:string];
-        
-        if (self.serverCode) {
-            if (![self validateCode]){
-                return NO;
-            };
-        } else {
-            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        }
+    if (textField.text.length + string.length == CONFIMATION_CODE_DIGITS && string.length > 0) {
+        [self validateCode:[textField.text stringByAppendingString:string]];
     }
     
     return YES;
 }
 
-- (void)requestConfirmationCode
+- (void)validateCode:(NSString *)code
 {
-    [ApiUtils requestSignupCode:self.phoneNumber success:^(NSString *code) {
-        self.serverCode = code;
-        
-        if (self.userCode) {
-            [self validateCode];
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    [ApiUtils validateSmsCode:code
+                         phoneNumber:self.phoneNumber
+                      success:^(NSString *authToken) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+                          
+        if (authToken) {
+            [SessionUtils securelySaveCurrentUserToken:authToken];
+            [self performSegueWithIdentifier:@"Dashboard Push Segue From Code Confirmation" sender:nil];
+        } else {
+            [self performSegueWithIdentifier:@"Request User Info Push Segue" sender:nil];
         }
     } failure:^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [GeneralUtils showMessage:@"We failed to send your confirmation code, please try again." withTitle:nil];
-        [self.navigationController popViewControllerAnimated:YES];
+        [GeneralUtils showMessage:@"Invalid code, please try again." withTitle:nil];
+        self.codeTextField.text = @"";
     }];
 }
 
-- (BOOL)validateCode
-{
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-    
-    if ([self.userCode intValue] == [self.serverCode intValue]) {
-        //TODO BB: save phoneNumber
-        //TODO BB: if signin, go to main screen directly
-        [self performSegueWithIdentifier:@"Request User Info Push Segue" sender:nil];
-        
-        return YES;
-    } else {
-        [GeneralUtils showMessage:@"Invalid code, please try again." withTitle:nil];
-        self.codeTextField.text = @"";
-        return NO;
-    }
-}
-
 - (IBAction)nextButtonClicked:(id)sender {
-    self.userCode = self.codeTextField.text;
-    
-    if (self.serverCode) {
-        [self validateCode];
-    } else {
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    }
+    [self validateCode:self.codeTextField.text];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -128,6 +102,7 @@
     
     if ([segueName isEqualToString: @"Request User Info Push Segue"]) {
         ((RequestUserInfoViewController *) [segue destinationViewController]).phoneNumber = self.phoneNumber;
+        ((RequestUserInfoViewController *) [segue destinationViewController]).smsCode = self.codeTextField.text;
     }
 }
 

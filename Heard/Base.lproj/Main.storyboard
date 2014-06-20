@@ -4,10 +4,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
-        <!--Welcome View Controller-->
+        <!--Welcome View Controller - Dashboard Push Segue From Welcome-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="WelcomeViewController" sceneMemberID="viewController">
+                <viewController title="Dashboard Push Segue From Welcome" id="vXZ-lx-hvc" customClass="WelcomeViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -66,6 +66,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="FRa-6e-sLJ"/>
+                    <connections>
+                        <segue destination="2uU-ai-Tsy" kind="push" identifier="Dashboard Push Segue From Welcome" id="xdp-at-Nje"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
@@ -230,7 +233,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oFh-Cf-eU4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="857" y="71"/>
+            <point key="canvasLocation" x="857" y="-619"/>
         </scene>
         <!--Code Confirmation View Controller-->
         <scene sceneID="NYw-zn-yUO">
@@ -369,11 +372,12 @@
                         <outlet property="phoneNumberLabel" destination="RrX-Vx-7gH" id="2sV-UJ-9QB"/>
                         <outlet property="textFieldContainer" destination="8qY-KN-O0r" id="LOF-7G-kiS"/>
                         <segue destination="DDj-Dy-Z2q" kind="push" identifier="Request User Info Push Segue" id="auo-7r-s5a"/>
+                        <segue destination="2uU-ai-Tsy" kind="push" identifier="Dashboard Push Segue From Code Confirmation" id="lrb-7Z-tIJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Voa-1s-g3a" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1429" y="99"/>
+            <point key="canvasLocation" x="1471" y="-619"/>
         </scene>
         <!--Request User Info View Controller-->
         <scene sceneID="7zi-bI-aVq">
@@ -567,7 +571,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1966" y="99"/>
+            <point key="canvasLocation" x="2052" y="-611"/>
         </scene>
         <!--Dashboard View Controller-->
         <scene sceneID="eZd-qI-nZD">
@@ -586,7 +590,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kJk-FM-4rk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2606" y="99"/>
+            <point key="canvasLocation" x="2762" y="99"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
@@ -594,4 +598,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="lrb-7Z-tIJ"/>
+    </inferredMetricsTieBreakers>
 </document>

@@ -8,6 +8,8 @@
 
 #import "HeardAppDelegate.h"
 #import "AFNetworkActivityIndicatorManager.h"
+#import "SessionUtils.h"
+#import "WelcomeViewController.h"
 
 
 @implementation HeardAppDelegate
@@ -22,6 +24,11 @@
     
     // todo BT (later)
     // Check if we come from a notif
+    
+    if ([SessionUtils isSignedIn]) {
+        WelcomeViewController* welcomeViewController = (WelcomeViewController *)  self.window.rootViewController.childViewControllers[0];
+        [welcomeViewController performSegueWithIdentifier:@"Dashboard Push Segue From Welcome" sender:nil];
+    }
     
     return YES;
 }

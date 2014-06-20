@@ -12,14 +12,20 @@
 
 + (ApiUtils *)sharedClient;
 
-+ (void)requestSignupCode:(NSString *)phoneNumber
-                  success:(void(^)(NSString *code))successBlock
++ (void)requestSmsCode:(NSString *)phoneNumber
+                  success:(void(^)())successBlock
                   failure:(void(^)())failureBlock;
+
++ (void)validateSmsCode:(NSString *)code
+            phoneNumber:(NSString *)phoneNumber
+                success:(void(^)(NSString *authToken))successBlock
+                failure:(void(^)())failureBlock;
 
 + (void)createUserWithPhoneNumber:(NSString *)phoneNumber
                         firstName:(NSString *)firstName
                          lastName:(NSString *)lastName
                           picture:(NSString *)picture
+                             code:(NSString *)code
                           success:(void(^)(NSString *authToken))successBlock
                           failure:(void(^)())failureBlock;
 

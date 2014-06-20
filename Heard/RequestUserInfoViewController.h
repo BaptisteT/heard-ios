@@ -11,5 +11,6 @@
 @interface RequestUserInfoViewController : UIViewController <UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate>
 
 @property (strong, nonatomic) NSString *phoneNumber;
+@property (strong, nonatomic) NSString *smsCode;
 
 @end

@@ -12,6 +12,8 @@
 #import "NBPhoneNumberUtil.h"
 #import "GeneralUtils.h"
 #import "CodeConfirmationViewController.h"
+#import "ApiUtils.h"
+#import "MBProgressHUD.h"
 
 #define BORDER_SIZE 0.5
 
@@ -57,7 +59,8 @@
                             defaultRegion:@"US" error:&aError];
     
     if (!aError && [util isValidNumber:phoneNumber]) {
-        [self performSegueWithIdentifier:@"Code Confirmation Push Segue" sender:phoneNumber];
+        NSString *formattedPhoneNumber = [NSString stringWithFormat:@"+%@%@", phoneNumber.countryCode, phoneNumber.nationalNumber];
+        [self sendCodeRequest:formattedPhoneNumber];
     } else {
         [GeneralUtils showMessage:nil withTitle:@"Invalid phone number"];
     }
@@ -83,8 +86,20 @@
     NSString * segueName = segue.identifier;
     
     if ([segueName isEqualToString: @"Code Confirmation Push Segue"]) {
-        ((CodeConfirmationViewController *) [segue destinationViewController]).phoneNumber = [NSString stringWithFormat:@"+%@%@", ((NBPhoneNumber *)sender).countryCode, ((NBPhoneNumber *)sender).nationalNumber];
+        ((CodeConfirmationViewController *) [segue destinationViewController]).phoneNumber = (NSString *)sender;
     }
+}
+
+- (void)sendCodeRequest:(NSString *)phoneNumber
+{
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    [ApiUtils requestSmsCode:phoneNumber success:^() {
+        [self performSegueWithIdentifier:@"Code Confirmation Push Segue" sender:phoneNumber];
+    } failure:^{
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [GeneralUtils showMessage:@"We failed to send your confirmation code, please try again." withTitle:nil];
+    }];
 }
 
 @end

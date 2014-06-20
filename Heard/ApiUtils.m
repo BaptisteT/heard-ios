@@ -8,6 +8,7 @@
 
 #import "ApiUtils.h"
 #import "Constants.h"
+#import "SessionUtils.h"
 
 @implementation ApiUtils
 
@@ -45,24 +46,25 @@
     return self;
 }
 
-+ (void)requestSignupCode:(NSString *)phoneNumber
-                  success:(void(^)(NSString *code))successBlock
+// Enrich parameters with token
++ (void) enrichParametersWithToken:(NSMutableDictionary *) parameters
+{
+    [parameters setObject:[SessionUtils getCurrentUserToken] forKey:@"auth_token"];
+}
+
++ (void)requestSmsCode:(NSString *)phoneNumber
+                  success:(void(^)())successBlock
                   failure:(void(^)())failureBlock
 {
-    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"signups.json"];
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"sessions.json"];
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     
     [parameters setObject:phoneNumber forKey:@"phone_number"];
     
     [[ApiUtils sharedClient] POST:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
-        
-        NSDictionary *result = [JSON valueForKeyPath:@"result"];
-        
-        NSString *code = [result objectForKey:@"code"];
-
         if (successBlock) {
-            successBlock(code);
+            successBlock();
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (failureBlock) {
@@ -71,10 +73,39 @@
     }];
 }
 
++ (void)validateSmsCode:(NSString *)code
+                       phoneNumber:(NSString *)phoneNumber
+                    success:(void(^)(NSString *authToken))successBlock
+                    failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"sessions/confirm_sms_code.json"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    
+    [parameters setObject:phoneNumber forKey:@"phone_number"];
+    [parameters setObject:code forKey:@"code"];
+    
+    [[ApiUtils sharedClient] GET:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        NSDictionary *result = [JSON valueForKeyPath:@"result"];
+        
+        NSString *authToken = [result objectForKey:@"auth_token"];
+        
+        if (successBlock) {
+            successBlock(authToken);
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
+
 + (void)createUserWithPhoneNumber:(NSString *)phoneNumber
                         firstName:(NSString *)firstName
                          lastName:(NSString *)lastName
                           picture:(NSString *)picture
+                             code:(NSString *)code
                           success:(void(^)(NSString *authToken))successBlock
                           failure:(void(^)())failureBlock
 {
@@ -86,6 +117,7 @@
     [parameters setObject:firstName forKey:@"first_name"];
     [parameters setObject:lastName forKey:@"last_name"];
     [parameters setObject:picture forKey:@"profile_picture"];
+    [parameters setObject:code forKey:@"code"];
     
     [[ApiUtils sharedClient] POST:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
         

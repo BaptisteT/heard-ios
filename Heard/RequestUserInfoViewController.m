@@ -94,7 +94,12 @@
         [GeneralUtils showMessage:@"We failed to sign you up, please try again." withTitle:nil];
     };
     
-    [ApiUtils createUserWithPhoneNumber:self.phoneNumber firstName:self.firstNameTextField.text lastName:self.lastNameTextField.text picture:[ImageUtils encodeToBase64String:self.profilePictureImageView.image] success:successBlock failure:failureBlock];
+    [ApiUtils createUserWithPhoneNumber:self.phoneNumber
+                              firstName:self.firstNameTextField.text
+                               lastName:self.lastNameTextField.text
+                                picture:[ImageUtils encodeToBase64String:self.profilePictureImageView.image]
+                                   code:self.smsCode
+                                success:successBlock failure:failureBlock];
 }
 
 - (IBAction)profilePicturePressed:(id)sender {
