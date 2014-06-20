@@ -58,6 +58,7 @@
 		0BDB65581953B6A000223093 /* RequestPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BD758F619511A4000CF0D85 /* RequestPhoneViewController.m */; };
 		0BDB655E1953BE9100223093 /* SessionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB655D1953BE9100223093 /* SessionUtils.m */; };
 		0BDB65611953C04800223093 /* DashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB65601953C04800223093 /* DashboardViewController.m */; };
+		3C7F52831954A575008DD3EA /* MessageBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C7F52821954A575008DD3EA /* MessageBubbleView.m */; };
 		3C9BBE0F195345A6001C6C4D /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9BBDFE195345A6001C6C4D /* AFNetworkActivityIndicatorManager.m */; };
 		3C9BBE11195345A6001C6C4D /* UIActivityIndicatorView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9BBE00195345A6001C6C4D /* UIActivityIndicatorView+AFNetworking.m */; };
 		3C9BBE13195345A6001C6C4D /* UIAlertView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9BBE02195345A6001C6C4D /* UIAlertView+AFNetworking.m */; };
@@ -155,6 +156,8 @@
 		0BDB655D1953BE9100223093 /* SessionUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionUtils.m; sourceTree = "<group>"; };
 		0BDB655F1953C04800223093 /* DashboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardViewController.h; sourceTree = "<group>"; };
 		0BDB65601953C04800223093 /* DashboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardViewController.m; sourceTree = "<group>"; };
+		3C7F52811954A575008DD3EA /* MessageBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageBubbleView.h; sourceTree = "<group>"; };
+		3C7F52821954A575008DD3EA /* MessageBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBubbleView.m; sourceTree = "<group>"; };
 		3C9BBDFD195345A6001C6C4D /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
 		3C9BBDFE195345A6001C6C4D /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
 		3C9BBDFF195345A6001C6C4D /* UIActivityIndicatorView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActivityIndicatorView+AFNetworking.h"; sourceTree = "<group>"; };
@@ -419,6 +422,8 @@
 			children = (
 				3CB8B7F3195453E50090D657 /* FriendBubbleView.h */,
 				3CB8B7F4195453E50090D657 /* FriendBubbleView.m */,
+				3C7F52811954A575008DD3EA /* MessageBubbleView.h */,
+				3C7F52821954A575008DD3EA /* MessageBubbleView.m */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -529,6 +534,7 @@
 			files = (
 				0BDB65581953B6A000223093 /* RequestPhoneViewController.m in Sources */,
 				0BDB65511953B60D00223093 /* NBAsYouTypeFormatter.m in Sources */,
+				3C7F52831954A575008DD3EA /* MessageBubbleView.m in Sources */,
 				0BDB65521953B60D00223093 /* NBNumberFormat.m in Sources */,
 				0BDB65531953B60D00223093 /* NBPhoneMetaData.m in Sources */,
 				0BDB65541953B60D00223093 /* NBPhoneNumber.m in Sources */,

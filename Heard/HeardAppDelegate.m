@@ -59,6 +59,7 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     // todo BT
     // The user receives a notif while using the app
+    // Create a message bubble and an alert
 }
 
 

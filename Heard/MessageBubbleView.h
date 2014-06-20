@@ -1,5 +1,5 @@
 //
-//  FriendBubbleView.h
+//  MessageBubbleView.h
 //  Heard
 //
 //  Created by Baptiste Truchot on 6/20/14.
@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import "Message.h"
 
+@interface MessageBubbleView : UIImageView <UIGestureRecognizerDelegate, AVAudioPlayerDelegate>
 
-@interface FriendBubbleView : UIImageView <UIGestureRecognizerDelegate, AVAudioRecorderDelegate>
-
-- (id)initBubbleViewWithFriendId:(NSInteger)friendId;
+- (id)initWithMessage:(Message *)message;
 
 @end

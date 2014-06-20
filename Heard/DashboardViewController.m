@@ -26,11 +26,16 @@
     
     // todo
     // 1 -> retrive all contacts + order (last message exchanged)
+    
     // 2 -> Create corresponding bubbles
+    // - (id)initBubbleViewWithFriendId:(NSInteger)friendId;
     
     // 3 -> Query all unread message
-    // 4 -> Add messages to friend buble or create other bubles 
     [ApiUtils getUnreadMessagesAndExecuteSuccess:nil failure:nil];
+    
+    // 4 -> Create messages bubles
+    //              - (id)initWithMessage:(Message *)message;
+    
     
     // test (to delete)
     self.exampleBubble = [self.exampleBubble initBubbleViewWithFriendId:6];

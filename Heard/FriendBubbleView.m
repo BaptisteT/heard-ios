@@ -126,10 +126,6 @@
     self.minDurationReached = TRUE;
 }
 
-//   AVAudioPlayer *player;
-//NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"https://s3.amazonaws.com/heard_messages/4_record"]] ;
-//player = [[AVAudioPlayer alloc] initWithData:data error:nil];
-//[player setDelegate:self];
-//[player play];
+
 
 @end
