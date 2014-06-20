@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "recordViewController.h"
+#import <AVFoundation/AVFoundation.h>
+
 
 @interface FriendBubbleView : UIImageView <UIGestureRecognizerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate>
 

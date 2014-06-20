@@ -24,7 +24,12 @@
 {
     [super viewDidLoad];
     
-    // Query all unread message
+    // todo
+    // 1 -> retrive all contacts + order (last message exchanged)
+    // 2 -> Create corresponding bubbles
+    
+    // 3 -> Query all unread message
+    // 4 -> Add messages to friend buble or create other bubles 
     [ApiUtils getUnreadMessagesAndExecuteSuccess:nil failure:nil];
     
     // test (to delete)
