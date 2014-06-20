@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="OIk-2W-hgJ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="OIk-2W-hgJ">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -16,19 +16,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Heard" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yMe-3M-kKz">
-                                <rect key="frame" x="110" y="265" width="100" height="38"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Waved" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yMe-3M-kKz">
+                                <rect key="frame" x="107" y="260" width="107" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="38" id="6W1-0s-wNG"/>
-                                    <constraint firstAttribute="width" constant="100" id="RCL-wf-zWp"/>
+                                    <constraint firstAttribute="width" constant="107" id="M44-54-eph"/>
+                                    <constraint firstAttribute="height" constant="48" id="zja-So-q28"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="35"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Vocal messaging." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LYj-fg-v2e">
-                                <rect key="frame" x="91" y="313" width="139" height="21"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Vocal messaging" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LYj-fg-v2e">
+                                <rect key="frame" x="91" y="308" width="139" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="CQs-ap-Iyd"/>
@@ -39,14 +39,14 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J5D-hb-dnh">
-                                <rect key="frame" x="87" y="514" width="146" height="34"/>
+                                <rect key="frame" x="87" y="498" width="146" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="146" id="PdQ-4j-3lI"/>
-                                    <constraint firstAttribute="height" constant="34" id="hJs-H3-Ke3"/>
+                                    <constraint firstAttribute="height" constant="50" id="hJs-H3-Ke3"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="20"/>
-                                <state key="normal" title="Start Messaging ">
+                                <state key="normal" title="Start Talking">
                                     <color key="titleColor" red="0.054901960784313725" green="0.30588235294117649" blue="0.67843137254901964" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -54,19 +54,33 @@
                                     <segue destination="UQD-ua-4i0" kind="push" identifier="Phone Push Segue" id="YmY-jJ-NfV"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="welcome-logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="dwm-Cy-B4c">
+                                <rect key="frame" x="0.0" y="100" width="320" height="120"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="120" id="ETk-1a-5CE"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="yMe-3M-kKz" secondAttribute="centerX" id="2Pk-xC-NFM"/>
                             <constraint firstAttribute="centerX" secondItem="J5D-hb-dnh" secondAttribute="centerX" id="5sK-mv-pjQ"/>
+                            <constraint firstItem="dwm-Cy-B4c" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="H9d-1r-6es"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="J5D-hb-dnh" secondAttribute="bottom" constant="20" id="Q0w-l8-850"/>
-                            <constraint firstItem="LYj-fg-v2e" firstAttribute="top" secondItem="yMe-3M-kKz" secondAttribute="bottom" constant="10" id="ZEe-6o-Op8"/>
+                            <constraint firstItem="LYj-fg-v2e" firstAttribute="top" secondItem="yMe-3M-kKz" secondAttribute="bottom" id="ZEe-6o-Op8"/>
+                            <constraint firstItem="yMe-3M-kKz" firstAttribute="top" secondItem="dwm-Cy-B4c" secondAttribute="bottom" constant="40" id="cxj-ig-e2I"/>
+                            <constraint firstAttribute="trailing" secondItem="dwm-Cy-B4c" secondAttribute="trailing" id="q9V-Vz-EhE"/>
                             <constraint firstAttribute="centerX" secondItem="LYj-fg-v2e" secondAttribute="centerX" id="tNt-i9-5RT"/>
                             <constraint firstAttribute="centerY" secondItem="yMe-3M-kKz" secondAttribute="centerY" id="yPI-R1-n49"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="FRa-6e-sLJ"/>
                     <connections>
+                        <outlet property="logoImage" destination="dwm-Cy-B4c" id="tyV-pV-YAA"/>
+                        <outlet property="startButton" destination="J5D-hb-dnh" id="iXF-cU-5sp"/>
+                        <outlet property="subTitleLabel" destination="LYj-fg-v2e" id="YgK-fa-4pM"/>
+                        <outlet property="titbleLabel" destination="yMe-3M-kKz" id="cWm-sR-7PE"/>
                         <segue destination="2uU-ai-Tsy" kind="push" identifier="Dashboard Push Segue From Welcome" id="xdp-at-Nje"/>
                     </connections>
                 </viewController>
@@ -603,12 +617,15 @@
             <point key="canvasLocation" x="2762" y="99"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="welcome-logo.png" width="640" height="165"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="lrb-7Z-tIJ"/>
+        <segue reference="xdp-at-Nje"/>
     </inferredMetricsTieBreakers>
 </document>
