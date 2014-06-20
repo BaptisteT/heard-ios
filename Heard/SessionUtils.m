@@ -31,17 +31,6 @@
     return [prefs objectForKey:USER_AUTH_TOKEN_PREF];
 }
 
-// Save user id
-+ (void)saveCurrentUserId:(NSInteger)currentUserId
-{
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    NSNumber *userId = [NSNumber numberWithLong:currentUserId];
-    [prefs setObject:userId forKey:USER_ID_PREF];
-    
-    [prefs synchronize];
-}
-
 // Get user id
 + (NSInteger)getCurrentUserId
 {

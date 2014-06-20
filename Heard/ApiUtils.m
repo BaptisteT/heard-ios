@@ -106,7 +106,7 @@
                          lastName:(NSString *)lastName
                           picture:(NSString *)picture
                              code:(NSString *)code
-                          success:(void(^)(NSString *authToken, NSInteger userId))successBlock
+                          success:(void(^)(NSString *authToken))successBlock
                           failure:(void(^)())failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users.json"];
@@ -124,10 +124,9 @@
         NSDictionary *result = [JSON valueForKeyPath:@"result"];
         
         NSString *authToken = [result objectForKey:@"auth_token"];
-        NSInteger userId = [[result objectForKey:@"user_id"] integerValue];
         
         if (successBlock) {
-            successBlock(authToken, userId);
+            successBlock(authToken);
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (failureBlock) {
@@ -138,7 +137,6 @@
 
 // Send message
 + (void)sendMessage:(NSData *)audioData
-           fromUser:(NSInteger)sender_id
              toUser:(NSInteger)receiverId
             success:(void(^)())successBlock
             failure:(void (^)())failureBlock
@@ -146,8 +144,9 @@
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages.json"];
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    [parameters setObject:[NSNumber numberWithLong:sender_id] forKey:@"sender_id"];
     [parameters setObject:[NSNumber numberWithLong:receiverId] forKey:@"receiver_id"];
+    
+    [self enrichParametersWithToken:parameters];
     
     [[ApiUtils sharedClient] POST:path
                        parameters:parameters
@@ -172,8 +171,9 @@
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/update_push_token.json"];
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    [parameters setObject:[NSNumber numberWithLong:[SessionUtils getCurrentUserId]] forKey:@"user_id"];
     [parameters setObject:token forKey:@"push_token"];
+    
+    [self enrichParametersWithToken:parameters];
     
     [[ApiUtils sharedClient] PATCH:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
         if (successBlock) {
@@ -194,7 +194,7 @@
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     
-    [parameters setObject:[NSNumber numberWithLong:[SessionUtils getCurrentUserId]] forKey:@"user_id"];
+    [self enrichParametersWithToken:parameters];
 
     
     [[ApiUtils sharedClient] GET:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {

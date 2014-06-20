@@ -104,7 +104,7 @@
         // If we are above min message time, we send it
         if (self.minDurationReached) {
             NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
-            [ApiUtils sendMessage:audioData fromUser:[SessionUtils getCurrentUserId] toUser:self.friendId success:nil failure:nil];
+            [ApiUtils sendMessage:audioData toUser:self.friendId success:nil failure:nil];
         } else {
             [GeneralUtils showMessage:@"Hold to record your message" withTitle:nil];
         }
