@@ -69,4 +69,30 @@
     }];
 }
 
+// Send message
++ (void)sendMessage:(NSData *)audioData fromUser:(NSInteger)sender_id toUser:(NSInteger)receiverId success:(void(^)())successBlock failure:(void (^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages.json"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setObject:[NSNumber numberWithLong:sender_id] forKey:@"sender_id"];
+    [parameters setObject:[NSNumber numberWithLong:receiverId] forKey:@"receiver_id"];
+    
+    [[ApiUtils sharedClient] POST:path
+                       parameters:parameters
+        constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            [formData appendPartWithFileData:audioData name:@"record" fileName:@"data.m4a" mimeType:@"audio/m4a"];
+        }
+                          success:^(NSURLSessionDataTask *task, id JSON) {
+                              if (successBlock) {
+                                  successBlock();
+                              }
+                          } failure:^(NSURLSessionDataTask *task, NSError *error) {
+                              NSLog(@"ERROR: %@, %@", task.description, error);
+                              if (failureBlock) {
+                                  failureBlock();
+                              }
+                          }];
+}
+
 @end
