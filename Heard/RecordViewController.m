@@ -84,15 +84,15 @@
     [player setDelegate:self];
     [player play];
 
-//    if (!recorder.recording){
-//        player = [[AVAudioPlayer alloc] initWithContentsOfURL:recorder.url error:nil];
-//        [player setDelegate:self];
-//        [player play];
-//        
-//        NSData *audioData = [[NSData alloc] initWithContentsOfURL:recorder.url];
-//        
-//        [ApiUtils sendMessage:audioData fromUser:1 toUser:2 success:nil failure:nil];
-//    }
+    if (!recorder.recording){
+        player = [[AVAudioPlayer alloc] initWithContentsOfURL:recorder.url error:nil];
+        [player setDelegate:self];
+        [player play];
+        
+        NSData *audioData = [[NSData alloc] initWithContentsOfURL:recorder.url];
+        
+        [ApiUtils sendMessage:audioData fromUser:1 toUser:2 success:nil failure:nil];
+    }
 }
 
 #pragma mark - AVAudioRecorderDelegate

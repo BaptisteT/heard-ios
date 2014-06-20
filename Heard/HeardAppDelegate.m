@@ -36,8 +36,6 @@
     
     return YES;
 }
-							
-
 
 
 // Delegation methods

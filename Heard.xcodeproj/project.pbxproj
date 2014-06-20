@@ -69,6 +69,7 @@
 		3C9BBE1D195345A6001C6C4D /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9BBE0D195345A6001C6C4D /* UIWebView+AFNetworking.m */; };
 		3CB8B7ED195346620090D657 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7EB195346620090D657 /* Message.m */; };
 		3CB8B7F11953466E0090D657 /* RecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7EF1953466E0090D657 /* RecordViewController.m */; };
+		3CB8B7F5195453E50090D657 /* FriendBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* FriendBubbleView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,6 +178,8 @@
 		3CB8B7EB195346620090D657 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		3CB8B7EE1953466E0090D657 /* RecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordViewController.h; sourceTree = "<group>"; };
 		3CB8B7EF1953466E0090D657 /* RecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordViewController.m; sourceTree = "<group>"; };
+		3CB8B7F3195453E50090D657 /* FriendBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendBubbleView.h; sourceTree = "<group>"; };
+		3CB8B7F4195453E50090D657 /* FriendBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendBubbleView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,6 +241,9 @@
 				0BDB64B21952150D00223093 /* Libraries */,
 				0BD758F919511A6500CF0D85 /* Interface */,
 				0BDB64D719521F7300223093 /* Utils */,
+				3CB8B7F2195453B10090D657 /* Custom Views */,
+				3CB8B7F3195453E50090D657 /* FriendBubbleView.h */,
+				3CB8B7F4195453E50090D657 /* FriendBubbleView.m */,
 				0BD758F419511A1E00CF0D85 /* Controllers */,
 				3CB8B7E9195346520090D657 /* Models */,
 				0BD758C61950F91B00CF0D85 /* Supporting Files */,
@@ -416,6 +422,13 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		3CB8B7F2195453B10090D657 /* Custom Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Custom Views";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -465,7 +478,7 @@
 				ORGANIZATIONNAME = streetshout;
 				TargetAttributes = {
 					0BD758BB1950F91B00CF0D85 = {
-						DevelopmentTeam = Y7RQR83KUE;
+						DevelopmentTeam = 9688VHJV6U;
 					};
 					0BD758DC1950F91B00CF0D85 = {
 						TestTargetID = 0BD758BB1950F91B00CF0D85;
@@ -532,6 +545,7 @@
 				0BDB654E1953B5FD00223093 /* RequestUserInfoViewController.m in Sources */,
 				0BDB654F1953B5FD00223093 /* Message.m in Sources */,
 				0BDB65501953B5FD00223093 /* main.m in Sources */,
+				3CB8B7F5195453E50090D657 /* FriendBubbleView.m in Sources */,
 				0BDB65341953B5EA00223093 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				0BDB65351953B5EA00223093 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				0BDB65361953B5EA00223093 /* UIAlertView+AFNetworking.m in Sources */,
@@ -625,7 +639,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (9X2H84A9C9)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Bastien Beurier (9X2H84A9C9)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -663,7 +678,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (9X2H84A9C9)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Bastien Beurier (9X2H84A9C9)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -684,12 +700,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (9X2H84A9C9)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9FADCC52-2A13-45FE-967E-06E0B8B26653";
+				PROVISIONING_PROFILE = "E0BA1CA2-86BB-475C-9059-E9FE8747036B";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -699,12 +716,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (9X2H84A9C9)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9FADCC52-2A13-45FE-967E-06E0B8B26653";
+				PROVISIONING_PROFILE = "E0BA1CA2-86BB-475C-9059-E9FE8747036B";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

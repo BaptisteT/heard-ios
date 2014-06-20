@@ -18,4 +18,6 @@
 
 + (BOOL)validName:(NSString *)name;
 
++ (NSURL *)getUserProfilePictureURLFromUserId:(NSInteger)userId;
+
 @end

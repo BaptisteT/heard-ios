@@ -7,8 +7,12 @@
 //
 
 #import "DashboardViewController.h"
+#import "FriendBubbleView.h"
 
 @interface DashboardViewController ()
+
+// test (to delete)
+@property (strong, nonatomic) IBOutlet FriendBubbleView *exampleBubble;
 
 @end
 
@@ -18,7 +22,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    // Query all unread message
+    
+    
+    // test (to delete)
+    self.exampleBubble = [self.exampleBubble initBubbleViewWithFriendId:6];
 }
 
 
