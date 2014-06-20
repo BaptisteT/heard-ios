@@ -45,7 +45,9 @@
     return self;
 }
 
-+ (void)requestSignupCode:(NSString *)phoneNumber success:(void(^)(NSString *code))successBlock failure:(void(^)())failureBlock
++ (void)requestSignupCode:(NSString *)phoneNumber
+                  success:(void(^)(NSString *code))successBlock
+                  failure:(void(^)())failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"signups.json"];
     
@@ -69,8 +71,44 @@
     }];
 }
 
++ (void)createUserWithPhoneNumber:(NSString *)phoneNumber
+                        firstName:(NSString *)firstName
+                         lastName:(NSString *)lastName
+                          picture:(NSString *)picture
+                          success:(void(^)(NSString *authToken))successBlock
+                          failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users.json"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    
+    [parameters setObject:phoneNumber forKey:@"phone_number"];
+    [parameters setObject:firstName forKey:@"first_name"];
+    [parameters setObject:lastName forKey:@"last_name"];
+    [parameters setObject:picture forKey:@"profile_picture"];
+    
+    [[ApiUtils sharedClient] POST:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        
+        NSDictionary *result = [JSON valueForKeyPath:@"result"];
+        
+        NSString *authToken = [result objectForKey:@"auth_token"];
+        
+        if (successBlock) {
+            successBlock(authToken);
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
 // Send message
-+ (void)sendMessage:(NSData *)audioData fromUser:(NSInteger)sender_id toUser:(NSInteger)receiverId success:(void(^)())successBlock failure:(void (^)())failureBlock
++ (void)sendMessage:(NSData *)audioData
+           fromUser:(NSInteger)sender_id
+             toUser:(NSInteger)receiverId
+            success:(void(^)())successBlock
+            failure:(void (^)())failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages.json"];
     

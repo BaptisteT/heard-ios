@@ -16,4 +16,6 @@
 
 + (void)addRightBorder:(UIView *)view borderSize:(float)borderSize;
 
++ (BOOL)validName:(NSString *)name;
+
 @end

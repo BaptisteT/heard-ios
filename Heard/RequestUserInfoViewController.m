@@ -9,6 +9,9 @@
 #import "RequestUserInfoViewController.h"
 #import "GeneralUtils.h"
 #import "ImageUtils.h"
+#import "MBProgressHUD.h"
+#import "SessionUtils.h"
+#import "ApiUtils.h"
 
 #define BORDER_SIZE 0.5
 #define ACTION_SHEET_OPTION_1 @"Camera"
@@ -28,7 +31,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *profilePictureImageView;
 
 @property (strong, nonatomic) UIImagePickerController *imagePickerController;
-@property (strong, nonatomic) UIImage *squareImage;
 
 @end
 
@@ -58,6 +60,41 @@
 }
 
 - (IBAction)nextButtonPressed:(id)sender {
+    
+    if (![GeneralUtils validName:self.firstNameTextField.text]) {
+        [GeneralUtils showMessage:@"First name must between 1 and 20 characters." withTitle:nil];
+        return;
+    } else if (![GeneralUtils validName:self.lastNameTextField.text]) {
+        [GeneralUtils showMessage:@"Last name must between 1 and 20 characters." withTitle:nil];
+        return;
+    } else if (!self.profilePictureImageView.image) {
+        [GeneralUtils showMessage:@"Please provide a profile picture." withTitle:nil];
+        return;
+    }
+    
+    [self signupUser];
+}
+
+- (void)signupUser
+{
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    typedef void (^SuccessBlock)(NSString *authToken);
+    SuccessBlock successBlock = ^(NSString *authToken) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [SessionUtils securelySaveCurrentUserToken:authToken];
+        
+        [self performSegueWithIdentifier:@"Dashboard Push Segue" sender:nil];
+    };
+    
+    typedef void (^FailureBlock)();
+    FailureBlock failureBlock = ^{
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        [GeneralUtils showMessage:@"We failed to sign you up, please try again." withTitle:nil];
+    };
+    
+    [ApiUtils createUserWithPhoneNumber:self.phoneNumber firstName:self.firstNameTextField.text lastName:self.lastNameTextField.text picture:[ImageUtils encodeToBase64String:self.profilePictureImageView.image] success:successBlock failure:failureBlock];
 }
 
 - (IBAction)profilePicturePressed:(id)sender {

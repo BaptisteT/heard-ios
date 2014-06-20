@@ -165,7 +165,7 @@
                                         <rect key="frame" x="70" y="0.0" width="230" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="20"/>
-                                        <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="phonePad"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="numberPad"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iLN-HP-La6">
                                         <rect key="frame" x="0.0" y="0.0" width="60" height="50"/>
@@ -230,7 +230,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oFh-Cf-eU4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="873" y="115"/>
+            <point key="canvasLocation" x="857" y="71"/>
         </scene>
         <!--Code Confirmation View Controller-->
         <scene sceneID="NYw-zn-yUO">
@@ -557,6 +557,7 @@
                         <outlet property="navigationContainer" destination="Io8-55-wUo" id="3Hb-7w-aai"/>
                         <outlet property="profilePictureContainer" destination="xeg-tG-uk1" id="srs-te-dTJ"/>
                         <outlet property="profilePictureImageView" destination="Rfc-MD-KeV" id="aMX-T5-2K3"/>
+                        <segue destination="2uU-ai-Tsy" kind="push" identifier="Dashboard Push Segue" id="qZZ-1Y-ErH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vVp-5g-1kK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -567,6 +568,25 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1966" y="99"/>
+        </scene>
+        <!--Dashboard View Controller-->
+        <scene sceneID="eZd-qI-nZD">
+            <objects>
+                <viewController id="2uU-ai-Tsy" customClass="DashboardViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="LHp-dQ-ooG"/>
+                        <viewControllerLayoutGuide type="bottom" id="8bw-fU-Wrq"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="MZK-2b-38C" customClass="Dash">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Fgn-qW-csE"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kJk-FM-4rk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2606" y="99"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

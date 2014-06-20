@@ -12,6 +12,7 @@
 #import "MBProgressHUD.h"
 #import "NBPhoneNumber.h"
 #import "NBPhoneNumberUtil.h"
+#import "RequestUserInfoViewController.h"
 
 #define CONFIMATION_CODE_DIGITS 5
 #define BORDER_SIZE 0.5
@@ -90,7 +91,7 @@
     } failure:^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [GeneralUtils showMessage:@"We failed to send your confirmation code, please try again." withTitle:nil];
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     }];
 }
 
@@ -118,6 +119,15 @@
         [self validateCode];
     } else {
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSString * segueName = segue.identifier;
+    
+    if ([segueName isEqualToString: @"Request User Info Push Segue"]) {
+        ((RequestUserInfoViewController *) [segue destinationViewController]).phoneNumber = self.phoneNumber;
     }
 }
 

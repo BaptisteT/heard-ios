@@ -7,6 +7,7 @@
 //
 
 #import "GeneralUtils.h"
+#import "Constants.h"
 
 @implementation GeneralUtils
 
@@ -41,6 +42,11 @@
                                    view.frame.size.height);
     rightBorder.backgroundColor = [UIColor lightGrayColor].CGColor;
     [view.layer addSublayer:rightBorder];
+}
+
++ (BOOL)validName:(NSString *)name
+{
+    return [name length] > 0 && [name length] <= kMaxNameLength;
 }
 
 @end

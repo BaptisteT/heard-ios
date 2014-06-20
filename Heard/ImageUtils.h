@@ -14,4 +14,6 @@
 
 + (UIImage*)imageWithImage:(UIImage*)image scaledToSize:(CGSize)newSize;
 
++ (NSString *)encodeToBase64String:(UIImage *)image;
+
 @end
