@@ -10,6 +10,7 @@
 #import "Constants.h"
 #import "SessionUtils.h"
 #import "Message.h"
+#import "Contact.h"
 
 @implementation ApiUtils
 
@@ -195,7 +196,6 @@
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     
     [self enrichParametersWithToken:parameters];
-
     
     [[ApiUtils sharedClient] GET:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
         NSDictionary *result = [JSON valueForKeyPath:@"result"];
@@ -220,12 +220,38 @@
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     [parameters setObject:[NSNumber numberWithLong:messageId] forKey:@"message_id"];
     
+    [self enrichParametersWithToken:parameters];
+    
     [[ApiUtils sharedClient] PATCH:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
         if (successBlock) {
             successBlock();
         }
     }failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"ERROR: %@, %@", task.description, error);
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
++ (void)getMyContacts:(NSArray *)phoneNumbers success:(void(^)(NSArray *contacts))successBlock failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/get_my_contact.json"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setObject:phoneNumbers forKey:@"contact_numbers"];
+    
+    [self enrichParametersWithToken:parameters];
+    
+    [[ApiUtils sharedClient] GET:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        NSDictionary *result = [JSON valueForKeyPath:@"result"];
+        NSArray *rawContacts = [result valueForKeyPath:@"contacts"];
+        NSArray *contacts = [Contact rawContactsToInstances:rawContacts];
+        
+        if (successBlock) {
+            successBlock(contacts);
+        }
+    }failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (failureBlock) {
             failureBlock();
         }
