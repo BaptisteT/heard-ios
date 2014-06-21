@@ -7,7 +7,7 @@
 //
 
 #import "DashboardViewController.h"
-#import "FriendBubbleView.h"
+#import "ContactBubbleView.h"
 #import "ApiUtils.h"
 #import <AddressBook/AddressBook.h>
 #import "NBPhoneNumberUtil.h"
@@ -17,12 +17,18 @@
 #import "ApiUtils.h"
 #import "GeneralUtils.h"
 
+#define CONTACT_MARGIN 20
+#define CONTACT_SIZE 80
+#define CONTACT_NAME_HEIGHT 30
+
 @interface DashboardViewController ()
 
 // test (to delete)
-@property (strong, nonatomic) IBOutlet FriendBubbleView *exampleBubble;
+@property (strong, nonatomic) IBOutlet ContactBubbleView *exampleBubble;
 @property (strong, nonatomic) UIAlertView *failedToRetrieveFriendsAlertView;
 @property (strong, nonatomic) NSMutableDictionary *addressBookFormattedContacts;
+@property (strong, nonatomic) NSArray *contacts;
+@property (weak, nonatomic) IBOutlet UIScrollView *contactScrollView;
 
 @end
 
@@ -46,10 +52,6 @@
     //              - (id)initWithMessage:(Message *)message;
     
     [self requestAddressBookAccess];
-    
-    
-    // test (to delete)
-    self.exampleBubble = [self.exampleBubble initBubbleViewWithFriendId:6];
 }
 
 - (void)requestAddressBookAccess
@@ -167,6 +169,17 @@
     
     [ApiUtils getMyContacts:phoneNumbers success:^(NSArray *contacts) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        self.contacts = contacts;
+        
+        for (Contact *contact in contacts) {
+            contact.firstName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
+            contact.lastName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
+        }
+        
+        self.addressBookFormattedContacts = nil;
+        
+        [self displayContacts];
     } failure:^{
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         
@@ -185,6 +198,85 @@
     if (alertView == self.failedToRetrieveFriendsAlertView) {
         [self getHeardContacts];
     }
+}
+
+- (void)displayContacts
+{
+    NSUInteger contactCount = [self.contacts count];
+    NSUInteger rows = [self.contacts count] / 3 + 1;
+    float rowHeight = CONTACT_MARGIN + CONTACT_SIZE + CONTACT_NAME_HEIGHT;
+    
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    CGFloat screenHeight = screenRect.size.height;
+    
+    self.contactScrollView.contentSize = CGSizeMake(screenWidth, MIN(screenHeight, rows * rowHeight + 2 * CONTACT_MARGIN));
+    
+    if ([self.contacts count] > 0) {
+        Contact* contact = [self.contacts firstObject];
+        
+        ContactBubbleView *contactView = [[ContactBubbleView alloc] initWithContactBubble:contact andFrame:CGRectMake(2 * CONTACT_MARGIN + CONTACT_SIZE, CONTACT_MARGIN, CONTACT_SIZE, CONTACT_SIZE)];
+        
+        [self addNameLabelForView:contactView andContact:contact];
+        
+        contactView.image = [UIImage imageNamed:@"contact_placeholder.png"];
+        
+        [self.contactScrollView addSubview:contactView];
+    }
+    
+    if ([self.contacts count] > 1) {
+        Contact* contact = [self.contacts objectAtIndex:1];
+        
+        ContactBubbleView *contactView = [[ContactBubbleView alloc] initWithContactBubble:contact andFrame:CGRectMake(3 * CONTACT_MARGIN + 2 * CONTACT_SIZE, CONTACT_MARGIN, CONTACT_SIZE, CONTACT_SIZE)];
+        
+        [self addNameLabelForView:contactView andContact:contact];
+        
+        contactView.image = [UIImage imageNamed:@"contact_placeholder.png"];
+        
+        [self.contactScrollView addSubview:contactView];
+    }
+    
+    for (NSUInteger i = 1; i < rows; i++) {
+        if (contactCount > i * 3 - 1) {
+            [self addContactViewForContactIndex:(i * 3 - 1) verticalPosition:0];
+        }
+        
+        if (contactCount > i * 3) {
+            [self addContactViewForContactIndex:(i * 3) verticalPosition:1];
+
+        }
+        
+        if (contactCount > i * 3 + 1) {
+            [self addContactViewForContactIndex:(i * 3 + 1) verticalPosition:2];
+        }
+    }
+}
+
+- (void)addContactViewForContactIndex:(NSUInteger)index verticalPosition:(NSUInteger)position
+{
+    Contact* contact = [self.contacts objectAtIndex:index];
+    
+    ContactBubbleView *contactView = [[ContactBubbleView alloc] initWithContactBubble:contact andFrame:CGRectMake((position + 1) *CONTACT_MARGIN + position * CONTACT_SIZE, (index - 1) * (CONTACT_MARGIN + CONTACT_SIZE + CONTACT_NAME_HEIGHT) + CONTACT_MARGIN, CONTACT_SIZE, CONTACT_SIZE)];
+    
+    [self addNameLabelForView:contactView andContact:contact];
+    
+    contactView.image = [UIImage imageNamed:@"contact_placeholder.png"];
+    
+    [self.contactScrollView addSubview:contactView];
+
+}
+
+- (void)addNameLabelForView:(UIView *)contactView andContact:(Contact *)contact
+{
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - CONTACT_MARGIN/4, contactView.frame.origin.y + CONTACT_SIZE, contactView.frame.size.width + CONTACT_MARGIN/2, CONTACT_NAME_HEIGHT)];
+    
+    nameLabel.text = [NSString stringWithFormat:@"%@ %@", contact.firstName, contact.lastName];
+    nameLabel.font = [UIFont fontWithName:@"Avenir-Light" size:14.0];
+    nameLabel.textAlignment = NSTextAlignmentCenter;
+    nameLabel.adjustsFontSizeToFitWidth = YES;
+    nameLabel.minimumScaleFactor = 0.7;
+    
+    [self.contactScrollView addSubview:nameLabel];
 }
 
 

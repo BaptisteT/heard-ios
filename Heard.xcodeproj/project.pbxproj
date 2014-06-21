@@ -15,6 +15,8 @@
 		0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */; };
 		0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A481954E4FF00476BFE /* welcome-logo.png */; };
 		0B893A4D19550FF000476BFE /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B893A4C19550FF000476BFE /* Contact.m */; };
+		0B893A511955417C00476BFE /* contact_placeholder@2x@iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A4F1955417C00476BFE /* contact_placeholder@2x@iphone.png */; };
+		0B893A521955417C00476BFE /* contact_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A501955417C00476BFE /* contact_placeholder.png */; };
 		0BD758C01950F91B00CF0D85 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD758BF1950F91B00CF0D85 /* Foundation.framework */; };
 		0BD758C21950F91B00CF0D85 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD758C11950F91B00CF0D85 /* CoreGraphics.framework */; };
 		0BD758C41950F91B00CF0D85 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD758C31950F91B00CF0D85 /* UIKit.framework */; };
@@ -64,7 +66,7 @@
 		0BDB655E1953BE9100223093 /* SessionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB655D1953BE9100223093 /* SessionUtils.m */; };
 		0BDB65611953C04800223093 /* DashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB65601953C04800223093 /* DashboardViewController.m */; };
 		3C7F52831954A575008DD3EA /* MessageBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C7F52821954A575008DD3EA /* MessageBubbleView.m */; };
-		3CB8B7F5195453E50090D657 /* FriendBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* FriendBubbleView.m */; };
+		3CB8B7F5195453E50090D657 /* ContactBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactBubbleView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +79,8 @@
 		0B893A481954E4FF00476BFE /* welcome-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome-logo.png"; sourceTree = "<group>"; };
 		0B893A4B19550FF000476BFE /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		0B893A4C19550FF000476BFE /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
+		0B893A4F1955417C00476BFE /* contact_placeholder@2x@iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact_placeholder@2x@iphone.png"; sourceTree = "<group>"; };
+		0B893A501955417C00476BFE /* contact_placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = contact_placeholder.png; sourceTree = "<group>"; };
 		0BD758BC1950F91B00CF0D85 /* Waved.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Waved.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BD758BF1950F91B00CF0D85 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0BD758C11950F91B00CF0D85 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -171,8 +175,8 @@
 		3C9BBE0D195345A6001C6C4D /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
 		3CB8B7EA195346620090D657 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		3CB8B7EB195346620090D657 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
-		3CB8B7F3195453E50090D657 /* FriendBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendBubbleView.h; sourceTree = "<group>"; };
-		3CB8B7F4195453E50090D657 /* FriendBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendBubbleView.m; sourceTree = "<group>"; };
+		3CB8B7F3195453E50090D657 /* ContactBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactBubbleView.h; sourceTree = "<group>"; };
+		3CB8B7F4195453E50090D657 /* ContactBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactBubbleView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,6 +198,8 @@
 		0B58BB001954D7E200E9FF70 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				0B893A4F1955417C00476BFE /* contact_placeholder@2x@iphone.png */,
+				0B893A501955417C00476BFE /* contact_placeholder.png */,
 				0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */,
 				0B893A481954E4FF00476BFE /* welcome-logo.png */,
 				0B893A381954DF0A00476BFE /* heard-logo-120.png */,
@@ -422,8 +428,8 @@
 		3CB8B7F2195453B10090D657 /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
-				3CB8B7F3195453E50090D657 /* FriendBubbleView.h */,
-				3CB8B7F4195453E50090D657 /* FriendBubbleView.m */,
+				3CB8B7F3195453E50090D657 /* ContactBubbleView.h */,
+				3CB8B7F4195453E50090D657 /* ContactBubbleView.m */,
 				3C7F52811954A575008DD3EA /* MessageBubbleView.h */,
 				3C7F52821954A575008DD3EA /* MessageBubbleView.m */,
 			);
@@ -496,9 +502,11 @@
 				0BD758D31950F91B00CF0D85 /* Main.storyboard in Resources */,
 				0B893A3C1954DF0A00476BFE /* heard-logo-58.png in Resources */,
 				0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */,
+				0B893A521955417C00476BFE /* contact_placeholder.png in Resources */,
 				0BDB64CD19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
 				0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */,
 				0B893A3B1954DF0A00476BFE /* heard-logo-120.png in Resources */,
+				0B893A511955417C00476BFE /* contact_placeholder@2x@iphone.png in Resources */,
 				0B893A3D1954DF0A00476BFE /* heard-logo-80.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -523,7 +531,7 @@
 				0BDB654E1953B5FD00223093 /* RequestUserInfoViewController.m in Sources */,
 				0BDB654F1953B5FD00223093 /* Message.m in Sources */,
 				0BDB65501953B5FD00223093 /* main.m in Sources */,
-				3CB8B7F5195453E50090D657 /* FriendBubbleView.m in Sources */,
+				3CB8B7F5195453E50090D657 /* ContactBubbleView.m in Sources */,
 				0BDB65341953B5EA00223093 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				0BDB65351953B5EA00223093 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				0BDB65361953B5EA00223093 /* UIAlertView+AFNetworking.m in Sources */,

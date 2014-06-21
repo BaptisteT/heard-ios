@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 streetshout. All rights reserved.
 //
 
-#import "FriendBubbleView.h"
+#import "ContactBubbleView.h"
 #import "UIImageView+AFNetworking.h"
 #import "GeneralUtils.h"
 #import "Constants.h"
@@ -14,9 +14,8 @@
 #import "SessionUtils.h"
 
 
-@interface FriendBubbleView()
+@interface ContactBubbleView()
 
-@property (nonatomic) NSInteger friendId;
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
 @property (nonatomic, strong) NSTimer *maxDurationtimer;
 @property (nonatomic, strong) NSTimer *minDurationtimer;
@@ -25,14 +24,21 @@
 
 @end
 
-@implementation FriendBubbleView
+@implementation ContactBubbleView
 
 
-- (id)initBubbleViewWithFriendId:(NSInteger)friendId
+- (id)initWithContactBubble:(Contact *)contact andFrame:(CGRect)frame;
 {
+    self  = [self initWithFrame:frame];
+    
     // Set profile picture
-    self.friendId = friendId;
-    [self setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:friendId]];
+    [self setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:contact.identifier]];
+    
+    self.clipsToBounds = YES;
+    self.layer.cornerRadius = self.bounds.size.height/2;
+    
+    self.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.layer.borderWidth = 2.0;
     
     // Alloc and add gesture recognisers
     [self setMultipleTouchEnabled:NO];
@@ -104,7 +110,7 @@
         // If we are above min message time, we send it
         if (self.minDurationReached) {
             NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
-            [ApiUtils sendMessage:audioData toUser:self.friendId success:nil failure:nil];
+            [ApiUtils sendMessage:audioData toUser:self.contact.identifier success:nil failure:nil];
         } else {
             [GeneralUtils showMessage:@"Hold to record your message" withTitle:nil];
         }
