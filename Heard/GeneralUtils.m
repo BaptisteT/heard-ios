@@ -17,7 +17,7 @@
     [[[UIAlertView alloc] initWithTitle:title
                                 message:text
                                delegate:nil
-                      cancelButtonTitle:@"OK!"
+                      cancelButtonTitle:@"OK"
                       otherButtonTitles:nil] show];
 }
 

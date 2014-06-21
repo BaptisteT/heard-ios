@@ -17,6 +17,7 @@
 		0B893A4D19550FF000476BFE /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B893A4C19550FF000476BFE /* Contact.m */; };
 		0B893A511955417C00476BFE /* contact_placeholder@2x@iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A4F1955417C00476BFE /* contact_placeholder@2x@iphone.png */; };
 		0B893A521955417C00476BFE /* contact_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A501955417C00476BFE /* contact_placeholder.png */; };
+		0BAF4FE219560AEE00838D7D /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BAF4FE119560AEE00838D7D /* MessageUI.framework */; };
 		0BD758C01950F91B00CF0D85 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD758BF1950F91B00CF0D85 /* Foundation.framework */; };
 		0BD758C21950F91B00CF0D85 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD758C11950F91B00CF0D85 /* CoreGraphics.framework */; };
 		0BD758C41950F91B00CF0D85 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD758C31950F91B00CF0D85 /* UIKit.framework */; };
@@ -81,6 +82,7 @@
 		0B893A4C19550FF000476BFE /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 		0B893A4F1955417C00476BFE /* contact_placeholder@2x@iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact_placeholder@2x@iphone.png"; sourceTree = "<group>"; };
 		0B893A501955417C00476BFE /* contact_placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = contact_placeholder.png; sourceTree = "<group>"; };
+		0BAF4FE119560AEE00838D7D /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		0BD758BC1950F91B00CF0D85 /* Waved.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Waved.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BD758BF1950F91B00CF0D85 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0BD758C11950F91B00CF0D85 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -184,6 +186,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BAF4FE219560AEE00838D7D /* MessageUI.framework in Frameworks */,
 				0B58BAFD1954B47700E9FF70 /* AddressBook.framework in Frameworks */,
 				0B58BAFE1954B47700E9FF70 /* AddressBookUI.framework in Frameworks */,
 				0BD758C21950F91B00CF0D85 /* CoreGraphics.framework in Frameworks */,
@@ -229,6 +232,7 @@
 		0BD758BE1950F91B00CF0D85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0BAF4FE119560AEE00838D7D /* MessageUI.framework */,
 				0B58BAFB1954B47700E9FF70 /* AddressBook.framework */,
 				0B58BAFC1954B47700E9FF70 /* AddressBookUI.framework */,
 				0BD758BF1950F91B00CF0D85 /* Foundation.framework */,

@@ -234,7 +234,7 @@
     }];
 }
 
-+ (void)getMyContacts:(NSArray *)phoneNumbers success:(void(^)(NSArray *contacts))successBlock failure:(void(^)())failureBlock
++ (void)getMyContacts:(NSArray *)phoneNumbers success:(void(^)(NSMutableArray *contacts))successBlock failure:(void(^)())failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/get_my_contact.json"];
     
@@ -243,7 +243,8 @@
     
     [self enrichParametersWithToken:parameters];
     
-    [[ApiUtils sharedClient] GET:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+    //Need a post, otherwise the URI is too large
+    [[ApiUtils sharedClient] POST:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
         NSDictionary *result = [JSON valueForKeyPath:@"result"];
         NSArray *rawContacts = [result valueForKeyPath:@"contacts"];
         NSArray *contacts = [Contact rawContactsToInstances:rawContacts];
