@@ -312,7 +312,7 @@
         [self presentViewController:picker animated:YES completion:nil];
     //Share (in the future, it'd be cool to share a vocal message!)
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_2]) {
-        NSString *shareString = @"Download Waved, the new vocal messaging app.";
+        NSString *shareString = @"Download Waved, the new voice messaging app.";
         
         NSURL *shareUrl = [NSURL URLWithString:kProdAFHeardWebsite];
         
@@ -389,7 +389,7 @@
         
         //Redirect to sms
         MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
-        viewController.body = [NSString stringWithFormat:@"Download Waved, the new vocal messaging app, at %@", kProdAFHeardWebsite];
+        viewController.body = [NSString stringWithFormat:@"Download Waved, the new voice messaging app, at %@", kProdAFHeardWebsite];
         viewController.recipients = selectedContactPhoneNumbers;
         viewController.messageComposeDelegate = self;
         
