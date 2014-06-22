@@ -17,10 +17,18 @@
 @interface ContactBubbleView()
 
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
+@property (nonatomic, strong) UITapGestureRecognizer *oneTapRecognizer;
 @property (nonatomic, strong) NSTimer *maxDurationtimer;
 @property (nonatomic, strong) NSTimer *minDurationtimer;
 @property (nonatomic) BOOL minDurationReached;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
+@property (nonatomic) NSInteger unreadMessagesCount;
+@property (nonatomic) UIButton *unreadMessagesButton;
+@property (nonatomic) NSMutableArray *unreadMessages;
+@property (strong, nonatomic) UIImageView *imageView;
+
+// temp bt ?
+@property (nonatomic, strong) AVAudioPlayer *player;
 
 @end
 
@@ -30,22 +38,24 @@
 - (id)initWithContactBubble:(Contact *)contact andFrame:(CGRect)frame;
 {
     self  = [self initWithFrame:frame];
+    self.contact = contact;
     
-    // Set profile picture
-    [self setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:contact.identifier]];
-    
-    self.clipsToBounds = YES;
-    self.layer.cornerRadius = self.bounds.size.height/2;
-    
-    self.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.layer.borderWidth = 2.0;
+    // Set image view
+    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, kContactSize, kContactSize)];
+    [self.imageView setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:contact.identifier]];
+    [self addSubview:self.imageView];
+    self.imageView.userInteractionEnabled = YES;
+    self.imageView.clipsToBounds = YES;
+    self.imageView.layer.cornerRadius = self.bounds.size.height/2;
+    self.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.imageView.layer.borderWidth = 2.0;
     
     // Alloc and add gesture recognisers
     [self setMultipleTouchEnabled:NO];
     self.userInteractionEnabled = YES;
     self.exclusiveTouch = YES;
     self.longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
-    [self addGestureRecognizer:self.longPressRecognizer];
+    [self.imageView addGestureRecognizer:self.longPressRecognizer];
     self.longPressRecognizer.delegate = self;
     self.longPressRecognizer.minimumPressDuration = 0.;
 
@@ -64,14 +74,18 @@
     NSMutableDictionary *recordSetting = [[NSMutableDictionary alloc] init];
     
     [recordSetting setValue:[NSNumber numberWithInt:kAudioFormatMPEG4AAC] forKey:AVFormatIDKey];
-    [recordSetting setValue:[NSNumber numberWithFloat:16000] forKey:AVSampleRateKey];
-    [recordSetting setValue:[NSNumber numberWithInt: 1] forKey:AVNumberOfChannelsKey];
+    [recordSetting setValue:[NSNumber numberWithFloat:44100] forKey:AVSampleRateKey];
+    [recordSetting setValue:[NSNumber numberWithInt: 2] forKey:AVNumberOfChannelsKey];
     
     // Initiate and prepare the recorder
     self.recorder = [[AVAudioRecorder alloc] initWithURL:outputFileURL settings:recordSetting error:nil];
     self.recorder.delegate = self;
     self.recorder.meteringEnabled = YES;
     [self.recorder prepareToRecord];
+    
+    // Init unread messages button
+    [self initUnreadMessagesButton];
+    self.unreadMessagesCount = 0;
     
     return self;
 }
@@ -112,11 +126,34 @@
             NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
             [ApiUtils sendMessage:audioData toUser:self.contact.identifier success:nil failure:nil];
         } else {
-            [GeneralUtils showMessage:@"Hold to record your message" withTitle:nil];
+            [GeneralUtils showMessage:@"Press and hold to record your message." withTitle:nil];
         }
     }
 }
 
+- (void)handleTapGesture:(UITapGestureRecognizer *)recognizer
+{
+    [self.player play];
+}
+
+// temp bt
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    if (flag) {
+        // Mark as opened on the database
+        [ApiUtils markMessageAsOpened:((Message *)self.unreadMessages[0]).identifier success:nil failure:nil];
+        
+        
+        [self.unreadMessages removeObjectAtIndex:0];
+        [self setUnreadMessagesCount:self.unreadMessagesCount-1];
+        
+        if (self.unreadMessagesCount > 0) {
+            NSData* data = [NSData dataWithContentsOfURL:[self.unreadMessages[0] getMessageURL]] ;
+            self.player = [[AVAudioPlayer alloc] initWithData:data error:nil];
+            [self.player setDelegate:self];
+        }
+    }
+}
 
 // ----------------------------------------------------------
 // Utilities
@@ -132,6 +169,54 @@
     self.minDurationReached = TRUE;
 }
 
+- (void)setUnreadMessagesCount:(NSInteger)unreadMessagesCount
+{
+    _unreadMessagesCount = unreadMessagesCount;
+    [self.unreadMessagesButton setTitle:[NSString stringWithFormat:@"%lu",(long)unreadMessagesCount] forState:UIControlStateNormal];
+    if (unreadMessagesCount>0) {
+        [self.unreadMessagesButton setHidden:NO];
+    } else {
+        [self.unreadMessagesButton setHidden:YES];
+    }
+}
 
+- (void)initUnreadMessagesButton
+{
+    self.unreadMessagesButton = [[UIButton alloc] init];
+    [self.unreadMessagesButton setFrame:CGRectMake(kContactSize - kUnreadMessagesButtonSize, 0, kUnreadMessagesButtonSize, kUnreadMessagesButtonSize)];
+    [self.unreadMessagesButton setBackgroundColor:[UIColor redColor]];
+    [self.unreadMessagesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    self.unreadMessagesButton.layer.cornerRadius = self.unreadMessagesButton.bounds.size.height/2;
+    
+    self.oneTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    [self.unreadMessagesButton addGestureRecognizer:self.oneTapRecognizer];
+    self.oneTapRecognizer.delegate = self;
+    self.oneTapRecognizer.numberOfTapsRequired = 1;
+
+    
+    [self addSubview:self.unreadMessagesButton];
+    [self.unreadMessagesButton setHidden:YES];
+}
+
+- (void)addUnreadMessage:(Message *)message
+{
+    if (!self.unreadMessages) { // 1st message
+        self.unreadMessages = [[NSMutableArray alloc] init];
+    }
+    [self.unreadMessages addObject:message];
+    [self setUnreadMessagesCount:self.unreadMessagesCount+1];
+    
+    if (self.unreadMessagesCount == 1) {
+        // Init player with this message if this is the only one
+        NSData* data = [NSData dataWithContentsOfURL:[message getMessageURL]] ;
+        self.player = [[AVAudioPlayer alloc] initWithData:data error:nil];
+        [self.player setDelegate:self];
+    }
+}
+
+- (void)setImage:(UIImage *)image
+{
+    self.imageView.image = image;
+}
 
 @end

@@ -18,9 +18,6 @@
 #import "GeneralUtils.h"
 #import "Constants.h"
 
-#define CONTACT_MARGIN 20
-#define CONTACT_SIZE 80
-#define CONTACT_NAME_HEIGHT 30
 #define ACTION_SHEET_OPTION_1 @"Invite contact"
 #define ACTION_SHEET_OPTION_2 @"Share this app"
 #define ACTION_SHEET_OPTION_3 @"Feedback"
@@ -31,7 +28,8 @@
 @property (strong, nonatomic) UIAlertView *failedToRetrieveFriendsAlertView;
 @property (strong, nonatomic) UIAlertView *failedToRetrieveNewFriendAlertView;
 @property (strong, nonatomic) NSMutableDictionary *addressBookFormattedContacts;
-@property (strong, nonatomic) NSMutableArray *contacts;
+@property (strong, nonatomic) NSArray *contacts;
+@property (strong, nonatomic) NSMutableArray *contactBubbleViews;
 @property (weak, nonatomic) IBOutlet UIScrollView *contactScrollView;
 @property (strong, nonatomic) UIActionSheet *menuActionSheet;
 
@@ -44,19 +42,15 @@
 {
     [super viewDidLoad];
     
-    // todo
-    // 1 -> retrive all contacts + order (last message exchanged)
+    // Some init
+    self.contactBubbleViews = [[NSMutableArray alloc] init];
     
-    // 2 -> Create corresponding bubbles
-    // - (id)initBubbleViewWithFriendId:(NSInteger)friendId;
-    
-    // 3 -> Query all unread message
-    [ApiUtils getUnreadMessagesAndExecuteSuccess:nil failure:nil];
+    // Retrive contacts, create bubble + retrieve unread messages
+    [self requestAddressBookAccess];
+    // todo order?
     
     // 4 -> Create messages bubles
     //              - (id)initWithMessage:(Message *)message;
-    
-    [self requestAddressBookAccess];
 }
 
 - (void)requestAddressBookAccess
@@ -70,7 +64,7 @@
                 [self retrieveFriendsFromAddressBook:addressBook];
             } else {
                 // User denied access
-                // Display an alert telling user the contact could not be added
+                // Todo Display an alert telling user the contact could not be added
             }
         });
     }
@@ -80,7 +74,7 @@
     }
     else {
         // The user has previously denied access
-        // Send an alert telling user to change privacy setting in settings app
+        // Todo Send an alert telling user to change privacy setting in settings app
     }
 
 }
@@ -171,8 +165,8 @@
     for (NSString* phoneNumber in self.addressBookFormattedContacts) {
         [phoneNumbers addObject:phoneNumber];
     }
-    
-    [ApiUtils getMyContacts:phoneNumbers success:^(NSMutableArray *contacts) {
+
+    [ApiUtils getMyContacts:phoneNumbers success:^(NSArray *contacts) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         
         self.contacts = contacts;
@@ -211,22 +205,22 @@
     
     NSUInteger contactCount = [self.contacts count];
     NSUInteger rows = [self.contacts count] / 3 + 1;
-    float rowHeight = CONTACT_MARGIN + CONTACT_SIZE + CONTACT_NAME_HEIGHT;
+    float rowHeight = kContactMargin + kContactSize + kContactNameHeight;
     
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;
     
-    self.contactScrollView.contentSize = CGSizeMake(screenWidth, MIN(screenHeight - 20, rows * rowHeight + 2 * CONTACT_MARGIN));
+    self.contactScrollView.contentSize = CGSizeMake(screenWidth, MIN(screenHeight - 20, rows * rowHeight + 2 * kContactMargin));
     
     if ([self.contacts count] > 0) {
         Contact* contact = [self.contacts firstObject];
         
-        ContactBubbleView *contactView = [[ContactBubbleView alloc] initWithContactBubble:contact andFrame:CGRectMake(2 * CONTACT_MARGIN + CONTACT_SIZE, CONTACT_MARGIN, CONTACT_SIZE, CONTACT_SIZE)];
+        ContactBubbleView *contactView = [[ContactBubbleView alloc] initWithContactBubble:contact andFrame:CGRectMake(2 * kContactMargin + kContactSize, kContactMargin, kContactSize, kContactSize)];
         
         [self addNameLabelForView:contactView andContact:contact];
-        
-        contactView.image = [UIImage imageNamed:@"contact_placeholder.png"];
+        [self.contactBubbleViews addObject:contactView];
+        [contactView setImage:[UIImage imageNamed:@"contact_placeholder.png"]];
         
         [self.contactScrollView addSubview:contactView];
     }
@@ -234,11 +228,11 @@
     if ([self.contacts count] > 1) {
         Contact* contact = [self.contacts objectAtIndex:1];
         
-        ContactBubbleView *contactView = [[ContactBubbleView alloc] initWithContactBubble:contact andFrame:CGRectMake(3 * CONTACT_MARGIN + 2 * CONTACT_SIZE, CONTACT_MARGIN, CONTACT_SIZE, CONTACT_SIZE)];
+        ContactBubbleView *contactView = [[ContactBubbleView alloc] initWithContactBubble:contact andFrame:CGRectMake(3 * kContactMargin + 2 * kContactSize, kContactMargin, kContactSize, kContactSize)];
         
         [self addNameLabelForView:contactView andContact:contact];
-        
-        contactView.image = [UIImage imageNamed:@"contact_placeholder.png"];
+        [self.contactBubbleViews addObject:contactView];
+        [contactView setImage:[UIImage imageNamed:@"contact_placeholder.png"]];
         
         [self.contactScrollView addSubview:contactView];
     }
@@ -257,17 +251,20 @@
             [self addContactViewForContactIndex:i horizontalPosition:2];
         }
     }
+    
+    // Retrieve unread messages
+    [self retrieveAndDisplayUnreadMessages];
 }
 
 - (void)addContactViewForContactIndex:(NSUInteger)index horizontalPosition:(NSUInteger)position
 {
     Contact* contact = [self.contacts objectAtIndex:(index*3 - 1 + position)];
     
-    ContactBubbleView *contactView = [[ContactBubbleView alloc] initWithContactBubble:contact andFrame:CGRectMake((position + 1) *CONTACT_MARGIN + position * CONTACT_SIZE, index * (CONTACT_MARGIN + CONTACT_SIZE + CONTACT_NAME_HEIGHT) + CONTACT_MARGIN, CONTACT_SIZE, CONTACT_SIZE)];
+    ContactBubbleView *contactView = [[ContactBubbleView alloc] initWithContactBubble:contact andFrame:CGRectMake((position + 1) *kContactMargin + position * kContactSize, index * (kContactMargin + kContactSize + kContactNameHeight) + kContactMargin, kContactSize, kContactSize)];
     
     [self addNameLabelForView:contactView andContact:contact];
-    
-    contactView.image = [UIImage imageNamed:@"contact_placeholder.png"];
+    [self.contactBubbleViews addObject:contactView];
+    [contactView setImage:[UIImage imageNamed:@"contact_placeholder.png"]];
     
     [self.contactScrollView addSubview:contactView];
 
@@ -275,7 +272,7 @@
 
 - (void)addNameLabelForView:(UIView *)contactView andContact:(Contact *)contact
 {
-    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - CONTACT_MARGIN/4, contactView.frame.origin.y + CONTACT_SIZE, contactView.frame.size.width + CONTACT_MARGIN/2, CONTACT_NAME_HEIGHT)];
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - kContactMargin/4, contactView.frame.origin.y + kContactSize, contactView.frame.size.width + kContactMargin/2, kContactNameHeight)];
     
     
     
@@ -413,6 +410,34 @@
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+// Retrieve unread messages and display alert
+- (void) retrieveAndDisplayUnreadMessages
+{
+    void (^successBlock)(NSArray *messages) = ^void(NSArray *messages) {
+        for (Message *message in messages) {
+            [self addUnreadMessage:message];
+        }
+    };
+    [ApiUtils getUnreadMessagesAndExecuteSuccess:successBlock failure:nil];
+}
+
+// Add a message we just received
+- (void)addUnreadMessage:(Message *)message
+{
+    for (ContactBubbleView *contactBubble in self.contactBubbleViews) {
+        BOOL isAttributed = NO;
+        if (message.senderId == contactBubble.contact.identifier) {
+            [contactBubble addUnreadMessage:message];
+            isAttributed = YES;
+            break;
+        }
+        if (!isAttributed) {
+            // todo BT
+            // case where we receive a message from someone not in our contacts
+        }
+    }
 }
 
 @end

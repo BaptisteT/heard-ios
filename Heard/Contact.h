@@ -15,6 +15,7 @@
 @property (strong, nonatomic) NSString *firstName;
 @property (strong, nonatomic) NSString *lastName;
 
+
 + (Contact *)createContactWithId:(NSUInteger)identifier
                      phoneNumber:(NSString *)phoneNumber
                        firstName:(NSString *)firstName

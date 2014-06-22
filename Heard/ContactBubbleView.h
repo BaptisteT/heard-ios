@@ -9,12 +9,16 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import "Contact.h"
+#import "Message.h"
 
 
-@interface ContactBubbleView : UIImageView <UIGestureRecognizerDelegate, AVAudioRecorderDelegate>
+@interface ContactBubbleView : UIView <UIGestureRecognizerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate>
 
 - (id)initWithContactBubble:(Contact *)contact andFrame:(CGRect)frame;
 
 @property (strong, nonatomic) Contact *contact;
+
+- (void)addUnreadMessage:(Message *)message;
+- (void)setImage:(UIImage *)image;
 
 @end

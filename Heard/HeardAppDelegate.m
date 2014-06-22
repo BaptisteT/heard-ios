@@ -11,6 +11,9 @@
 #import "SessionUtils.h"
 #import "WelcomeViewController.h"
 #import "ApiUtils.h"
+#import "Message.h"
+#import "DashboardViewController.h"
+#import "GeneralUtils.h"
 
 
 @implementation HeardAppDelegate
@@ -31,7 +34,7 @@
         [welcomeViewController performSegueWithIdentifier:@"Dashboard Push Segue From Welcome" sender:nil];
         
         // register for remote
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert)];
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
     }
     
     return YES;
@@ -57,9 +60,16 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    // todo BT
     // The user receives a notif while using the app
-    // Create a message bubble and an alert
+    Message *newMessage = [Message rawMessageToInstance:[userInfo valueForKey:@"message"]];
+    
+    UIViewController *visibleController = [self getVisibleController];
+    
+    if ([visibleController isKindOfClass:[DashboardViewController class]]) {
+        [(DashboardViewController *)visibleController addUnreadMessage:newMessage];
+    }
+    
+    // todo bt (later) create alert
 }
 
 
@@ -74,6 +84,11 @@ NSString* stringFromDeviceTokenData(NSData *deviceToken)
     return token;
 }
 
-
+// get visible view controller
+- (UIViewController *)getVisibleController
+{
+    UINavigationController *navigationController = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    return navigationController.visibleViewController;
+}
 
 @end

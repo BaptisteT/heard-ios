@@ -68,10 +68,10 @@
         [ApiUtils markMessageAsOpened:self.messageId success:nil failure:nil];
         
         // Remove from view
-        [self removeFromSuperview];
+//        [self removeFromSuperview];
         
-        // todo BT
-        // release
+        // todo BT (later) ?
+        // update unreadMessagesCount & unreadMessages in contact bubble
     }
 }
 

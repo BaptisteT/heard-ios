@@ -82,6 +82,7 @@
         if (authToken) {
             [SessionUtils securelySaveCurrentUserToken:authToken];
             [self performSegueWithIdentifier:@"Dashboard Push Segue From Code Confirmation" sender:nil];
+            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
         } else {
             [self performSegueWithIdentifier:@"Request User Info Push Segue" sender:nil];
         }

@@ -83,7 +83,7 @@
     SuccessBlock successBlock = ^(NSString *authToken) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         [SessionUtils securelySaveCurrentUserToken:authToken];
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert)];
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
         [self performSegueWithIdentifier:@"Dashboard Push Segue" sender:nil];
     };
     

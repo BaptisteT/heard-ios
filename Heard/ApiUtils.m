@@ -234,7 +234,7 @@
     }];
 }
 
-+ (void)getMyContacts:(NSArray *)phoneNumbers success:(void(^)(NSMutableArray *contacts))successBlock failure:(void(^)())failureBlock
++ (void)getMyContacts:(NSArray *)phoneNumbers success:(void(^)(NSArray *contacts))successBlock failure:(void(^)())failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/get_my_contact.json"];
     
