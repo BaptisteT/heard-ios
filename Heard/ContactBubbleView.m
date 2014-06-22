@@ -26,6 +26,9 @@
 @property (nonatomic) UIButton *unreadMessagesButton;
 @property (nonatomic) NSMutableArray *unreadMessages;
 @property (strong, nonatomic) UIImageView *imageView;
+@property (strong, nonatomic) NSTimer *metersTimer;
+@property (nonatomic) float averagePower;
+@property (nonatomic) float elapsedTime;
 
 // temp bt ?
 @property (nonatomic, strong) AVAudioPlayer *player;
@@ -109,10 +112,23 @@
         AVAudioSession *session = [AVAudioSession sharedInstance];
         [session setActive:YES error:nil];
         
+        self.elapsedTime = 0;
+        self.averagePower = 0;
+        
         // Start recording
         [self.recorder record];
+        
+        [self.delegate longPressOnContactBubbleViewStarted:self.contact.identifier];
+        
+        self.metersTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
+                                                           target:self
+                                                         selector:@selector(notifyNewMeters)
+                                                         userInfo:nil
+                                                          repeats:YES];
+        [self.metersTimer fire];
     }
     if (recognizer.state == UIGestureRecognizerStateEnded) {
+        [self.metersTimer invalidate];
         // Stop timer
         [self.maxDurationtimer invalidate];
         
@@ -124,11 +140,38 @@
         // If we are above min message time, we send it
         if (self.minDurationReached) {
             NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
-            [ApiUtils sendMessage:audioData toUser:self.contact.identifier success:nil failure:nil];
+            [ApiUtils sendMessage:audioData toUser:self.contact.identifier success:^{
+                [self.delegate messageSentWithError:NO];
+            } failure:^{
+                [self.delegate messageSentWithError:YES];
+            }];
+            
+            [self.delegate longPressOnContactBubbleViewEnded:self.contact.identifier longEnough:YES];
         } else {
-            [GeneralUtils showMessage:@"Press and hold to record your message." withTitle:nil];
+            [self.delegate longPressOnContactBubbleViewEnded:self.contact.identifier longEnough:NO];
         }
     }
+}
+
+- (void)notifyNewMeters
+{
+    [self.recorder updateMeters];
+    
+    
+    float power;
+    
+    if (self.averagePower == 0) {
+        power = [self.recorder averagePowerForChannel:0];
+    } else {
+        power = ([self.recorder averagePowerForChannel:0] - self.averagePower * (self.elapsedTime / (self.elapsedTime + 0.1))) * ((self.elapsedTime + 0.1)/0.1);
+    }
+    
+    self.averagePower = [self.recorder averagePowerForChannel:0];
+    
+    NSLog(@"POWER: %f", power);
+    
+    [self.delegate notifiedNewMeters:power];
+    
 }
 
 - (void)handleTapGesture:(UITapGestureRecognizer *)recognizer

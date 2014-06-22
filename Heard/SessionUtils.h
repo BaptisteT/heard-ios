@@ -14,6 +14,8 @@
 
 + (NSString *)getCurrentUserToken;
 
++ (void)saveUserInfo:(NSInteger)userId;
+
 + (NSInteger)getCurrentUserId;
 
 + (BOOL)isSignedIn;

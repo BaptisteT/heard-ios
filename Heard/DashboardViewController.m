@@ -7,7 +7,6 @@
 //
 
 #import "DashboardViewController.h"
-#import "ContactBubbleView.h"
 #import "ApiUtils.h"
 #import <AddressBook/AddressBook.h>
 #import "NBPhoneNumberUtil.h"
@@ -17,11 +16,25 @@
 #import "ApiUtils.h"
 #import "GeneralUtils.h"
 #import "Constants.h"
+#import "UIImageView+AFNetworking.h"
+#import "ImageUtils.h"
+#import "SessionUtils.h"
 
 #define ACTION_SHEET_OPTION_1 @"Invite contact"
 #define ACTION_SHEET_OPTION_2 @"Share this app"
 #define ACTION_SHEET_OPTION_3 @"Feedback"
 #define ACTION_SHEET_CANCEL @"Cancel"
+
+#define MAX_METERS 0
+#define MIN_METERS -45
+#define METERS_FREQUENCY (30/0.1)
+
+#define RECORDING_IMAGE_SIZE 50
+#define RECORDING_IMAGE_BOTTOM_MARGIN 50
+#define RECORDING_IMAGE_HORIZONTAL_MARGIN 10
+#define RECORDING_LINE_MAX_HEIGHT 300
+#define RECORDING_LINE_WEIGHT 0.5
+
 
 @interface DashboardViewController ()
 
@@ -32,6 +45,12 @@
 @property (strong, nonatomic) NSMutableArray *contactBubbleViews;
 @property (weak, nonatomic) IBOutlet UIScrollView *contactScrollView;
 @property (strong, nonatomic) UIActionSheet *menuActionSheet;
+@property (strong, nonatomic) UIView *recordingView;
+@property (nonatomic) float recordingLineX;
+@property (nonatomic) float recordingLineY;
+@property (nonatomic, strong)UILabel *recordingMessage;
+@property (nonatomic) float recordLineLength;
+
 
 @end
 
@@ -218,6 +237,8 @@
         
         ContactBubbleView *contactView = [[ContactBubbleView alloc] initWithContactBubble:contact andFrame:CGRectMake(2 * kContactMargin + kContactSize, kContactMargin, kContactSize, kContactSize)];
         
+        contactView.delegate = self;
+        
         [self addNameLabelForView:contactView andContact:contact];
         [self.contactBubbleViews addObject:contactView];
         [contactView setImage:[UIImage imageNamed:@"contact_placeholder.png"]];
@@ -229,6 +250,8 @@
         Contact* contact = [self.contacts objectAtIndex:1];
         
         ContactBubbleView *contactView = [[ContactBubbleView alloc] initWithContactBubble:contact andFrame:CGRectMake(3 * kContactMargin + 2 * kContactSize, kContactMargin, kContactSize, kContactSize)];
+        
+        contactView.delegate = self;
         
         [self addNameLabelForView:contactView andContact:contact];
         [self.contactBubbleViews addObject:contactView];
@@ -261,6 +284,8 @@
     Contact* contact = [self.contacts objectAtIndex:(index*3 - 1 + position)];
     
     ContactBubbleView *contactView = [[ContactBubbleView alloc] initWithContactBubble:contact andFrame:CGRectMake((position + 1) *kContactMargin + position * kContactSize, index * (kContactMargin + kContactSize + kContactNameHeight) + kContactMargin, kContactSize, kContactSize)];
+    
+    contactView.delegate = self;
     
     [self addNameLabelForView:contactView andContact:contact];
     [self.contactBubbleViews addObject:contactView];
@@ -420,6 +445,7 @@
             [self addUnreadMessage:message];
         }
     };
+    
     [ApiUtils getUnreadMessagesAndExecuteSuccess:successBlock failure:nil];
 }
 
@@ -437,6 +463,146 @@
             // todo BT
             // case where we receive a message from someone not in our contacts
         }
+    }
+}
+
+// ----------------------------------------------------------
+// Utilities
+// ----------------------------------------------------------
+
+//Create recording mode screen
+- (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId
+{
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    CGFloat screenHeight = screenRect.size.height;
+    
+    //Recording view is same size as screen
+    self.recordingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, screenHeight)];
+    self.recordingView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.recordingView];
+    
+    //Recording line starting point
+    self.recordingLineX = RECORDING_IMAGE_HORIZONTAL_MARGIN + RECORDING_IMAGE_SIZE;
+    self.recordingLineY = self.recordingView.bounds.size.height - RECORDING_IMAGE_BOTTOM_MARGIN - RECORDING_IMAGE_SIZE/2;
+    
+    [self addRecordingMessage:@"Release to send..." color:[UIColor blackColor]];
+    
+    //Add contact bubbles
+    UIImageView *myImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, self.recordingView.bounds.size.height - RECORDING_IMAGE_BOTTOM_MARGIN - RECORDING_IMAGE_SIZE, RECORDING_IMAGE_SIZE, RECORDING_IMAGE_SIZE)];
+    UIImageView *contactImageView = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth - RECORDING_IMAGE_SIZE - 10, self.recordingView.bounds.size.height - RECORDING_IMAGE_BOTTOM_MARGIN - RECORDING_IMAGE_SIZE, RECORDING_IMAGE_SIZE, RECORDING_IMAGE_SIZE)];
+    
+    contactImageView.clipsToBounds = YES;
+    myImageView.clipsToBounds = YES;
+    contactImageView.layer.cornerRadius = RECORDING_IMAGE_SIZE/2;
+    myImageView.layer.cornerRadius = RECORDING_IMAGE_SIZE/2;
+    
+    [contactImageView setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:contactId]];
+    [myImageView setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
+    
+    [self.recordingView addSubview:contactImageView];
+    [self.recordingView addSubview:myImageView];
+}
+
+//User stop pressing screen
+- (void)longPressOnContactBubbleViewEnded:(NSUInteger)contactId longEnough:(BOOL)longEnough
+{
+    [self notifiedNewMeters:MIN_METERS];
+    
+    if (longEnough) {
+        [self addRecordingMessage:@"Sending..." color:[UIColor blackColor]];
+    } else {
+        [self quitRecodingModeAnimated:NO];
+        [GeneralUtils showMessage:@"Press longer to send a voice message!" withTitle:nil];
+    }
+}
+
+//Recorder notifies a change in volume intensity (every 0.1 seconds)
+- (void)notifiedNewMeters:(float)power
+{
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:CGPointMake(self.recordingLineX, self.recordingLineY)];
+    
+    if (self.recordLineLength == 0) {
+        self.recordLineLength = self.recordingView.bounds.size.width - 2 * RECORDING_IMAGE_SIZE - 2 * RECORDING_IMAGE_HORIZONTAL_MARGIN;
+    }
+    
+    self.recordingLineX = self.recordingLineX + self.recordLineLength/METERS_FREQUENCY;
+    
+    if (power + (-MIN_METERS) < 0) {
+        power = 0;
+    } else {
+        power = power + (-MIN_METERS);
+    }
+    
+    self.recordingLineY = self.recordingView.bounds.size.height - RECORDING_IMAGE_BOTTOM_MARGIN - RECORDING_IMAGE_SIZE/2 - RECORDING_LINE_MAX_HEIGHT * (power/(MAX_METERS + (-MIN_METERS)));
+    
+    [path addLineToPoint:CGPointMake(self.recordingLineX, self.recordingLineY)];
+    
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    shapeLayer.path = [path CGPath];
+    shapeLayer.strokeColor = [[ImageUtils blue] CGColor];
+    shapeLayer.lineWidth = RECORDING_LINE_WEIGHT;
+    shapeLayer.fillColor = [[UIColor clearColor] CGColor];
+    
+    [self.recordingView.layer addSublayer:shapeLayer];
+}
+
+- (void)addRecordingMessage:(NSString *)message color:(UIColor *)color {
+    if (self.recordingMessage) {
+        [self.recordingMessage removeFromSuperview];
+        self.recordingMessage = nil;
+    }
+    
+    self.recordingMessage = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, self.recordingView.bounds.size.width, 40)];
+    
+    self.recordingMessage.text = message;
+    self.recordingMessage.font = [UIFont fontWithName:@"Avenir-Light" size:20.0];
+    self.recordingMessage.textAlignment = NSTextAlignmentCenter;
+    self.recordingMessage.textColor = color;
+    
+    [self.recordingView addSubview:self.recordingMessage];
+}
+
+- (void)messageSentWithError:(BOOL)error
+{
+    if (error) {
+        [self addRecordingMessage:@"Sending failed." color:[UIColor redColor]];
+        sleep(1);
+    } else {
+        [self addRecordingMessage:@"Sent!" color:[UIColor blackColor]];
+        
+        float initialWidth = 0;
+        float finalWidth = self.recordingView.bounds.size.width - RECORDING_IMAGE_SIZE - RECORDING_IMAGE_HORIZONTAL_MARGIN - self.recordingLineX;
+        
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(self.recordingLineX, self.recordingView.bounds.size.height -RECORDING_IMAGE_BOTTOM_MARGIN - RECORDING_IMAGE_SIZE/2, initialWidth, RECORDING_LINE_WEIGHT)];
+        
+        line.backgroundColor = [ImageUtils blue];
+        
+        [self.recordingView addSubview:line];
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            CGRect frame = line.frame;
+            frame.size.width = finalWidth;
+            line.frame = frame;
+        } completion:^(BOOL dummy){
+            [self quitRecodingModeAnimated:YES];
+        }];
+    }
+}
+
+- (void)quitRecodingModeAnimated:(BOOL)animated
+{
+    if (animated) {
+        [UIView animateWithDuration:1.0 animations:^{
+            self.recordingView.alpha = 0;
+        } completion:^(BOOL dummy){
+            [self.recordingView removeFromSuperview];
+            self.recordingView = nil;
+        }];
+    } else {
+        [self.recordingView removeFromSuperview];
+        self.recordingView = nil;
     }
 }
 

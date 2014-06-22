@@ -76,11 +76,12 @@
     
     [ApiUtils validateSmsCode:code
                          phoneNumber:self.phoneNumber
-                      success:^(NSString *authToken) {
+                      success:^(NSString *authToken, NSInteger userId) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
                           
-        if (authToken) {
+        if (authToken && userId != 0) {
             [SessionUtils securelySaveCurrentUserToken:authToken];
+            [SessionUtils saveUserInfo:userId];
             [self performSegueWithIdentifier:@"Dashboard Push Segue From Code Confirmation" sender:nil];
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
         } else {
