@@ -118,7 +118,7 @@
         // Start recording
         [self.recorder record];
         
-        [self.delegate longPressOnContactBubbleViewStarted:self.contact.identifier];
+        [self.delegate longPressOnContactBubbleViewStarted:self.contact.identifier FromView:self];
         
         self.metersTimer = [NSTimer scheduledTimerWithTimeInterval:0.05
                                                            target:self

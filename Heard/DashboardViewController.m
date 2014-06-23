@@ -52,8 +52,9 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
 @property (nonatomic, strong) UIView *playerAudioLine;
 @property (nonatomic, strong) AVAudioPlayer *replayPlayer;
-@property (nonatomic, strong) IBOutlet UIButton *replayButton;
 @property (nonatomic, strong) NSString *currentUserPhoneNumber;
+@property (nonatomic, strong) UIView *contactImageOverlay;
+@property (nonatomic, strong) UIView *lastMessagePlayedContact;
 
 
 @end
@@ -361,12 +362,8 @@
     
     //Add Friend
     if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_0]) {
-        if (self.replayPlayer) {
-            [self startedPlayingAudioFileWithDuration:self.replayPlayer.duration data:self.replayPlayer.data andView:self.view];
-            [self.replayPlayer play];
-        } else {
-            [GeneralUtils showMessage:@"No messaged played recently..." withTitle:@""];
-        }
+        [self startedPlayingAudioFileWithDuration:self.replayPlayer.duration data:self.replayPlayer.data andView:self.lastMessagePlayedContact];
+        [self.replayPlayer play];
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_1]) {
         ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc] init];
         picker.peoplePickerDelegate = self;
@@ -505,13 +502,30 @@
     }
 }
 
+- (void)addOverlayOverContactView:(UIView *)view
+{
+    self.contactImageOverlay = [[UIView alloc] initWithFrame:view.frame];
+    self.contactImageOverlay.clipsToBounds = YES;
+    self.contactImageOverlay.layer.cornerRadius = self.contactImageOverlay.bounds.size.height/2;
+    self.contactImageOverlay.backgroundColor = [ImageUtils trasparentBlue];
+    [self.contactScrollView addSubview:self.contactImageOverlay];
+}
+
+- (void)removeOverlayFromContactView
+{
+    [self.contactImageOverlay removeFromSuperview];
+    self.contactImageOverlay = nil;
+}
+
 // ----------------------------------------------------------
 // Recording Mode
 // ----------------------------------------------------------
 
 //Create recording mode screen
-- (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId
+- (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId FromView:(UIView *)view
 {
+    [self addOverlayOverContactView:view];
+    
     //Recording view is same size as screen
     self.recordingView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_HEIGHT, self.view.bounds.size.width, PLAYER_HEIGHT)];
     self.recordingView.backgroundColor = [UIColor colorWithRed:240.0/255 green:240.0/255 blue:240.0/255 alpha:1.0];
@@ -623,6 +637,8 @@
 
 - (void)quitRecodingModeAnimated:(BOOL)animated
 {
+    [self removeOverlayFromContactView];
+    
     if (animated) {
         [UIView animateWithDuration:1.0 animations:^{
             self.recordingView.alpha = 0;
@@ -638,6 +654,10 @@
 
 - (void)startedPlayingAudioFileWithDuration:(NSTimeInterval)duration data:(NSData *)data andView:(UIView *)view
 {
+    //Keep it in case of a replay
+    self.lastMessagePlayedContact = view;
+    
+    [self addOverlayOverContactView:view];
     view.userInteractionEnabled = NO;
     
     if (self.playerAudioLine) {
@@ -671,12 +691,9 @@
                         
                         self.replayPlayer = [[AVAudioPlayer alloc] initWithData:data error:nil];
                         [self.replayPlayer setVolume:2];
+                        
+                        [self removeOverlayFromContactView];
                     }];
-}
-
-
-- (IBAction)replayButtonClicked:(id)sender {
-    
 }
 
 - (void)showLoadingIndicator

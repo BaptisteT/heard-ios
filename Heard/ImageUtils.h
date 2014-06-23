@@ -12,6 +12,8 @@
 
 + (UIColor *)blue;
 
++ (UIColor *)trasparentBlue;
+
 + (UIImage*) cropBiggestCenteredSquareImageFromImage:(UIImage*)image withSide:(CGFloat)side;
 
 + (UIImage*)imageWithImage:(UIImage*)image scaledToSize:(CGSize)newSize;

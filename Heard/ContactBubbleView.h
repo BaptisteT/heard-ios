@@ -27,7 +27,7 @@
 
 @protocol ContactBubbleViewDelegate
 
-- (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId;
+- (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId FromView:(UIView *)view;
 
 - (void)longPressOnContactBubbleViewEnded:(NSUInteger)contactId;
 
