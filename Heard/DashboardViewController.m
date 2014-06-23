@@ -52,6 +52,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *menuButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
 @property (nonatomic, strong) UIView *playerAudioLine;
+@property (nonatomic, strong) AVAudioPlayer *replayPlayer;
+@property (nonatomic, strong) IBOutlet UIButton *replayButton;
 
 
 @end
@@ -67,6 +69,7 @@
     [super viewDidLoad];
     
     self.menuButton.hidden = YES;
+    self.replayButton.hidden = YES;
     
     // Some init
     self.contactBubbleViews = [[NSMutableArray alloc] init];
@@ -482,6 +485,9 @@
 //Create recording mode screen
 - (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId
 {
+    // Hide replay button
+    self.replayButton.hidden = YES;
+    
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;
@@ -621,8 +627,9 @@
     }
 }
 
-- (void)startedPlayingAudioFileWithDuration:(NSTimeInterval)duration andView:(UIView *)view
+- (void)startedPlayingAudioFileWithDuration:(NSTimeInterval)duration data:(NSData *)data andView:(UIView *)view
 {
+    self.replayButton.hidden = YES;
     view.userInteractionEnabled = NO;
     
     if (self.playerAudioLine) {
@@ -653,7 +660,17 @@
                         [self.playerAudioLine removeFromSuperview];
                         self.playerAudioLine = nil;
                         view.userInteractionEnabled = YES;
+                        
+                        // display replay Button
+                        self.replayButton.hidden = NO;
+                        self.replayPlayer = [[AVAudioPlayer alloc] initWithData:data error:nil];
                     }];
+}
+
+
+- (IBAction)replayButtonClicked:(id)sender {
+    [self startedPlayingAudioFileWithDuration:self.replayPlayer.duration data:self.replayPlayer.data andView:self.view];
+    [self.replayPlayer play];
 }
 
 - (void)showLoadingIndicator

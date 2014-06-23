@@ -153,7 +153,7 @@
 - (void)handleTapGesture
 {
     if (self.unreadMessagesCount > 0) {
-        [self.delegate startedPlayingAudioFileWithDuration:self.player.duration andView:self];
+        [self.delegate startedPlayingAudioFileWithDuration:self.player.duration data:self.player.data andView:self];
         [self.player play];
     } else {
         [GeneralUtils showMessage:@"Hold to record." withTitle:nil];
@@ -169,6 +169,7 @@
         [self.unreadMessages removeObjectAtIndex:0];
         [self setUnreadMessagesCount:self.unreadMessagesCount-1];
         
+        // prepare player for next song
         if (self.unreadMessagesCount > 0) {
             NSData* data = [NSData dataWithContentsOfURL:[self.unreadMessages[0] getMessageURL]] ;
             self.player = [[AVAudioPlayer alloc] initWithData:data error:nil];

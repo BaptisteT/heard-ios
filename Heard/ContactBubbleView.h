@@ -35,8 +35,9 @@
 
 - (void)messageSentWithError:(BOOL)error;
 
-- (void)startedPlayingAudioFileWithDuration:(NSTimeInterval)duration andView:(UIView *)view;
+- (void)startedPlayingAudioFileWithDuration:(NSTimeInterval)duration data:(NSData *)data andView:(UIView *)view;
 
 - (void)quitRecodingModeAnimated:(BOOL)animated;
+
 
 @end
