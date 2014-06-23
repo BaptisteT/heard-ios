@@ -41,6 +41,17 @@
 }
 
 
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    UIViewController *visibleController = [self getVisibleController];
+    
+    if ([visibleController isKindOfClass:[DashboardViewController class]]) {
+        [(DashboardViewController *)visibleController retrieveAndDisplayUnreadMessages];
+    }
+}
+
+
+
 // Delegation methods
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
     // Convert the binary data token into an NSString

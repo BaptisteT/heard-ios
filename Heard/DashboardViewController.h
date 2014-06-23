@@ -15,5 +15,6 @@
 @interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ABPeoplePickerNavigationControllerDelegate,MFMessageComposeViewControllerDelegate, ContactBubbleViewDelegate>
 
 - (void)addUnreadMessage:(Message *)message;
+- (void) retrieveAndDisplayUnreadMessages;
 
 @end

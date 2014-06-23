@@ -529,7 +529,7 @@
     [self addRecordingMessage:@"Sending..." color:[UIColor blackColor]];
 }
 
-//Recorder notifies a change in volume intensity (every 0.1 seconds)
+//Recorder notifies a change in volume intensity (every 0.05 seconds)
 - (void)notifiedNewMeters:(float)power
 {
     ctr ++;
