@@ -74,13 +74,18 @@
     // The user receives a notif while using the app
     Message *newMessage = [Message rawMessageToInstance:[userInfo valueForKey:@"message"]];
     
-    UIViewController *visibleController = [self getVisibleController];
+    // Update badge
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] + 1];
     
+    // Add unread message
+    UIViewController *visibleController = [self getVisibleController];
     if ([visibleController isKindOfClass:[DashboardViewController class]]) {
         [(DashboardViewController *)visibleController addUnreadMessage:newMessage];
+
+        // Sound alert
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+//        AudioServicesPlaySystemSound(1003);
     }
-    
-    // todo bt (later) create alert
 }
 
 

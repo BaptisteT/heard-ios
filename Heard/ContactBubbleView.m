@@ -62,8 +62,7 @@
     self.longPressRecognizer.minimumPressDuration = kLongPressMinDuration;
     
     self.oneTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture)];
-    [self.unreadMessagesLabel addGestureRecognizer:self.oneTapRecognizer];
-    [self.imageView addGestureRecognizer:self.oneTapRecognizer];
+    [self addGestureRecognizer:self.oneTapRecognizer];
     self.oneTapRecognizer.delegate = self;
     self.oneTapRecognizer.numberOfTapsRequired = 1;
 
@@ -166,8 +165,12 @@
         // Mark as opened on the database
         [ApiUtils markMessageAsOpened:((Message *)self.unreadMessages[0]).identifier success:nil failure:nil];
         
+        // Remove message
         [self.unreadMessages removeObjectAtIndex:0];
         [self setUnreadMessagesCount:self.unreadMessagesCount-1];
+        
+        // Update badge
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] - 1];
         
         // prepare player for next song
         if (self.unreadMessagesCount > 0) {
@@ -241,7 +244,7 @@
     self.unreadMessagesLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:16.0];
     self.unreadMessagesLabel.adjustsFontSizeToFitWidth = YES;
     self.unreadMessagesLabel.minimumScaleFactor = 0.2;
-    
+    self.unreadMessagesLabel.userInteractionEnabled = YES;
     [self addSubview:self.unreadMessagesLabel];
     [self.unreadMessagesLabel setHidden:YES];
 }

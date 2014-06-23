@@ -521,6 +521,7 @@
     ctr = 0;
     self.recordingLineX = 0;
     self.recordingLineY = self.recordingView.bounds.size.height/2;
+    ctr = 0;
     pts[ctr] = CGPointMake(self.recordingLineX, self.recordingLineY);
     
     [self addRecordingMessage:@"Release to send..." color:[UIColor blackColor]];
