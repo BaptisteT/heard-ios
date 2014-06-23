@@ -19,6 +19,7 @@
 #import "ImageUtils.h"
 #import "SessionUtils.h"
 
+#define ACTION_SHEET_OPTION_0 @"Replay last message"
 #define ACTION_SHEET_OPTION_1 @"Invite contact"
 #define ACTION_SHEET_OPTION_2 @"Share this app"
 #define ACTION_SHEET_OPTION_3 @"Feedback"
@@ -68,7 +69,6 @@
     [super viewDidLoad];
     
     self.menuButton.hidden = YES;
-    self.replayButton.hidden = YES;
     
     // Some init
     self.contactBubbleViews = [[NSMutableArray alloc] init];
@@ -330,7 +330,23 @@
     self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                           delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                             destructiveButtonTitle:nil
-                                                 otherButtonTitles:ACTION_SHEET_OPTION_1, ACTION_SHEET_OPTION_2, ACTION_SHEET_OPTION_3, nil];
+                                              otherButtonTitles:ACTION_SHEET_OPTION_0, ACTION_SHEET_OPTION_1, ACTION_SHEET_OPTION_2, ACTION_SHEET_OPTION_3, nil];
+    
+    for (UIView* view in [self.menuActionSheet subviews])
+    {
+        if ([view respondsToSelector:@selector(title)])
+        {
+            NSString* title = [view performSelector:@selector(title)];
+            if ([title isEqualToString:@"Replay last message"] && [view respondsToSelector:@selector(setEnabled:)])
+            {
+                if (self.replayPlayer) {
+                    [view performSelector:@selector(setEnabled:) withObject:@YES];
+                } else {
+                    [view performSelector:@selector(setEnabled:) withObject:NO];
+                }
+            }
+        }
+    }
     
     [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
@@ -344,7 +360,14 @@
     }
     
     //Add Friend
-    if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_1]) {
+    if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_0]) {
+        if (self.replayPlayer) {
+            [self startedPlayingAudioFileWithDuration:self.replayPlayer.duration data:self.replayPlayer.data andView:self.view];
+            [self.replayPlayer play];
+        } else {
+            [GeneralUtils showMessage:@"No messaged played recently..." withTitle:@""];
+        }
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_1]) {
         ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc] init];
         picker.peoplePickerDelegate = self;
         [self presentViewController:picker animated:YES completion:nil];
@@ -489,16 +512,13 @@
 //Create recording mode screen
 - (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId
 {
-    // Hide replay button
-    self.replayButton.hidden = YES;
-    
     //Recording view is same size as screen
     self.recordingView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_HEIGHT, self.view.bounds.size.width, PLAYER_HEIGHT)];
     self.recordingView.backgroundColor = [UIColor colorWithRed:240.0/255 green:240.0/255 blue:240.0/255 alpha:1.0];
-//    [GeneralUtils addTopBorder:self.recordingView borderSize:0.5];
     [self.view addSubview:self.recordingView];
     
     //Recording line starting point
+    ctr = 0;
     self.recordingLineX = 0;
     self.recordingLineY = self.recordingView.bounds.size.height/2;
     pts[ctr] = CGPointMake(self.recordingLineX, self.recordingLineY);
@@ -529,7 +549,7 @@
         self.recordLineLength = self.recordingView.bounds.size.width;
     }
     
-    self.recordingLineX = self.recordingLineX + self.recordLineLength/METERS_FREQUENCY;
+    self.recordingLineX = self.recordingLineX + self.recordingView.bounds.size.width/METERS_FREQUENCY;
     
     if (power + (-MIN_METERS) < 0) {
         power = 0;
@@ -574,7 +594,10 @@
 {
     if (error) {
         [self addRecordingMessage:@"Sending failed." color:[UIColor redColor]];
+        
         sleep(1);
+        
+        [self quitRecodingModeAnimated:YES];
     } else {
         [self addRecordingMessage:@"Sent!" color:[UIColor blackColor]];
         
@@ -614,7 +637,6 @@
 
 - (void)startedPlayingAudioFileWithDuration:(NSTimeInterval)duration data:(NSData *)data andView:(UIView *)view
 {
-    self.replayButton.hidden = YES;
     view.userInteractionEnabled = NO;
     
     if (self.playerAudioLine) {
@@ -646,8 +668,6 @@
                         self.playerAudioLine = nil;
                         view.userInteractionEnabled = YES;
                         
-                        // display replay Button
-                        self.replayButton.hidden = NO;
                         self.replayPlayer = [[AVAudioPlayer alloc] initWithData:data error:nil];
                         [self.replayPlayer setVolume:2];
                     }];
@@ -655,8 +675,7 @@
 
 
 - (IBAction)replayButtonClicked:(id)sender {
-    [self startedPlayingAudioFileWithDuration:self.replayPlayer.duration data:self.replayPlayer.data andView:self.view];
-    [self.replayPlayer play];
+    
 }
 
 - (void)showLoadingIndicator
