@@ -22,8 +22,12 @@ static NSString * const kProdHeardProfilePictureBaseURL = @"https://s3.amazonaws
 
 static const NSUInteger kMaxNameLength = 20;
 
+// Audio parameter
+static const NSUInteger kAVSampleRateKey = 16000;
+static const NSUInteger kAVNumberOfChannelsKey = 2;
 static const CGFloat kMaxAudioDuration = 30.; // in sec
 static const CGFloat kMinAudioDuration = 0.5; // in sec
+static const CGFloat kLongPressMinDuration = 0.2; // in sec
 
 // UI size
 static const NSUInteger kUnreadMessageSize = 30;

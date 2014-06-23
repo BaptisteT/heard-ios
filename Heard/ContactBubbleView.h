@@ -37,4 +37,6 @@
 
 - (void)startedPlayingAudioFileWithDuration:(NSTimeInterval)duration andView:(UIView *)view;
 
+- (void)quitRecodingModeAnimated:(BOOL)animated;
+
 @end

@@ -19,7 +19,8 @@
 
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *oneTapRecognizer;
-@property (nonatomic, strong) NSTimer *maxDurationtimer;
+@property (nonatomic, strong) NSTimer *maxDurationTimer;
+@property (nonatomic, strong) NSTimer *minDurationTimer;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic) NSInteger unreadMessagesCount;
 @property (nonatomic) UILabel *unreadMessagesLabel;
@@ -58,7 +59,7 @@
     self.longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
     [self.imageView addGestureRecognizer:self.longPressRecognizer];
     self.longPressRecognizer.delegate = self;
-    self.longPressRecognizer.minimumPressDuration = 0.1;
+    self.longPressRecognizer.minimumPressDuration = kLongPressMinDuration;
     
     self.oneTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture)];
     [self.unreadMessagesLabel addGestureRecognizer:self.oneTapRecognizer];
@@ -81,8 +82,8 @@
     NSMutableDictionary *recordSetting = [[NSMutableDictionary alloc] init];
     
     [recordSetting setValue:[NSNumber numberWithInt:kAudioFormatMPEG4AAC] forKey:AVFormatIDKey];
-    [recordSetting setValue:[NSNumber numberWithFloat:44100] forKey:AVSampleRateKey];
-    [recordSetting setValue:[NSNumber numberWithInt: 2] forKey:AVNumberOfChannelsKey];
+    [recordSetting setValue:[NSNumber numberWithFloat:kAVSampleRateKey] forKey:AVSampleRateKey];
+    [recordSetting setValue:[NSNumber numberWithInt: kAVNumberOfChannelsKey] forKey:AVNumberOfChannelsKey];
     
     // Initiate and prepare the recorder
     self.recorder = [[AVAudioRecorder alloc] initWithURL:outputFileURL settings:recordSetting error:nil];
@@ -108,7 +109,8 @@
     
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         // Create Timer
-        self.maxDurationtimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
+        self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
+        self.minDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMinAudioDuration target:self selector:@selector(minRecordingDurationReached) userInfo:nil repeats:NO];
         
         // Record
         AVAudioSession *session = [AVAudioSession sharedInstance];
@@ -129,9 +131,14 @@
     }
     if (recognizer.state == UIGestureRecognizerStateEnded) {
         // Stop timer if it did not fire yet
-        if ([self.maxDurationtimer isValid]) {
-            [self.maxDurationtimer invalidate];
-            [self stopAndSendRecording];
+        if ([self.maxDurationTimer isValid]) {
+            [self.maxDurationTimer invalidate];
+            if ([self.minDurationTimer isValid]) {
+                [self stopRecording];
+                [self.delegate quitRecodingModeAnimated:NO];
+            } else {
+                [self stopAndSendRecording];
+            }
         }
     }
 }
@@ -177,20 +184,24 @@
 // Stop and send recording
 - (void)stopAndSendRecording
 {
-    [self.metersTimer invalidate];
+    [self stopRecording];
     
-    // Stop recording
-    [self.recorder stop];
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    [audioSession setActive:NO error:nil];
-    
+    // Send
     NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
     [ApiUtils sendMessage:audioData toUser:self.contact.identifier success:^{
         [self.delegate messageSentWithError:NO];
     } failure:^{
         [self.delegate messageSentWithError:YES];
     }];
-    
+}
+
+// stop recording
+- (void)stopRecording
+{
+    [self.metersTimer invalidate];
+    [self.recorder stop];
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    [audioSession setActive:NO error:nil];
     [self.delegate longPressOnContactBubbleViewEnded:self.contact.identifier];
     [self.longPressRecognizer addTarget:self action:@selector(handleLongPressGesture:)];
 }
@@ -199,6 +210,10 @@
 - (void)maxRecordingDurationReached {
     [self.longPressRecognizer removeTarget:self action:@selector(handleLongPressGesture:)];
     [self stopAndSendRecording];
+}
+
+- (void)minRecordingDurationReached {
+    // do nothing
 }
 
 - (void)setUnreadMessagesCount:(NSInteger)unreadMessagesCount
