@@ -66,6 +66,7 @@
 		0BDB65581953B6A000223093 /* RequestPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BD758F619511A4000CF0D85 /* RequestPhoneViewController.m */; };
 		0BDB655E1953BE9100223093 /* SessionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB655D1953BE9100223093 /* SessionUtils.m */; };
 		0BDB65611953C04800223093 /* DashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB65601953C04800223093 /* DashboardViewController.m */; };
+		3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA177E91958B74000096266 /* AudioToolbox.framework */; };
 		3CB8B7F5195453E50090D657 /* ContactBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactBubbleView.m */; };
 /* End PBXBuildFile section */
 
@@ -172,6 +173,7 @@
 		3C9BBE0B195345A6001C6C4D /* UIRefreshControl+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIRefreshControl+AFNetworking.m"; sourceTree = "<group>"; };
 		3C9BBE0C195345A6001C6C4D /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		3C9BBE0D195345A6001C6C4D /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
+		3CA177E91958B74000096266 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		3CB8B7EA195346620090D657 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		3CB8B7EB195346620090D657 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		3CB8B7F3195453E50090D657 /* ContactBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactBubbleView.h; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */,
 				0BAF4FE219560AEE00838D7D /* MessageUI.framework in Frameworks */,
 				0B58BAFD1954B47700E9FF70 /* AddressBook.framework in Frameworks */,
 				0B58BAFE1954B47700E9FF70 /* AddressBookUI.framework in Frameworks */,
@@ -229,6 +232,7 @@
 		0BD758BE1950F91B00CF0D85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3CA177E91958B74000096266 /* AudioToolbox.framework */,
 				0BAF4FE119560AEE00838D7D /* MessageUI.framework */,
 				0B58BAFB1954B47700E9FF70 /* AddressBook.framework */,
 				0B58BAFC1954B47700E9FF70 /* AddressBookUI.framework */,
@@ -658,13 +662,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (63863BWF5M)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (9X2H84A9C9)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ECFA20B7-073A-4C04-B891-12CDCFF4F927";
+				PROVISIONING_PROFILE = "E0BA1CA2-86BB-475C-9059-E9FE8747036B";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -679,7 +683,7 @@
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ECFA20B7-073A-4C04-B891-12CDCFF4F927";
+				PROVISIONING_PROFILE = "E0BA1CA2-86BB-475C-9059-E9FE8747036B";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
