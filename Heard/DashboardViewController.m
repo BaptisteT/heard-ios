@@ -54,6 +54,7 @@
 @property (nonatomic, strong) UIView *playerAudioLine;
 @property (nonatomic, strong) AVAudioPlayer *replayPlayer;
 @property (nonatomic, strong) IBOutlet UIButton *replayButton;
+@property (nonatomic, strong) NSString *currentUserPhoneNumber;
 
 
 @end
@@ -80,6 +81,8 @@
     
     // 4 -> Create messages bubles
     //              - (id)initWithMessage:(Message *)message;
+    
+    self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
 }
 
 - (void)requestAddressBookAccess
@@ -253,7 +256,7 @@
         
         [self addNameLabelForView:contactView andContact:contact];
         [self.contactBubbleViews addObject:contactView];
-        [contactView setImage:[UIImage imageNamed:@"contact_placeholder.png"]];
+        [contactView setImage:[UIImage imageNamed:@"contact-placeholder.png"]];
         
         [self.contactScrollView addSubview:contactView];
     }
@@ -267,7 +270,7 @@
         
         [self addNameLabelForView:contactView andContact:contact];
         [self.contactBubbleViews addObject:contactView];
-        [contactView setImage:[UIImage imageNamed:@"contact_placeholder.png"]];
+        [contactView setImage:[UIImage imageNamed:@"contact-placeholder.png"]];
         
         [self.contactScrollView addSubview:contactView];
     }
@@ -301,7 +304,7 @@
     
     [self addNameLabelForView:contactView andContact:contact];
     [self.contactBubbleViews addObject:contactView];
-    [contactView setImage:[UIImage imageNamed:@"contact_placeholder.png"]];
+    [contactView setImage:[UIImage imageNamed:@"contact-placeholder.png"]];
     
     [self.contactScrollView addSubview:contactView];
 
@@ -311,10 +314,14 @@
 {
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - kContactMargin/4, contactView.frame.origin.y + kContactSize, contactView.frame.size.width + kContactMargin/2, kContactNameHeight)];
     
+    if ([self.currentUserPhoneNumber isEqualToString:contact.phoneNumber]) {
+        nameLabel.text = @"Me";
+        nameLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:14.0];
+    } else {
+        nameLabel.text = [NSString stringWithFormat:@"%@ %@", contact.firstName ? contact.firstName : @"", contact.lastName ? contact.lastName : @""];
+        nameLabel.font = [UIFont fontWithName:@"Avenir-Light" size:14.0];
+    }
     
-    
-    nameLabel.text = [NSString stringWithFormat:@"%@ %@", contact.firstName ? contact.firstName : @"", contact.lastName ? contact.lastName : @""];
-    nameLabel.font = [UIFont fontWithName:@"Avenir-Light" size:14.0];
     nameLabel.textAlignment = NSTextAlignmentCenter;
     nameLabel.adjustsFontSizeToFitWidth = YES;
     nameLabel.minimumScaleFactor = 0.7;
@@ -479,7 +486,7 @@
 }
 
 // ----------------------------------------------------------
-// Utilities
+// Recording Mode
 // ----------------------------------------------------------
 
 //Create recording mode screen

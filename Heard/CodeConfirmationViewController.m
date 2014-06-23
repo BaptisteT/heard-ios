@@ -81,7 +81,7 @@
                           
         if (authToken && userId != 0) {
             [SessionUtils securelySaveCurrentUserToken:authToken];
-            [SessionUtils saveUserInfo:userId];
+            [SessionUtils saveUserInfo:userId phoneNumber:self.phoneNumber];
             [self performSegueWithIdentifier:@"Dashboard Push Segue From Code Confirmation" sender:nil];
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
         } else {

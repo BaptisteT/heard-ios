@@ -14,9 +14,11 @@
 
 + (NSString *)getCurrentUserToken;
 
-+ (void)saveUserInfo:(NSInteger)userId;
++ (void)saveUserInfo:(NSInteger)userId phoneNumber:(NSString *)phoneNumber;
 
 + (NSInteger)getCurrentUserId;
+
++ (NSString *)getCurrentUserPhoneNumber;
 
 + (BOOL)isSignedIn;
 

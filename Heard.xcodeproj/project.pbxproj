@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B3651D61958AC5000534386 /* contact-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651D41958AC5000534386 /* contact-placeholder.png */; };
+		0B3651D71958AC5000534386 /* contact-placeholder@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */; };
 		0B58BAFD1954B47700E9FF70 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B58BAFB1954B47700E9FF70 /* AddressBook.framework */; };
 		0B58BAFE1954B47700E9FF70 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B58BAFC1954B47700E9FF70 /* AddressBookUI.framework */; };
 		0B893A3B1954DF0A00476BFE /* heard-logo-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A381954DF0A00476BFE /* heard-logo-120.png */; };
@@ -15,8 +17,6 @@
 		0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */; };
 		0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A481954E4FF00476BFE /* welcome-logo.png */; };
 		0B893A4D19550FF000476BFE /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B893A4C19550FF000476BFE /* Contact.m */; };
-		0B893A511955417C00476BFE /* contact_placeholder@2x@iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A4F1955417C00476BFE /* contact_placeholder@2x@iphone.png */; };
-		0B893A521955417C00476BFE /* contact_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A501955417C00476BFE /* contact_placeholder.png */; };
 		0BAF4FE219560AEE00838D7D /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BAF4FE119560AEE00838D7D /* MessageUI.framework */; };
 		0BD758C01950F91B00CF0D85 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD758BF1950F91B00CF0D85 /* Foundation.framework */; };
 		0BD758C21950F91B00CF0D85 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD758C11950F91B00CF0D85 /* CoreGraphics.framework */; };
@@ -70,6 +70,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0B3651D41958AC5000534386 /* contact-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-placeholder.png"; sourceTree = "<group>"; };
+		0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-placeholder@2x~iphone.png"; sourceTree = "<group>"; };
 		0B58BAFB1954B47700E9FF70 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		0B58BAFC1954B47700E9FF70 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		0B893A381954DF0A00476BFE /* heard-logo-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-120.png"; sourceTree = "<group>"; };
@@ -79,8 +81,6 @@
 		0B893A481954E4FF00476BFE /* welcome-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome-logo.png"; sourceTree = "<group>"; };
 		0B893A4B19550FF000476BFE /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		0B893A4C19550FF000476BFE /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
-		0B893A4F1955417C00476BFE /* contact_placeholder@2x@iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact_placeholder@2x@iphone.png"; sourceTree = "<group>"; };
-		0B893A501955417C00476BFE /* contact_placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = contact_placeholder.png; sourceTree = "<group>"; };
 		0BAF4FE119560AEE00838D7D /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		0BD758BC1950F91B00CF0D85 /* Waved.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Waved.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BD758BF1950F91B00CF0D85 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -198,8 +198,8 @@
 		0B58BB001954D7E200E9FF70 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				0B893A4F1955417C00476BFE /* contact_placeholder@2x@iphone.png */,
-				0B893A501955417C00476BFE /* contact_placeholder.png */,
+				0B3651D41958AC5000534386 /* contact-placeholder.png */,
+				0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */,
 				0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */,
 				0B893A481954E4FF00476BFE /* welcome-logo.png */,
 				0B893A381954DF0A00476BFE /* heard-logo-120.png */,
@@ -494,6 +494,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0BD758D81950F91B00CF0D85 /* Images.xcassets in Resources */,
+				0B3651D71958AC5000534386 /* contact-placeholder@2x~iphone.png in Resources */,
 				0BDB64CC19521A7C00223093 /* NBPhoneNumberMetadata.plist in Resources */,
 				0BDB64CE19521A7C00223093 /* PhoneNumberMetaData.json in Resources */,
 				0BD758CA1950F91B00CF0D85 /* InfoPlist.strings in Resources */,
@@ -501,11 +502,10 @@
 				0BD758D31950F91B00CF0D85 /* Main.storyboard in Resources */,
 				0B893A3C1954DF0A00476BFE /* heard-logo-58.png in Resources */,
 				0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */,
-				0B893A521955417C00476BFE /* contact_placeholder.png in Resources */,
 				0BDB64CD19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
 				0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */,
 				0B893A3B1954DF0A00476BFE /* heard-logo-120.png in Resources */,
-				0B893A511955417C00476BFE /* contact_placeholder@2x@iphone.png in Resources */,
+				0B3651D61958AC5000534386 /* contact-placeholder.png in Resources */,
 				0B893A3D1954DF0A00476BFE /* heard-logo-80.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -658,13 +658,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (9X2H84A9C9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (63863BWF5M)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "E0BA1CA2-86BB-475C-9059-E9FE8747036B";
+				PROVISIONING_PROFILE = "ECFA20B7-073A-4C04-B891-12CDCFF4F927";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -679,7 +679,7 @@
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "E0BA1CA2-86BB-475C-9059-E9FE8747036B";
+				PROVISIONING_PROFILE = "ECFA20B7-073A-4C04-B891-12CDCFF4F927";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
