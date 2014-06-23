@@ -664,6 +664,7 @@
                         // display replay Button
                         self.replayButton.hidden = NO;
                         self.replayPlayer = [[AVAudioPlayer alloc] initWithData:data error:nil];
+                        [self.replayPlayer setVolume:2];
                     }];
 }
 

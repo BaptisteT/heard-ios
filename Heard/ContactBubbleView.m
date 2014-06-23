@@ -173,6 +173,7 @@
         if (self.unreadMessagesCount > 0) {
             NSData* data = [NSData dataWithContentsOfURL:[self.unreadMessages[0] getMessageURL]] ;
             self.player = [[AVAudioPlayer alloc] initWithData:data error:nil];
+            [self.player setVolume:2];
             [self.player setDelegate:self];
         }
     }
@@ -257,6 +258,7 @@
         // Init player with this message if this is the only one
         NSData* data = [NSData dataWithContentsOfURL:[message getMessageURL]] ;
         self.player = [[AVAudioPlayer alloc] initWithData:data error:nil];
+        [self.player setVolume:2];
         [self.player setDelegate:self];
     }
 }
