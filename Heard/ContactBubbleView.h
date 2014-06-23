@@ -29,10 +29,12 @@
 
 - (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId;
 
-- (void)longPressOnContactBubbleViewEnded:(NSUInteger)contactId longEnough:(BOOL)longEnough;
+- (void)longPressOnContactBubbleViewEnded:(NSUInteger)contactId;
 
 - (void)notifiedNewMeters:(float)meters;
 
 - (void)messageSentWithError:(BOOL)error;
+
+- (void)startedPlayingAudioFileWithDuration:(NSTimeInterval)duration andView:(UIView *)view;
 
 @end

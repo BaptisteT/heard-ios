@@ -12,7 +12,6 @@
 #import "NBPhoneNumberUtil.h"
 #import "NBPhoneNumber.h"
 #import "Contact.h"
-#import "MBProgressHUD.h"
 #import "ApiUtils.h"
 #import "GeneralUtils.h"
 #import "Constants.h"
@@ -32,7 +31,7 @@
 #define RECORDING_IMAGE_SIZE 50
 #define RECORDING_IMAGE_BOTTOM_MARGIN 50
 #define RECORDING_IMAGE_HORIZONTAL_MARGIN 10
-#define RECORDING_LINE_MAX_HEIGHT 300
+#define RECORDING_LINE_MAX_HEIGHT 150
 #define RECORDING_LINE_WEIGHT 0.5
 
 
@@ -50,6 +49,9 @@
 @property (nonatomic) float recordingLineY;
 @property (nonatomic, strong)UILabel *recordingMessage;
 @property (nonatomic) float recordLineLength;
+@property (weak, nonatomic) IBOutlet UIButton *menuButton;
+@property (nonatomic, strong) UIActivityIndicatorView *activityView;
+@property (nonatomic, strong) UIView *playerAudioLine;
 
 
 @end
@@ -60,6 +62,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.menuButton.hidden = YES;
     
     // Some init
     self.contactBubbleViews = [[NSMutableArray alloc] init];
@@ -177,7 +181,7 @@
 
 - (void)getHeardContacts
 {
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [self showLoadingIndicator];
     
     NSMutableArray *phoneNumbers = [[NSMutableArray alloc] init];
     
@@ -186,7 +190,7 @@
     }
 
     [ApiUtils getMyContacts:phoneNumbers success:^(NSArray *contacts) {
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [self hideLoadingIndicator];
         
         self.contacts = contacts;
         
@@ -199,7 +203,7 @@
         
         [self displayContacts];
     } failure:^{
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [self hideLoadingIndicator];
         
         self.failedToRetrieveFriendsAlertView = [[UIAlertView alloc] initWithTitle:nil
                                                                            message:@"We failed to retrieve your contacts, please try again."
@@ -221,6 +225,8 @@
 - (void)displayContacts
 {
     //TODO erase existing views
+    
+    self.menuButton.hidden = NO;
     
     NSUInteger contactCount = [self.contacts count];
     NSUInteger rows = [self.contacts count] / 3 + 1;
@@ -505,16 +511,12 @@
 }
 
 //User stop pressing screen
-- (void)longPressOnContactBubbleViewEnded:(NSUInteger)contactId longEnough:(BOOL)longEnough
+- (void)longPressOnContactBubbleViewEnded:(NSUInteger)contactId
 {
+    //Bring the recording line to zero, to prepare sending animation
     [self notifiedNewMeters:MIN_METERS];
     
-    if (longEnough) {
-        [self addRecordingMessage:@"Sending..." color:[UIColor blackColor]];
-    } else {
-        [self quitRecodingModeAnimated:NO];
-        [GeneralUtils showMessage:@"Press longer to send a voice message!" withTitle:nil];
-    }
+    [self addRecordingMessage:@"Sending..." color:[UIColor blackColor]];
 }
 
 //Recorder notifies a change in volume intensity (every 0.1 seconds)
@@ -604,6 +606,58 @@
         [self.recordingView removeFromSuperview];
         self.recordingView = nil;
     }
+}
+
+- (void)startedPlayingAudioFileWithDuration:(NSTimeInterval)duration andView:(UIView *)view
+{
+    view.userInteractionEnabled = NO;
+    
+    if (self.playerAudioLine) {
+        [self.playerAudioLine removeFromSuperview];
+        self.playerAudioLine = nil;
+    }
+    
+    float initialWidth = 0;
+    float finalWidth = self.view.bounds.size.width;
+    float lineWeight = 6;
+    
+    self.playerAudioLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - lineWeight, initialWidth, lineWeight)];
+    
+    self.playerAudioLine.backgroundColor = [ImageUtils blue];
+    
+    [self.view addSubview:self.playerAudioLine];
+    
+    [UIView setAnimationCurve: UIViewAnimationCurveLinear];
+    
+    [UIView animateWithDuration:duration
+                          delay:0
+                        options:UIViewAnimationOptionCurveLinear
+                     animations:^{
+                         CGRect frame = self.playerAudioLine.frame;
+                         frame.size.width = finalWidth;
+                         self.playerAudioLine.frame = frame;
+                    } completion:^(BOOL dummy){
+                        [self.playerAudioLine removeFromSuperview];
+                        self.playerAudioLine = nil;
+                        view.userInteractionEnabled = YES;
+                    }];
+}
+
+- (void)showLoadingIndicator
+{
+    if (!self.activityView) {
+        self.activityView=[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        self.activityView.center = self.view.center;
+    }
+    
+    [self.activityView startAnimating];
+    [self.view addSubview:self.activityView];
+}
+
+- (void)hideLoadingIndicator
+{
+    [self.activityView stopAnimating];
+    [self.activityView removeFromSuperview];
 }
 
 @end

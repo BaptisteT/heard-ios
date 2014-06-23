@@ -12,6 +12,7 @@
 #import "Constants.h"
 #import "ApiUtils.h"
 #import "SessionUtils.h"
+#import "ImageUtils.h"
 
 
 @interface ContactBubbleView()
@@ -19,16 +20,12 @@
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *oneTapRecognizer;
 @property (nonatomic, strong) NSTimer *maxDurationtimer;
-@property (nonatomic, strong) NSTimer *minDurationtimer;
-@property (nonatomic) BOOL minDurationReached;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic) NSInteger unreadMessagesCount;
-@property (nonatomic) UIButton *unreadMessagesButton;
+@property (nonatomic) UILabel *unreadMessagesLabel;
 @property (nonatomic) NSMutableArray *unreadMessages;
 @property (strong, nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) NSTimer *metersTimer;
-@property (nonatomic) float averagePower;
-@property (nonatomic) float elapsedTime;
 
 // temp bt ?
 @property (nonatomic, strong) AVAudioPlayer *player;
@@ -43,6 +40,8 @@
     self  = [self initWithFrame:frame];
     self.contact = contact;
     
+    self.clipsToBounds = NO;
+    
     // Set image view
     self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, kContactSize, kContactSize)];
     [self.imageView setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:contact.identifier]];
@@ -51,7 +50,7 @@
     self.imageView.clipsToBounds = YES;
     self.imageView.layer.cornerRadius = self.bounds.size.height/2;
     self.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.imageView.layer.borderWidth = 2.0;
+    self.imageView.layer.borderWidth = 0.5;
     
     // Alloc and add gesture recognisers
     [self setMultipleTouchEnabled:NO];
@@ -60,7 +59,12 @@
     self.longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
     [self.imageView addGestureRecognizer:self.longPressRecognizer];
     self.longPressRecognizer.delegate = self;
-    self.longPressRecognizer.minimumPressDuration = 0.;
+    self.longPressRecognizer.minimumPressDuration = 0.5;
+    
+    self.oneTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture)];
+    [self.imageView addGestureRecognizer:self.oneTapRecognizer];
+    self.oneTapRecognizer.delegate = self;
+    self.oneTapRecognizer.numberOfTapsRequired = 1;
 
     // Set the audio file
     NSArray *pathComponents = [NSArray arrayWithObjects:
@@ -105,15 +109,10 @@
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         // Create Timer
         self.maxDurationtimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(stopAndSendRecording) userInfo:nil repeats:NO];
-        self.minDurationReached = NO;
-        self.minDurationtimer = [NSTimer scheduledTimerWithTimeInterval:kMinAudioDuration target:self selector:@selector(minDurationReaching) userInfo:nil repeats:NO];
         
         // Record
         AVAudioSession *session = [AVAudioSession sharedInstance];
         [session setActive:YES error:nil];
-        
-        self.elapsedTime = 0;
-        self.averagePower = 0;
         
         // Start recording
         [self.recorder record];
@@ -125,6 +124,7 @@
                                                          selector:@selector(notifyNewMeters)
                                                          userInfo:nil
                                                           repeats:YES];
+        
         [self.metersTimer fire];
     }
     if (recognizer.state == UIGestureRecognizerStateEnded) {
@@ -137,46 +137,32 @@
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setActive:NO error:nil];
         
-        // If we are above min message time, we send it
-        if (self.minDurationReached) {
-            NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
-            [ApiUtils sendMessage:audioData toUser:self.contact.identifier success:^{
-                [self.delegate messageSentWithError:NO];
-            } failure:^{
-                [self.delegate messageSentWithError:YES];
-            }];
-            
-            [self.delegate longPressOnContactBubbleViewEnded:self.contact.identifier longEnough:YES];
-        } else {
-            [self.delegate longPressOnContactBubbleViewEnded:self.contact.identifier longEnough:NO];
-        }
+        NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
+        [ApiUtils sendMessage:audioData toUser:self.contact.identifier success:^{
+            [self.delegate messageSentWithError:NO];
+        } failure:^{
+            [self.delegate messageSentWithError:YES];
+        }];
+        
+        [self.delegate longPressOnContactBubbleViewEnded:self.contact.identifier];
     }
 }
 
 - (void)notifyNewMeters
 {
     [self.recorder updateMeters];
-    
-    
-    float power;
-    
-    if (self.averagePower == 0) {
-        power = [self.recorder averagePowerForChannel:0];
-    } else {
-        power = ([self.recorder averagePowerForChannel:0] - self.averagePower * (self.elapsedTime / (self.elapsedTime + 0.1))) * ((self.elapsedTime + 0.1)/0.1);
-    }
-    
-    self.averagePower = [self.recorder averagePowerForChannel:0];
-    
-    NSLog(@"POWER: %f", power);
-    
-    [self.delegate notifiedNewMeters:power];
+    [self.delegate notifiedNewMeters:[self.recorder averagePowerForChannel:0]];
     
 }
 
-- (void)handleTapGesture:(UITapGestureRecognizer *)recognizer
+- (void)handleTapGesture
 {
-    [self.player play];
+    if (self.unreadMessagesCount > 0) {
+        [self.delegate startedPlayingAudioFileWithDuration:self.player.duration andView:self];
+        [self.player play];
+    } else {
+        [GeneralUtils showMessage:@"Hold to record." withTitle:nil];
+    }
 }
 
 // temp bt
@@ -207,38 +193,32 @@
     // todo BT (later)
 }
 
-// Stop recording after kMaxAudioDuration
-- (void)minDurationReaching {
-    self.minDurationReached = TRUE;
-}
-
 - (void)setUnreadMessagesCount:(NSInteger)unreadMessagesCount
 {
     _unreadMessagesCount = unreadMessagesCount;
-    [self.unreadMessagesButton setTitle:[NSString stringWithFormat:@"%lu",(long)unreadMessagesCount] forState:UIControlStateNormal];
+    self.unreadMessagesLabel.text = [NSString stringWithFormat:@"%lu",(long)unreadMessagesCount];
     if (unreadMessagesCount>0) {
-        [self.unreadMessagesButton setHidden:NO];
+        [self.unreadMessagesLabel setHidden:NO];
+        self.imageView.layer.borderColor = [ImageUtils blue].CGColor;
+        self.imageView.layer.borderWidth = 3;
     } else {
-        [self.unreadMessagesButton setHidden:YES];
+        [self.unreadMessagesLabel setHidden:YES];
+        self.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        self.imageView.layer.borderWidth = 0.5;
     }
 }
 
 - (void)initUnreadMessagesButton
 {
-    self.unreadMessagesButton = [[UIButton alloc] init];
-    [self.unreadMessagesButton setFrame:CGRectMake(kContactSize - kUnreadMessagesButtonSize, 0, kUnreadMessagesButtonSize, kUnreadMessagesButtonSize)];
-    [self.unreadMessagesButton setBackgroundColor:[UIColor redColor]];
-    [self.unreadMessagesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    self.unreadMessagesButton.layer.cornerRadius = self.unreadMessagesButton.bounds.size.height/2;
+    self.unreadMessagesLabel = [[UILabel alloc] init];
+    [self.unreadMessagesLabel setFrame:CGRectMake(kContactSize - kUnreadMessageSize/2, -15, kUnreadMessageSize, kUnreadMessageSize)];
+    self.unreadMessagesLabel.textColor = [ImageUtils blue];
+    self.unreadMessagesLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:16.0];
+    self.unreadMessagesLabel.adjustsFontSizeToFitWidth = YES;
+    self.unreadMessagesLabel.minimumScaleFactor = 0.2;
     
-    self.oneTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [self.unreadMessagesButton addGestureRecognizer:self.oneTapRecognizer];
-    self.oneTapRecognizer.delegate = self;
-    self.oneTapRecognizer.numberOfTapsRequired = 1;
-
-    
-    [self addSubview:self.unreadMessagesButton];
-    [self.unreadMessagesButton setHidden:YES];
+    [self addSubview:self.unreadMessagesLabel];
+    [self.unreadMessagesLabel setHidden:YES];
 }
 
 - (void)addUnreadMessage:(Message *)message

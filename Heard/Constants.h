@@ -26,7 +26,7 @@ static const CGFloat kMaxAudioDuration = 30.; // in sec
 static const CGFloat kMinAudioDuration = 0.5; // in sec
 
 // UI size
-static const NSUInteger kUnreadMessagesButtonSize = 30;
+static const NSUInteger kUnreadMessageSize = 30;
 static const NSUInteger kContactMargin = 20;
 static const NSUInteger kContactSize = 80;
 static const NSUInteger kContactNameHeight = 30;
