@@ -27,7 +27,6 @@
 @property (strong, nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) NSTimer *metersTimer;
 
-// temp bt ?
 @property (nonatomic, strong) AVAudioPlayer *player;
 
 @end
@@ -59,9 +58,10 @@
     self.longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
     [self.imageView addGestureRecognizer:self.longPressRecognizer];
     self.longPressRecognizer.delegate = self;
-    self.longPressRecognizer.minimumPressDuration = 0.5;
+    self.longPressRecognizer.minimumPressDuration = 0.1;
     
     self.oneTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture)];
+    [self.unreadMessagesLabel addGestureRecognizer:self.oneTapRecognizer];
     [self.imageView addGestureRecognizer:self.oneTapRecognizer];
     self.oneTapRecognizer.delegate = self;
     self.oneTapRecognizer.numberOfTapsRequired = 1;
@@ -108,7 +108,7 @@
     
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         // Create Timer
-        self.maxDurationtimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(stopAndSendRecording) userInfo:nil repeats:NO];
+        self.maxDurationtimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
         
         // Record
         AVAudioSession *session = [AVAudioSession sharedInstance];
@@ -119,7 +119,7 @@
         
         [self.delegate longPressOnContactBubbleViewStarted:self.contact.identifier];
         
-        self.metersTimer = [NSTimer scheduledTimerWithTimeInterval:0.1
+        self.metersTimer = [NSTimer scheduledTimerWithTimeInterval:0.05
                                                            target:self
                                                          selector:@selector(notifyNewMeters)
                                                          userInfo:nil
@@ -128,23 +128,11 @@
         [self.metersTimer fire];
     }
     if (recognizer.state == UIGestureRecognizerStateEnded) {
-        [self.metersTimer invalidate];
-        // Stop timer
-        [self.maxDurationtimer invalidate];
-        
-        // Stop recording
-        [self.recorder stop];
-        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        [audioSession setActive:NO error:nil];
-        
-        NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
-        [ApiUtils sendMessage:audioData toUser:self.contact.identifier success:^{
-            [self.delegate messageSentWithError:NO];
-        } failure:^{
-            [self.delegate messageSentWithError:YES];
-        }];
-        
-        [self.delegate longPressOnContactBubbleViewEnded:self.contact.identifier];
+        // Stop timer if it did not fire yet
+        if ([self.maxDurationtimer isValid]) {
+            [self.maxDurationtimer invalidate];
+            [self stopAndSendRecording];
+        }
     }
 }
 
@@ -165,13 +153,11 @@
     }
 }
 
-// temp bt
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
 {
     if (flag) {
         // Mark as opened on the database
         [ApiUtils markMessageAsOpened:((Message *)self.unreadMessages[0]).identifier success:nil failure:nil];
-        
         
         [self.unreadMessages removeObjectAtIndex:0];
         [self setUnreadMessagesCount:self.unreadMessagesCount-1];
@@ -188,9 +174,31 @@
 // Utilities
 // ----------------------------------------------------------
 
+// Stop and send recording
+- (void)stopAndSendRecording
+{
+    [self.metersTimer invalidate];
+    
+    // Stop recording
+    [self.recorder stop];
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    [audioSession setActive:NO error:nil];
+    
+    NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
+    [ApiUtils sendMessage:audioData toUser:self.contact.identifier success:^{
+        [self.delegate messageSentWithError:NO];
+    } failure:^{
+        [self.delegate messageSentWithError:YES];
+    }];
+    
+    [self.delegate longPressOnContactBubbleViewEnded:self.contact.identifier];
+    [self.longPressRecognizer addTarget:self action:@selector(handleLongPressGesture:)];
+}
+
 // Stop recording after kMaxAudioDuration
-- (void)stopAndSendRecording {
-    // todo BT (later)
+- (void)maxRecordingDurationReached {
+    [self.longPressRecognizer removeTarget:self action:@selector(handleLongPressGesture:)];
+    [self stopAndSendRecording];
 }
 
 - (void)setUnreadMessagesCount:(NSInteger)unreadMessagesCount

@@ -26,7 +26,7 @@
 
 #define MAX_METERS 0
 #define MIN_METERS -45
-#define METERS_FREQUENCY (30/0.1)
+#define METERS_FREQUENCY (30/0.05)
 
 #define RECORDING_IMAGE_SIZE 50
 #define RECORDING_IMAGE_BOTTOM_MARGIN 50
@@ -56,7 +56,10 @@
 
 @end
 
-@implementation DashboardViewController 
+@implementation DashboardViewController {
+    CGPoint pts[5];
+    int ctr;
+}
 
 
 - (void)viewDidLoad
@@ -491,6 +494,8 @@
     //Recording line starting point
     self.recordingLineX = RECORDING_IMAGE_HORIZONTAL_MARGIN + RECORDING_IMAGE_SIZE;
     self.recordingLineY = self.recordingView.bounds.size.height - RECORDING_IMAGE_BOTTOM_MARGIN - RECORDING_IMAGE_SIZE/2;
+    ctr = 0;
+    pts[ctr] = CGPointMake(self.recordingLineX, self.recordingLineY);
     
     [self addRecordingMessage:@"Release to send..." color:[UIColor blackColor]];
     
@@ -514,7 +519,12 @@
 - (void)longPressOnContactBubbleViewEnded:(NSUInteger)contactId
 {
     //Bring the recording line to zero, to prepare sending animation
-    [self notifiedNewMeters:MIN_METERS];
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:pts[0]];
+    self.recordingLineX = self.recordingLineX + self.recordLineLength/METERS_FREQUENCY;
+    self.recordingLineY = self.recordingView.bounds.size.height - RECORDING_IMAGE_BOTTOM_MARGIN - RECORDING_IMAGE_SIZE/2;
+    [path addLineToPoint:CGPointMake(self.recordingLineX, self.recordingLineY)];
+    [self.recordingView.layer addSublayer:[self shapeLayerWithPath:path]];
     
     [self addRecordingMessage:@"Sending..." color:[UIColor blackColor]];
 }
@@ -522,8 +532,7 @@
 //Recorder notifies a change in volume intensity (every 0.1 seconds)
 - (void)notifiedNewMeters:(float)power
 {
-    UIBezierPath *path = [UIBezierPath bezierPath];
-    [path moveToPoint:CGPointMake(self.recordingLineX, self.recordingLineY)];
+    ctr ++;
     
     if (self.recordLineLength == 0) {
         self.recordLineLength = self.recordingView.bounds.size.width - 2 * RECORDING_IMAGE_SIZE - 2 * RECORDING_IMAGE_HORIZONTAL_MARGIN;
@@ -538,16 +547,20 @@
     }
     
     self.recordingLineY = self.recordingView.bounds.size.height - RECORDING_IMAGE_BOTTOM_MARGIN - RECORDING_IMAGE_SIZE/2 - RECORDING_LINE_MAX_HEIGHT * (power/(MAX_METERS + (-MIN_METERS)));
+    pts[ctr] = CGPointMake(self.recordingLineX, self.recordingLineY);
     
-    [path addLineToPoint:CGPointMake(self.recordingLineX, self.recordingLineY)];
-    
-    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-    shapeLayer.path = [path CGPath];
-    shapeLayer.strokeColor = [[ImageUtils blue] CGColor];
-    shapeLayer.lineWidth = RECORDING_LINE_WEIGHT;
-    shapeLayer.fillColor = [[UIColor clearColor] CGColor];
-    
-    [self.recordingView.layer addSublayer:shapeLayer];
+    if (ctr == 4)
+    {
+        pts[3] = CGPointMake((pts[2].x + pts[4].x)/2.0, (pts[2].y + pts[4].y)/2.0);
+        UIBezierPath *path = [UIBezierPath bezierPath];
+        [path moveToPoint:pts[0]];
+        [path addCurveToPoint:pts[3] controlPoint1:pts[1] controlPoint2:pts[2]];
+        pts[0] = pts[3];
+        pts[1] = pts[4];
+        ctr = 1;
+        
+        [self.recordingView.layer addSublayer:[self shapeLayerWithPath:path]];
+    }
 }
 
 - (void)addRecordingMessage:(NSString *)message color:(UIColor *)color {
@@ -658,6 +671,16 @@
 {
     [self.activityView stopAnimating];
     [self.activityView removeFromSuperview];
+}
+
+- (CAShapeLayer *)shapeLayerWithPath:(UIBezierPath *)path
+{
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    shapeLayer.path = [path CGPath];
+    shapeLayer.strokeColor = [[ImageUtils blue] CGColor];
+    shapeLayer.lineWidth = RECORDING_LINE_WEIGHT;
+    shapeLayer.fillColor = [[UIColor clearColor] CGColor];
+    return shapeLayer;
 }
 
 @end
