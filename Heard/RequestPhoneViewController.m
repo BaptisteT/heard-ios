@@ -23,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
 @property (weak, nonatomic) IBOutlet UIButton *countryCodeButton;
 @property (strong, nonatomic) NBAsYouTypeFormatter *formatter;
+@property (nonatomic) BOOL USRegionCode;
 
 @end
 
@@ -32,6 +33,7 @@
 {
     [super viewDidLoad];
     
+    self.USRegionCode = YES;
     self.formatter = [[NBAsYouTypeFormatter alloc] initWithRegionCode:@"US"];
     
     self.phoneTextField.delegate = self;
@@ -55,8 +57,15 @@
 - (IBAction)nextButtonPressed:(id)sender {
     NSError *aError = nil;
     NBPhoneNumberUtil *util = [NBPhoneNumberUtil sharedInstance];
-    NBPhoneNumber *phoneNumber = [util parse:self.phoneTextField.text
-                            defaultRegion:@"US" error:&aError];
+    NBPhoneNumber *phoneNumber;
+    
+    if (self.USRegionCode) {
+        phoneNumber = [util parse:self.phoneTextField.text
+        defaultRegion:@"US" error:&aError];
+    } else {
+        phoneNumber = [util parse:self.phoneTextField.text
+                    defaultRegion:@"FR" error:&aError];
+    }
     
     if (!aError && [util isValidNumber:phoneNumber]) {
         NSString *formattedPhoneNumber = [NSString stringWithFormat:@"+%@%@", phoneNumber.countryCode, phoneNumber.nationalNumber];
@@ -67,8 +76,19 @@
 }
 
 - (IBAction)countryCodeButtonClicked:(id)sender {
-    //Allow French numbers
-    // todo
+    if (self.USRegionCode) {
+        self.USRegionCode = NO;
+        self.formatter = [[NBAsYouTypeFormatter alloc] initWithRegionCode:@"FR"];
+        [self.countryCodeButton setTitle:@"+33" forState:UIControlStateNormal];
+    } else {
+        self.USRegionCode = YES;
+        self.formatter = [[NBAsYouTypeFormatter alloc] initWithRegionCode:@"US"];
+        [self.countryCodeButton setTitle:@"+1" forState:UIControlStateNormal];
+    }
+    
+    if (self.phoneTextField.text && [self.phoneTextField.text length] > 0) {
+        self.phoneTextField.text = [self.formatter inputDigit:self.phoneTextField.text];
+    }
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
@@ -96,6 +116,7 @@
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
     [ApiUtils requestSmsCode:phoneNumber success:^() {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [self performSegueWithIdentifier:@"Code Confirmation Push Segue" sender:phoneNumber];
     } failure:^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];

@@ -32,7 +32,7 @@
 #define RECORDING_IMAGE_BOTTOM_MARGIN 50
 #define RECORDING_IMAGE_HORIZONTAL_MARGIN 10
 #define RECORDING_LINE_MAX_HEIGHT 150
-#define RECORDING_LINE_WEIGHT 0.5
+#define RECORDING_LINE_WEIGHT 2
 
 
 @interface DashboardViewController ()
@@ -596,7 +596,7 @@
         float initialWidth = 0;
         float finalWidth = self.recordingView.bounds.size.width - RECORDING_IMAGE_SIZE - RECORDING_IMAGE_HORIZONTAL_MARGIN - self.recordingLineX;
         
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(self.recordingLineX, self.recordingView.bounds.size.height -RECORDING_IMAGE_BOTTOM_MARGIN - RECORDING_IMAGE_SIZE/2, initialWidth, RECORDING_LINE_WEIGHT)];
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(self.recordingLineX, self.recordingView.bounds.size.height -RECORDING_IMAGE_BOTTOM_MARGIN - RECORDING_IMAGE_SIZE/2 - RECORDING_LINE_WEIGHT, initialWidth, RECORDING_LINE_WEIGHT)];
         
         line.backgroundColor = [ImageUtils blue];
         
