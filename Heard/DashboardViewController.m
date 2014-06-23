@@ -28,11 +28,9 @@
 #define MIN_METERS -45
 #define METERS_FREQUENCY (30/0.05)
 
-#define RECORDING_IMAGE_SIZE 50
-#define RECORDING_IMAGE_BOTTOM_MARGIN 50
-#define RECORDING_IMAGE_HORIZONTAL_MARGIN 10
-#define RECORDING_LINE_MAX_HEIGHT 150
+#define RECORDING_LINE_MAX_HEIGHT 20
 #define RECORDING_LINE_WEIGHT 2
+#define PLAYER_HEIGHT 50
 
 
 @interface DashboardViewController ()
@@ -307,7 +305,6 @@
     [contactView setImage:[UIImage imageNamed:@"contact-placeholder.png"]];
     
     [self.contactScrollView addSubview:contactView];
-
 }
 
 - (void)addNameLabelForView:(UIView *)contactView andContact:(Contact *)contact
@@ -495,37 +492,18 @@
     // Hide replay button
     self.replayButton.hidden = YES;
     
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenRect.size.width;
-    CGFloat screenHeight = screenRect.size.height;
-    
     //Recording view is same size as screen
-    self.recordingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, screenHeight)];
-    self.recordingView.backgroundColor = [UIColor whiteColor];
+    self.recordingView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_HEIGHT, self.view.bounds.size.width, PLAYER_HEIGHT)];
+    self.recordingView.backgroundColor = [UIColor colorWithRed:240.0/255 green:240.0/255 blue:240.0/255 alpha:1.0];
+//    [GeneralUtils addTopBorder:self.recordingView borderSize:0.5];
     [self.view addSubview:self.recordingView];
     
     //Recording line starting point
-    self.recordingLineX = RECORDING_IMAGE_HORIZONTAL_MARGIN + RECORDING_IMAGE_SIZE;
-    self.recordingLineY = self.recordingView.bounds.size.height - RECORDING_IMAGE_BOTTOM_MARGIN - RECORDING_IMAGE_SIZE/2;
-    ctr = 0;
+    self.recordingLineX = 0;
+    self.recordingLineY = self.recordingView.bounds.size.height/2;
     pts[ctr] = CGPointMake(self.recordingLineX, self.recordingLineY);
     
     [self addRecordingMessage:@"Release to send..." color:[UIColor blackColor]];
-    
-    //Add contact bubbles
-    UIImageView *myImageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, self.recordingView.bounds.size.height - RECORDING_IMAGE_BOTTOM_MARGIN - RECORDING_IMAGE_SIZE, RECORDING_IMAGE_SIZE, RECORDING_IMAGE_SIZE)];
-    UIImageView *contactImageView = [[UIImageView alloc] initWithFrame:CGRectMake(screenWidth - RECORDING_IMAGE_SIZE - 10, self.recordingView.bounds.size.height - RECORDING_IMAGE_BOTTOM_MARGIN - RECORDING_IMAGE_SIZE, RECORDING_IMAGE_SIZE, RECORDING_IMAGE_SIZE)];
-    
-    contactImageView.clipsToBounds = YES;
-    myImageView.clipsToBounds = YES;
-    contactImageView.layer.cornerRadius = RECORDING_IMAGE_SIZE/2;
-    myImageView.layer.cornerRadius = RECORDING_IMAGE_SIZE/2;
-    
-    [contactImageView setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:contactId]];
-    [myImageView setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
-    
-    [self.recordingView addSubview:contactImageView];
-    [self.recordingView addSubview:myImageView];
 }
 
 //User stop pressing screen
@@ -535,7 +513,7 @@
     UIBezierPath *path = [UIBezierPath bezierPath];
     [path moveToPoint:pts[0]];
     self.recordingLineX = self.recordingLineX + self.recordLineLength/METERS_FREQUENCY;
-    self.recordingLineY = self.recordingView.bounds.size.height - RECORDING_IMAGE_BOTTOM_MARGIN - RECORDING_IMAGE_SIZE/2;
+    self.recordingLineY = self.recordingView.bounds.size.height/2;
     [path addLineToPoint:CGPointMake(self.recordingLineX, self.recordingLineY)];
     [self.recordingView.layer addSublayer:[self shapeLayerWithPath:path]];
     
@@ -548,7 +526,7 @@
     ctr ++;
     
     if (self.recordLineLength == 0) {
-        self.recordLineLength = self.recordingView.bounds.size.width - 2 * RECORDING_IMAGE_SIZE - 2 * RECORDING_IMAGE_HORIZONTAL_MARGIN;
+        self.recordLineLength = self.recordingView.bounds.size.width;
     }
     
     self.recordingLineX = self.recordingLineX + self.recordLineLength/METERS_FREQUENCY;
@@ -559,7 +537,7 @@
         power = power + (-MIN_METERS);
     }
     
-    self.recordingLineY = self.recordingView.bounds.size.height - RECORDING_IMAGE_BOTTOM_MARGIN - RECORDING_IMAGE_SIZE/2 - RECORDING_LINE_MAX_HEIGHT * (power/(MAX_METERS + (-MIN_METERS)));
+    self.recordingLineY = self.recordingView.bounds.size.height/2 - RECORDING_LINE_MAX_HEIGHT * (power/(MAX_METERS + (-MIN_METERS)));
     pts[ctr] = CGPointMake(self.recordingLineX, self.recordingLineY);
     
     if (ctr == 4)
@@ -582,10 +560,10 @@
         self.recordingMessage = nil;
     }
     
-    self.recordingMessage = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, self.recordingView.bounds.size.width, 40)];
+    self.recordingMessage = [[UILabel alloc] initWithFrame:CGRectMake(0, self.recordingView.bounds.size.height/2, self.recordingView.bounds.size.width, self.recordingView.bounds.size.height/2)];
     
     self.recordingMessage.text = message;
-    self.recordingMessage.font = [UIFont fontWithName:@"Avenir-Light" size:20.0];
+    self.recordingMessage.font = [UIFont fontWithName:@"Avenir-Light" size:14.0];
     self.recordingMessage.textAlignment = NSTextAlignmentCenter;
     self.recordingMessage.textColor = color;
     
@@ -601,9 +579,9 @@
         [self addRecordingMessage:@"Sent!" color:[UIColor blackColor]];
         
         float initialWidth = 0;
-        float finalWidth = self.recordingView.bounds.size.width - RECORDING_IMAGE_SIZE - RECORDING_IMAGE_HORIZONTAL_MARGIN - self.recordingLineX;
+        float finalWidth = self.recordingView.bounds.size.width - self.recordingLineX;
         
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(self.recordingLineX, self.recordingView.bounds.size.height -RECORDING_IMAGE_BOTTOM_MARGIN - RECORDING_IMAGE_SIZE/2 - RECORDING_LINE_WEIGHT, initialWidth, RECORDING_LINE_WEIGHT)];
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(self.recordingLineX, self.recordingView.bounds.size.height/2 - RECORDING_LINE_WEIGHT, initialWidth, RECORDING_LINE_WEIGHT)];
         
         line.backgroundColor = [ImageUtils blue];
         

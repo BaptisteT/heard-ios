@@ -33,6 +33,18 @@
     [view.layer addSublayer:bottomBorder];
 }
 
++ (void)addTopBorder:(UIView *)view borderSize:(float)borderSize
+{
+    CALayer *bottomBorder = [CALayer layer];
+    bottomBorder.frame = CGRectMake(0.0f,
+                                    0.0f,
+                                    view.frame.size.width,
+                                    borderSize);
+    
+    bottomBorder.backgroundColor = [UIColor lightGrayColor].CGColor;
+    [view.layer addSublayer:bottomBorder];
+}
+
 + (void)addRightBorder:(UIView *)view borderSize:(float)borderSize
 {
     CALayer *rightBorder = [CALayer layer];

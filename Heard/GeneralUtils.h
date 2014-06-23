@@ -14,6 +14,8 @@
 
 + (void)addBottomBorder:(UIView *)view borderSize:(float)borderSize;
 
++ (void)addTopBorder:(UIView *)view borderSize:(float)borderSize;
+
 + (void)addRightBorder:(UIView *)view borderSize:(float)borderSize;
 
 + (BOOL)validName:(NSString *)name;
