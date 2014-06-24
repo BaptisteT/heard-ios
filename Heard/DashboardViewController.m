@@ -61,7 +61,6 @@
     int ctr;
 }
 
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -71,12 +70,12 @@
     // Some init
     self.contactBubbleViews = [[NSMutableArray alloc] init];
     
-    // Retrive contacts, create bubble + retrieve unread messages
     [self requestAddressBookAccess];
-    // todo order?
     
-    // 4 -> Create messages bubles
-    //              - (id)initWithMessage:(Message *)message;
+    //Use speakers (TODO: kill warning)
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+    UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
+    AudioSessionSetProperty(kAudioSessionProperty_OverrideAudioRoute, sizeof(audioRouteOverride), &audioRouteOverride);
     
     self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
 }
@@ -726,8 +725,8 @@
 
 - (void)quitPlayerMode
 {
-    if ([self.player isPlaying]) {
-        [self.player stop];
+    if ([self.mainPlayer isPlaying]) {
+        [self.mainPlayer stop];
     }
     
     if ([self.replayPlayer isPlaying]) {

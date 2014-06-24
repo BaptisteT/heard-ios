@@ -17,7 +17,7 @@
 - (void)addUnreadMessage:(Message *)message;
 - (void) retrieveAndDisplayUnreadMessages;
 
-@property (nonatomic, strong) AVAudioPlayer *player;
+@property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 @property (nonatomic, strong) AVAudioPlayer *replayPlayer;
 
 @end
