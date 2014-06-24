@@ -39,7 +39,7 @@
 
 - (void)messageSentWithError:(BOOL)error;
 
-- (void)startedPlayingAudioFileWithDuration:(NSTimeInterval)duration data:(NSData *)data andView:(ContactBubbleView *)view;
+- (void)startedPlayingAudioFileByView:(ContactBubbleView *)view;
 
 - (void)quitRecodingModeAnimated:(BOOL)animated;
 

@@ -684,14 +684,14 @@
 // Player Mode
 // ----------------------------------------------------------
 
-- (void)startedPlayingAudioFileWithDuration:(NSTimeInterval)duration data:(NSData *)data andView:(ContactBubbleView *)view
+- (void)startedPlayingAudioFileByView:(ContactBubbleView *)view
 {
     //In case of a replay
     self.lastMessagePlayedContact = view;
-    self.replayPlayer = [[AVAudioPlayer alloc] initWithData:data error:nil];
+    self.replayPlayer = [[AVAudioPlayer alloc] initWithData:self.mainPlayer.data error:nil];
     [self.replayPlayer setVolume:2];
     
-    [self startPlayerMode:duration];
+    [self startPlayerMode:self.mainPlayer.duration];
 }
 
 //Only UI
@@ -727,6 +727,7 @@
 {
     if ([self.mainPlayer isPlaying]) {
         [self.mainPlayer stop];
+        self.mainPlayer = nil;
     }
     
     if ([self.replayPlayer isPlaying]) {

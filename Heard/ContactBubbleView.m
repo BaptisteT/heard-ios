@@ -105,7 +105,7 @@
 {
     // todo BT (later)
     // check micro is available, else warm user
-    if ([self.delegate.player isPlaying]) {
+    if ([self.delegate.mainPlayer isPlaying]) {
         [self.delegate quitPlayerMode];
     }
     
@@ -149,11 +149,11 @@
     }
 }
 
+//TODO: Should be in DashBoard
 - (void)notifyNewMeters
 {
     [self.recorder updateMeters];
     [self.delegate notifiedNewMeters:[self.recorder averagePowerForChannel:0]];
-    
 }
 
 - (void)addActiveOverlay
@@ -176,11 +176,13 @@
 - (void)handleTapGesture
 {
     if (self.unreadMessagesCount > 0) {
-        if ([self.delegate.player isPlaying]) {
+        if ([self.delegate.mainPlayer isPlaying]) {
             [self.delegate quitPlayerMode];
-            
-            [self prepareNextMessage];
         }
+        
+        NSData* data = [NSData dataWithContentsOfURL:[self.unreadMessages[0] getMessageURL]] ;
+        self.delegate.mainPlayer = [[AVAudioPlayer alloc] initWithData:data error:nil];
+        [self.delegate.mainPlayer setVolume:2];
         
         if ([self.delegate.replayPlayer isPlaying]) {
             [self.delegate quitPlayerMode];
@@ -196,27 +198,10 @@
         // Update badge
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] - 1];
         
-        [self.delegate startedPlayingAudioFileWithDuration:self.delegate.player.duration data:self.delegate.player.data andView:self];
-        [self.delegate.player play];
+        [self.delegate startedPlayingAudioFileByView:self];
+        [self.delegate.mainPlayer play];
     } else {
         [GeneralUtils showMessage:@"Hold to record." withTitle:nil];
-    }
-}
-
-- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
-{
-    if (flag) {
-        [self prepareNextMessage];
-    }
-}
-
-- (void)prepareNextMessage
-{
-    if (self.unreadMessagesCount > 0) {
-        NSData* data = [NSData dataWithContentsOfURL:[self.unreadMessages[0] getMessageURL]] ;
-        self.delegate.player = [[AVAudioPlayer alloc] initWithData:data error:nil];
-        [self.delegate.player setVolume:2];
-        [self.delegate.player setDelegate:self];
     }
 }
 
@@ -295,14 +280,6 @@
     }
     [self.unreadMessages addObject:message];
     [self setUnreadMessagesCount:self.unreadMessagesCount+1];
-    
-    if (self.unreadMessagesCount == 1) {
-        // Init player with this message if this is the only one
-        NSData* data = [NSData dataWithContentsOfURL:[message getMessageURL]] ;
-        self.delegate.player = [[AVAudioPlayer alloc] initWithData:data error:nil];
-        [self.delegate.player setVolume:2];
-        [self.delegate.player setDelegate:self];
-    }
 }
 
 - (void)resetUnreadMessages
