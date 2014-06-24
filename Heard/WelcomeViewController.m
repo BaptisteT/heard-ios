@@ -27,11 +27,12 @@
     self.subTitleLabel.alpha = 0;
     self.startButton.alpha = 0;
     
-    self.hiddingView = [[UIView alloc] initWithFrame:self.logoImage.frame];
+    self.hiddingView = [[UIView alloc] initWithFrame:CGRectMake(0,
+                                                                0,
+                                                                self.logoImage.bounds.size.width,
+                                                                self.logoImage.bounds.size.height)];
     self.hiddingView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.hiddingView];
-    
-	// Do any additional setup after loading the view, typically from a nib.
+    [self.logoImage addSubview:self.hiddingView];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -40,10 +41,10 @@
     
     [UIView animateWithDuration:3.0 animations:^{
         
-        self.hiddingView.frame = CGRectMake(self.hiddingView.frame.size.width,
-                                            self.hiddingView.frame.origin.y,
-                                            self.hiddingView.frame.size.width,
-                                            self.hiddingView.frame.size.height);
+        self.hiddingView.frame = CGRectMake(self.logoImage.bounds.size.width,
+                                            0,
+                                            self.logoImage.bounds.size.width,
+                                            self.logoImage.bounds.size.height);
     } completion:^(BOOL dummy){
         [UIView animateWithDuration:1.0 animations:^{
             

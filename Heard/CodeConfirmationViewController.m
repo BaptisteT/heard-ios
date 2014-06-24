@@ -50,9 +50,9 @@
     [GeneralUtils addBottomBorder:self.textFieldContainer borderSize:BORDER_SIZE];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
     
     [self.codeTextField becomeFirstResponder];
 }
