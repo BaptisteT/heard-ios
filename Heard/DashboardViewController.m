@@ -23,6 +23,8 @@
 #define ACTION_SHEET_OPTION_1 @"Invite contact"
 #define ACTION_SHEET_OPTION_2 @"Share this app"
 #define ACTION_SHEET_OPTION_3 @"Feedback"
+#define ACTION_SHEET_OPTION_4 @"Add contact"
+#define ACTION_SHEET_OPTION_5 @"Block user"
 #define ACTION_SHEET_CANCEL @"Cancel"
 
 #define MAX_METERS 0
@@ -52,6 +54,7 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
 @property (nonatomic, strong) UIView *playerAudioLine;
 @property (nonatomic, strong) NSString *currentUserPhoneNumber;
+@property (nonatomic, weak) Contact *contactToAdd; // contact to add or block
 
 @end
 
@@ -386,7 +389,35 @@
         activityViewController.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeAssignToContact, UIActivityTypeAddToReadingList, UIActivityTypeAirDrop];
         
         [self presentViewController:activityViewController animated:YES completion:nil];
-    //Feedback
+    
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_2]) {
+        // todo Feedback
+        
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_4]) {
+        // create person record
+        ABRecordRef person = ABPersonCreate();
+        ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFStringRef) self.contactToAdd.firstName, NULL);
+        ABRecordSetValue(person, kABPersonLastNameProperty, (__bridge CFStringRef) self.contactToAdd.lastName, NULL);
+        ABMutableMultiValueRef phoneNumbers = ABMultiValueCreateMutable(kABMultiStringPropertyType);
+        ABMultiValueAddValueAndLabel(phoneNumbers, (__bridge CFStringRef)self.contactToAdd.phoneNumber, kABPersonPhoneMainLabel, NULL);
+        ABRecordSetValue(person, kABPersonPhoneProperty, phoneNumbers, nil);
+        
+        // let's show view controller
+        ABUnknownPersonViewController *controller = [[ABUnknownPersonViewController alloc] init];
+        controller.displayedPerson = person;
+        controller.allowsAddingToAddressBook = YES;
+        UINavigationController *newNavigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        controller.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
+                                                 initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self
+                                                 action:@selector(dismissContactView)];
+        [self.navigationController presentViewController:newNavigationController animated:YES completion:nil];
+        CFRelease(person);
+        
+        // todoBT detect when new contact is added & setbubble to non pending
+        
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_5]) {
+        // todo BT block user + delete bubble / contact
+        
     } else {
         NSString *email = [NSString stringWithFormat:@"mailto:%@?subject=Feedback for Waved on iOS (v%@)", kFeedbackEmail,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
         
@@ -395,6 +426,7 @@
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
     }
 }
+
 
 - (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person
 {
@@ -512,8 +544,7 @@
     }
     // case where we receive a message from someone not in our contacts
     if (!isAttributed) {
-        // todo BT
-        // Not safe (asynch)
+        // todo BT Not safe (asynch)
         void(^successBlock)(Contact *) = ^void(Contact *contact) {
             NSInteger index, horizontalPosition;
             // create bubble
@@ -522,7 +553,7 @@
                 horizontalPosition = 3 - (3*(self.contacts.count/3) + 2 - self.contacts.count);
             } else {
                 // increase scoll view
-                self.contactScrollView.contentSize = CGSizeMake(self.contactScrollView.contentSize.width, self.contactScrollView.contentSize.height + kContactMargin + kContactSize + kContactNameHeight);
+                self.contactScrollView.contentSize = CGSizeMake(self.contactScrollView.contentSize.width, MIN([[UIScreen mainScreen] bounds].size.height - 20,self.contactScrollView.contentSize.height + kContactMargin + kContactSize + kContactNameHeight));
                 index = (self.contacts.count + 1) / 3;
                 horizontalPosition = 0;
             }
@@ -530,12 +561,13 @@
             [self addContactViewForContactIndex:index horizontalPosition:horizontalPosition];
             
             // add message to bubble
-//            [[self.contactBubbleViews lastObject] setPendingContact:YES];
+            [[self.contactBubbleViews lastObject] setPendingContact:YES];
             [[self.contactBubbleViews lastObject] addUnreadMessage:message];
         };
         [ApiUtils getNewContactInfo:message.senderId AndExecuteSuccess:successBlock failure:nil];
     }
 }
+
 
 // ----------------------------------------------------------
 // Recording Mode
@@ -570,6 +602,27 @@
         }
     }
 }
+
+- (void)addRecordingMessage:(NSString *)message color:(UIColor *)color {
+    if (self.recordingMessage) {
+        [self.recordingMessage removeFromSuperview];
+        self.recordingMessage = nil;
+    }
+    
+    self.recordingMessage = [[UILabel alloc] initWithFrame:CGRectMake(0, self.recordingView.bounds.size.height/2, self.recordingView.bounds.size.width, self.recordingView.bounds.size.height/2)];
+    
+    self.recordingMessage.text = message;
+    self.recordingMessage.font = [UIFont fontWithName:@"Avenir-Light" size:14.0];
+    self.recordingMessage.textAlignment = NSTextAlignmentCenter;
+    self.recordingMessage.textColor = color;
+    
+    [self.recordingView addSubview:self.recordingMessage];
+}
+
+
+// ----------------------------------------------------------
+// Contact Bubble View Delegate Protocole
+// ----------------------------------------------------------
 
 //Create recording mode screen
 - (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId FromView:(ContactBubbleView *)view
@@ -641,22 +694,6 @@
     }
 }
 
-- (void)addRecordingMessage:(NSString *)message color:(UIColor *)color {
-    if (self.recordingMessage) {
-        [self.recordingMessage removeFromSuperview];
-        self.recordingMessage = nil;
-    }
-    
-    self.recordingMessage = [[UILabel alloc] initWithFrame:CGRectMake(0, self.recordingView.bounds.size.height/2, self.recordingView.bounds.size.width, self.recordingView.bounds.size.height/2)];
-    
-    self.recordingMessage.text = message;
-    self.recordingMessage.font = [UIFont fontWithName:@"Avenir-Light" size:14.0];
-    self.recordingMessage.textAlignment = NSTextAlignmentCenter;
-    self.recordingMessage.textColor = color;
-    
-    [self.recordingView addSubview:self.recordingMessage];
-}
-
 - (void)messageSentWithError:(BOOL)error
 {
     [self enableAllContactViews];
@@ -689,6 +726,12 @@
     }
 }
 
+- (void)startedPlayingAudioFileByView:(ContactBubbleView *)view
+{
+    //TODO restart player
+    [self startPlayerMode:self.mainPlayer.duration];
+}
+
 - (void)quitRecodingModeAnimated:(BOOL)animated
 {
     if (animated) {
@@ -704,15 +747,26 @@
     }
 }
 
+- (void)pendingContactClicked:(Contact *)contact
+{
+    self.contactToAdd = contact;
+    UIActionSheet *pendingActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                                    delegate:self
+                                                           cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                      destructiveButtonTitle:nil
+                                                           otherButtonTitles:ACTION_SHEET_OPTION_4, ACTION_SHEET_OPTION_5, nil];
+    [pendingActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+}
+
+- (void)dismissContactView
+{
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
+
 // ----------------------------------------------------------
 // Player Mode
 // ----------------------------------------------------------
-
-- (void)startedPlayingAudioFileByView:(ContactBubbleView *)view
-{
-    //TODO restart player
-    [self startPlayerMode:self.mainPlayer.duration];
-}
 
 //Only UI
 - (void)startPlayerMode:(NSTimeInterval)duration

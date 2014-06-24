@@ -29,6 +29,7 @@
 @property (strong, nonatomic) NSTimer *metersTimer;
 @property (nonatomic, strong) UIView *activeOverlay;
 @property (nonatomic, strong) NSData *nextMessageAudioData;
+@property (nonatomic, strong) UIImageView *pendingContactOverlay;
 
 @end
 
@@ -43,7 +44,7 @@
 {
     self  = [self initWithFrame:frame];
     self.contact = contact;
-    
+    _pendingContact = NO;
     self.clipsToBounds = NO;
     
     // Set image view
@@ -112,11 +113,6 @@
     [self hideMessageCountLabel:YES];
 }
 
-//- (void)setImage:(UIImage *)image
-//{
-//    self.imageView.image = image;
-//}
-
 
 // ----------------------------------------------------------
 // Handle Gestures
@@ -170,7 +166,15 @@
     }
 }
 
-- (void)handleTapGesture
+- (void)handleTapGesture {
+    if (self.pendingContact) {
+        [self handlePendingTapGesture];
+    } else {
+        [self handleNonPendingTapGesture];
+    }
+}
+
+- (void)handleNonPendingTapGesture
 {
     if (!self.unreadMessagesLabel.isHidden) { // ie. self.unreadMessageCount > 0 && self.nextMessageAudioData !=nil
         self.userInteractionEnabled = NO;
@@ -216,6 +220,31 @@
 
 
 // ----------------------------------------------------------
+// Pending Contact
+// ----------------------------------------------------------
+- (void)setPendingContact:(BOOL)pendingContact
+{
+    _pendingContact = pendingContact;
+    if (pendingContact) {
+        [self removeGestureRecognizer:self.longPressRecognizer];
+        if (!self.pendingContactOverlay) {
+            self.pendingContactOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
+            [self.pendingContactOverlay setImage:[UIImage imageNamed:@"question-mark.png"]];
+        }
+        [self addSubview:self.pendingContactOverlay];
+     } else {
+         [self addGestureRecognizer:self.longPressRecognizer];
+         if (self.pendingContactOverlay) {
+             [self.pendingContactOverlay removeFromSuperview];
+         }
+     }
+}
+
+- (void)handlePendingTapGesture {
+    [self.delegate pendingContactClicked:self.contact];
+}
+
+// ----------------------------------------------------------
 // Timer methods
 // ----------------------------------------------------------
 
@@ -238,10 +267,9 @@
 
 
 // ----------------------------------------------------------
-// Utilities
+// Recording utility
 // ----------------------------------------------------------
 
-// Recording utility
 - (void)sendRecording
 {
     [self stopRecording];
@@ -264,7 +292,10 @@
     [self.longPressRecognizer addTarget:self action:@selector(handleLongPressGesture:)];
 }
 
-// Messages utility
+
+// ----------------------------------------------------------
+// Message utility
+// ----------------------------------------------------------
 - (void)setUnreadMessagesCount:(NSInteger)unreadMessagesCount
 {
     _unreadMessagesCount = unreadMessagesCount;
@@ -282,7 +313,6 @@
         [ApiUtils downloadAudioFileAtURL:[message getMessageURL] success:^void(NSData *data) {
             self.nextMessageAudioData = data;
             [self hideMessageCountLabel:NO];
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
         } failure:nil];
     }
     [self.unreadMessages addObject:message];
@@ -296,7 +326,6 @@
     self.nextMessageAudioData = nil;
 }
 
-// Hide / unhide count label and change border color accordingly
 - (void)hideMessageCountLabel:(BOOL)flag {
     if (flag) {
         self.unreadMessagesLabel.hidden = YES;
@@ -309,7 +338,10 @@
     }
 }
 
-// Long press overlay utility
+
+// ----------------------------------------------------------
+// Design utility
+// ----------------------------------------------------------
 - (void)addActiveOverlay
 {
     [self removeActiveOverlay];

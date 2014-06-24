@@ -19,11 +19,10 @@
 
 @property (strong, nonatomic) Contact *contact;
 @property (weak, nonatomic) id <ContactBubbleViewDelegate> delegate;
-
+@property (nonatomic) BOOL pendingContact;
 
 - (void)addUnreadMessage:(Message *)message;
 - (void)resetUnreadMessages;
-//- (void)setImage:(UIImage *)image;
 
 - (void)addActiveOverlay;
 - (void)removeActiveOverlay;
@@ -45,6 +44,8 @@
 - (void)quitRecodingModeAnimated:(BOOL)animated;
 
 - (void)quitPlayerMode;
+
+- (void)pendingContactClicked:(Contact *)contact;
 
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 

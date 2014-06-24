@@ -82,6 +82,7 @@
     UIViewController *visibleController = [self getVisibleController];
     if ([visibleController isKindOfClass:[DashboardViewController class]]) {
         [(DashboardViewController *)visibleController addUnreadMessage:newMessage];
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
     }
 }
 

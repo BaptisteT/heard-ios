@@ -41,7 +41,8 @@
     Contact *contact= [[Contact alloc] init];
     contact.identifier = [[rawContact objectForKey:@"id"] integerValue];
     contact.phoneNumber = [rawContact objectForKey:@"phone_number"];
-    
+    contact.firstName = [rawContact objectForKey:@"first_name"];
+    contact.lastName = [rawContact objectForKey:@"last_name"];
     return contact;
 }
 
