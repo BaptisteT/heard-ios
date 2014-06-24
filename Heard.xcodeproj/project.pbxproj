@@ -9,11 +9,11 @@
 /* Begin PBXBuildFile section */
 		0B3651D61958AC5000534386 /* contact-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651D41958AC5000534386 /* contact-placeholder.png */; };
 		0B3651D71958AC5000534386 /* contact-placeholder@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */; };
+		0B3651DF1959109700534386 /* heard-logo-80.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DC1959109700534386 /* heard-logo-80.png */; };
+		0B3651E01959109700534386 /* heard-logo-58.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DD1959109700534386 /* heard-logo-58.png */; };
+		0B3651E11959109700534386 /* heard-logo-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DE1959109700534386 /* heard-logo-120.png */; };
 		0B58BAFD1954B47700E9FF70 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B58BAFB1954B47700E9FF70 /* AddressBook.framework */; };
 		0B58BAFE1954B47700E9FF70 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B58BAFC1954B47700E9FF70 /* AddressBookUI.framework */; };
-		0B893A3B1954DF0A00476BFE /* heard-logo-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A381954DF0A00476BFE /* heard-logo-120.png */; };
-		0B893A3C1954DF0A00476BFE /* heard-logo-58.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A391954DF0A00476BFE /* heard-logo-58.png */; };
-		0B893A3D1954DF0A00476BFE /* heard-logo-80.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A3A1954DF0A00476BFE /* heard-logo-80.png */; };
 		0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */; };
 		0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A481954E4FF00476BFE /* welcome-logo.png */; };
 		0B893A4D19550FF000476BFE /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B893A4C19550FF000476BFE /* Contact.m */; };
@@ -73,11 +73,11 @@
 /* Begin PBXFileReference section */
 		0B3651D41958AC5000534386 /* contact-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-placeholder.png"; sourceTree = "<group>"; };
 		0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-placeholder@2x~iphone.png"; sourceTree = "<group>"; };
+		0B3651DC1959109700534386 /* heard-logo-80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-80.png"; sourceTree = "<group>"; };
+		0B3651DD1959109700534386 /* heard-logo-58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-58.png"; sourceTree = "<group>"; };
+		0B3651DE1959109700534386 /* heard-logo-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-120.png"; sourceTree = "<group>"; };
 		0B58BAFB1954B47700E9FF70 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		0B58BAFC1954B47700E9FF70 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
-		0B893A381954DF0A00476BFE /* heard-logo-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-120.png"; sourceTree = "<group>"; };
-		0B893A391954DF0A00476BFE /* heard-logo-58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-58.png"; sourceTree = "<group>"; };
-		0B893A3A1954DF0A00476BFE /* heard-logo-80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-80.png"; sourceTree = "<group>"; };
 		0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome-logo@2x~iphone.png"; sourceTree = "<group>"; };
 		0B893A481954E4FF00476BFE /* welcome-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome-logo.png"; sourceTree = "<group>"; };
 		0B893A4B19550FF000476BFE /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
@@ -201,13 +201,13 @@
 		0B58BB001954D7E200E9FF70 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				0B3651DC1959109700534386 /* heard-logo-80.png */,
+				0B3651DD1959109700534386 /* heard-logo-58.png */,
+				0B3651DE1959109700534386 /* heard-logo-120.png */,
 				0B3651D41958AC5000534386 /* contact-placeholder.png */,
 				0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */,
 				0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */,
 				0B893A481954E4FF00476BFE /* welcome-logo.png */,
-				0B893A381954DF0A00476BFE /* heard-logo-120.png */,
-				0B893A391954DF0A00476BFE /* heard-logo-58.png */,
-				0B893A3A1954DF0A00476BFE /* heard-logo-80.png */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -500,17 +500,17 @@
 				0BD758D81950F91B00CF0D85 /* Images.xcassets in Resources */,
 				0B3651D71958AC5000534386 /* contact-placeholder@2x~iphone.png in Resources */,
 				0BDB64CC19521A7C00223093 /* NBPhoneNumberMetadata.plist in Resources */,
+				0B3651E11959109700534386 /* heard-logo-120.png in Resources */,
+				0B3651DF1959109700534386 /* heard-logo-80.png in Resources */,
 				0BDB64CE19521A7C00223093 /* PhoneNumberMetaData.json in Resources */,
 				0BD758CA1950F91B00CF0D85 /* InfoPlist.strings in Resources */,
 				0BDB64CF19521A7C00223093 /* PhoneNumberMetaDataForTesting.json in Resources */,
+				0B3651E01959109700534386 /* heard-logo-58.png in Resources */,
 				0BD758D31950F91B00CF0D85 /* Main.storyboard in Resources */,
-				0B893A3C1954DF0A00476BFE /* heard-logo-58.png in Resources */,
 				0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */,
 				0BDB64CD19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
 				0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */,
-				0B893A3B1954DF0A00476BFE /* heard-logo-120.png in Resources */,
 				0B3651D61958AC5000534386 /* contact-placeholder.png in Resources */,
-				0B893A3D1954DF0A00476BFE /* heard-logo-80.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
