@@ -54,7 +54,8 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
 @property (nonatomic, strong) UIView *playerAudioLine;
 @property (nonatomic, strong) NSString *currentUserPhoneNumber;
-@property (nonatomic, weak) Contact *contactToAdd; // contact to add or block
+@property (nonatomic, strong) Contact *contactToAdd;
+@property (nonatomic, strong) NSMutableDictionary *messagesFromPendingContact;
 
 @end
 
@@ -545,27 +546,39 @@
     }
     // case where we receive a message from someone not in our contacts
     if (!isAttributed) {
-        // todo BT Not safe (asynch)
-        void(^successBlock)(Contact *) = ^void(Contact *contact) {
-            NSInteger index, horizontalPosition;
-            // create bubble
-            if ( (self.contacts.count+1)/3 == self.contacts.count/3 ) {
-                index = self.contacts.count/3;
-                horizontalPosition = 3 - (3*(self.contacts.count/3) + 2 - self.contacts.count);
-            } else {
-                // increase scoll view
-                self.contactScrollView.contentSize = CGSizeMake(self.contactScrollView.contentSize.width, MIN([[UIScreen mainScreen] bounds].size.height - 20,self.contactScrollView.contentSize.height + kContactMargin + kContactSize + kContactNameHeight));
-                index = (self.contacts.count + 1) / 3;
-                horizontalPosition = 0;
-            }
-            [self.contacts addObject:contact];
-            [self addContactViewForContactIndex:index horizontalPosition:horizontalPosition];
+        if (!self.messagesFromPendingContact) {
+            self.messagesFromPendingContact = [[NSMutableDictionary alloc] init];
+        }
+        NSMutableArray *otherMessageFromSender =[self.messagesFromPendingContact objectForKey:[NSNumber numberWithInteger:message.senderId]];
+        if (otherMessageFromSender) {
+            [otherMessageFromSender addObject:message];
+        } else {
+            [self.messagesFromPendingContact setObject:[NSMutableArray arrayWithObject:message] forKey:[NSNumber numberWithInteger:message.senderId]];
             
-            // add message to bubble
-            [[self.contactBubbleViews lastObject] setPendingContact:YES];
-            [[self.contactBubbleViews lastObject] addUnreadMessage:message];
-        };
-        [ApiUtils getNewContactInfo:message.senderId AndExecuteSuccess:successBlock failure:nil];
+            void(^successBlock)(Contact *) = ^void(Contact *contact) {
+                NSInteger index, horizontalPosition;
+                // create bubble
+                if ( (self.contacts.count+1)/3 == self.contacts.count/3 ) {
+                    index = self.contacts.count/3;
+                    horizontalPosition = 3 - (3*(self.contacts.count/3) + 2 - self.contacts.count);
+                } else {
+                    // increase scoll view
+                    self.contactScrollView.contentSize = CGSizeMake(self.contactScrollView.contentSize.width, MIN([[UIScreen mainScreen] bounds].size.height - 20,self.contactScrollView.contentSize.height + kContactMargin + kContactSize + kContactNameHeight));
+                    index = (self.contacts.count + 1) / 3;
+                    horizontalPosition = 0;
+                }
+                [self.contacts addObject:contact];
+                [self addContactViewForContactIndex:index horizontalPosition:horizontalPosition];
+                
+                // add message to bubble
+                [[self.contactBubbleViews lastObject] setPendingContact:YES];
+                for (Message *mess in [self.messagesFromPendingContact objectForKey:[NSNumber numberWithInteger:message.senderId]]) {
+                    [[self.contactBubbleViews lastObject] addUnreadMessage:mess];
+                }
+                [self.messagesFromPendingContact removeObjectForKey:[NSNumber numberWithInteger:message.senderId]];
+            };
+            [ApiUtils getNewContactInfo:message.senderId AndExecuteSuccess:successBlock failure:nil];
+        }
     }
 }
 
@@ -858,6 +871,7 @@
         if ([mobile isEqualToString:contactBubble.contact.phoneNumber]) {
             if (contactBubble.pendingContact) {
                 [contactBubble setPendingContact:NO];
+                self.contactToAdd = nil;
             }
             break;
         }
