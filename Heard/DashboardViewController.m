@@ -406,6 +406,7 @@
         ABUnknownPersonViewController *controller = [[ABUnknownPersonViewController alloc] init];
         controller.displayedPerson = person;
         controller.allowsAddingToAddressBook = YES;
+        controller.unknownPersonViewDelegate = self;
         UINavigationController *newNavigationController = [[UINavigationController alloc] initWithRootViewController:controller];
         controller.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
                                                  initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self
@@ -414,7 +415,7 @@
         CFRelease(person);
         
         // todoBT detect when new contact is added & setbubble to non pending
-        
+        // unknownPersonViewController:didResolveToPerson
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_5]) {
         // todo BT block user + delete bubble / contact
         
@@ -834,6 +835,33 @@
     shapeLayer.lineWidth = RECORDING_LINE_WEIGHT;
     shapeLayer.fillColor = [[UIColor clearColor] CGColor];
     return shapeLayer;
+}
+
+
+// ----------------------------------------------------------
+// ABUnknownPersonViewControllerDelegate
+// ----------------------------------------------------------
+- (void)unknownPersonViewController:(ABUnknownPersonViewController *)unknownCardViewController didResolveToPerson:(ABRecordRef)person
+{
+    ABMultiValueRef phones =ABRecordCopyValue(person, kABPersonPhoneProperty);
+    NSString* mobile=@"";
+    NSString* mobileLabel;
+    for(CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
+        mobileLabel = (__bridge NSString *)(ABMultiValueCopyLabelAtIndex(phones, i));
+        if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneMainLabel])
+        {
+            mobile = (__bridge NSString *)(ABMultiValueCopyValueAtIndex(phones, i));
+        }
+    }
+
+    for (ContactBubbleView *contactBubble in self.contactBubbleViews) {
+        if ([mobile isEqualToString:contactBubble.contact.phoneNumber]) {
+            if (contactBubble.pendingContact) {
+                [contactBubble setPendingContact:NO];
+            }
+            break;
+        }
+    }
 }
 
 @end

@@ -12,7 +12,7 @@
 #import "Message.h"
 #import "ContactBubbleView.h"
 
-@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ABPeoplePickerNavigationControllerDelegate,MFMessageComposeViewControllerDelegate, ContactBubbleViewDelegate>
+@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ABPeoplePickerNavigationControllerDelegate,MFMessageComposeViewControllerDelegate, ContactBubbleViewDelegate, ABUnknownPersonViewControllerDelegate>
 
 - (void)addUnreadMessage:(Message *)message;
 - (void) retrieveAndDisplayUnreadMessages;
