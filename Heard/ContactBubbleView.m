@@ -159,6 +159,7 @@
             if ([self.minDurationTimer isValid]) {
                 [self stopRecording];
                 [self.delegate quitRecodingModeAnimated:NO];
+                [GeneralUtils showMessage:@"Hold to record." withTitle:nil];
             } else {
                 [self sendRecording];
             }
@@ -250,7 +251,7 @@
 
 // Stop recording after kMaxAudioDuration
 - (void)maxRecordingDurationReached {
-    [self.longPressRecognizer removeTarget:self action:@selector(handleLongPressGesture:)];
+    self.userInteractionEnabled = NO;
     [self sendRecording];
 }
 
@@ -289,7 +290,8 @@
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     [audioSession setActive:NO error:nil];
     [self.delegate longPressOnContactBubbleViewEnded:self.contact.identifier];
-    [self.longPressRecognizer addTarget:self action:@selector(handleLongPressGesture:)];
+    // For the max duration case
+    self.userInteractionEnabled = YES;
 }
 
 
@@ -300,6 +302,11 @@
 {
     _unreadMessagesCount = unreadMessagesCount;
     self.unreadMessagesLabel.text = [NSString stringWithFormat:@"%lu",(long)unreadMessagesCount];
+    if (unreadMessagesCount == 0) {
+        self.longPressRecognizer.minimumPressDuration = 0;
+    } else {
+        self.longPressRecognizer.minimumPressDuration = kLongPressMinDuration;
+    }
 }
 
 - (void)addUnreadMessage:(Message *)message
