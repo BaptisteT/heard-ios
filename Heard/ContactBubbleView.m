@@ -48,7 +48,7 @@
     
     // Set image view
     self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
-    [self.imageView setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:contact.identifier]];
+    [self.imageView setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:contact.identifier] placeholderImage:[UIImage imageNamed:@"contact-placeholder.png"]];
     [self addSubview:self.imageView];
     self.imageView.userInteractionEnabled = YES;
     self.imageView.clipsToBounds = YES;
@@ -112,10 +112,10 @@
     [self hideMessageCountLabel:YES];
 }
 
-- (void)setImage:(UIImage *)image
-{
-    self.imageView.image = image;
-}
+//- (void)setImage:(UIImage *)image
+//{
+//    self.imageView.image = image;
+//}
 
 
 // ----------------------------------------------------------
@@ -184,7 +184,7 @@
             return;
         }
         self.delegate.mainPlayer = [[AVAudioPlayer alloc] initWithData:self.nextMessageAudioData error:nil];
-        [self.delegate.mainPlayer setVolume:2];
+        [self.delegate.mainPlayer setVolume:kAudioPlayerVolume];
         
         // Get data of next message (asynch) if any
         [self hideMessageCountLabel:YES];

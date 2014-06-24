@@ -23,7 +23,7 @@
 
 - (void)addUnreadMessage:(Message *)message;
 - (void)resetUnreadMessages;
-- (void)setImage:(UIImage *)image;
+//- (void)setImage:(UIImage *)image;
 
 - (void)addActiveOverlay;
 - (void)removeActiveOverlay;

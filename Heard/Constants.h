@@ -28,6 +28,8 @@ static const NSUInteger kAVNumberOfChannelsKey = 2;
 static const CGFloat kMaxAudioDuration = 30.; // in sec
 static const CGFloat kMinAudioDuration = 0.; // in sec
 static const CGFloat kLongPressMinDuration = 0.2; // in sec
+static const CGFloat kAudioPlayerVolume = 1;
+
 
 // UI size
 static const NSUInteger kUnreadMessageSize = 30;

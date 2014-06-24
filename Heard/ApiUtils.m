@@ -286,5 +286,28 @@
     [dataTask resume];
 }
 
+// Get new contact info
++ (void)getNewContactInfo:(NSInteger)userId AndExecuteSuccess:(void(^)(Contact *contact))successBlock failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/get_user_info.json"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setObject:[NSNumber numberWithInteger:userId] forKey:@"user_id"];
+    [self enrichParametersWithToken:parameters];
+    
+    [[ApiUtils sharedClient] GET:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        NSDictionary *result = [JSON valueForKeyPath:@"result"];
+        
+        NSDictionary *rawContact = [result objectForKey:@"contact"];
+        
+        if (successBlock) {
+            successBlock([Contact rawContactToInstance:rawContact]);
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
 
 @end
