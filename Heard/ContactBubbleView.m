@@ -176,6 +176,8 @@
 - (void)handleTapGesture
 {
     if (self.unreadMessagesCount > 0) {
+        self.userInteractionEnabled = NO;
+        
         if ([self.delegate.mainPlayer isPlaying]) {
             [self.delegate quitPlayerMode];
         }
@@ -183,10 +185,6 @@
         NSData* data = [NSData dataWithContentsOfURL:[self.unreadMessages[0] getMessageURL]] ;
         self.delegate.mainPlayer = [[AVAudioPlayer alloc] initWithData:data error:nil];
         [self.delegate.mainPlayer setVolume:2];
-        
-        if ([self.delegate.replayPlayer isPlaying]) {
-            [self.delegate quitPlayerMode];
-        }
         
         // Mark as opened on the database
         [ApiUtils markMessageAsOpened:((Message *)self.unreadMessages[0]).identifier success:nil failure:nil];
@@ -200,6 +198,7 @@
         
         [self.delegate startedPlayingAudioFileByView:self];
         [self.delegate.mainPlayer play];
+        self.userInteractionEnabled = YES;
     } else {
         [GeneralUtils showMessage:@"Hold to record." withTitle:nil];
     }

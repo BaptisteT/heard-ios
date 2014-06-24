@@ -52,7 +52,6 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
 @property (nonatomic, strong) UIView *playerAudioLine;
 @property (nonatomic, strong) NSString *currentUserPhoneNumber;
-@property (nonatomic, strong) ContactBubbleView *lastMessagePlayedContact;
 
 @end
 
@@ -336,7 +335,7 @@
             NSString* title = [view performSelector:@selector(title)];
             if ([title isEqualToString:@"Replay last message"] && [view respondsToSelector:@selector(setEnabled:)])
             {
-                if (self.replayPlayer) {
+                if (self.mainPlayer) {
                     [view performSelector:@selector(setEnabled:) withObject:@YES];
                 } else {
                     [view performSelector:@selector(setEnabled:) withObject:NO];
@@ -356,13 +355,14 @@
         return;
     }
     
-    //Add Friend
+    //Replay message
     if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_0]) {
         [self quitPlayerMode];
         
-        [self startPlayerMode:([self.replayPlayer duration])];
+        [self startPlayerMode:([self.mainPlayer duration])];
         
-        [self.replayPlayer play];
+        [self.mainPlayer play];
+    //Add Friend
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_1]) {
         ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc] init];
         picker.peoplePickerDelegate = self;
@@ -686,11 +686,7 @@
 
 - (void)startedPlayingAudioFileByView:(ContactBubbleView *)view
 {
-    //In case of a replay
-    self.lastMessagePlayedContact = view;
-    self.replayPlayer = [[AVAudioPlayer alloc] initWithData:self.mainPlayer.data error:nil];
-    [self.replayPlayer setVolume:2];
-    
+    //TODO restart player
     [self startPlayerMode:self.mainPlayer.duration];
 }
 
@@ -727,12 +723,7 @@
 {
     if ([self.mainPlayer isPlaying]) {
         [self.mainPlayer stop];
-        self.mainPlayer = nil;
-    }
-    
-    if ([self.replayPlayer isPlaying]) {
-        [self.replayPlayer stop];
-        self.replayPlayer.currentTime = 0;
+        self.mainPlayer.currentTime = 0;
     }
     
     [self.playerAudioLine.layer removeAllAnimations];
