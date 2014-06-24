@@ -21,6 +21,10 @@
     dispatch_once(&onceToken, ^{
         _sharedClient = [[ApiUtils alloc] initWithBaseURL:[NSURL URLWithString:kProdAFHeardAPIBaseURLString]];
         
+        // Add m4a content type for audio
+        _sharedClient.responseSerializer.acceptableContentTypes = [_sharedClient.responseSerializer.acceptableContentTypes setByAddingObject:@"audio/m4a"];
+        
+        // Stop request if we lose connection
         NSOperationQueue *operationQueue = _sharedClient.operationQueue;
         [_sharedClient.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
             if(status == AFNetworkReachabilityStatusNotReachable) {
@@ -259,6 +263,27 @@
             failureBlock();
         }
     }];
+}
+
+// Download audio file asynchronously
++ (void)downloadAudioFileAtURL:(NSURL *)url success:(void(^)(NSData *audioData))successBlock failure:(void(^)())failureBlock
+{
+    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *defaultSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate:nil delegateQueue: [NSOperationQueue mainQueue]];
+    NSURLSessionDataTask * dataTask = [defaultSession dataTaskWithURL:url
+                                                    completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                                        if (error) {
+                                                            NSLog(@"Error: %@", error);
+                                                            if (failureBlock) {
+                                                                failureBlock();
+                                                            }
+                                                        } else {
+                                                            if (successBlock) {
+                                                                successBlock(data);
+                                                            }
+                                                        }
+                                                    }];
+    [dataTask resume];
 }
 
 

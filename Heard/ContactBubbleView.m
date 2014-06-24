@@ -27,13 +27,17 @@
 @property (nonatomic) NSMutableArray *unreadMessages;
 @property (strong, nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) NSTimer *metersTimer;
-
 @property (nonatomic, strong) UIView *activeOverlay;
+@property (nonatomic, strong) NSData *nextMessageAudioData;
 
 @end
 
 @implementation ContactBubbleView
 
+
+// ----------------------------------------------------------
+// Initialization
+// ----------------------------------------------------------
 
 - (id)initWithContactBubble:(Contact *)contact andFrame:(CGRect)frame;
 {
@@ -49,8 +53,6 @@
     self.imageView.userInteractionEnabled = YES;
     self.imageView.clipsToBounds = YES;
     self.imageView.layer.cornerRadius = self.bounds.size.height/2;
-    self.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.imageView.layer.borderWidth = 0.5;
     
     // Alloc and add gesture recognisers
     [self setMultipleTouchEnabled:NO];
@@ -97,6 +99,24 @@
     return self;
 }
 
+- (void)initUnreadMessagesButton
+{
+    self.unreadMessagesLabel = [[UILabel alloc] init];
+    [self.unreadMessagesLabel setFrame:CGRectMake(kContactSize - kUnreadMessageSize/2, -15, kUnreadMessageSize, kUnreadMessageSize)];
+    self.unreadMessagesLabel.textColor = [ImageUtils blue];
+    self.unreadMessagesLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:16.0];
+    self.unreadMessagesLabel.adjustsFontSizeToFitWidth = YES;
+    self.unreadMessagesLabel.minimumScaleFactor = 0.2;
+    self.unreadMessagesLabel.userInteractionEnabled = YES;
+    [self addSubview:self.unreadMessagesLabel];
+    [self hideMessageCountLabel:YES];
+}
+
+- (void)setImage:(UIImage *)image
+{
+    self.imageView.image = image;
+}
+
 
 // ----------------------------------------------------------
 // Handle Gestures
@@ -105,6 +125,7 @@
 {
     // todo BT (later)
     // check micro is available, else warm user
+    
     if ([self.delegate.mainPlayer isPlaying]) {
         [self.delegate quitPlayerMode];
     }
@@ -133,7 +154,7 @@
         
         [self.metersTimer fire];
     }
-    if (recognizer.state == UIGestureRecognizerStateEnded) {
+    if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled || recognizer.state == UIGestureRecognizerStateFailed) {
         [self removeActiveOverlay];
         
         // Stop timer if it did not fire yet
@@ -143,48 +164,34 @@
                 [self stopRecording];
                 [self.delegate quitRecodingModeAnimated:NO];
             } else {
-                [self stopAndSendRecording];
+                [self sendRecording];
             }
         }
     }
 }
 
-//TODO: Should be in DashBoard
-- (void)notifyNewMeters
-{
-    [self.recorder updateMeters];
-    [self.delegate notifiedNewMeters:[self.recorder averagePowerForChannel:0]];
-}
-
-- (void)addActiveOverlay
-{
-    [self removeActiveOverlay];
-    
-    self.activeOverlay = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
-    self.activeOverlay.clipsToBounds = YES;
-    self.activeOverlay.layer.cornerRadius = self.activeOverlay.bounds.size.height/2;
-    self.activeOverlay.backgroundColor = [ImageUtils trasparentBlue];
-    [self addSubview:self.activeOverlay];
-}
-
-- (void)removeActiveOverlay
-{
-    [self.activeOverlay removeFromSuperview];
-    self.activeOverlay = nil;
-}
-
 - (void)handleTapGesture
 {
-    if (self.unreadMessagesCount > 0) {
+    if (!self.unreadMessagesLabel.isHidden) { // ie. self.unreadMessageCount > 0 && self.nextMessageAudioData !=nil
         self.userInteractionEnabled = NO;
         
         if ([self.delegate.mainPlayer isPlaying]) {
             [self.delegate quitPlayerMode];
         }
         
-        NSData* data = [NSData dataWithContentsOfURL:[self.unreadMessages[0] getMessageURL]] ;
-        self.delegate.mainPlayer = [[AVAudioPlayer alloc] initWithData:data error:nil];
+        // todo bt handle case no data
+        self.delegate.mainPlayer = [[AVAudioPlayer alloc] initWithData:self.nextMessageAudioData error:nil];
         [self.delegate.mainPlayer setVolume:2];
+        
+        // Get data of next message (asynch) if any
+        [self hideMessageCountLabel:YES];
+        self.nextMessageAudioData = nil;
+        if (self.unreadMessagesCount > 1) {
+            [ApiUtils downloadAudioFileAtURL:[self.unreadMessages[1] getMessageURL] success:^void(NSData *data) {
+                self.nextMessageAudioData = data;
+                [self hideMessageCountLabel:NO];
+            } failure:nil];
+        }
         
         // Mark as opened on the database
         [ApiUtils markMessageAsOpened:((Message *)self.unreadMessages[0]).identifier success:nil failure:nil];
@@ -204,16 +211,38 @@
     }
 }
 
+
+// ----------------------------------------------------------
+// Timer methods
+// ----------------------------------------------------------
+
+// Stop recording after kMaxAudioDuration
+- (void)maxRecordingDurationReached {
+    [self.longPressRecognizer removeTarget:self action:@selector(handleLongPressGesture:)];
+    [self sendRecording];
+}
+
+- (void)minRecordingDurationReached {
+    // do nothing
+}
+
+//TODO: Should be in DashBoard
+- (void)notifyNewMeters
+{
+    [self.recorder updateMeters];
+    [self.delegate notifiedNewMeters:[self.recorder averagePowerForChannel:0]];
+}
+
+
 // ----------------------------------------------------------
 // Utilities
 // ----------------------------------------------------------
 
-// Stop and send recording
-- (void)stopAndSendRecording
+// Recording utility
+- (void)sendRecording
 {
     [self stopRecording];
     
-    // Send
     NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
     [ApiUtils sendMessage:audioData toUser:self.contact.identifier success:^{
         [self.delegate messageSentWithError:NO];
@@ -222,7 +251,6 @@
     }];
 }
 
-// stop recording
 - (void)stopRecording
 {
     [self.metersTimer invalidate];
@@ -233,42 +261,11 @@
     [self.longPressRecognizer addTarget:self action:@selector(handleLongPressGesture:)];
 }
 
-// Stop recording after kMaxAudioDuration
-- (void)maxRecordingDurationReached {
-    [self.longPressRecognizer removeTarget:self action:@selector(handleLongPressGesture:)];
-    [self stopAndSendRecording];
-}
-
-- (void)minRecordingDurationReached {
-    // do nothing
-}
-
+// Messages utility
 - (void)setUnreadMessagesCount:(NSInteger)unreadMessagesCount
 {
     _unreadMessagesCount = unreadMessagesCount;
     self.unreadMessagesLabel.text = [NSString stringWithFormat:@"%lu",(long)unreadMessagesCount];
-    if (unreadMessagesCount>0) {
-        [self.unreadMessagesLabel setHidden:NO];
-        self.imageView.layer.borderColor = [ImageUtils blue].CGColor;
-        self.imageView.layer.borderWidth = 3;
-    } else {
-        [self.unreadMessagesLabel setHidden:YES];
-        self.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        self.imageView.layer.borderWidth = 0.5;
-    }
-}
-
-- (void)initUnreadMessagesButton
-{
-    self.unreadMessagesLabel = [[UILabel alloc] init];
-    [self.unreadMessagesLabel setFrame:CGRectMake(kContactSize - kUnreadMessageSize/2, -15, kUnreadMessageSize, kUnreadMessageSize)];
-    self.unreadMessagesLabel.textColor = [ImageUtils blue];
-    self.unreadMessagesLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:16.0];
-    self.unreadMessagesLabel.adjustsFontSizeToFitWidth = YES;
-    self.unreadMessagesLabel.minimumScaleFactor = 0.2;
-    self.unreadMessagesLabel.userInteractionEnabled = YES;
-    [self addSubview:self.unreadMessagesLabel];
-    [self.unreadMessagesLabel setHidden:YES];
 }
 
 - (void)addUnreadMessage:(Message *)message
@@ -276,6 +273,13 @@
     if (!self.unreadMessages) { // 1st message
         self.unreadMessages = [[NSMutableArray alloc] init];
         self.unreadMessagesCount = 0;
+    }
+    if (self.unreadMessagesCount == 0) {
+        // Request data asynch 
+        [ApiUtils downloadAudioFileAtURL:[message getMessageURL] success:^void(NSData *data) {
+            self.nextMessageAudioData = data;
+            [self hideMessageCountLabel:NO];
+        } failure:nil];
     }
     [self.unreadMessages addObject:message];
     [self setUnreadMessagesCount:self.unreadMessagesCount+1];
@@ -285,11 +289,38 @@
 {
     self.unreadMessages = nil;
     self.unreadMessagesCount = 0;
+    self.nextMessageAudioData = nil;
 }
 
-- (void)setImage:(UIImage *)image
+// Hide / unhide count label and change border color accordingly
+- (void)hideMessageCountLabel:(BOOL)flag {
+    if (flag) {
+        self.unreadMessagesLabel.hidden = YES;
+        self.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        self.imageView.layer.borderWidth = 0.5;
+    } else {
+        self.unreadMessagesLabel.hidden = NO;
+        self.imageView.layer.borderColor = [ImageUtils blue].CGColor;
+        self.imageView.layer.borderWidth = 3;
+    }
+}
+
+// Long press overlay utility
+- (void)addActiveOverlay
 {
-    self.imageView.image = image;
+    [self removeActiveOverlay];
+    
+    self.activeOverlay = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
+    self.activeOverlay.clipsToBounds = YES;
+    self.activeOverlay.layer.cornerRadius = self.activeOverlay.bounds.size.height/2;
+    self.activeOverlay.backgroundColor = [ImageUtils trasparentBlue];
+    [self addSubview:self.activeOverlay];
+}
+
+- (void)removeActiveOverlay
+{
+    [self.activeOverlay removeFromSuperview];
+    self.activeOverlay = nil;
 }
 
 @end

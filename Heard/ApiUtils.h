@@ -42,4 +42,6 @@
 
 + (void)getMyContacts:(NSArray *)phoneNumbers success:(void(^)(NSArray *contacts))successBlock failure:(void(^)())failureBlock;
 
++ (void)downloadAudioFileAtURL:(NSURL *)url success:(void(^)(NSData *audioData))successBlock failure:(void(^)())failureBlock;
+
 @end

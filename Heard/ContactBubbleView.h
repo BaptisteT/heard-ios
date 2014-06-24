@@ -20,6 +20,7 @@
 @property (strong, nonatomic) Contact *contact;
 @property (weak, nonatomic) id <ContactBubbleViewDelegate> delegate;
 
+
 - (void)addUnreadMessage:(Message *)message;
 - (void)resetUnreadMessages;
 - (void)setImage:(UIImage *)image;
