@@ -20,6 +20,7 @@
 @property (strong, nonatomic) Contact *contact;
 @property (weak, nonatomic) id <ContactBubbleViewDelegate> delegate;
 @property (nonatomic) BOOL pendingContact;
+@property (nonatomic, weak) UILabel *nameLabel;
 
 - (void)addUnreadMessage:(Message *)message;
 - (void)resetUnreadMessages;

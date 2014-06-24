@@ -312,7 +312,7 @@
     [self.contactScrollView addSubview:contactView];
 }
 
-- (void)addNameLabelForView:(UIView *)contactView andContact:(Contact *)contact
+- (void)addNameLabelForView:(ContactBubbleView *)contactView andContact:(Contact *)contact
 {
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - kContactMargin/4, contactView.frame.origin.y + kContactSize, contactView.frame.size.width + kContactMargin/2, kContactNameHeight)];
     
@@ -327,7 +327,7 @@
     nameLabel.textAlignment = NSTextAlignmentCenter;
     nameLabel.adjustsFontSizeToFitWidth = YES;
     nameLabel.minimumScaleFactor = 0.7;
-    
+    contactView.nameLabel = nameLabel;
     [self.contactScrollView addSubview:nameLabel];
 }
 
@@ -422,6 +422,7 @@
                 if (bubbleView.contact.identifier == self.contactToAdd.identifier) {
                     [bubbleView removeFromSuperview];
                     [self.contacts removeObject:bubbleView.contact];
+                    [bubbleView.nameLabel removeFromSuperview];
                     [self.contactBubbleViews removeObject:bubbleView];
                     break;
                 }

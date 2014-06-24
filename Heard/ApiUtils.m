@@ -313,13 +313,13 @@
 // Block user
 + (void)blockUser:(NSInteger)userId AndExecuteSuccess:(void(^)())successBlock failure:(void(^)())failureBlock
 {
-    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/block_other_user.json"];
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"blockades.json"];
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    [parameters setObject:[NSNumber numberWithInteger:userId] forKey:@"blocked_user_id"];
+    [parameters setObject:[NSNumber numberWithInteger:userId] forKey:@"blocked_id"];
     [self enrichParametersWithToken:parameters];
     
-    [[ApiUtils sharedClient] GET:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+    [[ApiUtils sharedClient] POST:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
         if (successBlock) {
             successBlock();
         }
