@@ -51,11 +51,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *menuButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
 @property (nonatomic, strong) UIView *playerAudioLine;
-@property (nonatomic, strong) AVAudioPlayer *replayPlayer;
 @property (nonatomic, strong) NSString *currentUserPhoneNumber;
-@property (nonatomic, strong) UIView *contactImageOverlay;
-@property (nonatomic, strong) UIView *lastMessagePlayedContact;
-
+@property (nonatomic, strong) ContactBubbleView *lastMessagePlayedContact;
 
 @end
 
@@ -362,7 +359,10 @@
     
     //Add Friend
     if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_0]) {
-        [self startedPlayingAudioFileWithDuration:self.replayPlayer.duration data:self.replayPlayer.data andView:self.lastMessagePlayedContact];
+        [self quitPlayerMode];
+        
+        [self startPlayerMode:([self.replayPlayer duration])];
+        
         [self.replayPlayer play];
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_1]) {
         ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc] init];
@@ -477,12 +477,23 @@
 - (void) retrieveAndDisplayUnreadMessages
 {
     void (^successBlock)(NSArray *messages) = ^void(NSArray *messages) {
+        //Reset unread messages
+        [self resetUnreadMessages];
+        
         for (Message *message in messages) {
             [self addUnreadMessage:message];
         }
     };
     
     [ApiUtils getUnreadMessagesAndExecuteSuccess:successBlock failure:nil];
+}
+
+- (void)resetUnreadMessages
+{
+    for (ContactBubbleView *contactBubble in self.contactBubbleViews) {
+        [contactBubble resetUnreadMessages];
+    }
+
 }
 
 // Add a message we just received
@@ -502,28 +513,46 @@
     }
 }
 
-- (void)addOverlayOverContactView:(UIView *)view
-{
-    self.contactImageOverlay = [[UIView alloc] initWithFrame:view.frame];
-    self.contactImageOverlay.clipsToBounds = YES;
-    self.contactImageOverlay.layer.cornerRadius = self.contactImageOverlay.bounds.size.height/2;
-    self.contactImageOverlay.backgroundColor = [ImageUtils trasparentBlue];
-    [self.contactScrollView addSubview:self.contactImageOverlay];
-}
-
-- (void)removeOverlayFromContactView
-{
-    [self.contactImageOverlay removeFromSuperview];
-    self.contactImageOverlay = nil;
-}
-
 // ----------------------------------------------------------
 // Recording Mode
 // ----------------------------------------------------------
 
-//Create recording mode screen
-- (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId FromView:(UIView *)view
+- (void)addOverlayOverContactView:(ContactBubbleView *)view
 {
+    [view addActiveOverlay];
+}
+
+- (void)removeOverlayFromContactView
+{
+    for (ContactBubbleView *contactView in self.contactBubbleViews) {
+        [contactView removeActiveOverlay];
+    }
+}
+
+- (void)disableAllContactViews
+{
+    for (UIView *view in [self.contactScrollView subviews]) {
+        if ([view isKindOfClass:[ContactBubbleView class]]) {
+            view.userInteractionEnabled = NO;
+        }
+    }
+}
+
+- (void)enableAllContactViews
+{
+    for (UIView *view in [self.contactScrollView subviews]) {
+        if ([view isKindOfClass:[ContactBubbleView class]]) {
+            view.userInteractionEnabled = YES;
+           
+        }
+    }
+}
+
+//Create recording mode screen
+- (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId FromView:(ContactBubbleView *)view
+{
+    [self disableAllContactViews];
+    
     [self addOverlayOverContactView:view];
     
     //Recording view is same size as screen
@@ -607,6 +636,8 @@
 
 - (void)messageSentWithError:(BOOL)error
 {
+    [self enableAllContactViews];
+    
     if (error) {
         [self addRecordingMessage:@"Sending failed." color:[UIColor redColor]];
         
@@ -637,8 +668,6 @@
 
 - (void)quitRecodingModeAnimated:(BOOL)animated
 {
-    [self removeOverlayFromContactView];
-    
     if (animated) {
         [UIView animateWithDuration:1.0 animations:^{
             self.recordingView.alpha = 0;
@@ -652,19 +681,23 @@
     }
 }
 
-- (void)startedPlayingAudioFileWithDuration:(NSTimeInterval)duration data:(NSData *)data andView:(UIView *)view
+// ----------------------------------------------------------
+// Player Mode
+// ----------------------------------------------------------
+
+- (void)startedPlayingAudioFileWithDuration:(NSTimeInterval)duration data:(NSData *)data andView:(ContactBubbleView *)view
 {
-    //Keep it in case of a replay
+    //In case of a replay
     self.lastMessagePlayedContact = view;
+    self.replayPlayer = [[AVAudioPlayer alloc] initWithData:data error:nil];
+    [self.replayPlayer setVolume:2];
     
-    [self addOverlayOverContactView:view];
-    view.userInteractionEnabled = NO;
-    
-    if (self.playerAudioLine) {
-        [self.playerAudioLine removeFromSuperview];
-        self.playerAudioLine = nil;
-    }
-    
+    [self startPlayerMode:duration];
+}
+
+//Only UI
+- (void)startPlayerMode:(NSTimeInterval)duration
+{
     float initialWidth = 0;
     float finalWidth = self.view.bounds.size.width;
     float lineWeight = 6;
@@ -684,16 +717,27 @@
                          CGRect frame = self.playerAudioLine.frame;
                          frame.size.width = finalWidth;
                          self.playerAudioLine.frame = frame;
-                    } completion:^(BOOL dummy){
-                        [self.playerAudioLine removeFromSuperview];
-                        self.playerAudioLine = nil;
-                        view.userInteractionEnabled = YES;
-                        
-                        self.replayPlayer = [[AVAudioPlayer alloc] initWithData:data error:nil];
-                        [self.replayPlayer setVolume:2];
-                        
-                        [self removeOverlayFromContactView];
-                    }];
+                     } completion:^(BOOL finished){
+                         if (finished) {
+                             [self quitPlayerMode];
+                         }
+                     }];
+}
+
+- (void)quitPlayerMode
+{
+    if ([self.player isPlaying]) {
+        [self.player stop];
+    }
+    
+    if ([self.replayPlayer isPlaying]) {
+        [self.replayPlayer stop];
+        self.replayPlayer.currentTime = 0;
+    }
+    
+    [self.playerAudioLine.layer removeAllAnimations];
+    [self.playerAudioLine removeFromSuperview];
+    self.playerAudioLine = nil;
 }
 
 - (void)showLoadingIndicator

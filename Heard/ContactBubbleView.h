@@ -21,13 +21,17 @@
 @property (weak, nonatomic) id <ContactBubbleViewDelegate> delegate;
 
 - (void)addUnreadMessage:(Message *)message;
+- (void)resetUnreadMessages;
 - (void)setImage:(UIImage *)image;
+
+- (void)addActiveOverlay;
+- (void)removeActiveOverlay;
 
 @end
 
 @protocol ContactBubbleViewDelegate
 
-- (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId FromView:(UIView *)view;
+- (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId FromView:(ContactBubbleView *)view;
 
 - (void)longPressOnContactBubbleViewEnded:(NSUInteger)contactId;
 
@@ -35,9 +39,14 @@
 
 - (void)messageSentWithError:(BOOL)error;
 
-- (void)startedPlayingAudioFileWithDuration:(NSTimeInterval)duration data:(NSData *)data andView:(UIView *)view;
+- (void)startedPlayingAudioFileWithDuration:(NSTimeInterval)duration data:(NSData *)data andView:(ContactBubbleView *)view;
 
 - (void)quitRecodingModeAnimated:(BOOL)animated;
+
+- (void)quitPlayerMode;
+
+@property (nonatomic, strong) AVAudioPlayer *player;
+@property (nonatomic, strong) AVAudioPlayer *replayPlayer;
 
 
 @end

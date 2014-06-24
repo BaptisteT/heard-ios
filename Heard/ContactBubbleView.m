@@ -28,7 +28,7 @@
 @property (strong, nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) NSTimer *metersTimer;
 
-@property (nonatomic, strong) AVAudioPlayer *player;
+@property (nonatomic, strong) UIView *activeOverlay;
 
 @end
 
@@ -43,7 +43,7 @@
     self.clipsToBounds = NO;
     
     // Set image view
-    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, kContactSize, kContactSize)];
+    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
     [self.imageView setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:contact.identifier]];
     [self addSubview:self.imageView];
     self.imageView.userInteractionEnabled = YES;
@@ -57,7 +57,7 @@
     self.userInteractionEnabled = YES;
     self.exclusiveTouch = YES;
     self.longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
-    [self.imageView addGestureRecognizer:self.longPressRecognizer];
+    [self addGestureRecognizer:self.longPressRecognizer];
     self.longPressRecognizer.delegate = self;
     self.longPressRecognizer.minimumPressDuration = kLongPressMinDuration;
     
@@ -105,8 +105,13 @@
 {
     // todo BT (later)
     // check micro is available, else warm user
+    if ([self.delegate.player isPlaying]) {
+        [self.delegate quitPlayerMode];
+    }
     
     if (recognizer.state == UIGestureRecognizerStateBegan) {
+        [self addActiveOverlay];
+        
         // Create Timer
         self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
         self.minDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMinAudioDuration target:self selector:@selector(minRecordingDurationReached) userInfo:nil repeats:NO];
@@ -129,6 +134,8 @@
         [self.metersTimer fire];
     }
     if (recognizer.state == UIGestureRecognizerStateEnded) {
+        [self removeActiveOverlay];
+        
         // Stop timer if it did not fire yet
         if ([self.maxDurationTimer isValid]) {
             [self.maxDurationTimer invalidate];
@@ -149,19 +156,36 @@
     
 }
 
+- (void)addActiveOverlay
+{
+    [self removeActiveOverlay];
+    
+    self.activeOverlay = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
+    self.activeOverlay.clipsToBounds = YES;
+    self.activeOverlay.layer.cornerRadius = self.activeOverlay.bounds.size.height/2;
+    self.activeOverlay.backgroundColor = [ImageUtils trasparentBlue];
+    [self addSubview:self.activeOverlay];
+}
+
+- (void)removeActiveOverlay
+{
+    [self.activeOverlay removeFromSuperview];
+    self.activeOverlay = nil;
+}
+
 - (void)handleTapGesture
 {
     if (self.unreadMessagesCount > 0) {
-        [self.delegate startedPlayingAudioFileWithDuration:self.player.duration data:self.player.data andView:self];
-        [self.player play];
-    } else {
-        [GeneralUtils showMessage:@"Hold to record." withTitle:nil];
-    }
-}
-
-- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
-{
-    if (flag) {
+        if ([self.delegate.player isPlaying]) {
+            [self.delegate quitPlayerMode];
+            
+            [self prepareNextMessage];
+        }
+        
+        if ([self.delegate.replayPlayer isPlaying]) {
+            [self.delegate quitPlayerMode];
+        }
+        
         // Mark as opened on the database
         [ApiUtils markMessageAsOpened:((Message *)self.unreadMessages[0]).identifier success:nil failure:nil];
         
@@ -172,13 +196,27 @@
         // Update badge
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] - 1];
         
-        // prepare player for next song
-        if (self.unreadMessagesCount > 0) {
-            NSData* data = [NSData dataWithContentsOfURL:[self.unreadMessages[0] getMessageURL]] ;
-            self.player = [[AVAudioPlayer alloc] initWithData:data error:nil];
-            [self.player setVolume:2];
-            [self.player setDelegate:self];
-        }
+        [self.delegate startedPlayingAudioFileWithDuration:self.delegate.player.duration data:self.delegate.player.data andView:self];
+        [self.delegate.player play];
+    } else {
+        [GeneralUtils showMessage:@"Hold to record." withTitle:nil];
+    }
+}
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    if (flag) {
+        [self prepareNextMessage];
+    }
+}
+
+- (void)prepareNextMessage
+{
+    if (self.unreadMessagesCount > 0) {
+        NSData* data = [NSData dataWithContentsOfURL:[self.unreadMessages[0] getMessageURL]] ;
+        self.delegate.player = [[AVAudioPlayer alloc] initWithData:data error:nil];
+        [self.delegate.player setVolume:2];
+        [self.delegate.player setDelegate:self];
     }
 }
 
@@ -253,6 +291,7 @@
 {
     if (!self.unreadMessages) { // 1st message
         self.unreadMessages = [[NSMutableArray alloc] init];
+        self.unreadMessagesCount = 0;
     }
     [self.unreadMessages addObject:message];
     [self setUnreadMessagesCount:self.unreadMessagesCount+1];
@@ -260,10 +299,16 @@
     if (self.unreadMessagesCount == 1) {
         // Init player with this message if this is the only one
         NSData* data = [NSData dataWithContentsOfURL:[message getMessageURL]] ;
-        self.player = [[AVAudioPlayer alloc] initWithData:data error:nil];
-        [self.player setVolume:2];
-        [self.player setDelegate:self];
+        self.delegate.player = [[AVAudioPlayer alloc] initWithData:data error:nil];
+        [self.delegate.player setVolume:2];
+        [self.delegate.player setDelegate:self];
     }
+}
+
+- (void)resetUnreadMessages
+{
+    self.unreadMessages = nil;
+    self.unreadMessagesCount = 0;
 }
 
 - (void)setImage:(UIImage *)image
