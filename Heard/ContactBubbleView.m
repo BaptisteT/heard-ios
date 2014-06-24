@@ -179,7 +179,10 @@
             [self.delegate quitPlayerMode];
         }
         
-        // todo bt handle case no data
+        if (!self.nextMessageAudioData) {
+            // should not be possible
+            return;
+        }
         self.delegate.mainPlayer = [[AVAudioPlayer alloc] initWithData:self.nextMessageAudioData error:nil];
         [self.delegate.mainPlayer setVolume:2];
         
@@ -279,6 +282,7 @@
         [ApiUtils downloadAudioFileAtURL:[message getMessageURL] success:^void(NSData *data) {
             self.nextMessageAudioData = data;
             [self hideMessageCountLabel:NO];
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
         } failure:nil];
     }
     [self.unreadMessages addObject:message];

@@ -71,10 +71,18 @@
     
     [self requestAddressBookAccess];
     
-    //Use speakers (TODO: kill warning)
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-    UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
-    AudioSessionSetProperty(kAudioSessionProperty_OverrideAudioRoute, sizeof(audioRouteOverride), &audioRouteOverride);
+    // Create audio session
+    AVAudioSession* session = [AVAudioSession sharedInstance];
+
+    BOOL success; NSError* error;
+    success = [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+    if (!success)
+        NSLog(@"AVAudioSession error setting category:%@",error);
+    
+    //set the audioSession override
+    success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
+    if (!success)
+        NSLog(@"AVAudioSession error overrideOutputAudioPort:%@",error);
     
     self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
 }
