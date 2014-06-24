@@ -414,11 +414,21 @@
                                                  action:@selector(dismissContactView)];
         [self.navigationController presentViewController:newNavigationController animated:YES completion:nil];
         CFRelease(person);
-        
-        // todoBT detect when new contact is added & setbubble to non pending
-        // unknownPersonViewController:didResolveToPerson
+
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_5]) {
         // todo BT block user + delete bubble / contact
+        void(^successBlock)() = ^void() {
+            for (ContactBubbleView * bubbleView in self.contactBubbleViews) {
+                if (bubbleView.contact.identifier == self.contactToAdd.identifier) {
+                    [bubbleView removeFromSuperview];
+                    [self.contacts removeObject:bubbleView.contact];
+                    [self.contactBubbleViews removeObject:bubbleView];
+                    break;
+                }
+            }
+            self.contactToAdd = nil;
+        };
+        [ApiUtils blockUser:self.contactToAdd.identifier AndExecuteSuccess:successBlock failure:nil];
         
     } else {
         NSString *email = [NSString stringWithFormat:@"mailto:%@?subject=Feedback for Waved on iOS (v%@)", kFeedbackEmail,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
