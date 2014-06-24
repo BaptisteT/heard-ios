@@ -66,8 +66,8 @@
 		0BDB65581953B6A000223093 /* RequestPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BD758F619511A4000CF0D85 /* RequestPhoneViewController.m */; };
 		0BDB655E1953BE9100223093 /* SessionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB655D1953BE9100223093 /* SessionUtils.m */; };
 		0BDB65611953C04800223093 /* DashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB65601953C04800223093 /* DashboardViewController.m */; };
-		3C938CE01959C1B7008CCC92 /* question-mark.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C938CDE1959C1B7008CCC92 /* question-mark.png */; };
-		3C938CE11959C1B7008CCC92 /* question-mark@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C938CDF1959C1B7008CCC92 /* question-mark@2x~iphone.png */; };
+		3C938CE41959DC79008CCC92 /* question-mark.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C938CE21959DC79008CCC92 /* question-mark.png */; };
+		3C938CE51959DC79008CCC92 /* question-mark@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C938CE31959DC79008CCC92 /* question-mark@2x~iphone.png */; };
 		3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA177E91958B74000096266 /* AudioToolbox.framework */; };
 		3CB8B7F5195453E50090D657 /* ContactBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactBubbleView.m */; };
 /* End PBXBuildFile section */
@@ -158,8 +158,8 @@
 		0BDB655D1953BE9100223093 /* SessionUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionUtils.m; sourceTree = "<group>"; };
 		0BDB655F1953C04800223093 /* DashboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardViewController.h; sourceTree = "<group>"; };
 		0BDB65601953C04800223093 /* DashboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardViewController.m; sourceTree = "<group>"; };
-		3C938CDE1959C1B7008CCC92 /* question-mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "question-mark.png"; path = "../../../../question-mark.png"; sourceTree = "<group>"; };
-		3C938CDF1959C1B7008CCC92 /* question-mark@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "question-mark@2x~iphone.png"; path = "../../../../question-mark@2x~iphone.png"; sourceTree = "<group>"; };
+		3C938CE21959DC79008CCC92 /* question-mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "question-mark.png"; sourceTree = "<group>"; };
+		3C938CE31959DC79008CCC92 /* question-mark@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "question-mark@2x~iphone.png"; sourceTree = "<group>"; };
 		3C9BBDFD195345A6001C6C4D /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
 		3C9BBDFE195345A6001C6C4D /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
 		3C9BBDFF195345A6001C6C4D /* UIActivityIndicatorView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActivityIndicatorView+AFNetworking.h"; sourceTree = "<group>"; };
@@ -212,8 +212,8 @@
 				0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */,
 				0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */,
 				0B893A481954E4FF00476BFE /* welcome-logo.png */,
-				3C938CDE1959C1B7008CCC92 /* question-mark.png */,
-				3C938CDF1959C1B7008CCC92 /* question-mark@2x~iphone.png */,
+				3C938CE21959DC79008CCC92 /* question-mark.png */,
+				3C938CE31959DC79008CCC92 /* question-mark@2x~iphone.png */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -508,11 +508,11 @@
 				0BDB64CC19521A7C00223093 /* NBPhoneNumberMetadata.plist in Resources */,
 				0B3651E11959109700534386 /* heard-logo-120.png in Resources */,
 				0B3651DF1959109700534386 /* heard-logo-80.png in Resources */,
-				3C938CE01959C1B7008CCC92 /* question-mark.png in Resources */,
+				3C938CE41959DC79008CCC92 /* question-mark.png in Resources */,
 				0BDB64CE19521A7C00223093 /* PhoneNumberMetaData.json in Resources */,
 				0BD758CA1950F91B00CF0D85 /* InfoPlist.strings in Resources */,
 				0BDB64CF19521A7C00223093 /* PhoneNumberMetaDataForTesting.json in Resources */,
-				3C938CE11959C1B7008CCC92 /* question-mark@2x~iphone.png in Resources */,
+				3C938CE51959DC79008CCC92 /* question-mark@2x~iphone.png in Resources */,
 				0B3651E01959109700534386 /* heard-logo-58.png in Resources */,
 				0BD758D31950F91B00CF0D85 /* Main.storyboard in Resources */,
 				0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */,
