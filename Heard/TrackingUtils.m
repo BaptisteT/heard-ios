@@ -58,4 +58,13 @@
     [mixpanel.people increment:@"Add contact" by:[NSNumber numberWithInt:1]];
 }
 
++ (void)trackOpenApp
+{
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+
+    [mixpanel track:@"Open app"];
+    
+    [mixpanel.people increment:@"Open app count" by:[NSNumber numberWithInt:1]];
+}
+
 @end

@@ -16,6 +16,7 @@
 #import "GeneralUtils.h"
 #import "Mixpanel.h"
 #import "Constants.h"
+#import "TrackingUtils.h"
 
 @implementation HeardAppDelegate
 
@@ -44,6 +45,11 @@
     return YES;
 }
 
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    [TrackingUtils trackOpenApp];
+}
+
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
@@ -54,8 +60,6 @@
 //        [(DashboardViewController *)visibleController retrieveAndDisplayUnreadMessages];
     }
 }
-
-
 
 // Delegation methods
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {

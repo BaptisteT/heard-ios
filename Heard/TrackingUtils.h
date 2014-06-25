@@ -23,4 +23,6 @@
 
 + (void)trackAddContact;
 
++ (void)trackOpenApp;
+
 @end
