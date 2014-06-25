@@ -12,7 +12,11 @@
 
 + (UIColor *)blue;
 
-+ (UIColor *)trasparentBlue;
++ (UIColor *)transparentBlue;
+
++ (UIColor *)transparentRed;
+
++ (UIColor *)green;
 
 + (UIImage*) cropBiggestCenteredSquareImageFromImage:(UIImage*)image withSide:(CGFloat)side;
 

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 streetshout. All rights reserved.
 //
 
-#import "ContactBubbleView.h"
+#import "ContactView.h"
 #import "UIImageView+AFNetworking.h"
 #import "GeneralUtils.h"
 #import "Constants.h"
@@ -14,8 +14,10 @@
 #import "SessionUtils.h"
 #import "ImageUtils.h"
 
+#define UNREAD_MESSAGES_BORDER 3
+#define NO_UNREAD_MESSAGES_BORDER 0.5
 
-@interface ContactBubbleView()
+@interface ContactView()
 
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *oneTapRecognizer;
@@ -27,13 +29,13 @@
 @property (nonatomic) NSMutableArray *unreadMessages;
 @property (strong, nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) NSTimer *metersTimer;
-@property (nonatomic, strong) UIView *activeOverlay;
+@property (nonatomic, strong) UIImageView *recordingOverlay;
 @property (nonatomic, strong) NSData *nextMessageAudioData;
 @property (nonatomic, strong) UIImageView *pendingContactOverlay;
 
 @end
 
-@implementation ContactBubbleView
+@implementation ContactView
 
 
 // ----------------------------------------------------------
@@ -49,7 +51,7 @@
     
     // Set image view
     self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
-    [self.imageView setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:contact.identifier] placeholderImage:[UIImage imageNamed:@"contact-placeholder.png"]];
+    [self setContactPicture];
     [self addSubview:self.imageView];
     self.imageView.userInteractionEnabled = YES;
     self.imageView.clipsToBounds = YES;
@@ -123,11 +125,11 @@
     // check micro is available, else warm user
     
     if ([self.delegate.mainPlayer isPlaying]) {
-        [self.delegate quitPlayerMode];
+        [self.delegate endPlayerUI];
     }
     
     if (recognizer.state == UIGestureRecognizerStateBegan) {
-        [self addActiveOverlay];
+        [self recordingUI];
         
         // Create Timer
         self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
@@ -151,7 +153,7 @@
         [self.metersTimer fire];
     }
     if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled || recognizer.state == UIGestureRecognizerStateFailed) {
-        [self removeActiveOverlay];
+        [self endRecordingUI];
         
         // Stop timer if it did not fire yet
         if ([self.maxDurationTimer isValid]) {
@@ -159,6 +161,7 @@
             if ([self.minDurationTimer isValid]) {
                 [self stopRecording];
                 [self.delegate quitRecodingModeAnimated:NO];
+                
                 [GeneralUtils showMessage:@"Hold to record." withTitle:nil];
             } else {
                 [self sendRecording];
@@ -177,11 +180,12 @@
 
 - (void)handleNonPendingTapGesture
 {
+    //BB: weird condition?
     if (!self.unreadMessagesLabel.isHidden) { // ie. self.unreadMessageCount > 0 && self.nextMessageAudioData !=nil
         self.userInteractionEnabled = NO;
         
         if ([self.delegate.mainPlayer isPlaying]) {
-            [self.delegate quitPlayerMode];
+            [self.delegate endPlayerUI];
         }
         
         if (!self.nextMessageAudioData) {
@@ -230,7 +234,12 @@
         [self removeGestureRecognizer:self.longPressRecognizer];
         if (!self.pendingContactOverlay) {
             self.pendingContactOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
-            [self.pendingContactOverlay setImage:[UIImage imageNamed:@"question-mark.png"]];
+            self.pendingContactOverlay.layer.borderColor = [ImageUtils blue].CGColor;
+            self.pendingContactOverlay.layer.borderWidth = UNREAD_MESSAGES_BORDER;
+            self.pendingContactOverlay.clipsToBounds = YES;
+            self.pendingContactOverlay.layer.cornerRadius = self.bounds.size.height/2;
+            [self.pendingContactOverlay setBackgroundColor:[UIColor whiteColor]];
+            [self.pendingContactOverlay setImage:[UIImage imageNamed:@"unknown-user.png"]];
         }
         [self addSubview:self.pendingContactOverlay];
      } else {
@@ -239,6 +248,12 @@
              [self.pendingContactOverlay removeFromSuperview];
          }
      }
+}
+
+- (void)setContactPicture
+{
+    
+    [self.imageView setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:self.contact.identifier] placeholderImage:[UIImage imageNamed:@"contact-placeholder.png"]];
 }
 
 - (void)handlePendingTapGesture {
@@ -337,11 +352,11 @@
     if (flag) {
         self.unreadMessagesLabel.hidden = YES;
         self.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        self.imageView.layer.borderWidth = 0.5;
+        self.imageView.layer.borderWidth = NO_UNREAD_MESSAGES_BORDER;
     } else {
         self.unreadMessagesLabel.hidden = NO;
         self.imageView.layer.borderColor = [ImageUtils blue].CGColor;
-        self.imageView.layer.borderWidth = 3;
+        self.imageView.layer.borderWidth = UNREAD_MESSAGES_BORDER;
     }
 }
 
@@ -349,21 +364,40 @@
 // ----------------------------------------------------------
 // Design utility
 // ----------------------------------------------------------
-- (void)addActiveOverlay
+- (void)recordingUI
 {
-    [self removeActiveOverlay];
+    [self endRecordingUI];
     
-    self.activeOverlay = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
-    self.activeOverlay.clipsToBounds = YES;
-    self.activeOverlay.layer.cornerRadius = self.activeOverlay.bounds.size.height/2;
-    self.activeOverlay.backgroundColor = [ImageUtils trasparentBlue];
-    [self addSubview:self.activeOverlay];
+    self.recordingOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
+    self.recordingOverlay.clipsToBounds = YES;
+    self.recordingOverlay.alpha = 0.7;
+    self.recordingOverlay.image = [UIImage imageNamed:@"record"];
+    
+    [self addSubview:self.recordingOverlay];
 }
 
-- (void)removeActiveOverlay
+- (void)endRecordingUI
 {
-    [self.activeOverlay removeFromSuperview];
-    self.activeOverlay = nil;
+    [self.recordingOverlay removeFromSuperview];
+    self.recordingOverlay = nil;
+}
+
+- (void)playingUI
+{
+    [self endRecordingUI];
+    
+    self.recordingOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
+    self.recordingOverlay.clipsToBounds = YES;
+    self.recordingOverlay.alpha = 0.7;
+    self.recordingOverlay.image = [UIImage imageNamed:@"play"];
+    
+    [self addSubview:self.recordingOverlay];
+}
+
+- (void)endPlayingUI
+{
+    [self.recordingOverlay removeFromSuperview];
+    self.recordingOverlay = nil;
 }
 
 @end

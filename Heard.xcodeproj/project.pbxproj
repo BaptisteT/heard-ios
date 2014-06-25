@@ -66,10 +66,14 @@
 		0BDB65581953B6A000223093 /* RequestPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BD758F619511A4000CF0D85 /* RequestPhoneViewController.m */; };
 		0BDB655E1953BE9100223093 /* SessionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB655D1953BE9100223093 /* SessionUtils.m */; };
 		0BDB65611953C04800223093 /* DashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB65601953C04800223093 /* DashboardViewController.m */; };
-		3C938CE41959DC79008CCC92 /* question-mark.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C938CE21959DC79008CCC92 /* question-mark.png */; };
-		3C938CE51959DC79008CCC92 /* question-mark@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C938CE31959DC79008CCC92 /* question-mark@2x~iphone.png */; };
+		0BE55472195A340500CE4669 /* unknown-user@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55470195A340500CE4669 /* unknown-user@2x~iphone.png */; };
+		0BE55473195A340500CE4669 /* unknown-user.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55471195A340500CE4669 /* unknown-user.png */; };
+		0BE55478195A4ADC00CE4669 /* record.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55474195A4ADC00CE4669 /* record.png */; };
+		0BE55479195A4ADC00CE4669 /* play@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55475195A4ADC00CE4669 /* play@2x~iphone.png */; };
+		0BE5547A195A4ADC00CE4669 /* record@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55476195A4ADC00CE4669 /* record@2x~iphone.png */; };
+		0BE5547B195A4ADC00CE4669 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55477195A4ADC00CE4669 /* play.png */; };
 		3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA177E91958B74000096266 /* AudioToolbox.framework */; };
-		3CB8B7F5195453E50090D657 /* ContactBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactBubbleView.m */; };
+		3CB8B7F5195453E50090D657 /* ContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -158,8 +162,12 @@
 		0BDB655D1953BE9100223093 /* SessionUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionUtils.m; sourceTree = "<group>"; };
 		0BDB655F1953C04800223093 /* DashboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DashboardViewController.h; sourceTree = "<group>"; };
 		0BDB65601953C04800223093 /* DashboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DashboardViewController.m; sourceTree = "<group>"; };
-		3C938CE21959DC79008CCC92 /* question-mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "question-mark.png"; sourceTree = "<group>"; };
-		3C938CE31959DC79008CCC92 /* question-mark@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "question-mark@2x~iphone.png"; sourceTree = "<group>"; };
+		0BE55470195A340500CE4669 /* unknown-user@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unknown-user@2x~iphone.png"; sourceTree = "<group>"; };
+		0BE55471195A340500CE4669 /* unknown-user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unknown-user.png"; sourceTree = "<group>"; };
+		0BE55474195A4ADC00CE4669 /* record.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = record.png; sourceTree = "<group>"; };
+		0BE55475195A4ADC00CE4669 /* play@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x~iphone.png"; sourceTree = "<group>"; };
+		0BE55476195A4ADC00CE4669 /* record@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record@2x~iphone.png"; sourceTree = "<group>"; };
+		0BE55477195A4ADC00CE4669 /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		3C9BBDFD195345A6001C6C4D /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
 		3C9BBDFE195345A6001C6C4D /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
 		3C9BBDFF195345A6001C6C4D /* UIActivityIndicatorView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActivityIndicatorView+AFNetworking.h"; sourceTree = "<group>"; };
@@ -180,8 +188,8 @@
 		3CA177E91958B74000096266 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		3CB8B7EA195346620090D657 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		3CB8B7EB195346620090D657 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
-		3CB8B7F3195453E50090D657 /* ContactBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactBubbleView.h; sourceTree = "<group>"; };
-		3CB8B7F4195453E50090D657 /* ContactBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactBubbleView.m; sourceTree = "<group>"; };
+		3CB8B7F3195453E50090D657 /* ContactView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactView.h; sourceTree = "<group>"; };
+		3CB8B7F4195453E50090D657 /* ContactView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,15 +213,19 @@
 		0B58BB001954D7E200E9FF70 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				0BE55474195A4ADC00CE4669 /* record.png */,
+				0BE55475195A4ADC00CE4669 /* play@2x~iphone.png */,
+				0BE55476195A4ADC00CE4669 /* record@2x~iphone.png */,
+				0BE55477195A4ADC00CE4669 /* play.png */,
 				0B3651DC1959109700534386 /* heard-logo-80.png */,
 				0B3651DD1959109700534386 /* heard-logo-58.png */,
 				0B3651DE1959109700534386 /* heard-logo-120.png */,
+				0BE55470195A340500CE4669 /* unknown-user@2x~iphone.png */,
+				0BE55471195A340500CE4669 /* unknown-user.png */,
 				0B3651D41958AC5000534386 /* contact-placeholder.png */,
 				0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */,
 				0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */,
 				0B893A481954E4FF00476BFE /* welcome-logo.png */,
-				3C938CE21959DC79008CCC92 /* question-mark.png */,
-				3C938CE31959DC79008CCC92 /* question-mark@2x~iphone.png */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -439,8 +451,8 @@
 		3CB8B7F2195453B10090D657 /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
-				3CB8B7F3195453E50090D657 /* ContactBubbleView.h */,
-				3CB8B7F4195453E50090D657 /* ContactBubbleView.m */,
+				3CB8B7F3195453E50090D657 /* ContactView.h */,
+				3CB8B7F4195453E50090D657 /* ContactView.m */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -504,15 +516,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				0BD758D81950F91B00CF0D85 /* Images.xcassets in Resources */,
+				0BE5547B195A4ADC00CE4669 /* play.png in Resources */,
+				0BE55472195A340500CE4669 /* unknown-user@2x~iphone.png in Resources */,
+				0BE5547A195A4ADC00CE4669 /* record@2x~iphone.png in Resources */,
+				0BE55479195A4ADC00CE4669 /* play@2x~iphone.png in Resources */,
 				0B3651D71958AC5000534386 /* contact-placeholder@2x~iphone.png in Resources */,
 				0BDB64CC19521A7C00223093 /* NBPhoneNumberMetadata.plist in Resources */,
 				0B3651E11959109700534386 /* heard-logo-120.png in Resources */,
 				0B3651DF1959109700534386 /* heard-logo-80.png in Resources */,
-				3C938CE41959DC79008CCC92 /* question-mark.png in Resources */,
+				0BE55478195A4ADC00CE4669 /* record.png in Resources */,
 				0BDB64CE19521A7C00223093 /* PhoneNumberMetaData.json in Resources */,
 				0BD758CA1950F91B00CF0D85 /* InfoPlist.strings in Resources */,
 				0BDB64CF19521A7C00223093 /* PhoneNumberMetaDataForTesting.json in Resources */,
-				3C938CE51959DC79008CCC92 /* question-mark@2x~iphone.png in Resources */,
+				0BE55473195A340500CE4669 /* unknown-user.png in Resources */,
 				0B3651E01959109700534386 /* heard-logo-58.png in Resources */,
 				0BD758D31950F91B00CF0D85 /* Main.storyboard in Resources */,
 				0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */,
@@ -541,7 +557,7 @@
 				0BDB654E1953B5FD00223093 /* RequestUserInfoViewController.m in Sources */,
 				0BDB654F1953B5FD00223093 /* Message.m in Sources */,
 				0BDB65501953B5FD00223093 /* main.m in Sources */,
-				3CB8B7F5195453E50090D657 /* ContactBubbleView.m in Sources */,
+				3CB8B7F5195453E50090D657 /* ContactView.m in Sources */,
 				0BDB65341953B5EA00223093 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				0BDB65351953B5EA00223093 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				0BDB65361953B5EA00223093 /* UIAlertView+AFNetworking.m in Sources */,
@@ -670,13 +686,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (9X2H84A9C9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (63863BWF5M)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "E0BA1CA2-86BB-475C-9059-E9FE8747036B";
+				PROVISIONING_PROFILE = "ECFA20B7-073A-4C04-B891-12CDCFF4F927";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -691,7 +707,7 @@
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "E0BA1CA2-86BB-475C-9059-E9FE8747036B";
+				PROVISIONING_PROFILE = "ECFA20B7-073A-4C04-B891-12CDCFF4F927";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

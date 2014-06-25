@@ -13,7 +13,7 @@
 
 @protocol ContactBubbleViewDelegate;
 
-@interface ContactBubbleView : UIView <UIGestureRecognizerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate>
+@interface ContactView : UIView <UIGestureRecognizerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate>
 
 - (id)initWithContactBubble:(Contact *)contact andFrame:(CGRect)frame;
 
@@ -25,14 +25,16 @@
 - (void)addUnreadMessage:(Message *)message;
 - (void)resetUnreadMessages;
 
-- (void)addActiveOverlay;
-- (void)removeActiveOverlay;
+- (void)recordingUI;
+- (void)endRecordingUI;
+- (void)playingUI;
+- (void)endPlayingUI;
 
 @end
 
 @protocol ContactBubbleViewDelegate
 
-- (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId FromView:(ContactBubbleView *)view;
+- (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId FromView:(ContactView *)view;
 
 - (void)longPressOnContactBubbleViewEnded:(NSUInteger)contactId;
 
@@ -40,11 +42,11 @@
 
 - (void)messageSentWithError:(BOOL)error;
 
-- (void)startedPlayingAudioFileByView:(ContactBubbleView *)view;
+- (void)startedPlayingAudioFileByView:(ContactView *)view;
 
 - (void)quitRecodingModeAnimated:(BOOL)animated;
 
-- (void)quitPlayerMode;
+- (void)endPlayerUI;
 
 - (void)pendingContactClicked:(Contact *)contact;
 

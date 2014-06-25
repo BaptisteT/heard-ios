@@ -56,6 +56,7 @@
 @property (nonatomic, strong) NSString *currentUserPhoneNumber;
 @property (nonatomic, strong) Contact *contactToAdd;
 @property (nonatomic, strong) NSMutableDictionary *messagesFromPendingContact;
+@property (nonatomic, strong) ContactView *lastContactPlayed;
 
 @end
 
@@ -256,7 +257,7 @@
     if (contactCount > 0) {
         Contact* contact = [self.contacts firstObject];
         
-        ContactBubbleView *contactView = [[ContactBubbleView alloc] initWithContactBubble:contact andFrame:CGRectMake(2 * kContactMargin + kContactSize, kContactMargin, kContactSize, kContactSize)];
+        ContactView *contactView = [[ContactView alloc] initWithContactBubble:contact andFrame:CGRectMake(2 * kContactMargin + kContactSize, kContactMargin, kContactSize, kContactSize)];
         
         contactView.delegate = self;
         
@@ -269,7 +270,7 @@
     if (contactCount > 1) {
         Contact* contact = [self.contacts objectAtIndex:1];
         
-        ContactBubbleView *contactView = [[ContactBubbleView alloc] initWithContactBubble:contact andFrame:CGRectMake(3 * kContactMargin + 2 * kContactSize, kContactMargin, kContactSize, kContactSize)];
+        ContactView *contactView = [[ContactView alloc] initWithContactBubble:contact andFrame:CGRectMake(3 * kContactMargin + 2 * kContactSize, kContactMargin, kContactSize, kContactSize)];
         
         contactView.delegate = self;
         
@@ -302,7 +303,7 @@
 {
     Contact* contact = [self.contacts objectAtIndex:(index*3 - 1 + position)];
     
-    ContactBubbleView *contactView = [[ContactBubbleView alloc] initWithContactBubble:contact andFrame:CGRectMake((position + 1) *kContactMargin + position * kContactSize, index * (kContactMargin + kContactSize + kContactNameHeight) + kContactMargin, kContactSize, kContactSize)];
+    ContactView *contactView = [[ContactView alloc] initWithContactBubble:contact andFrame:CGRectMake((position + 1) *kContactMargin + position * kContactSize, index * (kContactMargin + kContactSize + kContactNameHeight) + kContactMargin, kContactSize, kContactSize)];
     
     contactView.delegate = self;
     
@@ -312,7 +313,7 @@
     [self.contactScrollView addSubview:contactView];
 }
 
-- (void)addNameLabelForView:(ContactBubbleView *)contactView andContact:(Contact *)contact
+- (void)addNameLabelForView:(ContactView *)contactView andContact:(Contact *)contact
 {
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - kContactMargin/4, contactView.frame.origin.y + kContactSize, contactView.frame.size.width + kContactMargin/2, kContactNameHeight)];
     
@@ -366,9 +367,9 @@
     
     //Replay message
     if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_0]) {
-        [self quitPlayerMode];
+        [self endPlayerUI];
         
-        [self startPlayerMode:([self.mainPlayer duration])];
+        [self playerUI:([self.mainPlayer duration]) ByContactView:self.lastContactPlayed];
         
         [self.mainPlayer play];
     //Add Friend
@@ -418,7 +419,7 @@
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_5]) {
         // todo BT block user + delete bubble / contact
         void(^successBlock)() = ^void() {
-            for (ContactBubbleView * bubbleView in self.contactBubbleViews) {
+            for (ContactView * bubbleView in self.contactBubbleViews) {
                 if (bubbleView.contact.identifier == self.contactToAdd.identifier) {
                     [bubbleView removeFromSuperview];
                     [self.contacts removeObject:bubbleView.contact];
@@ -539,7 +540,7 @@
 
 - (void)resetUnreadMessages
 {
-    for (ContactBubbleView *contactBubble in self.contactBubbleViews) {
+    for (ContactView *contactBubble in self.contactBubbleViews) {
         [contactBubble resetUnreadMessages];
     }
 }
@@ -548,7 +549,7 @@
 - (void)addUnreadMessage:(Message *)message
 {
     BOOL isAttributed = NO;
-    for (ContactBubbleView *contactBubble in self.contactBubbleViews) {
+    for (ContactView *contactBubble in self.contactBubbleViews) {
         if (message.senderId == contactBubble.contact.identifier) {
             [contactBubble addUnreadMessage:message];
             isAttributed = YES;
@@ -598,22 +599,22 @@
 // Recording Mode
 // ----------------------------------------------------------
 
-- (void)addOverlayOverContactView:(ContactBubbleView *)view
+- (void)recordingUIForContactView:(ContactView *)contactView
 {
-    [view addActiveOverlay];
+    [contactView recordingUI];
 }
 
-- (void)removeOverlayFromContactView
+- (void)endRecordingUIForAllContactViews
 {
-    for (ContactBubbleView *contactView in self.contactBubbleViews) {
-        [contactView removeActiveOverlay];
+    for (ContactView *contactView in self.contactBubbleViews) {
+        [contactView endRecordingUI];
     }
 }
 
 - (void)disableAllContactViews
 {
     for (UIView *view in [self.contactScrollView subviews]) {
-        if ([view isKindOfClass:[ContactBubbleView class]]) {
+        if ([view isKindOfClass:[ContactView class]]) {
             view.userInteractionEnabled = NO;
         }
     }
@@ -622,7 +623,7 @@
 - (void)enableAllContactViews
 {
     for (UIView *view in [self.contactScrollView subviews]) {
-        if ([view isKindOfClass:[ContactBubbleView class]]) {
+        if ([view isKindOfClass:[ContactView class]]) {
             view.userInteractionEnabled = YES;
         }
     }
@@ -650,15 +651,15 @@
 // ----------------------------------------------------------
 
 //Create recording mode screen
-- (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId FromView:(ContactBubbleView *)view
+- (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId FromView:(ContactView *)view
 {
     [self disableAllContactViews];
     
-    [self addOverlayOverContactView:view];
+    [self recordingUIForContactView:view];
     
     //Recording view is same size as screen
     self.recordingView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_HEIGHT, self.view.bounds.size.width, PLAYER_HEIGHT)];
-    self.recordingView.backgroundColor = [UIColor colorWithRed:240.0/255 green:240.0/255 blue:240.0/255 alpha:1.0];
+    self.recordingView.backgroundColor = [ImageUtils transparentRed];
     [self.view addSubview:self.recordingView];
     
     //Recording line starting point
@@ -751,10 +752,12 @@
     }
 }
 
-- (void)startedPlayingAudioFileByView:(ContactBubbleView *)view
+- (void)startedPlayingAudioFileByView:(ContactView *)contactView
 {
+    self.lastContactPlayed = contactView;
+    
     //TODO restart player
-    [self startPlayerMode:self.mainPlayer.duration];
+    [self playerUI:self.mainPlayer.duration ByContactView:contactView];
 }
 
 - (void)quitRecodingModeAnimated:(BOOL)animated
@@ -793,16 +796,30 @@
 // Player Mode
 // ----------------------------------------------------------
 
-//Only UI
-- (void)startPlayerMode:(NSTimeInterval)duration
+- (void)playerUIForContactView:(ContactView *)contactView
 {
+    [contactView playingUI];
+}
+
+- (void)endPlayerUIForAllContactViews
+{
+    for (ContactView *contactView in self.contactBubbleViews) {
+        [contactView endPlayingUI];
+    }
+}
+
+//Only UI
+- (void)playerUI:(NSTimeInterval)duration ByContactView:(ContactView *)contactView
+{
+    [self playerUIForContactView:contactView];
+    
     float initialWidth = 0;
     float finalWidth = self.view.bounds.size.width;
     float lineWeight = 6;
     
     self.playerAudioLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - lineWeight, initialWidth, lineWeight)];
     
-    self.playerAudioLine.backgroundColor = [ImageUtils blue];
+    self.playerAudioLine.backgroundColor = [ImageUtils green];
     
     [self.view addSubview:self.playerAudioLine];
     
@@ -817,13 +834,15 @@
                          self.playerAudioLine.frame = frame;
                      } completion:^(BOOL finished){
                          if (finished) {
-                             [self quitPlayerMode];
+                             [self endPlayerUI];
                          }
                      }];
 }
 
-- (void)quitPlayerMode
+- (void)endPlayerUI
 {
+    [self endPlayerUIForAllContactViews];
+    
     if ([self.mainPlayer isPlaying]) {
         [self.mainPlayer stop];
         self.mainPlayer.currentTime = 0;
@@ -878,7 +897,7 @@
         }
     }
 
-    for (ContactBubbleView *contactBubble in self.contactBubbleViews) {
+    for (ContactView *contactBubble in self.contactBubbleViews) {
         if ([mobile isEqualToString:contactBubble.contact.phoneNumber]) {
             if (contactBubble.pendingContact) {
                 [contactBubble setPendingContact:NO];
