@@ -244,7 +244,12 @@
 // ----------------------------------
 - (void)displayContacts
 {
-    //TODO erase existing views
+    // Erase existing views
+    for (ContactView *contactView in self.contactBubbleViews) {
+        [contactView removeFromSuperview];
+        [contactView.nameLabel removeFromSuperview];
+    }
+    self.contactBubbleViews = [[NSMutableArray alloc] init];
     
     NSUInteger contactCount = [self.contacts count];
     if (contactCount == 0)
@@ -317,7 +322,6 @@
     void (^successBlock)(NSArray *messages) = ^void(NSArray *messages) {
         //Reset unread messages
         [self resetUnreadMessages];
-        
         for (Message *message in messages) {
             [self addUnreadMessage:message];
         }

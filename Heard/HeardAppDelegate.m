@@ -46,7 +46,8 @@
     UIViewController *visibleController = [self getVisibleController];
     
     if ([visibleController isKindOfClass:[DashboardViewController class]]) {
-        [(DashboardViewController *)visibleController retrieveAndDisplayUnreadMessages];
+        [(DashboardViewController *)visibleController requestAddressBookAccess];
+//        [(DashboardViewController *)visibleController retrieveAndDisplayUnreadMessages];
     }
 }
 

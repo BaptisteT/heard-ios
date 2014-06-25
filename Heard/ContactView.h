@@ -21,7 +21,7 @@
 @property (strong, nonatomic) Contact *contact;
 @property (weak, nonatomic) id <ContactBubbleViewDelegate> delegate;
 @property (nonatomic) BOOL pendingContact;
-@property (nonatomic, weak) UILabel *nameLabel;
+@property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic) NSInteger orderPosition;
 
 - (void)addUnreadMessage:(Message *)message;

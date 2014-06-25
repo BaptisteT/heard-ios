@@ -16,6 +16,7 @@
 
 - (void)addUnreadMessage:(Message *)message;
 - (void) retrieveAndDisplayUnreadMessages;
+- (void)requestAddressBookAccess;
 
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 
