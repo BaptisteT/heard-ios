@@ -50,6 +50,8 @@
 
 - (void)pendingContactClicked:(Contact *)contact;
 
+- (void)enableAllContactViews;
+
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 
 

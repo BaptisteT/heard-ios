@@ -159,9 +159,9 @@
         if ([self.maxDurationTimer isValid]) {
             [self.maxDurationTimer invalidate];
             if ([self.minDurationTimer isValid]) {
+                [self.minDurationTimer invalidate];
                 [self stopRecording];
                 [self.delegate quitRecodingModeAnimated:NO];
-                
                 [GeneralUtils showMessage:@"Hold to record." withTitle:nil];
             } else {
                 [self sendRecording];

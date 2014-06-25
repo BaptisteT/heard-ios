@@ -722,8 +722,6 @@
 
 - (void)messageSentWithError:(BOOL)error
 {
-    [self enableAllContactViews];
-    
     if (error) {
         [self addRecordingMessage:@"Sending failed." color:[UIColor redColor]];
         
@@ -762,6 +760,7 @@
 
 - (void)quitRecodingModeAnimated:(BOOL)animated
 {
+    [self enableAllContactViews];
     if (animated) {
         [UIView animateWithDuration:1.0 animations:^{
             self.recordingView.alpha = 0;
