@@ -36,3 +36,6 @@ static const NSUInteger kUnreadMessageSize = 30;
 static const NSUInteger kContactMargin = 20;
 static const NSUInteger kContactSize = 80;
 static const NSUInteger kContactNameHeight = 30;
+
+//Mixpanel token
+static NSString * const kProdMixPanelToken = @"898ed29f5309c83be61a27a41d55c879";

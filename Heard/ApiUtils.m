@@ -81,7 +81,7 @@
 
 + (void)validateSmsCode:(NSString *)code
                        phoneNumber:(NSString *)phoneNumber
-                    success:(void(^)(NSString *authToken, NSInteger userId))successBlock
+                    success:(void(^)(NSString *authToken, Contact *contact))successBlock
                     failure:(void(^)())failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"sessions/confirm_sms_code.json"];
@@ -95,10 +95,10 @@
         NSDictionary *result = [JSON valueForKeyPath:@"result"];
         
         NSString *authToken = [result objectForKey:@"auth_token"];
-        NSInteger userId = [[result objectForKey:@"user_id"] longValue];
+        Contact *contact = [Contact rawContactToInstance:[result objectForKey:@"user"]];
         
         if (successBlock) {
-            successBlock(authToken, userId);
+            successBlock(authToken, contact);
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (failureBlock) {
@@ -112,7 +112,7 @@
                          lastName:(NSString *)lastName
                           picture:(NSString *)picture
                              code:(NSString *)code
-                          success:(void(^)(NSString *authToken, NSInteger userId))successBlock
+                          success:(void(^)(NSString *authToken, Contact *contact))successBlock
                           failure:(void(^)())failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users.json"];
@@ -130,10 +130,10 @@
         NSDictionary *result = [JSON valueForKeyPath:@"result"];
         
         NSString *authToken = [result objectForKey:@"auth_token"];
-        NSInteger userId = [[result objectForKey:@"user_id"] longValue];
+        Contact *contact = [Contact rawContactToInstance:[result objectForKey:@"user"]];
         
         if (successBlock) {
-            successBlock(authToken, userId);
+            successBlock(authToken, contact);
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (failureBlock) {

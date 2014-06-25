@@ -18,6 +18,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "ImageUtils.h"
 #import "SessionUtils.h"
+#import "TrackingUtils.h"
 
 #define ACTION_SHEET_OPTION_0 @"Replay last message"
 #define ACTION_SHEET_OPTION_1 @"Invite contact"
@@ -276,7 +277,7 @@
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;
     float rowHeight = kContactMargin + kContactSize + kContactNameHeight;
-    self.contactScrollView.contentSize = CGSizeMake(screenWidth, MIN(screenHeight - 20, rows * rowHeight + 2 * kContactMargin));
+    self.contactScrollView.contentSize = CGSizeMake(screenWidth, MAX(screenHeight - 20, rows * rowHeight + 2 * kContactMargin));
 }
 
 // Create contact view
@@ -744,11 +745,13 @@
         [self playerUI:([self.mainPlayer duration]) ByContactView:self.lastContactPlayed];
         
         [self.mainPlayer play];
-        //Add Friend
+        [TrackingUtils trackReplay];
+    //Add contact
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_1]) {
         ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc] init];
         picker.peoplePickerDelegate = self;
         [self presentViewController:picker animated:YES completion:nil];
+        [TrackingUtils trackAddContact];
         //Share (in the future, it'd be cool to share a vocal message!)
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_2]) {
         NSString *shareString = @"Download Waved, the fastest messaging app.";
@@ -764,10 +767,17 @@
         
         [self presentViewController:activityViewController animated:YES completion:nil];
         
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_2]) {
-        // todo Feedback
+        [TrackingUtils trackShare];
+        //Send feedback
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_3]) {
+        NSString *email = [NSString stringWithFormat:@"mailto:%@?subject=Feedback for Waved on iOS (v%@)", kFeedbackEmail,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
         
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_4]) {
+        email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
+    }
+    //BB: Add contact a contact not in address book: should be merged with add contact
+    else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_4]) {
         // create person record
         ABRecordRef person = ABPersonCreate();
         ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFStringRef) self.contactToAdd.firstName, NULL);
@@ -787,7 +797,8 @@
                                                        action:@selector(dismissContactView)];
         [self.navigationController presentViewController:newNavigationController animated:YES completion:nil];
         CFRelease(person);
-        
+      
+    //BB: Block user: NOT FOR NOW (let's keep the menu simple for now, we will have "Other" section for this)
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_5]) {
         // block user + delete bubble / contact
         void(^successBlock)() = ^void() {
@@ -805,12 +816,6 @@
         };
         [ApiUtils blockUser:self.contactToAdd.identifier AndExecuteSuccess:successBlock failure:nil];
         
-    } else {
-        NSString *email = [NSString stringWithFormat:@"mailto:%@?subject=Feedback for Waved on iOS (v%@)", kFeedbackEmail,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
-        
-        email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
     }
 }
 

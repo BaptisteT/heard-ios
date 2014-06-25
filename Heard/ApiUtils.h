@@ -19,7 +19,7 @@
 
 + (void)validateSmsCode:(NSString *)code
             phoneNumber:(NSString *)phoneNumber
-                success:(void(^)(NSString *authToken, NSInteger userId))successBlock
+                success:(void(^)(NSString *authToken, Contact *contact))successBlock
                 failure:(void(^)())failureBlock;
 
 + (void)createUserWithPhoneNumber:(NSString *)phoneNumber
@@ -27,7 +27,7 @@
                          lastName:(NSString *)lastName
                           picture:(NSString *)picture
                              code:(NSString *)code
-                          success:(void(^)(NSString *authToken, NSInteger userId))successBlock
+                          success:(void(^)(NSString *authToken, Contact *contact))successBlock
                           failure:(void(^)())failureBlock;
 
 + (void)sendMessage:(NSData *)audioData

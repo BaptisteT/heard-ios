@@ -12,6 +12,7 @@
 #import "MBProgressHUD.h"
 #import "SessionUtils.h"
 #import "ApiUtils.h"
+#import "TrackingUtils.h"
 
 #define BORDER_SIZE 0.5
 #define ACTION_SHEET_OPTION_1 @"Camera"
@@ -79,11 +80,14 @@
 {
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
-    typedef void (^SuccessBlock)(NSString *authToken, NSInteger userId);
-    SuccessBlock successBlock = ^(NSString *authToken, NSInteger userId) {
+    typedef void (^SuccessBlock)(NSString *authToken, Contact *contact);
+    SuccessBlock successBlock = ^(NSString *authToken, Contact *contact) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         [SessionUtils securelySaveCurrentUserToken:authToken];
-        [SessionUtils saveUserInfo:userId phoneNumber:self.phoneNumber];
+        [SessionUtils saveUserInfo:contact.identifier phoneNumber:self.phoneNumber];
+        
+        [TrackingUtils identifyWithMixpanel:contact signingUp:YES];
+        
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
         [self performSegueWithIdentifier:@"Dashboard Push Segue" sender:nil];
     };

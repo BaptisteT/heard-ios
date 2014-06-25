@@ -14,6 +14,7 @@
 #import "NBPhoneNumberUtil.h"
 #import "RequestUserInfoViewController.h"
 #import "SessionUtils.h"
+#import "TrackingUtils.h"
 
 #define CONFIMATION_CODE_DIGITS 5
 #define BORDER_SIZE 0.5
@@ -76,12 +77,15 @@
     
     [ApiUtils validateSmsCode:code
                          phoneNumber:self.phoneNumber
-                      success:^(NSString *authToken, NSInteger userId) {
+                      success:^(NSString *authToken, Contact *contact) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
                           
-        if (authToken && userId != 0) {
+        if (authToken && contact != nil) {
             [SessionUtils securelySaveCurrentUserToken:authToken];
-            [SessionUtils saveUserInfo:userId phoneNumber:self.phoneNumber];
+            [SessionUtils saveUserInfo:contact.identifier phoneNumber:self.phoneNumber];
+            
+            [TrackingUtils identifyWithMixpanel:contact signingUp:NO];
+            
             [self performSegueWithIdentifier:@"Dashboard Push Segue From Code Confirmation" sender:nil];
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
         } else {

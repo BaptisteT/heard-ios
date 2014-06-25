@@ -14,7 +14,8 @@
 #import "Message.h"
 #import "DashboardViewController.h"
 #import "GeneralUtils.h"
-
+#import "Mixpanel.h"
+#import "Constants.h"
 
 @implementation HeardAppDelegate
 
@@ -22,6 +23,9 @@
 {
     // Manage the network activity indicator
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
+    
+    //Mixpanel
+    [Mixpanel sharedInstanceWithToken:kProdMixPanelToken];
     
     // Notification received when app closed
     NSDictionary *remoteNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];

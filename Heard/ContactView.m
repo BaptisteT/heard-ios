@@ -13,6 +13,7 @@
 #import "ApiUtils.h"
 #import "SessionUtils.h"
 #import "ImageUtils.h"
+#import "TrackingUtils.h"
 
 #define UNREAD_MESSAGES_BORDER 3
 #define NO_UNREAD_MESSAGES_BORDER 0.5
@@ -174,6 +175,7 @@
                 [GeneralUtils showMessage:@"Hold to record." withTitle:nil];
             } else {
                 [self sendRecording];
+                [TrackingUtils trackRecord];
             }
         }
     }
@@ -227,6 +229,8 @@
         [self.delegate startedPlayingAudioFileByView:self];
         [self.delegate.mainPlayer play];
         self.userInteractionEnabled = YES;
+        
+        [TrackingUtils trackPlay];
     } else {
         [GeneralUtils showMessage:@"Hold to record." withTitle:nil];
     }
