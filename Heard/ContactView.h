@@ -15,16 +15,17 @@
 
 @interface ContactView : UIView <UIGestureRecognizerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate>
 
-- (id)initWithContactBubble:(Contact *)contact andFrame:(CGRect)frame;
+- (id)initWithContact:(Contact *)contact andFrame:(CGRect)frame;
+- (id)initWithContact:(Contact *)contact;
 
 @property (strong, nonatomic) Contact *contact;
 @property (weak, nonatomic) id <ContactBubbleViewDelegate> delegate;
 @property (nonatomic) BOOL pendingContact;
 @property (nonatomic, weak) UILabel *nameLabel;
+@property (nonatomic) NSInteger orderPosition;
 
 - (void)addUnreadMessage:(Message *)message;
 - (void)resetUnreadMessages;
-
 - (void)recordingUI;
 - (void)endRecordingUI;
 - (void)playingUI;
@@ -51,6 +52,8 @@
 - (void)pendingContactClicked:(Contact *)contact;
 
 - (void)enableAllContactViews;
+
+- (void)updateFrameOfContactView:(ContactView *)view;
 
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 

@@ -65,6 +65,9 @@
     int ctr;
 }
 
+// ------------------------------
+#pragma mark Life cycle
+// ------------------------------
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -91,6 +94,11 @@
     
     self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
 }
+
+
+// ------------------------------
+#pragma mark Get Contact
+// ------------------------------
 
 - (void)requestAddressBookAccess
 {
@@ -191,7 +199,6 @@
     }
     
     [self getHeardContacts];
-    
     CFRelease(people);
 }
 
@@ -200,7 +207,6 @@
     [self showLoadingIndicator];
     
     NSMutableArray *phoneNumbers = [[NSMutableArray alloc] init];
-    
     for (NSString* phoneNumber in self.addressBookFormattedContacts) {
         [phoneNumbers addObject:phoneNumber];
     }
@@ -231,90 +237,58 @@
     }];
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (alertView == self.failedToRetrieveFriendsAlertView) {
-        [self getHeardContacts];
-    }
-}
 
+
+// ----------------------------------
+#pragma mark Create Contact Bubble
+// ----------------------------------
 - (void)displayContacts
 {
     //TODO erase existing views
     
+    NSUInteger contactCount = [self.contacts count];
+    if (contactCount == 0)
+        return;
+    [self setScrollViewSizeForContactCount:(int)contactCount];
     self.menuButton.hidden = NO;
     
-    NSUInteger contactCount = [self.contacts count];
-    NSUInteger rows = [self.contacts count] / 3 + 1;
-    float rowHeight = kContactMargin + kContactSize + kContactNameHeight;
-    
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenRect.size.width;
-    CGFloat screenHeight = screenRect.size.height;
-    
-    self.contactScrollView.contentSize = CGSizeMake(screenWidth, MIN(screenHeight - 20, rows * rowHeight + 2 * kContactMargin));
-    
-    if (contactCount > 0) {
-        Contact* contact = [self.contacts firstObject];
-        
-        ContactView *contactView = [[ContactView alloc] initWithContactBubble:contact andFrame:CGRectMake(2 * kContactMargin + kContactSize, kContactMargin, kContactSize, kContactSize)];
-        
-        contactView.delegate = self;
-        
-        [self addNameLabelForView:contactView andContact:contact];
-        [self.contactBubbleViews addObject:contactView];
-        
-        [self.contactScrollView addSubview:contactView];
-    }
-    
-    if (contactCount > 1) {
-        Contact* contact = [self.contacts objectAtIndex:1];
-        
-        ContactView *contactView = [[ContactView alloc] initWithContactBubble:contact andFrame:CGRectMake(3 * kContactMargin + 2 * kContactSize, kContactMargin, kContactSize, kContactSize)];
-        
-        contactView.delegate = self;
-        
-        [self addNameLabelForView:contactView andContact:contact];
-        [self.contactBubbleViews addObject:contactView];
-        
-        [self.contactScrollView addSubview:contactView];
-    }
-    
-    for (NSUInteger i = 1; i < rows; i++) {
-        if (contactCount > i * 3 - 1) {
-            [self addContactViewForContactIndex:i horizontalPosition:0];
-        }
-        
-        if (contactCount > i * 3) {
-            [self addContactViewForContactIndex:i horizontalPosition:1];
-
-        }
-        
-        if (contactCount > i * 3 + 1) {
-            [self addContactViewForContactIndex:i horizontalPosition:2];
-        }
+    // todo bt get position from server
+    int position = 1;
+    for (Contact *contact in self.contacts) {
+        [self createContactViewWithContact:contact andPosition:position];
+        position ++;
     }
     
     // Retrieve unread messages
     [self retrieveAndDisplayUnreadMessages];
 }
 
-- (void)addContactViewForContactIndex:(NSUInteger)index horizontalPosition:(NSUInteger)position
+// Set Scroll View size from the number of contacts
+- (void)setScrollViewSizeForContactCount:(int)count
 {
-    Contact* contact = [self.contacts objectAtIndex:(index*3 - 1 + position)];
-    
-    ContactView *contactView = [[ContactView alloc] initWithContactBubble:contact andFrame:CGRectMake((position + 1) *kContactMargin + position * kContactSize, index * (kContactMargin + kContactSize + kContactNameHeight) + kContactMargin, kContactSize, kContactSize)];
-    
+    NSUInteger rows = count / 3 + 1;
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    CGFloat screenHeight = screenRect.size.height;
+    float rowHeight = kContactMargin + kContactSize + kContactNameHeight;
+    self.contactScrollView.contentSize = CGSizeMake(screenWidth, MIN(screenHeight - 20, rows * rowHeight + 2 * kContactMargin));
+}
+
+// Create contact view
+- (void)createContactViewWithContact:(Contact *)contact andPosition:(int)position
+{
+    ContactView *contactView = [[ContactView alloc] initWithContact:contact];
     contactView.delegate = self;
-    
-    [self addNameLabelForView:contactView andContact:contact];
+    contactView.orderPosition = position;
+    [self addNameLabelForView:contactView];
     [self.contactBubbleViews addObject:contactView];
-    
     [self.contactScrollView addSubview:contactView];
 }
 
-- (void)addNameLabelForView:(ContactView *)contactView andContact:(Contact *)contact
+// Add name below contact
+- (void)addNameLabelForView:(ContactView *)contactView
 {
+    Contact *contact = contactView.contact;
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - kContactMargin/4, contactView.frame.origin.y + kContactSize, contactView.frame.size.width + kContactMargin/2, kContactNameHeight)];
     
     if ([self.currentUserPhoneNumber isEqualToString:contact.phoneNumber]) {
@@ -332,196 +306,10 @@
     [self.contactScrollView addSubview:nameLabel];
 }
 
-- (IBAction)menuButtonClicked:(id)sender {
-    self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                          delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
-                                            destructiveButtonTitle:nil
-                                              otherButtonTitles:ACTION_SHEET_OPTION_0, ACTION_SHEET_OPTION_1, ACTION_SHEET_OPTION_2, ACTION_SHEET_OPTION_3, nil];
-    
-    for (UIView* view in [self.menuActionSheet subviews])
-    {
-        if ([view respondsToSelector:@selector(title)])
-        {
-            NSString* title = [view performSelector:@selector(title)];
-            if ([title isEqualToString:@"Replay last message"] && [view respondsToSelector:@selector(setEnabled:)])
-            {
-                if (self.mainPlayer) {
-                    [view performSelector:@selector(setEnabled:) withObject:@YES];
-                } else {
-                    [view performSelector:@selector(setEnabled:) withObject:NO];
-                }
-            }
-        }
-    }
-    
-    [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
-}
 
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
-    
-    if ([buttonTitle isEqualToString:ACTION_SHEET_CANCEL]) {
-        return;
-    }
-    
-    //Replay message
-    if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_0]) {
-        [self endPlayerUI];
-        
-        [self playerUI:([self.mainPlayer duration]) ByContactView:self.lastContactPlayed];
-        
-        [self.mainPlayer play];
-    //Add Friend
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_1]) {
-        ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc] init];
-        picker.peoplePickerDelegate = self;
-        [self presentViewController:picker animated:YES completion:nil];
-    //Share (in the future, it'd be cool to share a vocal message!)
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_2]) {
-        NSString *shareString = @"Download Waved, the fastest messaging app.";
-        
-        NSURL *shareUrl = [NSURL URLWithString:kProdAFHeardWebsite];
-        
-        NSArray *activityItems = [NSArray arrayWithObjects:shareString, shareUrl, nil];
-        
-        UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-        [activityViewController setValue:@"You should download Waved." forKey:@"subject"];
-        activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-        activityViewController.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeAssignToContact, UIActivityTypeAddToReadingList, UIActivityTypeAirDrop];
-        
-        [self presentViewController:activityViewController animated:YES completion:nil];
-    
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_2]) {
-        // todo Feedback
-        
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_4]) {
-        // create person record
-        ABRecordRef person = ABPersonCreate();
-        ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFStringRef) self.contactToAdd.firstName, NULL);
-        ABRecordSetValue(person, kABPersonLastNameProperty, (__bridge CFStringRef) self.contactToAdd.lastName, NULL);
-        ABMutableMultiValueRef phoneNumbers = ABMultiValueCreateMutable(kABMultiStringPropertyType);
-        ABMultiValueAddValueAndLabel(phoneNumbers, (__bridge CFStringRef)self.contactToAdd.phoneNumber, kABPersonPhoneMainLabel, NULL);
-        ABRecordSetValue(person, kABPersonPhoneProperty, phoneNumbers, nil);
-        
-        // let's show view controller
-        ABUnknownPersonViewController *controller = [[ABUnknownPersonViewController alloc] init];
-        controller.displayedPerson = person;
-        controller.allowsAddingToAddressBook = YES;
-        controller.unknownPersonViewDelegate = self;
-        UINavigationController *newNavigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-        controller.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
-                                                 initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self
-                                                 action:@selector(dismissContactView)];
-        [self.navigationController presentViewController:newNavigationController animated:YES completion:nil];
-        CFRelease(person);
-
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_5]) {
-        // todo BT block user + delete bubble / contact
-        void(^successBlock)() = ^void() {
-            for (ContactView * bubbleView in self.contactBubbleViews) {
-                if (bubbleView.contact.identifier == self.contactToAdd.identifier) {
-                    [bubbleView removeFromSuperview];
-                    [self.contacts removeObject:bubbleView.contact];
-                    [bubbleView.nameLabel removeFromSuperview];
-                    [self.contactBubbleViews removeObject:bubbleView];
-                    break;
-                }
-            }
-            self.contactToAdd = nil;
-        };
-        [ApiUtils blockUser:self.contactToAdd.identifier AndExecuteSuccess:successBlock failure:nil];
-        
-    } else {
-        NSString *email = [NSString stringWithFormat:@"mailto:%@?subject=Feedback for Waved on iOS (v%@)", kFeedbackEmail,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
-        
-        email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
-    }
-}
-
-
-- (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person
-{
-    [self dismissViewControllerAnimated:YES completion:^{
-        //Check if phone is a contact and phone validity
-        
-        NSString *firstName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
-        NSString *lastName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
-        firstName = firstName ? firstName : @"";
-        lastName = lastName ? lastName : @"";
-        
-        if (!firstName && !lastName) {
-            [GeneralUtils showMessage:@"Contact should have a first name or a last name." withTitle:nil];
-            return;
-        }
-        
-        NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
-        NSMutableArray *selectedContactFormattedPhoneNumbers = [[NSMutableArray alloc] init];
-        NSMutableArray *selectedContactPhoneNumbers = [[NSMutableArray alloc] init];
-        
-        ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
-        for (CFIndex j = 0; j < ABMultiValueGetCount(phoneNumbers); j++) {
-            NSString* phoneNumber = (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, j);
-            
-            [selectedContactPhoneNumbers addObject:phoneNumber];
-            
-            NSError *aError = nil;
-            NBPhoneNumber *nbPhoneNumber = [phoneUtil parseWithPhoneCarrierRegion:phoneNumber error:&aError];
-            
-            if (aError == nil && [phoneUtil isValidNumber:nbPhoneNumber]) {
-                Contact *contact = [Contact createContactWithId:0 phoneNumber:[NSString stringWithFormat:@"+%@%@", nbPhoneNumber.countryCode, nbPhoneNumber.nationalNumber]
-                                                      firstName:firstName
-                                                       lastName:lastName];
-                
-                [selectedContactFormattedPhoneNumbers addObject:contact.phoneNumber];
-            }
-        }
-        
-        //No phone number for selected contact
-        if ([selectedContactPhoneNumbers count] == 0) {
-            [GeneralUtils showMessage:[NSString stringWithFormat:@"We couldn't find any phone number for %@ %@.", firstName, lastName]  withTitle:nil];
-            return;
-        }
-        
-        //Check if not already in Waved contacts
-        for (NSString *phoneNumber in selectedContactFormattedPhoneNumbers) {
-            for (Contact *contact in self.contacts) {
-                if ([contact.phoneNumber isEqualToString:phoneNumber]) {
-                    [GeneralUtils showMessage:[NSString stringWithFormat:@"%@ %@ is already your contact on Waved!", firstName, lastName]  withTitle:nil];
-                    return;
-                }
-            }
-        }
-        
-        //Redirect to sms
-        MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
-        viewController.body = [NSString stringWithFormat:@"Download Waved, the fastest messaging app, at %@", kProdAFHeardWebsite];
-        viewController.recipients = selectedContactPhoneNumbers;
-        viewController.messageComposeDelegate = self;
-        
-        
-        [self presentViewController:viewController animated:YES completion:nil];
-    }];
-    
-	return NO;
-}
-
-- (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person property:(ABPropertyID)property identifier:(ABMultiValueIdentifier)identifier
-{
-    return NO;
-}
-
-- (void)peoplePickerNavigationControllerDidCancel:(ABPeoplePickerNavigationController *)peoplePicker;
-{
-	[self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
-{
-    [self dismissViewControllerAnimated:YES completion:NULL];
-}
+// ----------------------------------
+#pragma mark Display Messages
+// ----------------------------------
 
 // Retrieve unread messages and display alert
 - (void) retrieveAndDisplayUnreadMessages
@@ -568,20 +356,9 @@
             [self.messagesFromPendingContact setObject:[NSMutableArray arrayWithObject:message] forKey:[NSNumber numberWithInteger:message.senderId]];
             
             void(^successBlock)(Contact *) = ^void(Contact *contact) {
-                NSInteger index, horizontalPosition;
-                // create bubble
-                if ( (self.contacts.count+1)/3 == self.contacts.count/3 ) {
-                    index = self.contacts.count/3;
-                    horizontalPosition = 3 - (3*(self.contacts.count/3) + 2 - self.contacts.count);
-                } else {
-                    // increase scoll view
-                    self.contactScrollView.contentSize = CGSizeMake(self.contactScrollView.contentSize.width, MIN([[UIScreen mainScreen] bounds].size.height - 20,self.contactScrollView.contentSize.height + kContactMargin + kContactSize + kContactNameHeight));
-                    index = (self.contacts.count + 1) / 3;
-                    horizontalPosition = 0;
-                }
                 [self.contacts addObject:contact];
-                [self addContactViewForContactIndex:index horizontalPosition:horizontalPosition];
-                
+                [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
+                [self createContactViewWithContact:contact andPosition:(int)[self.contacts count]];
                 // add message to bubble
                 [[self.contactBubbleViews lastObject] setPendingContact:YES];
                 for (Message *mess in [self.messagesFromPendingContact objectForKey:[NSNumber numberWithInteger:message.senderId]]) {
@@ -595,8 +372,37 @@
 }
 
 
+// ------------------------------
+#pragma mark Click & navigate
+// ------------------------------
+- (IBAction)menuButtonClicked:(id)sender {
+    self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                       delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
+                                         destructiveButtonTitle:nil
+                                              otherButtonTitles:ACTION_SHEET_OPTION_0, ACTION_SHEET_OPTION_1, ACTION_SHEET_OPTION_2, ACTION_SHEET_OPTION_3, nil];
+    
+    for (UIView* view in [self.menuActionSheet subviews])
+    {
+        if ([view respondsToSelector:@selector(title)])
+        {
+            NSString* title = [view performSelector:@selector(title)];
+            if ([title isEqualToString:@"Replay last message"] && [view respondsToSelector:@selector(setEnabled:)])
+            {
+                if (self.mainPlayer) {
+                    [view performSelector:@selector(setEnabled:) withObject:@YES];
+                } else {
+                    [view performSelector:@selector(setEnabled:) withObject:NO];
+                }
+            }
+        }
+    }
+    
+    [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+}
+
+
 // ----------------------------------------------------------
-// Recording Mode
+#pragma mark Recording Mode
 // ----------------------------------------------------------
 
 - (void)recordingUIForContactView:(ContactView *)contactView
@@ -647,8 +453,16 @@
 
 
 // ----------------------------------------------------------
-// Contact Bubble View Delegate Protocole
+#pragma mark ContactBubbleViewDelegate Protocole
 // ----------------------------------------------------------
+
+- (void)updateFrameOfContactView:(ContactView *)view
+{
+    NSInteger row = view.orderPosition / 3 + 1;
+    NSInteger horizontalPosition = 3 - (3*(view.orderPosition/3) + 2 - view.orderPosition);
+    float rowHeight = kContactMargin + kContactSize + kContactNameHeight;
+    view.frame = CGRectMake(kContactMargin + (horizontalPosition - 1) * (kContactSize + kContactMargin), kContactMargin + (row - 1)* rowHeight, kContactSize, kContactSize);
+}
 
 //Create recording mode screen
 - (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId FromView:(ContactView *)view
@@ -792,7 +606,7 @@
 
 
 // ----------------------------------------------------------
-// Player Mode
+#pragma mark Player Mode
 // ----------------------------------------------------------
 
 - (void)playerUIForContactView:(ContactView *)contactView
@@ -881,7 +695,7 @@
 
 
 // ----------------------------------------------------------
-// ABUnknownPersonViewControllerDelegate
+#pragma mark ABUnknownPersonViewControllerDelegate
 // ----------------------------------------------------------
 - (void)unknownPersonViewController:(ABUnknownPersonViewController *)unknownCardViewController didResolveToPerson:(ABRecordRef)person
 {
@@ -904,6 +718,197 @@
             }
             break;
         }
+    }
+}
+
+
+// ----------------------------------------------------------
+#pragma mark ActionSheetProtocol
+// ----------------------------------------------------------
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
+    
+    if ([buttonTitle isEqualToString:ACTION_SHEET_CANCEL]) {
+        return;
+    }
+    
+    //Replay message
+    if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_0]) {
+        [self endPlayerUI];
+        
+        [self playerUI:([self.mainPlayer duration]) ByContactView:self.lastContactPlayed];
+        
+        [self.mainPlayer play];
+        //Add Friend
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_1]) {
+        ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc] init];
+        picker.peoplePickerDelegate = self;
+        [self presentViewController:picker animated:YES completion:nil];
+        //Share (in the future, it'd be cool to share a vocal message!)
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_2]) {
+        NSString *shareString = @"Download Waved, the fastest messaging app.";
+        
+        NSURL *shareUrl = [NSURL URLWithString:kProdAFHeardWebsite];
+        
+        NSArray *activityItems = [NSArray arrayWithObjects:shareString, shareUrl, nil];
+        
+        UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+        [activityViewController setValue:@"You should download Waved." forKey:@"subject"];
+        activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+        activityViewController.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeAssignToContact, UIActivityTypeAddToReadingList, UIActivityTypeAirDrop];
+        
+        [self presentViewController:activityViewController animated:YES completion:nil];
+        
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_2]) {
+        // todo Feedback
+        
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_4]) {
+        // create person record
+        ABRecordRef person = ABPersonCreate();
+        ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFStringRef) self.contactToAdd.firstName, NULL);
+        ABRecordSetValue(person, kABPersonLastNameProperty, (__bridge CFStringRef) self.contactToAdd.lastName, NULL);
+        ABMutableMultiValueRef phoneNumbers = ABMultiValueCreateMutable(kABMultiStringPropertyType);
+        ABMultiValueAddValueAndLabel(phoneNumbers, (__bridge CFStringRef)self.contactToAdd.phoneNumber, kABPersonPhoneMainLabel, NULL);
+        ABRecordSetValue(person, kABPersonPhoneProperty, phoneNumbers, nil);
+        
+        // let's show view controller
+        ABUnknownPersonViewController *controller = [[ABUnknownPersonViewController alloc] init];
+        controller.displayedPerson = person;
+        controller.allowsAddingToAddressBook = YES;
+        controller.unknownPersonViewDelegate = self;
+        UINavigationController *newNavigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        controller.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
+                                                       initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self
+                                                       action:@selector(dismissContactView)];
+        [self.navigationController presentViewController:newNavigationController animated:YES completion:nil];
+        CFRelease(person);
+        
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_5]) {
+        // block user + delete bubble / contact
+        void(^successBlock)() = ^void() {
+            for (ContactView * bubbleView in self.contactBubbleViews) {
+                if (bubbleView.contact.identifier == self.contactToAdd.identifier) {
+                    [bubbleView removeFromSuperview];
+                    [self.contacts removeObject:bubbleView.contact];
+                    [bubbleView.nameLabel removeFromSuperview];
+                    [self.contactBubbleViews removeObject:bubbleView];
+                    break;
+                }
+            }
+            // todo BT change position of other bubbles
+            self.contactToAdd = nil;
+        };
+        [ApiUtils blockUser:self.contactToAdd.identifier AndExecuteSuccess:successBlock failure:nil];
+        
+    } else {
+        NSString *email = [NSString stringWithFormat:@"mailto:%@?subject=Feedback for Waved on iOS (v%@)", kFeedbackEmail,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+        
+        email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
+    }
+}
+
+
+
+// ----------------------------------------------------------
+#pragma mark ABPeoplePickerNavigationControllerDelegate
+// ----------------------------------------------------------
+- (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        //Check if phone is a contact and phone validity
+        
+        NSString *firstName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
+        NSString *lastName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
+        firstName = firstName ? firstName : @"";
+        lastName = lastName ? lastName : @"";
+        
+        if (!firstName && !lastName) {
+            [GeneralUtils showMessage:@"Contact should have a first name or a last name." withTitle:nil];
+            return;
+        }
+        
+        NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+        NSMutableArray *selectedContactFormattedPhoneNumbers = [[NSMutableArray alloc] init];
+        NSMutableArray *selectedContactPhoneNumbers = [[NSMutableArray alloc] init];
+        
+        ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
+        for (CFIndex j = 0; j < ABMultiValueGetCount(phoneNumbers); j++) {
+            NSString* phoneNumber = (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, j);
+            
+            [selectedContactPhoneNumbers addObject:phoneNumber];
+            
+            NSError *aError = nil;
+            NBPhoneNumber *nbPhoneNumber = [phoneUtil parseWithPhoneCarrierRegion:phoneNumber error:&aError];
+            
+            if (aError == nil && [phoneUtil isValidNumber:nbPhoneNumber]) {
+                Contact *contact = [Contact createContactWithId:0 phoneNumber:[NSString stringWithFormat:@"+%@%@", nbPhoneNumber.countryCode, nbPhoneNumber.nationalNumber]
+                                                      firstName:firstName
+                                                       lastName:lastName];
+                
+                [selectedContactFormattedPhoneNumbers addObject:contact.phoneNumber];
+            }
+        }
+        
+        //No phone number for selected contact
+        if ([selectedContactPhoneNumbers count] == 0) {
+            [GeneralUtils showMessage:[NSString stringWithFormat:@"We couldn't find any phone number for %@ %@.", firstName, lastName]  withTitle:nil];
+            return;
+        }
+        
+        //Check if not already in Waved contacts
+        for (NSString *phoneNumber in selectedContactFormattedPhoneNumbers) {
+            for (Contact *contact in self.contacts) {
+                if ([contact.phoneNumber isEqualToString:phoneNumber]) {
+                    [GeneralUtils showMessage:[NSString stringWithFormat:@"%@ %@ is already your contact on Waved!", firstName, lastName]  withTitle:nil];
+                    return;
+                }
+            }
+        }
+        
+        //Redirect to sms
+        MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
+        viewController.body = [NSString stringWithFormat:@"Download Waved, the fastest messaging app, at %@", kProdAFHeardWebsite];
+        viewController.recipients = selectedContactPhoneNumbers;
+        viewController.messageComposeDelegate = self;
+        
+        
+        [self presentViewController:viewController animated:YES completion:nil];
+    }];
+    
+	return NO;
+}
+
+- (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person property:(ABPropertyID)property identifier:(ABMultiValueIdentifier)identifier
+{
+    return NO;
+}
+
+- (void)peoplePickerNavigationControllerDidCancel:(ABPeoplePickerNavigationController *)peoplePicker;
+{
+	[self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+// ----------------------------------------------------------
+#pragma mark MFMessageComposeViewControllerDelegate
+// ----------------------------------------------------------
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+{
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+
+// ----------------------------------------------------------
+#pragma mark AlertViewProtocol
+// ----------------------------------------------------------
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView == self.failedToRetrieveFriendsAlertView) {
+        [self getHeardContacts];
+        // todo BT better to log out and redirect to sign in (to get a brand new token)
     }
 }
 

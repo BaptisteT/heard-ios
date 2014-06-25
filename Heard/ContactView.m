@@ -39,12 +39,16 @@
 
 
 // ----------------------------------------------------------
-// Initialization
+#pragma mark Initialization
 // ----------------------------------------------------------
-
-- (id)initWithContactBubble:(Contact *)contact andFrame:(CGRect)frame;
+- (id)initWithContact:(Contact *)contact
 {
-    self  = [self initWithFrame:frame];
+    return [self initWithContact:contact andFrame:CGRectMake(0, 0, kContactSize, kContactSize)];
+}
+
+- (id)initWithContact:(Contact *)contact andFrame:(CGRect)frame
+{
+    self  = [super initWithFrame:frame];
     self.contact = contact;
     _pendingContact = NO;
     self.clipsToBounds = NO;
@@ -70,7 +74,7 @@
     [self addGestureRecognizer:self.oneTapRecognizer];
     self.oneTapRecognizer.delegate = self;
     self.oneTapRecognizer.numberOfTapsRequired = 1;
-
+    
     // Set the audio file
     NSArray *pathComponents = [NSArray arrayWithObjects:
                                [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
@@ -115,9 +119,14 @@
     [self hideMessageCountLabel:YES];
 }
 
+- (void)setOrderPosition:(NSInteger)orderPosition
+{
+    _orderPosition = orderPosition;
+    [self.delegate updateFrameOfContactView:self];
+}
 
 // ----------------------------------------------------------
-// Handle Gestures
+#pragma mark Handle Gestures
 // ----------------------------------------------------------
 - (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer
 {
@@ -225,7 +234,7 @@
 
 
 // ----------------------------------------------------------
-// Pending Contact
+#pragma mark Pending Contact
 // ----------------------------------------------------------
 - (void)setPendingContact:(BOOL)pendingContact
 {
@@ -260,8 +269,9 @@
     [self.delegate pendingContactClicked:self.contact];
 }
 
+
 // ----------------------------------------------------------
-// Timer methods
+#pragma mark Timer methods
 // ----------------------------------------------------------
 
 // Stop recording after kMaxAudioDuration
@@ -283,7 +293,7 @@
 
 
 // ----------------------------------------------------------
-// Recording utility
+#pragma mark Recording utility
 // ----------------------------------------------------------
 
 - (void)sendRecording
@@ -311,7 +321,7 @@
 
 
 // ----------------------------------------------------------
-// Message utility
+#pragma mark Message utility
 // ----------------------------------------------------------
 - (void)setUnreadMessagesCount:(NSInteger)unreadMessagesCount
 {
@@ -362,7 +372,7 @@
 
 
 // ----------------------------------------------------------
-// Design utility
+#pragma mark Design utility
 // ----------------------------------------------------------
 - (void)recordingUI
 {
