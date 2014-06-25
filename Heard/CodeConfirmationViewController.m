@@ -84,7 +84,7 @@
             [SessionUtils securelySaveCurrentUserToken:authToken];
             [SessionUtils saveUserInfo:contact.identifier phoneNumber:self.phoneNumber];
             
-            [TrackingUtils identifyWithMixpanel:contact signingUp:NO];
+            [TrackingUtils identifyWithMixpanel:contact];
             
             [self performSegueWithIdentifier:@"Dashboard Push Segue From Code Confirmation" sender:nil];
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];

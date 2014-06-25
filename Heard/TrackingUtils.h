@@ -11,7 +11,7 @@
 
 @interface TrackingUtils : NSObject
 
-+ (void)identifyWithMixpanel:(Contact *)contact signingUp:(BOOL)isSigningUp;
++ (void)identifyWithMixpanel:(Contact *)contact;
 
 + (void)trackRecord;
 

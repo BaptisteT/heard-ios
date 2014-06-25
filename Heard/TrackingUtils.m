@@ -12,14 +12,11 @@
 
 @implementation TrackingUtils
 
-+ (void)identifyWithMixpanel:(Contact *)contact signingUp:(BOOL)isSigningUp
++ (void)identifyWithMixpanel:(Contact *)contact
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    //Alias to merge mixpanel people id before signup and street shout id after sign up
-    if (isSigningUp) {
-        [mixpanel createAlias:[NSString stringWithFormat:@"%lu", (unsigned long)contact.identifier] forDistinctID:mixpanel.distinctId];
-    }
+    [mixpanel createAlias:[NSString stringWithFormat:@"%lu", (unsigned long)contact.identifier] forDistinctID:mixpanel.distinctId];
     
     [mixpanel identify:[NSString stringWithFormat:@"%lu", (unsigned long)contact.identifier]];
     
