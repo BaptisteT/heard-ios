@@ -264,8 +264,25 @@
 
 - (void)setContactPicture
 {
+    NSURLRequest *imageRequest = [NSURLRequest requestWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:self.contact.identifier]];
     
-    [self.imageView setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:self.contact.identifier] placeholderImage:[UIImage imageNamed:@"contact-placeholder.png"]];
+    UIImageView *imageView = self.imageView;
+    
+    //Fade in profile picture
+    [self.imageView setImageWithURLRequest:imageRequest placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+        [UIView transitionWithView:imageView
+                          duration:1.0f
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^{[imageView setImage:image];}
+                        completion:nil];
+    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+        [UIView transitionWithView:imageView
+                          duration:1.0f
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^{[imageView setImage:[UIImage imageNamed:@"contact-placeholder.png"]];}
+                        completion:nil];
+    }];
+
 }
 
 - (void)handlePendingTapGesture {

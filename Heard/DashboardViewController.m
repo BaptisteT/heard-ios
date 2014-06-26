@@ -131,6 +131,9 @@
 
 - (void)requestAddressBookAccess
 {
+    [self removeDisplayedContacts];
+    [self showLoadingIndicator];
+    
     ABAddressBookRef addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
@@ -271,13 +274,24 @@
 // ----------------------------------
 #pragma mark Create Contact Bubble
 // ----------------------------------
-- (void)displayContacts
+
+- (void)removeDisplayedContacts
 {
+    self.menuButton.hidden = YES;
+    
     // Erase existing views
     for (ContactView *contactView in self.contactBubbleViews) {
         [contactView removeFromSuperview];
         [contactView.nameLabel removeFromSuperview];
     }
+    
+    self.contactBubbleViews = [[NSMutableArray alloc] init];
+}
+
+- (void)displayContacts
+{
+    [self removeDisplayedContacts];
+    
     self.contactBubbleViews = [[NSMutableArray alloc] init];
     
     NSUInteger contactCount = [self.contacts count];
