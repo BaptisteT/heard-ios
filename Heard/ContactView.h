@@ -45,7 +45,7 @@
 
 - (void)startedPlayingAudioFileByView:(ContactView *)view;
 
-- (void)quitRecodingModeAnimated:(BOOL)animated;
+- (void)quitRecordingModeAnimated:(BOOL)animated;
 
 - (void)endPlayerUI;
 

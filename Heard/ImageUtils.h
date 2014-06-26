@@ -14,6 +14,8 @@
 
 + (UIColor *)transparentBlue;
 
++ (UIColor *)red;
+
 + (UIColor *)transparentRed;
 
 + (UIColor *)green;

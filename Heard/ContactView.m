@@ -170,7 +170,7 @@
             if ([self.minDurationTimer isValid]) {
                 [self.minDurationTimer invalidate];
                 [self stopRecording];
-                [self.delegate quitRecodingModeAnimated:NO];
+                [self.delegate quitRecordingModeAnimated:NO];
                 [GeneralUtils showMessage:@"Hold to record." withTitle:nil];
             } else {
                 [self sendRecording];

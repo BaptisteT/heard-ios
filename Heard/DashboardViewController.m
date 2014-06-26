@@ -33,10 +33,11 @@
 #define MIN_METERS -45
 #define METERS_FREQUENCY (30/0.05)
 
-#define RECORDING_LINE_MAX_HEIGHT 20
-#define RECORDING_LINE_WEIGHT 2
-#define PLAYER_HEIGHT 50
+#define RECORDER_LINE_MAX_HEIGHT 20
+#define RECORDER_LINE_WEIGHT 2
+#define RECORDER_HEIGHT 50
 
+#define PLAYER_LINE_WEIGHT 6
 
 @interface DashboardViewController ()
 
@@ -47,14 +48,17 @@
 @property (strong, nonatomic) NSMutableArray *contactBubbleViews;
 @property (weak, nonatomic) IBOutlet UIScrollView *contactScrollView;
 @property (strong, nonatomic) UIActionSheet *menuActionSheet;
-@property (strong, nonatomic) UIView *recordingView;
+@property (strong, nonatomic) UIView *recorderContainer;
+@property (strong, nonatomic) UIView *recorderView;
+@property (strong, nonatomic) UIView *playerContainer;
+@property (nonatomic, strong) UIView *playerView;
 @property (nonatomic) float recordingLineX;
 @property (nonatomic) float recordingLineY;
-@property (nonatomic, strong)UILabel *recordingMessage;
+@property (nonatomic, strong)UILabel *recorderMessage;
 @property (nonatomic) float recordLineLength;
 @property (weak, nonatomic) IBOutlet UIButton *menuButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
-@property (nonatomic, strong) UIView *playerAudioLine;
+
 @property (nonatomic, strong) NSString *currentUserPhoneNumber;
 @property (nonatomic, strong) Contact *contactToAdd;
 @property (nonatomic, strong) NSMutableDictionary *messagesFromPendingContact;
@@ -76,6 +80,15 @@
     [super viewDidLoad];
     
     self.menuButton.hidden = YES;
+    
+    
+    self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - RECORDER_HEIGHT, self.view.bounds.size.width, RECORDER_HEIGHT)];
+    [self.view addSubview:self.recorderContainer];
+    self.recorderContainer.hidden = YES;
+    
+    self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_LINE_WEIGHT, self.view.bounds.size.width, PLAYER_LINE_WEIGHT)];
+    [self.view addSubview:self.playerContainer];
+    self.playerContainer.hidden = YES;
     
     // Some init
     self.contactBubbleViews = [[NSMutableArray alloc] init];
@@ -455,20 +468,20 @@
     }
 }
 
-- (void)addRecordingMessage:(NSString *)message color:(UIColor *)color {
-    if (self.recordingMessage) {
-        [self.recordingMessage removeFromSuperview];
-        self.recordingMessage = nil;
+- (void)addRecorderMessage:(NSString *)message color:(UIColor *)color {
+    if (self.recorderMessage) {
+        [self.recorderMessage removeFromSuperview];
+        self.recorderMessage = nil;
     }
     
-    self.recordingMessage = [[UILabel alloc] initWithFrame:CGRectMake(0, self.recordingView.bounds.size.height/2, self.recordingView.bounds.size.width, self.recordingView.bounds.size.height/2)];
+    self.recorderMessage = [[UILabel alloc] initWithFrame:CGRectMake(0, self.recorderView.bounds.size.height/2, self.recorderView.bounds.size.width, self.recorderView.bounds.size.height/2)];
     
-    self.recordingMessage.text = message;
-    self.recordingMessage.font = [UIFont fontWithName:@"Avenir-Light" size:14.0];
-    self.recordingMessage.textAlignment = NSTextAlignmentCenter;
-    self.recordingMessage.textColor = color;
+    self.recorderMessage.text = message;
+    self.recorderMessage.font = [UIFont fontWithName:@"Avenir-Light" size:14.0];
+    self.recorderMessage.textAlignment = NSTextAlignmentCenter;
+    self.recorderMessage.textColor = color;
     
-    [self.recordingView addSubview:self.recordingMessage];
+    [self.recorderView addSubview:self.recorderMessage];
 }
 
 
@@ -491,19 +504,20 @@
     
     [self recordingUIForContactView:view];
     
-    //Recording view is same size as screen
-    self.recordingView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_HEIGHT, self.view.bounds.size.width, PLAYER_HEIGHT)];
-    self.recordingView.backgroundColor = [ImageUtils transparentRed];
-    [self.view addSubview:self.recordingView];
+    self.recorderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.recorderContainer.bounds.size.width, self.recorderContainer.bounds.size.height)];
+    self.recorderView.backgroundColor = [ImageUtils red];
+    [self.recorderContainer addSubview:self.recorderView];
+    
+    self.recorderContainer.hidden = NO;
     
     //Recording line starting point
     ctr = 0;
     self.recordingLineX = 0;
-    self.recordingLineY = self.recordingView.bounds.size.height/2;
+    self.recordingLineY = self.recorderView.bounds.size.height/2;
     ctr = 0;
     pts[ctr] = CGPointMake(self.recordingLineX, self.recordingLineY);
     
-    [self addRecordingMessage:@"Release to send..." color:[UIColor blackColor]];
+    [self addRecorderMessage:@"Release to send..." color:[UIColor whiteColor]];
 }
 
 //User stop pressing screen
@@ -513,11 +527,11 @@
     UIBezierPath *path = [UIBezierPath bezierPath];
     [path moveToPoint:pts[0]];
     self.recordingLineX = self.recordingLineX + self.recordLineLength/METERS_FREQUENCY;
-    self.recordingLineY = self.recordingView.bounds.size.height/2;
+    self.recordingLineY = self.recorderView.bounds.size.height/2;
     [path addLineToPoint:CGPointMake(self.recordingLineX, self.recordingLineY)];
-    [self.recordingView.layer addSublayer:[self shapeLayerWithPath:path]];
+    [self.recorderView.layer addSublayer:[self shapeLayerWithPath:path]];
     
-    [self addRecordingMessage:@"Sending..." color:[UIColor blackColor]];
+    [self addRecorderMessage:@"Sending..." color:[UIColor whiteColor]];
 }
 
 //Recorder notifies a change in volume intensity (every 0.05 seconds)
@@ -526,10 +540,10 @@
     ctr ++;
     
     if (self.recordLineLength == 0) {
-        self.recordLineLength = self.recordingView.bounds.size.width;
+        self.recordLineLength = self.recorderView.bounds.size.width;
     }
     
-    self.recordingLineX = self.recordingLineX + self.recordingView.bounds.size.width/METERS_FREQUENCY;
+    self.recordingLineX = self.recordingLineX + self.recorderView.bounds.size.width/METERS_FREQUENCY;
     
     if (power + (-MIN_METERS) < 0) {
         power = 0;
@@ -537,7 +551,7 @@
         power = power + (-MIN_METERS);
     }
     
-    self.recordingLineY = self.recordingView.bounds.size.height/2 - RECORDING_LINE_MAX_HEIGHT * (power/(MAX_METERS + (-MIN_METERS)));
+    self.recordingLineY = self.recorderView.bounds.size.height/2 - RECORDER_LINE_MAX_HEIGHT * (power/(MAX_METERS + (-MIN_METERS)));
     pts[ctr] = CGPointMake(self.recordingLineX, self.recordingLineY);
     
     if (ctr == 4)
@@ -550,36 +564,36 @@
         pts[1] = pts[4];
         ctr = 1;
         
-        [self.recordingView.layer addSublayer:[self shapeLayerWithPath:path]];
+        [self.recorderView.layer addSublayer:[self shapeLayerWithPath:path]];
     }
 }
 
 - (void)messageSentWithError:(BOOL)error
 {
     if (error) {
-        [self addRecordingMessage:@"Sending failed." color:[UIColor redColor]];
+        [self addRecorderMessage:@"Sending failed." color:[UIColor whiteColor]];
         
         sleep(1);
         
-        [self quitRecodingModeAnimated:YES];
+        [self quitRecordingModeAnimated:YES];
     } else {
-        [self addRecordingMessage:@"Sent!" color:[UIColor blackColor]];
+        [self addRecorderMessage:@"Sent!" color:[UIColor whiteColor]];
         
         float initialWidth = 0;
-        float finalWidth = self.recordingView.bounds.size.width - self.recordingLineX;
+        float finalWidth = self.recorderView.bounds.size.width - self.recordingLineX;
         
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(self.recordingLineX, self.recordingView.bounds.size.height/2 - RECORDING_LINE_WEIGHT, initialWidth, RECORDING_LINE_WEIGHT)];
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(self.recordingLineX, self.recorderView.bounds.size.height/2 - RECORDER_LINE_WEIGHT, initialWidth, RECORDER_LINE_WEIGHT)];
         
-        line.backgroundColor = [ImageUtils blue];
+        line.backgroundColor = [UIColor whiteColor];
         
-        [self.recordingView addSubview:line];
+        [self.recorderView addSubview:line];
         
         [UIView animateWithDuration:0.5 animations:^{
             CGRect frame = line.frame;
             frame.size.width = finalWidth;
             line.frame = frame;
         } completion:^(BOOL dummy){
-            [self quitRecodingModeAnimated:YES];
+            [self quitRecordingModeAnimated:YES];
         }];
     }
 }
@@ -592,19 +606,21 @@
     [self playerUI:self.mainPlayer.duration ByContactView:contactView];
 }
 
-- (void)quitRecodingModeAnimated:(BOOL)animated
+- (void)quitRecordingModeAnimated:(BOOL)animated
 {
     [self enableAllContactViews];
     if (animated) {
         [UIView animateWithDuration:1.0 animations:^{
-            self.recordingView.alpha = 0;
+            self.recorderView.alpha = 0;
         } completion:^(BOOL dummy){
-            [self.recordingView removeFromSuperview];
-            self.recordingView = nil;
+            [self.recorderView removeFromSuperview];
+            self.recorderView = nil;
+            self.recorderContainer.hidden = YES;
         }];
     } else {
-        [self.recordingView removeFromSuperview];
-        self.recordingView = nil;
+        [self.recorderView removeFromSuperview];
+        self.recorderView = nil;
+        self.recorderContainer.hidden = YES;
     }
 }
 
@@ -646,25 +662,24 @@
 {
     [self playerUIForContactView:contactView];
     
+    self.playerContainer.hidden = NO;
+    
     float initialWidth = 0;
-    float finalWidth = self.view.bounds.size.width;
-    float lineWeight = 6;
+    float finalWidth = self.playerContainer.bounds.size.width;
     
-    self.playerAudioLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - lineWeight, initialWidth, lineWeight)];
+    self.playerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, initialWidth, PLAYER_LINE_WEIGHT)];
     
-    self.playerAudioLine.backgroundColor = [ImageUtils green];
+    self.playerView.backgroundColor = [ImageUtils green];
     
-    [self.view addSubview:self.playerAudioLine];
-    
-    [UIView setAnimationCurve: UIViewAnimationCurveLinear];
+    [self.playerContainer addSubview:self.playerView];
     
     [UIView animateWithDuration:duration
                           delay:0
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
-                         CGRect frame = self.playerAudioLine.frame;
+                         CGRect frame = self.playerView.frame;
                          frame.size.width = finalWidth;
-                         self.playerAudioLine.frame = frame;
+                         self.playerView.frame = frame;
                      } completion:^(BOOL finished){
                          if (finished) {
                              [self endPlayerUI];
@@ -681,9 +696,11 @@
         self.mainPlayer.currentTime = 0;
     }
     
-    [self.playerAudioLine.layer removeAllAnimations];
-    [self.playerAudioLine removeFromSuperview];
-    self.playerAudioLine = nil;
+    [self.playerView.layer removeAllAnimations];
+    [self.playerView removeFromSuperview];
+    self.playerView = nil;
+    
+    self.playerContainer.hidden = YES;
 }
 
 - (void)showLoadingIndicator
@@ -707,8 +724,8 @@
 {
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
     shapeLayer.path = [path CGPath];
-    shapeLayer.strokeColor = [[ImageUtils blue] CGColor];
-    shapeLayer.lineWidth = RECORDING_LINE_WEIGHT;
+    shapeLayer.strokeColor = [[UIColor whiteColor] CGColor];
+    shapeLayer.lineWidth = RECORDER_LINE_WEIGHT;
     shapeLayer.fillColor = [[UIColor clearColor] CGColor];
     return shapeLayer;
 }

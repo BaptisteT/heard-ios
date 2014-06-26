@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RequestPhoneViewController : UIViewController <UITextFieldDelegate>
+@interface RequestPhoneViewController : UIViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 
 @end
