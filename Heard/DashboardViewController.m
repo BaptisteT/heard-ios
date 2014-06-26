@@ -384,6 +384,7 @@
                     [[self.contactBubbleViews lastObject] addUnreadMessage:mess];
                 }
                 [self.messagesFromPendingContact removeObjectForKey:[NSNumber numberWithInteger:message.senderId]];
+                [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
             };
             [ApiUtils getNewContactInfo:message.senderId AndExecuteSuccess:successBlock failure:nil];
         }
