@@ -69,7 +69,7 @@
     self.longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
     [self addGestureRecognizer:self.longPressRecognizer];
     self.longPressRecognizer.delegate = self;
-    self.longPressRecognizer.minimumPressDuration = kLongPressMinDuration;
+    self.longPressRecognizer.minimumPressDuration = kLongPressMinDurationNoMessageCase;
     
     self.oneTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture)];
     [self addGestureRecognizer:self.oneTapRecognizer];
@@ -134,11 +134,10 @@
     // todo BT (later)
     // check micro is available, else warm user
     
-    if ([self.delegate.mainPlayer isPlaying]) {
-        [self.delegate endPlayerUI];
-    }
-    
     if (recognizer.state == UIGestureRecognizerStateBegan) {
+        if ([self.delegate.mainPlayer isPlaying]) {
+            [self.delegate endPlayerUI];
+        }
         [self recordingUI];
         
         // Create Timer
@@ -332,9 +331,9 @@
     _unreadMessagesCount = unreadMessagesCount;
     self.unreadMessagesLabel.text = [NSString stringWithFormat:@"%lu",(long)unreadMessagesCount];
     if (unreadMessagesCount == 0) {
-        self.longPressRecognizer.minimumPressDuration = 0;
+        self.longPressRecognizer.minimumPressDuration = kLongPressMinDurationNoMessageCase;
     } else {
-        self.longPressRecognizer.minimumPressDuration = kLongPressMinDuration;
+        self.longPressRecognizer.minimumPressDuration = kLongPressMinDurationMessageCase;
     }
 }
 
