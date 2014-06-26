@@ -90,6 +90,7 @@
 		0BE55479195A4ADC00CE4669 /* play@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55475195A4ADC00CE4669 /* play@2x~iphone.png */; };
 		0BE5547A195A4ADC00CE4669 /* record@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55476195A4ADC00CE4669 /* record@2x~iphone.png */; };
 		0BE5547B195A4ADC00CE4669 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55477195A4ADC00CE4669 /* play.png */; };
+		3C0D0061195C5E500058A0E0 /* AudioUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D0060195C5E500058A0E0 /* AudioUtils.m */; };
 		3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA177E91958B74000096266 /* AudioToolbox.framework */; };
 		3CB8B7F5195453E50090D657 /* ContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactView.m */; };
 /* End PBXBuildFile section */
@@ -217,6 +218,8 @@
 		0BE55475195A4ADC00CE4669 /* play@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x~iphone.png"; sourceTree = "<group>"; };
 		0BE55476195A4ADC00CE4669 /* record@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record@2x~iphone.png"; sourceTree = "<group>"; };
 		0BE55477195A4ADC00CE4669 /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
+		3C0D005F195C5E500058A0E0 /* AudioUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioUtils.h; sourceTree = "<group>"; };
+		3C0D0060195C5E500058A0E0 /* AudioUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioUtils.m; sourceTree = "<group>"; };
 		3C9BBDFD195345A6001C6C4D /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
 		3C9BBDFE195345A6001C6C4D /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
 		3C9BBDFF195345A6001C6C4D /* UIActivityIndicatorView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActivityIndicatorView+AFNetworking.h"; sourceTree = "<group>"; };
@@ -462,6 +465,8 @@
 				0BDB655D1953BE9100223093 /* SessionUtils.m */,
 				0BB0E8FD195B44C900C94AC0 /* TrackingUtils.h */,
 				0BB0E8FE195B44C900C94AC0 /* TrackingUtils.m */,
+				3C0D005F195C5E500058A0E0 /* AudioUtils.h */,
+				3C0D0060195C5E500058A0E0 /* AudioUtils.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -648,6 +653,7 @@
 				0BDB65521953B60D00223093 /* NBNumberFormat.m in Sources */,
 				0BDB65531953B60D00223093 /* NBPhoneMetaData.m in Sources */,
 				0BB0E8F6195B449A00C94AC0 /* MPSurveyQuestion.m in Sources */,
+				3C0D0061195C5E500058A0E0 /* AudioUtils.m in Sources */,
 				0BDB65541953B60D00223093 /* NBPhoneNumber.m in Sources */,
 				0BDB65551953B60D00223093 /* NBPhoneNumberDesc.m in Sources */,
 				0BDB65561953B60D00223093 /* NBPhoneNumberUtil.m in Sources */,

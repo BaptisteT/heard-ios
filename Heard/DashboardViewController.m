@@ -19,6 +19,7 @@
 #import "ImageUtils.h"
 #import "SessionUtils.h"
 #import "TrackingUtils.h"
+#import "AudioUtils.h"
 
 #define ACTION_SHEET_OPTION_0 @"Replay last message"
 #define ACTION_SHEET_OPTION_1 @"Invite contact"
@@ -58,6 +59,7 @@
 @property (nonatomic, strong) Contact *contactToAdd;
 @property (nonatomic, strong) NSMutableDictionary *messagesFromPendingContact;
 @property (nonatomic, strong) ContactView *lastContactPlayed;
+@property (nonatomic) BOOL isUsingHeadSet;
 
 @end
 
@@ -88,16 +90,24 @@
     if (!success)
         NSLog(@"AVAudioSession error setting category:%@",error);
     
-    //set the audioSession override
-    success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
-    if (!success)
-        NSLog(@"AVAudioSession error overrideOutputAudioPort:%@",error);
+    // Add proximity state checker
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    [[NSNotificationCenter defaultCenter]
+     addObserverForName:UIDeviceProximityStateDidChangeNotification
+     object:nil queue:[NSOperationQueue mainQueue]
+     usingBlock:^(NSNotification *notification) {
+         [self updateOutputAudioPort];
+     }];
     
+    // Headset checker
+    self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:session];
+
     self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
 }
 
 - (void)viewDidLayoutSubviews
 {
+    [super viewWillLayoutSubviews];
     [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
 }
 
@@ -923,6 +933,34 @@
         [self getHeardContacts];
         // todo BT better to log out and redirect to sign in (to get a brand new token)
     }
+}
+
+
+// ----------------------------------------------------------
+#pragma mark OutPut Port
+// ----------------------------------------------------------
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if([keyPath isEqualToString:@"inputDataSources"]) {
+        self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:[AVAudioSession sharedInstance]];
+    }
+}
+
+- (void)setIsUsingHeadSet:(BOOL)isUsingHeadSet {
+    _isUsingHeadSet = isUsingHeadSet;
+    [self updateOutputAudioPort];
+}
+
+- (void)updateOutputAudioPort {
+    BOOL success; NSError* error;
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    if (self.isUsingHeadSet || [UIDevice currentDevice].proximityState ) {
+        success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error];
+    } else {
+        success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
+    }
+    if (!success)
+        NSLog(@"AVAudioSession error overrideOutputAudioPort:%@",error);
 }
 
 @end
