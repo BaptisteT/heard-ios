@@ -96,6 +96,11 @@
     self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
+}
+
 
 // ------------------------------
 #pragma mark Get Contact
@@ -253,10 +258,10 @@
     self.contactBubbleViews = [[NSMutableArray alloc] init];
     
     NSUInteger contactCount = [self.contacts count];
+    self.menuButton.hidden = NO;
+    
     if (contactCount == 0)
         return;
-    [self setScrollViewSizeForContactCount:(int)contactCount];
-    self.menuButton.hidden = NO;
     
     // todo bt get position from server
     int position = 1;
@@ -362,7 +367,6 @@
             
             void(^successBlock)(Contact *) = ^void(Contact *contact) {
                 [self.contacts addObject:contact];
-                [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
                 [self createContactViewWithContact:contact andPosition:(int)[self.contacts count]];
                 // add message to bubble
                 [[self.contactBubbleViews lastObject] setPendingContact:YES];
