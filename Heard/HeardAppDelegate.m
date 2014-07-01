@@ -32,6 +32,7 @@
     NSDictionary *remoteNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if(remoteNotif) {
         // todo BT (later)
+        // update contact list & order
     }
     
     if ([SessionUtils isSignedIn]) {

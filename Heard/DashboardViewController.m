@@ -157,6 +157,7 @@
     else {
         // The user has previously denied access
         // Todo Send an alert telling user to change privacy setting in settings app
+        [self hideLoadingIndicator];
     }
 
 }
