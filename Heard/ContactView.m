@@ -140,26 +140,33 @@
         }
         [self recordingUI];
         
-        // Create Timer
-        self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
-        self.minDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMinAudioDuration target:self selector:@selector(minRecordingDurationReached) userInfo:nil repeats:NO];
-        
-        // Record
+        // Set session
         AVAudioSession *session = [AVAudioSession sharedInstance];
-        [session setActive:YES error:nil];
-        
-        // Start recording
-        [self.recorder record];
-        
-        [self.delegate longPressOnContactBubbleViewStarted:self.contact.identifier FromView:self];
-        
-        self.metersTimer = [NSTimer scheduledTimerWithTimeInterval:0.05
-                                                           target:self
-                                                         selector:@selector(notifyNewMeters)
-                                                         userInfo:nil
-                                                          repeats:YES];
-        
-        [self.metersTimer fire];
+        [session requestRecordPermission:^(BOOL granted) {
+            if (!granted) {
+                [GeneralUtils showMessage:@"To activate it, go to Settings > Privacy > Micro" withTitle:@"Waved does not have access to your micro"];
+                return;
+            } else {
+                [session setActive:YES error:nil];
+                
+                // Create Timer
+                self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
+                self.minDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMinAudioDuration target:self selector:@selector(minRecordingDurationReached) userInfo:nil repeats:NO];
+                
+                // Start recording
+                [self.recorder record];
+                
+                [self.delegate longPressOnContactBubbleViewStarted:self.contact.identifier FromView:self];
+                
+                self.metersTimer = [NSTimer scheduledTimerWithTimeInterval:0.05
+                                                                    target:self
+                                                                  selector:@selector(notifyNewMeters)
+                                                                  userInfo:nil
+                                                                   repeats:YES];
+                
+                [self.metersTimer fire];
+            }
+        }];
     }
     if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled || recognizer.state == UIGestureRecognizerStateFailed) {
         [self endRecordingUI];
