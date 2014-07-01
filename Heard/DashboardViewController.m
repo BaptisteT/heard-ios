@@ -103,14 +103,17 @@
     if (!success)
         NSLog(@"AVAudioSession error setting category:%@",error);
     
-    // Add proximity state checker
+    // Add headset observer
+    [session addObserver:self forKeyPath:@"inputDataSources" options:NSKeyValueObservingOptionNew context:nil];
+    
+    // Add proximity state observer
     [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
-    [[NSNotificationCenter defaultCenter]
-     addObserverForName:UIDeviceProximityStateDidChangeNotification
-     object:nil queue:[NSOperationQueue mainQueue]
-     usingBlock:^(NSNotification *notification) {
-         [self updateOutputAudioPort];
-     }];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIDeviceProximityStateDidChangeNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification *notification) {
+                                                                 [self updateOutputAudioPort];
+                                                             }];
     
     // Headset checker
     self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:session];
@@ -264,7 +267,7 @@
                                                                           delegate:self
                                                                  cancelButtonTitle:@"OK!"
                                                                  otherButtonTitles:nil];
-        
+        // todo BT better to log out and redirect to sign in (to get a brand new token)
         [self.failedToRetrieveFriendsAlertView show];
     }];
 }
@@ -861,7 +864,6 @@
             self.contactToAdd = nil;
         };
         [ApiUtils blockUser:self.contactToAdd.identifier AndExecuteSuccess:successBlock failure:nil];
-        
     }
 }
 
@@ -963,7 +965,6 @@
 {
     if (alertView == self.failedToRetrieveFriendsAlertView) {
         [self getHeardContacts];
-        // todo BT better to log out and redirect to sign in (to get a brand new token)
     }
 }
 
