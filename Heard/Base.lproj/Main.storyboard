@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="OIk-2W-hgJ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="OIk-2W-hgJ">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -648,10 +648,23 @@ Unicode: U+276F, UTF-8: E2 9D AF</string>
                                             <action selector="menuButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="4ge-39-XlM"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4c9-3Y-zTL">
+                                        <rect key="frame" x="20" y="140" width="280" height="200"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="200" id="8Hx-ot-n0y"/>
+                                            <constraint firstAttribute="width" constant="280" id="A88-w2-0Rf"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="16"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="3eZ-vS-6nf" secondAttribute="trailing" constant="220" id="AnU-za-cqK"/>
                                     <constraint firstItem="3eZ-vS-6nf" firstAttribute="top" secondItem="a0u-JM-gz3" secondAttribute="top" constant="20" id="BZj-Fm-jVN"/>
+                                    <constraint firstItem="4c9-3Y-zTL" firstAttribute="leading" secondItem="a0u-JM-gz3" secondAttribute="leading" constant="20" id="EUt-hx-0Cs"/>
+                                    <constraint firstItem="4c9-3Y-zTL" firstAttribute="top" secondItem="3eZ-vS-6nf" secondAttribute="bottom" constant="40" id="QHz-qJ-ePq"/>
                                     <constraint firstItem="3eZ-vS-6nf" firstAttribute="leading" secondItem="a0u-JM-gz3" secondAttribute="leading" constant="20" id="b6q-of-lMm"/>
                                     <constraint firstAttribute="bottom" secondItem="3eZ-vS-6nf" secondAttribute="bottom" constant="468" id="kZa-8H-c5I"/>
                                 </constraints>
@@ -667,6 +680,7 @@ Unicode: U+276F, UTF-8: E2 9D AF</string>
                     </view>
                     <navigationItem key="navigationItem" id="Fgn-qW-csE"/>
                     <connections>
+                        <outlet property="contactAuthDenyLabel" destination="4c9-3Y-zTL" id="dSY-RH-S5T"/>
                         <outlet property="contactScrollView" destination="a0u-JM-gz3" id="7ew-mq-LGy"/>
                         <outlet property="menuButton" destination="3eZ-vS-6nf" id="DVk-PZ-hkG"/>
                     </connections>

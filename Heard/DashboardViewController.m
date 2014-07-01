@@ -21,12 +21,12 @@
 #import "TrackingUtils.h"
 #import "AudioUtils.h"
 
-#define ACTION_SHEET_OPTION_0 @"Replay last message"
-#define ACTION_SHEET_OPTION_1 @"Invite contact"
-#define ACTION_SHEET_OPTION_2 @"Share this app"
-#define ACTION_SHEET_OPTION_3 @"Feedback"
-#define ACTION_SHEET_OPTION_4 @"Add contact"
-#define ACTION_SHEET_OPTION_5 @"Block user"
+#define ACTION_SHEET_1_OPTION_0 @"Replay last message"
+#define ACTION_SHEET_1_OPTION_1 @"Invite contact"
+#define ACTION_SHEET_1_OPTION_2 @"Share this app"
+#define ACTION_SHEET_1_OPTION_3 @"Feedback"
+#define ACTION_SHEET_2_OPTION_1 @"Add contact"
+#define ACTION_SHEET_2_OPTION_2 @"Block user"
 #define ACTION_SHEET_CANCEL @"Cancel"
 
 #define MAX_METERS 0
@@ -64,6 +64,7 @@
 @property (nonatomic, strong) NSMutableDictionary *messagesFromPendingContact;
 @property (nonatomic, strong) ContactView *lastContactPlayed;
 @property (nonatomic) BOOL isUsingHeadSet;
+@property (nonatomic, strong) IBOutlet UILabel *contactAuthDenyLabel;
 
 @end
 
@@ -80,7 +81,9 @@
     [super viewDidLoad];
     
     self.menuButton.hidden = YES;
-    
+    self.contactAuthDenyLabel.hidden = YES;
+    [self.contactAuthDenyLabel setText:@"Waved does not have access to your contact.\n\nPlease go to your iPhone - Settings - Privacy - Contacts. Then select ON for Waved"];
+    [self.contactAuthDenyLabel setNumberOfLines:0];
     
     self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - RECORDER_HEIGHT, self.view.bounds.size.width, RECORDER_HEIGHT)];
     [self.view addSubview:self.recorderContainer];
@@ -146,7 +149,8 @@
                 [self retrieveFriendsFromAddressBook:addressBook];
             } else {
                 // User denied access
-                // Todo Display an alert telling user the contact could not be added
+                [self hideLoadingIndicator];
+                self.contactAuthDenyLabel.hidden = NO;
             }
         });
     }
@@ -156,8 +160,8 @@
     }
     else {
         // The user has previously denied access
-        // Todo Send an alert telling user to change privacy setting in settings app
         [self hideLoadingIndicator];
+        self.contactAuthDenyLabel.hidden = NO;
     }
 
 }
@@ -282,6 +286,7 @@
 - (void)removeDisplayedContacts
 {
     self.menuButton.hidden = YES;
+    self.contactAuthDenyLabel.hidden = YES;
     
     // Erase existing views
     for (ContactView *contactView in self.contactBubbleViews) {
@@ -304,7 +309,6 @@
     if (contactCount == 0)
         return;
     
-    // todo bt get position from server
     int position = 1;
     for (Contact *contact in self.contacts) {
         [self createContactViewWithContact:contact andPosition:position];
@@ -430,7 +434,7 @@
     self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                        delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:ACTION_SHEET_OPTION_0, ACTION_SHEET_OPTION_1, ACTION_SHEET_OPTION_2, ACTION_SHEET_OPTION_3, nil];
+                                              otherButtonTitles:ACTION_SHEET_1_OPTION_0, ACTION_SHEET_1_OPTION_1, ACTION_SHEET_1_OPTION_2, ACTION_SHEET_1_OPTION_3, nil];
     
     for (UIView* view in [self.menuActionSheet subviews])
     {
@@ -513,6 +517,9 @@
     NSInteger horizontalPosition = 3 - (3*(view.orderPosition/3) + 2 - view.orderPosition);
     float rowHeight = kContactMargin + kContactSize + kContactNameHeight;
     view.frame = CGRectMake(kContactMargin + (horizontalPosition - 1) * (kContactSize + kContactMargin), kContactMargin + (row - 1)* rowHeight, kContactSize, kContactSize);
+    
+    // Update frame of Name Label too
+    view.nameLabel.frame = CGRectMake(view.frame.origin.x - kContactMargin/4, view.frame.origin.y + kContactSize, view.frame.size.width + kContactMargin/2, kContactNameHeight);
 }
 
 //Create recording mode screen
@@ -649,7 +656,7 @@
                                                                     delegate:self
                                                            cancelButtonTitle:ACTION_SHEET_CANCEL
                                                       destructiveButtonTitle:nil
-                                                           otherButtonTitles:ACTION_SHEET_OPTION_4, ACTION_SHEET_OPTION_5, nil];
+                                                           otherButtonTitles:ACTION_SHEET_2_OPTION_1, ACTION_SHEET_2_OPTION_2, nil];
     [pendingActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
@@ -788,7 +795,7 @@
     }
     
     //Replay message
-    if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_0]) {
+    if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_0]) {
         [self endPlayerUI];
         
         [self playerUI:([self.mainPlayer duration]) ByContactView:self.lastContactPlayed];
@@ -796,13 +803,13 @@
         [self.mainPlayer play];
         [TrackingUtils trackReplay];
     //Add contact
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_1]) {
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_1]) {
         ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc] init];
         picker.peoplePickerDelegate = self;
         [self presentViewController:picker animated:YES completion:nil];
         [TrackingUtils trackAddContact];
         //Share (in the future, it'd be cool to share a vocal message!)
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_2]) {
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_2]) {
         NSString *shareString = @"Download Waved, the fastest messaging app.";
         
         NSURL *shareUrl = [NSURL URLWithString:kProdAFHeardWebsite];
@@ -818,7 +825,7 @@
         
         [TrackingUtils trackShare];
         //Send feedback
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_3]) {
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_3]) {
         NSString *email = [NSString stringWithFormat:@"mailto:%@?subject=Feedback for Waved on iOS (v%@)", kFeedbackEmail,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
         
         email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -826,7 +833,7 @@
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
     }
     //BB: Add contact a contact not in address book: should be merged with add contact
-    else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_4]) {
+    else if ([buttonTitle isEqualToString:ACTION_SHEET_2_OPTION_1]) {
         // create person record
         ABRecordRef person = ABPersonCreate();
         ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFStringRef) self.contactToAdd.firstName, NULL);
@@ -842,20 +849,26 @@
         UINavigationController *newNavigationController = [[UINavigationController alloc] initWithRootViewController:controller];
         [self.navigationController presentViewController:newNavigationController animated:YES completion:nil];
         CFRelease(person);
-      
-    //BB: Block user: NOT FOR NOW (let's keep the menu simple for now, we will have "Other" section for this)
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_5]) {
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_2_OPTION_2]) {
         // block user + delete bubble / contact
         void(^successBlock)() = ^void() {
+            NSInteger holePosition = 0;
             for (ContactView * bubbleView in self.contactBubbleViews) {
                 if (bubbleView.contact.identifier == self.contactToAdd.identifier) {
                     [bubbleView removeFromSuperview];
+                    holePosition = bubbleView.orderPosition;
                     [self.contacts removeObject:bubbleView.contact];
                     [bubbleView.nameLabel removeFromSuperview];
                     [self.contactBubbleViews removeObject:bubbleView];
+                    
                     break;
                 }
-                // todo BT change position of other bubbles
+            }
+            // Change position of other bubbles
+            for (ContactView * bubbleView in self.contactBubbleViews) {
+                if (bubbleView.orderPosition > holePosition) {
+                    [bubbleView setOrderPosition:bubbleView.orderPosition -1];
+                }
             }
             self.contactToAdd = nil;
         };
