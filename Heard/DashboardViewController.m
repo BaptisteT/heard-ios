@@ -653,11 +653,6 @@
     [pendingActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
-- (void)dismissContactView
-{
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-}
-
 
 // ----------------------------------------------------------
 #pragma mark Player Mode
@@ -750,32 +745,36 @@
 
 
 // ----------------------------------------------------------
-#pragma mark ABUnknownPersonViewControllerDelegate
+#pragma mark ABNewPersonViewControllerDelegate
 // ----------------------------------------------------------
-- (void)unknownPersonViewController:(ABUnknownPersonViewController *)unknownCardViewController didResolveToPerson:(ABRecordRef)person
+- (void)newPersonViewController:(ABNewPersonViewController *)newPersonViewController didCompleteWithNewPerson:(ABRecordRef)person
 {
-    ABMultiValueRef phones =ABRecordCopyValue(person, kABPersonPhoneProperty);
-    NSString* mobile=@"";
-    NSString* mobileLabel;
-    for(CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
-        mobileLabel = (__bridge NSString *)(ABMultiValueCopyLabelAtIndex(phones, i));
-        if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneMainLabel])
-        {
-            mobile = (__bridge NSString *)(ABMultiValueCopyValueAtIndex(phones, i));
-        }
-    }
-
-    for (ContactView *contactBubble in self.contactBubbleViews) {
-        if ([mobile isEqualToString:contactBubble.contact.phoneNumber]) {
-            if (contactBubble.pendingContact) {
-                [contactBubble setPendingContact:NO];
-                self.contactToAdd = nil;
+    if (!person) { // cancel clicked
+        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        ABMultiValueRef phones =ABRecordCopyValue(person, kABPersonPhoneProperty);
+        NSString* mobile=@"";
+        NSString* mobileLabel;
+        for(CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
+            mobileLabel = (__bridge NSString *)(ABMultiValueCopyLabelAtIndex(phones, i));
+            if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneMainLabel])
+            {
+                mobile = (__bridge NSString *)(ABMultiValueCopyValueAtIndex(phones, i));
             }
-            break;
         }
+        
+        for (ContactView *contactBubble in self.contactBubbleViews) {
+            if ([mobile isEqualToString:contactBubble.contact.phoneNumber]) {
+                if (contactBubble.pendingContact) {
+                    [contactBubble setPendingContact:NO];
+                    self.contactToAdd = nil;
+                }
+                break;
+            }
+        }
+        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     }
 }
-
 
 // ----------------------------------------------------------
 #pragma mark ActionSheetProtocol
@@ -837,14 +836,10 @@
         ABRecordSetValue(person, kABPersonPhoneProperty, phoneNumbers, nil);
         
         // let's show view controller
-        ABUnknownPersonViewController *controller = [[ABUnknownPersonViewController alloc] init];
+        ABNewPersonViewController *controller = [[ABNewPersonViewController alloc] init];
         controller.displayedPerson = person;
-        controller.allowsAddingToAddressBook = YES;
-        controller.unknownPersonViewDelegate = self;
+        controller.newPersonViewDelegate = self;
         UINavigationController *newNavigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-        controller.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
-                                                       initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self
-                                                       action:@selector(dismissContactView)];
         [self.navigationController presentViewController:newNavigationController animated:YES completion:nil];
         CFRelease(person);
       
@@ -860,8 +855,8 @@
                     [self.contactBubbleViews removeObject:bubbleView];
                     break;
                 }
+                // todo BT change position of other bubbles
             }
-            // todo BT change position of other bubbles
             self.contactToAdd = nil;
         };
         [ApiUtils blockUser:self.contactToAdd.identifier AndExecuteSuccess:successBlock failure:nil];
