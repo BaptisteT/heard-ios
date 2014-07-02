@@ -17,6 +17,7 @@
 #import "Mixpanel.h"
 #import "Constants.h"
 #import "TrackingUtils.h"
+#import "ContactUtils.h"
 
 @implementation HeardAppDelegate
 
@@ -28,11 +29,15 @@
     //Mixpanel
     [Mixpanel sharedInstanceWithToken:kProdMixPanelToken];
     
+    // Contacts list
+    self.contacts = [ContactUtils retrieveContactsInMemory];
+    
     // Notification received when app closed
     NSDictionary *remoteNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if(remoteNotif) {
-        // todo BT (later)
         // update contact list & order
+        Message *message = [Message rawMessageToInstance:[remoteNotif valueForKey:@"message"]];
+        [ContactUtils updateContacts:self.contacts withNewMessage:message];
     }
     
     if ([SessionUtils isSignedIn]) {
@@ -57,18 +62,29 @@
     UIViewController *visibleController = [self getVisibleController];
     
     if ([visibleController isKindOfClass:[DashboardViewController class]]) {
-        [(DashboardViewController *)visibleController requestAddressBookAccess];
-//        [(DashboardViewController *)visibleController retrieveAndDisplayUnreadMessages];
+        [(DashboardViewController *)visibleController displayContacts]; // ie. change order if needed
+        [(DashboardViewController *)visibleController retrieveAndDisplayUnreadMessages];
     }
 }
+
+// Save contacts before termination
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+    [ContactUtils saveContactsInMemory:self.contacts];
+}
+
+// Save contacts before termination
+// Not sure which method is called
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    [ContactUtils saveContactsInMemory:self.contacts];
+}
+
 
 // Delegation methods
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
     // Convert the binary data token into an NSString
     NSString *deviceTokenAsString = stringFromDeviceTokenData(devToken);
-    
-    // Show the device token obtained from apple to the log
-    NSLog(@"deviceToken: %@", deviceTokenAsString);
     
     // Send push token
     [ApiUtils updatePushToken:deviceTokenAsString success:nil failure:nil];
@@ -83,15 +99,21 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     // The user receives a notif while using the app
     Message *newMessage = [Message rawMessageToInstance:[userInfo valueForKey:@"message"]];
-    NSNumber *badgeNumber = [[userInfo valueForKey:@"aps"] valueForKey:@"badge"];
+    
+    // Update Contact
+    [ContactUtils updateContacts:self.contacts withNewMessage:newMessage];
     
     // Update badge
+    NSNumber *badgeNumber = [[userInfo valueForKey:@"aps"] valueForKey:@"badge"];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[badgeNumber integerValue]];
     
     // Add unread message
     UIViewController *visibleController = [self getVisibleController];
     if ([visibleController isKindOfClass:[DashboardViewController class]]) {
         [(DashboardViewController *)visibleController addUnreadMessage:newMessage];
+        
+        // distributeNonAttributedMessages (case where the bubble does not exists)
+        [(DashboardViewController *)visibleController distributeNonAttributedMessages];
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
     }
 }

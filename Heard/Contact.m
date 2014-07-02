@@ -21,6 +21,7 @@
     contact.phoneNumber = phoneNumber;
     contact.firstName = firstName;
     contact.lastName = lastName;
+    contact.isPending = NO;
     
     return contact;
 }
@@ -43,6 +44,7 @@
     contact.phoneNumber = [rawContact objectForKey:@"phone_number"];
     contact.firstName = [rawContact objectForKey:@"first_name"];
     contact.lastName = [rawContact objectForKey:@"last_name"];
+    contact.isPending = NO; // default
     return contact;
 }
 

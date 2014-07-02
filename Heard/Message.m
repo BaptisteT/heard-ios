@@ -12,6 +12,7 @@
 #define MESSAGE_ID @"id"
 #define SENDER_ID @"sender_id"
 #define RECEIVER_ID @"receiver_id"
+#define CREATED_AT @"date"
 
 @implementation Message
 
@@ -31,6 +32,7 @@
     message.identifier = [[rawMessage objectForKey:MESSAGE_ID] integerValue];
     message.senderId = [[rawMessage objectForKey:SENDER_ID] integerValue];
     message.receiverId = [[rawMessage objectForKey:RECEIVER_ID] integerValue];
+    message.createdAt = [[rawMessage objectForKey:CREATED_AT] integerValue];
     return message;
 }
 

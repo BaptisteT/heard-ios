@@ -131,9 +131,6 @@
 // ----------------------------------------------------------
 - (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer
 {
-    // todo BT (later)
-    // check micro is available, else warm user
-    
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         if ([self.delegate.mainPlayer isPlaying]) {
             [self.delegate endPlayerUI];
@@ -329,6 +326,8 @@
     
     NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
     [ApiUtils sendMessage:audioData toUser:self.contact.identifier success:^{
+        // todo bt update date, check same than ruby one
+//        self.contact.lastMessageDate = [[NSDate date] date]
         [self.delegate messageSentWithError:NO];
     } failure:^{
         [self.delegate messageSentWithError:YES];

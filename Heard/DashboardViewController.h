@@ -16,7 +16,9 @@
 
 - (void)addUnreadMessage:(Message *)message;
 - (void) retrieveAndDisplayUnreadMessages;
-- (void)requestAddressBookAccess;
+- (void)requestAddressBookAccessAndRetrieveFriends;
+- (void)displayContacts;
+- (void)distributeNonAttributedMessages;
 
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 
