@@ -35,6 +35,10 @@
     [self.logoImage addSubview:self.hiddingView];
 }
 
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
