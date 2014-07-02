@@ -20,13 +20,15 @@
 #import "SessionUtils.h"
 #import "TrackingUtils.h"
 #import "AudioUtils.h"
+#import "HeardAppDelegate.h"
+#import "ContactUtils.h"
 
-#define ACTION_SHEET_OPTION_0 @"Replay last message"
-#define ACTION_SHEET_OPTION_1 @"Invite contact"
-#define ACTION_SHEET_OPTION_2 @"Share this app"
-#define ACTION_SHEET_OPTION_3 @"Feedback"
-#define ACTION_SHEET_OPTION_4 @"Add contact"
-#define ACTION_SHEET_OPTION_5 @"Block user"
+#define ACTION_SHEET_1_OPTION_0 @"Replay last message"
+#define ACTION_SHEET_1_OPTION_1 @"Invite contact"
+#define ACTION_SHEET_1_OPTION_2 @"Share this app"
+#define ACTION_SHEET_1_OPTION_3 @"Feedback"
+#define ACTION_SHEET_2_OPTION_1 @"Add contact"
+#define ACTION_SHEET_2_OPTION_2 @"Block user"
 #define ACTION_SHEET_CANCEL @"Cancel"
 
 #define MAX_METERS 0
@@ -41,8 +43,6 @@
 
 @interface DashboardViewController ()
 
-@property (strong, nonatomic) UIAlertView *failedToRetrieveFriendsAlertView;
-@property (strong, nonatomic) UIAlertView *failedToRetrieveNewFriendAlertView;
 @property (strong, nonatomic) NSMutableDictionary *addressBookFormattedContacts;
 @property (strong, nonatomic) NSMutableArray *contacts;
 @property (strong, nonatomic) NSMutableArray *contactBubbleViews;
@@ -58,12 +58,12 @@
 @property (nonatomic) float recordLineLength;
 @property (weak, nonatomic) IBOutlet UIButton *menuButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
-
 @property (nonatomic, strong) NSString *currentUserPhoneNumber;
 @property (nonatomic, strong) Contact *contactToAdd;
-@property (nonatomic, strong) NSMutableDictionary *messagesFromPendingContact;
+@property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
 @property (nonatomic, strong) ContactView *lastContactPlayed;
 @property (nonatomic) BOOL isUsingHeadSet;
+@property (nonatomic, strong) IBOutlet UILabel *contactAuthDenyLabel;
 
 @end
 
@@ -80,7 +80,8 @@
     [super viewDidLoad];
     
     self.menuButton.hidden = YES;
-    
+    [self.contactAuthDenyLabel setText:@"Waved does not have access to your contacts.\n\nPlease go to your iPhone > Settings > Privacy > Contacts. Then select ON for Waved"];
+    [self.contactAuthDenyLabel setNumberOfLines:0];
     
     self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - RECORDER_HEIGHT, self.view.bounds.size.width, RECORDER_HEIGHT)];
     [self.view addSubview:self.recorderContainer];
@@ -89,30 +90,34 @@
     self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_LINE_WEIGHT, self.view.bounds.size.width, PLAYER_LINE_WEIGHT)];
     [self.view addSubview:self.playerContainer];
     self.playerContainer.hidden = YES;
-    
-    // Some init
-    self.contactBubbleViews = [[NSMutableArray alloc] init];
-    
-    [self requestAddressBookAccess];
+
+    // Create bubble with contacts
+    self.contacts = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).contacts;
+    [self displayContacts];
+
+    // Retrieve messages (fill nonAttributedUnreadMessages if necessary)
+    [self retrieveAndDisplayUnreadMessages];
     
     // Create audio session
     AVAudioSession* session = [AVAudioSession sharedInstance];
-
     BOOL success; NSError* error;
     success = [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
     if (!success)
         NSLog(@"AVAudioSession error setting category:%@",error);
     
-    // Add proximity state checker
-    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
-    [[NSNotificationCenter defaultCenter]
-     addObserverForName:UIDeviceProximityStateDidChangeNotification
-     object:nil queue:[NSOperationQueue mainQueue]
-     usingBlock:^(NSNotification *notification) {
-         [self updateOutputAudioPort];
-     }];
+    // Add headset observer
+    [session addObserver:self forKeyPath:@"inputDataSources" options:NSKeyValueObservingOptionNew context:nil];
     
-    // Headset checker
+    // Add proximity state observer
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIDeviceProximityStateDidChangeNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification *notification) {
+                                                                 [self updateOutputAudioPort];
+                                                             }];
+    
+    // Headset observer
     self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:session];
 
     self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
@@ -129,11 +134,8 @@
 #pragma mark Get Contact
 // ------------------------------
 
-- (void)requestAddressBookAccess
+- (void)requestAddressBookAccessAndRetrieveFriends
 {
-    [self removeDisplayedContacts];
-    [self showLoadingIndicator];
-    
     ABAddressBookRef addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
@@ -143,7 +145,7 @@
                 [self retrieveFriendsFromAddressBook:addressBook];
             } else {
                 // User denied access
-                // Todo Display an alert telling user the contact could not be added
+                [self.contactAuthDenyLabel setHidden:NO];
             }
         });
     }
@@ -153,9 +155,8 @@
     }
     else {
         // The user has previously denied access
-        // Todo Send an alert telling user to change privacy setting in settings app
+        [self distributeNonAttributedMessages];
     }
-
 }
 
 - (void)retrieveFriendsFromAddressBook:(ABAddressBookRef) addressBook
@@ -236,36 +237,34 @@
 
 - (void)getHeardContacts
 {
-    [self showLoadingIndicator];
-    
     NSMutableArray *phoneNumbers = [[NSMutableArray alloc] init];
     for (NSString* phoneNumber in self.addressBookFormattedContacts) {
         [phoneNumbers addObject:phoneNumber];
     }
-
+    // Get contacts and compare with contact in memory
     [ApiUtils getMyContacts:phoneNumbers success:^(NSArray *contacts) {
-        [self hideLoadingIndicator];
-        
-        self.contacts = [NSMutableArray arrayWithArray:contacts];
-        
-        for (Contact *contact in self.contacts) {
-            contact.firstName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
-            contact.lastName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
+        for (Contact *contact in contacts) {
+            Contact *existingContact = [ContactUtils findContact:contact.identifier inContactsArray:self.contacts];
+            if (! existingContact) {
+                [self.contacts addObject:contact];
+                contact.firstName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
+                contact.lastName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
+                contact.lastMessageDate = 0;
+                [self displayAdditionnalContact:contact];
+            } else if (existingContact.isPending) {
+                // Mark as non pending
+                existingContact.firstName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
+                existingContact.lastName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
+                existingContact.phoneNumber = contact.phoneNumber;
+                existingContact.isPending = NO;
+            }
         }
-        
         self.addressBookFormattedContacts = nil;
         
-        [self displayContacts];
+        // Distribute non attributed messages
+        [self distributeNonAttributedMessages];
     } failure:^{
-        [self hideLoadingIndicator];
-        
-        self.failedToRetrieveFriendsAlertView = [[UIAlertView alloc] initWithTitle:nil
-                                                                           message:@"We failed to retrieve your contacts, please try again."
-                                                                          delegate:self
-                                                                 cancelButtonTitle:@"OK!"
-                                                                 otherButtonTitles:nil];
-        
-        [self.failedToRetrieveFriendsAlertView show];
+        // todo bt (later) handle this case
     }];
 }
 
@@ -278,6 +277,9 @@
 - (void)removeDisplayedContacts
 {
     self.menuButton.hidden = YES;
+    if (!self.contactAuthDenyLabel.isHidden) {
+        [self.contactAuthDenyLabel setHidden:YES];
+    }
     
     // Erase existing views
     for (ContactView *contactView in self.contactBubbleViews) {
@@ -291,24 +293,36 @@
 - (void)displayContacts
 {
     [self removeDisplayedContacts];
-    
-    self.contactBubbleViews = [[NSMutableArray alloc] init];
-    
-    NSUInteger contactCount = [self.contacts count];
     self.menuButton.hidden = NO;
     
+    NSUInteger contactCount = [self.contacts count];
     if (contactCount == 0)
         return;
+    self.contactBubbleViews = [[NSMutableArray alloc] initWithCapacity:contactCount];
     
-    // todo bt get position from server
+    // Sort contact
+    [self.contacts sortUsingComparator:^(Contact *contact1, Contact * contact2) {
+        if (contact1.lastMessageDate < contact2.lastMessageDate) {
+            return (NSComparisonResult)NSOrderedDescending;
+        } else {
+            return (NSComparisonResult)NSOrderedAscending;
+        }
+    }];
+    
+    // Create bubbles
     int position = 1;
     for (Contact *contact in self.contacts) {
         [self createContactViewWithContact:contact andPosition:position];
         position ++;
     }
-    
-    // Retrieve unread messages
-    [self retrieveAndDisplayUnreadMessages];
+}
+
+- (void)displayAdditionnalContact:(Contact *)contact
+{
+    if (!self.contactBubbleViews) {
+        self.contactBubbleViews = [[NSMutableArray alloc] initWithCapacity:[self.contacts count]];
+    }
+    [self createContactViewWithContact:contact andPosition:(int)[self.contactBubbleViews count]+1];
 }
 
 // Set Scroll View size from the number of contacts
@@ -326,9 +340,22 @@
 - (void)createContactViewWithContact:(Contact *)contact andPosition:(int)position
 {
     ContactView *contactView = [[ContactView alloc] initWithContact:contact];
+    
+    // if pending, and missing name, request info
+    if (contact.isPending && contact.phoneNumber.length != 0) {
+        void(^successBlock)(Contact *) = ^void(Contact *serverContact) {
+            contact.phoneNumber = serverContact.phoneNumber;
+            contact.firstName = serverContact.firstName;
+            contact.lastName = serverContact.lastName;
+            [self addNameLabelForView:contactView];
+        };
+        [ApiUtils getNewContactInfo:contact.identifier AndExecuteSuccess:successBlock failure:nil];
+    } else {
+        [self addNameLabelForView:contactView];
+    }
+    
     contactView.delegate = self;
     contactView.orderPosition = position;
-    [self addNameLabelForView:contactView];
     [self.contactBubbleViews addObject:contactView];
     [self.contactScrollView addSubview:contactView];
 }
@@ -368,6 +395,9 @@
         for (Message *message in messages) {
             [self addUnreadMessage:message];
         }
+        
+        // Check if we have new contacts
+        [self requestAddressBookAccessAndRetrieveFriends];
     };
     
     [ApiUtils getUnreadMessagesAndExecuteSuccess:successBlock failure:nil];
@@ -378,6 +408,7 @@
     for (ContactView *contactBubble in self.contactBubbleViews) {
         [contactBubble resetUnreadMessages];
     }
+    self.nonAttributedUnreadMessages = nil;
 }
 
 // Add a message we just received
@@ -387,33 +418,58 @@
     for (ContactView *contactBubble in self.contactBubbleViews) {
         if (message.senderId == contactBubble.contact.identifier) {
             [contactBubble addUnreadMessage:message];
+            
+            // Update last message date to sort contacts even if no push
+            contactBubble.contact.lastMessageDate = MAX(contactBubble.contact.lastMessageDate,message.createdAt);
             isAttributed = YES;
             break;
         }
     }
-    // case where we receive a message from someone not in our contacts
+
+    // unread message pool
     if (!isAttributed) {
-        if (!self.messagesFromPendingContact) {
-            self.messagesFromPendingContact = [[NSMutableDictionary alloc] init];
+        if (!self.nonAttributedUnreadMessages) {
+            self.nonAttributedUnreadMessages = [[NSMutableArray alloc] init];
         }
-        NSMutableArray *otherMessageFromSender =[self.messagesFromPendingContact objectForKey:[NSNumber numberWithInteger:message.senderId]];
-        if (otherMessageFromSender) {
-            [otherMessageFromSender addObject:message];
-        } else {
-            [self.messagesFromPendingContact setObject:[NSMutableArray arrayWithObject:message] forKey:[NSNumber numberWithInteger:message.senderId]];
-            
-            void(^successBlock)(Contact *) = ^void(Contact *contact) {
+        [self.nonAttributedUnreadMessages addObject:message];
+    }
+}
+
+- (void)distributeNonAttributedMessages
+{
+    BOOL isAttributed;
+    for (Message *message in self.nonAttributedUnreadMessages) {
+        isAttributed = NO;
+        for (ContactView *contactBubble in self.contactBubbleViews) {
+            if (message.senderId == contactBubble.contact.identifier) {
+                [contactBubble addUnreadMessage:message];
+                isAttributed = YES;
+                // Update last message date to sort contacts even if no push
+                contactBubble.contact.lastMessageDate = MAX(contactBubble.contact.lastMessageDate,message.createdAt);
+                break;
+            }
+        }
+        
+        if (!isAttributed) {
+            // create contact if does not exists
+            Contact *contact = [ContactUtils findContact:message.senderId inContactsArray:self.contacts];
+            if (!contact) {
+                Contact *contact = [Contact createContactWithId:message.senderId phoneNumber:nil firstName:nil lastName:nil];
+                contact.lastMessageDate = message.createdAt;
+                contact.isPending = YES;
                 [self.contacts addObject:contact];
-                [self createContactViewWithContact:contact andPosition:(int)[self.contacts count]];
-                // add message to bubble
-                [[self.contactBubbleViews lastObject] setPendingContact:YES];
-                for (Message *mess in [self.messagesFromPendingContact objectForKey:[NSNumber numberWithInteger:message.senderId]]) {
-                    [[self.contactBubbleViews lastObject] addUnreadMessage:mess];
-                }
-                [self.messagesFromPendingContact removeObjectForKey:[NSNumber numberWithInteger:message.senderId]];
-                [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
-            };
-            [ApiUtils getNewContactInfo:message.senderId AndExecuteSuccess:successBlock failure:nil];
+            }
+            // create bubble
+            [self displayAdditionnalContact:contact];
+            [[self.contactBubbleViews lastObject] addUnreadMessage:message];
+        }
+    }
+    self.nonAttributedUnreadMessages = nil;
+    
+    // Mark pending contact view as pending
+    for (ContactView *contactView in self.contactBubbleViews) {
+        if (contactView.contact.isPending) {
+            [contactView setPendingContact:YES];
         }
     }
 }
@@ -426,7 +482,7 @@
     self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                        delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:ACTION_SHEET_OPTION_0, ACTION_SHEET_OPTION_1, ACTION_SHEET_OPTION_2, ACTION_SHEET_OPTION_3, nil];
+                                              otherButtonTitles:ACTION_SHEET_1_OPTION_0, ACTION_SHEET_1_OPTION_1, ACTION_SHEET_1_OPTION_2, ACTION_SHEET_1_OPTION_3, nil];
     
     for (UIView* view in [self.menuActionSheet subviews])
     {
@@ -509,6 +565,9 @@
     NSInteger horizontalPosition = 3 - (3*(view.orderPosition/3) + 2 - view.orderPosition);
     float rowHeight = kContactMargin + kContactSize + kContactNameHeight;
     view.frame = CGRectMake(kContactMargin + (horizontalPosition - 1) * (kContactSize + kContactMargin), kContactMargin + (row - 1)* rowHeight, kContactSize, kContactSize);
+    
+    // Update frame of Name Label too
+    view.nameLabel.frame = CGRectMake(view.frame.origin.x - kContactMargin/4, view.frame.origin.y + kContactSize, view.frame.size.width + kContactMargin/2, kContactNameHeight);
 }
 
 //Create recording mode screen
@@ -640,18 +699,19 @@
 
 - (void)pendingContactClicked:(Contact *)contact
 {
+    // check contact access
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusDenied) {
+        [GeneralUtils showMessage:@"To activate it, go to Settings > Privacy > Contacts" withTitle:@"Waved does not have access to your contacts"];
+        return;
+    }
+    
     self.contactToAdd = contact;
     UIActionSheet *pendingActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                                     delegate:self
                                                            cancelButtonTitle:ACTION_SHEET_CANCEL
                                                       destructiveButtonTitle:nil
-                                                           otherButtonTitles:ACTION_SHEET_OPTION_4, ACTION_SHEET_OPTION_5, nil];
+                                                           otherButtonTitles:ACTION_SHEET_2_OPTION_1, ACTION_SHEET_2_OPTION_2, nil];
     [pendingActionSheet showInView:[UIApplication sharedApplication].keyWindow];
-}
-
-- (void)dismissContactView
-{
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -746,32 +806,36 @@
 
 
 // ----------------------------------------------------------
-#pragma mark ABUnknownPersonViewControllerDelegate
+#pragma mark ABNewPersonViewControllerDelegate
 // ----------------------------------------------------------
-- (void)unknownPersonViewController:(ABUnknownPersonViewController *)unknownCardViewController didResolveToPerson:(ABRecordRef)person
+- (void)newPersonViewController:(ABNewPersonViewController *)newPersonViewController didCompleteWithNewPerson:(ABRecordRef)person
 {
-    ABMultiValueRef phones =ABRecordCopyValue(person, kABPersonPhoneProperty);
-    NSString* mobile=@"";
-    NSString* mobileLabel;
-    for(CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
-        mobileLabel = (__bridge NSString *)(ABMultiValueCopyLabelAtIndex(phones, i));
-        if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneMainLabel])
-        {
-            mobile = (__bridge NSString *)(ABMultiValueCopyValueAtIndex(phones, i));
-        }
-    }
-
-    for (ContactView *contactBubble in self.contactBubbleViews) {
-        if ([mobile isEqualToString:contactBubble.contact.phoneNumber]) {
-            if (contactBubble.pendingContact) {
-                [contactBubble setPendingContact:NO];
-                self.contactToAdd = nil;
+    if (!person) { // cancel clicked
+        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        ABMultiValueRef phones =ABRecordCopyValue(person, kABPersonPhoneProperty);
+        NSString* mobile=@"";
+        NSString* mobileLabel;
+        for(CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
+            mobileLabel = (__bridge NSString *)(ABMultiValueCopyLabelAtIndex(phones, i));
+            if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneMainLabel])
+            {
+                mobile = (__bridge NSString *)(ABMultiValueCopyValueAtIndex(phones, i));
             }
-            break;
         }
+        
+        for (ContactView *contactBubble in self.contactBubbleViews) {
+            if ([mobile isEqualToString:contactBubble.contact.phoneNumber]) {
+                if (contactBubble.pendingContact) {
+                    [contactBubble setPendingContact:NO];
+                    self.contactToAdd = nil;
+                }
+                break;
+            }
+        }
+        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     }
 }
-
 
 // ----------------------------------------------------------
 #pragma mark ActionSheetProtocol
@@ -785,7 +849,7 @@
     }
     
     //Replay message
-    if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_0]) {
+    if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_0]) {
         [self endPlayerUI];
         
         [self playerUI:([self.mainPlayer duration]) ByContactView:self.lastContactPlayed];
@@ -793,13 +857,13 @@
         [self.mainPlayer play];
         [TrackingUtils trackReplay];
     //Add contact
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_1]) {
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_1]) {
         ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc] init];
         picker.peoplePickerDelegate = self;
         [self presentViewController:picker animated:YES completion:nil];
         [TrackingUtils trackAddContact];
         //Share (in the future, it'd be cool to share a vocal message!)
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_2]) {
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_2]) {
         NSString *shareString = @"Download Waved, the fastest messaging app.";
         
         NSURL *shareUrl = [NSURL URLWithString:kProdAFHeardWebsite];
@@ -815,7 +879,7 @@
         
         [TrackingUtils trackShare];
         //Send feedback
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_3]) {
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_3]) {
         NSString *email = [NSString stringWithFormat:@"mailto:%@?subject=Feedback for Waved on iOS (v%@)", kFeedbackEmail,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
         
         email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -823,7 +887,7 @@
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
     }
     //BB: Add contact a contact not in address book: should be merged with add contact
-    else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_4]) {
+    else if ([buttonTitle isEqualToString:ACTION_SHEET_2_OPTION_1]) {
         // create person record
         ABRecordRef person = ABPersonCreate();
         ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFStringRef) self.contactToAdd.firstName, NULL);
@@ -833,35 +897,36 @@
         ABRecordSetValue(person, kABPersonPhoneProperty, phoneNumbers, nil);
         
         // let's show view controller
-        ABUnknownPersonViewController *controller = [[ABUnknownPersonViewController alloc] init];
+        ABNewPersonViewController *controller = [[ABNewPersonViewController alloc] init];
         controller.displayedPerson = person;
-        controller.allowsAddingToAddressBook = YES;
-        controller.unknownPersonViewDelegate = self;
+        controller.newPersonViewDelegate = self;
         UINavigationController *newNavigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-        controller.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
-                                                       initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self
-                                                       action:@selector(dismissContactView)];
         [self.navigationController presentViewController:newNavigationController animated:YES completion:nil];
         CFRelease(person);
-      
-    //BB: Block user: NOT FOR NOW (let's keep the menu simple for now, we will have "Other" section for this)
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_5]) {
+    } else if ([buttonTitle isEqualToString:ACTION_SHEET_2_OPTION_2]) {
         // block user + delete bubble / contact
         void(^successBlock)() = ^void() {
+            NSInteger holePosition = 0;
             for (ContactView * bubbleView in self.contactBubbleViews) {
                 if (bubbleView.contact.identifier == self.contactToAdd.identifier) {
                     [bubbleView removeFromSuperview];
+                    holePosition = bubbleView.orderPosition;
                     [self.contacts removeObject:bubbleView.contact];
                     [bubbleView.nameLabel removeFromSuperview];
                     [self.contactBubbleViews removeObject:bubbleView];
+                    
                     break;
                 }
             }
-            // todo BT change position of other bubbles
+            // Change position of other bubbles
+            for (ContactView * bubbleView in self.contactBubbleViews) {
+                if (bubbleView.orderPosition > holePosition) {
+                    [bubbleView setOrderPosition:bubbleView.orderPosition -1];
+                }
+            }
             self.contactToAdd = nil;
         };
         [ApiUtils blockUser:self.contactToAdd.identifier AndExecuteSuccess:successBlock failure:nil];
-        
     }
 }
 
@@ -953,18 +1018,6 @@
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
-}
-
-
-// ----------------------------------------------------------
-#pragma mark AlertViewProtocol
-// ----------------------------------------------------------
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (alertView == self.failedToRetrieveFriendsAlertView) {
-        [self getHeardContacts];
-        // todo BT better to log out and redirect to sign in (to get a brand new token)
-    }
 }
 
 

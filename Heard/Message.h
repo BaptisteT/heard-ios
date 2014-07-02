@@ -17,5 +17,6 @@
 @property (nonatomic) NSUInteger identifier;
 @property (nonatomic) NSUInteger senderId;
 @property (nonatomic) NSUInteger receiverId;
+@property (nonatomic) NSInteger createdAt;
 
 @end

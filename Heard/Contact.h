@@ -14,6 +14,8 @@
 @property (strong, nonatomic) NSString *phoneNumber;
 @property (strong, nonatomic) NSString *firstName;
 @property (strong, nonatomic) NSString *lastName;
+@property (nonatomic) NSInteger lastMessageDate;
+@property (nonatomic) BOOL isPending;
 
 
 + (Contact *)createContactWithId:(NSUInteger)identifier
@@ -26,4 +28,5 @@
 + (Contact *)rawContactToInstance:(NSDictionary *)rawContact;
 
 - (NSString *)description;
+
 @end

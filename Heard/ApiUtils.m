@@ -197,7 +197,7 @@
 // Get unread messages
 + (void)getUnreadMessagesAndExecuteSuccess:(void(^)(NSArray *messages))successBlock failure:(void(^)())failureBlock
 {
-    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/unread_messages.json"];
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages/unread_messages.json"];
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     

@@ -12,11 +12,13 @@
 #import "Message.h"
 #import "ContactView.h"
 
-@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ABPeoplePickerNavigationControllerDelegate,MFMessageComposeViewControllerDelegate, ContactBubbleViewDelegate, ABUnknownPersonViewControllerDelegate>
+@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ABPeoplePickerNavigationControllerDelegate,MFMessageComposeViewControllerDelegate, ContactBubbleViewDelegate, ABNewPersonViewControllerDelegate>
 
 - (void)addUnreadMessage:(Message *)message;
 - (void) retrieveAndDisplayUnreadMessages;
-- (void)requestAddressBookAccess;
+- (void)requestAddressBookAccessAndRetrieveFriends;
+- (void)displayContacts;
+- (void)distributeNonAttributedMessages;
 
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 
