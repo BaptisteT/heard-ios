@@ -189,7 +189,6 @@
                                     lastName:(__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty)];
                 
                 if (contact.firstName != nil || contact.lastName != nil) {
-//                    [self.addressBookFormattedContacts setObject:contact forKey:contact.phoneNumber];
                     // We need unformatted numbers for the keys
                     [self.addressBookFormattedContacts setObject:contact forKey:phoneNumber];
                 }
@@ -225,7 +224,6 @@
                                             lastName:(__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty)];
                         
                         if (contact.firstName != nil || contact.lastName != nil) {
-//                            [self.addressBookFormattedContacts setObject:contact forKey:contact.phoneNumber];
                             [self.addressBookFormattedContacts setObject:contact forKey:phoneNumber];
                         }
                     }
@@ -242,16 +240,16 @@
 {
     NSMutableArray *phoneNumbers = [[NSMutableArray alloc] init];
     NSMutableDictionary * adressBookWithFormattedKey = [NSMutableDictionary new];
-    
     for (NSString* phoneNumber in self.addressBookFormattedContacts) {
-//        [phoneNumbers addObject:phoneNumber];
         Contact *object = [self.addressBookFormattedContacts objectForKey:phoneNumber];
-        NSString * formattedPhoneNumber = object.phoneNumber;
-        [phoneNumbers addObject:formattedPhoneNumber];
-        [adressBookWithFormattedKey setObject:object forKey:formattedPhoneNumber];
+        [adressBookWithFormattedKey setObject:object forKey:object.phoneNumber];
     }
     // The keys are now formatted numbers (to use local names for retrieved contacts)
     self.addressBookFormattedContacts = adressBookWithFormattedKey;
+    
+    for (NSString* phoneNumber in self.addressBookFormattedContacts) {
+        [phoneNumbers addObject:phoneNumber];
+    }
     
     // Get contacts and compare with contact in memory
     [ApiUtils getMyContacts:phoneNumbers success:^(NSArray *contacts) {
