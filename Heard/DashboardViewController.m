@@ -507,7 +507,7 @@
     self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                        delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:ACTION_SHEET_1_OPTION_0, ACTION_SHEET_1_OPTION_1, ACTION_SHEET_1_OPTION_2, ACTION_SHEET_1_OPTION_3, nil];
+                                              otherButtonTitles:ACTION_SHEET_1_OPTION_0, ACTION_SHEET_2_OPTION_1, ACTION_SHEET_1_OPTION_2, ACTION_SHEET_1_OPTION_3, nil];
     
     for (UIView* view in [self.menuActionSheet subviews])
     {
@@ -836,6 +836,7 @@
 - (void)newPersonViewController:(ABNewPersonViewController *)newPersonViewController didCompleteWithNewPerson:(ABRecordRef)person
 {
     if (!person) { // cancel clicked
+        self.contactToAdd = nil;
         [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     } else {
         ABMultiValueRef phones =ABRecordCopyValue(person, kABPersonPhoneProperty);
@@ -899,7 +900,7 @@
         UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
         [activityViewController setValue:@"You should download Waved." forKey:@"subject"];
         activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-        activityViewController.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeAssignToContact, UIActivityTypeAddToReadingList, UIActivityTypeAirDrop];
+        activityViewController.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeAssignToContact, UIActivityTypeAddToReadingList, UIActivityTypeAirDrop, UIActivityTypeSaveToCameraRoll, UIActivityTypeCopyToPasteboard];
         
         [self presentViewController:activityViewController animated:YES completion:nil];
         
@@ -916,11 +917,15 @@
     else if ([buttonTitle isEqualToString:ACTION_SHEET_2_OPTION_1]) {
         // create person record
         ABRecordRef person = ABPersonCreate();
-        ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFStringRef) self.contactToAdd.firstName, NULL);
-        ABRecordSetValue(person, kABPersonLastNameProperty, (__bridge CFStringRef) self.contactToAdd.lastName, NULL);
-        ABMutableMultiValueRef phoneNumbers = ABMultiValueCreateMutable(kABMultiStringPropertyType);
-        ABMultiValueAddValueAndLabel(phoneNumbers, (__bridge CFStringRef)self.contactToAdd.phoneNumber, kABPersonPhoneMainLabel, NULL);
-        ABRecordSetValue(person, kABPersonPhoneProperty, phoneNumbers, nil);
+        
+        // Fill contact info if any
+        if (self.contactToAdd) {
+            ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFStringRef) self.contactToAdd.firstName, NULL);
+            ABRecordSetValue(person, kABPersonLastNameProperty, (__bridge CFStringRef) self.contactToAdd.lastName, NULL);
+            ABMutableMultiValueRef phoneNumbers = ABMultiValueCreateMutable(kABMultiStringPropertyType);
+            ABMultiValueAddValueAndLabel(phoneNumbers, (__bridge CFStringRef)self.contactToAdd.phoneNumber, kABPersonPhoneMainLabel, NULL);
+            ABRecordSetValue(person, kABPersonPhoneProperty, phoneNumbers, nil);
+        }
         
         // let's show view controller
         ABNewPersonViewController *controller = [[ABNewPersonViewController alloc] init];
