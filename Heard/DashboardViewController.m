@@ -189,7 +189,9 @@
                                     lastName:(__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty)];
                 
                 if (contact.firstName != nil || contact.lastName != nil) {
-                    [self.addressBookFormattedContacts setObject:contact forKey:contact.phoneNumber];
+//                    [self.addressBookFormattedContacts setObject:contact forKey:contact.phoneNumber];
+                    // We need unformatted numbers for the keys
+                    [self.addressBookFormattedContacts setObject:contact forKey:phoneNumber];
                 }
                 
                 //Store country codes found in international numbers
@@ -223,7 +225,8 @@
                                             lastName:(__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty)];
                         
                         if (contact.firstName != nil || contact.lastName != nil) {
-                            [self.addressBookFormattedContacts setObject:contact forKey:contact.phoneNumber];
+//                            [self.addressBookFormattedContacts setObject:contact forKey:contact.phoneNumber];
+                            [self.addressBookFormattedContacts setObject:contact forKey:phoneNumber];
                         }
                     }
                 }
@@ -238,15 +241,18 @@
 - (void)getHeardContacts
 {
     NSMutableArray *phoneNumbers = [[NSMutableArray alloc] init];
+    NSMutableDictionary * adressBookWithFormattedKey = [NSMutableDictionary new];
+    
     for (NSString* phoneNumber in self.addressBookFormattedContacts) {
-        [phoneNumbers addObject:phoneNumber];
+//        [phoneNumbers addObject:phoneNumber];
+        Contact *object = [self.addressBookFormattedContacts objectForKey:phoneNumber];
+        NSString * formattedPhoneNumber = object.phoneNumber;
+        [phoneNumbers addObject:formattedPhoneNumber];
+        [adressBookWithFormattedKey setObject:object forKey:formattedPhoneNumber];
     }
-    void (^failureBlock)(NSURLSessionDataTask *) = ^void(NSURLSessionDataTask *task){
-        //In this case, 401 means that the auth token is no valid.
-        if ([SessionUtils invalidTokenResponse:task]) {
-            [SessionUtils redirectToSignIn];
-        }
-    };
+    // The keys are now formatted numbers (to use local names for retrieved contacts)
+    self.addressBookFormattedContacts = adressBookWithFormattedKey;
+    
     // Get contacts and compare with contact in memory
     [ApiUtils getMyContacts:phoneNumbers success:^(NSArray *contacts) {
         for (Contact *contact in contacts) {
@@ -269,7 +275,13 @@
         
         // Distribute non attributed messages
         [self distributeNonAttributedMessages];
-    } failure:failureBlock];
+        
+    } failure: ^void(NSURLSessionDataTask *task){
+        //In this case, 401 means that the auth token is no valid.
+        if ([SessionUtils invalidTokenResponse:task]) {
+            [SessionUtils redirectToSignIn];
+        }
+    }];
 }
 
 
