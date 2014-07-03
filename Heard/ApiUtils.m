@@ -195,7 +195,7 @@
 }
 
 // Get unread messages
-+ (void)getUnreadMessagesAndExecuteSuccess:(void(^)(NSArray *messages))successBlock failure:(void(^)())failureBlock
++ (void)getUnreadMessagesAndExecuteSuccess:(void(^)(NSArray *messages))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages/unread_messages.json"];
     
@@ -213,7 +213,7 @@
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (failureBlock) {
-            failureBlock();
+            failureBlock(task);
         }
     }];
 }
@@ -240,7 +240,7 @@
     }];
 }
 
-+ (void)getMyContacts:(NSArray *)phoneNumbers success:(void(^)(NSArray *contacts))successBlock failure:(void(^)())failureBlock
++ (void)getMyContacts:(NSArray *)phoneNumbers success:(void(^)(NSArray *contacts))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/get_my_contact.json"];
     
@@ -260,7 +260,7 @@
         }
     }failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (failureBlock) {
-            failureBlock();
+            failureBlock(task);
         }
     }];
 }

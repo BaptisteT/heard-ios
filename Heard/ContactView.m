@@ -306,7 +306,7 @@
     // do nothing
 }
 
-//TODO: Should be in DashBoard
+// Should be in DashBoard
 - (void)notifyNewMeters
 {
     [self.recorder updateMeters];

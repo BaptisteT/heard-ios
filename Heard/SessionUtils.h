@@ -26,4 +26,6 @@
 
 + (void)wipeOffCredentials;
 
++ (BOOL)invalidTokenResponse:(NSURLSessionDataTask *)task;
+
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "SessionUtils.h"
+#import "GeneralUtils.h"
 
 #define USER_AUTH_TOKEN_PREF @"User authentication token preference"
 #define USER_ID_PREF @"User id preference"
@@ -69,9 +70,9 @@
 {
     [SessionUtils wipeOffCredentials];
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard_iPhone" bundle:nil];
-    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
-    window.rootViewController = [storyboard instantiateInitialViewController];
+    UINavigationController *navigationController = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    [navigationController popToRootViewControllerAnimated:NO];
+    [GeneralUtils showMessage:@"Please, sign in again" withTitle:@"Authentification error"];
 }
 
 // Remove FB session and user token
@@ -79,6 +80,12 @@
 {
     NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+}
+
+// Check if this is an invalid token response
++ (BOOL)invalidTokenResponse:(NSURLSessionDataTask *)task
+{
+    return task && [(NSHTTPURLResponse *) task.response statusCode] == 401;
 }
 
 

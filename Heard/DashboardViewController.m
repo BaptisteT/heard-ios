@@ -239,6 +239,12 @@
     for (NSString* phoneNumber in self.addressBookFormattedContacts) {
         [phoneNumbers addObject:phoneNumber];
     }
+    void (^failureBlock)(NSURLSessionDataTask *) = ^void(NSURLSessionDataTask *task){
+        //In this case, 401 means that the auth token is no valid.
+        if ([SessionUtils invalidTokenResponse:task]) {
+            [SessionUtils redirectToSignIn];
+        }
+    };
     // Get contacts and compare with contact in memory
     [ApiUtils getMyContacts:phoneNumbers success:^(NSArray *contacts) {
         for (Contact *contact in contacts) {
@@ -261,10 +267,7 @@
         
         // Distribute non attributed messages
         [self distributeNonAttributedMessages];
-    } failure:^{
-        // todo bt (later) handle this case
-        // invalid token --> redirect to sign in / log out
-    }];
+    } failure:failureBlock];
 }
 
 
@@ -330,7 +333,9 @@
         [contactView setOrderPosition:position];
         position ++;
     }
-
+    
+    // Pending contact UI
+    [self showContactViewAsPending];
 }
 
 - (void)displayAdditionnalContact:(Contact *)contact
@@ -426,11 +431,17 @@
             [self requestAddressBookAccessAndRetrieveFriends];
         } else {
             [self redisplayContact];
-            [self showContactViewAsPending];
         }
     };
     
-    [ApiUtils getUnreadMessagesAndExecuteSuccess:successBlock failure:nil];
+    void (^failureBlock)(NSURLSessionDataTask *) = ^void(NSURLSessionDataTask *task){
+        //In this case, 401 means that the auth token is no valid.
+        if ([SessionUtils invalidTokenResponse:task]) {
+            [SessionUtils redirectToSignIn];
+        }
+    };
+    
+    [ApiUtils getUnreadMessagesAndExecuteSuccess:successBlock failure:failureBlock];
 }
 
 - (void)resetUnreadMessages
@@ -495,7 +506,6 @@
     // Redisplay correctly
     self.nonAttributedUnreadMessages = nil;
     [self redisplayContact];
-    [self showContactViewAsPending];
     [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
 }
 
