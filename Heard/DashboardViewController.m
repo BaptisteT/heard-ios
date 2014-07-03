@@ -22,6 +22,7 @@
 #import "AudioUtils.h"
 #import "HeardAppDelegate.h"
 #import "ContactUtils.h"
+#import <MediaPlayer/MPMusicPlayerController.h>
 
 #define ACTION_SHEET_1_OPTION_0 @"Replay last message"
 #define ACTION_SHEET_1_OPTION_1 @"Invite contact"
@@ -63,6 +64,7 @@
 @property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
 @property (nonatomic, strong) ContactView *lastContactPlayed;
 @property (nonatomic) BOOL isUsingHeadSet;
+
 
 @end
 
@@ -766,11 +768,17 @@
     }
 }
 
-//Only UI
+// Audio Playing UI + volume setting
 - (void)playerUI:(NSTimeInterval)duration ByContactView:(ContactView *)contactView
 {
-    [self playerUIForContactView:contactView];
+    // Min volume (legal / deprecated ?)
+    MPMusicPlayerController *appPlayer = [MPMusicPlayerController applicationMusicPlayer];
+    float volumeLevel = appPlayer.volume;
+    if (volumeLevel < 0.5) {
+        [appPlayer setVolume:0.5];
+    }
     
+    [self playerUIForContactView:contactView];
     self.playerContainer.hidden = NO;
     
     float initialWidth = 0;
@@ -791,6 +799,7 @@
                          self.playerView.frame = frame;
                      } completion:^(BOOL finished){
                          if (finished) {
+                             [appPlayer setVolume:volumeLevel];
                              [self endPlayerUI];
                          }
                      }];
