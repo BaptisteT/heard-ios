@@ -31,15 +31,7 @@
     
     // Contacts list
     self.contacts = [ContactUtils retrieveContactsInMemory];
-    
-    // Notification received when app closed
-    NSDictionary *remoteNotif = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-    if(remoteNotif) {
-        // update contact list & order
-        Message *message = [Message rawMessageToInstance:[remoteNotif valueForKey:@"message"]];
-        [ContactUtils updateContacts:self.contacts withNewMessage:message];
-    }
-    
+
     if ([SessionUtils isSignedIn]) {
         WelcomeViewController* welcomeViewController = (WelcomeViewController *)  self.window.rootViewController.childViewControllers[0];
         [welcomeViewController performSegueWithIdentifier:@"Dashboard Push Segue From Welcome" sender:nil];

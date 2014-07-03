@@ -63,7 +63,6 @@
 @property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
 @property (nonatomic, strong) ContactView *lastContactPlayed;
 @property (nonatomic) BOOL isUsingHeadSet;
-@property (nonatomic, strong) IBOutlet UILabel *contactAuthDenyLabel;
 
 @end
 
@@ -80,8 +79,6 @@
     [super viewDidLoad];
     
     self.menuButton.hidden = YES;
-    [self.contactAuthDenyLabel setText:@"Waved does not have access to your contacts.\n\nPlease go to your iPhone > Settings > Privacy > Contacts. Then select ON for Waved"];
-    [self.contactAuthDenyLabel setNumberOfLines:0];
     
     self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - RECORDER_HEIGHT, self.view.bounds.size.width, RECORDER_HEIGHT)];
     [self.view addSubview:self.recorderContainer];
@@ -145,7 +142,8 @@
                 [self retrieveFriendsFromAddressBook:addressBook];
             } else {
                 // User denied access
-                [self.contactAuthDenyLabel setHidden:NO];
+                [GeneralUtils showMessage:@"To activate it, go to Settings > Privacy > Contacts" withTitle:@"Waved does not have access to your contacts"];
+                [self distributeNonAttributedMessages];
             }
         });
     }
@@ -278,9 +276,6 @@
 - (void)removeDisplayedContacts
 {
     self.menuButton.hidden = YES;
-    if (!self.contactAuthDenyLabel.isHidden) {
-        [self.contactAuthDenyLabel setHidden:YES];
-    }
     
     // Erase existing views
     for (ContactView *contactView in self.contactBubbleViews) {
@@ -427,7 +422,7 @@
         }
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:messages.count];
         // Check if we have new contacts
-        if (retrieveNewContacts || !areAttributed) {
+        if (retrieveNewContacts || !areAttributed || self.contacts.count == 0) {
             [self requestAddressBookAccessAndRetrieveFriends];
         } else {
             [self redisplayContact];
