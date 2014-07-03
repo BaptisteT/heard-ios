@@ -62,8 +62,9 @@
     UIViewController *visibleController = [self getVisibleController];
     
     if ([visibleController isKindOfClass:[DashboardViewController class]]) {
-        [(DashboardViewController *)visibleController displayContacts]; // ie. change order if needed
-        [(DashboardViewController *)visibleController retrieveAndDisplayUnreadMessages];
+        [(DashboardViewController *)visibleController displayContacts];
+        // Retrieve new messages
+        [(DashboardViewController *)visibleController retrieveUnreadMessagesAndNewContacts:NO];
     }
 }
 
@@ -96,28 +97,34 @@
     NSLog(@"Error in registration. Error: %@", err);
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    // The user receives a notif while using the app
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
     Message *newMessage = [Message rawMessageToInstance:[userInfo valueForKey:@"message"]];
     
     // Update Contact
     [ContactUtils updateContacts:self.contacts withNewMessage:newMessage];
-    
-    // Update badge
-    NSNumber *badgeNumber = [[userInfo valueForKey:@"aps"] valueForKey:@"badge"];
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[badgeNumber integerValue]];
-    
-    // Add unread message
-    UIViewController *visibleController = [self getVisibleController];
-    if ([visibleController isKindOfClass:[DashboardViewController class]]) {
-        [(DashboardViewController *)visibleController addUnreadMessage:newMessage];
+    UIApplicationState state = [application applicationState];
+    if (state == UIApplicationStateActive) {
+        // Update badge
+        NSNumber *badgeNumber = [[userInfo valueForKey:@"aps"] valueForKey:@"badge"];
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[badgeNumber integerValue]];
         
-        // distributeNonAttributedMessages (case where the bubble does not exists)
-        [(DashboardViewController *)visibleController distributeNonAttributedMessages];
-        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+        // Add unread message
+        UIViewController *visibleController = [self getVisibleController];
+        if ([visibleController isKindOfClass:[DashboardViewController class]]) {
+            BOOL isAttributed = [(DashboardViewController *)visibleController addUnreadMessageToExistingContacts:newMessage];
+            
+            // distribute NonAttributedMessages
+            if (!isAttributed) {
+                [(DashboardViewController *)visibleController distributeNonAttributedMessages];
+            }
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+        }
     }
+    
+    completionHandler(UIBackgroundFetchResultNoData);
 }
-
 
 NSString* stringFromDeviceTokenData(NSData *deviceToken)
 {

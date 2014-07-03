@@ -27,7 +27,6 @@
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic) NSInteger unreadMessagesCount;
 @property (nonatomic) UILabel *unreadMessagesLabel;
-@property (nonatomic) NSMutableArray *unreadMessages;
 @property (strong, nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) NSTimer *metersTimer;
 @property (nonatomic, strong) UIImageView *recordingOverlay;
@@ -194,7 +193,6 @@
 
 - (void)handleNonPendingTapGesture
 {
-    //BB: weird condition?
     if (!self.unreadMessagesLabel.isHidden) { // ie. self.unreadMessageCount > 0 && self.nextMessageAudioData !=nil
         self.userInteractionEnabled = NO;
         
@@ -326,8 +324,8 @@
     
     NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
     [ApiUtils sendMessage:audioData toUser:self.contact.identifier success:^{
-        // todo bt update date, check same than ruby one
-//        self.contact.lastMessageDate = [[NSDate date] date]
+        // Update last message date
+        self.contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
         [self.delegate messageSentWithError:NO];
     } failure:^{
         [self.delegate messageSentWithError:YES];

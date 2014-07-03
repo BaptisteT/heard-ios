@@ -23,6 +23,7 @@
 @property (nonatomic) BOOL pendingContact;
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic) NSInteger orderPosition;
+@property (nonatomic) NSMutableArray *unreadMessages;
 
 - (void)addUnreadMessage:(Message *)message;
 - (void)resetUnreadMessages;

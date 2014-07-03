@@ -90,13 +90,15 @@
     self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_LINE_WEIGHT, self.view.bounds.size.width, PLAYER_LINE_WEIGHT)];
     [self.view addSubview:self.playerContainer];
     self.playerContainer.hidden = YES;
-
+    
+    self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
+    
     // Create bubble with contacts
     self.contacts = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).contacts;
     [self displayContacts];
 
-    // Retrieve messages (fill nonAttributedUnreadMessages if necessary)
-    [self retrieveAndDisplayUnreadMessages];
+    // Retrieve messages & contacts
+    [self retrieveUnreadMessagesAndNewContacts:YES];
     
     // Create audio session
     AVAudioSession* session = [AVAudioSession sharedInstance];
@@ -119,8 +121,6 @@
     
     // Headset observer
     self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:session];
-
-    self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
 }
 
 - (void)viewDidLayoutSubviews
@@ -265,6 +265,7 @@
         [self distributeNonAttributedMessages];
     } failure:^{
         // todo bt (later) handle this case
+        // invalid token --> redirect to sign in / log out
     }];
 }
 
@@ -317,6 +318,26 @@
     }
 }
 
+- (void)redisplayContact
+{
+    // Sort contact
+    [self.contactBubbleViews sortUsingComparator:^(ContactView *contactView1, ContactView * contactView2) {
+        if (contactView1.contact.lastMessageDate < contactView2.contact.lastMessageDate) {
+            return (NSComparisonResult)NSOrderedDescending;
+        } else {
+            return (NSComparisonResult)NSOrderedAscending;
+        }
+    }];
+    
+    // Create bubbles
+    int position = 1;
+    for (ContactView *contactView in self.contactBubbleViews) {
+        [contactView setOrderPosition:position];
+        position ++;
+    }
+
+}
+
 - (void)displayAdditionnalContact:(Contact *)contact
 {
     if (!self.contactBubbleViews) {
@@ -342,7 +363,7 @@
     ContactView *contactView = [[ContactView alloc] initWithContact:contact];
     
     // if pending, and missing name, request info
-    if (contact.isPending && contact.phoneNumber.length != 0) {
+    if (contact.isPending && contact.phoneNumber.length == 0) {
         void(^successBlock)(Contact *) = ^void(Contact *serverContact) {
             contact.phoneNumber = serverContact.phoneNumber;
             contact.firstName = serverContact.firstName;
@@ -381,23 +402,37 @@
     [self.contactScrollView addSubview:nameLabel];
 }
 
+- (void)showContactViewAsPending
+{
+    for (ContactView *contactView in self.contactBubbleViews) {
+        if (contactView.contact.isPending) {
+            [contactView setPendingContact:YES];
+        }
+    }
+}
 
 // ----------------------------------
 #pragma mark Display Messages
 // ----------------------------------
 
 // Retrieve unread messages and display alert
-- (void) retrieveAndDisplayUnreadMessages
+- (void) retrieveUnreadMessagesAndNewContacts:(BOOL)retrieveNewContacts
 {
     void (^successBlock)(NSArray *messages) = ^void(NSArray *messages) {
         //Reset unread messages
         [self resetUnreadMessages];
+        BOOL areAttributed = YES;
         for (Message *message in messages) {
-            [self addUnreadMessage:message];
+            areAttributed &= [self addUnreadMessageToExistingContacts:message];
         }
-        
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:messages.count];
         // Check if we have new contacts
-        [self requestAddressBookAccessAndRetrieveFriends];
+        if (retrieveNewContacts || !areAttributed) {
+            [self requestAddressBookAccessAndRetrieveFriends];
+        } else {
+            [self redisplayContact];
+            [self showContactViewAsPending];
+        }
     };
     
     [ApiUtils getUnreadMessagesAndExecuteSuccess:successBlock failure:nil];
@@ -412,27 +447,24 @@
 }
 
 // Add a message we just received
-- (void)addUnreadMessage:(Message *)message
+- (BOOL)addUnreadMessageToExistingContacts:(Message *)message
 {
-    BOOL isAttributed = NO;
     for (ContactView *contactBubble in self.contactBubbleViews) {
         if (message.senderId == contactBubble.contact.identifier) {
             [contactBubble addUnreadMessage:message];
             
             // Update last message date to sort contacts even if no push
             contactBubble.contact.lastMessageDate = MAX(contactBubble.contact.lastMessageDate,message.createdAt);
-            isAttributed = YES;
-            break;
+            return YES;
         }
     }
 
     // unread message pool
-    if (!isAttributed) {
-        if (!self.nonAttributedUnreadMessages) {
+    if (!self.nonAttributedUnreadMessages) {
             self.nonAttributedUnreadMessages = [[NSMutableArray alloc] init];
         }
-        [self.nonAttributedUnreadMessages addObject:message];
-    }
+    [self.nonAttributedUnreadMessages addObject:message];
+    return NO;
 }
 
 - (void)distributeNonAttributedMessages
@@ -454,7 +486,7 @@
             // create contact if does not exists
             Contact *contact = [ContactUtils findContact:message.senderId inContactsArray:self.contacts];
             if (!contact) {
-                Contact *contact = [Contact createContactWithId:message.senderId phoneNumber:nil firstName:nil lastName:nil];
+                contact = [Contact createContactWithId:message.senderId phoneNumber:nil firstName:nil lastName:nil];
                 contact.lastMessageDate = message.createdAt;
                 contact.isPending = YES;
                 [self.contacts addObject:contact];
@@ -464,14 +496,12 @@
             [[self.contactBubbleViews lastObject] addUnreadMessage:message];
         }
     }
-    self.nonAttributedUnreadMessages = nil;
     
-    // Mark pending contact view as pending
-    for (ContactView *contactView in self.contactBubbleViews) {
-        if (contactView.contact.isPending) {
-            [contactView setPendingContact:YES];
-        }
-    }
+    // Redisplay correctly
+    self.nonAttributedUnreadMessages = nil;
+    [self redisplayContact];
+    [self showContactViewAsPending];
+    [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
 }
 
 
@@ -828,6 +858,7 @@
             if ([mobile isEqualToString:contactBubble.contact.phoneNumber]) {
                 if (contactBubble.pendingContact) {
                     [contactBubble setPendingContact:NO];
+                    contactBubble.contact.isPending = NO;
                     self.contactToAdd = nil;
                 }
                 break;
@@ -913,17 +944,19 @@
                     holePosition = bubbleView.orderPosition;
                     [self.contacts removeObject:bubbleView.contact];
                     [bubbleView.nameLabel removeFromSuperview];
+                    // update Badge
+                    if (bubbleView.unreadMessages) {
+                        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] - bubbleView.unreadMessages.count];
+                    }
                     [self.contactBubbleViews removeObject:bubbleView];
-                    
                     break;
                 }
             }
             // Change position of other bubbles
-            for (ContactView * bubbleView in self.contactBubbleViews) {
-                if (bubbleView.orderPosition > holePosition) {
-                    [bubbleView setOrderPosition:bubbleView.orderPosition -1];
-                }
-            }
+            [self redisplayContact];
+            
+            // Update badge & scroll view frame
+            [self setScrollViewSizeForContactCount:(int)[self.contactBubbleViews count]];
             self.contactToAdd = nil;
         };
         [ApiUtils blockUser:self.contactToAdd.identifier AndExecuteSuccess:successBlock failure:nil];
