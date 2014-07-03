@@ -90,7 +90,7 @@
 }
 
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     Message *newMessage = [Message rawMessageToInstance:[userInfo valueForKey:@"message"]];
     
@@ -114,8 +114,6 @@
             AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
         }
     }
-    
-    completionHandler(UIBackgroundFetchResultNoData);
 }
 
 NSString* stringFromDeviceTokenData(NSData *deviceToken)
