@@ -330,4 +330,22 @@
     }];
 }
 
+// Crash Data
++ (void)sendCrashData:(NSString *)data andExecuteSuccess:(void(^)())successBlock failure:(void(^)())failureBlock {
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"report_crash.json"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setObject:data forKey:@"data"];
+    
+    [[ApiUtils sharedClient] POST:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        if (successBlock) {
+            successBlock();
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
 @end

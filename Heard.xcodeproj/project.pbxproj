@@ -93,6 +93,8 @@
 		3C06C3A019659C2400B8D70C /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C06C39F19659C2400B8D70C /* MediaPlayer.framework */; };
 		3C0D0061195C5E500058A0E0 /* AudioUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D0060195C5E500058A0E0 /* AudioUtils.m */; };
 		3C0D0064196330E40058A0E0 /* ContactUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D0063196330E40058A0E0 /* ContactUtils.m */; };
+		3C55FD6D1966AA3500E818D9 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */; };
+		3C55FD701966B11C00E818D9 /* CrashReportUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */; };
 		3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA177E91958B74000096266 /* AudioToolbox.framework */; };
 		3CB8B7F5195453E50090D657 /* ContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactView.m */; };
 /* End PBXBuildFile section */
@@ -225,6 +227,9 @@
 		3C0D0060195C5E500058A0E0 /* AudioUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioUtils.m; sourceTree = "<group>"; };
 		3C0D0062196330E40058A0E0 /* ContactUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactUtils.h; sourceTree = "<group>"; };
 		3C0D0063196330E40058A0E0 /* ContactUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactUtils.m; sourceTree = "<group>"; };
+		3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
+		3C55FD6E1966B11C00E818D9 /* CrashReportUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashReportUtils.h; sourceTree = "<group>"; };
+		3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashReportUtils.m; sourceTree = "<group>"; };
 		3C9BBDFD195345A6001C6C4D /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
 		3C9BBDFE195345A6001C6C4D /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
 		3C9BBDFF195345A6001C6C4D /* UIActivityIndicatorView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActivityIndicatorView+AFNetworking.h"; sourceTree = "<group>"; };
@@ -255,6 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C06C3A019659C2400B8D70C /* MediaPlayer.framework in Frameworks */,
+				3C55FD6D1966AA3500E818D9 /* CrashReporter.framework in Frameworks */,
 				3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */,
 				0BAF4FE219560AEE00838D7D /* MessageUI.framework in Frameworks */,
 				0B58BAFD1954B47700E9FF70 /* AddressBook.framework in Frameworks */,
@@ -344,6 +350,7 @@
 		0BD758BE1950F91B00CF0D85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */,
 				3C06C39F19659C2400B8D70C /* MediaPlayer.framework */,
 				3CA177E91958B74000096266 /* AudioToolbox.framework */,
 				0BAF4FE119560AEE00838D7D /* MessageUI.framework */,
@@ -476,6 +483,8 @@
 				3C0D0060195C5E500058A0E0 /* AudioUtils.m */,
 				3C0D0062196330E40058A0E0 /* ContactUtils.h */,
 				3C0D0063196330E40058A0E0 /* ContactUtils.m */,
+				3C55FD6E1966B11C00E818D9 /* CrashReportUtils.h */,
+				3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -687,6 +696,7 @@
 				0BB0E8FC195B449A00C94AC0 /* UIView+MPSnapshotImage.m in Sources */,
 				0BDB653F1953B5EA00223093 /* AFHTTPSessionManager.m in Sources */,
 				0BB0E8ED195B449A00C94AC0 /* Mixpanel.m in Sources */,
+				3C55FD701966B11C00E818D9 /* CrashReportUtils.m in Sources */,
 				0BDB655E1953BE9100223093 /* SessionUtils.m in Sources */,
 				0BB0E8F7195B449A00C94AC0 /* MPSurveyQuestionViewController.m in Sources */,
 				0BDB65401953B5EA00223093 /* AFNetworkReachabilityManager.m in Sources */,
@@ -810,6 +820,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (9X2H84A9C9)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Bastien Beurier (9X2H84A9C9)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
@@ -826,6 +840,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (9X2H84A9C9)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Bastien Beurier (9X2H84A9C9)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";

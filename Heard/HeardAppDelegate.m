@@ -18,6 +18,8 @@
 #import "Constants.h"
 #import "TrackingUtils.h"
 #import "ContactUtils.h"
+#import <CrashReporter/CrashReporter.h>
+#import "CrashReportUtils.h"
 
 @implementation HeardAppDelegate
 
@@ -28,6 +30,16 @@
     
     //Mixpanel
     [Mixpanel sharedInstanceWithToken:kProdMixPanelToken];
+    
+    // Crash report
+    PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
+    NSError *error;
+    // Check if we previously crashed
+    if ([crashReporter hasPendingCrashReport])
+        [CrashReportUtils handleCrashReport];
+    // Enable the Crash Reporter
+    if (![crashReporter enableCrashReporterAndReturnError: &error])
+        NSLog(@"Warning: Could not enable crash reporter: %@", error);
     
     // Contacts list
     self.contacts = [ContactUtils retrieveContactsInMemory];
@@ -133,5 +145,6 @@ NSString* stringFromDeviceTokenData(NSData *deviceToken)
     UINavigationController *navigationController = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
     return navigationController.visibleViewController;
 }
+
 
 @end
