@@ -793,9 +793,8 @@
 {
     // Min volume (legal / deprecated ?)
     MPMusicPlayerController *appPlayer = [MPMusicPlayerController applicationMusicPlayer];
-    float volumeLevel = appPlayer.volume;
-    if (volumeLevel < 0.5) {
-        [appPlayer setVolume:0.5];
+    if (appPlayer.volume < 0.25) {
+        [appPlayer setVolume:0.25];
     }
     
     [self playerUIForContactView:contactView];
@@ -819,8 +818,6 @@
                          self.playerView.frame = frame;
                      } completion:^(BOOL finished){
                          if (finished) {
-                             // Set volume back
-                             [appPlayer setVolume:volumeLevel];
                              [self endPlayerUI];
                          }
                      }];
