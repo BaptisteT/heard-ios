@@ -116,6 +116,7 @@
                                                   usingBlock:^(NSNotification *notification) {
                                                                  [self updateOutputAudioPort];
                                                              }];
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
     
     // Headset observer
     self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:session];
@@ -790,9 +791,6 @@
 // Audio Playing UI + volume setting
 - (void)playerUI:(NSTimeInterval)duration ByContactView:(ContactView *)contactView
 {
-    // Start controlling proximity
-    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
-    
     // Min volume (legal / deprecated ?)
     MPMusicPlayerController *appPlayer = [MPMusicPlayerController applicationMusicPlayer];
     float volumeLevel = appPlayer.volume;
@@ -830,9 +828,6 @@
 
 - (void)endPlayerUI
 {
-    // Stop Controlling proximity
-    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
-    
     [self endPlayerUIForAllContactViews];
     
     if ([self.mainPlayer isPlaying]) {
