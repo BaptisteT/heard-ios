@@ -110,7 +110,6 @@
     [session addObserver:self forKeyPath:@"inputDataSources" options:NSKeyValueObservingOptionNew context:nil];
     
     // Add proximity state observer
-    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
     [[NSNotificationCenter defaultCenter] addObserverForName:UIDeviceProximityStateDidChangeNotification
                                                       object:nil
                                                        queue:[NSOperationQueue mainQueue]
@@ -791,6 +790,9 @@
 // Audio Playing UI + volume setting
 - (void)playerUI:(NSTimeInterval)duration ByContactView:(ContactView *)contactView
 {
+    // Start controlling proximity
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    
     // Min volume (legal / deprecated ?)
     MPMusicPlayerController *appPlayer = [MPMusicPlayerController applicationMusicPlayer];
     float volumeLevel = appPlayer.volume;
@@ -819,6 +821,7 @@
                          self.playerView.frame = frame;
                      } completion:^(BOOL finished){
                          if (finished) {
+                             // Set volume back
                              [appPlayer setVolume:volumeLevel];
                              [self endPlayerUI];
                          }
@@ -827,6 +830,9 @@
 
 - (void)endPlayerUI
 {
+    // Stop Controlling proximity
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+    
     [self endPlayerUIForAllContactViews];
     
     if ([self.mainPlayer isPlaying]) {
