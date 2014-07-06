@@ -21,6 +21,15 @@
 #import <CrashReporter/CrashReporter.h>
 #import "CrashReportUtils.h"
 
+@interface HeardAppDelegate()
+
+@property (nonatomic, strong) UIAlertView *apiMessagealertView;
+@property (nonatomic, strong) NSURL *redirectURL;
+@property (nonatomic, strong) NSString *messageContent;
+@property (nonatomic, strong) NSString *messageType;
+
+@end
+
 @implementation HeardAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -43,7 +52,21 @@
     
     // Contacts list
     self.contacts = [ContactUtils retrieveContactsInMemory];
+    
 
+    // Check API related message
+    [ApiUtils checkAPIVersionAndExecuteSucess:^(NSDictionary *result){
+        self.messageType = [result valueForKeyPath:@"message_type"];
+        if (self.messageType) {
+            self.messageContent = [result valueForKeyPath:@"message_content"];
+            NSString *messageURL = [result valueForKeyPath:@"redirect_url"];
+            if (messageURL && [messageURL length] > 0) {
+                self.redirectURL = [NSURL URLWithString:messageURL];
+            }
+            [self createObsoleteAPIAlertView];
+        }
+    }];
+    
     if ([SessionUtils isSignedIn]) {
         WelcomeViewController* welcomeViewController = (WelcomeViewController *)  self.window.rootViewController.childViewControllers[0];
         [welcomeViewController performSegueWithIdentifier:@"Dashboard Push Segue From Welcome" sender:nil];
@@ -143,7 +166,34 @@ NSString* stringFromDeviceTokenData(NSData *deviceToken)
 - (UIViewController *)getVisibleController
 {
     UINavigationController *navigationController = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    return navigationController.visibleViewController;
+    if ([navigationController respondsToSelector:@selector(visibleViewController)]) {
+        return navigationController.visibleViewController;
+    } else {
+        return nil;
+    }
+}
+
+// API related alert
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView == self.apiMessagealertView) {
+        if (self.redirectURL) {
+            [[UIApplication sharedApplication] openURL:self.redirectURL];
+        }
+        if ([self.messageType isEqualToString:@"Blocking alert"]) {
+            [self createObsoleteAPIAlertView];
+        }
+    }
+}
+
+- (void)createObsoleteAPIAlertView
+{
+    self.apiMessagealertView = [[UIAlertView alloc] initWithTitle:nil
+                                                          message:self.messageContent
+                                                         delegate:self
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+    [self.apiMessagealertView show];
 }
 
 

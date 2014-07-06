@@ -348,4 +348,20 @@
     }];
 }
 
+// Check API version (retrieve potential message and redirection)
++ (void)checkAPIVersionAndExecuteSucess:(void(^)(NSDictionary *))successBlock
+{
+    NSString *path = [[ApiUtils getBasePath] stringByAppendingString:@"obsolete_api.json"];
+    
+    NSDictionary *parameters = @{@"api_version": kApiVersion};
+    [[ApiUtils sharedClient] GET:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        NSDictionary *result = [JSON valueForKeyPath:@"result"];
+        if (successBlock) {
+            successBlock(result);
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"checkAPIVersion: We should not pass in this block!!!!");
+    }];
+}
+
 @end

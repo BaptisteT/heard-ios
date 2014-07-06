@@ -51,4 +51,6 @@
 
 + (void)sendCrashData:(NSString *)data andExecuteSuccess:(void(^)())successBlock failure:(void(^)())failureBlock;
 
++ (void)checkAPIVersionAndExecuteSucess:(void(^)(NSDictionary *))successBlock;
+
 @end
