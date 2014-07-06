@@ -12,7 +12,7 @@
 #import "Message.h"
 #import "ContactView.h"
 
-@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ABPeoplePickerNavigationControllerDelegate,MFMessageComposeViewControllerDelegate, ContactBubbleViewDelegate, ABNewPersonViewControllerDelegate>
+@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ABPeoplePickerNavigationControllerDelegate,MFMessageComposeViewControllerDelegate, ContactBubbleViewDelegate, ABNewPersonViewControllerDelegate, UIGestureRecognizerDelegate>
 
 - (BOOL)addUnreadMessageToExistingContacts:(Message *)message;
 - (void) retrieveUnreadMessagesAndNewContacts:(BOOL)retrieveNewContacts;

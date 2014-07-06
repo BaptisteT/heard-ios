@@ -64,6 +64,10 @@
 @property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
 @property (nonatomic, strong) ContactView *lastContactPlayed;
 @property (nonatomic) BOOL isUsingHeadSet;
+@property (nonatomic, strong) NSData *resendAudioData;
+@property (nonatomic, strong) Contact *resendContact;
+@property (nonatomic, strong) UITapGestureRecognizer *oneTapResendRecognizer;
+@property (nonatomic, strong) NSTimer *resendTimer;
 
 
 @end
@@ -82,13 +86,20 @@
     
     self.menuButton.hidden = YES;
     
+    // Init recorder container
     self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - RECORDER_HEIGHT, self.view.bounds.size.width, RECORDER_HEIGHT)];
     [self.view addSubview:self.recorderContainer];
     self.recorderContainer.hidden = YES;
     
+    // Init player container
     self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_LINE_WEIGHT, self.view.bounds.size.width, PLAYER_LINE_WEIGHT)];
     [self.view addSubview:self.playerContainer];
     self.playerContainer.hidden = YES;
+    
+    // Init resend gesture
+    self.oneTapResendRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleResendTapGesture)];
+    self.oneTapResendRecognizer.delegate = self;
+    self.oneTapResendRecognizer.numberOfTapsRequired = 1;
     
     self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
     
@@ -611,6 +622,71 @@
     [self.recorderView addSubview:self.recorderMessage];
 }
 
+// ----------------------------------
+#pragma mark Sending Messages
+// ----------------------------------
+
+- (void)handleResendTapGesture
+{
+    if (self.resendContact && self.resendAudioData) {
+        [self addRecorderMessage:@"Sending..." color:[UIColor whiteColor]];
+        [self sendMessage:self.resendAudioData toContact:self.resendContact];
+    } else {
+        [self quitRecordingModeAnimated:NO];
+    }
+}
+
+- (void)sendMessage:(NSData *)audioData toContact:(Contact *)contact
+{
+    self.recorderView.userInteractionEnabled = NO; // avoid double sending
+    [ApiUtils sendMessage:audioData toUser:contact.identifier success:^{
+        // Update last message date
+        contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
+        self.resendAudioData = nil;
+        self.resendContact = nil;
+        [self messageSentWithError:NO];
+    } failure:^{
+        self.resendAudioData = audioData;
+        self.resendContact = contact;
+        [self messageSentWithError:YES];
+    }];
+}
+
+- (void)messageSentWithError:(BOOL)error
+{
+    if (error) {
+        [self addRecorderMessage:@"Sending failed." color:[UIColor whiteColor]];
+        self.resendTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(resendUI) userInfo:nil repeats:NO];
+    } else {
+        [self addRecorderMessage:@"Sent!" color:[UIColor whiteColor]];
+        
+        float initialWidth = 0;
+        float finalWidth = self.recorderView.bounds.size.width - self.recordingLineX;
+        
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(self.recordingLineX, self.recorderView.bounds.size.height/2 - RECORDER_LINE_WEIGHT, initialWidth, RECORDER_LINE_WEIGHT)];
+        
+        line.backgroundColor = [UIColor whiteColor];
+        
+        [self.recorderView addSubview:line];
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            CGRect frame = line.frame;
+            frame.size.width = finalWidth;
+            line.frame = frame;
+        } completion:^(BOOL dummy){
+            [self quitRecordingModeAnimated:YES];
+        }];
+    }
+}
+
+- (void)resendUI
+{
+    [self addRecorderMessage:@"Tap to resend" color:[UIColor whiteColor]];
+    self.recorderView.userInteractionEnabled = YES;
+    [self enableAllContactViews];
+    [self.recorderView addGestureRecognizer:self.oneTapResendRecognizer];
+}
+
 
 // ----------------------------------------------------------
 #pragma mark ContactBubbleViewDelegate Protocole
@@ -695,36 +771,6 @@
         ctr = 1;
         
         [self.recorderView.layer addSublayer:[self shapeLayerWithPath:path]];
-    }
-}
-
-- (void)messageSentWithError:(BOOL)error
-{
-    if (error) {
-        [self addRecorderMessage:@"Sending failed." color:[UIColor whiteColor]];
-        
-        sleep(1);
-        
-        [self quitRecordingModeAnimated:YES];
-    } else {
-        [self addRecorderMessage:@"Sent!" color:[UIColor whiteColor]];
-        
-        float initialWidth = 0;
-        float finalWidth = self.recorderView.bounds.size.width - self.recordingLineX;
-        
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(self.recordingLineX, self.recorderView.bounds.size.height/2 - RECORDER_LINE_WEIGHT, initialWidth, RECORDER_LINE_WEIGHT)];
-        
-        line.backgroundColor = [UIColor whiteColor];
-        
-        [self.recorderView addSubview:line];
-        
-        [UIView animateWithDuration:0.5 animations:^{
-            CGRect frame = line.frame;
-            frame.size.width = finalWidth;
-            line.frame = frame;
-        } completion:^(BOOL dummy){
-            [self quitRecordingModeAnimated:YES];
-        }];
     }
 }
 

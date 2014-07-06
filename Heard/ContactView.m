@@ -323,13 +323,7 @@
     [self stopRecording];
     
     NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
-    [ApiUtils sendMessage:audioData toUser:self.contact.identifier success:^{
-        // Update last message date
-        self.contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
-        [self.delegate messageSentWithError:NO];
-    } failure:^{
-        [self.delegate messageSentWithError:YES];
-    }];
+    [self.delegate sendMessage:audioData toContact:self.contact];
 }
 
 - (void)stopRecording
@@ -339,8 +333,6 @@
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     [audioSession setActive:NO error:nil];
     [self.delegate longPressOnContactBubbleViewEnded:self.contact.identifier];
-    // For the max duration case
-    self.userInteractionEnabled = YES;
 }
 
 

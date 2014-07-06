@@ -42,7 +42,7 @@
 
 - (void)notifiedNewMeters:(float)meters;
 
-- (void)messageSentWithError:(BOOL)error;
+- (void)sendMessage:(NSData *)audioData toContact:(Contact *)contact;
 
 - (void)startedPlayingAudioFileByView:(ContactView *)view;
 
