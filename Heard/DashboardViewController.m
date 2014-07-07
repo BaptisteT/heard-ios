@@ -72,7 +72,7 @@
 @property (nonatomic, strong) NSTimer *resendTimer;
 @property (nonatomic) ABAddressBookRef addressBook;
 @property (nonatomic, strong) UIButton *inviteContactButton;
-@property (nonatomic) BOOL addressBookAccess;
+@property (nonatomic, strong) UITextView *noAddressBookAccessLabel;
 
 
 @end
@@ -90,7 +90,6 @@
     [super viewDidLoad];
     
     self.contactScrollView.hidden = YES;
-    self.addressBookAccess = NO;
     self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     
     // Init recorder container
@@ -110,10 +109,14 @@
     
     self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
     
-    [self getAddressBookAccessAndRef];
+    // Init no adress book access label
+    [self initNoAddressBookAccessLabel]; // we do it here to avoid to resize text in a parrallel thread
     
     // Create bubble with contacts
-    self.contacts = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).contacts;
+    // We don't load contact if we do not have access to address book
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
+        self.contacts = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).contacts;
+    }
     
     [self displayContacts];
     
@@ -147,19 +150,11 @@
     self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:session];
 }
 
-//BB: Necessary?
+// Make sure scroll view has been resized (necessary because layout constraints change scroll view size)
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    
-    
-    //Check if we have access to the address book before doing anything
-    [self getAddressBookAccessAndRef];
-    if (self.addressBookAccess) {
-        [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
-    }
-    
-    [self.view layoutSubviews];
+    [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
 }
 
 
@@ -167,37 +162,29 @@
 #pragma mark Get Contact
 // ------------------------------
 
-- (void)getAddressBookAccessAndRef
+- (void)requestAddressBookAccessAndRetrieveFriends
 {
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
             if (granted) {
                 // First time access has been granted, add the contact
-                self.addressBookAccess = YES;
+                [self retrieveFriendsFromAddressBook:self.addressBook];
             } else {
                 // User denied access
-                self.addressBookAccess = NO;
                 [self noAddressBookAccessMode];
             }
         });
     }
     else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
         // The user has previously given access, add the contact
-       self.addressBookAccess = YES;
+        [self retrieveFriendsFromAddressBook:self.addressBook];
+        if (self.noAddressBookAccessLabel) {
+            [self.noAddressBookAccessLabel removeFromSuperview];
+        }
     }
     else {
         // The user has previously denied access
-        self.addressBookAccess = NO;
         [self noAddressBookAccessMode];
-    }
-}
-
-- (void)syncFriends
-{
-    [self getAddressBookAccessAndRef];
-    
-    if (self.addressBookAccess) {
-        [self retrieveFriendsFromAddressBook:self.addressBook];
     }
 }
 
@@ -209,15 +196,18 @@
     
     [self removeDisplayedContacts];
     
+    [self.view addSubview:self.noAddressBookAccessLabel];
+    [self hideLoadingIndicator];
+}
+
+- (void)initNoAddressBookAccessLabel
+{
     NSUInteger labelHeight = 100;
-    
-    UITextView *noAddressBookAccessLabel = [[UITextView alloc] initWithFrame:CGRectMake(0, (self.view.bounds.size.height - labelHeight)/2, self.view.bounds.size.width, labelHeight)];
-    noAddressBookAccessLabel.userInteractionEnabled = NO;
-    noAddressBookAccessLabel.text = @"Waved uses your address book to find your contacts. Please allow access in Settings > Privacy > Contacts.";
-    noAddressBookAccessLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
-    noAddressBookAccessLabel.textAlignment = NSTextAlignmentCenter;
-    
-    [self.view addSubview:noAddressBookAccessLabel];
+    self.noAddressBookAccessLabel = [[UITextView alloc] initWithFrame:CGRectMake(0, (self.view.bounds.size.height - labelHeight)/2, self.view.bounds.size.width, labelHeight)];
+    self.noAddressBookAccessLabel.userInteractionEnabled = NO;
+    self.noAddressBookAccessLabel.text = @"Waved uses your address book to find your contacts. Please allow access in Settings > Privacy > Contacts.";
+    self.noAddressBookAccessLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
+    self.noAddressBookAccessLabel.textAlignment = NSTextAlignmentCenter;
 }
 
 - (void)retrieveFriendsFromAddressBook:(ABAddressBookRef) addressBook
@@ -348,6 +338,7 @@
         [self distributeNonAttributedMessages];
         
     } failure: ^void(NSURLSessionDataTask *task){
+        [self hideLoadingIndicator];
         //In this case, 401 means that the auth token is no valid.
         if ([SessionUtils invalidTokenResponse:task]) {
             [SessionUtils redirectToSignIn];
@@ -376,12 +367,6 @@
 
 - (void)displayContacts
 {
-    //Check if we have access to the address book before doing anything
-    [self getAddressBookAccessAndRef];
-    if (!self.addressBookAccess) {
-        return;
-    }
-    
     [self removeDisplayedContacts];
     
     self.contactScrollView.hidden = NO;
@@ -409,6 +394,9 @@
         [self createContactViewWithContact:contact andPosition:position];
         position ++;
     }
+    
+    // Resize view
+    [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
 }
 
 - (void)redisplayContact
@@ -431,6 +419,9 @@
     
     // Pending contact UI
     [self showContactViewAsPending];
+    
+    // Resize view
+    [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
 }
 
 - (void)displayAdditionnalContact:(Contact *)contact
@@ -536,12 +527,6 @@
 // Retrieve unread messages and display alert
 - (void) retrieveUnreadMessagesAndNewContacts:(BOOL)retrieveNewContacts
 {
-    //Check if we have access to the address book before doing anything
-    [self getAddressBookAccessAndRef];
-    if (!self.addressBookAccess) {
-        return;
-    }
-    
     void (^successBlock)(NSArray *messages) = ^void(NSArray *messages) {
         //Reset unread messages
         [self resetUnreadMessages];
@@ -552,7 +537,7 @@
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:messages.count];
         // Check if we have new contacts
         if (retrieveNewContacts || !areAttributed || self.contacts.count == 0) {
-            [self syncFriends];
+            [self requestAddressBookAccessAndRetrieveFriends];
         } else {
             [self redisplayContact];
         }
@@ -599,12 +584,6 @@
 
 - (void)distributeNonAttributedMessages
 {
-    //Check if we have access to the address book before doing anything
-    [self getAddressBookAccessAndRef];
-    if (!self.addressBookAccess) {
-        return;
-    }
-    
     BOOL isAttributed;
     for (Message *message in self.nonAttributedUnreadMessages) {
         isAttributed = NO;
@@ -636,7 +615,6 @@
     // Redisplay correctly
     self.nonAttributedUnreadMessages = nil;
     [self redisplayContact];
-    [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
 }
 
 
@@ -1140,9 +1118,6 @@
             }
             // Change position of other bubbles
             [self redisplayContact];
-            
-            // Update badge & scroll view frame
-            [self setScrollViewSizeForContactCount:(int)[self.contactBubbleViews count]];
             self.contactToAdd = nil;
         };
         [ApiUtils blockUser:self.contactToAdd.identifier AndExecuteSuccess:successBlock failure:nil];
