@@ -49,7 +49,7 @@
 @property (strong, nonatomic) NSMutableDictionary *addressBookFormattedContacts;
 @property (strong, nonatomic) NSMutableArray *contacts;
 @property (strong, nonatomic) NSMutableArray *contactBubbleViews;
-@property (weak, nonatomic) IBOutlet UIScrollView *contactScrollView;
+@property (weak, nonatomic) UIScrollView *contactScrollView;
 @property (strong, nonatomic) UIActionSheet *menuActionSheet;
 @property (strong, nonatomic) UIView *recorderContainer;
 @property (strong, nonatomic) UIView *recorderView;
@@ -59,7 +59,7 @@
 @property (nonatomic) float recordingLineY;
 @property (nonatomic, strong)UILabel *recorderMessage;
 @property (nonatomic) float recordLineLength;
-@property (weak, nonatomic) IBOutlet UIButton *menuButton;
+@property (weak, nonatomic) UIButton *menuButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
 @property (nonatomic, strong) NSString *currentUserPhoneNumber;
 @property (nonatomic, strong) Contact *contactToAdd;
@@ -150,7 +150,7 @@
 //BB: Necessary?
 - (void)viewDidLayoutSubviews
 {
-    [super viewWillLayoutSubviews];
+    [super viewDidLayoutSubviews];
     
     
     //Check if we have access to the address book before doing anything
@@ -158,6 +158,8 @@
     if (self.addressBookAccess) {
         [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
     }
+    
+    [self.view layoutSubviews];
 }
 
 
@@ -326,7 +328,7 @@
         
         for (Contact *contact in contacts) {
             Contact *existingContact = [ContactUtils findContact:contact.identifier inContactsArray:self.contacts];
-            if (! existingContact) {
+            if (!existingContact) {
                 [self.contacts addObject:contact];
                 contact.firstName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
                 contact.lastName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
@@ -1155,7 +1157,7 @@
 {
     MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
     picker.messageComposeDelegate = self;
-    picker.body = @"Join Waved to chat together! Download at http://www.waved.io.";
+    picker.body = @"Join Waved to chat me! Download at http://www.waved.io.";
     
     [self presentViewController:picker animated:YES completion:nil];
 }
