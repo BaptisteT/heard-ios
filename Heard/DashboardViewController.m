@@ -113,9 +113,10 @@
     [self initNoAddressBookAccessLabel]; // we do it here to avoid to resize text in a parrallel thread
     
     // Create bubble with contacts
-    // We don't load contact if we do not have access to address book
-    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
-        self.contacts = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).contacts;
+    self.contacts = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).contacts;
+    // We remove contact if we do not have access to address book
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusDenied) {
+        [self.contacts removeAllObjects];
     }
     
     [self displayContacts];
