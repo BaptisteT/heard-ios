@@ -26,7 +26,7 @@
 
 #define ACTION_SHEET_1_OPTION_0 @"Replay last message"
 #define ACTION_SHEET_1_OPTION_1 @"Invite contact"
-#define ACTION_SHEET_1_OPTION_2 @"Share this app"
+#define ACTION_SHEET_1_OPTION_2 @"Share"
 #define ACTION_SHEET_1_OPTION_3 @"Feedback"
 #define ACTION_SHEET_2_OPTION_1 @"Add contact"
 #define ACTION_SHEET_2_OPTION_2 @"Block user"
@@ -68,6 +68,8 @@
 @property (nonatomic, strong) Contact *resendContact;
 @property (nonatomic, strong) UITapGestureRecognizer *oneTapResendRecognizer;
 @property (nonatomic, strong) NSTimer *resendTimer;
+@property (nonatomic) BOOL addressBookAccess;
+@property (nonatomic) ABAddressBookRef addressBook;
 
 
 @end
@@ -85,6 +87,8 @@
     [super viewDidLoad];
     
     self.menuButton.hidden = YES;
+    self.addressBookAccess = NO;
+    self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     
     // Init recorder container
     self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - RECORDER_HEIGHT, self.view.bounds.size.width, RECORDER_HEIGHT)];
@@ -103,9 +107,18 @@
     
     self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
     
+    [self getAddressBookAccessAndRef];
+    
     // Create bubble with contacts
     self.contacts = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).contacts;
-    [self displayContacts];
+    
+    if (self.addressBookAccess) {
+        [self displayContacts];
+    }
+    
+    if (!self.contacts || [self.contacts count] == 0) {
+        [self showLoadingIndicator];
+    }
 
     // Retrieve messages & contacts
     [self retrieveUnreadMessagesAndNewContacts:YES];
@@ -144,30 +157,54 @@
 #pragma mark Get Contact
 // ------------------------------
 
-- (void)requestAddressBookAccessAndRetrieveFriends
+- (void)getAddressBookAccessAndRef
 {
-    ABAddressBookRef addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
-    
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
-        ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
+        ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
             if (granted) {
                 // First time access has been granted, add the contact
-                [self retrieveFriendsFromAddressBook:addressBook];
+                self.addressBookAccess = YES;
             } else {
                 // User denied access
-                [GeneralUtils showMessage:@"To activate it, go to Settings > Privacy > Contacts" withTitle:@"Waved does not have access to your contacts"];
-                [self distributeNonAttributedMessages];
+                self.addressBookAccess = NO;
+                [self noAddressBookAccessMode];
             }
         });
     }
     else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
         // The user has previously given access, add the contact
-        [self retrieveFriendsFromAddressBook:addressBook];
+       self.addressBookAccess = YES;
     }
     else {
         // The user has previously denied access
-        [self distributeNonAttributedMessages];
+        self.addressBookAccess = NO;
+        [self noAddressBookAccessMode];
     }
+}
+
+- (void)syncFriends
+{
+    [self getAddressBookAccessAndRef];
+    
+    if (self.addressBookAccess) {
+        [self retrieveFriendsFromAddressBook:self.addressBook];
+    }
+}
+
+- (void)noAddressBookAccessMode
+{
+    self.menuButton.hidden = YES;
+    [self removeDisplayedContacts];
+    
+    NSUInteger labelHeight = 100;
+    
+    UITextView *noAddressBookAccessLabel = [[UITextView alloc] initWithFrame:CGRectMake(0, (self.view.bounds.size.height - labelHeight)/2, self.view.bounds.size.width, labelHeight)];
+    noAddressBookAccessLabel.userInteractionEnabled = NO;
+    noAddressBookAccessLabel.text = @"Waved uses your address book to find your contacts. Please allow access in Settings > Privacy > Contacts.";
+    noAddressBookAccessLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
+    noAddressBookAccessLabel.textAlignment = NSTextAlignmentCenter;
+    
+    [self.view addSubview:noAddressBookAccessLabel];
 }
 
 - (void)retrieveFriendsFromAddressBook:(ABAddressBookRef) addressBook
@@ -274,6 +311,8 @@
     
     // Get contacts and compare with contact in memory
     [ApiUtils getMyContacts:phoneNumbers success:^(NSArray *contacts) {
+        [self hideLoadingIndicator];
+        
         for (Contact *contact in contacts) {
             Contact *existingContact = [ContactUtils findContact:contact.identifier inContactsArray:self.contacts];
             if (! existingContact) {
@@ -325,11 +364,15 @@
 - (void)displayContacts
 {
     [self removeDisplayedContacts];
-    self.menuButton.hidden = NO;
     
     NSUInteger contactCount = [self.contacts count];
-    if (contactCount == 0)
+    
+    if (contactCount == 0) {
         return;
+    }
+    
+    self.menuButton.hidden = NO;
+    
     self.contactBubbleViews = [[NSMutableArray alloc] initWithCapacity:contactCount];
     
     // Sort contact
@@ -461,7 +504,7 @@
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:messages.count];
         // Check if we have new contacts
         if (retrieveNewContacts || !areAttributed || self.contacts.count == 0) {
-            [self requestAddressBookAccessAndRetrieveFriends];
+            [self syncFriends];
         } else {
             [self redisplayContact];
         }
@@ -550,7 +593,7 @@
     self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                        delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:ACTION_SHEET_1_OPTION_0, ACTION_SHEET_2_OPTION_1, ACTION_SHEET_1_OPTION_2, ACTION_SHEET_1_OPTION_3, nil];
+                                              otherButtonTitles:ACTION_SHEET_1_OPTION_0, ACTION_SHEET_1_OPTION_2, ACTION_SHEET_1_OPTION_3, nil];
     
     for (UIView* view in [self.menuActionSheet subviews])
     {
@@ -887,6 +930,8 @@
 
 - (void)showLoadingIndicator
 {
+    self.menuButton.hidden = YES;
+    
     if (!self.activityView) {
         self.activityView=[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         self.activityView.center = self.view.center;
@@ -898,8 +943,12 @@
 
 - (void)hideLoadingIndicator
 {
-    [self.activityView stopAnimating];
-    [self.activityView removeFromSuperview];
+    self.menuButton.hidden = NO;
+    
+    if (self.activityView) {
+        [self.activityView stopAnimating];
+        [self.activityView removeFromSuperview];
+    }
 }
 
 - (CAShapeLayer *)shapeLayerWithPath:(UIBezierPath *)path
