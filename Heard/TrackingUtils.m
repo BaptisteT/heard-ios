@@ -12,12 +12,14 @@
 
 @implementation TrackingUtils
 
-+ (void)identifyWithMixpanel:(Contact *)contact
++ (void)identifyWithMixpanel:(Contact *)contact signup:(BOOL)isSigningUp
 {
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    [mixpanel createAlias:[NSString stringWithFormat:@"%lu", (unsigned long)contact.identifier] forDistinctID:mixpanel.distinctId];
-    
+    if (isSigningUp) {
+        [mixpanel createAlias:[NSString stringWithFormat:@"%lu", (unsigned long)contact.identifier] forDistinctID:mixpanel.distinctId];
+    }
+        
     [mixpanel identify:[NSString stringWithFormat:@"%lu", (unsigned long)contact.identifier]];
     
     [mixpanel.people set:@{@"First name": contact.firstName, @"Last name": contact.lastName}];

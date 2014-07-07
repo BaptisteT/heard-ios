@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define RECORD_TUTO_PREF @"Record message tutorial pref"
+
 @interface Constants : NSObject
 
 @end

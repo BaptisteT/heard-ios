@@ -407,6 +407,8 @@
 {
     [self.recordingOverlay removeFromSuperview];
     self.recordingOverlay = nil;
+    
+    [self.delegate endTutorialMode];
 //    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
 }
 

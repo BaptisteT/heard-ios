@@ -56,6 +56,8 @@
 
 - (void)updateFrameOfContactView:(ContactView *)view;
 
+- (void)endTutorialMode;
+
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 
 

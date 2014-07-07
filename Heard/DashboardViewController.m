@@ -74,6 +74,7 @@
 @property (nonatomic, strong) UIButton *inviteContactButton;
 @property (nonatomic, strong) UITextView *noAddressBookAccessLabel;
 @property (nonatomic) BOOL disableProximityObserver;
+@property (nonatomic, strong) UIView *tutorialView;
 
 
 @end
@@ -158,6 +159,77 @@
     [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
 }
 
+// ------------------------------
+#pragma mark UI Modes
+// ------------------------------
+
+- (void)noAddressBookAccessMode
+{
+    self.contactScrollView.hidden = YES;
+    
+    [self.view addSubview:self.noAddressBookAccessLabel];
+}
+
+- (void)initNoAddressBookAccessLabel
+{
+    NSUInteger labelHeight = 100;
+    self.noAddressBookAccessLabel = [[UITextView alloc] initWithFrame:CGRectMake(0, (self.view.bounds.size.height - labelHeight)/2, self.view.bounds.size.width, labelHeight)];
+    self.noAddressBookAccessLabel.userInteractionEnabled = NO;
+    self.noAddressBookAccessLabel.text = @"Waved uses your address book to find your contacts. Please allow access in Settings > Privacy > Contacts.";
+    self.noAddressBookAccessLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
+    self.noAddressBookAccessLabel.textAlignment = NSTextAlignmentCenter;
+}
+
+- (void)tutorialMode
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    if ([userDefaults objectForKey:RECORD_TUTO_PREF]) {
+        return;
+    }
+    
+    if (self.tutorialView || !self.contactBubbleViews || [self.contactBubbleViews count] == 0) {
+        //No contact to use for the tutorial, wait for next time
+        return;
+    }
+    
+    //Don't show tuto anymore
+    [userDefaults setObject:@"dummy" forKey:RECORD_TUTO_PREF];
+    
+    self.tutorialView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 60)];
+    self.tutorialView.backgroundColor = [ImageUtils blue];
+    
+    [self.view addSubview:self.tutorialView];
+    
+    UILabel *tutorialMessage = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tutorialView.bounds.size.width, self.tutorialView.bounds.size.height)];
+    tutorialMessage.text = @"Press & hold a contact to record";
+    tutorialMessage.font = [UIFont fontWithName:@"Avenir-Light" size:20.0];
+    tutorialMessage.textAlignment = NSTextAlignmentCenter;
+    tutorialMessage.textColor = [UIColor whiteColor];
+    tutorialMessage.backgroundColor = [UIColor clearColor];
+    
+    [self.tutorialView addSubview:tutorialMessage];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.tutorialView.frame = CGRectMake(self.tutorialView.frame.origin.x,
+                                             self.tutorialView.frame.origin.y - self.tutorialView.frame.size.height,
+                                             self.tutorialView.frame.size.width,
+                                             self.tutorialView.frame.size.height);
+    }];
+}
+
+- (void)endTutorialMode
+{
+    if (!self.tutorialView) {
+        return;
+    }
+    
+    [self.tutorialView.layer removeAllAnimations];
+    
+    [self.tutorialView removeFromSuperview];
+    self.tutorialView = nil;
+}
+
 
 // ------------------------------
 #pragma mark Get Contact
@@ -187,25 +259,6 @@
         // The user has previously denied access
         [self noAddressBookAccessMode];
     }
-}
-
-- (void)noAddressBookAccessMode
-{
-    self.contactScrollView.contentSize = CGSizeMake(self.contactScrollView.contentSize.width, self.view.bounds.size.height - 20);
-    
-    [self removeDisplayedContacts];
-    
-    [self.view addSubview:self.noAddressBookAccessLabel];
-}
-
-- (void)initNoAddressBookAccessLabel
-{
-    NSUInteger labelHeight = 100;
-    self.noAddressBookAccessLabel = [[UITextView alloc] initWithFrame:CGRectMake(0, (self.view.bounds.size.height - labelHeight)/2, self.view.bounds.size.width, labelHeight)];
-    self.noAddressBookAccessLabel.userInteractionEnabled = NO;
-    self.noAddressBookAccessLabel.text = @"Waved uses your address book to find your contacts. Please allow access in Settings > Privacy > Contacts.";
-    self.noAddressBookAccessLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
-    self.noAddressBookAccessLabel.textAlignment = NSTextAlignmentCenter;
 }
 
 - (void)retrieveFriendsFromAddressBook:(ABAddressBookRef) addressBook
@@ -420,6 +473,8 @@
     
     // Resize view
     [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
+    
+    [self tutorialMode];
 }
 
 - (void)displayAdditionnalContact:(Contact *)contact
