@@ -16,7 +16,6 @@
 
 - (BOOL)addUnreadMessageToExistingContacts:(Message *)message;
 - (void) retrieveUnreadMessagesAndNewContacts:(BOOL)retrieveNewContacts;
-- (void)syncFriends;
 - (void)displayContacts;
 - (void)distributeNonAttributedMessages;
 

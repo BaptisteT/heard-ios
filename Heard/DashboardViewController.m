@@ -42,6 +42,8 @@
 
 #define PLAYER_LINE_WEIGHT 6
 
+#define INVITE_CONTACT_BUTTON_HEIGHT 50
+
 @interface DashboardViewController ()
 
 @property (strong, nonatomic) NSMutableDictionary *addressBookFormattedContacts;
@@ -68,8 +70,9 @@
 @property (nonatomic, strong) Contact *resendContact;
 @property (nonatomic, strong) UITapGestureRecognizer *oneTapResendRecognizer;
 @property (nonatomic, strong) NSTimer *resendTimer;
-@property (nonatomic) BOOL addressBookAccess;
 @property (nonatomic) ABAddressBookRef addressBook;
+@property (nonatomic, strong) UIButton *inviteContactButton;
+@property (nonatomic) BOOL addressBookAccess;
 
 
 @end
@@ -86,7 +89,7 @@
 {
     [super viewDidLoad];
     
-    self.menuButton.hidden = YES;
+    self.contactScrollView.hidden = YES;
     self.addressBookAccess = NO;
     self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     
@@ -112,9 +115,7 @@
     // Create bubble with contacts
     self.contacts = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).contacts;
     
-    if (self.addressBookAccess) {
-        [self displayContacts];
-    }
+    [self displayContacts];
     
     if (!self.contacts || [self.contacts count] == 0) {
         [self showLoadingIndicator];
@@ -146,10 +147,17 @@
     self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:session];
 }
 
+//BB: Necessary?
 - (void)viewDidLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
+    
+    
+    //Check if we have access to the address book before doing anything
+    [self getAddressBookAccessAndRef];
+    if (self.addressBookAccess) {
+        [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
+    }
 }
 
 
@@ -193,7 +201,10 @@
 
 - (void)noAddressBookAccessMode
 {
-    self.menuButton.hidden = YES;
+    self.contactScrollView.hidden = YES;
+    
+    self.contactScrollView.contentSize = CGSizeMake(self.contactScrollView.contentSize.width, self.view.bounds.size.height - 20);
+    
     [self removeDisplayedContacts];
     
     NSUInteger labelHeight = 100;
@@ -350,7 +361,7 @@
 
 - (void)removeDisplayedContacts
 {
-    self.menuButton.hidden = YES;
+    self.contactScrollView.hidden = YES;
     
     // Erase existing views
     for (ContactView *contactView in self.contactBubbleViews) {
@@ -363,15 +374,21 @@
 
 - (void)displayContacts
 {
+    //Check if we have access to the address book before doing anything
+    [self getAddressBookAccessAndRef];
+    if (!self.addressBookAccess) {
+        return;
+    }
+    
     [self removeDisplayedContacts];
+    
+    self.contactScrollView.hidden = NO;
     
     NSUInteger contactCount = [self.contacts count];
     
     if (contactCount == 0) {
         return;
     }
-    
-    self.menuButton.hidden = NO;
     
     self.contactBubbleViews = [[NSMutableArray alloc] initWithCapacity:contactCount];
     
@@ -430,7 +447,9 @@
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;
     float rowHeight = kContactMargin + kContactSize + kContactNameHeight;
-    self.contactScrollView.contentSize = CGSizeMake(screenWidth, MAX(screenHeight - 20, rows * rowHeight + 2 * kContactMargin));
+    self.contactScrollView.contentSize = CGSizeMake(screenWidth, MAX(screenHeight - 20, rows * rowHeight + 3 * kContactMargin));
+    
+    [self addInviteContactButton];
 }
 
 // Create contact view
@@ -487,6 +506,27 @@
     }
 }
 
+- (void)addInviteContactButton
+{
+    NSUInteger buttonHeight = 50;
+    
+    if (self.inviteContactButton) {
+        [self.inviteContactButton removeFromSuperview];
+        self.inviteContactButton = nil;
+    }
+    
+    self.inviteContactButton = [[UIButton alloc] initWithFrame:CGRectMake(0, self.contactScrollView.contentSize.height - INVITE_CONTACT_BUTTON_HEIGHT, self.contactScrollView.contentSize.width, buttonHeight)];
+    [self.inviteContactButton setTitle:@"Invite new contacts" forState:UIControlStateNormal];
+    [self.inviteContactButton setTitle:@"Invite new contacts" forState:UIControlStateSelected];
+    self.inviteContactButton.titleLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:17.0];
+    self.inviteContactButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.inviteContactButton.titleLabel.textColor = [ImageUtils blue];
+    
+    [self.inviteContactButton addTarget:self action:@selector(inviteContacts) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.contactScrollView addSubview:self.inviteContactButton];
+}
+
 // ----------------------------------
 #pragma mark Display Messages
 // ----------------------------------
@@ -494,6 +534,12 @@
 // Retrieve unread messages and display alert
 - (void) retrieveUnreadMessagesAndNewContacts:(BOOL)retrieveNewContacts
 {
+    //Check if we have access to the address book before doing anything
+    [self getAddressBookAccessAndRef];
+    if (!self.addressBookAccess) {
+        return;
+    }
+    
     void (^successBlock)(NSArray *messages) = ^void(NSArray *messages) {
         //Reset unread messages
         [self resetUnreadMessages];
@@ -551,6 +597,12 @@
 
 - (void)distributeNonAttributedMessages
 {
+    //Check if we have access to the address book before doing anything
+    [self getAddressBookAccessAndRef];
+    if (!self.addressBookAccess) {
+        return;
+    }
+    
     BOOL isAttributed;
     for (Message *message in self.nonAttributedUnreadMessages) {
         isAttributed = NO;
@@ -930,7 +982,7 @@
 
 - (void)showLoadingIndicator
 {
-    self.menuButton.hidden = YES;
+    self.contactScrollView.hidden = YES;
     
     if (!self.activityView) {
         self.activityView=[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -943,7 +995,7 @@
 
 - (void)hideLoadingIndicator
 {
-    self.menuButton.hidden = NO;
+    self.contactScrollView.hidden = NO;
     
     if (self.activityView) {
         [self.activityView stopAnimating];
@@ -1095,6 +1147,24 @@
     }
 }
 
+// ----------------------------------------------------------
+#pragma mark MFMessageComposeViewControllerDelegate
+// ----------------------------------------------------------
+
+- (void)inviteContacts
+{
+    MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
+    picker.messageComposeDelegate = self;
+    picker.body = @"Join Waved to chat together! Download at http://www.waved.io.";
+    
+    [self presentViewController:picker animated:YES completion:nil];
+}
+
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 
 
 // ----------------------------------------------------------
@@ -1175,16 +1245,6 @@
 {
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
-
-
-// ----------------------------------------------------------
-#pragma mark MFMessageComposeViewControllerDelegate
-// ----------------------------------------------------------
-- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
-{
-    [self dismissViewControllerAnimated:YES completion:NULL];
-}
-
 
 // ----------------------------------------------------------
 #pragma mark OutPut Port
