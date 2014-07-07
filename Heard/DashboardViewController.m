@@ -73,6 +73,7 @@
 @property (nonatomic) ABAddressBookRef addressBook;
 @property (nonatomic, strong) UIButton *inviteContactButton;
 @property (nonatomic, strong) UITextView *noAddressBookAccessLabel;
+@property (nonatomic) BOOL disableProximityObserver;
 
 
 @end
@@ -145,7 +146,6 @@
                                                   usingBlock:^(NSNotification *notification) {
                                                                  [self updateOutputAudioPort];
                                                              }];
-    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
     
     // Headset observer
     self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:session];
@@ -191,14 +191,11 @@
 
 - (void)noAddressBookAccessMode
 {
-    self.contactScrollView.hidden = YES;
-    
     self.contactScrollView.contentSize = CGSizeMake(self.contactScrollView.contentSize.width, self.view.bounds.size.height - 20);
     
     [self removeDisplayedContacts];
     
     [self.view addSubview:self.noAddressBookAccessLabel];
-    [self hideLoadingIndicator];
 }
 
 - (void)initNoAddressBookAccessLabel
@@ -919,6 +916,13 @@
         [appPlayer setVolume:0.25];
     }
     
+    // Set loud speaker and proximity check
+//    if (! self.isUsingHeadSet) {
+//        [[AVAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
+//    }
+    self.disableProximityObserver = NO;
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    
     [self playerUIForContactView:contactView];
     self.playerContainer.hidden = NO;
     
@@ -947,6 +951,11 @@
 
 - (void)endPlayerUI
 {
+    if ([UIDevice currentDevice].proximityState) {
+        self.disableProximityObserver = YES;
+    } else {
+        [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+    }
     [self endPlayerUIForAllContactViews];
     
     if ([self.mainPlayer isPlaying]) {
@@ -1242,10 +1251,14 @@
 - (void)updateOutputAudioPort {
     BOOL success; NSError* error;
     AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSLog(@"%d",[UIDevice currentDevice].proximityState);
     if (self.isUsingHeadSet || [UIDevice currentDevice].proximityState ) {
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error];
     } else {
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
+        if (self.disableProximityObserver) {
+            [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+        }
     }
     if (!success)
         NSLog(@"AVAudioSession error overrideOutputAudioPort:%@",error);
