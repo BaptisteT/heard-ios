@@ -14,11 +14,11 @@
 
 + (void)identifyWithMixpanel:(Contact *)contact signup:(BOOL)isSigningUp
 {
-    if (DEBUG)return;
+    if (!PRODUCTION)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    if (isSigningUp) {
+    if (isSigningUp || !PRODUCTION) {
         [mixpanel createAlias:[NSString stringWithFormat:@"%lu", (unsigned long)contact.identifier] forDistinctID:mixpanel.distinctId];
     }
         
@@ -29,7 +29,7 @@
 
 + (void)trackRecord
 {
-    if (DEBUG)return;
+    if (!PRODUCTION)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
@@ -38,7 +38,7 @@
 
 + (void)trackPlay
 {
-    if (DEBUG)return;
+    if (!PRODUCTION)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
@@ -47,7 +47,7 @@
 
 + (void)trackReplay
 {
-    if (DEBUG)return;
+    if (!PRODUCTION)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
@@ -56,7 +56,7 @@
 
 + (void)trackShare
 {
-    if (DEBUG)return;
+    if (!PRODUCTION)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
@@ -65,7 +65,7 @@
 
 + (void)trackAddContact
 {
-    if (DEBUG)return;
+    if (!PRODUCTION)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
@@ -74,7 +74,7 @@
 
 + (void)trackOpenApp
 {
-    if (DEBUG)return;
+    if (!PRODUCTION)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
 

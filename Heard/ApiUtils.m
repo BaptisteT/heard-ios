@@ -20,10 +20,10 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        if (DEBUG) {
-            _sharedClient = [[ApiUtils alloc] initWithBaseURL:[NSURL URLWithString:kStagingAFHeardAPIBaseURLString]];
-        } else {
+        if (PRODUCTION) {
             _sharedClient = [[ApiUtils alloc] initWithBaseURL:[NSURL URLWithString:kProdAFHeardAPIBaseURLString]];
+        } else {
+            _sharedClient = [[ApiUtils alloc] initWithBaseURL:[NSURL URLWithString:kStagingAFHeardAPIBaseURLString]];
         }
         
         // Add m4a content type for audio

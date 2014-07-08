@@ -14,6 +14,96 @@
 		0B3651E11959109700534386 /* heard-logo-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DE1959109700534386 /* heard-logo-120.png */; };
 		0B58BAFD1954B47700E9FF70 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B58BAFB1954B47700E9FF70 /* AddressBook.framework */; };
 		0B58BAFE1954B47700E9FF70 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B58BAFC1954B47700E9FF70 /* AddressBookUI.framework */; };
+		0B72EEA2196C672F00AC5A01 /* UIColor+MPColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8E5195B449A00C94AC0 /* UIColor+MPColor.m */; };
+		0B72EEA3196C672F00AC5A01 /* UIImage+MPImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8E9195B449A00C94AC0 /* UIImage+MPImageEffects.m */; };
+		0B72EEA4196C672F00AC5A01 /* MPSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8DA195B449A00C94AC0 /* MPSurvey.m */; };
+		0B72EEA5196C672F00AC5A01 /* RequestPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BD758F619511A4000CF0D85 /* RequestPhoneViewController.m */; };
+		0B72EEA6196C672F00AC5A01 /* MPNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8D5195B449A00C94AC0 /* MPNotification.m */; };
+		0B72EEA7196C672F00AC5A01 /* NBAsYouTypeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64BE19521A7C00223093 /* NBAsYouTypeFormatter.m */; };
+		0B72EEA8196C672F00AC5A01 /* NSData+MPBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8E3195B449A00C94AC0 /* NSData+MPBase64.m */; };
+		0B72EEA9196C672F00AC5A01 /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64C019521A7C00223093 /* NBNumberFormat.m */; };
+		0B72EEAA196C672F00AC5A01 /* NBPhoneMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64C219521A7C00223093 /* NBPhoneMetaData.m */; };
+		0B72EEAB196C672F00AC5A01 /* MPSurveyQuestion.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8DF195B449A00C94AC0 /* MPSurveyQuestion.m */; };
+		0B72EEAC196C672F00AC5A01 /* AudioUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D0060195C5E500058A0E0 /* AudioUtils.m */; };
+		0B72EEAD196C672F00AC5A01 /* NBPhoneNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64C419521A7C00223093 /* NBPhoneNumber.m */; };
+		0B72EEAE196C672F00AC5A01 /* NBPhoneNumberDesc.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64C719521A7C00223093 /* NBPhoneNumberDesc.m */; };
+		0B72EEAF196C672F00AC5A01 /* NBPhoneNumberUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64C919521A7C00223093 /* NBPhoneNumberUtil.m */; };
+		0B72EEB0196C672F00AC5A01 /* NSArray+NBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64CB19521A7C00223093 /* NSArray+NBAdditions.m */; };
+		0B72EEB1196C672F00AC5A01 /* CodeConfirmationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB650019528F4600223093 /* CodeConfirmationViewController.m */; };
+		0B72EEB2196C672F00AC5A01 /* RequestUserInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB650719535CCC00223093 /* RequestUserInfoViewController.m */; };
+		0B72EEB3196C672F00AC5A01 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7EB195346620090D657 /* Message.m */; };
+		0B72EEB4196C672F00AC5A01 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BD758CB1950F91B00CF0D85 /* main.m */; };
+		0B72EEB5196C672F00AC5A01 /* ContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactView.m */; };
+		0B72EEB6196C672F00AC5A01 /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9BBDFE195345A6001C6C4D /* AFNetworkActivityIndicatorManager.m */; };
+		0B72EEB7196C672F00AC5A01 /* UIActivityIndicatorView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9BBE00195345A6001C6C4D /* UIActivityIndicatorView+AFNetworking.m */; };
+		0B72EEB8196C672F00AC5A01 /* UIAlertView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9BBE02195345A6001C6C4D /* UIAlertView+AFNetworking.m */; };
+		0B72EEB9196C672F00AC5A01 /* UIButton+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9BBE04195345A6001C6C4D /* UIButton+AFNetworking.m */; };
+		0B72EEBA196C672F00AC5A01 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9BBE06195345A6001C6C4D /* UIImageView+AFNetworking.m */; };
+		0B72EEBB196C672F00AC5A01 /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9BBE09195345A6001C6C4D /* UIProgressView+AFNetworking.m */; };
+		0B72EEBC196C672F00AC5A01 /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9BBE0B195345A6001C6C4D /* UIRefreshControl+AFNetworking.m */; };
+		0B72EEBD196C672F00AC5A01 /* DashboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB65601953C04800223093 /* DashboardViewController.m */; };
+		0B72EEBE196C672F00AC5A01 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C9BBE0D195345A6001C6C4D /* UIWebView+AFNetworking.m */; };
+		0B72EEBF196C672F00AC5A01 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB6504195295A800223093 /* MBProgressHUD.m */; };
+		0B72EEC0196C672F00AC5A01 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64DD195267CC00223093 /* AFHTTPRequestOperation.m */; };
+		0B72EEC1196C672F00AC5A01 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64DF195267CC00223093 /* AFHTTPRequestOperationManager.m */; };
+		0B72EEC2196C672F00AC5A01 /* UIView+MPSnapshotImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8EB195B449A00C94AC0 /* UIView+MPSnapshotImage.m */; };
+		0B72EEC3196C672F00AC5A01 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64E1195267CC00223093 /* AFHTTPSessionManager.m */; };
+		0B72EEC4196C672F00AC5A01 /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8D1195B449A00C94AC0 /* Mixpanel.m */; };
+		0B72EEC5196C672F00AC5A01 /* CrashReportUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */; };
+		0B72EEC6196C672F00AC5A01 /* SessionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB655D1953BE9100223093 /* SessionUtils.m */; };
+		0B72EEC7196C672F00AC5A01 /* MPSurveyQuestionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8E1195B449A00C94AC0 /* MPSurveyQuestionViewController.m */; };
+		0B72EEC8196C672F00AC5A01 /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64E4195267CC00223093 /* AFNetworkReachabilityManager.m */; };
+		0B72EEC9196C672F00AC5A01 /* MPNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8D8195B449A00C94AC0 /* MPNotificationViewController.m */; };
+		0B72EECA196C672F00AC5A01 /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64E6195267CC00223093 /* AFSecurityPolicy.m */; };
+		0B72EECB196C672F00AC5A01 /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64E8195267CC00223093 /* AFURLConnectionOperation.m */; };
+		0B72EECC196C672F00AC5A01 /* UIImage+MPAverageColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8E7195B449A00C94AC0 /* UIImage+MPAverageColor.m */; };
+		0B72EECD196C672F00AC5A01 /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64EA195267CC00223093 /* AFURLRequestSerialization.m */; };
+		0B72EECE196C672F00AC5A01 /* MPSurveyNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8DD195B449A00C94AC0 /* MPSurveyNavigationController.m */; };
+		0B72EECF196C672F00AC5A01 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B893A4C19550FF000476BFE /* Contact.m */; };
+		0B72EED0196C672F00AC5A01 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64EC195267CC00223093 /* AFURLResponseSerialization.m */; };
+		0B72EED1196C672F00AC5A01 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64EE195267CC00223093 /* AFURLSessionManager.m */; };
+		0B72EED2196C672F00AC5A01 /* HeardAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BD758CF1950F91B00CF0D85 /* HeardAppDelegate.m */; };
+		0B72EED3196C672F00AC5A01 /* TrackingUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8FE195B44C900C94AC0 /* TrackingUtils.m */; };
+		0B72EED4196C672F00AC5A01 /* ContactUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D0063196330E40058A0E0 /* ContactUtils.m */; };
+		0B72EED5196C672F00AC5A01 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64FC1952688300223093 /* Constants.m */; };
+		0B72EED6196C672F00AC5A01 /* ApiUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64F91952680C00223093 /* ApiUtils.m */; };
+		0B72EED7196C672F00AC5A01 /* GeneralUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB64D919521F8700223093 /* GeneralUtils.m */; };
+		0B72EED8196C672F00AC5A01 /* ImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB650C195375B100223093 /* ImageUtils.m */; };
+		0B72EED9196C672F00AC5A01 /* WelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BD758D51950F91B00CF0D85 /* WelcomeViewController.m */; };
+		0B72EEDB196C672F00AC5A01 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C06C39F19659C2400B8D70C /* MediaPlayer.framework */; };
+		0B72EEDC196C672F00AC5A01 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */; };
+		0B72EEDD196C672F00AC5A01 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA177E91958B74000096266 /* AudioToolbox.framework */; };
+		0B72EEDE196C672F00AC5A01 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BAF4FE119560AEE00838D7D /* MessageUI.framework */; };
+		0B72EEDF196C672F00AC5A01 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B58BAFB1954B47700E9FF70 /* AddressBook.framework */; };
+		0B72EEE0196C672F00AC5A01 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B58BAFC1954B47700E9FF70 /* AddressBookUI.framework */; };
+		0B72EEE1196C672F00AC5A01 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD758C11950F91B00CF0D85 /* CoreGraphics.framework */; };
+		0B72EEE2196C672F00AC5A01 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD758C31950F91B00CF0D85 /* UIKit.framework */; };
+		0B72EEE3196C672F00AC5A01 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD758BF1950F91B00CF0D85 /* Foundation.framework */; };
+		0B72EEE5196C672F00AC5A01 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0BD758D71950F91B00CF0D85 /* Images.xcassets */; };
+		0B72EEE6196C672F00AC5A01 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55477195A4ADC00CE4669 /* play.png */; };
+		0B72EEE7196C672F00AC5A01 /* unknown-user@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55470195A340500CE4669 /* unknown-user@2x~iphone.png */; };
+		0B72EEE8196C672F00AC5A01 /* record@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55476195A4ADC00CE4669 /* record@2x~iphone.png */; };
+		0B72EEE9196C672F00AC5A01 /* play@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55475195A4ADC00CE4669 /* play@2x~iphone.png */; };
+		0B72EEEA196C672F00AC5A01 /* contact-placeholder@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */; };
+		0B72EEEB196C672F00AC5A01 /* NBPhoneNumberMetadata.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64B919521A7C00223093 /* NBPhoneNumberMetadata.plist */; };
+		0B72EEEC196C672F00AC5A01 /* MPCloseBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8D3195B449A00C94AC0 /* MPCloseBtn@2x.png */; };
+		0B72EEED196C672F00AC5A01 /* heard-logo-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DE1959109700534386 /* heard-logo-120.png */; };
+		0B72EEEE196C672F00AC5A01 /* MPSurvey.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8DB195B449A00C94AC0 /* MPSurvey.storyboard */; };
+		0B72EEEF196C672F00AC5A01 /* heard-logo-80.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DC1959109700534386 /* heard-logo-80.png */; };
+		0B72EEF0196C672F00AC5A01 /* record.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55474195A4ADC00CE4669 /* record.png */; };
+		0B72EEF1196C672F00AC5A01 /* PhoneNumberMetaData.json in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64BB19521A7C00223093 /* PhoneNumberMetaData.json */; };
+		0B72EEF2196C672F00AC5A01 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0BD758C81950F91B00CF0D85 /* InfoPlist.strings */; };
+		0B72EEF3196C672F00AC5A01 /* PhoneNumberMetaDataForTesting.json in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64BC19521A7C00223093 /* PhoneNumberMetaDataForTesting.json */; };
+		0B72EEF4196C672F00AC5A01 /* unknown-user.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55471195A340500CE4669 /* unknown-user.png */; };
+		0B72EEF5196C672F00AC5A01 /* heard-logo-58.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DD1959109700534386 /* heard-logo-58.png */; };
+		0B72EEF6196C672F00AC5A01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0BD758D11950F91B00CF0D85 /* Main.storyboard */; };
+		0B72EEF7196C672F00AC5A01 /* MPCloseBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8D2195B449A00C94AC0 /* MPCloseBtn.png */; };
+		0B72EEF8196C672F00AC5A01 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8CF195B449A00C94AC0 /* Media.xcassets */; };
+		0B72EEF9196C672F00AC5A01 /* welcome-logo@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */; };
+		0B72EEFA196C672F00AC5A01 /* MPNotification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8D6195B449A00C94AC0 /* MPNotification.storyboard */; };
+		0B72EEFB196C672F00AC5A01 /* NBPhoneNumberMetadataForTesting.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64BA19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist */; };
+		0B72EEFC196C672F00AC5A01 /* welcome-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A481954E4FF00476BFE /* welcome-logo.png */; };
+		0B72EEFD196C672F00AC5A01 /* contact-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651D41958AC5000534386 /* contact-placeholder.png */; };
 		0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */; };
 		0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A481954E4FF00476BFE /* welcome-logo.png */; };
 		0B893A4D19550FF000476BFE /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B893A4C19550FF000476BFE /* Contact.m */; };
@@ -107,6 +197,8 @@
 		0B3651DE1959109700534386 /* heard-logo-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-120.png"; sourceTree = "<group>"; };
 		0B58BAFB1954B47700E9FF70 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		0B58BAFC1954B47700E9FF70 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		0B72EF01196C672F00AC5A01 /* Waved copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Waved copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0B72EF02196C672F00AC5A01 /* Waved copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Waved copy-Info.plist"; path = "/Users/bastien/Developer/iOS/Heard/Waved copy-Info.plist"; sourceTree = "<absolute>"; };
 		0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome-logo@2x~iphone.png"; sourceTree = "<group>"; };
 		0B893A481954E4FF00476BFE /* welcome-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome-logo.png"; sourceTree = "<group>"; };
 		0B893A4B19550FF000476BFE /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
@@ -255,6 +347,22 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0B72EEDA196C672F00AC5A01 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0B72EEDB196C672F00AC5A01 /* MediaPlayer.framework in Frameworks */,
+				0B72EEDC196C672F00AC5A01 /* CrashReporter.framework in Frameworks */,
+				0B72EEDD196C672F00AC5A01 /* AudioToolbox.framework in Frameworks */,
+				0B72EEDE196C672F00AC5A01 /* MessageUI.framework in Frameworks */,
+				0B72EEDF196C672F00AC5A01 /* AddressBook.framework in Frameworks */,
+				0B72EEE0196C672F00AC5A01 /* AddressBookUI.framework in Frameworks */,
+				0B72EEE1196C672F00AC5A01 /* CoreGraphics.framework in Frameworks */,
+				0B72EEE2196C672F00AC5A01 /* UIKit.framework in Frameworks */,
+				0B72EEE3196C672F00AC5A01 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0BD758B91950F91B00CF0D85 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -336,6 +444,7 @@
 				0BD758C51950F91B00CF0D85 /* Heard */,
 				0BD758BE1950F91B00CF0D85 /* Frameworks */,
 				0BD758BD1950F91B00CF0D85 /* Products */,
+				0B72EF02196C672F00AC5A01 /* Waved copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -343,6 +452,7 @@
 			isa = PBXGroup;
 			children = (
 				0BD758BC1950F91B00CF0D85 /* Waved.app */,
+				0B72EF01196C672F00AC5A01 /* Waved copy.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -571,6 +681,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		0B72EEA0196C672F00AC5A01 /* Waved Staging */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0B72EEFE196C672F00AC5A01 /* Build configuration list for PBXNativeTarget "Waved Staging" */;
+			buildPhases = (
+				0B72EEA1196C672F00AC5A01 /* Sources */,
+				0B72EEDA196C672F00AC5A01 /* Frameworks */,
+				0B72EEE4196C672F00AC5A01 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Waved Staging";
+			productName = Heard;
+			productReference = 0B72EF01196C672F00AC5A01 /* Waved copy.app */;
+			productType = "com.apple.product-type.application";
+		};
 		0BD758BB1950F91B00CF0D85 /* Waved */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0BD758EE1950F91B00CF0D85 /* Build configuration list for PBXNativeTarget "Waved" */;
@@ -598,6 +725,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = streetshout;
 				TargetAttributes = {
+					0B72EEA0196C672F00AC5A01 = {
+						DevelopmentTeam = 9688VHJV6U;
+					};
 					0BD758BB1950F91B00CF0D85 = {
 						DevelopmentTeam = Y7RQR83KUE;
 					};
@@ -617,11 +747,44 @@
 			projectRoot = "";
 			targets = (
 				0BD758BB1950F91B00CF0D85 /* Waved */,
+				0B72EEA0196C672F00AC5A01 /* Waved Staging */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0B72EEE4196C672F00AC5A01 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0B72EEE5196C672F00AC5A01 /* Images.xcassets in Resources */,
+				0B72EEE6196C672F00AC5A01 /* play.png in Resources */,
+				0B72EEE7196C672F00AC5A01 /* unknown-user@2x~iphone.png in Resources */,
+				0B72EEE8196C672F00AC5A01 /* record@2x~iphone.png in Resources */,
+				0B72EEE9196C672F00AC5A01 /* play@2x~iphone.png in Resources */,
+				0B72EEEA196C672F00AC5A01 /* contact-placeholder@2x~iphone.png in Resources */,
+				0B72EEEB196C672F00AC5A01 /* NBPhoneNumberMetadata.plist in Resources */,
+				0B72EEEC196C672F00AC5A01 /* MPCloseBtn@2x.png in Resources */,
+				0B72EEED196C672F00AC5A01 /* heard-logo-120.png in Resources */,
+				0B72EEEE196C672F00AC5A01 /* MPSurvey.storyboard in Resources */,
+				0B72EEEF196C672F00AC5A01 /* heard-logo-80.png in Resources */,
+				0B72EEF0196C672F00AC5A01 /* record.png in Resources */,
+				0B72EEF1196C672F00AC5A01 /* PhoneNumberMetaData.json in Resources */,
+				0B72EEF2196C672F00AC5A01 /* InfoPlist.strings in Resources */,
+				0B72EEF3196C672F00AC5A01 /* PhoneNumberMetaDataForTesting.json in Resources */,
+				0B72EEF4196C672F00AC5A01 /* unknown-user.png in Resources */,
+				0B72EEF5196C672F00AC5A01 /* heard-logo-58.png in Resources */,
+				0B72EEF6196C672F00AC5A01 /* Main.storyboard in Resources */,
+				0B72EEF7196C672F00AC5A01 /* MPCloseBtn.png in Resources */,
+				0B72EEF8196C672F00AC5A01 /* Media.xcassets in Resources */,
+				0B72EEF9196C672F00AC5A01 /* welcome-logo@2x~iphone.png in Resources */,
+				0B72EEFA196C672F00AC5A01 /* MPNotification.storyboard in Resources */,
+				0B72EEFB196C672F00AC5A01 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
+				0B72EEFC196C672F00AC5A01 /* welcome-logo.png in Resources */,
+				0B72EEFD196C672F00AC5A01 /* contact-placeholder.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0BD758BA1950F91B00CF0D85 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -657,6 +820,69 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0B72EEA1196C672F00AC5A01 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0B72EEA2196C672F00AC5A01 /* UIColor+MPColor.m in Sources */,
+				0B72EEA3196C672F00AC5A01 /* UIImage+MPImageEffects.m in Sources */,
+				0B72EEA4196C672F00AC5A01 /* MPSurvey.m in Sources */,
+				0B72EEA5196C672F00AC5A01 /* RequestPhoneViewController.m in Sources */,
+				0B72EEA6196C672F00AC5A01 /* MPNotification.m in Sources */,
+				0B72EEA7196C672F00AC5A01 /* NBAsYouTypeFormatter.m in Sources */,
+				0B72EEA8196C672F00AC5A01 /* NSData+MPBase64.m in Sources */,
+				0B72EEA9196C672F00AC5A01 /* NBNumberFormat.m in Sources */,
+				0B72EEAA196C672F00AC5A01 /* NBPhoneMetaData.m in Sources */,
+				0B72EEAB196C672F00AC5A01 /* MPSurveyQuestion.m in Sources */,
+				0B72EEAC196C672F00AC5A01 /* AudioUtils.m in Sources */,
+				0B72EEAD196C672F00AC5A01 /* NBPhoneNumber.m in Sources */,
+				0B72EEAE196C672F00AC5A01 /* NBPhoneNumberDesc.m in Sources */,
+				0B72EEAF196C672F00AC5A01 /* NBPhoneNumberUtil.m in Sources */,
+				0B72EEB0196C672F00AC5A01 /* NSArray+NBAdditions.m in Sources */,
+				0B72EEB1196C672F00AC5A01 /* CodeConfirmationViewController.m in Sources */,
+				0B72EEB2196C672F00AC5A01 /* RequestUserInfoViewController.m in Sources */,
+				0B72EEB3196C672F00AC5A01 /* Message.m in Sources */,
+				0B72EEB4196C672F00AC5A01 /* main.m in Sources */,
+				0B72EEB5196C672F00AC5A01 /* ContactView.m in Sources */,
+				0B72EEB6196C672F00AC5A01 /* AFNetworkActivityIndicatorManager.m in Sources */,
+				0B72EEB7196C672F00AC5A01 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
+				0B72EEB8196C672F00AC5A01 /* UIAlertView+AFNetworking.m in Sources */,
+				0B72EEB9196C672F00AC5A01 /* UIButton+AFNetworking.m in Sources */,
+				0B72EEBA196C672F00AC5A01 /* UIImageView+AFNetworking.m in Sources */,
+				0B72EEBB196C672F00AC5A01 /* UIProgressView+AFNetworking.m in Sources */,
+				0B72EEBC196C672F00AC5A01 /* UIRefreshControl+AFNetworking.m in Sources */,
+				0B72EEBD196C672F00AC5A01 /* DashboardViewController.m in Sources */,
+				0B72EEBE196C672F00AC5A01 /* UIWebView+AFNetworking.m in Sources */,
+				0B72EEBF196C672F00AC5A01 /* MBProgressHUD.m in Sources */,
+				0B72EEC0196C672F00AC5A01 /* AFHTTPRequestOperation.m in Sources */,
+				0B72EEC1196C672F00AC5A01 /* AFHTTPRequestOperationManager.m in Sources */,
+				0B72EEC2196C672F00AC5A01 /* UIView+MPSnapshotImage.m in Sources */,
+				0B72EEC3196C672F00AC5A01 /* AFHTTPSessionManager.m in Sources */,
+				0B72EEC4196C672F00AC5A01 /* Mixpanel.m in Sources */,
+				0B72EEC5196C672F00AC5A01 /* CrashReportUtils.m in Sources */,
+				0B72EEC6196C672F00AC5A01 /* SessionUtils.m in Sources */,
+				0B72EEC7196C672F00AC5A01 /* MPSurveyQuestionViewController.m in Sources */,
+				0B72EEC8196C672F00AC5A01 /* AFNetworkReachabilityManager.m in Sources */,
+				0B72EEC9196C672F00AC5A01 /* MPNotificationViewController.m in Sources */,
+				0B72EECA196C672F00AC5A01 /* AFSecurityPolicy.m in Sources */,
+				0B72EECB196C672F00AC5A01 /* AFURLConnectionOperation.m in Sources */,
+				0B72EECC196C672F00AC5A01 /* UIImage+MPAverageColor.m in Sources */,
+				0B72EECD196C672F00AC5A01 /* AFURLRequestSerialization.m in Sources */,
+				0B72EECE196C672F00AC5A01 /* MPSurveyNavigationController.m in Sources */,
+				0B72EECF196C672F00AC5A01 /* Contact.m in Sources */,
+				0B72EED0196C672F00AC5A01 /* AFURLResponseSerialization.m in Sources */,
+				0B72EED1196C672F00AC5A01 /* AFURLSessionManager.m in Sources */,
+				0B72EED2196C672F00AC5A01 /* HeardAppDelegate.m in Sources */,
+				0B72EED3196C672F00AC5A01 /* TrackingUtils.m in Sources */,
+				0B72EED4196C672F00AC5A01 /* ContactUtils.m in Sources */,
+				0B72EED5196C672F00AC5A01 /* Constants.m in Sources */,
+				0B72EED6196C672F00AC5A01 /* ApiUtils.m in Sources */,
+				0B72EED7196C672F00AC5A01 /* GeneralUtils.m in Sources */,
+				0B72EED8196C672F00AC5A01 /* ImageUtils.m in Sources */,
+				0B72EED9196C672F00AC5A01 /* WelcomeViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0BD758B81950F91B00CF0D85 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -742,6 +968,52 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0B72EEFF196C672F00AC5A01 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (63863BWF5M)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Bastien Beurier (63863BWF5M)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					"PRODUCTION=0",
+				);
+				INFOPLIST_FILE = "Waved copy-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "Waved copy";
+				PROVISIONING_PROFILE = "B847C88E-088D-4B35-9A28-3E4510B9E366";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		0B72EF00196C672F00AC5A01 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: LINCS";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = "PRODUCTION=0";
+				INFOPLIST_FILE = "Waved copy-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "Waved copy";
+				PROVISIONING_PROFILE = "9FADCC52-2A13-45FE-967E-06E0B8B26653";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 		0BD758EC1950F91B00CF0D85 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -827,6 +1099,11 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					"PRODUCTION=1",
+				);
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -847,6 +1124,7 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = "PRODUCTION=1";
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -858,6 +1136,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0B72EEFE196C672F00AC5A01 /* Build configuration list for PBXNativeTarget "Waved Staging" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0B72EEFF196C672F00AC5A01 /* Debug */,
+				0B72EF00196C672F00AC5A01 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		0BD758B71950F91B00CF0D85 /* Build configuration list for PBXProject "Heard" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

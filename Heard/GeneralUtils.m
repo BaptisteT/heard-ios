@@ -65,10 +65,10 @@
 {
     NSString *baseURL;
     
-    if (DEBUG) {
-        baseURL = kStagingHeardProfilePictureBaseURL;
-    } else {
+    if (PRODUCTION) {
         baseURL = kProdHeardProfilePictureBaseURL;
+    } else {
+        baseURL = kStagingHeardProfilePictureBaseURL;
     }
     
     return [NSURL URLWithString:[baseURL stringByAppendingFormat:@"%lu%@",(unsigned long)userId,@"_profile_picture"]];
