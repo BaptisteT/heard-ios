@@ -779,8 +779,10 @@
 - (void)messageSentWithError:(BOOL)error
 {
     if (error) {
-        [self addRecorderMessage:@"Sending failed." color:[UIColor whiteColor]];
-        self.resendTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(resendUI) userInfo:nil repeats:NO];
+        [self addRecorderMessage:@"Sending failed. Tap to resend." color:[UIColor whiteColor]];
+        self.recorderView.userInteractionEnabled = YES;
+        [self enableAllContactViews];
+        [self.recorderView addGestureRecognizer:self.oneTapResendRecognizer];
     } else {
         [self addRecorderMessage:@"Sent!" color:[UIColor whiteColor]];
         
@@ -803,13 +805,6 @@
     }
 }
 
-- (void)resendUI
-{
-    [self addRecorderMessage:@"Tap to resend" color:[UIColor whiteColor]];
-    self.recorderView.userInteractionEnabled = YES;
-    [self enableAllContactViews];
-    [self.recorderView addGestureRecognizer:self.oneTapResendRecognizer];
-}
 
 
 // ----------------------------------------------------------
@@ -1302,7 +1297,6 @@
 - (void)updateOutputAudioPort {
     BOOL success; NSError* error;
     AVAudioSession *session = [AVAudioSession sharedInstance];
-    NSLog(@"%d",[UIDevice currentDevice].proximityState);
     if (self.isUsingHeadSet || [UIDevice currentDevice].proximityState ) {
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error];
     } else {
