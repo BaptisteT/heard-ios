@@ -24,7 +24,7 @@
 #import "ContactUtils.h"
 #import <MediaPlayer/MPMusicPlayerController.h>
 
-#define ACTION_SHEET_1_OPTION_0 @"Replay last message"
+#define ACTION_SHEET_1_OPTION_0 @"Replay"
 #define ACTION_SHEET_1_OPTION_1 @"Invite contact"
 #define ACTION_SHEET_1_OPTION_2 @"Share"
 #define ACTION_SHEET_1_OPTION_3 @"Feedback"
@@ -688,7 +688,7 @@
         if ([view respondsToSelector:@selector(title)])
         {
             NSString* title = [view performSelector:@selector(title)];
-            if ([title isEqualToString:@"Replay last message"] && [view respondsToSelector:@selector(setEnabled:)])
+            if ([title isEqualToString:ACTION_SHEET_1_OPTION_0] && [view respondsToSelector:@selector(setEnabled:)])
             {
                 if (self.mainPlayer) {
                     [view performSelector:@selector(setEnabled:) withObject:@YES];
