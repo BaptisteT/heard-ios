@@ -393,7 +393,6 @@
 - (void)recordingUI
 {
     [self endRecordingUI];
-//    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
     
     self.recordingOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
     self.recordingOverlay.clipsToBounds = YES;
@@ -409,7 +408,6 @@
     self.recordingOverlay = nil;
     
     [self.delegate endTutorialMode];
-//    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
 }
 
 - (void)playingUI

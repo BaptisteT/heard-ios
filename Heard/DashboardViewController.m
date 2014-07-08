@@ -24,7 +24,7 @@
 #import "ContactUtils.h"
 #import <MediaPlayer/MPMusicPlayerController.h>
 
-#define ACTION_SHEET_1_OPTION_0 @"Replay last message"
+#define ACTION_SHEET_1_OPTION_0 @"Replay"
 #define ACTION_SHEET_1_OPTION_1 @"Invite contact"
 #define ACTION_SHEET_1_OPTION_2 @"Share"
 #define ACTION_SHEET_1_OPTION_3 @"Feedback"
@@ -688,7 +688,7 @@
         if ([view respondsToSelector:@selector(title)])
         {
             NSString* title = [view performSelector:@selector(title)];
-            if ([title isEqualToString:@"Replay last message"] && [view respondsToSelector:@selector(setEnabled:)])
+            if ([title isEqualToString:ACTION_SHEET_1_OPTION_0] && [view respondsToSelector:@selector(setEnabled:)])
             {
                 if (self.mainPlayer) {
                     [view performSelector:@selector(setEnabled:) withObject:@YES];
@@ -779,8 +779,10 @@
 - (void)messageSentWithError:(BOOL)error
 {
     if (error) {
-        [self addRecorderMessage:@"Sending failed." color:[UIColor whiteColor]];
-        self.resendTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(resendUI) userInfo:nil repeats:NO];
+        [self addRecorderMessage:@"Sending failed. Tap to resend." color:[UIColor whiteColor]];
+        self.recorderView.userInteractionEnabled = YES;
+        [self enableAllContactViews];
+        [self.recorderView addGestureRecognizer:self.oneTapResendRecognizer];
     } else {
         [self addRecorderMessage:@"Sent!" color:[UIColor whiteColor]];
         
@@ -803,13 +805,6 @@
     }
 }
 
-- (void)resendUI
-{
-    [self addRecorderMessage:@"Tap to resend" color:[UIColor whiteColor]];
-    self.recorderView.userInteractionEnabled = YES;
-    [self enableAllContactViews];
-    [self.recorderView addGestureRecognizer:self.oneTapResendRecognizer];
-}
 
 
 // ----------------------------------------------------------
@@ -833,6 +828,14 @@
     [self disableAllContactViews];
     
     [self recordingUIForContactView:view];
+    
+    // Case where we had a pending message
+    if (self.recorderView) {
+        [self.recorderView removeFromSuperview];
+        self.recorderView = nil;
+        self.resendContact = nil;
+        self.resendAudioData = nil;
+    }
     
     self.recorderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.recorderContainer.bounds.size.width, self.recorderContainer.bounds.size.height)];
     self.recorderView.backgroundColor = [ImageUtils red];
@@ -1302,7 +1305,6 @@
 - (void)updateOutputAudioPort {
     BOOL success; NSError* error;
     AVAudioSession *session = [AVAudioSession sharedInstance];
-    NSLog(@"%d",[UIDevice currentDevice].proximityState);
     if (self.isUsingHeadSet || [UIDevice currentDevice].proximityState ) {
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error];
     } else {
