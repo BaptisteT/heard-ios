@@ -418,6 +418,9 @@
 
 - (void)displayContacts
 {
+    //Because of bug when user quits app while playing a message
+    [self endPlayerUI];
+    
     [self removeDisplayedContacts];
     
     self.contactScrollView.hidden = NO;
@@ -707,13 +710,6 @@
 - (void)recordingUIForContactView:(ContactView *)contactView
 {
     [contactView recordingUI];
-}
-
-- (void)endRecordingUIForAllContactViews
-{
-    for (ContactView *contactView in self.contactBubbleViews) {
-        [contactView endRecordingUI];
-    }
 }
 
 - (void)disableAllContactViews
@@ -1197,7 +1193,7 @@
 {
     MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
     picker.messageComposeDelegate = self;
-    picker.body = @"Join Waved to chat me! Download at http://www.waved.io.";
+    picker.body = @"Join Waved to chat with me! Download at http://www.waved.io.";
     
     [self presentViewController:picker animated:YES completion:nil];
 }
