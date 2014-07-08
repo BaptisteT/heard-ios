@@ -829,6 +829,14 @@
     
     [self recordingUIForContactView:view];
     
+    // Case where we had a pending message
+    if (self.recorderView) {
+        [self.recorderView removeFromSuperview];
+        self.recorderView = nil;
+        self.resendContact = nil;
+        self.resendAudioData = nil;
+    }
+    
     self.recorderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.recorderContainer.bounds.size.width, self.recorderContainer.bounds.size.height)];
     self.recorderView.backgroundColor = [ImageUtils red];
     [self.recorderContainer addSubview:self.recorderView];
