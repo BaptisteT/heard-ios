@@ -38,7 +38,10 @@
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     
     //Mixpanel
-    [Mixpanel sharedInstanceWithToken:kProdMixPanelToken];
+    
+    if (!DEBUG) {
+        [Mixpanel sharedInstanceWithToken:kProdMixPanelToken];
+    }
     
     // Crash report
     PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];

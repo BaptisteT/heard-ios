@@ -63,7 +63,14 @@
 
 + (NSURL *)getUserProfilePictureURLFromUserId:(NSInteger)userId
 {
-    NSString *baseURL = kProdHeardProfilePictureBaseURL;
+    NSString *baseURL;
+    
+    if (DEBUG) {
+        baseURL = kStagingHeardProfilePictureBaseURL;
+    } else {
+        baseURL = kProdHeardProfilePictureBaseURL;
+    }
+    
     return [NSURL URLWithString:[baseURL stringByAppendingFormat:@"%lu%@",(unsigned long)userId,@"_profile_picture"]];
 }
 

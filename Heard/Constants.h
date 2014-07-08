@@ -17,10 +17,16 @@
 static NSString * const kApiVersion = @"1";
 static NSString * const kProdAFHeardAPIBaseURLString = @"http://heard.herokuapp.com/";
 static NSString * const kProdAFHeardWebsite = @"http://www.waved.io/";
+
+static NSString * const kStagingAFHeardAPIBaseURLString = @"http://heard-staging.herokuapp.com/";
+
 static NSString * const kFeedbackEmail = @"info@waved.io";
 
 static NSString * const kProdHeardRecordBaseURL = @"https://s3.amazonaws.com/heard_messages/";
 static NSString * const kProdHeardProfilePictureBaseURL = @"https://s3.amazonaws.com/heard_profile_pictures/original/";
+
+static NSString * const kStagingHeardRecordBaseURL = @"https://s3.amazonaws.com/heard_messages_staging/";
+static NSString * const kStagingHeardProfilePictureBaseURL = @"https://s3.amazonaws.com/heard_profile_pictures_staging/original/";
 
 static const NSUInteger kMaxNameLength = 20;
 

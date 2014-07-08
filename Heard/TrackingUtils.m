@@ -14,6 +14,8 @@
 
 + (void)identifyWithMixpanel:(Contact *)contact signup:(BOOL)isSigningUp
 {
+    if (DEBUG)return;
+    
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
     if (isSigningUp) {
@@ -27,6 +29,8 @@
 
 + (void)trackRecord
 {
+    if (DEBUG)return;
+    
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
     [mixpanel.people increment:@"Records" by:[NSNumber numberWithInt:1]];
@@ -34,6 +38,8 @@
 
 + (void)trackPlay
 {
+    if (DEBUG)return;
+    
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
     [mixpanel.people increment:@"Plays" by:[NSNumber numberWithInt:1]];
@@ -41,6 +47,8 @@
 
 + (void)trackReplay
 {
+    if (DEBUG)return;
+    
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
     [mixpanel.people increment:@"Replays" by:[NSNumber numberWithInt:1]];
@@ -48,6 +56,8 @@
 
 + (void)trackShare
 {
+    if (DEBUG)return;
+    
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
     [mixpanel.people increment:@"Share" by:[NSNumber numberWithInt:1]];
@@ -55,6 +65,8 @@
 
 + (void)trackAddContact
 {
+    if (DEBUG)return;
+    
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
     [mixpanel.people increment:@"Add contact" by:[NSNumber numberWithInt:1]];
@@ -62,6 +74,8 @@
 
 + (void)trackOpenApp
 {
+    if (DEBUG)return;
+    
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
     [mixpanel track:@"Open app"];

@@ -19,7 +19,12 @@
     static ApiUtils *_sharedClient = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sharedClient = [[ApiUtils alloc] initWithBaseURL:[NSURL URLWithString:kProdAFHeardAPIBaseURLString]];
+        
+        if (DEBUG) {
+            _sharedClient = [[ApiUtils alloc] initWithBaseURL:[NSURL URLWithString:kStagingAFHeardAPIBaseURLString]];
+        } else {
+            _sharedClient = [[ApiUtils alloc] initWithBaseURL:[NSURL URLWithString:kProdAFHeardAPIBaseURLString]];
+        }
         
         // Add m4a content type for audio
         _sharedClient.responseSerializer.acceptableContentTypes = [_sharedClient.responseSerializer.acceptableContentTypes setByAddingObject:@"audio/m4a"];

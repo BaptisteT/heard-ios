@@ -38,7 +38,11 @@
 
 - (NSURL *)getMessageURL
 {
-    return [NSURL URLWithString:[kProdHeardRecordBaseURL stringByAppendingFormat:@"%lu%@",(unsigned long)self.identifier,@"_record"]];
+    if (DEBUG) {
+        return [NSURL URLWithString:[kStagingHeardRecordBaseURL stringByAppendingFormat:@"%lu%@",(unsigned long)self.identifier,@"_record"]];
+    } else {
+        return [NSURL URLWithString:[kProdHeardRecordBaseURL stringByAppendingFormat:@"%lu%@",(unsigned long)self.identifier,@"_record"]];
+    }
 }
 
 
