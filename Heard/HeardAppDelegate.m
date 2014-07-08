@@ -52,7 +52,6 @@
     
     // Contacts list
     self.contacts = [ContactUtils retrieveContactsInMemory];
-    
 
     // Check API related message
     [ApiUtils checkAPIVersionAndExecuteSucess:^(NSDictionary *result){
@@ -148,6 +147,7 @@
                 [(DashboardViewController *)visibleController distributeNonAttributedMessages];
             }
             AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+            AudioServicesPlaySystemSound(1000);
         }
     }
 }
