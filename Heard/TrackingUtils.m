@@ -20,6 +20,8 @@
     
     if (isSigningUp || !PRODUCTION) {
         [mixpanel createAlias:[NSString stringWithFormat:@"%lu", (unsigned long)contact.identifier] forDistinctID:mixpanel.distinctId];
+        
+        [mixpanel track:@"Signup"];
     }
         
     [mixpanel identify:[NSString stringWithFormat:@"%lu", (unsigned long)contact.identifier]];
@@ -33,6 +35,8 @@
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
+    [mixpanel track:@"Record"];
+    
     [mixpanel.people increment:@"Records" by:[NSNumber numberWithInt:1]];
 }
 
@@ -41,6 +45,8 @@
     if (!PRODUCTION)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    
+    [mixpanel track:@"Play"];
     
     [mixpanel.people increment:@"Plays" by:[NSNumber numberWithInt:1]];
 }
