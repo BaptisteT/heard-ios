@@ -39,7 +39,7 @@
     
     //Mixpanel
     
-    if (PRODUCTION) {
+    if (PRODUCTION && !DEBUG) {
         [Mixpanel sharedInstanceWithToken:kProdMixPanelToken];
     }
     

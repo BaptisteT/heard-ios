@@ -14,7 +14,7 @@
 
 + (void)identifyWithMixpanel:(Contact *)contact signup:(BOOL)isSigningUp
 {
-    if (!PRODUCTION)return;
+    if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
@@ -31,7 +31,7 @@
 
 + (void)trackRecord
 {
-    if (!PRODUCTION)return;
+    if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
@@ -42,7 +42,7 @@
 
 + (void)trackPlay
 {
-    if (!PRODUCTION)return;
+    if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
@@ -53,7 +53,7 @@
 
 + (void)trackReplay
 {
-    if (!PRODUCTION)return;
+    if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
@@ -62,7 +62,7 @@
 
 + (void)trackShare
 {
-    if (!PRODUCTION)return;
+    if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
@@ -71,7 +71,7 @@
 
 + (void)trackAddContact
 {
-    if (!PRODUCTION)return;
+    if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
@@ -80,7 +80,7 @@
 
 + (void)trackOpenApp
 {
-    if (!PRODUCTION)return;
+    if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
 
