@@ -94,7 +94,7 @@
         [(DashboardViewController *)visibleController displayContacts];
         
         // Retrieve new messages
-        [(DashboardViewController *)visibleController retrieveUnreadMessagesAndNewContacts:NO];
+        [(DashboardViewController *)visibleController retrieveUnreadMessagesAndNewContacts];
     }
 }
 

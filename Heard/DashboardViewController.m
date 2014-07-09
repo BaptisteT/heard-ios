@@ -76,6 +76,7 @@
 @property (nonatomic, strong) UITextView *noAddressBookAccessLabel;
 @property (nonatomic) BOOL disableProximityObserver;
 @property (nonatomic, strong) UIView *tutorialView;
+@property (nonatomic) BOOL retrieveNewContact;
 
 
 @end
@@ -93,7 +94,11 @@
     [super viewDidLoad];
     
     self.contactScrollView.hidden = YES;
+    self.retrieveNewContact = YES;
+    
+    // Init address book
     self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
+    ABAddressBookRegisterExternalChangeCallback(self.addressBook, MyAddressBookExternalChangeCallback, (__bridge void *)(self));
     
     // Init recorder container
     self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - RECORDER_HEIGHT, self.view.bounds.size.width, RECORDER_HEIGHT)];
@@ -129,7 +134,7 @@
     }
 
     // Retrieve messages & contacts
-    [self retrieveUnreadMessagesAndNewContacts:YES];
+    [self retrieveUnreadMessagesAndNewContacts];
     
     // Create audio session
     AVAudioSession* session = [AVAudioSession sharedInstance];
@@ -405,7 +410,11 @@
     }];
 }
 
-
+// Address book changes callback
+void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressbook,CFDictionaryRef info,void *context)
+{
+    ((__bridge DashboardViewController *)context).retrieveNewContact = YES;
+}
 
 // ----------------------------------
 #pragma mark Create Contact Bubble
@@ -602,7 +611,7 @@
 // ----------------------------------
 
 // Retrieve unread messages and display alert
-- (void) retrieveUnreadMessagesAndNewContacts:(BOOL)retrieveNewContacts
+- (void) retrieveUnreadMessagesAndNewContacts
 {
     void (^successBlock)(NSArray *messages) = ^void(NSArray *messages) {
         //Reset unread messages
@@ -613,8 +622,9 @@
         }
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:messages.count];
         // Check if we have new contacts
-        if (retrieveNewContacts || !areAttributed || self.contacts.count == 0) {
+        if (self.retrieveNewContact || !areAttributed) {
             [self requestAddressBookAccessAndRetrieveFriends];
+            self.retrieveNewContact = NO;
         } else {
             [self redisplayContact];
         }
