@@ -992,9 +992,6 @@
     }
     
     // Set loud speaker and proximity check
-//    if (! self.isUsingHeadSet) {
-//        [[AVAudioSession sharedInstance] overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
-//    }
     self.disableProximityObserver = NO;
     [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
     
@@ -1089,23 +1086,25 @@
         [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     } else {
         ABMultiValueRef phones =ABRecordCopyValue(person, kABPersonPhoneProperty);
-        NSString* mobile=@"";
-        NSString* mobileLabel;
+        NSMutableArray* mobileNumbers = [NSMutableArray new];
         for(CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
-            mobileLabel = (__bridge NSString *)(ABMultiValueCopyLabelAtIndex(phones, i));
-            if([mobileLabel isEqualToString:(NSString *)kABPersonPhoneMainLabel])
-            {
-                mobile = (__bridge NSString *)(ABMultiValueCopyValueAtIndex(phones, i));
-            }
+            [mobileNumbers addObject:(__bridge NSString *)(ABMultiValueCopyValueAtIndex(phones, i))];
         }
         
-        for (ContactView *contactBubble in self.contactBubbleViews) {
-            if ([mobile isEqualToString:contactBubble.contact.phoneNumber]) {
-                if (contactBubble.pendingContact) {
-                    [contactBubble setPendingContact:NO];
-                    contactBubble.contact.isPending = NO;
-                    self.contactToAdd = nil;
+        BOOL isAttributed = NO;
+        for (NSString *mobile in mobileNumbers) {
+            for (ContactView *contactBubble in self.contactBubbleViews) {
+                if ([mobile isEqualToString:contactBubble.contact.phoneNumber]) {
+                    if (contactBubble.pendingContact) {
+                        [contactBubble setPendingContact:NO];
+                        contactBubble.contact.isPending = NO;
+                        self.contactToAdd = nil;
+                    }
+                    isAttributed = YES;
+                    break;
                 }
+            }
+            if (isAttributed) {
                 break;
             }
         }
