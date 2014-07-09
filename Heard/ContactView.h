@@ -58,6 +58,8 @@
 
 - (void)endTutorialMode;
 
+- (void)tutorialModeWithDuration:(NSTimeInterval)duration;
+
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 
 

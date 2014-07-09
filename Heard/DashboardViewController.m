@@ -43,6 +43,7 @@
 #define PLAYER_LINE_WEIGHT 6
 
 #define INVITE_CONTACT_BUTTON_HEIGHT 50
+#define TUTORIAL_VIEW_HEIGHT 60
 
 @interface DashboardViewController ()
 
@@ -180,41 +181,50 @@
     self.noAddressBookAccessLabel.textAlignment = NSTextAlignmentCenter;
 }
 
-- (void)tutorialMode
+- (void)initTutorialView
 {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    if ([userDefaults objectForKey:RECORD_TUTO_PREF]) {
-        return;
-    }
-    
-    if (self.tutorialView || !self.contactBubbleViews || [self.contactBubbleViews count] == 0) {
-        //No contact to use for the tutorial, wait for next time
-        return;
-    }
-    
-    //Don't show tuto anymore
-    [userDefaults setObject:@"dummy" forKey:RECORD_TUTO_PREF];
-    
-    self.tutorialView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 60)];
+    self.tutorialView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, TUTORIAL_VIEW_HEIGHT)];
     self.tutorialView.backgroundColor = [ImageUtils blue];
     
-    [self.view addSubview:self.tutorialView];
-    
-    UILabel *tutorialMessage = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tutorialView.bounds.size.width, self.tutorialView.bounds.size.height)];
-    tutorialMessage.text = @"Press & hold a contact to record";
+    UILabel *tutorialMessage = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, TUTORIAL_VIEW_HEIGHT)];
+    tutorialMessage.text = @"Hold contact to record.";
     tutorialMessage.font = [UIFont fontWithName:@"Avenir-Light" size:20.0];
     tutorialMessage.textAlignment = NSTextAlignmentCenter;
     tutorialMessage.textColor = [UIColor whiteColor];
     tutorialMessage.backgroundColor = [UIColor clearColor];
     
     [self.tutorialView addSubview:tutorialMessage];
+}
+
+- (void)tutorialModeWithDuration:(NSTimeInterval)duration
+{
+    [self endTutorialMode];
+    
+    if (!self.tutorialView) {
+        [self initTutorialView];
+    }
+    
+    self.tutorialView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, TUTORIAL_VIEW_HEIGHT);
+    [self.view addSubview:self.tutorialView];
     
     [UIView animateWithDuration:0.5 animations:^{
         self.tutorialView.frame = CGRectMake(self.tutorialView.frame.origin.x,
                                              self.tutorialView.frame.origin.y - self.tutorialView.frame.size.height,
                                              self.tutorialView.frame.size.width,
                                              self.tutorialView.frame.size.height);
+    } completion:^(BOOL finished) {
+        if (finished && self.tutorialView) {
+            [UIView animateWithDuration:0.5 delay:duration options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.tutorialView.frame = CGRectMake(self.tutorialView.frame.origin.x,
+                                                     self.tutorialView.frame.origin.y + self.tutorialView.frame.size.height,
+                                                     self.tutorialView.frame.size.width,
+                                                     self.tutorialView.frame.size.height);
+            } completion:^(BOOL finished) {
+                if (finished) {
+                    [self endTutorialMode];
+                }
+            }];
+        }
     }];
 }
 
@@ -225,9 +235,7 @@
     }
     
     [self.tutorialView.layer removeAllAnimations];
-    
     [self.tutorialView removeFromSuperview];
-    self.tutorialView = nil;
 }
 
 
@@ -477,7 +485,15 @@
     // Resize view
     [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
     
-    [self tutorialMode];
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    if (![userDefaults objectForKey:RECORD_TUTO_PREF]) {
+        [self tutorialModeWithDuration:10];
+        
+        //Don't show tuto anymore on start
+        [userDefaults setObject:@"dummy" forKey:RECORD_TUTO_PREF];
+    }
 }
 
 - (void)displayAdditionnalContact:(Contact *)contact
@@ -535,7 +551,12 @@
         nameLabel.text = @"Me";
         nameLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:14.0];
     } else {
-        nameLabel.text = [NSString stringWithFormat:@"%@ %@", contact.firstName ? contact.firstName : @"", contact.lastName ? contact.lastName : @""];
+        if (contact.firstName) {
+            nameLabel.text = [NSString stringWithFormat:@"%@", contact.firstName ? contact.firstName : @""];
+        } else {
+            nameLabel.text = [NSString stringWithFormat:@"%@", contact.lastName ? contact.lastName : @""];
+        }
+        
         nameLabel.font = [UIFont fontWithName:@"Avenir-Light" size:14.0];
     }
     

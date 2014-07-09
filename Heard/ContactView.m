@@ -174,7 +174,7 @@
                 [self.minDurationTimer invalidate];
                 [self stopRecording];
                 [self.delegate quitRecordingModeAnimated:NO];
-                [GeneralUtils showMessage:@"Hold to record." withTitle:nil];
+                [self.delegate tutorialModeWithDuration:3];
             } else {
                 [self sendRecording];
                 [TrackingUtils trackRecord];
@@ -233,7 +233,7 @@
         
         [TrackingUtils trackPlay];
     } else {
-        [GeneralUtils showMessage:@"Hold to record." withTitle:nil];
+        [self.delegate tutorialModeWithDuration:3];
     }
 }
 
