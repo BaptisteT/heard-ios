@@ -22,4 +22,6 @@
 
 + (NSURL *)getUserProfilePictureURLFromUserId:(NSInteger)userId;
 
++ (BOOL)isFirstOpening;
+
 @end

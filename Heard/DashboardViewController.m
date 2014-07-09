@@ -377,7 +377,7 @@
     }
     
     // Get contacts and compare with contact in memory
-    [ApiUtils getMyContacts:phoneNumbers success:^(NSArray *contacts) {
+    [ApiUtils getMyContacts:phoneNumbers atSignUp:self.isSignUp success:^(NSArray *contacts) {
         [self hideLoadingIndicator];
         
         for (Contact *contact in contacts) {
@@ -408,6 +408,7 @@
             [SessionUtils redirectToSignIn];
         }
     }];
+    self.isSignUp = NO;
 }
 
 // Address book changes callback
@@ -494,14 +495,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     // Resize view
     [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
     
-    
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    if (![userDefaults objectForKey:RECORD_TUTO_PREF]) {
+    if ([GeneralUtils isFirstOpening]) {
         [self tutorialModeWithDuration:10];
-        
-        //Don't show tuto anymore on start
-        [userDefaults setObject:@"dummy" forKey:RECORD_TUTO_PREF];
     }
 }
 
@@ -613,7 +608,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 // Retrieve unread messages and display alert
 - (void) retrieveUnreadMessagesAndNewContacts
 {
-    void (^successBlock)(NSArray *messages) = ^void(NSArray *messages) {
+    void (^successBlock)(NSArray*,BOOL) = ^void(NSArray *messages, BOOL newContactOnServer) {
         //Reset unread messages
         [self resetUnreadMessages];
         BOOL areAttributed = YES;
@@ -621,8 +616,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
             areAttributed &= [self addUnreadMessageToExistingContacts:message];
         }
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:messages.count];
+        
         // Check if we have new contacts
-        if (self.retrieveNewContact || !areAttributed) {
+        // App launch - Change in address book - Message from unknown - New user added current user - 0 contact
+        if (self.retrieveNewContact || !areAttributed || newContactOnServer || self.contacts.count == 0) {
             [self requestAddressBookAccessAndRetrieveFriends];
             self.retrieveNewContact = NO;
         } else {
@@ -631,6 +628,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     };
     
     void (^failureBlock)(NSURLSessionDataTask *) = ^void(NSURLSessionDataTask *task){
+        [self hideLoadingIndicator];
         //In this case, 401 means that the auth token is no valid.
         if ([SessionUtils invalidTokenResponse:task]) {
             [SessionUtils redirectToSignIn];

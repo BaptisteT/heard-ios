@@ -13,6 +13,7 @@
 #import "SessionUtils.h"
 #import "ApiUtils.h"
 #import "TrackingUtils.h"
+#import "DashboardViewController.h"
 
 #define BORDER_SIZE 0.5
 #define ACTION_SHEET_OPTION_1 @"Camera"
@@ -38,6 +39,9 @@
 @implementation RequestUserInfoViewController
 
 
+// ----------------------
+// Life Cycle
+// ----------------------
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -55,6 +59,19 @@
     
     [self.firstNameTextField becomeFirstResponder];
 }
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSString * segueName = segue.identifier;
+    
+    if ([segueName isEqualToString: @"Dashboard Push Segue"]) {
+        ((DashboardViewController *) [segue destinationViewController]).isSignUp = YES;
+    }
+}
+
+// ----------------------
+// Button Pressed
+// ----------------------
 
 - (IBAction)backButtonPressed:(id)sender {
     [self.navigationController popToRootViewControllerAnimated:YES];
@@ -75,6 +92,16 @@
     
     [self signupUser];
 }
+
+- (IBAction)profilePicturePressed:(id)sender {
+    self.pictureActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                          delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
+                                            destructiveButtonTitle:nil
+                                                 otherButtonTitles:ACTION_SHEET_OPTION_1, ACTION_SHEET_OPTION_2, nil];
+    
+    [self.pictureActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+}
+
 
 - (void)signupUser
 {
@@ -107,14 +134,6 @@
                                 success:successBlock failure:failureBlock];
 }
 
-- (IBAction)profilePicturePressed:(id)sender {
-    self.pictureActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                       delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
-                                         destructiveButtonTitle:nil
-                                              otherButtonTitles:ACTION_SHEET_OPTION_1, ACTION_SHEET_OPTION_2, nil];
-    
-    [self.pictureActionSheet showInView:[UIApplication sharedApplication].keyWindow];
-}
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {

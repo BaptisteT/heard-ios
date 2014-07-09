@@ -200,11 +200,11 @@
 }
 
 // Get unread messages
-+ (void)getUnreadMessagesAndExecuteSuccess:(void(^)(NSArray *messages))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock
++ (void)getUnreadMessagesAndExecuteSuccess:(void(^)(NSArray *messages, BOOL newContactOnServer))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages/unread_messages.json"];
     
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *parameters = [NSMutableDictionary new];
     
     [self enrichParametersWithToken:parameters];
     
@@ -212,9 +212,10 @@
         NSDictionary *result = [JSON valueForKeyPath:@"result"];
         
         NSArray *rawMessages = [result objectForKey:@"messages"];
+        BOOL newContactOnServer = [[result objectForKey:@"retrieve_contacts"] boolValue];
         
         if (successBlock) {
-            successBlock([Message rawMessagesToInstances:rawMessages]);
+            successBlock([Message rawMessagesToInstances:rawMessages], newContactOnServer);
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (failureBlock) {
@@ -245,12 +246,13 @@
     }];
 }
 
-+ (void)getMyContacts:(NSArray *)phoneNumbers success:(void(^)(NSArray *contacts))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock
++ (void)getMyContacts:(NSArray *)phoneNumbers atSignUp:(BOOL)isSignUp success:(void(^)(NSArray *contacts))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/get_my_contact.json"];
     
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *parameters = [NSMutableDictionary new];
     [parameters setObject:phoneNumbers forKey:@"contact_numbers"];
+    [parameters setObject:[NSNumber numberWithBool:isSignUp] forKey:@"sign_up"];
     
     [self enrichParametersWithToken:parameters];
     

@@ -200,5 +200,14 @@ NSString* stringFromDeviceTokenData(NSData *deviceToken)
     [self.apiMessagealertView show];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSString * segueName = segue.identifier;
+    
+    if ([segueName isEqualToString: @"Dashboard Push Segue From Welcome"]) {
+        ((DashboardViewController *) [segue destinationViewController]).isSignUp = NO;
+    }
+}
+
 
 @end

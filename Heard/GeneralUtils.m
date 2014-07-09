@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 streetshout. All rights reserved.
 //
 
+#define FIRST_OPENING_PREF @"First Opening"
+
 #import "GeneralUtils.h"
 #import "Constants.h"
 
@@ -72,6 +74,18 @@
     }
     
     return [NSURL URLWithString:[baseURL stringByAppendingFormat:@"%lu%@",(unsigned long)userId,@"_profile_picture"]];
+}
+
++ (BOOL)isFirstOpening
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    if([prefs objectForKey:FIRST_OPENING_PREF]) {
+        return NO;
+    } else {
+        [prefs setObject:[NSNumber numberWithBool:YES] forKey:FIRST_OPENING_PREF];
+        return YES;
+    }
 }
 
 
