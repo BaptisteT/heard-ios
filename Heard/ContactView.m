@@ -32,6 +32,7 @@
 @property (nonatomic, strong) UIImageView *recordingOverlay;
 @property (nonatomic, strong) NSData *nextMessageAudioData;
 @property (nonatomic, strong) UIImageView *pendingContactOverlay;
+@property (nonatomic, strong) CAShapeLayer *circleShape;
 
 @end
 
@@ -134,6 +135,8 @@
         if ([self.delegate.mainPlayer isPlaying]) {
             [self.delegate endPlayerUI];
         }
+        
+        [self.delegate startRecordSound];
         [self recordingUI];
         
         // Set session
@@ -165,6 +168,7 @@
         }];
     }
     if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled || recognizer.state == UIGestureRecognizerStateFailed) {
+        [self.delegate endRecordSound];
         [self endRecordingUI];
         
         // Stop timer if it did not fire yet
@@ -228,6 +232,7 @@
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] - 1];
         
         [self.delegate startedPlayingAudioFileByView:self];
+        
         [self.delegate.mainPlayer play];
         self.userInteractionEnabled = YES;
         
@@ -394,6 +399,8 @@
 {
     [self endRecordingUI];
     
+    [self startSonarAnimationWithColor:[ImageUtils red]];
+    
     self.recordingOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
     self.recordingOverlay.clipsToBounds = YES;
     self.recordingOverlay.alpha = 0.7;
@@ -402,8 +409,53 @@
     [self addSubview:self.recordingOverlay];
 }
 
+- (void)startSonarAnimationWithColor:(UIColor *)color
+{
+    CGRect pathFrame = CGRectMake(-CGRectGetMidX(self.bounds), -CGRectGetMidY(self.bounds), self.bounds.size.width, self.bounds.size.height);
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:pathFrame cornerRadius:self.bounds.size.height];
+    
+    // accounts for left/right offset and contentOffset of scroll view
+    //    CGPoint shapePosition = [self.superview.superview convertPoint:self.center fromView:self.superview.superview];
+    CGPoint shapePosition = [self.superview convertPoint:self.center fromView:self.superview];
+    
+    self.circleShape = [CAShapeLayer layer];
+    self.circleShape.path = path.CGPath;
+    self.circleShape.position = shapePosition;
+    self.circleShape.fillColor = [UIColor clearColor].CGColor;
+    self.circleShape.opacity = 1;
+    self.circleShape.strokeColor = color.CGColor;
+    self.circleShape.lineWidth = 2.0;
+    
+    //    [self.superview.superview.layer addSublayer:circleShape];
+    [self.superview.layer addSublayer:self.circleShape];
+    
+    CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+    scaleAnimation.fromValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
+    scaleAnimation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(2.5, 2.5, 1)];
+    
+    CABasicAnimation *alphaAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+    alphaAnimation.fromValue = @1;
+    alphaAnimation.toValue = @0;
+    
+    CAAnimationGroup *animation = [CAAnimationGroup animation];
+    animation.animations = @[scaleAnimation, alphaAnimation];
+    animation.duration = 0.5f;
+    animation.repeatCount = INFINITY;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+    
+    [self.circleShape addAnimation:animation forKey:nil];
+}
+
+- (void)endSonarAnimation
+{
+    [self.circleShape removeAllAnimations];
+    [self.circleShape removeFromSuperlayer];
+}
+
 - (void)endRecordingUI
 {
+    [self endSonarAnimation];
+    
     [self.recordingOverlay removeFromSuperview];
     self.recordingOverlay = nil;
     
@@ -413,6 +465,8 @@
 - (void)playingUI
 {
     [self endRecordingUI];
+    
+    [self startSonarAnimationWithColor:[ImageUtils green]];
     
     self.recordingOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
     self.recordingOverlay.clipsToBounds = YES;
@@ -424,6 +478,8 @@
 
 - (void)endPlayingUI
 {
+    [self endSonarAnimation];
+    
     [self.recordingOverlay removeFromSuperview];
     self.recordingOverlay = nil;
 }

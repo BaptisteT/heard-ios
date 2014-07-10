@@ -77,7 +77,7 @@
 @property (nonatomic) BOOL disableProximityObserver;
 @property (nonatomic, strong) UIView *tutorialView;
 @property (nonatomic) BOOL retrieveNewContact;
-
+@property (nonatomic) SystemSoundID recordSound;
 
 @end
 
@@ -95,6 +95,11 @@
     
     self.contactScrollView.hidden = YES;
     self.retrieveNewContact = YES;
+    
+    //For custom sound
+    //Init recording sound
+//    CFURLRef soundFileURLRef  = CFBundleCopyResourceURL (CFBundleGetMainBundle (), CFSTR ("record-sound"), CFSTR ("aif"), NULL);
+//    AudioServicesCreateSystemSoundID(soundFileURLRef, &_recordSound);
     
     // Init address book
     self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
@@ -773,6 +778,20 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     self.recorderMessage.textColor = color;
     
     [self.recorderView addSubview:self.recorderMessage];
+}
+
+- (void)startRecordSound
+{
+    AudioServicesPlaySystemSound(1113);
+    //For custom sound
+    //AudioServicesPlaySystemSound (self.recordSound);
+}
+
+- (void)endRecordSound
+{
+    AudioServicesPlaySystemSound(1114);
+    //For custom sound
+    //AudioServicesPlaySystemSound (self.recordSound);
 }
 
 // ----------------------------------

@@ -60,6 +60,10 @@
 
 - (void)tutorialModeWithDuration:(NSTimeInterval)duration;
 
+- (void)startRecordSound;
+
+- (void)endRecordSound;
+
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 
 
