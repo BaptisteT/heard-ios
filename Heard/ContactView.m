@@ -236,7 +236,7 @@
         [self.delegate.mainPlayer play];
         self.userInteractionEnabled = YES;
         
-        [TrackingUtils trackPlay];
+        [TrackingUtils trackPlayWithDuration:self.delegate.mainPlayer.duration];
     } else {
         [self.delegate tutorialModeWithDuration:3];
     }

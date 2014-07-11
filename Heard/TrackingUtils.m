@@ -40,13 +40,13 @@
     [mixpanel.people increment:@"Records" by:[NSNumber numberWithInt:1]];
 }
 
-+ (void)trackPlay
++ (void)trackPlayWithDuration:(NSTimeInterval)duration
 {
     if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    [mixpanel track:@"Play"];
+    [mixpanel track:@"Play" properties:@{@"Duration": [NSNumber numberWithInt:duration]}];
     
     [mixpanel.people increment:@"Plays" by:[NSNumber numberWithInt:1]];
 }
@@ -87,6 +87,15 @@
     [mixpanel track:@"Open app"];
     
     [mixpanel.people increment:@"Open app count" by:[NSNumber numberWithInt:1]];
+}
+
++ (void)trackNumberOfContacts:(NSInteger)nbrOfContacts
+{
+    if (!PRODUCTION || DEBUG)return;
+    
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    
+    [mixpanel.people set:@{@"Contacts": [NSNumber numberWithInt:nbrOfContacts]}];
 }
 
 @end

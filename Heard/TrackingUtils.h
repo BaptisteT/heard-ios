@@ -15,7 +15,7 @@
 
 + (void)trackRecord;
 
-+ (void)trackPlay;
++ (void)trackPlayWithDuration:(NSTimeInterval)duration;
 
 + (void)trackReplay;
 
@@ -24,5 +24,7 @@
 + (void)trackAddContact;
 
 + (void)trackOpenApp;
+
++ (void)trackNumberOfContacts:(NSInteger)nbrOfContacts;
 
 @end
