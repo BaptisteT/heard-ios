@@ -52,8 +52,8 @@
     for (Contact * contact in contacts) {
         [idArray addObject:[NSNumber numberWithInteger:contact.identifier]];
         [phoneArray addObject:contact.phoneNumber ? contact.phoneNumber : @""];
-        [firstNameArray addObject:contact.firstName ? contact.firstName : @""];
-        [lastNameArray addObject:contact.lastName ? contact.lastName : @""];
+        [firstNameArray addObject:(contact.firstName && contact.firstName!=(id)[NSNull null]) ? contact.firstName : @""];
+        [lastNameArray addObject:(contact.lastName && contact.lastName!=(id)[NSNull null])? contact.lastName : @""];
         [pendingArray addObject:[NSNumber numberWithInteger:contact.isPending]];
         [lastMessageDateArray addObject:[NSNumber numberWithInteger:contact.lastMessageDate]];
     }
