@@ -257,12 +257,14 @@
             self.pendingContactOverlay.layer.borderWidth = UNREAD_MESSAGES_BORDER;
             self.pendingContactOverlay.clipsToBounds = YES;
             self.pendingContactOverlay.layer.cornerRadius = self.bounds.size.height/2;
-            [self.pendingContactOverlay setBackgroundColor:[UIColor whiteColor]];
+            [self.pendingContactOverlay setBackgroundColor:[UIColor clearColor]];
+            self.imageView.alpha = 0.3;
             [self.pendingContactOverlay setImage:[UIImage imageNamed:@"unknown-user.png"]];
         }
         [self addSubview:self.pendingContactOverlay];
      } else {
          [self addGestureRecognizer:self.longPressRecognizer];
+         self.imageView.alpha = 1;
          if (self.pendingContactOverlay) {
              [self.pendingContactOverlay removeFromSuperview];
          }
