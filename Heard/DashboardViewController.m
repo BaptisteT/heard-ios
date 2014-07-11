@@ -579,7 +579,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 - (void)showContactViewAsPending
 {
     for (ContactView *contactView in self.contactBubbleViews) {
-        if (contactView.contact.isPending) {
+        if (contactView.contact.isPending && contactView.contact.identifier != kAdminId) {
             [contactView setPendingContact:YES];
         }
     }

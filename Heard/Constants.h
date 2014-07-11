@@ -38,6 +38,8 @@ static const CGFloat kLongPressMinDurationMessageCase = 0.2;
 static const CGFloat kLongPressMinDurationNoMessageCase = 0.05;
 static const CGFloat kAudioPlayerVolume = 1;
 
+// Admin
+static const NSUInteger kAdminId = 1;
 
 // UI size
 static const NSUInteger kUnreadMessageSize = 30;
