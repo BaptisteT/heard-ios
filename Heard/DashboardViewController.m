@@ -389,14 +389,30 @@
             Contact *existingContact = [ContactUtils findContact:contact.identifier inContactsArray:self.contacts];
             if (!existingContact) {
                 [self.contacts addObject:contact];
-                contact.firstName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
+                
+                //Use server name if blank in address book
+                NSString *firstName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
+                
+                if (firstName && [firstName length] > 0) {
+                    contact.firstName = firstName;
+                }
+                
                 contact.lastName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
+                
                 contact.lastMessageDate = 0;
                 [self displayAdditionnalContact:contact];
             } else if (existingContact.isPending) {
                 // Mark as non pending
-                existingContact.firstName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
-                existingContact.lastName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
+                
+                //Use server name if blank in address book
+                NSString *firstName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
+                
+                if (firstName && [firstName length] > 0) {
+                    contact.firstName = firstName;
+                }
+                
+                contact.lastName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
+                
                 existingContact.phoneNumber = contact.phoneNumber;
                 existingContact.isPending = NO;
             }
@@ -558,9 +574,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     Contact *contact = contactView.contact;
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - kContactMargin/4, contactView.frame.origin.y + kContactSize, contactView.frame.size.width + kContactMargin/2, kContactNameHeight)];
     
-    if ([self.currentUserPhoneNumber isEqualToString:contact.phoneNumber]) {
+    if (contact.identifier == 1) {
+        nameLabel.text = @"Waved";
+        nameLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:14.0];
+    } else if ([self.currentUserPhoneNumber isEqualToString:contact.phoneNumber]) {
         nameLabel.text = @"Me";
-        nameLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:14.0];
+        nameLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:14.0];
     } else {
         if (contact.firstName) {
             nameLabel.text = [NSString stringWithFormat:@"%@", contact.firstName ? contact.firstName : @""];
