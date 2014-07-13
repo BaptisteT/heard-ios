@@ -40,7 +40,7 @@
 
 - (void)longPressOnContactBubbleViewEnded:(NSUInteger)contactId;
 
-- (void)notifiedNewMeters:(float)meters;
+//- (void)notifiedNewMeters:(float)meters;
 
 - (void)sendMessage:(NSData *)audioData toContact:(Contact *)contact;
 

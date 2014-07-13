@@ -28,7 +28,7 @@
 @property (nonatomic) NSInteger unreadMessagesCount;
 @property (nonatomic) UILabel *unreadMessagesLabel;
 @property (strong, nonatomic) UIImageView *imageView;
-@property (strong, nonatomic) NSTimer *metersTimer;
+//@property (strong, nonatomic) NSTimer *metersTimer;
 @property (nonatomic, strong) UIImageView *recordingOverlay;
 @property (nonatomic, strong) NSData *nextMessageAudioData;
 @property (nonatomic, strong) UIImageView *pendingContactOverlay;
@@ -157,13 +157,13 @@
                 
                 [self.delegate longPressOnContactBubbleViewStarted:self.contact.identifier FromView:self];
                 
-                self.metersTimer = [NSTimer scheduledTimerWithTimeInterval:0.05
-                                                                    target:self
-                                                                  selector:@selector(notifyNewMeters)
-                                                                  userInfo:nil
-                                                                   repeats:YES];
-                
-                [self.metersTimer fire];
+//                self.metersTimer = [NSTimer scheduledTimerWithTimeInterval:0.05
+//                                                                    target:self
+//                                                                  selector:@selector(notifyNewMeters)
+//                                                                  userInfo:nil
+//                                                                   repeats:YES];
+//                
+//                [self.metersTimer fire];
             }
         }];
     }
@@ -314,11 +314,11 @@
 }
 
 // Should be in DashBoard
-- (void)notifyNewMeters
-{
-    [self.recorder updateMeters];
-    [self.delegate notifiedNewMeters:[self.recorder averagePowerForChannel:0]];
-}
+//- (void)notifyNewMeters
+//{
+//    [self.recorder updateMeters];
+//    [self.delegate notifiedNewMeters:[self.recorder averagePowerForChannel:0]];
+//}
 
 
 // ----------------------------------------------------------
@@ -335,7 +335,7 @@
 
 - (void)stopRecording
 {
-    [self.metersTimer invalidate];
+//    [self.metersTimer invalidate];
     [self.recorder stop];
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     [audioSession setActive:NO error:nil];

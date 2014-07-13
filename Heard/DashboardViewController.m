@@ -32,13 +32,9 @@
 #define ACTION_SHEET_2_OPTION_2 @"Block user"
 #define ACTION_SHEET_CANCEL @"Cancel"
 
-#define MAX_METERS 0
-#define MIN_METERS -45
-#define METERS_FREQUENCY (30/0.05)
-
-#define RECORDER_LINE_MAX_HEIGHT 20
-#define RECORDER_LINE_WEIGHT 2
+#define RECORDER_LINE_HEIGHT 0.4
 #define RECORDER_HEIGHT 50
+#define RECORDER_MESSAGE_HEIGHT 20
 
 #define PLAYER_LINE_WEIGHT 6
 
@@ -53,13 +49,9 @@
 @property (weak, nonatomic) UIScrollView *contactScrollView;
 @property (strong, nonatomic) UIActionSheet *menuActionSheet;
 @property (strong, nonatomic) UIView *recorderContainer;
-@property (strong, nonatomic) UIView *recorderView;
 @property (strong, nonatomic) UIView *playerContainer;
 @property (nonatomic, strong) UIView *playerView;
-@property (nonatomic) float recordingLineX;
-@property (nonatomic) float recordingLineY;
-@property (nonatomic, strong)UILabel *recorderMessage;
-@property (nonatomic) float recordLineLength;
+@property (nonatomic, strong) UILabel *recorderMessage;
 @property (weak, nonatomic) UIButton *menuButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
 @property (nonatomic, strong) NSString *currentUserPhoneNumber;
@@ -70,7 +62,6 @@
 @property (nonatomic, strong) NSData *resendAudioData;
 @property (nonatomic, strong) Contact *resendContact;
 @property (nonatomic, strong) UITapGestureRecognizer *oneTapResendRecognizer;
-@property (nonatomic, strong) NSTimer *resendTimer;
 @property (nonatomic) ABAddressBookRef addressBook;
 @property (nonatomic, strong) UIButton *inviteContactButton;
 @property (nonatomic, strong) UITextView *noAddressBookAccessLabel;
@@ -78,6 +69,11 @@
 @property (nonatomic, strong) UIView *tutorialView;
 @property (nonatomic) BOOL retrieveNewContact;
 @property (nonatomic) SystemSoundID recordSound;
+
+@property (nonatomic,strong) EZAudioPlotGL *audioPlot;
+@property (nonatomic,strong) EZMicrophone *microphone;
+@property (nonatomic,strong) UIView *recorderLine;
+
 
 @end
 
@@ -107,6 +103,7 @@
     
     // Init recorder container
     self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - RECORDER_HEIGHT, self.view.bounds.size.width, RECORDER_HEIGHT)];
+    self.recorderContainer.backgroundColor = [ImageUtils red];
     [self.view addSubview:self.recorderContainer];
     self.recorderContainer.hidden = YES;
     
@@ -161,6 +158,15 @@
     
     // Headset observer
     self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:session];
+    
+    // AudioPlot
+    self.microphone = [EZMicrophone microphoneWithDelegate:self];
+    self.audioPlot = [self allocAndInitAudioPlot];
+    
+    // Recoder line
+    self.recorderLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.audioPlot.bounds.size.height/2, 0, RECORDER_LINE_HEIGHT)];
+    self.recorderLine.backgroundColor = [UIColor whiteColor];
+    [self.audioPlot addSubview:self.recorderLine];
 }
 
 // Make sure scroll view has been resized (necessary because layout constraints change scroll view size)
@@ -791,14 +797,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         self.recorderMessage = nil;
     }
     
-    self.recorderMessage = [[UILabel alloc] initWithFrame:CGRectMake(0, self.recorderView.bounds.size.height/2, self.recorderView.bounds.size.width, self.recorderView.bounds.size.height/2)];
+    self.recorderMessage = [[UILabel alloc] initWithFrame:CGRectMake(0, self.recorderContainer.bounds.size.height - RECORDER_MESSAGE_HEIGHT, self.recorderContainer.bounds.size.width, RECORDER_MESSAGE_HEIGHT)];
     
     self.recorderMessage.text = message;
     self.recorderMessage.font = [UIFont fontWithName:@"Avenir-Light" size:14.0];
     self.recorderMessage.textAlignment = NSTextAlignmentCenter;
     self.recorderMessage.textColor = color;
-    
-    [self.recorderView addSubview:self.recorderMessage];
+    [self.audioPlot addSubview:self.recorderMessage];
 }
 
 - (void)startRecordSound
@@ -831,7 +836,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 
 - (void)sendMessage:(NSData *)audioData toContact:(Contact *)contact
 {
-    self.recorderView.userInteractionEnabled = NO; // avoid double sending
+    self.audioPlot.userInteractionEnabled = NO;
     [ApiUtils sendMessage:audioData toUser:contact.identifier success:^{
         // Update last message date
         contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
@@ -849,25 +854,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 {
     if (error) {
         [self addRecorderMessage:@"Sending failed. Tap to resend." color:[UIColor whiteColor]];
-        self.recorderView.userInteractionEnabled = YES;
+        self.audioPlot.userInteractionEnabled = YES;
         [self enableAllContactViews];
-        [self.recorderView addGestureRecognizer:self.oneTapResendRecognizer];
+        [self.audioPlot addGestureRecognizer:self.oneTapResendRecognizer];
     } else {
         [self addRecorderMessage:@"Sent!" color:[UIColor whiteColor]];
         
-        float initialWidth = 0;
-        float finalWidth = self.recorderView.bounds.size.width - self.recordingLineX;
-        
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(self.recordingLineX, self.recorderView.bounds.size.height/2 - RECORDER_LINE_WEIGHT, initialWidth, RECORDER_LINE_WEIGHT)];
-        
-        line.backgroundColor = [UIColor whiteColor];
-        
-        [self.recorderView addSubview:line];
-        
         [UIView animateWithDuration:0.5 animations:^{
-            CGRect frame = line.frame;
-            frame.size.width = finalWidth;
-            line.frame = frame;
+            [self setRecorderLineWidth:self.audioPlot.bounds.size.width];
         } completion:^(BOOL dummy){
             [self quitRecordingModeAnimated:YES];
         }];
@@ -899,75 +893,40 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     [self recordingUIForContactView:view];
     
     // Case where we had a pending message
-    if (self.recorderView) {
-        [self.recorderView removeFromSuperview];
-        self.recorderView = nil;
+    if (!self.recorderContainer.isHidden) {
+        [self.audioPlot clear];
+        [self setRecorderLineWidth:0];
         self.resendContact = nil;
         self.resendAudioData = nil;
     }
-    
-    self.recorderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.recorderContainer.bounds.size.width, self.recorderContainer.bounds.size.height)];
-    self.recorderView.backgroundColor = [ImageUtils red];
-    [self.recorderContainer addSubview:self.recorderView];
+
+    [self.recorderContainer addSubview:self.audioPlot];
     
     self.recorderContainer.hidden = NO;
+    [self.microphone startFetchingAudio];
     
-    //Recording line starting point
-    ctr = 0;
-    self.recordingLineX = 0;
-    self.recordingLineY = self.recorderView.bounds.size.height/2;
-    ctr = 0;
-    pts[ctr] = CGPointMake(self.recordingLineX, self.recordingLineY);
+    float finalWidth = self.audioPlot.bounds.size.width;
     
+    [UIView animateWithDuration:30
+                          delay:0
+                        options:UIViewAnimationOptionCurveLinear
+                     animations:^{
+                         [self setRecorderLineWidth:finalWidth];
+                     } completion:^(BOOL finished){
+                         if (finished) {
+                         }
+                     }];
     [self addRecorderMessage:@"Release to send..." color:[UIColor whiteColor]];
 }
 
 //User stop pressing screen
 - (void)longPressOnContactBubbleViewEnded:(NSUInteger)contactId
 {
-    //Bring the recording line to zero, to prepare sending animation
-    UIBezierPath *path = [UIBezierPath bezierPath];
-    [path moveToPoint:pts[0]];
-    self.recordingLineX = self.recordingLineX + self.recordLineLength/METERS_FREQUENCY;
-    self.recordingLineY = self.recorderView.bounds.size.height/2;
-    [path addLineToPoint:CGPointMake(self.recordingLineX, self.recordingLineY)];
-    [self.recorderView.layer addSublayer:[self shapeLayerWithPath:path]];
+    self.recorderLine.frame = [[self.recorderLine.layer presentationLayer] frame];
+    [self.recorderLine.layer removeAllAnimations];
     
+    [self.microphone stopFetchingAudio];
     [self addRecorderMessage:@"Sending..." color:[UIColor whiteColor]];
-}
-
-//Recorder notifies a change in volume intensity (every 0.05 seconds)
-- (void)notifiedNewMeters:(float)power
-{
-    ctr ++;
-    
-    if (self.recordLineLength == 0) {
-        self.recordLineLength = self.recorderView.bounds.size.width;
-    }
-    
-    self.recordingLineX = self.recordingLineX + self.recorderView.bounds.size.width/METERS_FREQUENCY;
-    
-    if (power + (-MIN_METERS) < 0) {
-        power = 0;
-    } else {
-        power = power + (-MIN_METERS);
-    }
-    
-    self.recordingLineY = self.recorderView.bounds.size.height/2 - RECORDER_LINE_MAX_HEIGHT * (power/(MAX_METERS + (-MIN_METERS)));
-    pts[ctr] = CGPointMake(self.recordingLineX, self.recordingLineY);
-    
-    if (ctr == 4)
-    {
-        pts[3] = CGPointMake((pts[2].x + pts[4].x)/2.0, (pts[2].y + pts[4].y)/2.0);
-        UIBezierPath *path = [UIBezierPath bezierPath];
-        [path moveToPoint:pts[0]];
-        [path addCurveToPoint:pts[3] controlPoint1:pts[1] controlPoint2:pts[2]];
-        pts[0] = pts[3];
-        pts[1] = pts[4];
-        ctr = 1;
-        
-        [self.recorderView.layer addSublayer:[self shapeLayerWithPath:path]];
-    }
 }
 
 - (void)startedPlayingAudioFileByView:(ContactView *)contactView
@@ -980,18 +939,21 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 
 - (void)quitRecordingModeAnimated:(BOOL)animated
 {
-    [self enableAllContactViews];
     if (animated) {
-        [UIView animateWithDuration:1.0 animations:^{
-            self.recorderView.alpha = 0;
+        [UIView animateWithDuration:0.5 animations:^{
+            self.recorderContainer.alpha = 0;
         } completion:^(BOOL dummy){
-            [self.recorderView removeFromSuperview];
-            self.recorderView = nil;
+            [self enableAllContactViews];
+            [self setRecorderLineWidth:0];
+            [self.audioPlot clear];
+            [self.audioPlot removeFromSuperview];
             self.recorderContainer.hidden = YES;
+            self.recorderContainer.alpha = 1;
         }];
     } else {
-        [self.recorderView removeFromSuperview];
-        self.recorderView = nil;
+        [self setRecorderLineWidth:0];
+        [self.audioPlot clear];
+        [self.audioPlot removeFromSuperview];
         self.recorderContainer.hidden = YES;
     }
 }
@@ -1111,16 +1073,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         [self.activityView stopAnimating];
         [self.activityView removeFromSuperview];
     }
-}
-
-- (CAShapeLayer *)shapeLayerWithPath:(UIBezierPath *)path
-{
-    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-    shapeLayer.path = [path CGPath];
-    shapeLayer.strokeColor = [[UIColor whiteColor] CGColor];
-    shapeLayer.lineWidth = RECORDER_LINE_WEIGHT;
-    shapeLayer.fillColor = [[UIColor clearColor] CGColor];
-    return shapeLayer;
 }
 
 
@@ -1383,6 +1335,42 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     }
     if (!success)
         NSLog(@"AVAudioSession error overrideOutputAudioPort:%@",error);
+}
+
+
+// ----------------------------------------------------------
+#pragma mark EZ audio
+// ----------------------------------------------------------
+
+- (EZAudioPlotGL *)allocAndInitAudioPlot {
+    EZAudioPlotGL *audioPlot = [[EZAudioPlotGL alloc] initWithFrame:CGRectMake(0, 0, self.recorderContainer.bounds.size.width, self.recorderContainer.bounds.size.height - RECORDER_MESSAGE_HEIGHT / 2)];
+    audioPlot.backgroundColor = [ImageUtils red];
+    audioPlot.color           = [UIColor whiteColor];
+    audioPlot.plotType        = EZPlotTypeRolling;
+    audioPlot.shouldFill      = YES;
+    audioPlot.shouldMirror    = YES;
+    [audioPlot setRollingHistoryLength:1290]; // todo BT make this precise & robust
+    audioPlot.gain = 4;
+    return audioPlot;
+}
+
+- (void)microphone:(EZMicrophone *)microphone
+ hasAudioReceived:(float **)buffer
+   withBufferSize:(UInt32)bufferSize
+withNumberOfChannels:(UInt32)numberOfChannels {
+    // Getting audio data as an array of float buffer arrays. What does that mean? Because the audio is coming in as a stereo signal the data is split into a left and right channel. So buffer[0] corresponds to the float* data for the left channel while buffer[1] corresponds to the float* data for the right channel.
+
+    // See the Thread Safety warning above, but in a nutshell these callbacks happen on a separate audio thread. We wrap any UI updating in a GCD block on the main thread to avoid blocking that audio flow.
+    dispatch_async(dispatch_get_main_queue(),^{
+        // All the audio plot needs is the buffer data (float*) and the size. Internally the audio plot will handle all the drawing related code, history management, and freeing its own resources. Hence, one badass line of code gets you a pretty plot :)
+        [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
+    });
+}
+
+- (void)setRecorderLineWidth:(float)width {
+    CGRect frame = self.recorderLine.frame;
+    frame.size.width = width;
+    self.recorderLine.frame = frame;
 }
 
 @end
