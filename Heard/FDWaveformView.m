@@ -71,7 +71,7 @@
     [self addSubview:self.clipping];
     self.clipsToBounds = YES;
     
-    self.wavesColor = [ImageUtils transparentGreen];
+    self.wavesColor = [ImageUtils lightGreen];
     self.progressColor = [ImageUtils green];
     
     self.pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGesture:)];
@@ -249,7 +249,7 @@
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     CGRect drawRect = CGRectMake(0, 0, image.size.width, image.size.height);
     [self.progressColor set];
-    UIRectFillUsingBlendMode(drawRect, kCGBlendModeSourceAtop);
+    UIRectFillUsingBlendMode(drawRect, kCGBlendModeSourceIn);
     UIImage *tintedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     done(image, tintedImage);
@@ -270,8 +270,6 @@
     AVAssetTrack *songTrack = [songAsset.tracks objectAtIndex:0];
     NSDictionary *outputSettingsDict = [[NSDictionary alloc] initWithObjectsAndKeys:
                                         [NSNumber numberWithInt:kAudioFormatLinearPCM],AVFormatIDKey,
-                                        //     [NSNumber numberWithInt:44100.0],AVSampleRateKey, /*Not Supported*/
-                                        //     [NSNumber numberWithInt: 2],AVNumberOfChannelsKey,    /*Not Supported*/
                                         [NSNumber numberWithInt:16],AVLinearPCMBitDepthKey,
                                         [NSNumber numberWithBool:NO],AVLinearPCMIsBigEndianKey,
                                         [NSNumber numberWithBool:NO],AVLinearPCMIsFloatKey,

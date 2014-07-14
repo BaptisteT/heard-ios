@@ -36,9 +36,9 @@
     return [UIColor colorWithRed:52/256.0 green:180/256.0 blue:74/256.0 alpha:1.0];
 }
 
-+ (UIColor *)transparentGreen
++ (UIColor *)lightGreen
 {
-    return [UIColor colorWithRed:52/256.0 green:180/256.0 blue:74/256.0 alpha:0.25];
+    return [UIColor colorWithRed:152/256.0 green:251/256.0 blue:152/256.0 alpha:1];
 }
 
 + (UIImage*) cropBiggestCenteredSquareImageFromImage:(UIImage*)image withSide:(CGFloat)side

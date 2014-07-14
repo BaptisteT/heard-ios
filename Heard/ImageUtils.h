@@ -26,6 +26,6 @@
 
 + (NSString *)encodeToBase64String:(UIImage *)image;
 
-+ (UIColor *)transparentGreen;
++ (UIColor *)lightGreen;
 
 @end
