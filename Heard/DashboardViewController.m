@@ -1,4 +1,4 @@
-//
+    //
 //  DashboardViewController.m
 //  Heard
 //
@@ -51,7 +51,6 @@
 @property (strong, nonatomic) UIActionSheet *menuActionSheet;
 @property (strong, nonatomic) UIView *recorderContainer;
 @property (strong, nonatomic) UIView *playerContainer;
-//@property (nonatomic, strong) UIView *playerView;
 @property (nonatomic, strong) UILabel *recorderMessage;
 @property (weak, nonatomic) UIButton *menuButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
@@ -110,6 +109,7 @@
     
     // Init player container
     self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_UI_HEIGHT, self.view.bounds.size.width, PLAYER_UI_HEIGHT)];
+    self.playerContainer.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.playerContainer];
     self.playerContainer.hidden = YES;
     
@@ -943,7 +943,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         [self endPlayerUI];
     }
     
-    // todo BT
     // Waveform
     [self.playerWaveView setAudioURL:[GeneralUtils getPlayedAudioURL]];
     self.playerWaveView.progressSamples = 10000;
@@ -1037,19 +1036,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     [self playerUIForContactView:contactView];
     self.playerContainer.hidden = NO;
     
-//    float finalWidth = self.playerContainer.bounds.size.width;
-//    self.playerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, PLAYER_LINE_WEIGHT)];
-//    self.playerView.backgroundColor = [ImageUtils green];
-//    [self.playerContainer addSubview:self.playerView];
-    
     [UIView animateWithDuration:duration
                           delay:0
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
                          self.playerWaveView.progressSamples = self.playerWaveView.totalSamples;
-//                         CGRect frame = self.playerView.frame;
-//                         frame.size.width = finalWidth;
-//                         self.playerView.frame = frame;
                      } completion:^(BOOL finished){
                          if (finished) {
                              [self endPlayerUI];
@@ -1059,6 +1050,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 
 - (void)endPlayerUI
 {
+    self.playerWaveView.progressSamples = 0;
     // Remove proximity state (here because player delegate not working)
     if ([UIDevice currentDevice].proximityState) {
         self.disableProximityObserver = YES;
@@ -1072,12 +1064,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         [self.mainPlayer stop];
         self.mainPlayer.currentTime = 0;
     }
-    
     [self.playerWaveView.layer removeAllAnimations];
-//    [self.playerView.layer removeAllAnimations];
-//    [self.playerView removeFromSuperview];
-//    self.playerView = nil;
-    
     self.playerContainer.hidden = YES;
 }
 
@@ -1154,7 +1141,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     
     //Replay message
     if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_0]) {
-        //todo bt
         [self endPlayerUI];
         
         [self playerUI:([self.mainPlayer duration]) ByContactView:self.lastContactPlayed];

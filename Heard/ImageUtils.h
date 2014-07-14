@@ -28,4 +28,6 @@
 
 + (UIColor *)lightGreen;
 
++ (UIColor *)transparentGreen;
+
 @end
