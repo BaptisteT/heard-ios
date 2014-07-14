@@ -1078,7 +1078,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (9X2H84A9C9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (63863BWF5M)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Bastien Beurier (63863BWF5M)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1094,7 +1094,7 @@
 				INFOPLIST_FILE = "Waved copy-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = WavedStaging;
-				PROVISIONING_PROFILE = "E0BA1CA2-86BB-475C-9059-E9FE8747036B";
+				PROVISIONING_PROFILE = "B847C88E-088D-4B35-9A28-3E4510B9E366";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1115,7 +1115,7 @@
 				INFOPLIST_FILE = "Waved copy-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = WavedStaging;
-				PROVISIONING_PROFILE = "E0BA1CA2-86BB-475C-9059-E9FE8747036B";
+				PROVISIONING_PROFILE = "B847C88E-088D-4B35-9A28-3E4510B9E366";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

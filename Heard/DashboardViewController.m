@@ -34,10 +34,12 @@
 #define ACTION_SHEET_CANCEL @"Cancel"
 
 #define RECORDER_LINE_HEIGHT 0.4
-#define RECORDER_HEIGHT 50
+#define RECORDER_HEIGHT 80
+#define RECORDER_VERTICAL_MARGIN 10
 #define RECORDER_MESSAGE_HEIGHT 20
 
-#define PLAYER_UI_HEIGHT 40
+#define PLAYER_UI_HEIGHT 80
+#define PLAYER_UI_VERTICAL_MARGIN 10
 
 #define INVITE_CONTACT_BUTTON_HEIGHT 50
 #define TUTORIAL_VIEW_HEIGHT 60
@@ -109,7 +111,7 @@
     
     // Init player container
     self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_UI_HEIGHT, self.view.bounds.size.width, PLAYER_UI_HEIGHT)];
-    self.playerContainer.backgroundColor = [UIColor whiteColor];
+    self.playerContainer.backgroundColor = [ImageUtils green];
     [self.view addSubview:self.playerContainer];
     self.playerContainer.hidden = YES;
     
@@ -170,7 +172,7 @@
     [self.audioPlot addSubview:self.recorderLine];
     
     // player wave view
-    self.playerWaveView = [[FDWaveformView alloc] initWithFrame:CGRectMake(0, 0, self.playerContainer.frame.size.width, self.playerContainer.frame.size.height)];
+    self.playerWaveView = [[FDWaveformView alloc] initWithFrame:CGRectMake(0, PLAYER_UI_VERTICAL_MARGIN, self.playerContainer.frame.size.width, self.playerContainer.frame.size.height - 2 * PLAYER_UI_VERTICAL_MARGIN)];
     [self.playerContainer addSubview:self.playerWaveView];
 }
 
@@ -471,7 +473,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     [TrackingUtils trackNumberOfContacts:[self.contactBubbleViews count]];
     
     //Because of bug when user quits app while playing a message
-    [self endPlayerUI];
+    [self endPlayerUIAnimated:NO];
     
     [self removeDisplayedContacts];
     
@@ -802,13 +804,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         self.recorderMessage = nil;
     }
     
-    self.recorderMessage = [[UILabel alloc] initWithFrame:CGRectMake(0, self.recorderContainer.bounds.size.height - RECORDER_MESSAGE_HEIGHT, self.recorderContainer.bounds.size.width, RECORDER_MESSAGE_HEIGHT)];
+    self.recorderMessage = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.recorderContainer.bounds.size.width, self.recorderContainer.bounds.size.height)];
     
     self.recorderMessage.text = message;
-    self.recorderMessage.font = [UIFont fontWithName:@"Avenir-Light" size:14.0];
+    self.recorderMessage.font = [UIFont fontWithName:@"Avenir-Light" size:20.0];
     self.recorderMessage.textAlignment = NSTextAlignmentCenter;
     self.recorderMessage.textColor = color;
-    [self.audioPlot addSubview:self.recorderMessage];
+    [self.recorderContainer addSubview:self.recorderMessage];
 }
 
 - (void)startRecordSound
@@ -841,7 +843,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 
 - (void)sendMessage:(NSData *)audioData toContact:(Contact *)contact
 {
-    self.audioPlot.userInteractionEnabled = NO;
+    self.recorderContainer.userInteractionEnabled = NO;
     [ApiUtils sendMessage:audioData toUser:contact.identifier success:^{
         // Update last message date
         contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
@@ -858,18 +860,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 - (void)messageSentWithError:(BOOL)error
 {
     if (error) {
-        [self addRecorderMessage:@"Sending failed. Tap to resend." color:[UIColor whiteColor]];
-        self.audioPlot.userInteractionEnabled = YES;
+        [self addRecorderMessage:@"Failed, tap to resend." color:[UIColor whiteColor]];
+        self.recorderContainer.userInteractionEnabled = YES;
         [self enableAllContactViews];
-        [self.audioPlot addGestureRecognizer:self.oneTapResendRecognizer];
+        [self.recorderContainer addGestureRecognizer:self.oneTapResendRecognizer];
     } else {
         [self addRecorderMessage:@"Sent!" color:[UIColor whiteColor]];
         
-        [UIView animateWithDuration:0.5 animations:^{
-            [self setRecorderLineWidth:self.audioPlot.bounds.size.width];
-        } completion:^(BOOL dummy){
-            [self quitRecordingModeAnimated:YES];
-        }];
+        [self quitRecordingModeAnimated:YES];
     }
 }
 
@@ -894,7 +892,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 - (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId FromView:(ContactView *)view
 {
     if ([self.mainPlayer isPlaying]) {
-        [self endPlayerUI];
+        [self endPlayerUIAnimated:NO];
     }
     [self disableAllContactViews];
     
@@ -924,7 +922,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
                          if (finished) {
                          }
                      }];
-    [self addRecorderMessage:@"Release to send..." color:[UIColor whiteColor]];
 }
 
 //User stop pressing screen
@@ -933,6 +930,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     self.recorderLine.frame = [[self.recorderLine.layer presentationLayer] frame];
     [self.recorderLine.layer removeAllAnimations];
     
+    [self setRecorderLineWidth:0];
+    [self.audioPlot clear];
+    [self.audioPlot removeFromSuperview];
+    
     [self.microphone stopFetchingAudio];
     [self addRecorderMessage:@"Sending..." color:[UIColor whiteColor]];
 }
@@ -940,7 +941,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 - (void)startedPlayingAudioFileByView:(ContactView *)contactView
 {
     if ([self.mainPlayer isPlaying]) {
-        [self endPlayerUI];
+        [self endPlayerUIAnimated:NO];
     }
     
     // Waveform
@@ -967,13 +968,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 - (void)quitRecordingModeAnimated:(BOOL)animated
 {
     if (animated) {
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:1 animations:^{
             self.recorderContainer.alpha = 0;
         } completion:^(BOOL dummy){
             [self enableAllContactViews];
-            [self setRecorderLineWidth:0];
-            [self.audioPlot clear];
-            [self.audioPlot removeFromSuperview];
             self.recorderContainer.hidden = YES;
             self.recorderContainer.alpha = 1;
         }];
@@ -1043,12 +1041,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
                          self.playerWaveView.progressSamples = self.playerWaveView.totalSamples;
                      } completion:^(BOOL finished){
                          if (finished) {
-                             [self endPlayerUI];
+                             [self endPlayerUIAnimated:YES];
                          }
                      }];
 }
 
-- (void)endPlayerUI
+- (void)endPlayerUIAnimated:(BOOL)animated
 {
     self.playerWaveView.progressSamples = 0;
     // Remove proximity state (here because player delegate not working)
@@ -1064,8 +1062,20 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         [self.mainPlayer stop];
         self.mainPlayer.currentTime = 0;
     }
+    
     [self.playerWaveView.layer removeAllAnimations];
-    self.playerContainer.hidden = YES;
+    
+    if (animated) {
+        [UIView animateWithDuration:0.5 animations:^{
+            self.playerContainer.alpha = 0;
+        } completion:^(BOOL dummy){
+            self.playerContainer.hidden = YES;
+            self.playerContainer.alpha = 1;
+        }];
+    } else {
+        self.playerContainer.hidden = YES;
+    }
+    
 }
 
 - (void)showLoadingIndicator
@@ -1141,7 +1151,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     
     //Replay message
     if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_0]) {
-        [self endPlayerUI];
+        [self endPlayerUIAnimated:NO];
         
         [self playerUI:([self.mainPlayer duration]) ByContactView:self.lastContactPlayed];
         
@@ -1359,7 +1369,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 // ----------------------------------------------------------
 
 - (EZAudioPlotGL *)allocAndInitAudioPlot {
-    EZAudioPlotGL *audioPlot = [[EZAudioPlotGL alloc] initWithFrame:CGRectMake(0, 0, self.recorderContainer.bounds.size.width, self.recorderContainer.bounds.size.height - RECORDER_MESSAGE_HEIGHT / 2)];
+    EZAudioPlotGL *audioPlot = [[EZAudioPlotGL alloc] initWithFrame:CGRectMake(0, RECORDER_VERTICAL_MARGIN, self.recorderContainer.bounds.size.width, self.recorderContainer.bounds.size.height - RECORDER_VERTICAL_MARGIN * 2)];
     audioPlot.backgroundColor = [ImageUtils red];
     audioPlot.color           = [UIColor whiteColor];
     audioPlot.plotType        = EZPlotTypeRolling;

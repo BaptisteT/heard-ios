@@ -18,7 +18,7 @@ static NSString * const kProdAFHeardAPIBaseURLString = @"http://heard.herokuapp.
 static NSString * const kProdAFHeardWebsite = @"http://www.waved.io/";
 
 static NSString * const kStagingAFHeardAPIBaseURLString = @"http://heard-staging.herokuapp.com/";
-
+    
 static NSString * const kFeedbackEmail = @"info@waved.io";
 
 static NSString * const kProdHeardRecordBaseURL = @"https://s3.amazonaws.com/heard_messages/";

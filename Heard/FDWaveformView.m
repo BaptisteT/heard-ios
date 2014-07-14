@@ -72,7 +72,7 @@
     self.clipsToBounds = YES;
     
     self.wavesColor = [ImageUtils lightGreen];
-    self.progressColor = [ImageUtils green];
+    self.progressColor = [UIColor whiteColor];
     
     self.pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGesture:)];
     self.pinchRecognizer.delegate = self;
