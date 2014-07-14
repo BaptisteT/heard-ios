@@ -24,4 +24,6 @@
 
 + (BOOL)isFirstOpening;
 
++ (NSURL *)getPlayedAudioURL;
+
 @end

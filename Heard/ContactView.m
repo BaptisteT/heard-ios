@@ -20,17 +20,15 @@
 
 @interface ContactView()
 
+@property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *oneTapRecognizer;
 @property (nonatomic, strong) NSTimer *maxDurationTimer;
 @property (nonatomic, strong) NSTimer *minDurationTimer;
-@property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic) NSInteger unreadMessagesCount;
 @property (nonatomic) UILabel *unreadMessagesLabel;
 @property (strong, nonatomic) UIImageView *imageView;
-//@property (strong, nonatomic) NSTimer *metersTimer;
 @property (nonatomic, strong) UIImageView *recordingOverlay;
-@property (nonatomic, strong) NSData *nextMessageAudioData;
 @property (nonatomic, strong) UIImageView *pendingContactOverlay;
 @property (nonatomic, strong) CAShapeLayer *circleShape;
 
@@ -132,9 +130,6 @@
 - (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer
 {
     if (recognizer.state == UIGestureRecognizerStateBegan) {
-        if ([self.delegate.mainPlayer isPlaying]) {
-            [self.delegate endPlayerUI];
-        }
         
         [self.delegate startRecordSound];
         [self recordingUI];
@@ -156,14 +151,6 @@
                 [self.recorder record];
                 
                 [self.delegate longPressOnContactBubbleViewStarted:self.contact.identifier FromView:self];
-                
-//                self.metersTimer = [NSTimer scheduledTimerWithTimeInterval:0.05
-//                                                                    target:self
-//                                                                  selector:@selector(notifyNewMeters)
-//                                                                  userInfo:nil
-//                                                                   repeats:YES];
-//                
-//                [self.metersTimer fire];
             }
         }];
     }
@@ -198,18 +185,18 @@
 - (void)handleNonPendingTapGesture
 {
     if (!self.unreadMessagesLabel.isHidden) { // ie. self.unreadMessageCount > 0 && self.nextMessageAudioData !=nil
+        
         self.userInteractionEnabled = NO;
-        
-        if ([self.delegate.mainPlayer isPlaying]) {
-            [self.delegate endPlayerUI];
-        }
-        
         if (!self.nextMessageAudioData) {
             // should not be possible
             return;
         }
-        self.delegate.mainPlayer = [[AVAudioPlayer alloc] initWithData:self.nextMessageAudioData error:nil];
-        [self.delegate.mainPlayer setVolume:kAudioPlayerVolume];
+        
+        // Save data to file
+        [self.nextMessageAudioData writeToURL:[GeneralUtils getPlayedAudioURL] atomically:NO];
+        
+        // Stat playing
+        [self.delegate startedPlayingAudioFileByView:self];
         
         // Get data of next message (asynch) if any
         [self hideMessageCountLabel:YES];
@@ -222,7 +209,8 @@
         }
         
         // Mark as opened on the database
-        [ApiUtils markMessageAsOpened:((Message *)self.unreadMessages[0]).identifier success:nil failure:nil];
+        // todo bt handle error
+//        [ApiUtils markMessageAsOpened:((Message *)self.unreadMessages[0]).identifier success:nil failure:nil];
         
         // Remove message
         [self.unreadMessages removeObjectAtIndex:0];
@@ -231,12 +219,7 @@
         // Update badge
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] - 1];
         
-        [self.delegate startedPlayingAudioFileByView:self];
-        
-        [self.delegate.mainPlayer play];
         self.userInteractionEnabled = YES;
-        
-        [TrackingUtils trackPlayWithDuration:self.delegate.mainPlayer.duration];
     } else {
         [self.delegate tutorialModeWithDuration:3];
     }
@@ -313,13 +296,6 @@
     // do nothing
 }
 
-// Should be in DashBoard
-//- (void)notifyNewMeters
-//{
-//    [self.recorder updateMeters];
-//    [self.delegate notifiedNewMeters:[self.recorder averagePowerForChannel:0]];
-//}
-
 
 // ----------------------------------------------------------
 #pragma mark Recording utility
@@ -335,7 +311,6 @@
 
 - (void)stopRecording
 {
-//    [self.metersTimer invalidate];
     [self.recorder stop];
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     [audioSession setActive:NO error:nil];

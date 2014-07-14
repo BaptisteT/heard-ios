@@ -88,5 +88,12 @@
     }
 }
 
++ (NSURL *)getPlayedAudioURL
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"audioPlayed.m4a"];
+    return [NSURL fileURLWithPath:dataPath];
+}
 
 @end

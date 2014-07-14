@@ -23,6 +23,7 @@
 #import "HeardAppDelegate.h"
 #import "ContactUtils.h"
 #import <MediaPlayer/MPMusicPlayerController.h>
+#import "FDWaveformView.h"
 
 #define ACTION_SHEET_1_OPTION_0 @"Replay"
 #define ACTION_SHEET_1_OPTION_1 @"Invite contact"
@@ -36,7 +37,7 @@
 #define RECORDER_HEIGHT 50
 #define RECORDER_MESSAGE_HEIGHT 20
 
-#define PLAYER_LINE_WEIGHT 6
+#define PLAYER_UI_HEIGHT 40
 
 #define INVITE_CONTACT_BUTTON_HEIGHT 50
 #define TUTORIAL_VIEW_HEIGHT 60
@@ -50,7 +51,7 @@
 @property (strong, nonatomic) UIActionSheet *menuActionSheet;
 @property (strong, nonatomic) UIView *recorderContainer;
 @property (strong, nonatomic) UIView *playerContainer;
-@property (nonatomic, strong) UIView *playerView;
+//@property (nonatomic, strong) UIView *playerView;
 @property (nonatomic, strong) UILabel *recorderMessage;
 @property (weak, nonatomic) UIButton *menuButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
@@ -74,13 +75,13 @@
 @property (nonatomic,strong) EZMicrophone *microphone;
 @property (nonatomic,strong) UIView *recorderLine;
 
+@property (nonatomic, strong) FDWaveformView *playerWaveView;
+@property (nonatomic, strong) AVAudioPlayer *mainPlayer;
+
 
 @end
 
-@implementation DashboardViewController {
-    CGPoint pts[5];
-    int ctr;
-}
+@implementation DashboardViewController 
 
 // ------------------------------
 #pragma mark Life cycle
@@ -108,7 +109,7 @@
     self.recorderContainer.hidden = YES;
     
     // Init player container
-    self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_LINE_WEIGHT, self.view.bounds.size.width, PLAYER_LINE_WEIGHT)];
+    self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_UI_HEIGHT, self.view.bounds.size.width, PLAYER_UI_HEIGHT)];
     [self.view addSubview:self.playerContainer];
     self.playerContainer.hidden = YES;
     
@@ -167,6 +168,10 @@
     self.recorderLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.audioPlot.bounds.size.height/2, 0, RECORDER_LINE_HEIGHT)];
     self.recorderLine.backgroundColor = [UIColor whiteColor];
     [self.audioPlot addSubview:self.recorderLine];
+    
+    // player wave view
+    self.playerWaveView = [[FDWaveformView alloc] initWithFrame:CGRectMake(0, 0, self.playerContainer.frame.size.width, self.playerContainer.frame.size.height)];
+    [self.playerContainer addSubview:self.playerWaveView];
 }
 
 // Make sure scroll view has been resized (necessary because layout constraints change scroll view size)
@@ -547,7 +552,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     float rowHeight = kContactMargin + kContactSize + kContactNameHeight;
     self.contactScrollView.contentSize = CGSizeMake(screenWidth, MAX(screenHeight - 20, rows * rowHeight + 3 * kContactMargin));
     
-    [self addInviteContactButton];
+//    [self addInviteContactButton];
 }
 
 // Create contact view
@@ -888,6 +893,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 //Create recording mode screen
 - (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId FromView:(ContactView *)view
 {
+    if ([self.mainPlayer isPlaying]) {
+        [self endPlayerUI];
+    }
     [self disableAllContactViews];
     
     [self recordingUIForContactView:view];
@@ -931,10 +939,30 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 
 - (void)startedPlayingAudioFileByView:(ContactView *)contactView
 {
+    if ([self.mainPlayer isPlaying]) {
+        [self endPlayerUI];
+    }
+    
+    // todo BT
+    // Waveform
+    [self.playerWaveView setAudioURL:[GeneralUtils getPlayedAudioURL]];
+    self.playerWaveView.progressSamples = 10000;
+    
     self.lastContactPlayed = contactView;
     
-    //TODO restart player
-    [self playerUI:self.mainPlayer.duration ByContactView:contactView];
+    // Init player
+    self.mainPlayer = [[AVAudioPlayer alloc] initWithData:contactView.nextMessageAudioData error:nil];
+    [self.mainPlayer setVolume:kAudioPlayerVolume];
+    
+    // Player UI
+    NSTimeInterval duration = self.mainPlayer.duration;
+    [self playerUI:duration ByContactView:contactView];
+    
+    // play
+    [self.mainPlayer play];
+    
+    // MixPanel
+    [TrackingUtils trackPlayWithDuration:duration];
 }
 
 - (void)quitRecordingModeAnimated:(BOOL)animated
@@ -951,6 +979,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
             self.recorderContainer.alpha = 1;
         }];
     } else {
+        [self enableAllContactViews];
         [self setRecorderLineWidth:0];
         [self.audioPlot clear];
         [self.audioPlot removeFromSuperview];
@@ -1008,22 +1037,19 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     [self playerUIForContactView:contactView];
     self.playerContainer.hidden = NO;
     
-    float initialWidth = 0;
-    float finalWidth = self.playerContainer.bounds.size.width;
-    
-    self.playerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, initialWidth, PLAYER_LINE_WEIGHT)];
-    
-    self.playerView.backgroundColor = [ImageUtils green];
-    
-    [self.playerContainer addSubview:self.playerView];
+//    float finalWidth = self.playerContainer.bounds.size.width;
+//    self.playerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, PLAYER_LINE_WEIGHT)];
+//    self.playerView.backgroundColor = [ImageUtils green];
+//    [self.playerContainer addSubview:self.playerView];
     
     [UIView animateWithDuration:duration
                           delay:0
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
-                         CGRect frame = self.playerView.frame;
-                         frame.size.width = finalWidth;
-                         self.playerView.frame = frame;
+                         self.playerWaveView.progressSamples = self.playerWaveView.totalSamples;
+//                         CGRect frame = self.playerView.frame;
+//                         frame.size.width = finalWidth;
+//                         self.playerView.frame = frame;
                      } completion:^(BOOL finished){
                          if (finished) {
                              [self endPlayerUI];
@@ -1033,11 +1059,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 
 - (void)endPlayerUI
 {
+    // Remove proximity state (here because player delegate not working)
     if ([UIDevice currentDevice].proximityState) {
         self.disableProximityObserver = YES;
     } else {
         [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
     }
+    
     [self endPlayerUIForAllContactViews];
     
     if ([self.mainPlayer isPlaying]) {
@@ -1045,9 +1073,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         self.mainPlayer.currentTime = 0;
     }
     
-    [self.playerView.layer removeAllAnimations];
-    [self.playerView removeFromSuperview];
-    self.playerView = nil;
+    [self.playerWaveView.layer removeAllAnimations];
+//    [self.playerView.layer removeAllAnimations];
+//    [self.playerView removeFromSuperview];
+//    self.playerView = nil;
     
     self.playerContainer.hidden = YES;
 }
@@ -1125,6 +1154,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     
     //Replay message
     if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_0]) {
+        //todo bt
         [self endPlayerUI];
         
         [self playerUI:([self.mainPlayer duration]) ByContactView:self.lastContactPlayed];
@@ -1372,5 +1402,7 @@ withNumberOfChannels:(UInt32)numberOfChannels {
     frame.size.width = width;
     self.recorderLine.frame = frame;
 }
+
+
 
 @end

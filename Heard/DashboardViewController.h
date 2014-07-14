@@ -21,7 +21,6 @@
 - (void)displayContacts;
 - (void)distributeNonAttributedMessages;
 
-@property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 @property (nonatomic) BOOL isSignUp;
 
 @end

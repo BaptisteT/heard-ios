@@ -13,7 +13,7 @@
 
 @protocol ContactBubbleViewDelegate;
 
-@interface ContactView : UIView <UIGestureRecognizerDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate>
+@interface ContactView : UIView <UIGestureRecognizerDelegate, AVAudioRecorderDelegate>
 
 - (id)initWithContact:(Contact *)contact andFrame:(CGRect)frame;
 - (id)initWithContact:(Contact *)contact;
@@ -24,6 +24,8 @@
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic) NSInteger orderPosition;
 @property (nonatomic) NSMutableArray *unreadMessages;
+@property (nonatomic, strong) NSData *nextMessageAudioData;
+
 
 - (void)addUnreadMessage:(Message *)message;
 - (void)resetUnreadMessages;
@@ -31,6 +33,7 @@
 - (void)endRecordingUI;
 - (void)playingUI;
 - (void)endPlayingUI;
+
 
 @end
 
@@ -40,19 +43,13 @@
 
 - (void)longPressOnContactBubbleViewEnded:(NSUInteger)contactId;
 
-//- (void)notifiedNewMeters:(float)meters;
-
 - (void)sendMessage:(NSData *)audioData toContact:(Contact *)contact;
 
 - (void)startedPlayingAudioFileByView:(ContactView *)view;
 
 - (void)quitRecordingModeAnimated:(BOOL)animated;
 
-- (void)endPlayerUI;
-
 - (void)pendingContactClicked:(Contact *)contact;
-
-- (void)enableAllContactViews;
 
 - (void)updateFrameOfContactView:(ContactView *)view;
 
@@ -63,8 +60,6 @@
 - (void)startRecordSound;
 
 - (void)endRecordSound;
-
-@property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 
 
 @end
