@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="OIk-2W-hgJ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="OIk-2W-hgJ">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -656,12 +656,28 @@ Unicode: U+276F, UTF-8: E2 9D AF</string>
                                     <constraint firstAttribute="bottom" secondItem="3eZ-vS-6nf" secondAttribute="bottom" constant="468" id="kZa-8H-c5I"/>
                                 </constraints>
                             </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j4G-6T-wvn">
+                                <rect key="frame" x="0.0" y="518" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="dct-5c-nde"/>
+                                    <constraint firstAttribute="width" constant="50" id="f7I-Ug-iPj"/>
+                                </constraints>
+                                <state key="normal" image="replay.png">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="replayButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="IfX-sw-OPc"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="8bw-fU-Wrq" firstAttribute="top" secondItem="j4G-6T-wvn" secondAttribute="bottom" id="2ke-fP-2bz"/>
                             <constraint firstItem="8bw-fU-Wrq" firstAttribute="top" secondItem="a0u-JM-gz3" secondAttribute="bottom" id="Kb4-YK-pux"/>
                             <constraint firstAttribute="trailing" secondItem="a0u-JM-gz3" secondAttribute="trailing" id="L3M-9u-MGu"/>
                             <constraint firstItem="a0u-JM-gz3" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" id="Quf-E0-JVP"/>
+                            <constraint firstItem="j4G-6T-wvn" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="XgD-P9-zOU"/>
                             <constraint firstItem="a0u-JM-gz3" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="bgw-gw-JYp"/>
                         </constraints>
                     </view>
@@ -669,6 +685,7 @@ Unicode: U+276F, UTF-8: E2 9D AF</string>
                     <connections>
                         <outlet property="contactScrollView" destination="a0u-JM-gz3" id="7ew-mq-LGy"/>
                         <outlet property="menuButton" destination="3eZ-vS-6nf" id="DVk-PZ-hkG"/>
+                        <outlet property="replayButton" destination="j4G-6T-wvn" id="dNW-0o-haL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kJk-FM-4rk" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -677,6 +694,7 @@ Unicode: U+276F, UTF-8: E2 9D AF</string>
         </scene>
     </scenes>
     <resources>
+        <image name="replay.png" width="124" height="124"/>
         <image name="welcome-logo.png" width="640" height="165"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
@@ -685,6 +703,6 @@ Unicode: U+276F, UTF-8: E2 9D AF</string>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="lrb-7Z-tIJ"/>
+        <segue reference="xdp-at-Nje"/>
     </inferredMetricsTieBreakers>
 </document>

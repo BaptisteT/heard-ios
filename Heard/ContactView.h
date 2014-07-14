@@ -59,7 +59,5 @@
 
 - (void)startRecordSound;
 
-- (void)endRecordSound;
-
 
 @end

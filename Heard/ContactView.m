@@ -147,15 +147,13 @@
                 self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
                 self.minDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMinAudioDuration target:self selector:@selector(minRecordingDurationReached) userInfo:nil repeats:NO];
                 
-                // Start recording
-                [self.recorder record];
-                
                 [self.delegate longPressOnContactBubbleViewStarted:self.contact.identifier FromView:self];
+                
+                [self performSelector:@selector(startRecording) withObject:self afterDelay:0.3];
             }
         }];
     }
     if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled || recognizer.state == UIGestureRecognizerStateFailed) {
-        [self.delegate endRecordSound];
         [self endRecordingUI];
         
         // Stop timer if it did not fire yet
@@ -172,6 +170,11 @@
             }
         }
     }
+}
+
+- (void)startRecording
+{
+    [self.recorder record];
 }
 
 - (void)handleTapGesture {

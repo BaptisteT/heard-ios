@@ -25,7 +25,6 @@
 #import <MediaPlayer/MPMusicPlayerController.h>
 #import "FDWaveformView.h"
 
-#define ACTION_SHEET_1_OPTION_0 @"Replay"
 #define ACTION_SHEET_1_OPTION_1 @"Invite contact"
 #define ACTION_SHEET_1_OPTION_2 @"Share"
 #define ACTION_SHEET_1_OPTION_3 @"Feedback"
@@ -78,6 +77,7 @@
 
 @property (nonatomic, strong) FDWaveformView *playerWaveView;
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
+@property (weak, nonatomic) IBOutlet UIButton *replayButton;
 
 
 @end
@@ -93,6 +93,8 @@
     
     self.contactScrollView.hidden = YES;
     self.retrieveNewContact = YES;
+    
+    [self updateReplayButtonAppearance];
     
     //For custom sound
     //Init recording sound
@@ -749,23 +751,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                        delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:ACTION_SHEET_1_OPTION_0, ACTION_SHEET_1_OPTION_2, ACTION_SHEET_1_OPTION_3, nil];
-    
-    for (UIView* view in [self.menuActionSheet subviews])
-    {
-        if ([view respondsToSelector:@selector(title)])
-        {
-            NSString* title = [view performSelector:@selector(title)];
-            if ([title isEqualToString:ACTION_SHEET_1_OPTION_0] && [view respondsToSelector:@selector(setEnabled:)])
-            {
-                if (self.mainPlayer) {
-                    [view performSelector:@selector(setEnabled:) withObject:@YES];
-                } else {
-                    [view performSelector:@selector(setEnabled:) withObject:NO];
-                }
-            }
-        }
-    }
+                                              otherButtonTitles:ACTION_SHEET_1_OPTION_2, ACTION_SHEET_1_OPTION_3, nil];
     
     [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
@@ -816,13 +802,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 - (void)startRecordSound
 {
     AudioServicesPlaySystemSound(1113);
-    //For custom sound
-    //AudioServicesPlaySystemSound (self.recordSound);
-}
-
-- (void)endRecordSound
-{
-    AudioServicesPlaySystemSound(1114);
     //For custom sound
     //AudioServicesPlaySystemSound (self.recordSound);
 }
@@ -953,6 +932,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     // Init player
     self.mainPlayer = [[AVAudioPlayer alloc] initWithData:contactView.nextMessageAudioData error:nil];
     [self.mainPlayer setVolume:kAudioPlayerVolume];
+    
+    [self updateReplayButtonAppearance];
     
     // Player UI
     NSTimeInterval duration = self.mainPlayer.duration;
@@ -1101,6 +1082,23 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     }
 }
 
+- (void)updateReplayButtonAppearance
+{
+    if (self.mainPlayer) {
+        self.replayButton.hidden = NO;
+    } else {
+        self.replayButton.hidden = YES;
+    }
+}
+
+- (IBAction)replayButtonClicked:(id)sender {
+    [self endPlayerUIAnimated:NO];
+    
+    [self playerUI:([self.mainPlayer duration]) ByContactView:self.lastContactPlayed];
+    
+    [self.mainPlayer play];
+    [TrackingUtils trackReplay];
+}
 
 // ----------------------------------------------------------
 #pragma mark ABNewPersonViewControllerDelegate
@@ -1149,16 +1147,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         return;
     }
     
-    //Replay message
-    if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_0]) {
-        [self endPlayerUIAnimated:NO];
-        
-        [self playerUI:([self.mainPlayer duration]) ByContactView:self.lastContactPlayed];
-        
-        [self.mainPlayer play];
-        [TrackingUtils trackReplay];
     //Add contact
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_1]) {
+    if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_1]) {
         ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc] init];
         picker.peoplePickerDelegate = self;
         [self presentViewController:picker animated:YES completion:nil];
