@@ -38,7 +38,6 @@
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     
     //Mixpanel
-    
     if (PRODUCTION && !DEBUG) {
         [Mixpanel sharedInstanceWithToken:kProdMixPanelToken];
     }
@@ -208,6 +207,7 @@ NSString* stringFromDeviceTokenData(NSData *deviceToken)
         ((DashboardViewController *) [segue destinationViewController]).isSignUp = NO;
     }
 }
+
 
 
 @end

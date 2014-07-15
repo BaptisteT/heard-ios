@@ -37,6 +37,7 @@
 #define RECORDER_VERTICAL_MARGIN 5
 #define RECORDER_MESSAGE_HEIGHT 20
 
+#define PLAYER_LINE_HEIGHT 0.4
 #define PLAYER_UI_HEIGHT 50
 #define PLAYER_UI_VERTICAL_MARGIN 5
 
@@ -76,6 +77,7 @@
 @property (nonatomic,strong) UIView *recorderLine;
 
 @property (nonatomic, strong) FDWaveformView *playerWaveView;
+@property (nonatomic,strong) UIView *playerLine;
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 @property (weak, nonatomic) IBOutlet UIButton *replayButton;
 @property (strong, nonatomic) NSDate* lastRecordSoundDate;
@@ -183,6 +185,11 @@
     // player wave view
     self.playerWaveView = [[FDWaveformView alloc] initWithFrame:CGRectMake(0, PLAYER_UI_VERTICAL_MARGIN, self.playerContainer.frame.size.width, self.playerContainer.frame.size.height - 2 * PLAYER_UI_VERTICAL_MARGIN)];
     [self.playerContainer addSubview:self.playerWaveView];
+    
+    // player line
+    self.playerLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.playerWaveView.bounds.size.height/2, 0, RECORDER_LINE_HEIGHT)];
+    self.playerLine.backgroundColor = [UIColor whiteColor];
+    [self.playerWaveView addSubview:self.playerLine];
 }
 
 // Make sure scroll view has been resized (necessary because layout constraints change scroll view size)
@@ -815,6 +822,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     //AudioServicesPlaySystemSound (self.recordSound);
 }
 
+- (void)setRecorderLineWidth:(float)width {
+    CGRect frame = self.recorderLine.frame;
+    frame.size.width = width;
+    self.recorderLine.frame = frame;
+}
+
 // ----------------------------------
 #pragma mark Sending Messages
 // ----------------------------------
@@ -917,7 +930,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 {
     self.recorderLine.frame = [[self.recorderLine.layer presentationLayer] frame];
     [self.recorderLine.layer removeAllAnimations];
-    
     [self setRecorderLineWidth:0];
     [self.audioPlot clear];
     [self.audioPlot removeFromSuperview];
@@ -1029,6 +1041,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
                          self.playerWaveView.progressSamples = self.playerWaveView.totalSamples;
+                         [self setPlayerLineWidth:self.playerWaveView.bounds.size.width];
                      } completion:^(BOOL finished){
                          if (finished) {
                              [self endPlayerUIAnimated:YES];
@@ -1052,7 +1065,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         [self.mainPlayer stop];
         self.mainPlayer.currentTime = 0;
     }
-    
     [self.playerWaveView.layer removeAllAnimations];
     
     if (animated) {
@@ -1061,9 +1073,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         } completion:^(BOOL dummy){
             self.playerContainer.hidden = YES;
             self.playerContainer.alpha = 1;
+            [self setPlayerLineWidth:0];
         }];
     } else {
         self.playerContainer.hidden = YES;
+        [self setPlayerLineWidth:0];
     }
     
 }
@@ -1108,6 +1122,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     [self.mainPlayer play];
     [TrackingUtils trackReplay];
 }
+
+- (void)setPlayerLineWidth:(float)width {
+    CGRect frame = self.playerLine.frame;
+    frame.size.width = width;
+    self.playerLine.frame = frame;
+}
+
 
 // ----------------------------------------------------------
 #pragma mark ABNewPersonViewControllerDelegate
@@ -1390,12 +1411,6 @@ withNumberOfChannels:(UInt32)numberOfChannels {
         // All the audio plot needs is the buffer data (float*) and the size. Internally the audio plot will handle all the drawing related code, history management, and freeing its own resources. Hence, one badass line of code gets you a pretty plot :)
         [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
     });
-}
-
-- (void)setRecorderLineWidth:(float)width {
-    CGRect frame = self.recorderLine.frame;
-    frame.size.width = width;
-    self.recorderLine.frame = frame;
 }
 
 
