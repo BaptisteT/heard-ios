@@ -106,10 +106,12 @@
 }
 
 - (IBAction)countryCodeButtonClicked:(id)sender {
-    self.countryCodePicker.hidden = NO;
-    self.countryCodeInstructions.hidden = NO;
+//    self.countryCodePicker.hidden = NO;
+//    self.countryCodeInstructions.hidden = NO;
+//    
+//    [self.phoneTextField endEditing:YES];
     
-    [self.phoneTextField endEditing:YES];
+    [self performSegueWithIdentifier:@"Country Code Segue" sender:nil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

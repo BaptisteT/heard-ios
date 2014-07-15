@@ -16,6 +16,14 @@
 		0B3651DF1959109700534386 /* heard-logo-80.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DC1959109700534386 /* heard-logo-80.png */; };
 		0B3651E01959109700534386 /* heard-logo-58.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DD1959109700534386 /* heard-logo-58.png */; };
 		0B3651E11959109700534386 /* heard-logo-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DE1959109700534386 /* heard-logo-120.png */; };
+		0B56F64A19757D5300DB6FF1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B56F64919757D5300DB6FF1 /* QuartzCore.framework */; };
+		0B56F64C19757D5900DB6FF1 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B56F64B19757D5900DB6FF1 /* CoreData.framework */; };
+		0B56F65219758D9600DB6FF1 /* CountryCodeViewTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B56F65119758D9600DB6FF1 /* CountryCodeViewTVC.m */; };
+		0B56F65319758D9600DB6FF1 /* CountryCodeViewTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B56F65119758D9600DB6FF1 /* CountryCodeViewTVC.m */; };
+		0B56F656197592FE00DB6FF1 /* PhoneCountries.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0B56F655197592FE00DB6FF1 /* PhoneCountries.txt */; };
+		0B56F657197592FE00DB6FF1 /* PhoneCountries.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0B56F655197592FE00DB6FF1 /* PhoneCountries.txt */; };
+		0B56F65A1975AE4D00DB6FF1 /* CountryCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B56F6591975AE4D00DB6FF1 /* CountryCodeViewController.m */; };
+		0B56F65B1975AE4D00DB6FF1 /* CountryCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B56F6591975AE4D00DB6FF1 /* CountryCodeViewController.m */; };
 		0B58BAFD1954B47700E9FF70 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B58BAFB1954B47700E9FF70 /* AddressBook.framework */; };
 		0B58BAFE1954B47700E9FF70 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B58BAFC1954B47700E9FF70 /* AddressBookUI.framework */; };
 		0B72EEA2196C672F00AC5A01 /* UIColor+MPColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8E5195B449A00C94AC0 /* UIColor+MPColor.m */; };
@@ -225,6 +233,13 @@
 		0B3651DC1959109700534386 /* heard-logo-80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-80.png"; sourceTree = "<group>"; };
 		0B3651DD1959109700534386 /* heard-logo-58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-58.png"; sourceTree = "<group>"; };
 		0B3651DE1959109700534386 /* heard-logo-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-120.png"; sourceTree = "<group>"; };
+		0B56F64919757D5300DB6FF1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		0B56F64B19757D5900DB6FF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		0B56F65019758D9600DB6FF1 /* CountryCodeViewTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryCodeViewTVC.h; sourceTree = "<group>"; };
+		0B56F65119758D9600DB6FF1 /* CountryCodeViewTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryCodeViewTVC.m; sourceTree = "<group>"; };
+		0B56F655197592FE00DB6FF1 /* PhoneCountries.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PhoneCountries.txt; sourceTree = "<group>"; };
+		0B56F6581975AE4D00DB6FF1 /* CountryCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryCodeViewController.h; sourceTree = "<group>"; };
+		0B56F6591975AE4D00DB6FF1 /* CountryCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryCodeViewController.m; sourceTree = "<group>"; };
 		0B58BAFB1954B47700E9FF70 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		0B58BAFC1954B47700E9FF70 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		0B72EF01196C672F00AC5A01 /* WavedStaging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WavedStaging.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -402,6 +417,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B56F64C19757D5900DB6FF1 /* CoreData.framework in Frameworks */,
+				0B56F64A19757D5300DB6FF1 /* QuartzCore.framework in Frameworks */,
 				0B72EEDB196C672F00AC5A01 /* MediaPlayer.framework in Frameworks */,
 				0B72EEDC196C672F00AC5A01 /* CrashReporter.framework in Frameworks */,
 				0B72EEDD196C672F00AC5A01 /* AudioToolbox.framework in Frameworks */,
@@ -451,6 +468,7 @@
 				0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */,
 				0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */,
 				0B893A481954E4FF00476BFE /* welcome-logo.png */,
+				0B56F655197592FE00DB6FF1 /* PhoneCountries.txt */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -512,6 +530,8 @@
 		0BD758BE1950F91B00CF0D85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0B56F64B19757D5900DB6FF1 /* CoreData.framework */,
+				0B56F64919757D5300DB6FF1 /* QuartzCore.framework */,
 				3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */,
 				3C06C39F19659C2400B8D70C /* MediaPlayer.framework */,
 				3CA177E91958B74000096266 /* AudioToolbox.framework */,
@@ -565,6 +585,10 @@
 				0BDB650719535CCC00223093 /* RequestUserInfoViewController.m */,
 				0BDB655F1953C04800223093 /* DashboardViewController.h */,
 				0BDB65601953C04800223093 /* DashboardViewController.m */,
+				0B56F65019758D9600DB6FF1 /* CountryCodeViewTVC.h */,
+				0B56F65119758D9600DB6FF1 /* CountryCodeViewTVC.m */,
+				0B56F6581975AE4D00DB6FF1 /* CountryCodeViewController.h */,
+				0B56F6591975AE4D00DB6FF1 /* CountryCodeViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -873,6 +897,7 @@
 				0B72EEFA196C672F00AC5A01 /* MPNotification.storyboard in Resources */,
 				0B72EEFB196C672F00AC5A01 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
 				0B72EEFC196C672F00AC5A01 /* welcome-logo.png in Resources */,
+				0B56F657197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
 				0B25845C1974884B00321261 /* replay.png in Resources */,
 				0B72EEFD196C672F00AC5A01 /* contact-placeholder.png in Resources */,
 				3CD180A61971B55200EC8BE2 /* CHANGELOG in Resources */,
@@ -909,6 +934,7 @@
 				0BB0E8F1195B449A00C94AC0 /* MPNotification.storyboard in Resources */,
 				0BDB64CD19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
 				0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */,
+				0B56F656197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
 				0B25845B1974884B00321261 /* replay.png in Resources */,
 				0B3651D61958AC5000534386 /* contact-placeholder.png in Resources */,
 				3CD180A51971B55200EC8BE2 /* CHANGELOG in Resources */,
@@ -968,7 +994,9 @@
 				0B72EEC5196C672F00AC5A01 /* CrashReportUtils.m in Sources */,
 				0B72EEC6196C672F00AC5A01 /* SessionUtils.m in Sources */,
 				0B72EEC7196C672F00AC5A01 /* MPSurveyQuestionViewController.m in Sources */,
+				0B56F65319758D9600DB6FF1 /* CountryCodeViewTVC.m in Sources */,
 				0B72EEC8196C672F00AC5A01 /* AFNetworkReachabilityManager.m in Sources */,
+				0B56F65B1975AE4D00DB6FF1 /* CountryCodeViewController.m in Sources */,
 				3CD180A01971B55200EC8BE2 /* EZPlot.m in Sources */,
 				0B72EEC9196C672F00AC5A01 /* MPNotificationViewController.m in Sources */,
 				0B72EECA196C672F00AC5A01 /* AFSecurityPolicy.m in Sources */,
@@ -1041,7 +1069,9 @@
 				3C55FD701966B11C00E818D9 /* CrashReportUtils.m in Sources */,
 				0BDB655E1953BE9100223093 /* SessionUtils.m in Sources */,
 				0BB0E8F7195B449A00C94AC0 /* MPSurveyQuestionViewController.m in Sources */,
+				0B56F65219758D9600DB6FF1 /* CountryCodeViewTVC.m in Sources */,
 				0BDB65401953B5EA00223093 /* AFNetworkReachabilityManager.m in Sources */,
+				0B56F65A1975AE4D00DB6FF1 /* CountryCodeViewController.m in Sources */,
 				3CD1809F1971B55200EC8BE2 /* EZPlot.m in Sources */,
 				0BB0E8F2195B449A00C94AC0 /* MPNotificationViewController.m in Sources */,
 				0BDB65411953B5EA00223093 /* AFSecurityPolicy.m in Sources */,
