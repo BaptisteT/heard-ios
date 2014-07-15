@@ -254,6 +254,11 @@
     [parameters setObject:phoneNumbers forKey:@"contact_numbers"];
     [parameters setObject:[NSNumber numberWithBool:isSignUp] forKey:@"sign_up"];
     
+    // Add api & app version
+    NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    [parameters setObject:appVersion forKey:@"app_version"];
+    [parameters setObject:kApiVersion forKey:@"api_version"];
+    
     [self enrichParametersWithToken:parameters];
     
     //Need a post, otherwise the URI is too large
@@ -356,18 +361,18 @@
 }
 
 // Check API version (retrieve potential message and redirection)
-+ (void)checkAPIVersionAndExecuteSucess:(void(^)(NSDictionary *))successBlock
++ (void)checkAppVersionAndExecuteSucess:(void(^)(NSDictionary *))successBlock
 {
     NSString *path = [[ApiUtils getBasePath] stringByAppendingString:@"obsolete_api.json"];
-    
-    NSDictionary *parameters = @{@"api_version": kApiVersion};
+    NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSDictionary *parameters = @{@"api_version": appVersion};
     [[ApiUtils sharedClient] GET:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
         NSDictionary *result = [JSON valueForKeyPath:@"result"];
         if (successBlock) {
             successBlock(result);
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        NSLog(@"checkAPIVersion: We should not pass in this block!!!!");
+        NSLog(@"checkBuildVersion: We should not pass in this block!!!!");
     }];
 }
 

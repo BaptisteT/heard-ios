@@ -56,7 +56,7 @@
     self.contacts = [ContactUtils retrieveContactsInMemory];
 
     // Check API related message
-    [ApiUtils checkAPIVersionAndExecuteSucess:^(NSDictionary *result){
+    [ApiUtils checkAppVersionAndExecuteSucess:^(NSDictionary *result){
         self.messageType = [result valueForKeyPath:@"message_type"];
         if (self.messageType) {
             self.messageContent = [result valueForKeyPath:@"message_content"];
