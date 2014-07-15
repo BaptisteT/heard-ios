@@ -33,12 +33,12 @@
 #define ACTION_SHEET_CANCEL @"Cancel"
 
 #define RECORDER_LINE_HEIGHT 0.4
-#define RECORDER_HEIGHT 80
-#define RECORDER_VERTICAL_MARGIN 10
+#define RECORDER_HEIGHT 50
+#define RECORDER_VERTICAL_MARGIN 5
 #define RECORDER_MESSAGE_HEIGHT 20
 
-#define PLAYER_UI_HEIGHT 80
-#define PLAYER_UI_VERTICAL_MARGIN 10
+#define PLAYER_UI_HEIGHT 50
+#define PLAYER_UI_VERTICAL_MARGIN 5
 
 #define INVITE_CONTACT_BUTTON_HEIGHT 50
 #define TUTORIAL_VIEW_HEIGHT 60
@@ -1366,7 +1366,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     audioPlot.shouldFill      = YES;
     audioPlot.shouldMirror    = YES;
     [audioPlot setRollingHistoryLength:1290]; // todo BT make this precise & robust
-    audioPlot.gain = 4;
+    audioPlot.gain = 12;
     return audioPlot;
 }
 
