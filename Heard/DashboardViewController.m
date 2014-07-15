@@ -26,10 +26,13 @@
 #import "FDWaveformView.h"
 
 #define ACTION_SHEET_1_OPTION_1 @"Invite contact"
-#define ACTION_SHEET_1_OPTION_2 @"Share"
-#define ACTION_SHEET_1_OPTION_3 @"Feedback"
-#define ACTION_SHEET_2_OPTION_1 @"Add contact"
-#define ACTION_SHEET_2_OPTION_2 @"Block user"
+#define ACTION_SHEET_1_OPTION_2 @"New Contact"
+#define ACTION_SHEET_1_OPTION_3 @"Other"
+#define ACTION_SHEET_2_OPTION_1 @"Profile"
+#define ACTION_SHEET_2_OPTION_2 @"Share"
+#define ACTION_SHEET_2_OPTION_3 @"Feedback"
+#define ACTION_SHEET_PENDING_OPTION_1 @"Add contact"
+#define ACTION_SHEET_PENDING_OPTION_2 @"Block user"
 #define ACTION_SHEET_CANCEL @"Cancel"
 
 #define RECORDER_LINE_HEIGHT 0.4
@@ -765,7 +768,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                        delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:ACTION_SHEET_1_OPTION_2, ACTION_SHEET_1_OPTION_3, nil];
+                                              otherButtonTitles:ACTION_SHEET_1_OPTION_1, ACTION_SHEET_1_OPTION_2, ACTION_SHEET_1_OPTION_3, nil];
     
     [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
@@ -999,7 +1002,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
                                                                     delegate:self
                                                            cancelButtonTitle:ACTION_SHEET_CANCEL
                                                       destructiveButtonTitle:nil
-                                                           otherButtonTitles:ACTION_SHEET_2_OPTION_1, ACTION_SHEET_2_OPTION_2, nil];
+                                                           otherButtonTitles:ACTION_SHEET_PENDING_OPTION_1, ACTION_SHEET_PENDING_OPTION_2, nil];
     [pendingActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
@@ -1177,14 +1180,34 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         return;
     }
     
-    //Add contact
+    // Invite contact
     if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_1]) {
         ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc] init];
         picker.peoplePickerDelegate = self;
         [self presentViewController:picker animated:YES completion:nil];
         [TrackingUtils trackAddContact];
-        //Share (in the future, it'd be cool to share a vocal message!)
+        
+    // New Contact
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_2]) {
+        // todo
+    }
+    
+    // Other
+    else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_3]) {
+        self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                           delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
+                                             destructiveButtonTitle:nil
+                                                  otherButtonTitles:ACTION_SHEET_2_OPTION_1, ACTION_SHEET_2_OPTION_2, ACTION_SHEET_2_OPTION_3, nil];
+        
+        [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+    }
+    
+    else if ([buttonTitle isEqualToString:ACTION_SHEET_2_OPTION_1]) {
+        // todo BT
+    }
+    
+    // Share
+    else if ([buttonTitle isEqualToString:ACTION_SHEET_2_OPTION_2]) {
         NSString *shareString = @"Download Waved, the fastest messaging app.";
         
         NSURL *shareUrl = [NSURL URLWithString:kProdAFHeardWebsite];
@@ -1199,16 +1222,19 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         [self presentViewController:activityViewController animated:YES completion:nil];
         
         [TrackingUtils trackShare];
-        //Send feedback
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_3]) {
+    }
+    
+    //Send feedback
+    else if ([buttonTitle isEqualToString:ACTION_SHEET_2_OPTION_3]) {
         NSString *email = [NSString stringWithFormat:@"mailto:%@?subject=Feedback for Waved on iOS (v%@)", kFeedbackEmail,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
         
         email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
     }
+    // Add contact
     //BB: Add contact a contact not in address book: should be merged with add contact
-    else if ([buttonTitle isEqualToString:ACTION_SHEET_2_OPTION_1]) {
+    else if ([buttonTitle isEqualToString:ACTION_SHEET_PENDING_OPTION_1]) {
         // create person record
         ABRecordRef person = ABPersonCreate();
         
@@ -1228,7 +1254,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         UINavigationController *newNavigationController = [[UINavigationController alloc] initWithRootViewController:controller];
         [self.navigationController presentViewController:newNavigationController animated:YES completion:nil];
         CFRelease(person);
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_2_OPTION_2]) {
+    }
+    // Block
+    else if ([buttonTitle isEqualToString:ACTION_SHEET_PENDING_OPTION_2]) {
         // block user + delete bubble / contact
         void(^successBlock)() = ^void() {
             NSInteger holePosition = 0;
