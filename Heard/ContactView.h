@@ -59,5 +59,7 @@
 
 - (void)startRecordSound;
 
+- (NSTimeInterval)delayBeforeRecording;
+
 
 @end

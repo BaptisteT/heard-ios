@@ -78,6 +78,8 @@
 @property (nonatomic, strong) FDWaveformView *playerWaveView;
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 @property (weak, nonatomic) IBOutlet UIButton *replayButton;
+@property (strong, nonatomic) NSDate* lastRecordSoundDate;
+@property (nonatomic) BOOL silentMode;
 
 
 @end
@@ -96,10 +98,15 @@
     
     [self updateReplayButtonAppearance];
     
+    // Sound callback
+    AudioServicesAddSystemSoundCompletion(1113, CFRunLoopGetMain(), kCFRunLoopDefaultMode, soundMuteNotificationCompletionProc,(__bridge void *)(self));
+    self.silentMode = NO;
+    
     //For custom sound
     //Init recording sound
 //    CFURLRef soundFileURLRef  = CFBundleCopyResourceURL (CFBundleGetMainBundle (), CFSTR ("record-sound"), CFSTR ("aif"), NULL);
 //    AudioServicesCreateSystemSoundID(soundFileURLRef, &_recordSound);
+//        AudioServicesAddSystemSoundCompletion(_recordSound, CFRunLoopGetMain(), kCFRunLoopDefaultMode, soundMuteNotificationCompletionProc,(__bridge void *)(self));
     
     // Init address book
     self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
@@ -801,7 +808,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 
 - (void)startRecordSound
 {
+    self.lastRecordSoundDate = [NSDate date];
     AudioServicesPlaySystemSound(1113);
+    
     //For custom sound
     //AudioServicesPlaySystemSound (self.recordSound);
 }
@@ -1387,6 +1396,24 @@ withNumberOfChannels:(UInt32)numberOfChannels {
     CGRect frame = self.recorderLine.frame;
     frame.size.width = width;
     self.recorderLine.frame = frame;
+}
+
+
+// ----------------------------------------------------------
+#pragma mark System Sound callback
+// ----------------------------------------------------------
+void soundMuteNotificationCompletionProc(SystemSoundID  ssID,void* clientData){
+    double diff = [[NSDate date] timeIntervalSinceDate:((__bridge DashboardViewController *)clientData).lastRecordSoundDate];
+    ((__bridge DashboardViewController *)clientData).silentMode = diff < 0.1;
+}
+
+- (NSTimeInterval)delayBeforeRecording
+{
+    if (self.silentMode) {
+        return 0;
+    } else {
+        return kMinAudioDuration;
+    }
 }
 
 

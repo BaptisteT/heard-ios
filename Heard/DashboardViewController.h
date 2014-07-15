@@ -20,6 +20,7 @@
 - (void) retrieveUnreadMessagesAndNewContacts;
 - (void)displayContacts;
 - (void)distributeNonAttributedMessages;
+- (NSTimeInterval)delayBeforeRecording;
 
 @property (nonatomic) BOOL isSignUp;
 

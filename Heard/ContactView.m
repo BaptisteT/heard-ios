@@ -131,12 +131,10 @@
 // ----------------------------------------------------------
 - (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer
 {
-    if (self.cancelRecord) return;
+    if (self.cancelRecord)
+        return;
     
     if (recognizer.state == UIGestureRecognizerStateBegan) {
-        
-        [self.delegate startRecordSound];
-        
         // Set session
         AVAudioSession *session = [AVAudioSession sharedInstance];
         [session requestRecordPermission:^(BOOL granted) {
@@ -144,12 +142,14 @@
                 [GeneralUtils showMessage:@"To activate it, go to Settings > Privacy > Micro" withTitle:@"Waved does not have access to your micro"];
                 return;
             } else {
+                // Start Sound
+                [self.delegate startRecordSound];
                 [session setActive:YES error:nil];
                 
                 // Create Timer
                 self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
                 
-                [self performSelector:@selector(startRecording) withObject:self afterDelay:kMinAudioDuration];
+                [self performSelector:@selector(startRecording) withObject:self afterDelay:[self.delegate delayBeforeRecording]];
             }
         }];
     }
@@ -199,12 +199,11 @@
     if (!self.unreadMessagesLabel.isHidden) { // ie. self.unreadMessageCount > 0 && self.nextMessageAudioData !=nil
         
         self.userInteractionEnabled = NO;
-        if (!self.nextMessageAudioData) {
-            // should not be possible
+        if (!self.nextMessageAudioData) { // should not be possible
             return;
         }
         
-        // Save data to file
+        // Save data to file (for FDWaveFormView)
         [self.nextMessageAudioData writeToURL:[GeneralUtils getPlayedAudioURL] atomically:NO];
         
         // Stat playing
@@ -222,7 +221,7 @@
         
         // Mark as opened on the database
         // todo bt handle error
-        [ApiUtils markMessageAsOpened:((Message *)self.unreadMessages[0]).identifier success:nil failure:nil];
+//        [ApiUtils markMessageAsOpened:((Message *)self.unreadMessages[0]).identifier success:nil failure:nil];
         
         // Remove message
         [self.unreadMessages removeObjectAtIndex:0];
