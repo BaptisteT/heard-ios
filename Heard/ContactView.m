@@ -24,13 +24,13 @@
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *oneTapRecognizer;
 @property (nonatomic, strong) NSTimer *maxDurationTimer;
-@property (nonatomic, strong) NSTimer *minDurationTimer;
 @property (nonatomic) NSInteger unreadMessagesCount;
 @property (nonatomic) UILabel *unreadMessagesLabel;
 @property (strong, nonatomic) UIImageView *imageView;
 @property (nonatomic, strong) UIImageView *recordingOverlay;
 @property (nonatomic, strong) UIImageView *pendingContactOverlay;
 @property (nonatomic, strong) CAShapeLayer *circleShape;
+@property (nonatomic) BOOL cancelRecord;
 
 @end
 
@@ -51,6 +51,8 @@
     self.contact = contact;
     _pendingContact = NO;
     self.clipsToBounds = NO;
+    
+    self.cancelRecord = NO;
     
     // Set image view
     self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
@@ -129,10 +131,11 @@
 // ----------------------------------------------------------
 - (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer
 {
+    if (self.cancelRecord) return;
+    
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         
         [self.delegate startRecordSound];
-        [self recordingUI];
         
         // Set session
         AVAudioSession *session = [AVAudioSession sharedInstance];
@@ -145,11 +148,8 @@
                 
                 // Create Timer
                 self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
-                self.minDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMinAudioDuration target:self selector:@selector(minRecordingDurationReached) userInfo:nil repeats:NO];
                 
-                [self.delegate longPressOnContactBubbleViewStarted:self.contact.identifier FromView:self];
-                
-                [self performSelector:@selector(startRecording) withObject:self afterDelay:0.3];
+                [self performSelector:@selector(startRecording) withObject:self afterDelay:kMinAudioDuration];
             }
         }];
     }
@@ -159,14 +159,16 @@
         // Stop timer if it did not fire yet
         if ([self.maxDurationTimer isValid]) {
             [self.maxDurationTimer invalidate];
-            if ([self.minDurationTimer isValid]) {
-                [self.minDurationTimer invalidate];
-                [self stopRecording];
-                [self.delegate quitRecordingModeAnimated:NO];
-                [self.delegate tutorialModeWithDuration:3];
-            } else {
+            
+            if ([self.recorder isRecording]) {
                 [self sendRecording];
                 [TrackingUtils trackRecord];
+            } else {
+                self.cancelRecord = YES;
+                
+                [self.delegate quitRecordingModeAnimated:NO];
+                [self.delegate tutorialModeWithDuration:3];
+
             }
         }
     }
@@ -174,7 +176,14 @@
 
 - (void)startRecording
 {
-    [self.recorder record];
+    if (!self.cancelRecord) {
+        [self recordingUI];
+        
+        [self.delegate longPressOnContactBubbleViewStarted:self.contact.identifier FromView:self];
+        [self.recorder record];
+    }
+    
+    self.cancelRecord = NO;
 }
 
 - (void)handleTapGesture {
