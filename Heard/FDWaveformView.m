@@ -236,6 +236,9 @@
     
     float halfGraphHeight = (imageHeight / 2);
     float centerLeft = halfGraphHeight;
+    // BT issue here
+    if (normalizeMax == noiseFloor)
+        return;
     float sampleAdjustmentFactor = imageHeight / (normalizeMax - noiseFloor) / 2;
     
     for (NSInteger intSample=0; intSample<sampleCount; intSample++) {
