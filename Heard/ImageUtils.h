@@ -30,4 +30,6 @@
 
 + (UIColor *)transparentGreen;
 
++ (UIColor *)transparentWhite;
+
 @end

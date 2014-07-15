@@ -221,7 +221,7 @@
         
         // Mark as opened on the database
         // todo bt handle error
-//        [ApiUtils markMessageAsOpened:((Message *)self.unreadMessages[0]).identifier success:nil failure:nil];
+        [ApiUtils markMessageAsOpened:((Message *)self.unreadMessages[0]).identifier success:nil failure:nil];
         
         // Remove message
         [self.unreadMessages removeObjectAtIndex:0];

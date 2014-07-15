@@ -188,7 +188,7 @@
     
     // player line
     self.playerLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.playerWaveView.bounds.size.height/2, 0, RECORDER_LINE_HEIGHT)];
-    self.playerLine.backgroundColor = [UIColor whiteColor];
+    self.playerLine.backgroundColor = [ImageUtils transparentWhite];
     [self.playerWaveView addSubview:self.playerLine];
 }
 
