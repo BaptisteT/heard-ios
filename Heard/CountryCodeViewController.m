@@ -27,8 +27,23 @@
 }
 
 - (IBAction)cancelButtonClicked:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)updateCountryName:(NSString *)countryName code:(NSNumber *)code letterCode:(NSString *)letterCode;
+{
+    [self.delegate updateCountryName:countryName code:code letterCode:letterCode];
     
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSString * segueName = segue.identifier;
+    
+    if ([segueName isEqualToString: @"Country Code TVC Segue"]) {
+        ((CountryCodeViewTVC *) [segue destinationViewController]).delegate = self;
+    }
 }
 
 @end

@@ -7,7 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CountryCodeViewTVC.h"
 
-@interface CountryCodeViewController : UIViewController
+@protocol CountryCodeViewControllerDelegate;
+
+@interface CountryCodeViewController : UIViewController <CountryCodeTVCDelegate>
+
+@property (weak, nonatomic) id <CountryCodeViewControllerDelegate> delegate;
+
+@end
+
+@protocol CountryCodeViewControllerDelegate
+
+- (void)updateCountryName:(NSString *)countryName code:(NSNumber *)code letterCode:(NSString *)letterCode;
 
 @end

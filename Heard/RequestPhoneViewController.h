@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CountryCodeViewController.h"
 
-@interface RequestPhoneViewController : UIViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
+@interface RequestPhoneViewController : UIViewController <UITextFieldDelegate, CountryCodeViewControllerDelegate>
 
 @end

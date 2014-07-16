@@ -11,7 +11,7 @@
 @interface CountryCodeViewTVC ()
 
 @property (strong, nonatomic) NSMutableDictionary *indexedCountries;
-@property (strong, nonatomic) NSMutableDictionary *countryToCode;
+@property (strong, nonatomic) NSMutableDictionary *countryToCodes;
 @property (strong, nonatomic) NSArray *sectionTitles;
 
 @end
@@ -24,7 +24,7 @@
     [super viewDidLoad];
     
     self.indexedCountries = [[NSMutableDictionary alloc] init];
-    self.countryToCode = [[NSMutableDictionary alloc] init];
+    self.countryToCodes = [[NSMutableDictionary alloc] init];
     
     [self setCountriesAndCodes];
     
@@ -61,7 +61,7 @@
     
     cell.textLabel.text = country;
     
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"+%@", [self.countryToCode objectForKey:country]];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"+%@", [self.countryToCodes objectForKey:country][0]];
     
     return cell;
 }
@@ -75,6 +75,16 @@
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
     return [self.sectionTitles indexOfObject:title];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *sectionTitle = [self.sectionTitles objectAtIndex:indexPath.section];
+    NSArray *sectionCountries = [self.indexedCountries objectForKey:sectionTitle];
+    NSString *country = [sectionCountries objectAtIndex:indexPath.row];
+    
+    [self.delegate updateCountryName:country code:[self.countryToCodes objectForKey:country][0] letterCode:[self.countryToCodes objectForKey:country][1]];
+    
 }
 
 - (void)setCountriesAndCodes
@@ -104,7 +114,7 @@
         if (idRange.location == NSNotFound)
             break;
         
-//        NSString *countryId = [[data substringWithRange:NSMakeRange(codeRange.location + 1, idRange.location - (codeRange.location + 1))] lowercaseString];
+        NSString *countryId = [[data substringWithRange:NSMakeRange(codeRange.location + 1, idRange.location - (codeRange.location + 1))] lowercaseString];
         
         NSRange nameRange = [data rangeOfString:endOfLine options:0 range:NSMakeRange(idRange.location + 1, data.length - (idRange.location + 1))];
         if (nameRange.location == NSNotFound)
@@ -120,7 +130,7 @@
             [self.indexedCountries setValue:[[NSMutableArray alloc] initWithObjects:countryName, nil] forKey:[countryName substringToIndex:1]];
         }
         
-        [self.countryToCode setValue:[[NSNumber alloc] initWithInt:countryCode] forKey:countryName];
+        [self.countryToCodes setValue:@[[[NSNumber alloc] initWithInt:countryCode], countryId] forKey:countryName];
         
         currentLocation = nameRange.location + nameRange.length;
         if (nameRange.length > 1)
@@ -131,9 +141,6 @@
     for (NSString *key in [self.indexedCountries allKeys]) {
         [self.indexedCountries setObject:[(NSMutableArray *)[self.indexedCountries objectForKey:key] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] forKey:key];
     }
-    
-    NSLog(@"INDEXED COUNTRIES: %@", self.indexedCountries);
-    NSLog(@"COUNTRY TO CODE: %@", self.countryToCode);
 }
 
 @end

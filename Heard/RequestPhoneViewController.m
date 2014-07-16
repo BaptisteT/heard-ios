@@ -7,28 +7,29 @@
 //
 
 #import "RequestPhoneViewController.h"
-#import "NBAsYouTypeFormatter.h"
-#import "NBPhoneNumber.h"
-#import "NBPhoneNumberUtil.h"
 #import "GeneralUtils.h"
 #import "CodeConfirmationViewController.h"
 #import "ApiUtils.h"
 #import "MBProgressHUD.h"
+#import "RMPhoneFormat.h"
 
 #define BORDER_SIZE 0.5
+#define DEFAULT_COUNTRY @"USA"
+#define DEFAULT_COUNTRY_CODE 1
+#define DEFAULT_COUNTRY_LETTER_CODE @"us"
+
 
 @interface RequestPhoneViewController ()
 
-@property (strong, nonatomic) NBAsYouTypeFormatter *formatter;
 @property (weak, nonatomic) IBOutlet UIView *navigationContainer;
 @property (weak, nonatomic) IBOutlet UIView *textFieldContainer;
 @property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
 @property (weak, nonatomic) IBOutlet UIButton *countryCodeButton;
-@property (strong, nonatomic) NBPhoneNumberUtil *util;
-@property (weak, nonatomic) IBOutlet UIPickerView *countryCodePicker;
-@property (strong, nonatomic) NSMutableDictionary *numericalToLetterCodes;
-@property (strong, nonatomic) NSMutableArray *numericalCountryCodes;
-@property (weak, nonatomic) IBOutlet UITextView *countryCodeInstructions;
+@property (nonatomic, strong) NSString *rawPhoneNumber;
+@property (nonatomic, strong) RMPhoneFormat *phoneFormat;
+@property (weak, nonatomic) IBOutlet UILabel *countryNameLabel;
+@property (weak, nonatomic) IBOutlet UITextView *tutoLabel;
+@property (weak, nonatomic) IBOutlet UIView *countryNameContainer;
 
 @end
 
@@ -38,46 +39,25 @@
 {
     [super viewDidLoad];
     
-    self.formatter = [[NBAsYouTypeFormatter alloc] initWithRegionCode:@"FR"];
+    self.rawPhoneNumber = @"";
     
-    self.countryCodePicker.hidden = YES;
-    self.countryCodeInstructions.hidden = YES;
-    
-    self.util = [NBPhoneNumberUtil sharedInstance];
-    self.numericalToLetterCodes =  [[NSMutableDictionary alloc] init];
-    self.numericalCountryCodes = [[NSMutableArray alloc] init];
-    
-    NSArray *regionLetterCodes = [NSLocale ISOCountryCodes];
-    
-    for (NSString *regionLetterCode in regionLetterCodes) {
-        NSString *numericalCode = [[NBPhoneNumberUtil sharedInstance] countryCodeFromRegionCode:regionLetterCode];
-        if (numericalCode) {
-            NSNumber *code = [NSNumber numberWithLong:[numericalCode intValue]];
-            
-            if (![self.numericalCountryCodes containsObject:code]) {
-                [self.numericalToLetterCodes setObject:regionLetterCode forKey:code];
-                [self.numericalCountryCodes addObject:code];
-            }
-        }
-    }
-    
-    //Order numericalCountryCodes
-    NSSortDescriptor *lowestToHighest = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES];
-    [self.numericalCountryCodes sortUsingDescriptors:[NSArray arrayWithObject:lowestToHighest]];
-    
-    self.countryCodePicker.delegate = self;
-    self.countryCodePicker.dataSource = self;
+    [self updateCountryName:DEFAULT_COUNTRY code:[NSNumber numberWithInt:DEFAULT_COUNTRY_CODE] letterCode:DEFAULT_COUNTRY_LETTER_CODE];
     
     self.phoneTextField.delegate = self;
     
     [GeneralUtils addBottomBorder:self.navigationContainer borderSize:BORDER_SIZE];
     [GeneralUtils addBottomBorder:self.textFieldContainer borderSize:BORDER_SIZE];
+    [GeneralUtils addTopBorder:self.textFieldContainer borderSize:BORDER_SIZE];
     [GeneralUtils addRightBorder:self.countryCodeButton borderSize:BORDER_SIZE];
+    
+    //Autoresize bug
+    [self.tutoLabel sizeToFit];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
     
     [self.phoneTextField becomeFirstResponder];
 }
@@ -87,31 +67,34 @@
 }
 
 - (IBAction)nextButtonPressed:(id)sender {
-    NSError *aError = nil;
-    NBPhoneNumberUtil *util = [NBPhoneNumberUtil sharedInstance];
-    NBPhoneNumber *phoneNumber;
-    
-    NSNumber *code = [self.numericalCountryCodes objectAtIndex:[self.countryCodePicker selectedRowInComponent:0]];
-    NSString *letterCode = [self.numericalToLetterCodes objectForKey:code];
-    
-    phoneNumber = [util parse:self.phoneTextField.text
-                defaultRegion:letterCode error:&aError];
-    
-    if (!aError && [util isValidNumber:phoneNumber]) {
-        NSString *formattedPhoneNumber = [NSString stringWithFormat:@"+%@%@", phoneNumber.countryCode, phoneNumber.nationalNumber];
-        [self sendCodeRequest:formattedPhoneNumber];
+    if ([self.phoneFormat isPhoneNumberValid:self.rawPhoneNumber]) {
+        NSString *internationalPhoneNumber = [NSString stringWithFormat:@"+%@%@", [self.countryCodeButton.titleLabel.text substringFromIndex:1], self.rawPhoneNumber];
+        [self sendCodeRequest:internationalPhoneNumber];
     } else {
         [GeneralUtils showMessage:nil withTitle:@"Invalid phone number"];
     }
 }
 
 - (IBAction)countryCodeButtonClicked:(id)sender {
-//    self.countryCodePicker.hidden = NO;
-//    self.countryCodeInstructions.hidden = NO;
-//    
-//    [self.phoneTextField endEditing:YES];
-    
     [self performSegueWithIdentifier:@"Country Code Segue" sender:nil];
+}
+
+
+- (IBAction)countryNameButtonPressed:(UILongPressGestureRecognizer *)sender {
+    switch (sender.state) {
+        case 1: // object pressed
+        case 2:
+            [self.countryNameContainer.layer setBackgroundColor:[UIColor lightGrayColor].CGColor];
+            [self.countryNameContainer.layer setOpacity:0.4];
+            break;
+        case 3: // object released
+            [self.countryNameContainer.layer setBackgroundColor:[UIColor clearColor].CGColor];
+            [self.countryNameContainer.layer setOpacity:1];
+            [self performSegueWithIdentifier:@"Country Code Segue" sender:nil];
+            break;
+        default:
+            break;
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -120,6 +103,10 @@
     
     if ([segueName isEqualToString: @"Code Confirmation Push Segue"]) {
         ((CodeConfirmationViewController *) [segue destinationViewController]).phoneNumber = (NSString *)sender;
+    }
+    
+    if ([segueName isEqualToString: @"Country Code Segue"]) {
+        ((CountryCodeViewController *) [segue destinationViewController]).delegate = self;
     }
 }
 
@@ -132,59 +119,41 @@
         [self performSegueWithIdentifier:@"Code Confirmation Push Segue" sender:phoneNumber];
     } failure:^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [GeneralUtils showMessage:@"We failed to send your confirmation code, please try again." withTitle:nil];
+        [GeneralUtils showMessage:@"We failed to send your confirmation code, the provided phone number might be invalid." withTitle:nil];
     }];
-}
-
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
-
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return [self.numericalCountryCodes count];
-}
-
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    return [NSString stringWithFormat:@"+%@",[self.numericalCountryCodes objectAtIndex:row]];
-}
-
--(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    NSNumber *code = [self.numericalCountryCodes objectAtIndex:row];
-    NSString *letterCode = [self.numericalToLetterCodes objectForKey:code];
-    
-    [self.countryCodeButton setTitle:[NSString stringWithFormat:@"+%@", code] forState:UIControlStateNormal];
-    
-    self.formatter = [[NBAsYouTypeFormatter alloc] initWithRegionCode:letterCode];
-
-    NSString *currentFormattedPhoneNumber = self.phoneTextField.text;
-    NSInteger currentFormattedPhoneNumberLength = [currentFormattedPhoneNumber length];
-    
-    if (currentFormattedPhoneNumber && currentFormattedPhoneNumber > 0) {
-        for (NSInteger i = 0; i < currentFormattedPhoneNumberLength; i++) {
-            self.phoneTextField.text = [self.formatter inputDigit:[currentFormattedPhoneNumber substringWithRange:NSMakeRange(i, 1)]];
-        }
-    }
-
-}
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    self.countryCodePicker.hidden = YES;
-    self.countryCodeInstructions.hidden = YES;
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     if (string.length > 0) {
-        textField.text = [self.formatter inputDigit:string];
+        self.rawPhoneNumber = [self.rawPhoneNumber stringByAppendingString:string];
     } else {
-        textField.text = [self.formatter removeLastDigit];
+        NSString *newString = [[textField.text substringToIndex:range.location] stringByAppendingString:[textField.text substringFromIndex:range.location + range.length]];
+        
+        NSString *numberString = @"";
+        
+        for (int i=0; i<[newString length]; i++) {
+            if (isdigit([newString characterAtIndex:i])) {
+                numberString = [numberString stringByAppendingFormat:@"%c",[newString characterAtIndex:i]];
+            }
+        }
+        
+        self.rawPhoneNumber = numberString;
     }
     
+    textField.text = [self.phoneFormat format:self.rawPhoneNumber];
+    
     return NO;
+}
+
+- (void)updateCountryName:(NSString *)countryName code:(NSNumber *)code letterCode:(NSString *)letterCode
+{
+    self.phoneFormat = [[RMPhoneFormat alloc] initWithDefaultCountry:letterCode];
+    
+    [self.countryCodeButton setTitle:[NSString stringWithFormat:@"+%@", code] forState: UIControlStateNormal];
+    self.phoneTextField.text = [self.phoneFormat format:self.rawPhoneNumber];
+    
+    self.countryNameLabel.text = countryName;
 }
 
 @end

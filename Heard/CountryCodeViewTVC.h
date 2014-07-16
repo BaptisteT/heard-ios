@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol CountryCodeTVCDelegate;
+
 @interface CountryCodeViewTVC : UITableViewController
+
+@property (weak, nonatomic) id <CountryCodeTVCDelegate> delegate;
+
+@end
+
+@protocol CountryCodeTVCDelegate
+
+- (void)updateCountryName:(NSString *)countryName code:(NSNumber *)code letterCode:(NSString *)letterCode;
 
 @end

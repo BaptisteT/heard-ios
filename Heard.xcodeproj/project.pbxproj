@@ -119,6 +119,10 @@
 		0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */; };
 		0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A481954E4FF00476BFE /* welcome-logo.png */; };
 		0B893A4D19550FF000476BFE /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B893A4C19550FF000476BFE /* Contact.m */; };
+		0B9051A41975D72A001E2ED5 /* RMPhoneFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B9051A31975D72A001E2ED5 /* RMPhoneFormat.m */; };
+		0B9051A51975D72A001E2ED5 /* RMPhoneFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B9051A31975D72A001E2ED5 /* RMPhoneFormat.m */; };
+		0B9051A71975DE8C001E2ED5 /* PhoneFormats.dat in Resources */ = {isa = PBXBuildFile; fileRef = 0B9051A61975DE8C001E2ED5 /* PhoneFormats.dat */; };
+		0B9051A81975DE8C001E2ED5 /* PhoneFormats.dat in Resources */ = {isa = PBXBuildFile; fileRef = 0B9051A61975DE8C001E2ED5 /* PhoneFormats.dat */; };
 		0BAF4FE219560AEE00838D7D /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BAF4FE119560AEE00838D7D /* MessageUI.framework */; };
 		0BB0E8EC195B449A00C94AC0 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8CF195B449A00C94AC0 /* Media.xcassets */; };
 		0BB0E8ED195B449A00C94AC0 /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8D1195B449A00C94AC0 /* Mixpanel.m */; };
@@ -247,6 +251,9 @@
 		0B893A481954E4FF00476BFE /* welcome-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome-logo.png"; sourceTree = "<group>"; };
 		0B893A4B19550FF000476BFE /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		0B893A4C19550FF000476BFE /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
+		0B9051A21975D72A001E2ED5 /* RMPhoneFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMPhoneFormat.h; sourceTree = "<group>"; };
+		0B9051A31975D72A001E2ED5 /* RMPhoneFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMPhoneFormat.m; sourceTree = "<group>"; };
+		0B9051A61975DE8C001E2ED5 /* PhoneFormats.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = PhoneFormats.dat; sourceTree = "<group>"; };
 		0BAF4FE119560AEE00838D7D /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		0BB0E8CF195B449A00C94AC0 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		0BB0E8D0195B449A00C94AC0 /* Mixpanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mixpanel.h; sourceTree = "<group>"; };
@@ -453,6 +460,7 @@
 		0B58BB001954D7E200E9FF70 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				0B9051A61975DE8C001E2ED5 /* PhoneFormats.dat */,
 				0B2584571974884B00321261 /* replay@2x~iphone.png */,
 				0B2584581974884B00321261 /* replay.png */,
 				0BE55474195A4ADC00CE4669 /* record.png */,
@@ -471,6 +479,15 @@
 				0B56F655197592FE00DB6FF1 /* PhoneCountries.txt */,
 			);
 			name = Assets;
+			sourceTree = "<group>";
+		};
+		0B9051A11975D721001E2ED5 /* RMPhoneFormat */ = {
+			isa = PBXGroup;
+			children = (
+				0B9051A21975D72A001E2ED5 /* RMPhoneFormat.h */,
+				0B9051A31975D72A001E2ED5 /* RMPhoneFormat.m */,
+			);
+			name = RMPhoneFormat;
 			sourceTree = "<group>";
 		};
 		0BB0E8CE195B449A00C94AC0 /* Mixpanel */ = {
@@ -605,6 +622,7 @@
 		0BDB64B21952150D00223093 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				0B9051A11975D721001E2ED5 /* RMPhoneFormat */,
 				3CD180711971B55200EC8BE2 /* EZAudio */,
 				0BB0E8CE195B449A00C94AC0 /* Mixpanel */,
 				3C9BBDFC195345A6001C6C4D /* UIKit+AFNetworking */,
@@ -881,6 +899,7 @@
 				0B72EEEB196C672F00AC5A01 /* NBPhoneNumberMetadata.plist in Resources */,
 				0B72EEEC196C672F00AC5A01 /* MPCloseBtn@2x.png in Resources */,
 				0B72EEED196C672F00AC5A01 /* heard-logo-120.png in Resources */,
+				0B9051A81975DE8C001E2ED5 /* PhoneFormats.dat in Resources */,
 				0B72EEEE196C672F00AC5A01 /* MPSurvey.storyboard in Resources */,
 				0B72EEEF196C672F00AC5A01 /* heard-logo-80.png in Resources */,
 				0B72EEF0196C672F00AC5A01 /* record.png in Resources */,
@@ -918,6 +937,7 @@
 				0BDB64CC19521A7C00223093 /* NBPhoneNumberMetadata.plist in Resources */,
 				0BB0E8EF195B449A00C94AC0 /* MPCloseBtn@2x.png in Resources */,
 				0B3651E11959109700534386 /* heard-logo-120.png in Resources */,
+				0B9051A71975DE8C001E2ED5 /* PhoneFormats.dat in Resources */,
 				0BB0E8F4195B449A00C94AC0 /* MPSurvey.storyboard in Resources */,
 				0B3651DF1959109700534386 /* heard-logo-80.png in Resources */,
 				0BE55478195A4ADC00CE4669 /* record.png in Resources */,
@@ -957,6 +977,7 @@
 				0B72EEA7196C672F00AC5A01 /* NBAsYouTypeFormatter.m in Sources */,
 				0B72EEA8196C672F00AC5A01 /* NSData+MPBase64.m in Sources */,
 				0B72EEA9196C672F00AC5A01 /* NBNumberFormat.m in Sources */,
+				0B9051A51975D72A001E2ED5 /* RMPhoneFormat.m in Sources */,
 				0B72EEAA196C672F00AC5A01 /* NBPhoneMetaData.m in Sources */,
 				0B72EEAB196C672F00AC5A01 /* MPSurveyQuestion.m in Sources */,
 				0B72EEAC196C672F00AC5A01 /* AudioUtils.m in Sources */,
@@ -1032,6 +1053,7 @@
 				0BDB65511953B60D00223093 /* NBAsYouTypeFormatter.m in Sources */,
 				0BB0E8F8195B449A00C94AC0 /* NSData+MPBase64.m in Sources */,
 				0BDB65521953B60D00223093 /* NBNumberFormat.m in Sources */,
+				0B9051A41975D72A001E2ED5 /* RMPhoneFormat.m in Sources */,
 				0BDB65531953B60D00223093 /* NBPhoneMetaData.m in Sources */,
 				0BB0E8F6195B449A00C94AC0 /* MPSurveyQuestion.m in Sources */,
 				3C0D0061195C5E500058A0E0 /* AudioUtils.m in Sources */,
@@ -1195,7 +1217,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "4F991406-5786-466C-B06B-4BB7D18E50CC";
 				SDKROOT = iphoneos;
@@ -1229,7 +1251,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

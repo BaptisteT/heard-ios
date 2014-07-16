@@ -5,13 +5,13 @@
 1869;KN;Saint Kitts and Nevis
 1868;TT;Trinidad and Tobago
 1849;DO;Dominican Republic
-1829;DO;Dominican Republic
-1809;DO;Dominican Republic
+1829;DO;Dominican Republic (bis)
+1809;DO;Dominican Republic (ter)
 1787;PR;Puerto Rico
-1784;VC;Saint Vincent and the Grenadines
+1784;VC;St Vincent & Grenadines
 1767;DM;Dominica
 1758;LC;Saint Lucia
-1721;SX;Bonaire, Sint Eustatius and Saba
+1721;SX;Bonaire, S. E. & S.
 1684;AS;American Samoa
 1671;GU;Guam
 1670;MP;Northern Mariana Islands
@@ -88,7 +88,7 @@
 591;BO;Bolivia
 590;GP;Guadeloupe
 509;HT;Haiti
-508;PM;Saint Pierre and Miquelon
+508;PM;St Pierre & Miquelon
 507;PA;Panama
 506;CR;Costa Rica
 505;NI;Nicaragua
@@ -101,7 +101,7 @@
 421;SK;Slovakia
 420;CZ;Czech Republic
 389;MK;Macedonia
-387;BA;Bosnia and Herzegovina
+387;BA;Bosnia & Herzegovina
 386;SI;Slovenia
 385;HR;Croatia
 382;ME;Montenegro
@@ -153,11 +153,11 @@
 249;SD;Sudan
 248;SC;Seychelles
 247;SH;Saint Helena
-246;IO;United Kingdom
+246;IO;Diego Garcia
 245;GW;Guinea-Bissau
 244;AO;Angola
-243;CD;Congo, Democratic Republic
-242;CG;Congo
+243;CD;Congo (Dem. Rep.)
+242;CG;Congo (Rep.)
 241;GA;Gabon
 240;GQ;Equatorial Guinea
 239;ST;São Tomé and Príncipe
