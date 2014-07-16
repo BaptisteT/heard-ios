@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CountryCodeViewTVC.h"
+#import "CountryCodeTVC.h"
 
 @protocol CountryCodeViewControllerDelegate;
 

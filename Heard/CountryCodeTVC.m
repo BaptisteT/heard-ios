@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 streetshout. All rights reserved.
 //
 
-#import "CountryCodeViewTVC.h"
+#import "CountryCodeTVC.h"
 
-@interface CountryCodeViewTVC ()
+@interface CountryCodeTVC ()
 
 @property (strong, nonatomic) NSMutableDictionary *indexedCountries;
 @property (strong, nonatomic) NSMutableDictionary *countryToCodes;
@@ -16,7 +16,7 @@
 
 @end
 
-@implementation CountryCodeViewTVC
+@implementation CountryCodeTVC
 
 
 - (void)viewDidLoad

@@ -42,7 +42,7 @@
     NSString * segueName = segue.identifier;
     
     if ([segueName isEqualToString: @"Country Code TVC Segue"]) {
-        ((CountryCodeViewTVC *) [segue destinationViewController]).delegate = self;
+        ((CountryCodeTVC *) [segue destinationViewController]).delegate = self;
     }
 }
 

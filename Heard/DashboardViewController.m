@@ -25,8 +25,8 @@
 #import <MediaPlayer/MPMusicPlayerController.h>
 #import "FDWaveformView.h"
 
-#define ACTION_SHEET_1_OPTION_1 @"Invite contact"
-#define ACTION_SHEET_1_OPTION_2 @"New Contact"
+#define ACTION_SHEET_1_OPTION_1 @"Invite Contacts"
+#define ACTION_SHEET_1_OPTION_2 @"Add Contact"
 #define ACTION_SHEET_1_OPTION_3 @"Other"
 #define ACTION_SHEET_2_OPTION_1 @"Profile"
 #define ACTION_SHEET_2_OPTION_2 @"Share"
@@ -1187,10 +1187,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbo
     
     // Invite contact
     if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_1]) {
-        ABPeoplePickerNavigationController *picker = [[ABPeoplePickerNavigationController alloc] init];
-        picker.peoplePickerDelegate = self;
-        [self presentViewController:picker animated:YES completion:nil];
-        [TrackingUtils trackAddContact];
+        [self performSegueWithIdentifier:@"Invite Contacts Segue" sender:nil];
         
     // New Contact
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_2]) {

@@ -10,7 +10,7 @@
 
 @protocol CountryCodeTVCDelegate;
 
-@interface CountryCodeViewTVC : UITableViewController
+@interface CountryCodeTVC : UITableViewController
 
 @property (weak, nonatomic) id <CountryCodeTVCDelegate> delegate;
 
