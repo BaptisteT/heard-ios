@@ -30,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *countryNameLabel;
 @property (weak, nonatomic) IBOutlet UITextView *tutoLabel;
 @property (weak, nonatomic) IBOutlet UIView *countryNameContainer;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @end
 
@@ -57,7 +58,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
     
     [self.phoneTextField becomeFirstResponder];
 }
@@ -114,7 +114,7 @@
 {
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
-    [ApiUtils requestSmsCode:phoneNumber success:^() {
+    [ApiUtils requestSmsCode:phoneNumber retry:NO success:^() {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [self performSegueWithIdentifier:@"Code Confirmation Push Segue" sender:phoneNumber];
     } failure:^{

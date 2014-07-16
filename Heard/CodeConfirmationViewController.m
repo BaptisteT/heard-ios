@@ -26,6 +26,10 @@
 @property (weak, nonatomic) IBOutlet UITextField *codeTextField;
 @property (weak, nonatomic) IBOutlet UILabel *phoneNumberLabel;
 @property (nonatomic) BOOL existingUser;
+@property (nonatomic, strong) NSTimer *countdownTimer;
+@property (nonatomic) NSTimeInterval countdownStart;
+@property (weak, nonatomic) IBOutlet UILabel *resendLabel;
+@property (weak, nonatomic) IBOutlet UILabel *timeRemainLabel;
 
 @end
 
@@ -55,10 +59,36 @@
 {
     [super viewWillAppear:animated];
     
+    self.countdownStart = CFAbsoluteTimeGetCurrent();
+    self.countdownTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateCounter) userInfo:nil repeats:YES];
+    
+    [self.countdownTimer fire];
+    
     [self.codeTextField becomeFirstResponder];
 }
 
+- (void)updateCounter
+{
+    NSInteger timeout = 2 * 60;
+    
+    NSTimeInterval currentTime = CFAbsoluteTimeGetCurrent();
+    NSTimeInterval remainingTime = (self.countdownStart + timeout) - currentTime;
+    
+    if (remainingTime <= 0) {
+        [self.countdownTimer invalidate];
+        self.resendLabel.text = @"We sent a second SMS.";
+        self.timeRemainLabel.hidden = YES;
+        
+        [self.countdownTimer invalidate];
+        
+        [ApiUtils requestSmsCode:self.phoneNumber retry:YES success:nil failure:nil];
+    } else {
+        self.timeRemainLabel.text = [NSString stringWithFormat:@"%ld:%02ld", (NSInteger) floor(remainingTime/60), (NSInteger)remainingTime - (NSInteger) floor(remainingTime/60)*60];
+    }
+}
+
 - (IBAction)backButtonClicked:(id)sender {
+    [self.countdownTimer invalidate];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -79,6 +109,8 @@
                          phoneNumber:self.phoneNumber
                       success:^(NSString *authToken, Contact *contact) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
+                          
+        [self.countdownTimer invalidate];
                           
         if (authToken && contact != nil) {
             [SessionUtils securelySaveCurrentUserToken:authToken];

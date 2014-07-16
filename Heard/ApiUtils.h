@@ -14,6 +14,7 @@
 + (ApiUtils *)sharedClient;
 
 + (void)requestSmsCode:(NSString *)phoneNumber
+                 retry:(BOOL)retry
                   success:(void(^)())successBlock
                   failure:(void(^)())failureBlock;
 

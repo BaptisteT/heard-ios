@@ -64,14 +64,19 @@
 }
 
 + (void)requestSmsCode:(NSString *)phoneNumber
-                  success:(void(^)())successBlock
-                  failure:(void(^)())failureBlock
+                 retry:(BOOL)retry
+               success:(void(^)())successBlock
+               failure:(void(^)())failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"sessions.json"];
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     
     [parameters setObject:phoneNumber forKey:@"phone_number"];
+    
+    if (retry) {
+        [parameters setObject:@"dummy" forKey:@"retry"];
+    }
     
     [[ApiUtils sharedClient] POST:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
         if (successBlock) {
