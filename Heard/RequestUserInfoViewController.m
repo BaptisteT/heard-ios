@@ -14,12 +14,13 @@
 #import "ApiUtils.h"
 #import "TrackingUtils.h"
 #import "DashboardViewController.h"
+#import "Constants.h"
 
 #define BORDER_SIZE 0.5
 #define ACTION_SHEET_OPTION_1 @"Camera"
 #define ACTION_SHEET_OPTION_2 @"Library"
 #define ACTION_SHEET_CANCEL @"Cancel"
-#define PROFILE_PICTURE_SIZE 200
+
 
 @interface RequestUserInfoViewController ()
 
@@ -115,7 +116,7 @@
     SuccessBlock successBlock = ^(NSString *authToken, Contact *contact) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         [SessionUtils securelySaveCurrentUserToken:authToken];
-        [SessionUtils saveUserInfo:contact.identifier phoneNumber:self.phoneNumber];
+        [SessionUtils saveUserInfo:contact];
         
         [TrackingUtils identifyWithMixpanel:contact signup:YES];
         
@@ -188,7 +189,7 @@
 {
     UIImage *image =  [info objectForKey:UIImagePickerControllerOriginalImage];
     
-    CGSize rescaleSize = {PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE};
+    CGSize rescaleSize = {kProfilePictureSize, kProfilePictureSize};
     
     if (image) {
         self.profilePictureImageView.image = [ImageUtils imageWithImage:[ImageUtils cropBiggestCenteredSquareImageFromImage:image withSide:image.size.width] scaledToSize:rescaleSize];

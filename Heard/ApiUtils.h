@@ -37,6 +37,9 @@
             failure:(void (^)())failureBlock;
 
 + (void)updatePushToken:(NSString *)token success:(void(^)())successBlock failure:(void(^)())failureBlock;
++ (void)updateProfilePicture:(NSString *)picture success:(void(^)())successBlock failure:(void(^)())failureBlock;
++ (void)updateFirstName:(NSString *)firstName success:(void(^)())successBlock failure:(void(^)())failureBlock;
++ (void)updateLastName:(NSString *)lastName success:(void(^)())successBlock failure:(void(^)())failureBlock;
 
 + (void)getUnreadMessagesAndExecuteSuccess:(void(^)(NSArray *messages, BOOL newContactOnServer))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock;
 
@@ -53,5 +56,7 @@
 + (void)sendCrashData:(NSString *)data andExecuteSuccess:(void(^)())successBlock failure:(void(^)())failureBlock;
 
 + (void)checkAppVersionAndExecuteSucess:(void(^)(NSDictionary *))successBlock;
+
+
 
 @end

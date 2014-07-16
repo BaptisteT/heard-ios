@@ -33,6 +33,11 @@
 #define ACTION_SHEET_2_OPTION_3 @"Feedback"
 #define ACTION_SHEET_PENDING_OPTION_1 @"Add contact"
 #define ACTION_SHEET_PENDING_OPTION_2 @"Block user"
+#define ACTION_SHEET_PROFILE_OPTION_1 @"Picture"
+#define ACTION_SHEET_PROFILE_OPTION_2 @"First Name"
+#define ACTION_SHEET_PROFILE_OPTION_3 @"Last Name"
+#define ACTION_SHEET_PICTURE_OPTION_1 @"Camera"
+#define ACTION_SHEET_PICTURE_OPTION_2 @"Library"
 #define ACTION_SHEET_CANCEL @"Cancel"
 
 #define RECORDER_LINE_HEIGHT 0.4
@@ -85,7 +90,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *replayButton;
 @property (strong, nonatomic) NSDate* lastRecordSoundDate;
 @property (nonatomic) BOOL silentMode;
-
+@property (strong, nonatomic) UIImagePickerController *imagePickerController;
 
 @end
 
@@ -465,7 +470,7 @@
 }
 
 // Address book changes callback
-void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressbook,CFDictionaryRef info,void *context)
+void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbook,CFDictionaryRef info,void *context)
 {
     ((__bridge DashboardViewController *)context).retrieveNewContact = YES;
 }
@@ -768,7 +773,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                        delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:ACTION_SHEET_1_OPTION_1, ACTION_SHEET_1_OPTION_2, ACTION_SHEET_1_OPTION_3, nil];
+                                              otherButtonTitles:ACTION_SHEET_1_OPTION_2, ACTION_SHEET_1_OPTION_1, ACTION_SHEET_1_OPTION_3, nil];
     
     [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
@@ -1189,7 +1194,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         
     // New Contact
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_2]) {
-        // todo
+        [self presentAddContactController];
     }
     
     // Other
@@ -1202,8 +1207,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
     
+    // Profile
     else if ([buttonTitle isEqualToString:ACTION_SHEET_2_OPTION_1]) {
-        // todo BT
+        self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                           delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
+                                             destructiveButtonTitle:nil
+                                                  otherButtonTitles:ACTION_SHEET_PROFILE_OPTION_1, ACTION_SHEET_PROFILE_OPTION_2, ACTION_SHEET_PROFILE_OPTION_3, nil];
+        
+        [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
     
     // Share
@@ -1232,29 +1243,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
     }
+    
     // Add contact
-    //BB: Add contact a contact not in address book: should be merged with add contact
     else if ([buttonTitle isEqualToString:ACTION_SHEET_PENDING_OPTION_1]) {
-        // create person record
-        ABRecordRef person = ABPersonCreate();
-        
-        // Fill contact info if any
-        if (self.contactToAdd) {
-            ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFStringRef) self.contactToAdd.firstName, NULL);
-            ABRecordSetValue(person, kABPersonLastNameProperty, (__bridge CFStringRef) self.contactToAdd.lastName, NULL);
-            ABMutableMultiValueRef phoneNumbers = ABMultiValueCreateMutable(kABMultiStringPropertyType);
-            ABMultiValueAddValueAndLabel(phoneNumbers, (__bridge CFStringRef)self.contactToAdd.phoneNumber, kABPersonPhoneMainLabel, NULL);
-            ABRecordSetValue(person, kABPersonPhoneProperty, phoneNumbers, nil);
-        }
-        
-        // let's show view controller
-        ABNewPersonViewController *controller = [[ABNewPersonViewController alloc] init];
-        controller.displayedPerson = person;
-        controller.newPersonViewDelegate = self;
-        UINavigationController *newNavigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-        [self.navigationController presentViewController:newNavigationController animated:YES completion:nil];
-        CFRelease(person);
+        [self presentAddContactController];
     }
+    
     // Block
     else if ([buttonTitle isEqualToString:ACTION_SHEET_PENDING_OPTION_2]) {
         // block user + delete bubble / contact
@@ -1280,7 +1274,52 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
         };
         [ApiUtils blockUser:self.contactToAdd.identifier AndExecuteSuccess:successBlock failure:nil];
     }
+    
+    // Picture
+    else if ([buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_1]) {
+        self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                           delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
+                                             destructiveButtonTitle:nil
+                                                  otherButtonTitles:ACTION_SHEET_PICTURE_OPTION_1, ACTION_SHEET_PICTURE_OPTION_2, nil];
+        
+        [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+    }
+    
+    // Camera
+    else if ([buttonTitle isEqualToString:ACTION_SHEET_PICTURE_OPTION_1]) {
+        [self showImagePickerForSourceType:UIImagePickerControllerSourceTypeCamera];
+    }
+    
+    // Library
+    else if ([buttonTitle isEqualToString:ACTION_SHEET_PICTURE_OPTION_2]) {
+        [self showImagePickerForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+    }
+    
+    // First Name
+    else if ([buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] || [buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_3]) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:buttonTitle message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        UITextField *textField = [alert textFieldAtIndex:0];
+        textField.textAlignment = NSTextAlignmentCenter;
+        textField.text = [buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] ? [SessionUtils getCurrentUserFirstName] : [SessionUtils getCurrentUserLastName];
+        [textField becomeFirstResponder];
+        [alert addSubview:textField];
+        [alert show];
+    }
 }
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    UITextField *textField = [alertView textFieldAtIndex:0];
+    if (buttonIndex == 0) // cancel
+        return;
+    if ([textField.text length] <= 0) {
+        [GeneralUtils showMessage:[alertView.title stringByAppendingString:@" must between 1 and 20 characters."] withTitle:nil];
+    }
+    if (buttonIndex == 1) {
+        [alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] ? [ApiUtils updateFirstName:textField.text success:nil failure:nil] : [ApiUtils updateLastName:textField.text success:nil failure:nil];
+    }
+}
+
 
 // ----------------------------------------------------------
 #pragma mark MFMessageComposeViewControllerDelegate
@@ -1381,6 +1420,30 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)presentAddContactController
+{
+    // create person record
+    ABRecordRef person = ABPersonCreate();
+    
+    // Fill contact info if any (= pending case)
+    if (self.contactToAdd) {
+        ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFStringRef) self.contactToAdd.firstName, NULL);
+        ABRecordSetValue(person, kABPersonLastNameProperty, (__bridge CFStringRef) self.contactToAdd.lastName, NULL);
+        ABMutableMultiValueRef phoneNumbers = ABMultiValueCreateMutable(kABMultiStringPropertyType);
+        ABMultiValueAddValueAndLabel(phoneNumbers, (__bridge CFStringRef)self.contactToAdd.phoneNumber, kABPersonPhoneMainLabel, NULL);
+        ABRecordSetValue(person, kABPersonPhoneProperty, phoneNumbers, nil);
+    }
+    
+    // let's show view controller
+    ABNewPersonViewController *controller = [[ABNewPersonViewController alloc] init];
+    controller.displayedPerson = person;
+    controller.newPersonViewDelegate = self;
+    UINavigationController *newNavigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    [self.navigationController presentViewController:newNavigationController animated:YES completion:nil];
+    CFRelease(person);
+}
+
+
 // ----------------------------------------------------------
 #pragma mark OutPut Port
 // ----------------------------------------------------------
@@ -1424,7 +1487,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef ntificationaddressboo
     audioPlot.shouldFill      = YES;
     audioPlot.shouldMirror    = YES;
     [audioPlot setRollingHistoryLength:1290]; // todo BT make this precise & robust
-    audioPlot.gain = 12;
+    audioPlot.gain = 10;
     return audioPlot;
 }
 
@@ -1459,6 +1522,46 @@ void soundMuteNotificationCompletionProc(SystemSoundID  ssID,void* clientData){
     }
 }
 
+
+// --------------------------
+// Profile picture change
+// --------------------------
+
+- (void)showImagePickerForSourceType:(UIImagePickerControllerSourceType)sourceType
+{
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    imagePickerController.sourceType = sourceType;
+    imagePickerController.delegate = self;
+    if (sourceType == UIImagePickerControllerSourceTypeCamera) {
+        imagePickerController.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+    }
+    self.imagePickerController = imagePickerController;
+    [self presentViewController:self.imagePickerController animated:YES completion:nil];
+}
+
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image =  [info objectForKey:UIImagePickerControllerOriginalImage];
+    
+    CGSize rescaleSize = {kProfilePictureSize, kProfilePictureSize};
+    
+    if (image) {
+        NSString *encodedImage = [ImageUtils encodeToBase64String:[ImageUtils imageWithImage:[ImageUtils cropBiggestCenteredSquareImageFromImage:image withSide:image.size.width] scaledToSize:rescaleSize]];
+        
+        [ApiUtils updateProfilePicture:encodedImage success:nil failure:nil];
+    } else {
+        NSLog(@"Failed to get image");
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
 
 
 @end

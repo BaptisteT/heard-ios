@@ -12,6 +12,8 @@
 #define USER_AUTH_TOKEN_PREF @"User authentication token preference"
 #define USER_ID_PREF @"User id preference"
 #define USER_PHONE_NUMBER_PREF @"User phone number preference"
+#define USER_FIRST_NAME_PREF @"User first name preference"
+#define USER_LAST_NAME_PREF @"User last name preference"
 
 @implementation SessionUtils
 
@@ -33,12 +35,14 @@
     return [prefs objectForKey:USER_AUTH_TOKEN_PREF];
 }
 
-+ (void)saveUserInfo:(NSInteger)userId phoneNumber:(NSString *)phoneNumber
++ (void)saveUserInfo:(Contact *)contact
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    [prefs setObject:[NSNumber numberWithLong:userId] forKey:USER_ID_PREF];
-    [prefs setObject:phoneNumber forKey:USER_PHONE_NUMBER_PREF];
+    [prefs setObject:[NSNumber numberWithLong:contact.identifier] forKey:USER_ID_PREF];
+    [prefs setObject:contact.phoneNumber forKey:USER_PHONE_NUMBER_PREF];
+    [prefs setObject:contact.firstName forKey:USER_FIRST_NAME_PREF];
+    [prefs setObject:contact.lastName forKey:USER_LAST_NAME_PREF];
     
     [prefs synchronize];
 }
@@ -57,6 +61,22 @@
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     return [prefs objectForKey:USER_PHONE_NUMBER_PREF];
+}
+
+// Get user first name
++ (NSString *)getCurrentUserFirstName
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    return [prefs objectForKey:USER_FIRST_NAME_PREF];
+}
+
+// Get user last name
++ (NSString *)getCurrentUserLastName
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    return [prefs objectForKey:USER_LAST_NAME_PREF];
 }
 
 // Check User and token are stored in the phone

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Contact.h"
 
 @interface SessionUtils : NSObject
 
@@ -14,11 +15,15 @@
 
 + (NSString *)getCurrentUserToken;
 
-+ (void)saveUserInfo:(NSInteger)userId phoneNumber:(NSString *)phoneNumber;
++ (void)saveUserInfo:(Contact *)contact;
 
 + (NSInteger)getCurrentUserId;
 
 + (NSString *)getCurrentUserPhoneNumber;
+
++ (NSString *)getCurrentUserFirstName;
+
++ (NSString *)getCurrentUserLastName;
 
 + (BOOL)isSignedIn;
 

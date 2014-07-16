@@ -69,6 +69,14 @@
     }];
     
     if ([SessionUtils isSignedIn]) {
+        // For backward compatibilty
+        // To do bt remove for prod
+        if (![SessionUtils getCurrentUserFirstName]) {
+            [ApiUtils getNewContactInfo:[SessionUtils getCurrentUserId] AndExecuteSuccess:^(Contact *contact) {
+                [SessionUtils saveUserInfo:contact];
+            } failure:nil];
+        }
+        
         WelcomeViewController* welcomeViewController = (WelcomeViewController *)  self.window.rootViewController.childViewControllers[0];
         [welcomeViewController performSegueWithIdentifier:@"Dashboard Push Segue From Welcome" sender:nil];
         

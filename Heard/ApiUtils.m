@@ -381,4 +381,77 @@
     }];
 }
 
+// Update profile picture
++ (void)updateProfilePicture:(NSString *)picture success:(void(^)())successBlock failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/update_profile_picture.json"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setObject:picture forKey:@"profile_picture"];
+    
+    [self enrichParametersWithToken:parameters];
+    
+    [[ApiUtils sharedClient] PATCH:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        if (successBlock) {
+            successBlock();
+        }
+    }failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"ERROR: %@, %@", task.description, error);
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
+// Update first name
++ (void)updateFirstName:(NSString *)firstName success:(void(^)())successBlock failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/update_first_name.json"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setObject:firstName forKey:@"first_name"];
+    
+    [self enrichParametersWithToken:parameters];
+    
+    [[ApiUtils sharedClient] PATCH:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        NSDictionary *result = [JSON valueForKeyPath:@"result"];
+        Contact *contact = [Contact rawContactToInstance:[result objectForKey:@"user"]];
+        [SessionUtils saveUserInfo:contact];
+        if (successBlock) {
+            successBlock();
+        }
+    }failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"ERROR: %@, %@", task.description, error);
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
+// Update Last Name
++ (void)updateLastName:(NSString *)lastName success:(void(^)())successBlock failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/update_last_name.json"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setObject:lastName forKey:@"last_name"];
+    
+    [self enrichParametersWithToken:parameters];
+    
+    [[ApiUtils sharedClient] PATCH:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        NSDictionary *result = [JSON valueForKeyPath:@"result"];
+        Contact *contact = [Contact rawContactToInstance:[result objectForKey:@"user"]];
+        [SessionUtils saveUserInfo:contact];
+        if (successBlock) {
+            successBlock();
+        }
+    }failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"ERROR: %@, %@", task.description, error);
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
+
 @end
