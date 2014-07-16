@@ -79,7 +79,12 @@
 // ----------------------
 
 - (IBAction)backButtonPressed:(id)sender {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    
+    [[[UIAlertView alloc] initWithTitle:nil
+                                message:@"Are you sure you want to go back to phone verification?"
+                               delegate:self
+                      cancelButtonTitle:@"Cancel"
+                      otherButtonTitles:@"Confirm", nil] show];
 }
 
 - (IBAction)nextButtonPressed:(id)sender {
@@ -205,6 +210,12 @@
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
     [self.firstNameTextField becomeFirstResponder];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1)  {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
 }
 
 @end
