@@ -19,12 +19,14 @@
 
 + (void)trackReplay;
 
-+ (void)trackShare;
++ (void)trackShareSuccessful:(BOOL)success;
 
-+ (void)trackAddContact;
++ (void)trackAddContactSuccessful:(BOOL)success;
 
 + (void)trackOpenApp;
 
 + (void)trackNumberOfContacts:(NSInteger)nbrOfContacts;
+
++ (void)trackInviteContacts:(NSInteger)nbrOfInvites successful:(BOOL)success;
 
 @end

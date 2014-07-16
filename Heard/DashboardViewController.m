@@ -1189,7 +1189,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbo
     if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_1]) {
         [self performSegueWithIdentifier:@"Invite Contacts Segue" sender:nil];
         
-    // New Contact
+    // Add New Contact
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_2]) {
         [self presentAddContactController];
     }
@@ -1227,9 +1227,15 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbo
         activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         activityViewController.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeAssignToContact, UIActivityTypeAddToReadingList, UIActivityTypeAirDrop, UIActivityTypeSaveToCameraRoll, UIActivityTypeCopyToPasteboard];
         
-        [self presentViewController:activityViewController animated:YES completion:nil];
+        [activityViewController setCompletionHandler:^(NSString *activityType, BOOL completed) {
+            if (completed) {
+                [TrackingUtils trackShareSuccessful:YES];
+            } else {
+                [TrackingUtils trackShareSuccessful:NO];
+            }
+        }];
         
-        [TrackingUtils trackShare];
+        [self presentViewController:activityViewController animated:YES completion:nil];
     }
     
     //Send feedback
@@ -1246,7 +1252,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbo
         [self presentAddContactController];
     }
     
-    // Block
+    // Block contact
     else if ([buttonTitle isEqualToString:ACTION_SHEET_PENDING_OPTION_2]) {
         // block user + delete bubble / contact
         void(^successBlock)() = ^void() {

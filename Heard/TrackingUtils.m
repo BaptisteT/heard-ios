@@ -60,22 +60,34 @@
     [mixpanel.people increment:@"Replays" by:[NSNumber numberWithInt:1]];
 }
 
-+ (void)trackShare
++ (void)trackShareSuccessful:(BOOL)success
 {
     if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    [mixpanel.people increment:@"Share" by:[NSNumber numberWithInt:1]];
+    if (success) {
+        [mixpanel track:@"Share" properties:@{@"Success": @"True"}];
+        
+        [mixpanel.people increment:@"Share" by:[NSNumber numberWithInt:1]];
+    } else {
+        [mixpanel track:@"Share" properties:@{@"Success": @"False"}];
+    }
 }
 
-+ (void)trackAddContact
++ (void)trackAddContactSuccessful:(BOOL)success
 {
     if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    [mixpanel.people increment:@"Add contact" by:[NSNumber numberWithInt:1]];
+    if (success) {
+        [mixpanel.people increment:@"Add contact" by:[NSNumber numberWithInt:1]];
+        
+        [mixpanel track:@"Add contact" properties:@{@"Success": @"True"}];
+    } else {
+        [mixpanel track:@"Add contact" properties:@{@"Success": @"False"}];
+    }
 }
 
 + (void)trackOpenApp
@@ -96,6 +108,23 @@
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
     [mixpanel.people set:@{@"Contacts": [NSNumber numberWithInt:nbrOfContacts]}];
+}
+
++ (void)trackInviteContacts:(NSInteger)nbrOfInvites successful:(BOOL)success
+{
+    if (!PRODUCTION || DEBUG)return;
+    
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    
+    if (success) {
+        [mixpanel.people increment:@"Invite contacts" by:[NSNumber numberWithInt:1]];
+        
+        [mixpanel track:@"Invite contacts" properties:@{@"Success": @"True", @"Number": [NSNumber numberWithLong:nbrOfInvites]}];
+        
+        [mixpanel.people increment:@"Invites" by:[NSNumber numberWithInt:nbrOfInvites]];
+    } else {
+        [mixpanel track:@"Invite contacts" properties:@{@"Success": @"False"}];
+    }
 }
 
 @end

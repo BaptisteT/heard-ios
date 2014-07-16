@@ -10,6 +10,7 @@
 #import <AddressBook/AddressBook.h>
 #import "GeneralUtils.h"
 #import "Constants.h"
+#import "TrackingUtils.h"
 
 @interface InviteContactsViewController ()
 
@@ -129,7 +130,11 @@
     [self dismissViewControllerAnimated:YES completion:nil];
     
     if (result == MessageComposeResultSent) {
+        [TrackingUtils trackInviteContacts:[self.selectedContacts count] successful:YES];
+        
         [self.inviteConctactsTVC deselectAll];
+    } else {
+        [TrackingUtils trackInviteContacts:[self.selectedContacts count] successful:NO];
     }
 }
 
