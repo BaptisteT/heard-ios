@@ -7,6 +7,7 @@
 //
 
 #import "ImageUtils.h"
+#import "UIImageView+AFNetworking.h"
 
 @implementation ImageUtils
 
@@ -110,6 +111,14 @@
 
 + (NSString *)encodeToBase64String:(UIImage *)image {
     return [UIImageJPEGRepresentation(image,0.9) base64EncodedStringWithOptions:0];
+}
+
++ (void)setWithoutCachingImageView:(UIImageView *)imageView withURL:(NSURL *)url
+{
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request addValue:@"image/*" forHTTPHeaderField:@"Accept"];
+    request.cachePolicy=NSURLRequestReloadIgnoringCacheData;
+    [imageView setImageWithURLRequest:request placeholderImage:nil success:nil failure:nil];
 }
 
 @end

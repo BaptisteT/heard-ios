@@ -117,7 +117,7 @@
                           
         if (authToken && contact != nil) {
             [SessionUtils securelySaveCurrentUserToken:authToken];
-            [SessionUtils saveUserInfo:contact.identifier phoneNumber:self.phoneNumber];
+            [SessionUtils saveUserInfo:contact];
             
             [TrackingUtils identifyWithMixpanel:contact signup:NO];
             

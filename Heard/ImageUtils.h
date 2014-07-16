@@ -32,4 +32,6 @@
 
 + (UIColor *)transparentWhite;
 
++ (void)setWithoutCachingImageView:(UIImageView *)imageView withURL:(NSURL *)url;
+
 @end
