@@ -51,7 +51,10 @@
     
     self.codeTextField.delegate = self;
     
-    [GeneralUtils addBottomBorder:self.navigationContainer borderSize:BORDER_SIZE];
+    //Weird bug on 3.5 screen screen
+    if ([[UIScreen mainScreen] bounds].size.height>480.0f) {
+        [GeneralUtils addBottomBorder:self.navigationContainer borderSize:BORDER_SIZE];
+    }
     [GeneralUtils addBottomBorder:self.textFieldContainer borderSize:BORDER_SIZE];
 }
 
