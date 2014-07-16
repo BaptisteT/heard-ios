@@ -494,7 +494,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbo
 
 - (void)displayContacts
 {
-    [TrackingUtils trackNumberOfContacts:[self.contactBubbleViews count]];
+    [TrackingUtils trackNumberOfContacts:[self.contacts count]];
     
     //Because of bug when user quits app while playing a message
     [self endPlayerUIAnimated:NO];
