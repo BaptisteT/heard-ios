@@ -9,6 +9,7 @@
 #import "CrashReportUtils.h"
 #import <CrashReporter/CrashReporter.h>
 #import "ApiUtils.h"
+#import "SessionUtils.h"
 
 @implementation CrashReportUtils
 
@@ -186,6 +187,8 @@
         [text appendFormat: @"Parent Process:  %@ [%@]\n", parentProcessName, parentProcessId];
     }
     
+    [text appendString: @"\n"];
+    [text appendFormat: @"User:       %lu\n", [SessionUtils getCurrentUserId]];
     [text appendString: @"\n"];
     
     /* System info */
