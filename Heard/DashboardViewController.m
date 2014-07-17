@@ -58,7 +58,6 @@
 @property (strong, nonatomic) NSMutableArray *contacts;
 @property (strong, nonatomic) NSMutableArray *contactBubbleViews;
 @property (weak, nonatomic) UIScrollView *contactScrollView;
-@property (strong, nonatomic) UIActionSheet *menuActionSheet;
 @property (strong, nonatomic) UIView *recorderContainer;
 @property (strong, nonatomic) UIView *playerContainer;
 @property (nonatomic, strong) UILabel *recorderMessage;
@@ -91,6 +90,7 @@
 @property (strong, nonatomic) NSDate* lastRecordSoundDate;
 @property (nonatomic) BOOL silentMode;
 @property (strong, nonatomic) UIImagePickerController *imagePickerController;
+@property (strong, nonatomic) UIImageView *currentUserProfilePicture;
 
 @end
 
@@ -198,6 +198,14 @@
     self.playerLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.playerWaveView.bounds.size.height/2, 0, RECORDER_LINE_HEIGHT)];
     self.playerLine.backgroundColor = [ImageUtils transparentWhite];
     [self.playerWaveView addSubview:self.playerLine];
+    
+    // Get current user profile picture
+    self.currentUserProfilePicture = [[UIImageView alloc] initWithFrame:CGRectMake(30,1,47,47)];
+    self.currentUserProfilePicture.layer.cornerRadius = self.currentUserProfilePicture.bounds.size.height/2;
+    self.currentUserProfilePicture.clipsToBounds = YES;
+    self.currentUserProfilePicture.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.currentUserProfilePicture.layer.borderWidth = 0.5;
+    [ImageUtils setWithoutCachingImageView:self.currentUserProfilePicture withURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
 }
 
 // Make sure scroll view has been resized (necessary because layout constraints change scroll view size)
@@ -577,8 +585,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbo
     CGFloat screenHeight = screenRect.size.height;
     float rowHeight = kContactMargin + kContactSize + kContactNameHeight;
     self.contactScrollView.contentSize = CGSizeMake(screenWidth, MAX(screenHeight - 20, rows * rowHeight + 3 * kContactMargin));
-    
-//    [self addInviteContactButton];
 }
 
 // Create contact view
@@ -641,27 +647,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbo
             [contactView setPendingContact:YES];
         }
     }
-}
-
-- (void)addInviteContactButton
-{
-    NSUInteger buttonHeight = 50;
-    
-    if (self.inviteContactButton) {
-        [self.inviteContactButton removeFromSuperview];
-        self.inviteContactButton = nil;
-    }
-    
-    self.inviteContactButton = [[UIButton alloc] initWithFrame:CGRectMake(0, self.contactScrollView.contentSize.height - INVITE_CONTACT_BUTTON_HEIGHT, self.contactScrollView.contentSize.width, buttonHeight)];
-    [self.inviteContactButton setTitle:@"Invite new contacts" forState:UIControlStateNormal];
-    [self.inviteContactButton setTitle:@"Invite new contacts" forState:UIControlStateSelected];
-    self.inviteContactButton.titleLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:17.0];
-    self.inviteContactButton.titleLabel.textAlignment = NSTextAlignmentCenter;
-    self.inviteContactButton.titleLabel.textColor = [ImageUtils blue];
-    
-    [self.inviteContactButton addTarget:self action:@selector(inviteContacts) forControlEvents:UIControlEventTouchUpInside];
-    
-    [self.contactScrollView addSubview:self.inviteContactButton];
 }
 
 // ----------------------------------
@@ -770,12 +755,21 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbo
 #pragma mark Click & navigate
 // ------------------------------
 - (IBAction)menuButtonClicked:(id)sender {
-    self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:[SessionUtils getCurrentUserFirstName]
                                                        delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                          destructiveButtonTitle:nil
                                               otherButtonTitles:ACTION_SHEET_1_OPTION_2, ACTION_SHEET_1_OPTION_1, ACTION_SHEET_1_OPTION_3, nil];
     
-    [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+    for (UIView *_currentView in actionSheet.subviews) {
+        if ([_currentView isKindOfClass:[UILabel class]]) {
+            CGRect frame = ((UILabel *)_currentView).frame;
+            [(UILabel *)_currentView setFont:[UIFont fontWithName:@"Avenir-Heavy" size:17.f]];
+            ((UILabel *)_currentView).frame = CGRectMake(frame.origin.x, 0, frame.size.width, 70);
+            [(UILabel *)_currentView.superview addSubview:self.currentUserProfilePicture];
+        }
+    }
+    [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
 
@@ -1220,22 +1214,22 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbo
     
     // Other
     else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_3]) {
-        self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                            delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                              destructiveButtonTitle:nil
                                                   otherButtonTitles:ACTION_SHEET_2_OPTION_1, ACTION_SHEET_2_OPTION_2, ACTION_SHEET_2_OPTION_3, nil];
         
-        [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+        [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
     
     // Profile
     else if ([buttonTitle isEqualToString:ACTION_SHEET_2_OPTION_1]) {
-        self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                            delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                              destructiveButtonTitle:nil
                                                   otherButtonTitles:ACTION_SHEET_PROFILE_OPTION_1, ACTION_SHEET_PROFILE_OPTION_2, ACTION_SHEET_PROFILE_OPTION_3, nil];
         
-        [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+        [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
     
     // Share
@@ -1304,12 +1298,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbo
     
     // Picture
     else if ([buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_1]) {
-        self.menuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                            delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                              destructiveButtonTitle:nil
                                                   otherButtonTitles:ACTION_SHEET_PICTURE_OPTION_1, ACTION_SHEET_PICTURE_OPTION_2, nil];
         
-        [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+        [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
     
     // Camera
@@ -1346,6 +1340,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbo
         [alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] ? [ApiUtils updateFirstName:textField.text success:nil failure:nil] : [ApiUtils updateLastName:textField.text success:nil failure:nil];
     }
 }
+
 
 // ----------------------------------------------------------
 #pragma mark OutPut Port
@@ -1448,11 +1443,12 @@ void soundMuteNotificationCompletionProc(SystemSoundID  ssID,void* clientData){
 {
     UIImage *image =  [info objectForKey:UIImagePickerControllerOriginalImage];
     
-    CGSize rescaleSize = {kProfilePictureSize, kProfilePictureSize};
-    
     if (image) {
-        NSString *encodedImage = [ImageUtils encodeToBase64String:[ImageUtils imageWithImage:[ImageUtils cropBiggestCenteredSquareImageFromImage:image withSide:image.size.width] scaledToSize:rescaleSize]];
+        CGSize rescaleSize = {kProfilePictureSize, kProfilePictureSize};
+        image = [ImageUtils imageWithImage:[ImageUtils cropBiggestCenteredSquareImageFromImage:image withSide:image.size.width] scaledToSize:rescaleSize];
+        [self.currentUserProfilePicture setImage:image];
         
+        NSString *encodedImage = [ImageUtils encodeToBase64String:image];
         [ApiUtils updateProfilePicture:encodedImage success:nil failure:nil];
     } else {
         NSLog(@"Failed to get image");

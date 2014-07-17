@@ -188,7 +188,7 @@
     }
     
     [text appendString: @"\n"];
-    [text appendFormat: @"User:       %lu\n", [SessionUtils getCurrentUserId]];
+    [text appendFormat: @"User:       %lu %@\n", [SessionUtils getCurrentUserId], [SessionUtils getCurrentUserFirstName]];
     [text appendString: @"\n"];
     
     /* System info */
