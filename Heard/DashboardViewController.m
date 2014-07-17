@@ -358,7 +358,7 @@
                     // We need unformatted numbers for the keys
                     [self.addressBookFormattedContacts setObject:contact forKey:phoneNumber];
                 }
-                
+
                 //Store country codes found in international numbers
                 if (nbPhoneNumber.countryCode != defaultCountryCode) {
                     if (![countryCodes objectForKey:nbPhoneNumber.countryCode]) {
@@ -388,7 +388,7 @@
         ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
         for (CFIndex k = 0; k < ABMultiValueGetCount(phoneNumbers); k++) {
             NSString* phoneNumber = (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, k);
-            
+
             if (![self.addressBookFormattedContacts objectForKey:phoneNumber]) {
                 NSError *aError = nil;
                 
@@ -448,6 +448,7 @@
                 [self displayAdditionnalContact:contact];
             } else if (existingContact.isPending) {
                 // Mark as non pending
+                existingContact.isPending = NO;
                 
                 //Use server name if blank in address book
                 NSString *firstName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
@@ -455,11 +456,8 @@
                 if (firstName && [firstName length] > 0) {
                     contact.firstName = firstName;
                 }
-                
                 contact.lastName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
-                
                 existingContact.phoneNumber = contact.phoneNumber;
-                existingContact.isPending = NO;
             }
         }
         self.addressBookFormattedContacts = nil;
@@ -478,9 +476,12 @@
 }
 
 // Address book changes callback
-void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbook,CFDictionaryRef info,void *context)
+void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBook,CFDictionaryRef info,void *context)
 {
-    ((__bridge DashboardViewController *)context).retrieveNewContact = YES;
+    DashboardViewController * dashboardController = (__bridge DashboardViewController *)context;
+    dashboardController.retrieveNewContact = YES;
+    dashboardController.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
+    ABAddressBookRegisterExternalChangeCallback(dashboardController.addressBook, MyAddressBookExternalChangeCallback, (__bridge void *)(dashboardController));
 }
 
 // ----------------------------------
@@ -1387,7 +1388,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbo
     audioPlot.shouldFill      = YES;
     audioPlot.shouldMirror    = YES;
     [audioPlot setRollingHistoryLength:1290]; // todo BT make this precise & robust
-    audioPlot.gain = 10;
+    audioPlot.gain = 8;
     return audioPlot;
 }
 
