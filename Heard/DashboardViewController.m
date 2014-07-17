@@ -760,16 +760,18 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbo
                                                        delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                          destructiveButtonTitle:nil
                                               otherButtonTitles:ACTION_SHEET_1_OPTION_2, ACTION_SHEET_1_OPTION_1, ACTION_SHEET_1_OPTION_3, nil];
-    
+    [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
+}
+
+- (void)willPresentActionSheet:(UIActionSheet *)actionSheet {
     for (UIView *_currentView in actionSheet.subviews) {
         if ([_currentView isKindOfClass:[UILabel class]]) {
             CGRect frame = ((UILabel *)_currentView).frame;
-            [(UILabel *)_currentView setFont:[UIFont fontWithName:@"Avenir-Heavy" size:17.f]];
-            ((UILabel *)_currentView).frame = CGRectMake(frame.origin.x, 0, frame.size.width, 70);
+            [(UILabel *)_currentView setFont:[UIFont fontWithName:@"Avenir-Heavy" size:18.f]];
+            ((UILabel *)_currentView).frame = CGRectMake(frame.origin.x, 0, frame.size.width, 80);
             [(UILabel *)_currentView.superview addSubview:self.currentUserProfilePicture];
         }
     }
-    [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
 
