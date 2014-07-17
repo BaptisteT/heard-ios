@@ -129,7 +129,7 @@
             ((firstName && [firstName length] > 0) || (lastName && [lastName length] > 0))) {
             
             NSMutableArray *contact = [[NSMutableArray alloc] initWithObjects:lastName ? lastName : firstName,
-                                       firstName ? firstName : @"",
+                                       firstName && lastName ? firstName : @"",
                                        (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, 0),
                                        @"not selected", nil];
             

@@ -1141,6 +1141,30 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbo
 // ----------------------------------------------------------
 #pragma mark ABNewPersonViewControllerDelegate
 // ----------------------------------------------------------
+
+- (void)presentAddContactController
+{
+    // create person record
+    ABRecordRef person = ABPersonCreate();
+    
+    // Fill contact info if any (= pending case)
+    if (self.contactToAdd) {
+        ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFStringRef) self.contactToAdd.firstName, NULL);
+        ABRecordSetValue(person, kABPersonLastNameProperty, (__bridge CFStringRef) self.contactToAdd.lastName, NULL);
+        ABMutableMultiValueRef phoneNumbers = ABMultiValueCreateMutable(kABMultiStringPropertyType);
+        ABMultiValueAddValueAndLabel(phoneNumbers, (__bridge CFStringRef)self.contactToAdd.phoneNumber, kABPersonPhoneMainLabel, NULL);
+        ABRecordSetValue(person, kABPersonPhoneProperty, phoneNumbers, nil);
+    }
+    
+    // let's show view controller
+    ABNewPersonViewController *controller = [[ABNewPersonViewController alloc] init];
+    controller.displayedPerson = person;
+    controller.newPersonViewDelegate = self;
+    UINavigationController *newNavigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+    [self.navigationController presentViewController:newNavigationController animated:YES completion:nil];
+    CFRelease(person);
+}
+
 - (void)newPersonViewController:(ABNewPersonViewController *)newPersonViewController didCompleteWithNewPerson:(ABRecordRef)person
 {
     if (!person) { // cancel clicked
@@ -1322,130 +1346,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationaddressbo
         [alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] ? [ApiUtils updateFirstName:textField.text success:nil failure:nil] : [ApiUtils updateLastName:textField.text success:nil failure:nil];
     }
 }
-
-
-// ----------------------------------------------------------
-#pragma mark MFMessageComposeViewControllerDelegate
-// ----------------------------------------------------------
-
-- (void)inviteContacts
-{
-    MFMessageComposeViewController *picker = [[MFMessageComposeViewController alloc] init];
-    picker.messageComposeDelegate = self;
-    picker.body = @"Join Waved to chat with me! Download at http://www.waved.io.";
-    
-    [self presentViewController:picker animated:YES completion:nil];
-}
-
-- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-
-
-// ----------------------------------------------------------
-#pragma mark ABPeoplePickerNavigationControllerDelegate
-// ----------------------------------------------------------
-- (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person
-{
-    [self dismissViewControllerAnimated:YES completion:^{
-        //Check if phone is a contact and phone validity
-        
-        NSString *firstName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
-        NSString *lastName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
-        firstName = firstName ? firstName : @"";
-        lastName = lastName ? lastName : @"";
-        
-        if (!firstName && !lastName) {
-            [GeneralUtils showMessage:@"Contact should have a first name or a last name." withTitle:nil];
-            return;
-        }
-        
-        NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
-        NSMutableArray *selectedContactFormattedPhoneNumbers = [[NSMutableArray alloc] init];
-        NSMutableArray *selectedContactPhoneNumbers = [[NSMutableArray alloc] init];
-        
-        ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
-        for (CFIndex j = 0; j < ABMultiValueGetCount(phoneNumbers); j++) {
-            NSString* phoneNumber = (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, j);
-            
-            [selectedContactPhoneNumbers addObject:phoneNumber];
-            
-            NSError *aError = nil;
-            NBPhoneNumber *nbPhoneNumber = [phoneUtil parseWithPhoneCarrierRegion:phoneNumber error:&aError];
-            
-            if (aError == nil && [phoneUtil isValidNumber:nbPhoneNumber]) {
-                Contact *contact = [Contact createContactWithId:0 phoneNumber:[NSString stringWithFormat:@"+%@%@", nbPhoneNumber.countryCode, nbPhoneNumber.nationalNumber]
-                                                      firstName:firstName
-                                                       lastName:lastName];
-                
-                [selectedContactFormattedPhoneNumbers addObject:contact.phoneNumber];
-            }
-        }
-        
-        //No phone number for selected contact
-        if ([selectedContactPhoneNumbers count] == 0) {
-            [GeneralUtils showMessage:[NSString stringWithFormat:@"We couldn't find any phone number for %@ %@.", firstName, lastName]  withTitle:nil];
-            return;
-        }
-        
-        //Check if not already in Waved contacts
-        for (NSString *phoneNumber in selectedContactFormattedPhoneNumbers) {
-            for (Contact *contact in self.contacts) {
-                if ([contact.phoneNumber isEqualToString:phoneNumber]) {
-                    [GeneralUtils showMessage:[NSString stringWithFormat:@"%@ %@ is already your contact on Waved!", firstName, lastName]  withTitle:nil];
-                    return;
-                }
-            }
-        }
-        
-        //Redirect to sms
-        MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
-        viewController.body = [NSString stringWithFormat:@"Download Waved, the fastest messaging app, at %@", kProdAFHeardWebsite];
-        viewController.recipients = selectedContactPhoneNumbers;
-        viewController.messageComposeDelegate = self;
-        
-        
-        [self presentViewController:viewController animated:YES completion:nil];
-    }];
-    
-	return NO;
-}
-
-- (BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person property:(ABPropertyID)property identifier:(ABMultiValueIdentifier)identifier
-{
-    return NO;
-}
-
-- (void)peoplePickerNavigationControllerDidCancel:(ABPeoplePickerNavigationController *)peoplePicker;
-{
-	[self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)presentAddContactController
-{
-    // create person record
-    ABRecordRef person = ABPersonCreate();
-    
-    // Fill contact info if any (= pending case)
-    if (self.contactToAdd) {
-        ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFStringRef) self.contactToAdd.firstName, NULL);
-        ABRecordSetValue(person, kABPersonLastNameProperty, (__bridge CFStringRef) self.contactToAdd.lastName, NULL);
-        ABMutableMultiValueRef phoneNumbers = ABMultiValueCreateMutable(kABMultiStringPropertyType);
-        ABMultiValueAddValueAndLabel(phoneNumbers, (__bridge CFStringRef)self.contactToAdd.phoneNumber, kABPersonPhoneMainLabel, NULL);
-        ABRecordSetValue(person, kABPersonPhoneProperty, phoneNumbers, nil);
-    }
-    
-    // let's show view controller
-    ABNewPersonViewController *controller = [[ABNewPersonViewController alloc] init];
-    controller.displayedPerson = person;
-    controller.newPersonViewDelegate = self;
-    UINavigationController *newNavigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-    [self.navigationController presentViewController:newNavigationController animated:YES completion:nil];
-    CFRelease(person);
-}
-
 
 // ----------------------------------------------------------
 #pragma mark OutPut Port
