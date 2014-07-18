@@ -35,7 +35,7 @@
 #define verticalMaximumOverdraw 1
 #define verticalTargetOverdraw 1
 
-#define usedSamplesFreq 10 // we don't use every samples
+#define usedSamplesFreq 5 // we don't use every samples
 
 
 @interface FDWaveformView() <UIGestureRecognizerDelegate>
