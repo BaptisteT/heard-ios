@@ -12,6 +12,7 @@
 #import "ApiUtils.h"
 #import "MBProgressHUD.h"
 #import "RMPhoneFormat.h"
+#import "AddressbookUtils.h"
 
 #define BORDER_SIZE 0.5
 #define DEFAULT_COUNTRY @"USA"
@@ -25,7 +26,7 @@
 @property (weak, nonatomic) IBOutlet UIView *textFieldContainer;
 @property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
 @property (weak, nonatomic) IBOutlet UIButton *countryCodeButton;
-@property (nonatomic, strong) NSString *rawPhoneNumber;
+@property (nonatomic, strong) NSString *decimalPhoneNumber;
 @property (nonatomic, strong) RMPhoneFormat *phoneFormat;
 @property (weak, nonatomic) IBOutlet UILabel *countryNameLabel;
 @property (weak, nonatomic) IBOutlet UITextView *tutoLabel;
@@ -40,9 +41,9 @@
 {
     [super viewDidLoad];
     
-    self.rawPhoneNumber = @"";
+    self.decimalPhoneNumber = @"";
     
-    [self updateCountryName:DEFAULT_COUNTRY code:[NSNumber numberWithInt:DEFAULT_COUNTRY_CODE] letterCode:DEFAULT_COUNTRY_LETTER_CODE];
+    [self setInitialCountryInfo];
     
     self.phoneTextField.delegate = self;
     
@@ -58,6 +59,23 @@
     [self.tutoLabel sizeToFit];
 }
 
+- (void)setInitialCountryInfo
+{
+    NSDictionary *letterCodeToCountryNameAndCallingCode = [AddressbookUtils getCountriesAndCallingCodesForLetterCodes];
+    
+    //Warning: need to convert to lower case to work with our file PhoneCountries.txt
+    NSString *localLetterCode = [[[NSLocale currentLocale] objectForKey: NSLocaleCountryCode] lowercaseString];
+    
+    NSString *localCountry = [letterCodeToCountryNameAndCallingCode objectForKey:localLetterCode][0];
+    NSNumber *localCallingCode = [letterCodeToCountryNameAndCallingCode objectForKey:localLetterCode][1];
+    
+    if (localLetterCode && localCountry && localCallingCode) {
+        [self updateCountryName:localCountry code:localCallingCode letterCode:localLetterCode];
+    } else {
+        [self updateCountryName:DEFAULT_COUNTRY code:[NSNumber numberWithInt:DEFAULT_COUNTRY_CODE] letterCode:DEFAULT_COUNTRY_LETTER_CODE];
+    }
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -70,8 +88,8 @@
 }
 
 - (IBAction)nextButtonPressed:(id)sender {
-    if ([self.phoneFormat isPhoneNumberValid:self.rawPhoneNumber]) {
-        NSString *internationalPhoneNumber = [NSString stringWithFormat:@"+%@%@", [self.countryCodeButton.titleLabel.text substringFromIndex:1], self.rawPhoneNumber];
+    if ([self.phoneFormat isPhoneNumberValid:self.decimalPhoneNumber]) {
+        NSString *internationalPhoneNumber = [NSString stringWithFormat:@"+%@%@", [self.countryCodeButton.titleLabel.text substringFromIndex:1], self.decimalPhoneNumber];
         [self sendCodeRequest:internationalPhoneNumber];
     } else {
         [GeneralUtils showMessage:nil withTitle:@"Invalid phone number"];
@@ -129,7 +147,7 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     if (string.length > 0) {
-        self.rawPhoneNumber = [self.rawPhoneNumber stringByAppendingString:string];
+        self.decimalPhoneNumber = [self.decimalPhoneNumber stringByAppendingString:string];
     } else {
         NSString *newString = [[textField.text substringToIndex:range.location] stringByAppendingString:[textField.text substringFromIndex:range.location + range.length]];
         
@@ -141,10 +159,10 @@
             }
         }
         
-        self.rawPhoneNumber = numberString;
+        self.decimalPhoneNumber = numberString;
     }
     
-    textField.text = [self.phoneFormat format:self.rawPhoneNumber];
+    textField.text = [self.phoneFormat format:self.decimalPhoneNumber];
     
     return NO;
 }
@@ -154,7 +172,7 @@
     self.phoneFormat = [[RMPhoneFormat alloc] initWithDefaultCountry:letterCode];
     
     [self.countryCodeButton setTitle:[NSString stringWithFormat:@"+%@", code] forState: UIControlStateNormal];
-    self.phoneTextField.text = [self.phoneFormat format:self.rawPhoneNumber];
+    self.phoneTextField.text = [self.phoneFormat format:self.decimalPhoneNumber];
     
     self.countryNameLabel.text = countryName;
 }

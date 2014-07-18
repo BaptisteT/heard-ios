@@ -22,6 +22,10 @@
 #define ALERT_VIEW_DONE_BUTTON @"Done"
 #define ALERT_VIEW_INVITE_BUTTON @"Invite"
 
+#define DEFAULT_COUNTRY @"USA"
+#define DEFAULT_COUNTRY_CODE 1
+#define DEFAULT_COUNTRY_LETTER_CODE @"us"
+
 @interface AddContactViewController ()
 
 @property (weak, nonatomic) IBOutlet UIView *navigationContainer;
@@ -60,8 +64,24 @@
     
     self.decimalPhoneNumber = @"";
     
-    //TODO Put default country code
-    [self updateCountryName:@"USA" code:[NSNumber numberWithInt:1] letterCode:@"us"];
+    [self setInitialCountryInfo];
+}
+
+- (void)setInitialCountryInfo
+{
+    NSDictionary *letterCodeToCountryNameAndCallingCode = [AddressbookUtils getCountriesAndCallingCodesForLetterCodes];
+    
+    //Warning: need to convert to lower case to work with our file PhoneCountries.txt
+    NSString *localLetterCode = [[[NSLocale currentLocale] objectForKey: NSLocaleCountryCode] lowercaseString];
+    
+    NSString *localCountry = [letterCodeToCountryNameAndCallingCode objectForKey:localLetterCode][0];
+    NSNumber *localCallingCode = [letterCodeToCountryNameAndCallingCode objectForKey:localLetterCode][1];
+    
+    if (localLetterCode && localCountry && localCallingCode) {
+        [self updateCountryName:localCountry code:localCallingCode letterCode:localLetterCode];
+    } else {
+        [self updateCountryName:DEFAULT_COUNTRY code:[NSNumber numberWithInt:DEFAULT_COUNTRY_CODE] letterCode:DEFAULT_COUNTRY_LETTER_CODE];
+    }
 }
 
 - (IBAction)nextButtonClicked:(id)sender {    

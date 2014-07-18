@@ -108,13 +108,13 @@
         if (codeRange.location == NSNotFound)
             break;
         
-        int countryCode = [[data substringWithRange:NSMakeRange(currentLocation, codeRange.location - currentLocation)] intValue];
+        int callingCode = [[data substringWithRange:NSMakeRange(currentLocation, codeRange.location - currentLocation)] intValue];
         
         NSRange idRange = [data rangeOfString:delimiter options:0 range:NSMakeRange(codeRange.location + 1, data.length - (codeRange.location + 1))];
         if (idRange.location == NSNotFound)
             break;
         
-        NSString *countryId = [[data substringWithRange:NSMakeRange(codeRange.location + 1, idRange.location - (codeRange.location + 1))] lowercaseString];
+        NSString *letterCode = [[data substringWithRange:NSMakeRange(codeRange.location + 1, idRange.location - (codeRange.location + 1))] lowercaseString];
         
         NSRange nameRange = [data rangeOfString:endOfLine options:0 range:NSMakeRange(idRange.location + 1, data.length - (idRange.location + 1))];
         if (nameRange.location == NSNotFound)
@@ -130,7 +130,7 @@
             [self.indexedCountries setValue:[[NSMutableArray alloc] initWithObjects:countryName, nil] forKey:[countryName substringToIndex:1]];
         }
         
-        [self.countryToCodes setValue:@[[[NSNumber alloc] initWithInt:countryCode], countryId] forKey:countryName];
+        [self.countryToCodes setValue:@[[[NSNumber alloc] initWithInt:callingCode], letterCode] forKey:countryName];
         
         currentLocation = nameRange.location + nameRange.length;
         if (nameRange.length > 1)

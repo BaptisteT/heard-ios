@@ -17,4 +17,6 @@
 
 + (NSString *)getDecimalNumber:(NSString *)formattedNumber;
 
++ (NSMutableDictionary *)getCountriesAndCallingCodesForLetterCodes;
+
 @end
