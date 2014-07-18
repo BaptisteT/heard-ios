@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "CountryCodeViewController.h"
+#import <MessageUI/MessageUI.h>
 
-@interface AddContactViewController : UIViewController <CountryCodeViewControllerDelegate, UITextFieldDelegate>
+@interface AddContactViewController : UIViewController <CountryCodeViewControllerDelegate, UITextFieldDelegate, MFMessageComposeViewControllerDelegate, UIAlertViewDelegate>
 
 @end

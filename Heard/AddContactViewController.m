@@ -13,8 +13,12 @@
 #import "RMPhoneFormat.h"
 #import "ApiUtils.h"
 #import "MBProgressHUD.h"
+#import "Constants.h"
 
+#define INVITE_ADDED_CONTACT_ALERT_TITLE @"Invite recently added contact alert"
 #define BORDER_WIDTH 0.5
+#define ALERT_VIEW_DONE_BUTTON @"Done"
+#define ALERT_VIEW_INVITE_BUTTON @"Invite"
 
 @interface AddContactViewController ()
 
@@ -58,11 +62,7 @@
     [self updateCountryName:@"USA" code:[NSNumber numberWithInt:1] letterCode:@"us"];
 }
 
-- (IBAction)nextButtonClicked:(id)sender {
-    //TODO Validate number and name
-    //TODO Check not already a contact
-    //TODO Explanation + Existing or New
-    
+- (IBAction)nextButtonClicked:(id)sender {    
     NSString *formattedPhoneNumber = [self.countryCodeButton.titleLabel.text stringByAppendingString:self.rawPhoneNumber];
     
     if (![self.phoneFormat isPhoneNumberValid:formattedPhoneNumber]) {
@@ -95,10 +95,11 @@
         //Not on Waved
         } else {
             [[[UIAlertView alloc] initWithTitle:nil
-                                        message:[NSString stringWithFormat:@"%@ is not yet on Waved!", contactName]
+                                        message:[NSString stringWithFormat:@"Successfully added! But %@ is not yet on Waved and will not be visible in your contacts. You should invite %@!", contactName, contactName]
                                        delegate:self
                               cancelButtonTitle:nil
-                              otherButtonTitles:@"Done", @"Invite", nil] show];
+                              otherButtonTitles:ALERT_VIEW_DONE_BUTTON, ALERT_VIEW_INVITE_BUTTON, nil] show];
+
         }
     } failure:^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -229,6 +230,7 @@
     
     //Create contact if no match
     if (!match) {
+        ABAddressBookRef addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
         ABRecordRef person = ABPersonCreate();
         CFErrorRef error = NULL;
         
@@ -250,6 +252,35 @@
         ABAddressBookSave(addressBook, &error);
         CFRelease(person);
     }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:ALERT_VIEW_INVITE_BUTTON]) {
+        //Redirect to sms
+        MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
+        viewController.body = [NSString stringWithFormat:@"Hey %@, let's start chating on Waved! Download at %@", self.firstNameField.text ? self.firstNameField.text : self.lastNameField.text, kProdAFHeardWebsite];
+        viewController.recipients = @[[self.countryCodeButton.titleLabel.text stringByAppendingString:self.rawPhoneNumber]];
+        viewController.messageComposeDelegate = self;
+        
+        [self presentViewController:viewController animated:YES completion:nil];
+    }
+}
+
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
+{
+    if (result == MessageComposeResultSent) {
+        //TODO track invite with property add success yes number 1
+        
+    } else {
+        //TODO track invite with property add success no number 1
+    }
+    
+    [self dismissViewControllerAnimated:NO completion:^{
+        [self dismissViewControllerAnimated:NO completion:^{
+            [GeneralUtils showMessage:[NSString stringWithFormat:@"%@ successfully invited!", self.firstNameField.text ? self.firstNameField.text : self.lastNameField.text]
+                            withTitle:nil];
+        }];
+    }];
 }
 
 @end

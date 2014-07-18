@@ -1140,30 +1140,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark ABNewPersonViewControllerDelegate
 // ----------------------------------------------------------
 
-//TODO Remove that part
 
-- (void)presentAddContactController
-{
-    // create person record
-    ABRecordRef person = ABPersonCreate();
-    
-    // Fill contact info if any (= pending case)
-    if (self.contactToAdd) {
-        ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFStringRef) self.contactToAdd.firstName, NULL);
-        ABRecordSetValue(person, kABPersonLastNameProperty, (__bridge CFStringRef) self.contactToAdd.lastName, NULL);
-        ABMutableMultiValueRef phoneNumbers = ABMultiValueCreateMutable(kABMultiStringPropertyType);
-        ABMultiValueAddValueAndLabel(phoneNumbers, (__bridge CFStringRef)self.contactToAdd.phoneNumber, kABPersonPhoneMainLabel, NULL);
-        ABRecordSetValue(person, kABPersonPhoneProperty, phoneNumbers, nil);
-    }
-    
-    // let's show view controller
-    ABNewPersonViewController *controller = [[ABNewPersonViewController alloc] init];
-    controller.displayedPerson = person;
-    controller.newPersonViewDelegate = self;
-    UINavigationController *newNavigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-    [self.navigationController presentViewController:newNavigationController animated:YES completion:nil];
-    CFRelease(person);
-}
 
 - (void)newPersonViewController:(ABNewPersonViewController *)newPersonViewController didCompleteWithNewPerson:(ABRecordRef)person
 {
@@ -1336,14 +1313,16 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    UITextField *textField = [alertView textFieldAtIndex:0];
-    if (buttonIndex == 0) // cancel
-        return;
-    if ([textField.text length] <= 0) {
-        [GeneralUtils showMessage:[alertView.title stringByAppendingString:@" must between 1 and 20 characters."] withTitle:nil];
-    }
-    if (buttonIndex == 1) {
-        [alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] ? [ApiUtils updateFirstName:textField.text success:nil failure:nil] : [ApiUtils updateLastName:textField.text success:nil failure:nil];
+    if ([alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] || [alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_3]) {
+        UITextField *textField = [alertView textFieldAtIndex:0];
+        if (buttonIndex == 0) // cancel
+            return;
+        if ([textField.text length] <= 0) {
+            [GeneralUtils showMessage:[alertView.title stringByAppendingString:@" must between 1 and 20 characters."] withTitle:nil];
+        }
+        if (buttonIndex == 1) {
+            [alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] ? [ApiUtils updateFirstName:textField.text success:nil failure:nil] : [ApiUtils updateLastName:textField.text success:nil failure:nil];
+        }
     }
 }
 
