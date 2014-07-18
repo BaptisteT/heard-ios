@@ -30,6 +30,10 @@
 {
     [super viewDidLoad];
     
+    if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+    
     [GeneralUtils addBottomBorder:self.navigationContainer borderSize:0.5];
     
     [GeneralUtils addTopBorder:self.inviteButtonContainer borderSize:0.5];
@@ -40,10 +44,6 @@
     tapRecognizer.numberOfTapsRequired = 1;
     
     self.inviteButtonContainer.hidden = YES;
-    
-    if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
     
     self.selectedContacts = [[NSMutableArray alloc] init];
 }

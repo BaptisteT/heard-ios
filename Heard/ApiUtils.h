@@ -57,6 +57,8 @@
 
 + (void)checkAppVersionAndExecuteSucess:(void(^)(NSDictionary *))successBlock;
 
++ (void)checkUserPresenceByPhoneNumber:(NSString *)phoneNumber success:(void(^)(BOOL present))successBlock failure:(void(^)())failureBlock;
+
 
 
 @end

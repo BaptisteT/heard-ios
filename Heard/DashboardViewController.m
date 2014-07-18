@@ -24,6 +24,7 @@
 #import "ContactUtils.h"
 #import <MediaPlayer/MPMusicPlayerController.h>
 #import "FDWaveformView.h"
+#import "AddContactViewController.h"
 
 #define ACTION_SHEET_1_OPTION_1 @"Invite Contacts"
 #define ACTION_SHEET_1_OPTION_2 @"Add Contact"
@@ -1139,6 +1140,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark ABNewPersonViewControllerDelegate
 // ----------------------------------------------------------
 
+//TODO Remove that part
+
 - (void)presentAddContactController
 {
     // create person record
@@ -1212,7 +1215,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         
     // Add New Contact
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_2]) {
-        [self presentAddContactController];
+        [self performSegueWithIdentifier:@"Add Contact Segue" sender:nil];
     }
     
     // Other
@@ -1270,7 +1273,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Add contact
     else if ([buttonTitle isEqualToString:ACTION_SHEET_PENDING_OPTION_1]) {
-        [self presentAddContactController];
+        [self performSegueWithIdentifier:@"Add Contact Segue" sender:nil];
     }
     
     // Block contact

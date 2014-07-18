@@ -453,5 +453,31 @@
     }];
 }
 
+// Check if user is on Waved
++ (void)checkUserPresenceByPhoneNumber:(NSString *)phoneNumber success:(void(^)(BOOL present))successBlock failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/user_presence.json"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setObject:phoneNumber forKey:@"phone_number"];
+    
+    [self enrichParametersWithToken:parameters];
+    
+    [[ApiUtils sharedClient] GET:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        NSDictionary *result = [JSON valueForKeyPath:@"result"];
+        
+        BOOL present = [[result objectForKey:@"presence"] boolValue];
+
+        if (successBlock) {
+            successBlock(present);
+        }
+    }failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"ERROR: %@, %@", task.description, error);
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
 
 @end

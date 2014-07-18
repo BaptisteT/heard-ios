@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B22CD021978439D00E1C7AF /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B22CD011978439D00E1C7AF /* AddContactViewController.m */; };
+		0B22CD031978439D00E1C7AF /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B22CD011978439D00E1C7AF /* AddContactViewController.m */; };
 		0B2584591974884B00321261 /* replay@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B2584571974884B00321261 /* replay@2x~iphone.png */; };
 		0B25845A1974884B00321261 /* replay@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B2584571974884B00321261 /* replay@2x~iphone.png */; };
 		0B25845B1974884B00321261 /* replay.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B2584581974884B00321261 /* replay.png */; };
@@ -242,6 +244,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0B22CD001978439D00E1C7AF /* AddContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddContactViewController.h; sourceTree = "<group>"; };
+		0B22CD011978439D00E1C7AF /* AddContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContactViewController.m; sourceTree = "<group>"; };
 		0B2584571974884B00321261 /* replay@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "replay@2x~iphone.png"; sourceTree = "<group>"; };
 		0B2584581974884B00321261 /* replay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = replay.png; sourceTree = "<group>"; };
 		0B3651D41958AC5000534386 /* contact-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-placeholder.png"; sourceTree = "<group>"; };
@@ -548,6 +552,8 @@
 				0B9051AD1976F618001E2ED5 /* InviteContactsViewController.m */,
 				0B9051B01976F62F001E2ED5 /* InviteContactsTVC.h */,
 				0B9051B11976F62F001E2ED5 /* InviteContactsTVC.m */,
+				0B22CD001978439D00E1C7AF /* AddContactViewController.h */,
+				0B22CD011978439D00E1C7AF /* AddContactViewController.m */,
 			);
 			name = Contacts;
 			sourceTree = "<group>";
@@ -1053,6 +1059,7 @@
 				0B72EEB3196C672F00AC5A01 /* Message.m in Sources */,
 				0B72EEB4196C672F00AC5A01 /* main.m in Sources */,
 				0B9051AF1976F618001E2ED5 /* InviteContactsViewController.m in Sources */,
+				0B22CD031978439D00E1C7AF /* AddContactViewController.m in Sources */,
 				0B72EEB5196C672F00AC5A01 /* ContactView.m in Sources */,
 				0B72EEB6196C672F00AC5A01 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				0B72EEB7196C672F00AC5A01 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
@@ -1131,6 +1138,7 @@
 				0BDB654F1953B5FD00223093 /* Message.m in Sources */,
 				0BDB65501953B5FD00223093 /* main.m in Sources */,
 				0B9051AE1976F618001E2ED5 /* InviteContactsViewController.m in Sources */,
+				0B22CD021978439D00E1C7AF /* AddContactViewController.m in Sources */,
 				3CB8B7F5195453E50090D657 /* ContactView.m in Sources */,
 				0BDB65341953B5EA00223093 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				0BDB65351953B5EA00223093 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
