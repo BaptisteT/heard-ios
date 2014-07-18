@@ -55,43 +55,45 @@
 
 @interface DashboardViewController ()
 
+// Contacts
+@property (nonatomic) ABAddressBookRef addressBook;
 @property (strong, nonatomic) NSMutableDictionary *addressBookFormattedContacts;
 @property (strong, nonatomic) NSMutableArray *contacts;
 @property (strong, nonatomic) NSMutableArray *contactBubbleViews;
 @property (weak, nonatomic) UIScrollView *contactScrollView;
-@property (strong, nonatomic) UIView *recorderContainer;
-@property (strong, nonatomic) UIView *playerContainer;
-@property (nonatomic, strong) UILabel *recorderMessage;
-@property (weak, nonatomic) UIButton *menuButton;
-@property (nonatomic, strong) UIActivityIndicatorView *activityView;
-@property (nonatomic, strong) NSString *currentUserPhoneNumber;
-@property (nonatomic, strong) Contact *contactToAdd;
-@property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
-@property (nonatomic, strong) ContactView *lastContactPlayed;
-@property (nonatomic) BOOL isUsingHeadSet;
-@property (nonatomic, strong) NSData *resendAudioData;
-@property (nonatomic, strong) Contact *resendContact;
-@property (nonatomic, strong) UITapGestureRecognizer *oneTapResendRecognizer;
-@property (nonatomic) ABAddressBookRef addressBook;
-@property (nonatomic, strong) UIButton *inviteContactButton;
-@property (nonatomic, strong) UITextView *noAddressBookAccessLabel;
-@property (nonatomic) BOOL disableProximityObserver;
-@property (nonatomic, strong) UIView *tutorialView;
 @property (nonatomic) BOOL retrieveNewContact;
-@property (nonatomic) SystemSoundID recordSound;
-
+@property (nonatomic, strong) Contact *contactToAdd;
+@property (nonatomic, strong) UITextView *noAddressBookAccessLabel;
+// Record
+@property (strong, nonatomic) UIView *recorderContainer;
 @property (nonatomic,strong) EZAudioPlotGL *audioPlot;
 @property (nonatomic,strong) EZMicrophone *microphone;
 @property (nonatomic,strong) UIView *recorderLine;
-
+@property (nonatomic, strong) AVAudioRecorder *recorder;
+@property (nonatomic) SystemSoundID recordSound;
+@property (nonatomic, strong) UILabel *recorderMessage;
+@property (strong, nonatomic) NSDate* lastRecordSoundDate;
+@property (nonatomic) BOOL silentMode;
+// Player
+@property (strong, nonatomic) UIView *playerContainer;
 @property (nonatomic, strong) FDWaveformView *playerWaveView;
 @property (nonatomic,strong) UIView *playerLine;
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 @property (weak, nonatomic) IBOutlet UIButton *replayButton;
-@property (strong, nonatomic) NSDate* lastRecordSoundDate;
-@property (nonatomic) BOOL silentMode;
+@property (nonatomic) BOOL disableProximityObserver;
+@property (nonatomic, strong) ContactView *lastContactPlayed;
+@property (nonatomic) BOOL isUsingHeadSet;
+// Current user
+@property (nonatomic, strong) NSString *currentUserPhoneNumber;
 @property (strong, nonatomic) UIImagePickerController *imagePickerController;
 @property (strong, nonatomic) UIImageView *currentUserProfilePicture;
+// Others
+@property (weak, nonatomic) UIButton *menuButton;
+@property (nonatomic, strong) UIActivityIndicatorView *activityView;
+@property (nonatomic, strong) UIView *tutorialView;
+@property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
+@property (nonatomic, strong) Contact *resendContact;
+@property (nonatomic, strong) UITapGestureRecognizer *oneTapResendRecognizer;
 
 @end
 
@@ -115,7 +117,7 @@
     
     // Init address book
     self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
-    ABAddressBookRegisterExternalChangeCallback(self.addressBook, MyAddressBookExternalChangeCallback, (__bridge void *)(self));
+    ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
     
     // Init recorder container
     self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - RECORDER_HEIGHT, self.view.bounds.size.width, RECORDER_HEIGHT)];
@@ -134,8 +136,6 @@
     self.oneTapResendRecognizer.delegate = self;
     self.oneTapResendRecognizer.numberOfTapsRequired = 1;
     
-    self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
-    
     // Init no adress book access label
     [self initNoAddressBookAccessLabel]; // we do it here to avoid to resize text in a parrallel thread
     
@@ -145,7 +145,6 @@
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusDenied) {
         [self.contacts removeAllObjects];
     }
-    
     [self displayContacts];
     
     if (!self.contacts || [self.contacts count] == 0) {
@@ -176,6 +175,26 @@
     // Headset observer
     self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:session];
     
+    // Set the audio file
+    NSArray *pathComponents = [NSArray arrayWithObjects:
+                               [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
+                               @"audio.m4a",
+                               nil];
+    NSURL *outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
+    
+    // Define the recorder setting
+    NSMutableDictionary *recordSetting = [[NSMutableDictionary alloc] init];
+    
+    [recordSetting setValue:[NSNumber numberWithInt:kAudioFormatMPEG4AAC] forKey:AVFormatIDKey];
+    [recordSetting setValue:[NSNumber numberWithFloat:kAVSampleRateKey] forKey:AVSampleRateKey];
+    [recordSetting setValue:[NSNumber numberWithInt: kAVNumberOfChannelsKey] forKey:AVNumberOfChannelsKey];
+    
+    // Initiate and prepare the recorder
+    self.recorder = [[AVAudioRecorder alloc] initWithURL:outputFileURL settings:recordSetting error:nil];
+    self.recorder.delegate = self;
+    self.recorder.meteringEnabled = YES;
+    [self.recorder prepareToRecord];
+    
     // AudioPlot
     self.microphone = [EZMicrophone microphoneWithDelegate:self];
     self.audioPlot = [self allocAndInitAudioPlot];
@@ -194,7 +213,8 @@
     self.playerLine.backgroundColor = [ImageUtils transparentWhite];
     [self.playerWaveView addSubview:self.playerLine];
     
-    // Get current user profile picture
+    // Current User
+    self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
     self.currentUserProfilePicture = [[UIImageView alloc] initWithFrame:CGRectMake(30,1,47,47)];
     self.currentUserProfilePicture.layer.cornerRadius = self.currentUserProfilePicture.bounds.size.height/2;
     self.currentUserProfilePicture.clipsToBounds = YES;
@@ -844,25 +864,24 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)handleResendTapGesture
 {
-    if (self.resendContact && self.resendAudioData) {
+    if (self.resendContact) {
         [self addRecorderMessage:@"Sending..." color:[UIColor whiteColor]];
-        [self sendMessage:self.resendAudioData toContact:self.resendContact];
+        [self sendRecordtoContact:self.resendContact];
     } else {
         [self quitRecordingModeAnimated:NO];
     }
 }
 
-- (void)sendMessage:(NSData *)audioData toContact:(Contact *)contact
+- (void)sendRecordtoContact:(Contact *)contact
 {
     self.recorderContainer.userInteractionEnabled = NO;
+    NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
     [ApiUtils sendMessage:audioData toUser:contact.identifier success:^{
         // Update last message date
         contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
-        self.resendAudioData = nil;
         self.resendContact = nil;
         [self messageSentWithError:NO];
     } failure:^{
-        self.resendAudioData = audioData;
         self.resendContact = contact;
         [self messageSentWithError:YES];
     }];
@@ -914,7 +933,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self.audioPlot clear];
         [self setRecorderLineWidth:0];
         self.resendContact = nil;
-        self.resendAudioData = nil;
     }
 
     [self.recorderContainer addSubview:self.audioPlot];
@@ -933,6 +951,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                          if (finished) {
                          }
                      }];
+    [self.recorder record];
 }
 
 //User stop pressing screen
@@ -944,6 +963,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.audioPlot clear];
     [self.audioPlot removeFromSuperview];
     
+    [self.recorder stop];
     [self.microphone stopFetchingAudio];
     [self addRecorderMessage:@"Sending..." color:[UIColor whiteColor]];
 }
@@ -994,6 +1014,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self.audioPlot removeFromSuperview];
         self.recorderContainer.hidden = YES;
     }
+}
+
+- (BOOL)isRecording {
+    return self.recorder.isRecording;
 }
 
 - (void)pendingContactClicked:(Contact *)contact

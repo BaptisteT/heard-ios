@@ -13,7 +13,7 @@
 
 @protocol ContactBubbleViewDelegate;
 
-@interface ContactView : UIView <UIGestureRecognizerDelegate, AVAudioRecorderDelegate>
+@interface ContactView : UIView <UIGestureRecognizerDelegate>
 
 - (id)initWithContact:(Contact *)contact andFrame:(CGRect)frame;
 - (id)initWithContact:(Contact *)contact;
@@ -43,7 +43,7 @@
 
 - (void)longPressOnContactBubbleViewEnded:(NSUInteger)contactId;
 
-- (void)sendMessage:(NSData *)audioData toContact:(Contact *)contact;
+- (void)sendRecordtoContact:(Contact *)contact;
 
 - (void)startedPlayingAudioFileByView:(ContactView *)view;
 
@@ -58,6 +58,8 @@
 - (void)tutorialModeWithDuration:(NSTimeInterval)duration;
 
 - (void)startRecordSound;
+
+- (BOOL)isRecording;
 
 - (NSTimeInterval)delayBeforeRecording;
 

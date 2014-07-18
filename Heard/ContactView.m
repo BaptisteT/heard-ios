@@ -20,7 +20,6 @@
 
 @interface ContactView()
 
-@property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *oneTapRecognizer;
 @property (nonatomic, strong) NSTimer *maxDurationTimer;
@@ -75,30 +74,6 @@
     [self addGestureRecognizer:self.oneTapRecognizer];
     self.oneTapRecognizer.delegate = self;
     self.oneTapRecognizer.numberOfTapsRequired = 1;
-    
-    // Set the audio file
-    NSArray *pathComponents = [NSArray arrayWithObjects:
-                               [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
-                               @"audio.m4a",
-                               nil];
-    NSURL *outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
-    
-    // Setup audio session
-    AVAudioSession *session = [AVAudioSession sharedInstance];
-    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-    
-    // Define the recorder setting
-    NSMutableDictionary *recordSetting = [[NSMutableDictionary alloc] init];
-    
-    [recordSetting setValue:[NSNumber numberWithInt:kAudioFormatMPEG4AAC] forKey:AVFormatIDKey];
-    [recordSetting setValue:[NSNumber numberWithFloat:kAVSampleRateKey] forKey:AVSampleRateKey];
-    [recordSetting setValue:[NSNumber numberWithInt: kAVNumberOfChannelsKey] forKey:AVNumberOfChannelsKey];
-    
-    // Initiate and prepare the recorder
-    self.recorder = [[AVAudioRecorder alloc] initWithURL:outputFileURL settings:recordSetting error:nil];
-    self.recorder.delegate = self;
-    self.recorder.meteringEnabled = YES;
-    [self.recorder prepareToRecord];
     
     // Init unread messages button
     [self initUnreadMessagesButton];
@@ -160,7 +135,7 @@
         if ([self.maxDurationTimer isValid]) {
             [self.maxDurationTimer invalidate];
             
-            if ([self.recorder isRecording]) {
+            if ([self.delegate isRecording]) {
                 [self sendRecording];
                 [TrackingUtils trackRecord];
             } else {
@@ -180,9 +155,7 @@
         [self recordingUI];
         
         [self.delegate longPressOnContactBubbleViewStarted:self.contact.identifier FromView:self];
-        [self.recorder record];
     }
-    
     self.cancelRecord = NO;
 }
 
@@ -303,10 +276,6 @@
     [self sendRecording];
 }
 
-- (void)minRecordingDurationReached {
-    // do nothing
-}
-
 
 // ----------------------------------------------------------
 #pragma mark Recording utility
@@ -316,15 +285,12 @@
 {
     [self stopRecording];
     
-    NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
-    [self.delegate sendMessage:audioData toContact:self.contact];
+    [self.delegate sendRecordtoContact:self.contact];
 }
 
 - (void)stopRecording
 {
-    [self.recorder stop];
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    [audioSession setActive:NO error:nil];
+    [[AVAudioSession sharedInstance] setActive:NO error:nil];
     [self.delegate longPressOnContactBubbleViewEnded:self.contact.identifier];
 }
 
