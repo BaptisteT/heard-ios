@@ -7,9 +7,9 @@
 //
 
 #import "AddressbookUtils.h"
-#import <AddressBook/AddressBook.h>
 #import "NBPhoneNumberUtil.h"
 #import "NBPhoneNumber.h"
+#import "Contact.h"
 
 @implementation AddressbookUtils
 
@@ -169,6 +169,96 @@
     }
     
     return letterCodeToCountryAndCallingCode;
+}
+
++ (NSMutableDictionary *)retrieveFriendsFromAddressBook:(ABAddressBookRef) addressBook
+{
+    NSMutableDictionary *addressBookFormattedContacts = [[NSMutableDictionary alloc] init];
+    
+    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+    
+    CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(addressBook);
+    CFIndex peopleCount = CFArrayGetCount(people);
+    
+    NSMutableDictionary *countryCodes = [[NSMutableDictionary alloc] init];
+    
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    
+    addressBookFormattedContacts = [[NSMutableDictionary alloc] init];
+    NSNumber *defaultCountryCode = [phoneUtil getCountryCodeForRegion:[phoneUtil countryCodeByCarrier]];
+    
+    for (CFIndex i = 0 ; i < peopleCount; i++) {
+        ABRecordRef person = CFArrayGetValueAtIndex(people, i);
+        
+        ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
+        for (CFIndex j = 0; j < ABMultiValueGetCount(phoneNumbers); j++) {
+            NSString* phoneNumber = (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, j);
+            
+            NSError *aError = nil;
+            NBPhoneNumber *nbPhoneNumber = [phoneUtil parseWithPhoneCarrierRegion:phoneNumber error:&aError];
+            
+            if (aError == nil && [phoneUtil isValidNumber:nbPhoneNumber]) {
+                Contact *contact = [Contact createContactWithId:0 phoneNumber:[NSString stringWithFormat:@"+%@%@", nbPhoneNumber.countryCode, nbPhoneNumber.nationalNumber]
+                                                      firstName:(__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty)
+                                                       lastName:(__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty)];
+                
+                if (contact.firstName != nil || contact.lastName != nil) {
+                    // We need unformatted numbers for the keys
+                    [addressBookFormattedContacts setObject:contact forKey:phoneNumber];
+                }
+                
+                //Store country codes found in international numbers
+                if (nbPhoneNumber.countryCode != defaultCountryCode) {
+                    if (![countryCodes objectForKey:nbPhoneNumber.countryCode]) {
+                        [countryCodes setObject:[NSNumber numberWithInt:1] forKey:nbPhoneNumber.countryCode];
+                    } else {
+                        [countryCodes setObject:[NSNumber numberWithInt:1+[[countryCodes objectForKey:nbPhoneNumber.countryCode] intValue]] forKey:nbPhoneNumber.countryCode];
+                    }
+                }
+            }
+        }
+    }
+    
+    // Retrieve the most common country code (except from the local one)
+    NSNumber *mostCommonCountryCode;
+    int maxOccurence = 0;
+    for (NSNumber *countryCode in countryCodes) {
+        if (maxOccurence < [[countryCodes objectForKey:countryCode] intValue]) {
+            maxOccurence = [[countryCodes objectForKey:countryCode] intValue];
+            mostCommonCountryCode = countryCode;
+        }
+    }
+    
+    // Try to rematch invalid phone numbers by using this country code
+    for (CFIndex j = 0 ; j < peopleCount; j++) {
+        ABRecordRef person = CFArrayGetValueAtIndex(people, j);
+        
+        ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
+        for (CFIndex k = 0; k < ABMultiValueGetCount(phoneNumbers); k++) {
+            NSString* phoneNumber = (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, k);
+            
+            if (![addressBookFormattedContacts objectForKey:phoneNumber]) {
+                NSError *aError = nil;
+                
+                NBPhoneNumber *nbPhoneNumber = [phoneUtil parse:phoneNumber defaultRegion:[[phoneUtil regionCodeFromCountryCode:mostCommonCountryCode] firstObject] error:&aError];
+                
+                if (aError == nil && [phoneUtil isValidNumber:nbPhoneNumber]) {
+                    Contact *contact = [Contact createContactWithId:0 phoneNumber:[NSString stringWithFormat:@"+%@%@", nbPhoneNumber.countryCode, nbPhoneNumber.nationalNumber]
+                                                          firstName:(__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty)
+                                                           lastName:(__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty)];
+                    
+                    if (contact.firstName != nil || contact.lastName != nil) {
+                        [addressBookFormattedContacts setObject:contact forKey:phoneNumber];
+                    }
+                }
+            }
+        }
+    }
+    
+    CFRelease(people);
+    
+    return addressBookFormattedContacts;
 }
 
 @end

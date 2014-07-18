@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AddressBookUI/AddressBookUI.h>
+#import <AddressBook/AddressBook.h>
 
 @interface AddressbookUtils : NSObject
 
@@ -18,5 +20,7 @@
 + (NSString *)getDecimalNumber:(NSString *)formattedNumber;
 
 + (NSMutableDictionary *)getCountriesAndCallingCodesForLetterCodes;
+
++ (NSMutableDictionary *)retrieveFriendsFromAddressBook:(ABAddressBookRef) addressBook;
 
 @end
