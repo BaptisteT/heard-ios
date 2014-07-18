@@ -973,6 +973,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if ([self.mainPlayer isPlaying]) {
         [self endPlayerUIAnimated:NO];
     }
+    [self.playerContainer.layer removeAllAnimations];
     
     // Waveform
     [self.playerWaveView setAudioURL:[GeneralUtils getPlayedAudioURL]];
@@ -1069,6 +1070,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     [self playerUIForContactView:contactView];
     self.playerContainer.hidden = NO;
+    self.playerContainer.alpha = 1;
+    [self setPlayerLineWidth:0];
     
     [UIView animateWithDuration:duration
                           delay:0
@@ -1106,9 +1109,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [UIView animateWithDuration:0.5 animations:^{
             self.playerContainer.alpha = 0;
         } completion:^(BOOL dummy){
-            self.playerContainer.hidden = YES;
-            self.playerContainer.alpha = 1;
-            [self setPlayerLineWidth:0];
+            if (dummy) {
+                self.playerContainer.hidden = YES;
+            }
         }];
     } else {
         self.playerContainer.hidden = YES;
