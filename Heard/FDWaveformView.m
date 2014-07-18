@@ -46,7 +46,6 @@
 @property (nonatomic, strong) UIPinchGestureRecognizer *pinchRecognizer;
 @property (nonatomic, strong) UIPanGestureRecognizer *panRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *tapRecognizer;
-@property BOOL renderingInProgress;
 @end
 
 @implementation FDWaveformView

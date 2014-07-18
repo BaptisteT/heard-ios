@@ -1074,6 +1074,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                           delay:0
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
+                         self.playerWaveView.renderingInProgress = NO;
                          self.playerWaveView.progressSamples = self.playerWaveView.totalSamples;
                          [self setPlayerLineWidth:self.playerWaveView.bounds.size.width];
                      } completion:^(BOOL finished){
