@@ -119,7 +119,7 @@
                 [self.delegate didFinishedAddingContact];
             }];
             
-            [TrackingUtils trackAddContactSuccessful:YES Present:YES];
+            [TrackingUtils trackAddContactSuccessful:YES Present:YES Pending:NO];
         //Not on Waved
         } else {
             [[[UIAlertView alloc] initWithTitle:nil
@@ -128,7 +128,7 @@
                               cancelButtonTitle:nil
                               otherButtonTitles:ALERT_VIEW_DONE_BUTTON, ALERT_VIEW_INVITE_BUTTON, nil] show];
             
-            [TrackingUtils trackAddContactSuccessful:YES Present:NO];
+            [TrackingUtils trackAddContactSuccessful:YES Present:NO Pending:NO];
         }
     } failure:^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -166,7 +166,7 @@
 - (IBAction)cancelButtonClicked:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
     
-    [TrackingUtils trackAddContactSuccessful:NO Present:NO];
+    [TrackingUtils trackAddContactSuccessful:NO Present:NO Pending:NO];
 }
 
 - (IBAction)countryCodeButtonClicked:(id)sender {

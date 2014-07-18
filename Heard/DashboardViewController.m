@@ -1161,6 +1161,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Add contact
     else if ([buttonTitle isEqualToString:ACTION_SHEET_PENDING_OPTION_1]) {
+        [TrackingUtils trackAddContactSuccessful:YES Present:YES Pending:YES];
         
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         

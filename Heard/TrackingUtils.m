@@ -75,7 +75,7 @@
     }
 }
 
-+ (void)trackAddContactSuccessful:(BOOL)success Present:(BOOL)present
++ (void)trackAddContactSuccessful:(BOOL)success Present:(BOOL)present Pending:(BOOL)pending
 {
     if (!PRODUCTION || DEBUG)return;
     
@@ -83,12 +83,16 @@
     
     NSString *presentStr = present ? @"True" : @"False";
     
-    if (success) {
+    if (pending) {
         [mixpanel.people increment:@"Add contact" by:[NSNumber numberWithInt:1]];
         
-        [mixpanel track:@"Add contact" properties:@{@"Success": @"True", @"Present": presentStr}];
+        [mixpanel track:@"Add contact" properties:@{@"Pending": @"True"}];
+    } else if (success) {
+        [mixpanel.people increment:@"Add contact" by:[NSNumber numberWithInt:1]];
+        
+        [mixpanel track:@"Add contact" properties:@{@"Success": @"True", @"Present": presentStr, @"Pending": @"False"}];
     } else {
-        [mixpanel track:@"Add contact" properties:@{@"Success": @"False"}];
+        [mixpanel track:@"Add contact" properties:@{@"Success": @"False", @"Pending": @"False"}];
     }
 }
 

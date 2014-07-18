@@ -21,7 +21,7 @@
 
 + (void)trackShareSuccessful:(BOOL)success;
 
-+ (void)trackAddContactSuccessful:(BOOL)success Present:(BOOL)present;
++ (void)trackAddContactSuccessful:(BOOL)success Present:(BOOL)present Pending:(BOOL)pending;
 
 + (void)trackOpenApp;
 
