@@ -15,6 +15,7 @@
 #import "MBProgressHUD.h"
 #import "Constants.h"
 #import "TrackingUtils.h"
+#import "AddressbookUtils.h"
 
 #define INVITE_ADDED_CONTACT_ALERT_TITLE @"Invite recently added contact alert"
 #define BORDER_WIDTH 0.5
@@ -30,7 +31,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *countryCodeButton;
 @property (weak, nonatomic) IBOutlet UIView *phoneNumberContainer;
 @property (nonatomic, strong) RMPhoneFormat *phoneFormat;
-@property (nonatomic, strong) NSString *rawPhoneNumber;
+@property (nonatomic, strong) NSString *decimalPhoneNumber;
 
 @end
 
@@ -57,14 +58,14 @@
     
     [self.firstNameField becomeFirstResponder];
     
-    self.rawPhoneNumber = @"";
+    self.decimalPhoneNumber = @"";
     
     //TODO Put default country code
     [self updateCountryName:@"USA" code:[NSNumber numberWithInt:1] letterCode:@"us"];
 }
 
 - (IBAction)nextButtonClicked:(id)sender {    
-    NSString *formattedPhoneNumber = [self.countryCodeButton.titleLabel.text stringByAppendingString:self.rawPhoneNumber];
+    NSString *formattedPhoneNumber = [self.countryCodeButton.titleLabel.text stringByAppendingString:self.decimalPhoneNumber];
     
     if (![self.phoneFormat isPhoneNumberValid:formattedPhoneNumber]) {
         [GeneralUtils showMessage:@"Invalid phone number." withTitle:nil];
@@ -78,8 +79,11 @@
     }
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    
-    [self createOrEditContact:formattedPhoneNumber];
+
+    [AddressbookUtils createOrEditContactWithDecimalNumber:(NSString *)self.decimalPhoneNumber
+                                           formattedNumber:(NSString *)formattedPhoneNumber
+                                                 firstName:(NSString *)self.firstNameField.text
+                                                  lastName:(NSString *)self.lastNameField.text];
     
     NSString *contactName = self.firstNameField.text ? self.firstNameField.text : self.lastNameField.text;
     
@@ -119,7 +123,7 @@
     if (textField != self.phoneNumberField) return YES;
     
     if (string.length > 0) {
-        self.rawPhoneNumber = [self.rawPhoneNumber stringByAppendingString:string];
+        self.decimalPhoneNumber = [self.decimalPhoneNumber stringByAppendingString:string];
     } else {
         NSString *newString = [[textField.text substringToIndex:range.location] stringByAppendingString:[textField.text substringFromIndex:range.location + range.length]];
         
@@ -131,10 +135,10 @@
             }
         }
         
-        self.rawPhoneNumber = numberString;
+        self.decimalPhoneNumber = numberString;
     }
     
-    textField.text = [self.phoneFormat format:self.rawPhoneNumber];
+    textField.text = [self.phoneFormat format:self.decimalPhoneNumber];
     
     return NO;
 }
@@ -175,98 +179,14 @@
     return YES;
 }
 
-- (void)createOrEditContact:(NSString *)reformattedNumber
-{
-    ABAddressBookRef addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
-    
-    CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(addressBook);
-    CFIndex peopleCount = CFArrayGetCount(people);
-    
-    //First we try to see if the number matches a contact
-    BOOL match = NO;
-    BOOL duplicate = NO;
-    
-    for (CFIndex i = 0 ; i < peopleCount && !match; i++) {
-        ABRecordRef person = CFArrayGetValueAtIndex(people, i);
-        
-        ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
-        
-        NSString *firstName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
-        NSString *lastName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
-        
-        if (ABMultiValueGetCount(phoneNumbers) > 0 &&
-            ((firstName && [firstName length] > 0) || (lastName && [lastName length] > 0))) {
-            
-            for (CFIndex j = 0; j < ABMultiValueGetCount(phoneNumbers); j++) {
-                NSString *rawPhoneNumber = (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, j);
-                NSString *numericalPhoneNumber = [[rawPhoneNumber componentsSeparatedByCharactersInSet:
-                                          [[NSCharacterSet decimalDigitCharacterSet] invertedSet]]
-                                         componentsJoinedByString:@""];
-                
-                if ([numericalPhoneNumber rangeOfString:self.rawPhoneNumber].location != NSNotFound) {
-                    match = YES;
-                }
-                
-                if ([numericalPhoneNumber isEqualToString:[reformattedNumber substringFromIndex:1]]) {
-                    duplicate = YES;
-                }
-            }
-            
-            //Save formatted phone number but do not duplicate
-            if (match && !duplicate) {
-                ABMutableMultiValueRef multiPhone = ABMultiValueCreateMutableCopy (ABRecordCopyValue(person, kABPersonPhoneProperty));
-                ABMultiValueAddValueAndLabel(multiPhone, (__bridge CFTypeRef)reformattedNumber, kABPersonPhoneMobileLabel, NULL);
-                ABRecordSetValue(person, kABPersonPhoneProperty, multiPhone,nil);
-                
-                CFErrorRef* error = NULL;
-                ABAddressBookSave(addressBook, error);
-                
-                if (error) {
-                    NSLog(@"ERROR SAVING!!!");
-                }
-                
-                CFRelease(multiPhone);
-            }
-        }
-        
-        CFRelease(person);
-        CFRelease(phoneNumbers);
-    }
-    
-    CFRelease(people);
-    
-    //Create contact if no match
-    if (!match) {
-        ABAddressBookRef addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
-        ABRecordRef person = ABPersonCreate();
-        CFErrorRef error = NULL;
-        
-        if (self.firstNameField.text) {
-            ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFTypeRef)self.firstNameField.text, &error);
-        }
-        
-        if (self.lastNameField.text) {
-            ABRecordSetValue(person, kABPersonLastNameProperty, (__bridge CFTypeRef)self.lastNameField.text, &error);
-        }
-        
-        //Set phone number
-        ABMutableMultiValueRef multiPhone =     ABMultiValueCreateMutable(kABMultiStringPropertyType);
-        ABMultiValueAddValueAndLabel(multiPhone, (__bridge CFTypeRef)reformattedNumber, kABPersonPhoneMobileLabel, NULL);
-        ABRecordSetValue(person, kABPersonPhoneProperty, multiPhone,nil);
-        CFRelease(multiPhone);
-        
-        ABAddressBookAddRecord(addressBook, person, &error);
-        ABAddressBookSave(addressBook, &error);
-        CFRelease(person);
-    }
-}
+
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:ALERT_VIEW_INVITE_BUTTON]) {
         //Redirect to sms
         MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
         viewController.body = [NSString stringWithFormat:@"Hey %@, let's start chating on Waved! Download at %@", self.firstNameField.text ? self.firstNameField.text : self.lastNameField.text, kProdAFHeardWebsite];
-        viewController.recipients = @[[self.countryCodeButton.titleLabel.text stringByAppendingString:self.rawPhoneNumber]];
+        viewController.recipients = @[[self.countryCodeButton.titleLabel.text stringByAppendingString:self.decimalPhoneNumber]];
         viewController.messageComposeDelegate = self;
         
         [self presentViewController:viewController animated:YES completion:nil];

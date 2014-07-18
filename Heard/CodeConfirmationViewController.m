@@ -10,8 +10,7 @@
 #import "ApiUtils.h"
 #import "GeneralUtils.h"
 #import "MBProgressHUD.h"
-#import "NBPhoneNumber.h"
-#import "NBPhoneNumberUtil.h"
+#import "RMPhoneFormat.h"
 #import "RequestUserInfoViewController.h"
 #import "SessionUtils.h"
 #import "TrackingUtils.h"
@@ -39,15 +38,7 @@
 {
     [super viewDidLoad];
     
-    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
-    
-    NBPhoneNumber *myNumber = [phoneUtil parse:self.phoneNumber
-                                 defaultRegion:@"US" error:nil];
-
-    
-    self.phoneNumberLabel.text = [phoneUtil format:myNumber
-                                      numberFormat:NBEPhoneNumberFormatINTERNATIONAL
-                                             error:nil];
+    self.phoneNumberLabel.text = [[[RMPhoneFormat alloc] init] format:self.phoneNumber];
     
     self.codeTextField.delegate = self;
     

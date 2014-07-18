@@ -118,6 +118,8 @@
 		0B72EEFB196C672F00AC5A01 /* NBPhoneNumberMetadataForTesting.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64BA19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist */; };
 		0B72EEFC196C672F00AC5A01 /* welcome-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A481954E4FF00476BFE /* welcome-logo.png */; };
 		0B72EEFD196C672F00AC5A01 /* contact-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651D41958AC5000534386 /* contact-placeholder.png */; };
+		0B87247A19799684007219AF /* AddressbookUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B87247919799684007219AF /* AddressbookUtils.m */; };
+		0B87247B19799684007219AF /* AddressbookUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B87247919799684007219AF /* AddressbookUtils.m */; };
 		0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */; };
 		0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A481954E4FF00476BFE /* welcome-logo.png */; };
 		0B893A4D19550FF000476BFE /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B893A4C19550FF000476BFE /* Contact.m */; };
@@ -263,6 +265,8 @@
 		0B58BAFB1954B47700E9FF70 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		0B58BAFC1954B47700E9FF70 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		0B72EF01196C672F00AC5A01 /* WavedStaging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WavedStaging.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0B87247819799684007219AF /* AddressbookUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressbookUtils.h; sourceTree = "<group>"; };
+		0B87247919799684007219AF /* AddressbookUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressbookUtils.m; sourceTree = "<group>"; };
 		0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome-logo@2x~iphone.png"; sourceTree = "<group>"; };
 		0B893A481954E4FF00476BFE /* welcome-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome-logo.png"; sourceTree = "<group>"; };
 		0B893A4B19550FF000476BFE /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
@@ -520,14 +524,14 @@
 		0B9051AA1976F1D4001E2ED5 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				0B56F65019758D9600DB6FF1 /* CountryCodeTVC.h */,
-				0B56F65119758D9600DB6FF1 /* CountryCodeTVC.m */,
-				0B56F6581975AE4D00DB6FF1 /* CountryCodeViewController.h */,
-				0B56F6591975AE4D00DB6FF1 /* CountryCodeViewController.m */,
 				0BD758D41950F91B00CF0D85 /* WelcomeViewController.h */,
 				0BD758D51950F91B00CF0D85 /* WelcomeViewController.m */,
 				0BD758F519511A4000CF0D85 /* RequestPhoneViewController.h */,
 				0BD758F619511A4000CF0D85 /* RequestPhoneViewController.m */,
+				0B56F65019758D9600DB6FF1 /* CountryCodeTVC.h */,
+				0B56F65119758D9600DB6FF1 /* CountryCodeTVC.m */,
+				0B56F6581975AE4D00DB6FF1 /* CountryCodeViewController.h */,
+				0B56F6591975AE4D00DB6FF1 /* CountryCodeViewController.m */,
 				0BDB64FF19528F4600223093 /* CodeConfirmationViewController.h */,
 				0BDB650019528F4600223093 /* CodeConfirmationViewController.m */,
 				0BDB650619535CCC00223093 /* RequestUserInfoViewController.h */,
@@ -748,6 +752,8 @@
 				3C0D0063196330E40058A0E0 /* ContactUtils.m */,
 				3C55FD6E1966B11C00E818D9 /* CrashReportUtils.h */,
 				3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */,
+				0B87247819799684007219AF /* AddressbookUtils.h */,
+				0B87247919799684007219AF /* AddressbookUtils.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -1102,6 +1108,7 @@
 				3CD180AC1972CCD200EC8BE2 /* EZAudioFile.m in Sources */,
 				0B72EED4196C672F00AC5A01 /* ContactUtils.m in Sources */,
 				0B72EED5196C672F00AC5A01 /* Constants.m in Sources */,
+				0B87247B19799684007219AF /* AddressbookUtils.m in Sources */,
 				0B72EED6196C672F00AC5A01 /* ApiUtils.m in Sources */,
 				0B72EED7196C672F00AC5A01 /* GeneralUtils.m in Sources */,
 				0B72EED8196C672F00AC5A01 /* ImageUtils.m in Sources */,
@@ -1181,6 +1188,7 @@
 				3CD180AB1972CCD200EC8BE2 /* EZAudioFile.m in Sources */,
 				3C0D0064196330E40058A0E0 /* ContactUtils.m in Sources */,
 				0BDB65471953B5EA00223093 /* Constants.m in Sources */,
+				0B87247A19799684007219AF /* AddressbookUtils.m in Sources */,
 				0BDB65481953B5EA00223093 /* ApiUtils.m in Sources */,
 				0BDB65491953B5EA00223093 /* GeneralUtils.m in Sources */,
 				0BDB654A1953B5EA00223093 /* ImageUtils.m in Sources */,

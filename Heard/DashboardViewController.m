@@ -25,6 +25,8 @@
 #import <MediaPlayer/MPMusicPlayerController.h>
 #import "FDWaveformView.h"
 #import "AddContactViewController.h"
+#import "AddressbookUtils.h"
+#import "MBProgressHUD.h"
 
 #define ACTION_SHEET_1_OPTION_1 @"Invite Contacts"
 #define ACTION_SHEET_1_OPTION_2 @"Add Contact"
@@ -506,6 +508,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     dashboardController.retrieveNewContact = YES;
     dashboardController.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     ABAddressBookRegisterExternalChangeCallback(dashboardController.addressBook, MyAddressBookExternalChangeCallback, (__bridge void *)(dashboardController));
+}
+
+//After adding a contact with AddContactViewController or after adding pending contact
+- (void)didFinishedAddingContact
+{
+    //TODO: update contacts to display recently added contact
 }
 
 
@@ -1024,12 +1032,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)pendingContactClicked:(Contact *)contact
 {
-    // check contact access
-    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusDenied) {
-        [GeneralUtils showMessage:@"To activate it, go to Settings > Privacy > Contacts" withTitle:@"Waved does not have access to your contacts"];
-        return;
-    }
-    
     self.contactToAdd = contact;
     UIActionSheet *pendingActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                                     delegate:self
@@ -1168,39 +1170,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.playerLine.frame = frame;
 }
 
-//- (void)newPersonViewController:(ABNewPersonViewController *)newPersonViewController didCompleteWithNewPerson:(ABRecordRef)person
-//{
-//    if (!person) { // cancel clicked
-//        self.contactToAdd = nil;
-//        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-//    } else {
-//        ABMultiValueRef phones =ABRecordCopyValue(person, kABPersonPhoneProperty);
-//        NSMutableArray* mobileNumbers = [NSMutableArray new];
-//        for(CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
-//            [mobileNumbers addObject:(__bridge NSString *)(ABMultiValueCopyValueAtIndex(phones, i))];
-//        }
-//        
-//        BOOL isAttributed = NO;
-//        for (NSString *mobile in mobileNumbers) {
-//            for (ContactView *contactBubble in self.contactBubbleViews) {
-//                if ([mobile isEqualToString:contactBubble.contact.phoneNumber]) {
-//                    if (contactBubble.pendingContact) {
-//                        [contactBubble setPendingContact:NO];
-//                        contactBubble.contact.isPending = NO;
-//                        self.contactToAdd = nil;
-//                    }
-//                    isAttributed = YES;
-//                    break;
-//                }
-//            }
-//            if (isAttributed) {
-//                break;
-//            }
-//        }
-//        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-//    }
-//}
-
 // ----------------------------------------------------------
 #pragma mark ActionSheetProtocol
 // ----------------------------------------------------------
@@ -1276,7 +1245,19 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Add contact
     else if ([buttonTitle isEqualToString:ACTION_SHEET_PENDING_OPTION_1]) {
-        [self performSegueWithIdentifier:@"Add Contact Segue" sender:nil];
+        
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        
+        NSString *decimalNumber = [AddressbookUtils getDecimalNumber:self.contactToAdd.phoneNumber];
+        
+        [AddressbookUtils createOrEditContactWithDecimalNumber:decimalNumber
+                                               formattedNumber:self.contactToAdd.phoneNumber
+                                                     firstName:self.contactToAdd.firstName
+                                                      lastName:self.contactToAdd.lastName];
+        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        [self didFinishedAddingContact];
     }
     
     // Block contact
@@ -1471,15 +1452,6 @@ void soundMuteNotificationCompletionProc(SystemSoundID  ssID,void* clientData){
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
-}
-
-- (void)didFinishedAddingContact
-{
-    [self showLoadingIndicator];
-    
-    self.retrieveNewContact = YES;
-    
-    [self retrieveUnreadMessagesAndNewContacts];
 }
 
 
