@@ -13,8 +13,9 @@
 #import "ContactView.h"
 #import "EZAudioPlotGL.h"
 #import "EZMicrophone.h"
+#import "AddContactViewController.h"
 
-@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, EZMicrophoneDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, EZMicrophoneDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, AddContactViewControllerDelegate>
 
 - (BOOL)addUnreadMessageToExistingContacts:(Message *)message;
 - (void) retrieveUnreadMessagesAndNewContacts;

@@ -130,11 +130,11 @@
     [self dismissViewControllerAnimated:YES completion:nil];
     
     if (result == MessageComposeResultSent) {
-        [TrackingUtils trackInviteContacts:[self.selectedContacts count] successful:YES];
+        [TrackingUtils trackInviteContacts:[self.selectedContacts count] successful:YES justAdded:NO];
         
         [self.inviteConctactsTVC deselectAll];
     } else {
-        [TrackingUtils trackInviteContacts:[self.selectedContacts count] successful:NO];
+        [TrackingUtils trackInviteContacts:[self.selectedContacts count] successful:NO justAdded:NO];
     }
 }
 

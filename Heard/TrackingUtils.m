@@ -75,16 +75,18 @@
     }
 }
 
-+ (void)trackAddContactSuccessful:(BOOL)success
++ (void)trackAddContactSuccessful:(BOOL)success Present:(BOOL)present
 {
     if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
+    NSString *presentStr = present ? @"True" : @"False";
+    
     if (success) {
         [mixpanel.people increment:@"Add contact" by:[NSNumber numberWithInt:1]];
         
-        [mixpanel track:@"Add contact" properties:@{@"Success": @"True"}];
+        [mixpanel track:@"Add contact" properties:@{@"Success": @"True", @"Present": presentStr}];
     } else {
         [mixpanel track:@"Add contact" properties:@{@"Success": @"False"}];
     }
@@ -110,20 +112,21 @@
     [mixpanel.people set:@{@"Contacts": [NSNumber numberWithInt:nbrOfContacts]}];
 }
 
-+ (void)trackInviteContacts:(NSInteger)nbrOfInvites successful:(BOOL)success
++ (void)trackInviteContacts:(NSInteger)nbrOfInvites successful:(BOOL)success justAdded:(BOOL)justAdded
 {
     if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
+    NSString *justAddedStr = justAdded ? @"True" : @"False";
     if (success) {
         [mixpanel.people increment:@"Invite contacts" by:[NSNumber numberWithInt:1]];
         
-        [mixpanel track:@"Invite contacts" properties:@{@"Success": @"True", @"Number": [NSNumber numberWithLong:nbrOfInvites]}];
+        [mixpanel track:@"Invite contacts" properties:@{@"Success": @"True", @"Number": [NSNumber numberWithLong:nbrOfInvites] , @"Just added": justAddedStr}];
         
         [mixpanel.people increment:@"Invites" by:[NSNumber numberWithInt:nbrOfInvites]];
     } else {
-        [mixpanel track:@"Invite contacts" properties:@{@"Success": @"False"}];
+        [mixpanel track:@"Invite contacts" properties:@{@"Success": @"False", @"Just added": justAddedStr}];
     }
 }
 

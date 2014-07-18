@@ -21,12 +21,12 @@
 
 + (void)trackShareSuccessful:(BOOL)success;
 
-+ (void)trackAddContactSuccessful:(BOOL)success;
++ (void)trackAddContactSuccessful:(BOOL)success Present:(BOOL)present;
 
 + (void)trackOpenApp;
 
 + (void)trackNumberOfContacts:(NSInteger)nbrOfContacts;
 
-+ (void)trackInviteContacts:(NSInteger)nbrOfInvites successful:(BOOL)success;
++ (void)trackInviteContacts:(NSInteger)nbrOfInvites successful:(BOOL)success justAdded:(BOOL)justAdded;
 
 @end

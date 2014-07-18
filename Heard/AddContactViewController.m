@@ -14,6 +14,7 @@
 #import "ApiUtils.h"
 #import "MBProgressHUD.h"
 #import "Constants.h"
+#import "TrackingUtils.h"
 
 #define INVITE_ADDED_CONTACT_ALERT_TITLE @"Invite recently added contact alert"
 #define BORDER_WIDTH 0.5
@@ -90,8 +91,11 @@
             [self dismissViewControllerAnimated:YES completion:^{
                 [GeneralUtils showMessage:[NSString stringWithFormat:@"%@ is now a contact.", contactName]
                                 withTitle:nil];
-
+                
+                [self.delegate didFinishedAddingContact];
             }];
+            
+            [TrackingUtils trackAddContactSuccessful:YES Present:YES];
         //Not on Waved
         } else {
             [[[UIAlertView alloc] initWithTitle:nil
@@ -99,7 +103,8 @@
                                        delegate:self
                               cancelButtonTitle:nil
                               otherButtonTitles:ALERT_VIEW_DONE_BUTTON, ALERT_VIEW_INVITE_BUTTON, nil] show];
-
+            
+            [TrackingUtils trackAddContactSuccessful:YES Present:NO];
         }
     } failure:^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -136,6 +141,8 @@
 
 - (IBAction)cancelButtonClicked:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
+    
+    [TrackingUtils trackAddContactSuccessful:NO Present:NO];
 }
 
 - (IBAction)countryCodeButtonClicked:(id)sender {
@@ -269,10 +276,9 @@
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
 {
     if (result == MessageComposeResultSent) {
-        //TODO track invite with property add success yes number 1
-        
+        [TrackingUtils trackInviteContacts:1 successful:YES justAdded:YES];
     } else {
-        //TODO track invite with property add success no number 1
+        [TrackingUtils trackInviteContacts:1 successful:NO justAdded:YES];
     }
     
     [self dismissViewControllerAnimated:NO completion:^{

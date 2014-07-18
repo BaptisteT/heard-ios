@@ -10,6 +10,16 @@
 #import "CountryCodeViewController.h"
 #import <MessageUI/MessageUI.h>
 
+@protocol AddContactViewControllerDelegate;
+
 @interface AddContactViewController : UIViewController <CountryCodeViewControllerDelegate, UITextFieldDelegate, MFMessageComposeViewControllerDelegate, UIAlertViewDelegate>
+
+@property (weak, nonatomic) id <AddContactViewControllerDelegate> delegate;
+
+@end
+
+@protocol AddContactViewControllerDelegate
+
+- (void)didFinishedAddingContact;
 
 @end

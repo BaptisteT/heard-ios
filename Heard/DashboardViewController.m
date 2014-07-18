@@ -113,12 +113,6 @@
     AudioServicesAddSystemSoundCompletion(1113, CFRunLoopGetMain(), kCFRunLoopDefaultMode, soundMuteNotificationCompletionProc,(__bridge void *)(self));
     self.silentMode = NO;
     
-    //For custom sound
-    //Init recording sound
-//    CFURLRef soundFileURLRef  = CFBundleCopyResourceURL (CFBundleGetMainBundle (), CFSTR ("record-sound"), CFSTR ("aif"), NULL);
-//    AudioServicesCreateSystemSoundID(soundFileURLRef, &_recordSound);
-//        AudioServicesAddSystemSoundCompletion(_recordSound, CFRunLoopGetMain(), kCFRunLoopDefaultMode, soundMuteNotificationCompletionProc,(__bridge void *)(self));
-    
     // Init address book
     self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     ABAddressBookRegisterExternalChangeCallback(self.addressBook, MyAddressBookExternalChangeCallback, (__bridge void *)(self));
@@ -214,6 +208,15 @@
 {
     [super viewDidLayoutSubviews];
     [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSString * segueName = segue.identifier;
+    
+    if ([segueName isEqualToString: @"Add Contact Segue"]) {
+        ((AddContactViewController *) [segue destinationViewController]).delegate = self;
+    }
 }
 
 // ------------------------------
@@ -484,6 +487,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     dashboardController.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     ABAddressBookRegisterExternalChangeCallback(dashboardController.addressBook, MyAddressBookExternalChangeCallback, (__bridge void *)(dashboardController));
 }
+
 
 // ----------------------------------
 #pragma mark Create Contact Bubble
@@ -1135,45 +1139,38 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.playerLine.frame = frame;
 }
 
-
-// ----------------------------------------------------------
-#pragma mark ABNewPersonViewControllerDelegate
-// ----------------------------------------------------------
-
-
-
-- (void)newPersonViewController:(ABNewPersonViewController *)newPersonViewController didCompleteWithNewPerson:(ABRecordRef)person
-{
-    if (!person) { // cancel clicked
-        self.contactToAdd = nil;
-        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-    } else {
-        ABMultiValueRef phones =ABRecordCopyValue(person, kABPersonPhoneProperty);
-        NSMutableArray* mobileNumbers = [NSMutableArray new];
-        for(CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
-            [mobileNumbers addObject:(__bridge NSString *)(ABMultiValueCopyValueAtIndex(phones, i))];
-        }
-        
-        BOOL isAttributed = NO;
-        for (NSString *mobile in mobileNumbers) {
-            for (ContactView *contactBubble in self.contactBubbleViews) {
-                if ([mobile isEqualToString:contactBubble.contact.phoneNumber]) {
-                    if (contactBubble.pendingContact) {
-                        [contactBubble setPendingContact:NO];
-                        contactBubble.contact.isPending = NO;
-                        self.contactToAdd = nil;
-                    }
-                    isAttributed = YES;
-                    break;
-                }
-            }
-            if (isAttributed) {
-                break;
-            }
-        }
-        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-    }
-}
+//- (void)newPersonViewController:(ABNewPersonViewController *)newPersonViewController didCompleteWithNewPerson:(ABRecordRef)person
+//{
+//    if (!person) { // cancel clicked
+//        self.contactToAdd = nil;
+//        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+//    } else {
+//        ABMultiValueRef phones =ABRecordCopyValue(person, kABPersonPhoneProperty);
+//        NSMutableArray* mobileNumbers = [NSMutableArray new];
+//        for(CFIndex i = 0; i < ABMultiValueGetCount(phones); i++) {
+//            [mobileNumbers addObject:(__bridge NSString *)(ABMultiValueCopyValueAtIndex(phones, i))];
+//        }
+//        
+//        BOOL isAttributed = NO;
+//        for (NSString *mobile in mobileNumbers) {
+//            for (ContactView *contactBubble in self.contactBubbleViews) {
+//                if ([mobile isEqualToString:contactBubble.contact.phoneNumber]) {
+//                    if (contactBubble.pendingContact) {
+//                        [contactBubble setPendingContact:NO];
+//                        contactBubble.contact.isPending = NO;
+//                        self.contactToAdd = nil;
+//                    }
+//                    isAttributed = YES;
+//                    break;
+//                }
+//            }
+//            if (isAttributed) {
+//                break;
+//            }
+//        }
+//        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+//    }
+//}
 
 // ----------------------------------------------------------
 #pragma mark ActionSheetProtocol
@@ -1445,6 +1442,15 @@ void soundMuteNotificationCompletionProc(SystemSoundID  ssID,void* clientData){
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void)didFinishedAddingContact
+{
+    [self showLoadingIndicator];
+    
+    self.retrieveNewContact = YES;
+    
+    [self retrieveUnreadMessagesAndNewContacts];
 }
 
 
