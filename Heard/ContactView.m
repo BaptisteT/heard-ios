@@ -177,7 +177,9 @@
         }
         
         // Save data to file (for FDWaveFormView)
-        [self.nextMessageAudioData writeToURL:[GeneralUtils getPlayedAudioURL] atomically:NO];
+        if (![self.nextMessageAudioData writeToURL:[GeneralUtils getPlayedAudioURL] atomically:NO]) {
+            NSLog(@"saving failure");
+        }
         
         // Stat playing
         [self.delegate startedPlayingAudioFileByView:self];

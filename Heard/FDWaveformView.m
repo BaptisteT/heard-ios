@@ -27,12 +27,15 @@
 #define horizontalMaximumBleed 3
 #define horizontalTargetBleed 0.5
 // Drawing more pixels than shown to get antialiasing
-#define horizontalMinimumOverdraw 2
-#define horizontalMaximumOverdraw 5
-#define horizontalTargetOverdraw 3
+// BT overhidden
+#define horizontalMinimumOverdraw 1
+#define horizontalMaximumOverdraw 1
+#define horizontalTargetOverdraw 1
 #define verticalMinimumOverdraw 1
-#define verticalMaximumOverdraw 3
-#define verticalTargetOverdraw 2
+#define verticalMaximumOverdraw 1
+#define verticalTargetOverdraw 1
+
+#define usedSamplesFreq 10 // we don't use every samples
 
 
 @interface FDWaveformView() <UIGestureRecognizerDelegate>
@@ -264,7 +267,7 @@
 
 {
     // TODO: break out subsampling code
-    CGFloat widthInPixels = self.frame.size.width * [UIScreen mainScreen].scale * horizontalTargetOverdraw;
+    CGFloat widthInPixels = self.frame.size.width * [UIScreen mainScreen].scale * usedSamplesFreq * horizontalTargetOverdraw;
     CGFloat heightInPixels = self.frame.size.height * [UIScreen mainScreen].scale * verticalTargetOverdraw;
 
     NSError *error = nil;
@@ -311,7 +314,7 @@
             
             SInt16 *samples = (SInt16 *) data;
             int sampleCount = (int) bufferLength / bytesPerInputSample;
-            for (int i=0; i<sampleCount; i++) {
+            for (int i=0; i<sampleCount; i+=usedSamplesFreq) {
                 Float32 sample = (Float32) *samples++;
                 sample = decibel(sample);
                 sample = minMaxX(sample,noiseFloor,0);

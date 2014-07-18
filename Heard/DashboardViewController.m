@@ -957,14 +957,15 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 //User stop pressing screen
 - (void)longPressOnContactBubbleViewEnded:(NSUInteger)contactId
 {
+    // Stop recording
+    [self.recorder stop];
+    [self.microphone stopFetchingAudio];
+    
     self.recorderLine.frame = [[self.recorderLine.layer presentationLayer] frame];
     [self.recorderLine.layer removeAllAnimations];
     [self setRecorderLineWidth:0];
     [self.audioPlot clear];
     [self.audioPlot removeFromSuperview];
-    
-    [self.recorder stop];
-    [self.microphone stopFetchingAudio];
     [self addRecorderMessage:@"Sending..." color:[UIColor whiteColor]];
 }
 
@@ -1404,7 +1405,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
    withBufferSize:(UInt32)bufferSize
 withNumberOfChannels:(UInt32)numberOfChannels {
     // Getting audio data as an array of float buffer arrays. What does that mean? Because the audio is coming in as a stereo signal the data is split into a left and right channel. So buffer[0] corresponds to the float* data for the left channel while buffer[1] corresponds to the float* data for the right channel.
-
+    
     // See the Thread Safety warning above, but in a nutshell these callbacks happen on a separate audio thread. We wrap any UI updating in a GCD block on the main thread to avoid blocking that audio flow.
     dispatch_async(dispatch_get_main_queue(),^{
         // All the audio plot needs is the buffer data (float*) and the size. Internally the audio plot will handle all the drawing related code, history management, and freeing its own resources. Hence, one badass line of code gets you a pretty plot :)
