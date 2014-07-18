@@ -426,7 +426,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     ABAddressBookRegisterExternalChangeCallback(dashboardController.addressBook, MyAddressBookExternalChangeCallback, (__bridge void *)(dashboardController));
 }
 
-//After adding a contact with AddContactViewController or after adding pending contact
+//After adding a contact with AddContactViewController (delegate method) or after adding pending contact
 - (void)didFinishedAddingContact
 {
     //TODO: update contacts to display recently added contact

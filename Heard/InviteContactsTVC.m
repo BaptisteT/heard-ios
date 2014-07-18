@@ -133,11 +133,14 @@
                                        (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, 0),
                                        @"not selected", nil];
             
-            if ([self.indexedContacts valueForKey:[contact[0] substringToIndex:1]]) {
-                [[self.indexedContacts valueForKey:[contact[0] substringToIndex:1]] addObject:contact];
-            } else {
-                [self.indexedContacts setValue:[[NSMutableArray alloc] initWithObjects:contact, nil]
-                                        forKey:[contact[0] substringToIndex:1]];
+            //Exclude case where contact has no first name and no last name
+            if ([contact[0] length] > 0) {
+                if ([self.indexedContacts valueForKey:[contact[0] substringToIndex:1]]) {
+                    [[self.indexedContacts valueForKey:[contact[0] substringToIndex:1]] addObject:contact];
+                } else {
+                    [self.indexedContacts setValue:[[NSMutableArray alloc] initWithObjects:contact, nil]
+                                            forKey:[contact[0] substringToIndex:1]];
+                }
             }
         }
         
