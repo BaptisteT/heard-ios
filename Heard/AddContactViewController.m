@@ -123,7 +123,7 @@
         //Not on Waved
         } else {
             [[[UIAlertView alloc] initWithTitle:nil
-                                        message:[NSString stringWithFormat:@"Successfully added! But %@ is not yet on Waved and will not be visible in your contacts. You should invite %@!", contactName, contactName]
+                                        message:[NSString stringWithFormat:@"Successfully added. But %@ is not yet on Waved and will not be visible in your contacts. You should invite %@!", contactName, contactName]
                                        delegate:self
                               cancelButtonTitle:nil
                               otherButtonTitles:ALERT_VIEW_DONE_BUTTON, ALERT_VIEW_INVITE_BUTTON, nil] show];
@@ -210,6 +210,8 @@
         viewController.messageComposeDelegate = self;
         
         [self presentViewController:viewController animated:YES completion:nil];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
@@ -217,16 +219,20 @@
 {
     if (result == MessageComposeResultSent) {
         [TrackingUtils trackInviteContacts:1 successful:YES justAdded:YES];
+        
+        [self dismissViewControllerAnimated:NO completion:^{
+            [self dismissViewControllerAnimated:NO completion:^{
+                [GeneralUtils showMessage:[NSString stringWithFormat:@"%@ successfully invited.", self.firstNameField.text ? self.firstNameField.text : self.lastNameField.text]
+                                withTitle:nil];
+            }];
+        }];
     } else {
         [TrackingUtils trackInviteContacts:1 successful:NO justAdded:YES];
-    }
-    
-    [self dismissViewControllerAnimated:NO completion:^{
+        
         [self dismissViewControllerAnimated:NO completion:^{
-            [GeneralUtils showMessage:[NSString stringWithFormat:@"%@ successfully invited!", self.firstNameField.text ? self.firstNameField.text : self.lastNameField.text]
-                            withTitle:nil];
+            [self dismissViewControllerAnimated:NO completion:nil];
         }];
-    }];
+    }
 }
 
 @end

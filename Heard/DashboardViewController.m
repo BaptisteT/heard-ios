@@ -455,7 +455,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 //After adding a contact with AddContactViewController (delegate method) or after adding pending contact
 - (void)didFinishedAddingContact
 {
-    //TODO: update contacts to display recently added contact
+    [GeneralUtils showMessage:@"Contact successfully added." withTitle:nil];
+    
     [self requestAddressBookAccessAndRetrieveFriends];
 }
 

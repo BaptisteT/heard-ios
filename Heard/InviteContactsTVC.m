@@ -135,11 +135,13 @@
             
             //Exclude case where contact has no first name and no last name
             if ([contact[0] length] > 0) {
-                if ([self.indexedContacts valueForKey:[contact[0] substringToIndex:1]]) {
-                    [[self.indexedContacts valueForKey:[contact[0] substringToIndex:1]] addObject:contact];
+                NSString *key = [[contact[0] substringToIndex:1] uppercaseString];
+                
+                if ([self.indexedContacts valueForKey:key]) {
+                    [[self.indexedContacts valueForKey:key] addObject:contact];
                 } else {
                     [self.indexedContacts setValue:[[NSMutableArray alloc] initWithObjects:contact, nil]
-                                            forKey:[contact[0] substringToIndex:1]];
+                                            forKey:key];
                 }
             }
         }
