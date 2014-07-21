@@ -84,11 +84,11 @@
         CFErrorRef error = NULL;
         
         if (firstName) {
-            ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFTypeRef)lastName, &error);
+            ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFTypeRef)firstName, &error);
         }
         
         if (lastName) {
-            ABRecordSetValue(person, kABPersonLastNameProperty, (__bridge CFTypeRef)firstName, &error);
+            ABRecordSetValue(person, kABPersonLastNameProperty, (__bridge CFTypeRef)lastName, &error);
         }
         
         //Set phone number
