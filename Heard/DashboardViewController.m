@@ -147,7 +147,7 @@
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusDenied) {
         [self.contacts removeAllObjects];
     }
-    [self displayContacts];
+    [self displayContactViews];
     
     if (!self.contacts || [self.contacts count] == 0) {
         [self showLoadingIndicator];
@@ -437,59 +437,27 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Create Contact Bubble
 // ----------------------------------
 
-- (void)removeDisplayedContacts
-{
-    self.contactScrollView.hidden = YES;
-    
-    // Erase existing views
-    for (ContactView *contactView in self.contactBubbleViews) {
-        [contactView removeFromSuperview];
-        [contactView.nameLabel removeFromSuperview];
-    }
-    
-    self.contactBubbleViews = [[NSMutableArray alloc] init];
-}
-
-- (void)displayContacts
+- (void)displayContactViews
 {
     [TrackingUtils trackNumberOfContacts:[self.contacts count]];
-    
-    //Because of bug when user quits app while playing a message
-    [self endPlayerUIAnimated:NO];
-    
-    [self removeDisplayedContacts];
     
     self.contactScrollView.hidden = NO;
     
     NSUInteger contactCount = [self.contacts count];
-    
     if (contactCount == 0) {
         return;
     }
-    
     self.contactBubbleViews = [[NSMutableArray alloc] initWithCapacity:contactCount];
     
-    // Sort contact
-    [self.contacts sortUsingComparator:^(Contact *contact1, Contact * contact2) {
-        if (contact1.lastMessageDate < contact2.lastMessageDate) {
-            return (NSComparisonResult)NSOrderedDescending;
-        } else {
-            return (NSComparisonResult)NSOrderedAscending;
-        }
-    }];
-    
     // Create bubbles
-    int position = 1;
     for (Contact *contact in self.contacts) {
-        [self createContactViewWithContact:contact andPosition:position];
-        position ++;
+        [self createContactViewWithContact:contact andPosition:1];
     }
     
-    // Resize view
-    [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
+    [self reOrderContactViews];
 }
 
-- (void)redisplayContact
+- (void)reOrderContactViews
 {
     // Sort contact
     [self.contactBubbleViews sortUsingComparator:^(ContactView *contactView1, ContactView * contactView2) {
@@ -599,8 +567,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
 }
 
+
 // ----------------------------------
-#pragma mark Display Messages
+#pragma mark Messages
 // ----------------------------------
 
 // Retrieve unread messages and display alert
@@ -621,7 +590,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [self requestAddressBookAccessAndRetrieveFriends];
             self.retrieveNewContact = NO;
         } else {
-            [self redisplayContact];
+            [self reOrderContactViews];
         }
     };
     
@@ -660,7 +629,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     // unread message pool
     if (!self.nonAttributedUnreadMessages) {
             self.nonAttributedUnreadMessages = [[NSMutableArray alloc] init];
-        }
+    }
     [self.nonAttributedUnreadMessages addObject:message];
     return NO;
 }
@@ -697,7 +666,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Redisplay correctly
     self.nonAttributedUnreadMessages = nil;
-    [self redisplayContact];
+    [self reOrderContactViews];
 }
 
 
@@ -1197,7 +1166,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                 }
             }
             // Change position of other bubbles
-            [self redisplayContact];
+            [self reOrderContactViews];
             self.contactToAdd = nil;
         };
         [ApiUtils blockUser:self.contactToAdd.identifier AndExecuteSuccess:successBlock failure:nil];

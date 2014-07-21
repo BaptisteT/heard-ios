@@ -19,7 +19,6 @@
 
 - (BOOL)addUnreadMessageToExistingContacts:(Message *)message;
 - (void) retrieveUnreadMessagesAndNewContacts;
-- (void)displayContacts;
 - (void)distributeNonAttributedMessages;
 - (NSTimeInterval)delayBeforeRecording;
 

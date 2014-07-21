@@ -98,8 +98,6 @@
     UIViewController *visibleController = [self getVisibleController];
     
     if ([visibleController isKindOfClass:[DashboardViewController class]]) {
-        [(DashboardViewController *)visibleController displayContacts];
-        
         // Retrieve new messages
         [(DashboardViewController *)visibleController retrieveUnreadMessagesAndNewContacts];
     }
