@@ -306,6 +306,7 @@
     _unreadMessagesCount = unreadMessagesCount;
     self.unreadMessagesLabel.text = [NSString stringWithFormat:@"%lu",(long)unreadMessagesCount];
     if (unreadMessagesCount == 0) {
+        [self hideMessageCountLabel:YES];
         self.longPressRecognizer.minimumPressDuration = kLongPressMinDurationNoMessageCase;
     } else {
         self.longPressRecognizer.minimumPressDuration = kLongPressMinDurationMessageCase;
