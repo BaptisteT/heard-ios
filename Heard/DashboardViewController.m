@@ -389,19 +389,19 @@
                 contact.lastMessageDate = 0;
                 [self displayAdditionnalContact:contact];
             }
-//            else if (existingContact.isPending) {
-//                // Mark as non pending
-//                existingContact.isPending = NO;
-//                
-//                //Use server name if blank in address book
-//                NSString *firstName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
-//                
-//                if (firstName && [firstName length] > 0) {
-//                    contact.firstName = firstName;
-//                }
-//                contact.lastName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
-//                existingContact.phoneNumber = contact.phoneNumber;
-//            }
+            else if (existingContact.isPending) {
+                // Mark as non pending
+                existingContact.isPending = NO;
+                
+                //Use server name if blank in address book
+                NSString *firstName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
+                
+                if (firstName && [firstName length] > 0) {
+                    contact.firstName = firstName;
+                }
+                contact.lastName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
+                existingContact.phoneNumber = contact.phoneNumber;
+            }
         }
         self.addressBookFormattedContacts = nil;
         
@@ -423,14 +423,15 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     DashboardViewController * dashboardController = (__bridge DashboardViewController *)context;
     dashboardController.retrieveNewContact = YES;
-    dashboardController.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
-    ABAddressBookRegisterExternalChangeCallback(dashboardController.addressBook, MyAddressBookExternalChangeCallback, (__bridge void *)(dashboardController));
+
+    ABAddressBookRevert(notificationAddressBook);
 }
 
 //After adding a contact with AddContactViewController (delegate method) or after adding pending contact
 - (void)didFinishedAddingContact
 {
     //TODO: update contacts to display recently added contact
+    [self requestAddressBookAccessAndRetrieveFriends];
 }
 
 
@@ -564,6 +565,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     for (ContactView *contactView in self.contactBubbleViews) {
         if (contactView.contact.isPending && contactView.contact.identifier != kAdminId) {
             [contactView setPendingContact:YES];
+        } else {
+            [contactView setPendingContact:NO];
         }
     }
 }

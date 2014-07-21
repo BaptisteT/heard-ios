@@ -92,7 +92,7 @@
         }
         
         //Set phone number
-        ABMutableMultiValueRef multiPhone =     ABMultiValueCreateMutable(kABMultiStringPropertyType);
+        ABMutableMultiValueRef multiPhone = ABMultiValueCreateMutable(kABMultiStringPropertyType);
         ABMultiValueAddValueAndLabel(multiPhone, (__bridge CFTypeRef)formattedNumber, kABPersonPhoneMobileLabel, NULL);
         ABRecordSetValue(person, kABPersonPhoneProperty, multiPhone,nil);
         CFRelease(multiPhone);
