@@ -28,10 +28,10 @@
 #import "AddressbookUtils.h"
 #import "MBProgressHUD.h"
 
-#define ACTION_SHEET_1_OPTION_1 @"Invite Contacts"
-#define ACTION_SHEET_1_OPTION_2 @"Add Contact"
+#define ACTION_SHEET_1_OPTION_1 @"Invite Friends"
+#define ACTION_SHEET_1_OPTION_2 @"Add New Contact"
 #define ACTION_SHEET_1_OPTION_3 @"Other"
-#define ACTION_SHEET_2_OPTION_1 @"Profile"
+#define ACTION_SHEET_2_OPTION_1 @"Edit Profile"
 #define ACTION_SHEET_2_OPTION_2 @"Share"
 #define ACTION_SHEET_2_OPTION_3 @"Feedback"
 #define ACTION_SHEET_PENDING_OPTION_1 @"Add contact"
@@ -708,7 +708,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                        delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:ACTION_SHEET_1_OPTION_2, ACTION_SHEET_1_OPTION_1, ACTION_SHEET_1_OPTION_3, nil];
+                                              otherButtonTitles:ACTION_SHEET_1_OPTION_1, ACTION_SHEET_1_OPTION_2 , ACTION_SHEET_1_OPTION_3, nil];
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
