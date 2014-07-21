@@ -55,6 +55,11 @@
 #define INVITE_CONTACT_BUTTON_HEIGHT 50
 #define TUTORIAL_VIEW_HEIGHT 60
 
+#define USER_PROFILE_VIEW_SIZE 60
+#define USER_PROFILE_PICTURE_SIZE 50
+#define USER_PROFILE_PICTURE_MARGIN 5
+
+
 @interface DashboardViewController ()
 
 // Contacts
@@ -88,7 +93,10 @@
 // Current user
 @property (nonatomic, strong) NSString *currentUserPhoneNumber;
 @property (strong, nonatomic) UIImagePickerController *imagePickerController;
-@property (strong, nonatomic) UIImageView *currentUserProfilePicture;
+@property (strong, nonatomic) UIImageView *profilePicture;
+@property (nonatomic, strong) UIView *profileContainer;
+@property (nonatomic, strong) UILabel *usernameLabel;
+
 // Others
 @property (weak, nonatomic) UIButton *menuButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
@@ -140,6 +148,32 @@
     
     // Init no adress book access label
     [self initNoAddressBookAccessLabel]; // we do it here to avoid to resize text in a parrallel thread
+    
+    // Current User phone number
+    self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
+    
+    //Current user profile container
+    self.profileContainer = [[UIView alloc] initWithFrame:CGRectMake(8, -8 - USER_PROFILE_VIEW_SIZE, 304, USER_PROFILE_VIEW_SIZE)];
+    self.profileContainer.layer.cornerRadius = 3;
+    self.profileContainer.backgroundColor = [UIColor colorWithRed:240/256.0 green:240/256.0 blue:240/256.0 alpha:0.98];
+    
+    //Current user profile picture
+    self.profilePicture = [[UIImageView alloc] initWithFrame:CGRectMake(USER_PROFILE_PICTURE_MARGIN,USER_PROFILE_PICTURE_MARGIN,USER_PROFILE_PICTURE_SIZE,USER_PROFILE_PICTURE_SIZE)];
+    self.profilePicture.layer.cornerRadius = USER_PROFILE_PICTURE_SIZE/2;
+    self.profilePicture.clipsToBounds = YES;
+    self.profilePicture.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.profilePicture.layer.borderWidth = 0.5;
+    [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
+    [self.profileContainer addSubview:self.profilePicture];
+    
+    //Current user name label
+    float usernameOffset = self.profilePicture.frame.origin.x + self.profilePicture.frame.size.width + USER_PROFILE_PICTURE_MARGIN;
+    self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(usernameOffset, 0,
+                                                                       self.profileContainer.bounds.size.width - 2 * usernameOffset, self.profileContainer.bounds.size.height)];
+    self.usernameLabel.textAlignment = NSTextAlignmentCenter;
+    self.usernameLabel.font = [UIFont systemFontOfSize:15.0];
+    self.usernameLabel.textColor = [UIColor grayColor];
+    [self.profileContainer addSubview:self.usernameLabel];
     
     // Create bubble with contacts
     self.contacts = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).contacts;
@@ -214,15 +248,6 @@
     self.playerLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.playerWaveView.bounds.size.height/2, 0, RECORDER_LINE_HEIGHT)];
     self.playerLine.backgroundColor = [ImageUtils transparentWhite];
     [self.playerWaveView addSubview:self.playerLine];
-    
-    // Current User
-    self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
-    self.currentUserProfilePicture = [[UIImageView alloc] initWithFrame:CGRectMake(30,1,47,47)];
-    self.currentUserProfilePicture.layer.cornerRadius = self.currentUserProfilePicture.bounds.size.height/2;
-    self.currentUserProfilePicture.clipsToBounds = YES;
-    self.currentUserProfilePicture.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.currentUserProfilePicture.layer.borderWidth = 0.5;
-    [ImageUtils setWithoutCachingImageView:self.currentUserProfilePicture withURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
 }
 
 // Make sure scroll view has been resized (necessary because layout constraints change scroll view size)
@@ -679,24 +704,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ------------------------------
 - (IBAction)menuButtonClicked:(id)sender {
 
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:[SessionUtils getCurrentUserFirstName]
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                        delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                          destructiveButtonTitle:nil
                                               otherButtonTitles:ACTION_SHEET_1_OPTION_2, ACTION_SHEET_1_OPTION_1, ACTION_SHEET_1_OPTION_3, nil];
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
-
-- (void)willPresentActionSheet:(UIActionSheet *)actionSheet {
-    for (UIView *_currentView in actionSheet.subviews) {
-        if ([_currentView isKindOfClass:[UILabel class]]) {
-            CGRect frame = ((UILabel *)_currentView).frame;
-            [(UILabel *)_currentView setFont:[UIFont fontWithName:@"Avenir-Heavy" size:18.f]];
-            ((UILabel *)_currentView).frame = CGRectMake(frame.origin.x, 0, frame.size.width, 80);
-            [(UILabel *)_currentView.superview addSubview:self.currentUserProfilePicture];
-        }
-    }
-}
-
 
 // ----------------------------------------------------------
 #pragma mark Recording Mode
@@ -1081,7 +1094,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Other
     else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_3]) {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:[NSString stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
                                                            delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                              destructiveButtonTitle:nil
                                                   otherButtonTitles:ACTION_SHEET_2_OPTION_1, ACTION_SHEET_2_OPTION_2, ACTION_SHEET_2_OPTION_3, nil];
@@ -1218,9 +1231,34 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [GeneralUtils showMessage:[alertView.title stringByAppendingString:@" must between 1 and 20 characters."] withTitle:nil];
         }
         if (buttonIndex == 1) {
-            [alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] ? [ApiUtils updateFirstName:textField.text success:nil failure:nil] : [ApiUtils updateLastName:textField.text success:nil failure:nil];
+            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            
+            [alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] ? [ApiUtils updateFirstName:textField.text success:^{
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [GeneralUtils showMessage:@"First name successfully updated." withTitle:nil];
+            } failure:^{
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [GeneralUtils showMessage:@"We couldn't update your first name, please try again." withTitle:nil];
+            }]: [ApiUtils updateLastName:textField.text success:^{
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [GeneralUtils showMessage:@"Last name successfully updated." withTitle:nil];
+            } failure:^{
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [GeneralUtils showMessage:@"We couldn't update your last name, please try again." withTitle:nil];
+            }];
         }
     }
+}
+
+- (void)willPresentActionSheet:(UIActionSheet *)actionSheet {
+    self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", [SessionUtils getCurrentUserFirstName], [SessionUtils getCurrentUserLastName]];
+    
+    [actionSheet addSubview:self.profileContainer];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet willDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    [self.profileContainer removeFromSuperview];
 }
 
 
@@ -1322,14 +1360,21 @@ void soundMuteNotificationCompletionProc(SystemSoundID  ssID,void* clientData){
     UIImage *image =  [info objectForKey:UIImagePickerControllerOriginalImage];
     
     if (image) {
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        
         CGSize rescaleSize = {kProfilePictureSize, kProfilePictureSize};
         image = [ImageUtils imageWithImage:[ImageUtils cropBiggestCenteredSquareImageFromImage:image withSide:image.size.width] scaledToSize:rescaleSize];
-        [self.currentUserProfilePicture setImage:image];
         
         NSString *encodedImage = [ImageUtils encodeToBase64String:image];
-        [ApiUtils updateProfilePicture:encodedImage success:nil failure:nil];
+        [ApiUtils updateProfilePicture:encodedImage success:^{
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [GeneralUtils showMessage:@"Profile picture successfully updated." withTitle:nil];
+            [ImageUtils setWithoutCachingImageView:self.profilePicture withURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
+        }failure:^{
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        }];
     } else {
-        NSLog(@"Failed to get image");
+        [GeneralUtils showMessage:@"We could not update your profile picture, please try again." withTitle:nil];
     }
     
     [self dismissViewControllerAnimated:YES completion:NULL];
