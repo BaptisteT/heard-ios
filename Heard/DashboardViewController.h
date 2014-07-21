@@ -21,6 +21,7 @@
 - (void) retrieveUnreadMessagesAndNewContacts;
 - (void)distributeNonAttributedMessages;
 - (NSTimeInterval)delayBeforeRecording;
+- (void)endPlayerUIAnimated:(BOOL)animated;
 
 @property (nonatomic) BOOL isSignUp;
 

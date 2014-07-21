@@ -114,6 +114,12 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     [ContactUtils saveContactsInMemory:self.contacts];
+    
+    UIViewController *visibleController = [self getVisibleController];
+    if ([visibleController isKindOfClass:[DashboardViewController class]]) {
+        // Clean UI
+        [(DashboardViewController *)visibleController endPlayerUIAnimated:NO];
+    }
 }
 
 
