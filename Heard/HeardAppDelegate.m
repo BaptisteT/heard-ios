@@ -154,7 +154,7 @@
         // Add unread message
         UIViewController *visibleController = [self getVisibleController];
         if ([visibleController isKindOfClass:[DashboardViewController class]]) {
-            BOOL isAttributed = [(DashboardViewController *)visibleController addUnreadMessageToExistingContacts:newMessage];
+            BOOL isAttributed = [(DashboardViewController *)visibleController attributeMessageToExistingContacts:newMessage];
             
             // distribute NonAttributedMessages
             if (!isAttributed) {

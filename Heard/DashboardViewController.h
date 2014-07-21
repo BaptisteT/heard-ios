@@ -17,7 +17,7 @@
 
 @interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, EZMicrophoneDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, AddContactViewControllerDelegate, AVAudioRecorderDelegate>
 
-- (BOOL)addUnreadMessageToExistingContacts:(Message *)message;
+- (BOOL)attributeMessageToExistingContacts:(Message *)message;
 - (void) retrieveUnreadMessagesAndNewContacts;
 - (void)distributeNonAttributedMessages;
 - (NSTimeInterval)delayBeforeRecording;

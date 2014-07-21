@@ -330,8 +330,8 @@
         ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
             if (granted) {
                 // First time access has been granted, add the contact
-                self.addressBookFormattedContacts = [AddressbookUtils retrieveFriendsFromAddressBook:self.addressBook];
-                [self getHeardContacts];
+                self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
+                [self matchPhoneContactsWithHeardUsers];
             } else {
                 // User denied access
                 [self noAddressBookAccessMode];
@@ -340,8 +340,8 @@
     }
     else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
         // The user has previously given access, add the contact
-        self.addressBookFormattedContacts = [AddressbookUtils retrieveFriendsFromAddressBook:self.addressBook];
-        [self getHeardContacts];
+        self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
+        [self matchPhoneContactsWithHeardUsers];
 
         if (self.noAddressBookAccessLabel) {
             [self.noAddressBookAccessLabel removeFromSuperview];
@@ -353,7 +353,7 @@
     }
 }
 
-- (void)getHeardContacts
+- (void)matchPhoneContactsWithHeardUsers
 {
     NSMutableArray *phoneNumbers = [[NSMutableArray alloc] init];
     NSMutableDictionary * adressBookWithFormattedKey = [NSMutableDictionary new];
@@ -388,19 +388,20 @@
                 
                 contact.lastMessageDate = 0;
                 [self displayAdditionnalContact:contact];
-            } else if (existingContact.isPending) {
-                // Mark as non pending
-                existingContact.isPending = NO;
-                
-                //Use server name if blank in address book
-                NSString *firstName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
-                
-                if (firstName && [firstName length] > 0) {
-                    contact.firstName = firstName;
-                }
-                contact.lastName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
-                existingContact.phoneNumber = contact.phoneNumber;
             }
+//            else if (existingContact.isPending) {
+//                // Mark as non pending
+//                existingContact.isPending = NO;
+//                
+//                //Use server name if blank in address book
+//                NSString *firstName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
+//                
+//                if (firstName && [firstName length] > 0) {
+//                    contact.firstName = firstName;
+//                }
+//                contact.lastName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
+//                existingContact.phoneNumber = contact.phoneNumber;
+//            }
         }
         self.addressBookFormattedContacts = nil;
         
@@ -580,7 +581,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self resetUnreadMessages];
         BOOL areAttributed = YES;
         for (Message *message in messages) {
-            areAttributed &= [self addUnreadMessageToExistingContacts:message];
+            areAttributed &= [self attributeMessageToExistingContacts:message];
         }
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:messages.count];
         
@@ -614,7 +615,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 // Add a message we just received
-- (BOOL)addUnreadMessageToExistingContacts:(Message *)message
+- (BOOL)attributeMessageToExistingContacts:(Message *)message
 {
     for (ContactView *contactBubble in self.contactBubbleViews) {
         if (message.senderId == contactBubble.contact.identifier) {
@@ -1291,11 +1292,7 @@ void soundMuteNotificationCompletionProc(SystemSoundID  ssID,void* clientData){
 
 - (NSTimeInterval)delayBeforeRecording
 {
-    if (self.silentMode) {
-        return 0;
-    } else {
-        return kMinAudioDuration;
-    }
+    return self.silentMode ? 0 : kMinAudioDuration;
 }
 
 

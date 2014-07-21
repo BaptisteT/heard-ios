@@ -21,6 +21,6 @@
 
 + (NSMutableDictionary *)getCountriesAndCallingCodesForLetterCodes;
 
-+ (NSMutableDictionary *)retrieveFriendsFromAddressBook:(ABAddressBookRef) addressBook;
++ (NSMutableDictionary *)getFormattedPhoneNumbersFromAddressBook:(ABAddressBookRef) addressBook;
 
 @end

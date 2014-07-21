@@ -171,7 +171,7 @@
     return letterCodeToCountryAndCallingCode;
 }
 
-+ (NSMutableDictionary *)retrieveFriendsFromAddressBook:(ABAddressBookRef) addressBook
++ (NSMutableDictionary *)getFormattedPhoneNumbersFromAddressBook:(ABAddressBookRef) addressBook
 {
     NSMutableDictionary *addressBookFormattedContacts = [[NSMutableDictionary alloc] init];
     
