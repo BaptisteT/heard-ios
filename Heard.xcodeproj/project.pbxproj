@@ -219,8 +219,6 @@
 		3C55FD701966B11C00E818D9 /* CrashReportUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */; };
 		3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA177E91958B74000096266 /* AudioToolbox.framework */; };
 		3CB8B7F5195453E50090D657 /* ContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactView.m */; };
-		3CCA75B01973D6D90095A626 /* FDWaveformView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCA75AF1973D6D90095A626 /* FDWaveformView.m */; };
-		3CCA75B11973D6D90095A626 /* FDWaveformView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CCA75AF1973D6D90095A626 /* FDWaveformView.m */; };
 		3CD1808D1971B55200EC8BE2 /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD180731971B55200EC8BE2 /* AEFloatConverter.m */; };
 		3CD1808E1971B55200EC8BE2 /* AEFloatConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD180731971B55200EC8BE2 /* AEFloatConverter.m */; };
 		3CD1808F1971B55200EC8BE2 /* EZAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD180751971B55200EC8BE2 /* EZAudio.m */; };
@@ -328,7 +326,6 @@
 		0BD758D41950F91B00CF0D85 /* WelcomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController.h; sourceTree = "<group>"; };
 		0BD758D51950F91B00CF0D85 /* WelcomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController.m; sourceTree = "<group>"; };
 		0BD758D71950F91B00CF0D85 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		0BD758DE1950F91B00CF0D85 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		0BD758F519511A4000CF0D85 /* RequestPhoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestPhoneViewController.h; sourceTree = "<group>"; };
 		0BD758F619511A4000CF0D85 /* RequestPhoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestPhoneViewController.m; sourceTree = "<group>"; };
 		0BDB64B919521A7C00223093 /* NBPhoneNumberMetadata.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = NBPhoneNumberMetadata.plist; sourceTree = "<group>"; };
@@ -423,8 +420,6 @@
 		3CB8B7EB195346620090D657 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		3CB8B7F3195453E50090D657 /* ContactView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactView.h; sourceTree = "<group>"; };
 		3CB8B7F4195453E50090D657 /* ContactView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactView.m; sourceTree = "<group>"; };
-		3CCA75AE1973D6D90095A626 /* FDWaveformView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDWaveformView.h; sourceTree = "<group>"; };
-		3CCA75AF1973D6D90095A626 /* FDWaveformView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDWaveformView.m; sourceTree = "<group>"; };
 		3CD180721971B55200EC8BE2 /* AEFloatConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEFloatConverter.h; sourceTree = "<group>"; };
 		3CD180731971B55200EC8BE2 /* AEFloatConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AEFloatConverter.m; sourceTree = "<group>"; };
 		3CD180741971B55200EC8BE2 /* EZAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAudio.h; sourceTree = "<group>"; };
@@ -630,7 +625,6 @@
 				0BD758BF1950F91B00CF0D85 /* Foundation.framework */,
 				0BD758C11950F91B00CF0D85 /* CoreGraphics.framework */,
 				0BD758C31950F91B00CF0D85 /* UIKit.framework */,
-				0BD758DE1950F91B00CF0D85 /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -831,8 +825,6 @@
 		3CB8B7F2195453B10090D657 /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
-				3CCA75AE1973D6D90095A626 /* FDWaveformView.h */,
-				3CCA75AF1973D6D90095A626 /* FDWaveformView.m */,
 				3CB8B7F3195453E50090D657 /* ContactView.h */,
 				3CB8B7F4195453E50090D657 /* ContactView.m */,
 			);
@@ -1045,7 +1037,6 @@
 				0B72EEA4196C672F00AC5A01 /* MPSurvey.m in Sources */,
 				0B72EEA5196C672F00AC5A01 /* RequestPhoneViewController.m in Sources */,
 				0B72EEA6196C672F00AC5A01 /* MPNotification.m in Sources */,
-				3CCA75B11973D6D90095A626 /* FDWaveformView.m in Sources */,
 				0B72EEA7196C672F00AC5A01 /* NBAsYouTypeFormatter.m in Sources */,
 				0B72EEA8196C672F00AC5A01 /* NSData+MPBase64.m in Sources */,
 				0B72EEA9196C672F00AC5A01 /* NBNumberFormat.m in Sources */,
@@ -1125,7 +1116,6 @@
 				0BB0E8F3195B449A00C94AC0 /* MPSurvey.m in Sources */,
 				0BDB65581953B6A000223093 /* RequestPhoneViewController.m in Sources */,
 				0BB0E8F0195B449A00C94AC0 /* MPNotification.m in Sources */,
-				3CCA75B01973D6D90095A626 /* FDWaveformView.m in Sources */,
 				0BDB65511953B60D00223093 /* NBAsYouTypeFormatter.m in Sources */,
 				0BB0E8F8195B449A00C94AC0 /* NSData+MPBase64.m in Sources */,
 				0BDB65521953B60D00223093 /* NBNumberFormat.m in Sources */,

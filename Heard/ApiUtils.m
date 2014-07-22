@@ -370,7 +370,7 @@
 {
     NSString *path = [[ApiUtils getBasePath] stringByAppendingString:@"obsolete_api.json"];
     NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSDictionary *parameters = @{@"api_version": appVersion};
+    NSDictionary *parameters = @{@"app_version": appVersion};
     [[ApiUtils sharedClient] GET:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
         NSDictionary *result = [JSON valueForKeyPath:@"result"];
         if (successBlock) {

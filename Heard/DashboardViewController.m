@@ -23,7 +23,6 @@
 #import "HeardAppDelegate.h"
 #import "ContactUtils.h"
 #import <MediaPlayer/MPMusicPlayerController.h>
-#import "FDWaveformView.h"
 #import "AddContactViewController.h"
 #import "AddressbookUtils.h"
 #import "MBProgressHUD.h"
@@ -81,7 +80,6 @@
 @property (nonatomic) BOOL silentMode;
 // Player
 @property (strong, nonatomic) UIView *playerContainer;
-//@property (nonatomic, strong) FDWaveformView *playerWaveView;
 @property (nonatomic,strong) UIView *playerLine;
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 @property (weak, nonatomic) IBOutlet UIButton *replayButton;
