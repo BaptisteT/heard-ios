@@ -14,8 +14,6 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>logo-heard-80</string>
-				<string>logo-heard-120</string>
 				<string>heard-logo-58</string>
 				<string>heard-logo-80</string>
 				<string>heard-logo-120</string>

@@ -1087,7 +1087,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Share
     else if ([buttonTitle isEqualToString:ACTION_SHEET_2_OPTION_2]) {
-        NSString *shareString = @"Download Waved, the fastest messaging app.";
+        NSString *shareString = @"Download Waved, the fastest way to say a lot.";
         
         NSURL *shareUrl = [NSURL URLWithString:kProdAFHeardWebsite];
         
