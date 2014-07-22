@@ -182,10 +182,6 @@
         [self.contacts removeAllObjects];
     }
     [self displayContactViews];
-    
-    if (!self.contacts || [self.contacts count] == 0) {
-        [self showLoadingIndicator];
-    }
 
     // Retrieve messages & contacts
     [self retrieveUnreadMessagesAndNewContacts];
@@ -620,6 +616,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [self requestAddressBookAccessAndRetrieveFriends];
             self.retrieveNewContact = NO;
         } else {
+            [self hideLoadingIndicator];
             [self reOrderContactViews];
         }
     };
@@ -631,7 +628,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [SessionUtils redirectToSignIn];
         }
     };
-    
+    [self showLoadingIndicator];
     [ApiUtils getUnreadMessagesAndExecuteSuccess:successBlock failure:failureBlock];
 }
 
