@@ -48,9 +48,7 @@
 #define RECORDER_VERTICAL_MARGIN 5
 #define RECORDER_MESSAGE_HEIGHT 20
 
-#define PLAYER_LINE_HEIGHT 0.4
-#define PLAYER_UI_HEIGHT 50
-#define PLAYER_UI_VERTICAL_MARGIN 5
+#define PLAYER_UI_HEIGHT 5
 
 #define INVITE_CONTACT_BUTTON_HEIGHT 50
 #define TUTORIAL_VIEW_HEIGHT 60
@@ -83,7 +81,7 @@
 @property (nonatomic) BOOL silentMode;
 // Player
 @property (strong, nonatomic) UIView *playerContainer;
-@property (nonatomic, strong) FDWaveformView *playerWaveView;
+//@property (nonatomic, strong) FDWaveformView *playerWaveView;
 @property (nonatomic,strong) UIView *playerLine;
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 @property (weak, nonatomic) IBOutlet UIButton *replayButton;
@@ -118,8 +116,7 @@
     
     self.contactScrollView.hidden = YES;
     self.retrieveNewContact = YES;
-    
-    [self updateReplayButtonAppearance];
+    self.replayButton.hidden = YES;
     
     // Sound callback
     AudioServicesAddSystemSoundCompletion(1113, CFRunLoopGetMain(), kCFRunLoopDefaultMode, soundMuteNotificationCompletionProc,(__bridge void *)(self));
@@ -134,12 +131,6 @@
     self.recorderContainer.backgroundColor = [ImageUtils red];
     [self.view addSubview:self.recorderContainer];
     self.recorderContainer.hidden = YES;
-    
-    // Init player container
-    self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_UI_HEIGHT, self.view.bounds.size.width, PLAYER_UI_HEIGHT)];
-    self.playerContainer.backgroundColor = [ImageUtils green];
-    [self.view addSubview:self.playerContainer];
-    self.playerContainer.hidden = YES;
     
     // Init resend gesture
     self.oneTapResendRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleResendTapGesture)];
@@ -236,14 +227,16 @@
     self.recorderLine.backgroundColor = [UIColor whiteColor];
     [self.audioPlot addSubview:self.recorderLine];
     
-    // player wave view
-    self.playerWaveView = [[FDWaveformView alloc] initWithFrame:CGRectMake(0, PLAYER_UI_VERTICAL_MARGIN, self.playerContainer.frame.size.width, self.playerContainer.frame.size.height - 2 * PLAYER_UI_VERTICAL_MARGIN)];
-    [self.playerContainer addSubview:self.playerWaveView];
+    // Init player container
+    self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_UI_HEIGHT, self.view.bounds.size.width, PLAYER_UI_HEIGHT)];
+    self.playerContainer.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.playerContainer];
+    self.playerContainer.hidden = YES;
     
     // player line
-    self.playerLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.playerWaveView.bounds.size.height/2, 0, RECORDER_LINE_HEIGHT)];
-    self.playerLine.backgroundColor = [ImageUtils transparentWhite];
-    [self.playerWaveView addSubview:self.playerLine];
+    self.playerLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, PLAYER_UI_HEIGHT)];
+    self.playerLine.backgroundColor = [ImageUtils green];
+    [self.playerContainer addSubview:self.playerLine];
 }
 
 // Make sure scroll view has been resized (necessary because layout constraints change scroll view size)
@@ -884,17 +877,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     [self.playerContainer.layer removeAllAnimations];
     
-    // Waveform
-    [self.playerWaveView setAudioURL:[GeneralUtils getPlayedAudioURL]];
-    self.playerWaveView.progressSamples = 10000;
-    
     self.lastContactPlayed = contactView;
     
     // Init player
     self.mainPlayer = [[AVAudioPlayer alloc] initWithData:contactView.nextMessageAudioData error:nil];
     [self.mainPlayer setVolume:kAudioPlayerVolume];
-    
-    [self updateReplayButtonAppearance];
     
     // Player UI
     NSTimeInterval duration = self.mainPlayer.duration;
@@ -971,6 +958,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.disableProximityObserver = NO;
     [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
     
+    self.replayButton.hidden = YES;
     [self playerUIForContactView:contactView];
     self.playerContainer.hidden = NO;
     self.playerContainer.alpha = 1;
@@ -980,9 +968,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                           delay:0
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
-                         self.playerWaveView.renderingInProgress = NO;
-                         self.playerWaveView.progressSamples = self.playerWaveView.totalSamples;
-                         [self setPlayerLineWidth:self.playerWaveView.bounds.size.width];
+                         [self setPlayerLineWidth:self.playerContainer.bounds.size.width];
                      } completion:^(BOOL finished){
                          if (finished) {
                              [self endPlayerUIAnimated:YES];
@@ -992,7 +978,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)endPlayerUIAnimated:(BOOL)animated
 {
-    self.playerWaveView.progressSamples = 0;
     // Remove proximity state (here because player delegate not working)
     if ([UIDevice currentDevice].proximityState) {
         self.disableProximityObserver = YES;
@@ -1001,12 +986,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     
     [self endPlayerUIForAllContactViews];
+    self.replayButton.hidden = NO;
     
     if ([self.mainPlayer isPlaying]) {
         [self.mainPlayer stop];
         self.mainPlayer.currentTime = 0;
     }
-    [self.playerWaveView.layer removeAllAnimations];
+    [self.playerLine.layer removeAllAnimations];
     
     if (animated) {
         [UIView animateWithDuration:0.5 animations:^{
@@ -1043,15 +1029,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (self.activityView) {
         [self.activityView stopAnimating];
         [self.activityView removeFromSuperview];
-    }
-}
-
-- (void)updateReplayButtonAppearance
-{
-    if (self.mainPlayer) {
-        self.replayButton.hidden = NO;
-    } else {
-        self.replayButton.hidden = YES;
     }
 }
 
