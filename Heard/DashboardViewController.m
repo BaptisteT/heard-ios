@@ -984,7 +984,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     
     [self endPlayerUIForAllContactViews];
-    self.replayButton.hidden = NO;
     
     if ([self.mainPlayer isPlaying]) {
         [self.mainPlayer stop];
@@ -998,11 +997,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         } completion:^(BOOL dummy){
             if (dummy) {
                 self.playerContainer.hidden = YES;
+                self.replayButton.hidden = NO;
             }
         }];
     } else {
         self.playerContainer.hidden = YES;
         [self setPlayerLineWidth:0];
+        self.replayButton.hidden = NO;
     }
     
 }
