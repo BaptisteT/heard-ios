@@ -997,13 +997,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         } completion:^(BOOL dummy){
             if (dummy) {
                 self.playerContainer.hidden = YES;
-                self.replayButton.hidden = NO;
+                [self unhideReplayButton];
             }
         }];
     } else {
         self.playerContainer.hidden = YES;
         [self setPlayerLineWidth:0];
-        self.replayButton.hidden = NO;
+        [self unhideReplayButton];
     }
     
 }
@@ -1024,12 +1024,17 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)hideLoadingIndicator
 {
     self.contactScrollView.hidden = NO;
-    if (self.mainPlayer.duration > 0) {
-        self.replayButton.hidden = NO;
-    }
+    [self unhideReplayButton];
     if (self.activityView) {
         [self.activityView stopAnimating];
         [self.activityView removeFromSuperview];
+    }
+}
+
+- (void)unhideReplayButton
+{
+    if (self.mainPlayer.duration > 0) {
+        self.replayButton.hidden = NO;
     }
 }
 
