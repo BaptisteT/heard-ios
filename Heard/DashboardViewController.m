@@ -1011,7 +1011,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)showLoadingIndicator
 {
     self.contactScrollView.hidden = YES;
-    
+    self.replayButton.hidden = YES;
     if (!self.activityView) {
         self.activityView=[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         self.activityView.center = self.view.center;
@@ -1024,7 +1024,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)hideLoadingIndicator
 {
     self.contactScrollView.hidden = NO;
-    
+    self.replayButton.hidden = NO;
     if (self.activityView) {
         [self.activityView stopAnimating];
         [self.activityView removeFromSuperview];
