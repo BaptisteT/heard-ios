@@ -63,5 +63,7 @@
 
 - (NSTimeInterval)delayBeforeRecording;
 
+- (void)contactTappedWithoutUnreadMessages:(Contact *)contact;
+
 
 @end

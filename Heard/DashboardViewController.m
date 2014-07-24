@@ -27,19 +27,22 @@
 #import "AddressbookUtils.h"
 #import "MBProgressHUD.h"
 
-#define ACTION_SHEET_1_OPTION_1 @"Invite Friends"
-#define ACTION_SHEET_1_OPTION_2 @"Add New Contact"
-#define ACTION_SHEET_1_OPTION_3 @"Other"
-#define ACTION_SHEET_2_OPTION_1 @"Edit Profile"
-#define ACTION_SHEET_2_OPTION_2 @"Share"
-#define ACTION_SHEET_2_OPTION_3 @"Feedback"
-#define ACTION_SHEET_PENDING_OPTION_1 @"Add contact"
-#define ACTION_SHEET_PENDING_OPTION_2 @"Block user"
+#define ACTION_MAIN_MENU_OPTION_1 @"Invite Friends"
+#define ACTION_MAIN_MENU_OPTION_2 @"Add New Contact"
+#define ACTION_MAIN_MENU_OPTION_3 @"Other"
+#define ACTION_OTHER_MENU_OPTION_1 @"Edit Profile"
+#define ACTION_OTHER_MENU_OPTION_2 @"Share"
+#define ACTION_OTHER_MENU_OPTION_3 @"Feedback"
+#define ACTION_PENDING_OPTION_1 @"Add Contact"
+#define ACTION_PENDING_OPTION_2 @"Block User"
 #define ACTION_SHEET_PROFILE_OPTION_1 @"Picture"
 #define ACTION_SHEET_PROFILE_OPTION_2 @"First Name"
 #define ACTION_SHEET_PROFILE_OPTION_3 @"Last Name"
 #define ACTION_SHEET_PICTURE_OPTION_1 @"Camera"
 #define ACTION_SHEET_PICTURE_OPTION_2 @"Library"
+#define ACTION_CONTACT_MENU_OPTION_1 @"Replay last message"
+#define ACTION_CONTACT_MENU_OPTION_2 @"View in address book"
+#define ACTION_CONTACT_MENU_OPTION_3 @"Hide contact"
 #define ACTION_SHEET_CANCEL @"Cancel"
 
 #define RECORDER_LINE_HEIGHT 0.4
@@ -101,6 +104,11 @@
 @property (nonatomic, strong) Contact *resendContact;
 @property (nonatomic, strong) UITapGestureRecognizer *oneTapResendRecognizer;
 
+//Action sheets
+@property (strong, nonatomic) UIActionSheet *mainMenuActionSheet;
+@property (strong, nonatomic) UIActionSheet *contactMenuActionSheet;
+@property (strong, nonatomic) Contact *lastSelectedContact;
+
 @end
 
 @implementation DashboardViewController 
@@ -138,24 +146,23 @@
     // Init no adress book access label
     [self initNoAddressBookAccessLabel]; // we do it here to avoid to resize text in a parrallel thread
     
-    // Current User phone number
+    //Current User phone number
     self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
     
-    //Current user profile container
+    //Action sheet menu profile container
     self.profileContainer = [[UIView alloc] initWithFrame:CGRectMake(8, -8 - USER_PROFILE_VIEW_SIZE, 304, USER_PROFILE_VIEW_SIZE)];
     self.profileContainer.layer.cornerRadius = 3;
     self.profileContainer.backgroundColor = [UIColor colorWithRed:240/256.0 green:240/256.0 blue:240/256.0 alpha:0.98];
     
-    //Current user profile picture
+    //Menu profile picture
     self.profilePicture = [[UIImageView alloc] initWithFrame:CGRectMake(USER_PROFILE_PICTURE_MARGIN,USER_PROFILE_PICTURE_MARGIN,USER_PROFILE_PICTURE_SIZE,USER_PROFILE_PICTURE_SIZE)];
     self.profilePicture.layer.cornerRadius = USER_PROFILE_PICTURE_SIZE/2;
     self.profilePicture.clipsToBounds = YES;
     self.profilePicture.layer.borderColor = [UIColor lightGrayColor].CGColor;
     self.profilePicture.layer.borderWidth = 0.5;
-    [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
     [self.profileContainer addSubview:self.profilePicture];
     
-    //Current user name label
+    //Action sheet menu name label
     float usernameOffset = self.profilePicture.frame.origin.x + self.profilePicture.frame.size.width + USER_PROFILE_PICTURE_MARGIN;
     self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(usernameOffset, 0,
                                                                        self.profileContainer.bounds.size.width - 2 * usernameOffset, self.profileContainer.bounds.size.height)];
@@ -693,11 +700,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ------------------------------
 - (IBAction)menuButtonClicked:(id)sender {
 
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+    self.mainMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                        delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:ACTION_SHEET_1_OPTION_1, ACTION_SHEET_1_OPTION_2 , ACTION_SHEET_1_OPTION_3, nil];
-    [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
+                                              otherButtonTitles:ACTION_MAIN_MENU_OPTION_1, ACTION_MAIN_MENU_OPTION_2 , ACTION_MAIN_MENU_OPTION_3, nil];
+    [self.mainMenuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
 // ----------------------------------------------------------
@@ -805,6 +812,21 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ----------------------------------------------------------
 #pragma mark ContactBubbleViewDelegate Protocole
 // ----------------------------------------------------------
+
+- (void)contactTappedWithoutUnreadMessages:(Contact *)contact
+{
+    self.lastSelectedContact = contact;
+    
+    //Show contact menu action sheet
+    self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                              delegate:self
+                                                     cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                destructiveButtonTitle:nil
+                                                     otherButtonTitles:ACTION_CONTACT_MENU_OPTION_1, ACTION_CONTACT_MENU_OPTION_2, ACTION_CONTACT_MENU_OPTION_3, nil];
+    
+    
+    [self.contactMenuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+}
 
 - (void)updateFrameOfContactView:(ContactView *)view
 {
@@ -922,7 +944,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                                                                     delegate:self
                                                            cancelButtonTitle:ACTION_SHEET_CANCEL
                                                       destructiveButtonTitle:nil
-                                                           otherButtonTitles:ACTION_SHEET_PENDING_OPTION_1, ACTION_SHEET_PENDING_OPTION_2, nil];
+                                                           otherButtonTitles:ACTION_PENDING_OPTION_1, ACTION_PENDING_OPTION_2, nil];
     [pendingActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
@@ -1064,27 +1086,35 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         return;
     }
     
+    /* -------------------------------------------------------------------------
+     MAIN MENU
+    ---------------------------------------------------------------------------*/
+    
     // Invite contact
-    if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_1]) {
+    if ([buttonTitle isEqualToString:ACTION_MAIN_MENU_OPTION_1]) {
         [self performSegueWithIdentifier:@"Invite Contacts Segue" sender:nil];
         
     // Add New Contact
-    } else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_2]) {
+    } else if ([buttonTitle isEqualToString:ACTION_MAIN_MENU_OPTION_2]) {
         [self performSegueWithIdentifier:@"Add Contact Segue" sender:nil];
     }
     
     // Other
-    else if ([buttonTitle isEqualToString:ACTION_SHEET_1_OPTION_3]) {
+    else if ([buttonTitle isEqualToString:ACTION_MAIN_MENU_OPTION_3]) {
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:[NSString stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
                                                            delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                              destructiveButtonTitle:nil
-                                                  otherButtonTitles:ACTION_SHEET_2_OPTION_1, ACTION_SHEET_2_OPTION_2, ACTION_SHEET_2_OPTION_3, nil];
+                                                  otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, nil];
         
         [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
     
+    /* -------------------------------------------------------------------------
+     OTHER MENU
+     ---------------------------------------------------------------------------*/
+    
     // Profile
-    else if ([buttonTitle isEqualToString:ACTION_SHEET_2_OPTION_1]) {
+    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_1]) {
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                            delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                              destructiveButtonTitle:nil
@@ -1094,7 +1124,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     
     // Share
-    else if ([buttonTitle isEqualToString:ACTION_SHEET_2_OPTION_2]) {
+    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_2]) {
         NSString *shareString = @"Download Waved, the fastest way to say a lot.";
         
         NSURL *shareUrl = [NSURL URLWithString:kProdAFHeardWebsite];
@@ -1118,7 +1148,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     
     //Send feedback
-    else if ([buttonTitle isEqualToString:ACTION_SHEET_2_OPTION_3]) {
+    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_3]) {
         NSString *email = [NSString stringWithFormat:@"mailto:%@?subject=Feedback for Waved on iOS (v%@)", kFeedbackEmail,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
         
         email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -1126,8 +1156,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
     }
     
+    /* -------------------------------------------------------------------------
+     PENDING MENU
+     ---------------------------------------------------------------------------*/
+    
     // Add contact
-    else if ([buttonTitle isEqualToString:ACTION_SHEET_PENDING_OPTION_1]) {
+    else if ([buttonTitle isEqualToString:ACTION_PENDING_OPTION_1]) {
         [TrackingUtils trackAddContactSuccessful:YES Present:YES Pending:YES];
         
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -1145,7 +1179,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     
     // Block contact
-    else if ([buttonTitle isEqualToString:ACTION_SHEET_PENDING_OPTION_2]) {
+    else if ([buttonTitle isEqualToString:ACTION_PENDING_OPTION_2]) {
         // block user + delete bubble / contact
         void(^successBlock)() = ^void() {
             NSInteger holePosition = 0;
@@ -1170,6 +1204,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [ApiUtils blockUser:self.contactToAdd.identifier AndExecuteSuccess:successBlock failure:nil];
     }
     
+    /* -------------------------------------------------------------------------
+     PROFILE MENU
+     ---------------------------------------------------------------------------*/
+    
     // Picture
     else if ([buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_1]) {
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
@@ -1180,15 +1218,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
     
-    // Camera
-    else if ([buttonTitle isEqualToString:ACTION_SHEET_PICTURE_OPTION_1]) {
-        [self showImagePickerForSourceType:UIImagePickerControllerSourceTypeCamera];
-    }
-    
-    // Library
-    else if ([buttonTitle isEqualToString:ACTION_SHEET_PICTURE_OPTION_2]) {
-        [self showImagePickerForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-    }
     
     // First Name
     else if ([buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] || [buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_3]) {
@@ -1200,6 +1229,39 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [textField becomeFirstResponder];
         [alert addSubview:textField];
         [alert show];
+    }
+    
+    /* -------------------------------------------------------------------------
+     PROFILE PICTURE MENU
+     ---------------------------------------------------------------------------*/
+    
+    // Camera
+    else if ([buttonTitle isEqualToString:ACTION_SHEET_PICTURE_OPTION_1]) {
+        [self showImagePickerForSourceType:UIImagePickerControllerSourceTypeCamera];
+    }
+    
+    // Library
+    else if ([buttonTitle isEqualToString:ACTION_SHEET_PICTURE_OPTION_2]) {
+        [self showImagePickerForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+    }
+    
+    /* -------------------------------------------------------------------------
+     CONTACT MENU
+     ---------------------------------------------------------------------------*/
+    
+    // Replay
+    else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_1]) {
+        
+    }
+    
+    // Call/Text
+    else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_2]) {
+        
+    }
+    
+    // Hide
+    else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_3]) {
+        
     }
 }
 
@@ -1232,14 +1294,27 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 - (void)willPresentActionSheet:(UIActionSheet *)actionSheet {
-    self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", [SessionUtils getCurrentUserFirstName], [SessionUtils getCurrentUserLastName]];
     
-    [actionSheet addSubview:self.profileContainer];
+    if (actionSheet == self.mainMenuActionSheet) {
+        self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", [SessionUtils getCurrentUserFirstName], [SessionUtils getCurrentUserLastName]];
+        [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
+        
+        [actionSheet addSubview:self.profileContainer];
+    }
+    
+    if (actionSheet == self.contactMenuActionSheet) {
+        self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", self.lastSelectedContact.firstName, self.lastSelectedContact.lastName];
+        [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:self.lastSelectedContact.identifier]];
+        
+        [actionSheet addSubview:self.profileContainer];
+    }
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet willDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    [self.profileContainer removeFromSuperview];
+    if (actionSheet == self.mainMenuActionSheet || actionSheet == self.contactMenuActionSheet) {
+        [self.profileContainer removeFromSuperview];
+    }
 }
 
 

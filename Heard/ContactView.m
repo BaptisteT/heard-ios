@@ -15,7 +15,7 @@
 #import "ImageUtils.h"
 #import "TrackingUtils.h"
 
-#define UNREAD_MESSAGES_BORDER 3
+#define UNREAD_MESSAGES_BORDER 2.5
 #define NO_UNREAD_MESSAGES_BORDER 0.5
 
 @interface ContactView()
@@ -147,8 +147,7 @@
                 self.cancelRecord = YES;
                 
                 [self.delegate quitRecordingModeAnimated:NO];
-                [self.delegate tutorialModeWithDuration:3];
-
+                [self.delegate contactTappedWithoutUnreadMessages:self.contact];
             }
         }
     }
@@ -174,7 +173,7 @@
 
 - (void)handleNonPendingTapGesture
 {
-    if (!self.unreadMessagesLabel.isHidden) { // ie. self.unreadMessageCount > 0 && self.nextMessageAudioData !=nil
+    if (!self.unreadMessagesLabel.isHidden) { // (BB: not very pretty :/) ie. self.unreadMessageCount > 0 && self.nextMessageAudioData !=nil
         
         self.userInteractionEnabled = NO;
         if (!self.nextMessageAudioData) { // should not be possible
@@ -218,7 +217,7 @@
         
         self.userInteractionEnabled = YES;
     } else {
-        [self.delegate tutorialModeWithDuration:3];
+        [self.delegate contactTappedWithoutUnreadMessages:self.contact];
     }
 }
 
