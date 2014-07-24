@@ -1024,7 +1024,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)hideLoadingIndicator
 {
     self.contactScrollView.hidden = NO;
-    self.replayButton.hidden = NO;
+    if (self.mainPlayer.duration > 0) {
+        self.replayButton.hidden = NO;
+    }
     if (self.activityView) {
         [self.activityView stopAnimating];
         [self.activityView removeFromSuperview];

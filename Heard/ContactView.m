@@ -29,6 +29,7 @@
 @property (nonatomic, strong) UIImageView *recordingOverlay;
 @property (nonatomic, strong) UIImageView *pendingContactOverlay;
 @property (nonatomic, strong) CAShapeLayer *circleShape;
+@property (nonatomic, strong) CAShapeLayer *loadingCircleShape;
 @property (nonatomic) BOOL cancelRecord;
 
 @end
@@ -50,7 +51,6 @@
     self.contact = contact;
     _pendingContact = NO;
     self.clipsToBounds = NO;
-    
     self.cancelRecord = NO;
     
     // Set image view
@@ -78,6 +78,11 @@
     // Init unread messages button
     [self initUnreadMessagesButton];
     self.unreadMessagesCount = 0;
+    
+    // Set up the shape of the load messagecircle
+    self.loadingCircleShape = [CAShapeLayer layer];
+    self.loadingCircleShape.path = [UIBezierPath bezierPathWithRoundedRect:self.imageView.frame
+                                                              cornerRadius:self.bounds.size.height/2].CGPath;
     
     return self;
 }
@@ -188,10 +193,16 @@
         [self hideMessageCountLabel:YES];
         self.nextMessageAudioData = nil;
         if (self.unreadMessagesCount > 1) {
+            // Download animation
+            [self startLoadingMessageAnimation];
+            
             [ApiUtils downloadAudioFileAtURL:[self.unreadMessages[1] getMessageURL] success:^void(NSData *data) {
                 self.nextMessageAudioData = data;
                 [self hideMessageCountLabel:NO];
-            } failure:nil];
+                [self endLoadingMessageAnimation];
+            } failure:^(){
+                [self endLoadingMessageAnimation];
+            }];
         }
         
         // Mark as opened on the database
@@ -320,11 +331,17 @@
         self.unreadMessagesCount = 0;
     }
     if (self.unreadMessagesCount == 0) {
+        // Download animation
+        [self startLoadingMessageAnimation];
+        
         // Request data asynch 
         [ApiUtils downloadAudioFileAtURL:[message getMessageURL] success:^void(NSData *data) {
             self.nextMessageAudioData = data;
             [self hideMessageCountLabel:NO];
-        } failure:nil];
+            [self endLoadingMessageAnimation];
+        } failure:^(){
+            [self endLoadingMessageAnimation];
+        }];
     }
     [self.unreadMessages addObject:message];
     [self setUnreadMessagesCount:self.unreadMessagesCount+1];
@@ -440,6 +457,37 @@
     
     [self.recordingOverlay removeFromSuperview];
     self.recordingOverlay = nil;
+}
+
+- (void)startLoadingMessageAnimation
+{
+    // Configure the apperence of the circle
+    self.loadingCircleShape.fillColor = [UIColor clearColor].CGColor;
+    self.loadingCircleShape.strokeColor = [ImageUtils blue].CGColor;
+    self.loadingCircleShape.lineWidth = UNREAD_MESSAGES_BORDER;
+    
+    // Add to parent layer
+    [self.imageView.layer addSublayer:self.loadingCircleShape];
+    
+    // Configure animation
+    CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
+    drawAnimation.beginTime            = 0.0;
+    drawAnimation.duration            = 2.0;
+    drawAnimation.repeatCount         = INFINITY;
+    drawAnimation.fromValue = [NSNumber numberWithFloat:0.0];
+    drawAnimation.toValue   = [NSNumber numberWithFloat:1.0];
+//    drawAnimation.autoreverses = YES;
+    drawAnimation.removedOnCompletion = YES;
+    drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    
+    // Add the animation to the circle
+    [self.loadingCircleShape addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+}
+
+- (void)endLoadingMessageAnimation
+{
+    [self.loadingCircleShape removeAllAnimations];
+    [self.loadingCircleShape removeFromSuperlayer];
 }
 
 @end
