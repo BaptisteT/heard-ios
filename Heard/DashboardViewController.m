@@ -606,6 +606,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         if (contactView.unreadMessages) {
             [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] - contactView.unreadMessages.count];
         }
+        [self.contactBubbleViews removeObject:contactView];
         
         // Change position of other bubbles
         [self reorderContactViews];
