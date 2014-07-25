@@ -13,6 +13,7 @@
 + (NSArray *)rawMessagesToInstances:(NSArray *)rawMessages;
 + (Message *)rawMessageToInstance:(id)rawMessage;
 - (NSURL *)getMessageURL;
++ (NSURL *)getMessageURL:(NSUInteger)messageId;
 
 @property (nonatomic) NSUInteger identifier;
 @property (nonatomic) NSUInteger senderId;

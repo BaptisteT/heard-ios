@@ -45,6 +45,15 @@
     }
 }
 
++ (NSURL *)getMessageURL:(NSUInteger)messageId
+{
+    if (PRODUCTION) {
+        return [NSURL URLWithString:[kProdHeardRecordBaseURL stringByAppendingFormat:@"%lu%@",messageId,@"_record"]];
+    } else {
+        return [NSURL URLWithString:[kStagingHeardRecordBaseURL stringByAppendingFormat:@"%lu%@",messageId,@"_record"]];
+    }
+}
+
 
 
 @end

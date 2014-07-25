@@ -16,6 +16,7 @@
 #define CONTACTS_LAST_NAME_PREF @"Contact Last Name Preference"
 #define CONTACTS_PENDING_PREF @"Contact Pending Preference"
 #define CONTACTS_LAST_MESSAGE_DATE_PREF @"Contact Last Message Date Preference"
+#define CONTACTS_LAST_MESSAGE_IDENTIFIER_PREF @"Contact Last Message Identifier Preference"
 
 @implementation ContactUtils
 
@@ -27,6 +28,7 @@
     NSArray *lastNameArray = [[NSUserDefaults standardUserDefaults] arrayForKey:CONTACTS_LAST_NAME_PREF];
     NSArray *pendingArray = [[NSUserDefaults standardUserDefaults] arrayForKey:CONTACTS_PENDING_PREF];
     NSArray *lastMessageDateArray = [[NSUserDefaults standardUserDefaults] arrayForKey:CONTACTS_LAST_MESSAGE_DATE_PREF];
+    NSArray *lastMessageIdArray = [[NSUserDefaults standardUserDefaults] arrayForKey:CONTACTS_LAST_MESSAGE_IDENTIFIER_PREF];
     
     NSInteger contactCount = [idArray count];
     NSMutableArray *contacts = [[NSMutableArray alloc] initWithCapacity:contactCount];
@@ -34,6 +36,7 @@
         Contact *contact = [Contact createContactWithId:[idArray[i] integerValue] phoneNumber:phoneArray[i] firstName:firstNameArray[i] lastName:lastNameArray[i]];
         contact.lastMessageDate = [lastMessageDateArray[i] integerValue];
         contact.isPending = [pendingArray[i] boolValue];
+        contact.lastPlayedMessageId = [lastMessageIdArray[i] integerValue];
         [contacts addObject:contact];
     }
     return contacts;
@@ -49,6 +52,7 @@
     NSMutableArray *lastNameArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
     NSMutableArray *pendingArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
     NSMutableArray *lastMessageDateArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
+    NSMutableArray *lastMessageIdArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
     for (Contact * contact in contacts) {
         [idArray addObject:[NSNumber numberWithInteger:contact.identifier]];
         [phoneArray addObject:contact.phoneNumber ? contact.phoneNumber : @""];
@@ -56,6 +60,7 @@
         [lastNameArray addObject:(contact.lastName && contact.lastName!=(id)[NSNull null])? contact.lastName : @""];
         [pendingArray addObject:[NSNumber numberWithInteger:contact.isPending]];
         [lastMessageDateArray addObject:[NSNumber numberWithInteger:contact.lastMessageDate]];
+        [lastMessageIdArray addObject:[NSNumber numberWithInteger:contact.lastPlayedMessageId]];
     }
     [prefs setObject:idArray forKey:CONTACTS_ID_PREF];
     [prefs setObject:phoneArray forKey:CONTACTS_PHONE_PREF];
@@ -63,6 +68,7 @@
     [prefs setObject:lastNameArray forKey:CONTACTS_LAST_NAME_PREF];
     [prefs setObject:pendingArray forKey:CONTACTS_PENDING_PREF];
     [prefs setObject:lastMessageDateArray forKey:CONTACTS_LAST_MESSAGE_DATE_PREF];
+    [prefs setObject:lastMessageIdArray forKey:CONTACTS_LAST_MESSAGE_IDENTIFIER_PREF];
     [prefs synchronize];
 }
 

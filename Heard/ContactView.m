@@ -53,6 +53,9 @@
     self.clipsToBounds = NO;
     self.cancelRecord = NO;
     
+    //Initialization
+    self.nextMessageId = 0;
+    
     // Set image view
     self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
     [self setContactPicture];
@@ -122,8 +125,9 @@
                 [GeneralUtils showMessage:@"To activate it, go to Settings > Privacy > Micro" withTitle:@"Waved does not have access to your micro"];
                 return;
             } else {
-                // Start Sound
-                [self.delegate startRecordSound];
+                // Start button UI
+                [self recordingUI];
+                
                 [session setActive:YES error:nil];
                 
                 // Create Timer
@@ -141,13 +145,14 @@
             [self.maxDurationTimer invalidate];
             
             if ([self.delegate isRecording]) {
+                [self.delegate recordSound];
                 [self sendRecording];
                 [TrackingUtils trackRecord];
             } else {
                 self.cancelRecord = YES;
                 
                 [self.delegate quitRecordingModeAnimated:NO];
-                [self.delegate contactTappedWithoutUnreadMessages:self.contact];
+                [self.delegate contactTappedWithoutUnreadMessages:self];
             }
         }
     }
@@ -156,7 +161,7 @@
 - (void)startRecording
 {
     if (!self.cancelRecord) {
-        [self recordingUI];
+        [self.delegate recordSound];
         
         [self.delegate longPressOnContactBubbleViewStarted:self.contact.identifier FromView:self];
     }
@@ -217,7 +222,7 @@
         
         self.userInteractionEnabled = YES;
     } else {
-        [self.delegate contactTappedWithoutUnreadMessages:self.contact];
+        [self.delegate contactTappedWithoutUnreadMessages:self];
     }
 }
 
@@ -285,6 +290,7 @@
 // Stop recording after kMaxAudioDuration
 - (void)maxRecordingDurationReached {
     self.userInteractionEnabled = NO;
+    [self.delegate recordSound];
     [self endRecordingUI];
     [self sendRecording];
 }
@@ -336,6 +342,7 @@
         // Request data asynch 
         [ApiUtils downloadAudioFileAtURL:[message getMessageURL] success:^void(NSData *data) {
             self.nextMessageAudioData = data;
+            self.nextMessageId = message.identifier;
             [self hideMessageCountLabel:NO];
             [self endLoadingMessageAnimation];
         } failure:^(){

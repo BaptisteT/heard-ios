@@ -42,7 +42,7 @@
 #define ACTION_SHEET_PICTURE_OPTION_2 @"Library"
 #define ACTION_CONTACT_MENU_OPTION_1 @"Replay last message"
 #define ACTION_CONTACT_MENU_OPTION_2 @"View in address book"
-#define ACTION_CONTACT_MENU_OPTION_3 @"Hide contact"
+#define ACTION_CONTACT_MENU_OPTION_3 @"Block contact"
 #define ACTION_SHEET_CANCEL @"Cancel"
 
 #define RECORDER_LINE_HEIGHT 0.4
@@ -77,7 +77,6 @@
 @property (nonatomic,strong) EZMicrophone *microphone;
 @property (nonatomic,strong) UIView *recorderLine;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
-@property (nonatomic) SystemSoundID recordSound;
 @property (nonatomic, strong) UILabel *recorderMessage;
 @property (strong, nonatomic) NSDate* lastRecordSoundDate;
 @property (nonatomic) BOOL silentMode;
@@ -107,7 +106,7 @@
 //Action sheets
 @property (strong, nonatomic) UIActionSheet *mainMenuActionSheet;
 @property (strong, nonatomic) UIActionSheet *contactMenuActionSheet;
-@property (strong, nonatomic) Contact *lastSelectedContact;
+@property (strong, nonatomic) ContactView *lastSelectedContactView;
 
 @end
 
@@ -456,7 +455,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 
 // ----------------------------------
-#pragma mark Create Contact Bubble
+#pragma mark Contact Views
 // ----------------------------------
 
 - (void)displayContactViews
@@ -476,10 +475,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self createContactViewWithContact:contact andPosition:1];
     }
     
-    [self reOrderContactViews];
+    [self reorderContactViews];
 }
 
-- (void)reOrderContactViews
+- (void)reorderContactViews
 {
     // Sort contact
     [self.contactBubbleViews sortUsingComparator:^(ContactView *contactView1, ContactView * contactView2) {
@@ -591,6 +590,33 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
 }
 
+- (void)blockContact:(ContactView *)contactView
+{
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [ApiUtils blockUser:contactView.contact.identifier AndExecuteSuccess:^{
+        // block user + delete bubble / contact
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        NSInteger holePosition = 0;
+        [contactView removeFromSuperview];
+        holePosition = contactView.orderPosition;
+        [self.contacts removeObject:contactView.contact];
+        [contactView.nameLabel removeFromSuperview];
+        
+        if (contactView.unreadMessages) {
+            [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] - contactView.unreadMessages.count];
+        }
+        
+        // Change position of other bubbles
+        [self reorderContactViews];
+    }failure:^{
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        [GeneralUtils showMessage:@"Failed to hide contact, please try again." withTitle:nil];
+    }];
+
+}
+
 
 // ----------------------------------
 #pragma mark Messages
@@ -615,7 +641,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             self.retrieveNewContact = NO;
         } else {
             [self hideLoadingIndicator];
-            [self reOrderContactViews];
+            [self reorderContactViews];
         }
     };
     
@@ -691,7 +717,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Redisplay correctly
     self.nonAttributedUnreadMessages = nil;
-    [self reOrderContactViews];
+    [self reorderContactViews];
 }
 
 
@@ -749,13 +775,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.recorderContainer addSubview:self.recorderMessage];
 }
 
-- (void)startRecordSound
+- (void)recordSound
 {
     self.lastRecordSoundDate = [NSDate date];
     AudioServicesPlaySystemSound(1113);
-    
-    //For custom sound
-    //AudioServicesPlaySystemSound (self.recordSound);
 }
 
 - (void)setRecorderLineWidth:(float)width {
@@ -813,17 +836,47 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark ContactBubbleViewDelegate Protocole
 // ----------------------------------------------------------
 
-- (void)contactTappedWithoutUnreadMessages:(Contact *)contact
+- (void)contactTappedWithoutUnreadMessages:(ContactView *)contactView
 {
-    self.lastSelectedContact = contact;
+    self.lastSelectedContactView = contactView;
     
     //Show contact menu action sheet
-    self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                              delegate:self
-                                                     cancelButtonTitle:ACTION_SHEET_CANCEL
-                                                destructiveButtonTitle:nil
-                                                     otherButtonTitles:ACTION_CONTACT_MENU_OPTION_1, ACTION_CONTACT_MENU_OPTION_2, ACTION_CONTACT_MENU_OPTION_3, nil];
     
+     //No message to replay
+    if (contactView.contact.lastPlayedMessageId == 0) {
+        
+        //Waved contact
+        if (contactView.contact.identifier == 1) {
+            self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                                      delegate:self
+                                                             cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                        destructiveButtonTitle:nil
+                                                             otherButtonTitles:ACTION_CONTACT_MENU_OPTION_3, nil];
+        } else {
+            self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                                      delegate:self
+                                                             cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                        destructiveButtonTitle:nil
+                                                             otherButtonTitles:ACTION_CONTACT_MENU_OPTION_2, ACTION_CONTACT_MENU_OPTION_3, nil];
+        }
+    //Message to replay
+    } else {
+        
+        //Waved contact
+        if (contactView.contact.identifier == 1) {
+            self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                                      delegate:self
+                                                             cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                        destructiveButtonTitle:nil
+                                                             otherButtonTitles:ACTION_CONTACT_MENU_OPTION_1, ACTION_CONTACT_MENU_OPTION_3, nil];
+        } else {
+            self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                                      delegate:self
+                                                             cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                        destructiveButtonTitle:nil
+                                                             otherButtonTitles:ACTION_CONTACT_MENU_OPTION_1, ACTION_CONTACT_MENU_OPTION_2, ACTION_CONTACT_MENU_OPTION_3, nil];
+        }
+    }
     
     [self.contactMenuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
@@ -899,6 +952,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     self.lastContactPlayed = contactView;
     
+    //Change last played message id in contact
+    contactView.contact.lastPlayedMessageId = contactView.nextMessageId;
+    
     // Init player
     self.mainPlayer = [[AVAudioPlayer alloc] initWithData:contactView.nextMessageAudioData error:nil];
     [self.mainPlayer setVolume:kAudioPlayerVolume];
@@ -912,6 +968,31 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // MixPanel
     [TrackingUtils trackPlayWithDuration:duration];
+}
+
+- (void)startedReplayingAudioFile:(NSData *)audioData ByView:(ContactView *)contactView
+{
+    if ([self.mainPlayer isPlaying]) {
+        [self endPlayerUIAnimated:NO];
+    }
+    
+    [self.playerContainer.layer removeAllAnimations];
+    
+    self.lastContactPlayed = contactView;
+    
+    // Init player
+    self.mainPlayer = [[AVAudioPlayer alloc] initWithData:audioData error:nil];
+    [self.mainPlayer setVolume:kAudioPlayerVolume];
+    
+    // Player UI
+    NSTimeInterval duration = self.mainPlayer.duration;
+    [self playerUI:duration ByContactView:contactView];
+    
+    // play
+    [self.mainPlayer play];
+    
+    // Mixpanel
+    [TrackingUtils trackReplay];
 }
 
 - (void)quitRecordingModeAnimated:(BOOL)animated
@@ -1180,28 +1261,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Block contact
     else if ([buttonTitle isEqualToString:ACTION_PENDING_OPTION_2]) {
-        // block user + delete bubble / contact
-        void(^successBlock)() = ^void() {
-            NSInteger holePosition = 0;
-            for (ContactView * bubbleView in self.contactBubbleViews) {
-                if (bubbleView.contact.identifier == self.contactToAdd.identifier) {
-                    [bubbleView removeFromSuperview];
-                    holePosition = bubbleView.orderPosition;
-                    [self.contacts removeObject:bubbleView.contact];
-                    [bubbleView.nameLabel removeFromSuperview];
-                    // update Badge
-                    if (bubbleView.unreadMessages) {
-                        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] - bubbleView.unreadMessages.count];
-                    }
-                    [self.contactBubbleViews removeObject:bubbleView];
-                    break;
-                }
+        for (ContactView * bubbleView in self.contactBubbleViews) {
+            if (bubbleView.contact.identifier == self.contactToAdd.identifier) {
+                [self blockContact:bubbleView];
+                break;
             }
-            // Change position of other bubbles
-            [self reOrderContactViews];
-            self.contactToAdd = nil;
-        };
-        [ApiUtils blockUser:self.contactToAdd.identifier AndExecuteSuccess:successBlock failure:nil];
+        }
     }
     
     /* -------------------------------------------------------------------------
@@ -1251,7 +1316,23 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Replay
     else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_1]) {
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         
+        NSUInteger contactLastMessageId = self.lastSelectedContactView.contact.lastPlayedMessageId;
+        
+        if (contactLastMessageId == 0) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            return;
+        }
+        
+        [ApiUtils downloadAudioFileAtURL:[Message getMessageURL:contactLastMessageId] success:^void(NSData *data) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            [self startedReplayingAudioFile:data ByView:self.lastSelectedContactView];
+        } failure:^(){
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [GeneralUtils showMessage:@"Failed to retrieve last message, please try again" withTitle:nil];
+        }];
     }
     
     // Call/Text
@@ -1261,7 +1342,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Hide
     else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_3]) {
-        
+        [self blockContact:self.lastSelectedContactView];
     }
 }
 
@@ -1303,8 +1384,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     
     if (actionSheet == self.contactMenuActionSheet) {
-        self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", self.lastSelectedContact.firstName, self.lastSelectedContact.lastName];
-        [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:self.lastSelectedContact.identifier]];
+        NSString *firstName = self.lastSelectedContactView.contact.firstName ? self.lastSelectedContactView.contact.firstName : @"";
+        NSString *lastName = self.lastSelectedContactView.contact.lastName ? self.lastSelectedContactView.contact.lastName : @"";
+        
+        self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
+        [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:self.lastSelectedContactView.contact.identifier]];
         
         [actionSheet addSubview:self.profileContainer];
     }

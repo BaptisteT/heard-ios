@@ -16,6 +16,7 @@
 @property (strong, nonatomic) NSString *lastName;
 @property (nonatomic) NSInteger lastMessageDate;
 @property (nonatomic) BOOL isPending;
+@property (nonatomic) NSUInteger lastPlayedMessageId;
 
 
 + (Contact *)createContactWithId:(NSUInteger)identifier

@@ -25,6 +25,7 @@
 @property (nonatomic) NSInteger orderPosition;
 @property (nonatomic) NSMutableArray *unreadMessages;
 @property (nonatomic, strong) NSData *nextMessageAudioData;
+@property (nonatomic) NSUInteger nextMessageId;
 
 
 - (void)addUnreadMessage:(Message *)message;
@@ -57,13 +58,13 @@
 
 - (void)tutorialModeWithDuration:(NSTimeInterval)duration;
 
-- (void)startRecordSound;
+- (void)recordSound;
 
 - (BOOL)isRecording;
 
 - (NSTimeInterval)delayBeforeRecording;
 
-- (void)contactTappedWithoutUnreadMessages:(Contact *)contact;
+- (void)contactTappedWithoutUnreadMessages:(ContactView *)contactView;
 
 
 @end
