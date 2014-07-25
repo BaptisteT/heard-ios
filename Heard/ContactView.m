@@ -178,8 +178,7 @@
 
 - (void)handleNonPendingTapGesture
 {
-    if (!self.unreadMessagesLabel.isHidden) { // (BB: not very pretty :/) ie. self.unreadMessageCount > 0 && self.nextMessageAudioData !=nil
-        
+    if ([self hasMessagesToPlay]) {
         self.userInteractionEnabled = NO;
         if (!self.nextMessageAudioData) { // should not be possible
             return;
@@ -482,7 +481,6 @@
     drawAnimation.repeatCount         = INFINITY;
     drawAnimation.fromValue = [NSNumber numberWithFloat:0.0];
     drawAnimation.toValue   = [NSNumber numberWithFloat:1.0];
-//    drawAnimation.autoreverses = YES;
     drawAnimation.removedOnCompletion = YES;
     drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     
@@ -494,6 +492,11 @@
 {
     [self.loadingCircleShape removeAllAnimations];
     [self.loadingCircleShape removeFromSuperlayer];
+}
+
+- (BOOL)hasMessagesToPlay
+{
+    return self.unreadMessagesCount > 0 && self.nextMessageAudioData;
 }
 
 @end
