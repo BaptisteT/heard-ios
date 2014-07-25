@@ -30,7 +30,7 @@
 
 - (void)addUnreadMessage:(Message *)message;
 - (void)resetUnreadMessages;
-- (void)recordingUI;
+- (void)startRecordingUI;
 - (void)endRecordingUI;
 - (void)playingUI;
 - (void)endPlayingUI;
@@ -40,9 +40,9 @@
 
 @protocol ContactBubbleViewDelegate
 
-- (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId FromView:(ContactView *)view;
+- (void)startedLongPressOnContactView:(ContactView *)contactView;
 
-- (void)longPressOnContactBubbleViewEnded:(NSUInteger)contactId;
+- (void)endedLongPressOnContactView:(ContactView *)contactView;
 
 - (void)sendRecordtoContact:(Contact *)contact;
 
@@ -64,7 +64,7 @@
 
 - (NSTimeInterval)delayBeforeRecording;
 
-- (void)contactTappedWithoutUnreadMessages:(ContactView *)contactView;
+- (void)doubleTappedOnContactView:(ContactView *)contactView;
 
 
 @end

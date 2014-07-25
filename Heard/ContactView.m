@@ -17,11 +17,12 @@
 
 #define UNREAD_MESSAGES_BORDER 2.5
 #define NO_UNREAD_MESSAGES_BORDER 0.5
+#define DELAY_BEFORE_RECORDING 0.5
+#define DELAY_FOR_SECOND_TAP 0.5
 
 @interface ContactView()
 
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
-@property (nonatomic, strong) UITapGestureRecognizer *oneTapRecognizer;
 @property (nonatomic, strong) NSTimer *maxDurationTimer;
 @property (nonatomic) NSInteger unreadMessagesCount;
 @property (nonatomic) UILabel *unreadMessagesLabel;
@@ -30,7 +31,12 @@
 @property (nonatomic, strong) UIImageView *pendingContactOverlay;
 @property (nonatomic, strong) CAShapeLayer *circleShape;
 @property (nonatomic, strong) CAShapeLayer *loadingCircleShape;
-@property (nonatomic) BOOL cancelRecord;
+
+@property (nonatomic) BOOL cancelLongPress;
+@property (nonatomic) BOOL cancelSingleTap;
+
+@property (nonatomic) BOOL firstTap;
+@property (nonatomic) BOOL maxDurationTimerReached;
 
 @end
 
@@ -51,10 +57,12 @@
     self.contact = contact;
     _pendingContact = NO;
     self.clipsToBounds = NO;
-    self.cancelRecord = NO;
     
     //Initialization
     self.nextMessageId = 0;
+    self.cancelLongPress = NO;
+    self.firstTap = YES;
+    self.maxDurationTimerReached = NO;
     
     // Set image view
     self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
@@ -71,12 +79,7 @@
     self.longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
     [self addGestureRecognizer:self.longPressRecognizer];
     self.longPressRecognizer.delegate = self;
-    self.longPressRecognizer.minimumPressDuration = kLongPressMinDurationNoMessageCase;
-    
-    self.oneTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture)];
-    [self addGestureRecognizer:self.oneTapRecognizer];
-    self.oneTapRecognizer.delegate = self;
-    self.oneTapRecognizer.numberOfTapsRequired = 1;
+    self.longPressRecognizer.minimumPressDuration = 0;
     
     // Init unread messages button
     [self initUnreadMessagesButton];
@@ -114,45 +117,37 @@
 // ----------------------------------------------------------
 - (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer
 {
-    if (self.cancelRecord)
-        return;
-    
-    if (recognizer.state == UIGestureRecognizerStateBegan) {
-        // Set session
-        AVAudioSession *session = [AVAudioSession sharedInstance];
-        [session requestRecordPermission:^(BOOL granted) {
-            if (!granted) {
-                [GeneralUtils showMessage:@"To activate it, go to Settings > Privacy > Micro" withTitle:@"Waved does not have access to your micro"];
-                return;
-            } else {
-                // Start button UI
-                [self recordingUI];
-                
-                [session setActive:YES error:nil];
-                
-                // Create Timer
-                self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
-                
-                [self performSelector:@selector(startRecording) withObject:self afterDelay:[self.delegate delayBeforeRecording]];
-            }
-        }];
+    if (recognizer.state == UIGestureRecognizerStateBegan && self.firstTap) {
+        [self startRecordingUI];
+        [self performSelector:@selector(startRecording) withObject:self afterDelay:DELAY_BEFORE_RECORDING];
     }
+    
     if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled || recognizer.state == UIGestureRecognizerStateFailed) {
         [self endRecordingUI];
         
-        // Stop timer if it did not fire yet
-        if ([self.maxDurationTimer isValid]) {
-            [self.maxDurationTimer invalidate];
+        if ([self.delegate isRecording]) {
+            if ([self.maxDurationTimer isValid]) {
+                [self.maxDurationTimer invalidate];
+            }
             
-            if ([self.delegate isRecording]) {
-                [self.delegate recordSound];
-                [self sendRecording];
-                [TrackingUtils trackRecord];
-            } else {
-                self.cancelRecord = YES;
+            [self sendRecording];
+        } else {
+            self.cancelLongPress = YES;
+            [self.delegate quitRecordingModeAnimated:NO];
+            
+            if (self.firstTap) {
+                if (self.maxDurationTimerReached) {
+                    self.maxDurationTimerReached = NO;
+                    
+                    return;
+                }
                 
-                [self.delegate quitRecordingModeAnimated:NO];
-                [self.delegate contactTappedWithoutUnreadMessages:self];
+                [self performSelector:@selector(handleSingleTapGesture) withObject:self afterDelay:DELAY_FOR_SECOND_TAP];
+                self.firstTap = NO;
+            } else {
+                self.cancelSingleTap = YES;
+                self.firstTap = YES;
+                [self handleDoubleTapGesture];
             }
         }
     }
@@ -160,19 +155,52 @@
 
 - (void)startRecording
 {
-    if (!self.cancelRecord) {
-        [self.delegate recordSound];
+    self.firstTap = YES;
+    
+    if (self.cancelLongPress) {
+        self.cancelLongPress = NO;
+    } else {
+        self.cancelLongPress = NO;
         
-        [self.delegate longPressOnContactBubbleViewStarted:self.contact.identifier FromView:self];
+        // Set session
+        AVAudioSession *session = [AVAudioSession sharedInstance];
+        [session requestRecordPermission:^(BOOL granted) {
+            if (!granted) {
+                [GeneralUtils showMessage:@"To activate it, go to Settings > Privacy > Micro" withTitle:@"Waved does not have access to your micro"];
+                return;
+            } else {
+                [session setActive:YES error:nil];
+                
+                // Create Timer
+                self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
+                
+                //TODO Vibrate
+                
+                [self.delegate startedLongPressOnContactView:self];
+            }
+        }];
     }
-    self.cancelRecord = NO;
 }
 
-- (void)handleTapGesture {
+- (void)handleSingleTapGesture {
+    self.firstTap = YES;
+    
+    if (self.cancelSingleTap) {
+        self.cancelSingleTap = NO;
+    } else {
+        if (self.pendingContact) {
+            [self handlePendingTapGesture];
+        } else {
+            [self handleNonPendingTapGesture];
+        }
+    }
+}
+
+- (void)handleDoubleTapGesture {
     if (self.pendingContact) {
         [self handlePendingTapGesture];
     } else {
-        [self handleNonPendingTapGesture];
+        [self.delegate doubleTappedOnContactView:self];
     }
 }
 
@@ -221,7 +249,7 @@
         
         self.userInteractionEnabled = YES;
     } else {
-        [self.delegate contactTappedWithoutUnreadMessages:self];
+        [self.delegate tutorialModeWithDuration:3];
     }
 }
 
@@ -288,8 +316,9 @@
 
 // Stop recording after kMaxAudioDuration
 - (void)maxRecordingDurationReached {
+    self.maxDurationTimerReached = YES;
     self.userInteractionEnabled = NO;
-    [self.delegate recordSound];
+    
     [self endRecordingUI];
     [self sendRecording];
 }
@@ -301,15 +330,19 @@
 
 - (void)sendRecording
 {
+    //TODO Vibrate
+    
     [self stopRecording];
     
     [self.delegate sendRecordtoContact:self.contact];
+    
+    [TrackingUtils trackRecord];
 }
 
 - (void)stopRecording
 {
     [[AVAudioSession sharedInstance] setActive:NO error:nil];
-    [self.delegate longPressOnContactBubbleViewEnded:self.contact.identifier];
+    [self.delegate endedLongPressOnContactView:self];
 }
 
 
@@ -322,9 +355,6 @@
     self.unreadMessagesLabel.text = [NSString stringWithFormat:@"%lu",(long)unreadMessagesCount];
     if (unreadMessagesCount == 0) {
         [self hideMessageCountLabel:YES];
-        self.longPressRecognizer.minimumPressDuration = kLongPressMinDurationNoMessageCase;
-    } else {
-        self.longPressRecognizer.minimumPressDuration = kLongPressMinDurationMessageCase;
     }
 }
 
@@ -375,7 +405,7 @@
 // ----------------------------------------------------------
 #pragma mark Design utility
 // ----------------------------------------------------------
-- (void)recordingUI
+- (void)startRecordingUI
 {
     [self endRecordingUI];
     

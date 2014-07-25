@@ -67,7 +67,7 @@
 @property (nonatomic) ABAddressBookRef addressBook;
 @property (strong, nonatomic) NSMutableDictionary *addressBookFormattedContacts;
 @property (strong, nonatomic) NSMutableArray *contacts;
-@property (strong, nonatomic) NSMutableArray *contactBubbleViews;
+@property (strong, nonatomic) NSMutableArray *contactViews;
 @property (weak, nonatomic) UIScrollView *contactScrollView;
 @property (nonatomic) BOOL retrieveNewContact;
 @property (nonatomic, strong) Contact *contactToAdd;
@@ -482,7 +482,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (contactCount == 0) {
         return;
     }
-    self.contactBubbleViews = [[NSMutableArray alloc] initWithCapacity:contactCount];
+    self.contactViews = [[NSMutableArray alloc] initWithCapacity:contactCount];
     
     // Create bubbles
     for (Contact *contact in self.contacts) {
@@ -495,7 +495,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)reorderContactViews
 {
     // Sort contact
-    [self.contactBubbleViews sortUsingComparator:^(ContactView *contactView1, ContactView * contactView2) {
+    [self.contactViews sortUsingComparator:^(ContactView *contactView1, ContactView * contactView2) {
         if (contactView1.contact.lastMessageDate < contactView2.contact.lastMessageDate) {
             return (NSComparisonResult)NSOrderedDescending;
         } else {
@@ -505,7 +505,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Create bubbles
     int position = 1;
-    for (ContactView *contactView in self.contactBubbleViews) {
+    for (ContactView *contactView in self.contactViews) {
         [contactView setOrderPosition:position];
         position ++;
     }
@@ -526,10 +526,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)displayAdditionnalContact:(Contact *)contact
 {
-    if (!self.contactBubbleViews) {
-        self.contactBubbleViews = [[NSMutableArray alloc] initWithCapacity:[self.contacts count]];
+    if (!self.contactViews) {
+        self.contactViews = [[NSMutableArray alloc] initWithCapacity:[self.contacts count]];
     }
-    [self createContactViewWithContact:contact andPosition:(int)[self.contactBubbleViews count]+1];
+    [self createContactViewWithContact:contact andPosition:(int)[self.contactViews count]+1];
 }
 
 // Set Scroll View size from the number of contacts
@@ -563,7 +563,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     contactView.delegate = self;
     contactView.orderPosition = position;
-    [self.contactBubbleViews addObject:contactView];
+    [self.contactViews addObject:contactView];
     [self.contactScrollView addSubview:contactView];
 }
 
@@ -598,7 +598,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)showContactViewAsPending
 {
-    for (ContactView *contactView in self.contactBubbleViews) {
+    for (ContactView *contactView in self.contactViews) {
         if (contactView.contact.isPending && contactView.contact.identifier != kAdminId) {
             [contactView setPendingContact:YES];
         } else {
@@ -623,7 +623,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         if (contactView.unreadMessages) {
             [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] - contactView.unreadMessages.count];
         }
-        [self.contactBubbleViews removeObject:contactView];
+        [self.contactViews removeObject:contactView];
         
         // Change position of other bubbles
         [self reorderContactViews];
@@ -676,8 +676,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)resetUnreadMessages
 {
-    for (ContactView *contactBubble in self.contactBubbleViews) {
-        [contactBubble resetUnreadMessages];
+    for (ContactView *contactView in self.contactViews) {
+        [contactView resetUnreadMessages];
     }
     self.nonAttributedUnreadMessages = nil;
 }
@@ -685,12 +685,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // Add a message we just received
 - (BOOL)attributeMessageToExistingContacts:(Message *)message
 {
-    for (ContactView *contactBubble in self.contactBubbleViews) {
-        if (message.senderId == contactBubble.contact.identifier) {
-            [contactBubble addUnreadMessage:message];
+    for (ContactView *contactView in self.contactViews) {
+        if (message.senderId == contactView.contact.identifier) {
+            [contactView addUnreadMessage:message];
             
             // Update last message date to sort contacts even if no push
-            contactBubble.contact.lastMessageDate = MAX(contactBubble.contact.lastMessageDate,message.createdAt);
+            contactView.contact.lastMessageDate = MAX(contactView.contact.lastMessageDate,message.createdAt);
             return YES;
         }
     }
@@ -708,12 +708,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     BOOL isAttributed;
     for (Message *message in self.nonAttributedUnreadMessages) {
         isAttributed = NO;
-        for (ContactView *contactBubble in self.contactBubbleViews) {
-            if (message.senderId == contactBubble.contact.identifier) {
-                [contactBubble addUnreadMessage:message];
+        for (ContactView *contactView in self.contactViews) {
+            if (message.senderId == contactView.contact.identifier) {
+                [contactView addUnreadMessage:message];
                 isAttributed = YES;
                 // Update last message date to sort contacts even if no push
-                contactBubble.contact.lastMessageDate = MAX(contactBubble.contact.lastMessageDate,message.createdAt);
+                contactView.contact.lastMessageDate = MAX(contactView.contact.lastMessageDate,message.createdAt);
                 break;
             }
         }
@@ -729,7 +729,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             }
             // create bubble
             [self displayAdditionnalContact:contact];
-            [[self.contactBubbleViews lastObject] addUnreadMessage:message];
+            [[self.contactViews lastObject] addUnreadMessage:message];
         }
     }
     
@@ -757,7 +757,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)recordingUIForContactView:(ContactView *)contactView
 {
-    [contactView recordingUI];
+    [contactView startRecordingUI];
 }
 
 - (void)disableAllContactViews
@@ -851,10 +851,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 
 // ----------------------------------------------------------
-#pragma mark ContactBubbleViewDelegate Protocole
+#pragma mark ContactViewDelegate Protocole
 // ----------------------------------------------------------
 
-- (void)contactTappedWithoutUnreadMessages:(ContactView *)contactView
+- (void)doubleTappedOnContactView:(ContactView *)contactView
 {
     self.lastSelectedContactView = contactView;
     
@@ -911,14 +911,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 //Create recording mode screen
-- (void)longPressOnContactBubbleViewStarted:(NSUInteger)contactId FromView:(ContactView *)view
+- (void)startedLongPressOnContactView:(ContactView *)contactView
 {
     if ([self.mainPlayer isPlaying]) {
         [self endPlayerUIAnimated:NO];
     }
     [self disableAllContactViews];
     
-    [self recordingUIForContactView:view];
+    [self recordingUIForContactView:contactView];
     
     // Case where we had a pending message
     if (!self.recorderContainer.isHidden) {
@@ -947,7 +947,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 //User stop pressing screen
-- (void)longPressOnContactBubbleViewEnded:(NSUInteger)contactId
+- (void)endedLongPressOnContactView:(ContactView *)contactView
 {
     // Stop recording
     [self.recorder stop];
@@ -1059,7 +1059,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)endPlayerUIForAllContactViews
 {
-    for (ContactView *contactView in self.contactBubbleViews) {
+    for (ContactView *contactView in self.contactViews) {
         [contactView endPlayingUI];
     }
 }
@@ -1279,7 +1279,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Block contact
     else if ([buttonTitle isEqualToString:ACTION_PENDING_OPTION_2]) {
-        for (ContactView * bubbleView in self.contactBubbleViews) {
+        for (ContactView * bubbleView in self.contactViews) {
             if (bubbleView.contact.identifier == self.contactToAdd.identifier) {
                 [self blockContact:bubbleView];
                 break;
