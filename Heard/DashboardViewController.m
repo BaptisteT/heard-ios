@@ -109,6 +109,9 @@
 @property (strong, nonatomic) UIActionSheet *contactMenuActionSheet;
 @property (strong, nonatomic) ContactView *lastSelectedContactView;
 
+//Alertview
+@property (strong, nonatomic) UIAlertView *blockAlertView;
+
 @end
 
 @implementation DashboardViewController 
@@ -160,6 +163,8 @@
     self.profilePicture.clipsToBounds = YES;
     self.profilePicture.layer.borderColor = [UIColor lightGrayColor].CGColor;
     self.profilePicture.layer.borderWidth = 0.5;
+    //Preload
+    [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
     [self.profileContainer addSubview:self.profilePicture];
     
     //Action sheet menu name label
@@ -1272,7 +1277,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self didFinishedAddingContact];
     }
     
-    // Block contact
+    // Block user
     else if ([buttonTitle isEqualToString:ACTION_PENDING_OPTION_2]) {
         for (ContactView * bubbleView in self.contactViews) {
             if (bubbleView.contact.identifier == self.contactToAdd.identifier) {
@@ -1353,9 +1358,15 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         
     }
     
-    // Hide
+    // Block
     else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_3]) {
-        [self blockContact:self.lastSelectedContactView];
+        
+        self.blockAlertView = [[UIAlertView alloc] initWithTitle:nil
+                                                         message:[NSString stringWithFormat:@"Are you sure you want to remove %@ from your contacts?", self.lastSelectedContactView.contact.firstName ? self.lastSelectedContactView.contact.firstName : self.lastSelectedContactView.contact.lastName]
+                                                        delegate:self
+                                               cancelButtonTitle:nil
+                                               otherButtonTitles:@"Cancel", @"Block", nil];
+        [self.blockAlertView show];
     }
 }
 
@@ -1364,10 +1375,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         UITextField *textField = [alertView textFieldAtIndex:0];
         if (buttonIndex == 0) // cancel
             return;
+
         if ([textField.text length] <= 0) {
             [GeneralUtils showMessage:[alertView.title stringByAppendingString:@" must between 1 and 20 characters."] withTitle:nil];
         }
         if (buttonIndex == 1) {
+            
+            
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             
             [alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] ? [ApiUtils updateFirstName:textField.text success:^{
@@ -1384,6 +1398,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                 [GeneralUtils showMessage:@"We couldn't update your last name, please try again." withTitle:nil];
             }];
         }
+    }
+    
+    if (alertView == self.blockAlertView && buttonIndex == 1) {
+        [self blockContact:self.lastSelectedContactView];
     }
 }
 
