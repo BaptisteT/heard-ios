@@ -21,6 +21,11 @@
     return [UIColor colorWithRed:14/256.0 green:78/256.0 blue:173/256.0 alpha:0.25];
 }
 
++ (UIColor *)tutorialBlue
+{
+    return [UIColor colorWithRed:14/256.0 green:78/256.0 blue:173/256.0 alpha:0.95];
+}
+
 + (UIColor *)red
 {
     return [UIColor colorWithRed:231/256.0 green:29/256.0 blue:37/256.0 alpha:1.0];

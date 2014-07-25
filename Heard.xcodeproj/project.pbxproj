@@ -28,6 +28,22 @@
 		0B56F65B1975AE4D00DB6FF1 /* CountryCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B56F6591975AE4D00DB6FF1 /* CountryCodeViewController.m */; };
 		0B58BAFD1954B47700E9FF70 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B58BAFB1954B47700E9FF70 /* AddressBook.framework */; };
 		0B58BAFE1954B47700E9FF70 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B58BAFC1954B47700E9FF70 /* AddressBookUI.framework */; };
+		0B7295841982CB49003ECEBE /* UIImage+animatedGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7295831982CB49003ECEBE /* UIImage+animatedGIF.m */; };
+		0B7295851982CB49003ECEBE /* UIImage+animatedGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7295831982CB49003ECEBE /* UIImage+animatedGIF.m */; };
+		0B7295881982CB68003ECEBE /* TutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7295871982CB68003ECEBE /* TutorialViewController.m */; };
+		0B7295891982CB68003ECEBE /* TutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7295871982CB68003ECEBE /* TutorialViewController.m */; };
+		0B72958C1982D08E003ECEBE /* hold1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B72958A1982D08E003ECEBE /* hold1.png */; };
+		0B72958D1982D08E003ECEBE /* hold1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B72958A1982D08E003ECEBE /* hold1.png */; };
+		0B72958E1982D08E003ECEBE /* hold2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B72958B1982D08E003ECEBE /* hold2.png */; };
+		0B72958F1982D08E003ECEBE /* hold2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B72958B1982D08E003ECEBE /* hold2.png */; };
+		0B7295921982D0A0003ECEBE /* play1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B7295901982D0A0003ECEBE /* play1.png */; };
+		0B7295931982D0A0003ECEBE /* play1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B7295901982D0A0003ECEBE /* play1.png */; };
+		0B7295941982D0A0003ECEBE /* play2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B7295911982D0A0003ECEBE /* play2.png */; };
+		0B7295951982D0A0003ECEBE /* play2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B7295911982D0A0003ECEBE /* play2.png */; };
+		0B7295981982D0AF003ECEBE /* press1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B7295961982D0AF003ECEBE /* press1.png */; };
+		0B7295991982D0AF003ECEBE /* press1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B7295961982D0AF003ECEBE /* press1.png */; };
+		0B72959A1982D0AF003ECEBE /* press2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B7295971982D0AF003ECEBE /* press2.png */; };
+		0B72959B1982D0AF003ECEBE /* press2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B7295971982D0AF003ECEBE /* press2.png */; };
 		0B72EEA2196C672F00AC5A01 /* UIColor+MPColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8E5195B449A00C94AC0 /* UIColor+MPColor.m */; };
 		0B72EEA3196C672F00AC5A01 /* UIImage+MPImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8E9195B449A00C94AC0 /* UIImage+MPImageEffects.m */; };
 		0B72EEA4196C672F00AC5A01 /* MPSurvey.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8DA195B449A00C94AC0 /* MPSurvey.m */; };
@@ -262,6 +278,16 @@
 		0B56F6591975AE4D00DB6FF1 /* CountryCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryCodeViewController.m; sourceTree = "<group>"; };
 		0B58BAFB1954B47700E9FF70 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		0B58BAFC1954B47700E9FF70 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		0B7295821982CB49003ECEBE /* UIImage+animatedGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+animatedGIF.h"; sourceTree = "<group>"; };
+		0B7295831982CB49003ECEBE /* UIImage+animatedGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+animatedGIF.m"; sourceTree = "<group>"; };
+		0B7295861982CB68003ECEBE /* TutorialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TutorialViewController.h; sourceTree = "<group>"; };
+		0B7295871982CB68003ECEBE /* TutorialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TutorialViewController.m; sourceTree = "<group>"; };
+		0B72958A1982D08E003ECEBE /* hold1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hold1.png; sourceTree = "<group>"; };
+		0B72958B1982D08E003ECEBE /* hold2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hold2.png; sourceTree = "<group>"; };
+		0B7295901982D0A0003ECEBE /* play1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play1.png; sourceTree = "<group>"; };
+		0B7295911982D0A0003ECEBE /* play2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play2.png; sourceTree = "<group>"; };
+		0B7295961982D0AF003ECEBE /* press1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = press1.png; sourceTree = "<group>"; };
+		0B7295971982D0AF003ECEBE /* press2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = press2.png; sourceTree = "<group>"; };
 		0B72EF01196C672F00AC5A01 /* WavedStaging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WavedStaging.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B87247819799684007219AF /* AddressbookUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressbookUtils.h; sourceTree = "<group>"; };
 		0B87247919799684007219AF /* AddressbookUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressbookUtils.m; sourceTree = "<group>"; };
@@ -483,6 +509,12 @@
 		0B58BB001954D7E200E9FF70 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				0B7295961982D0AF003ECEBE /* press1.png */,
+				0B7295971982D0AF003ECEBE /* press2.png */,
+				0B7295901982D0A0003ECEBE /* play1.png */,
+				0B7295911982D0A0003ECEBE /* play2.png */,
+				0B72958A1982D08E003ECEBE /* hold1.png */,
+				0B72958B1982D08E003ECEBE /* hold2.png */,
 				0B9051C019771B9E001E2ED5 /* Files */,
 				0B9051B419771B96001E2ED5 /* checkbox-selected@2x~iphone.png */,
 				0B9051B519771B96001E2ED5 /* checkbox-selected.png */,
@@ -505,6 +537,15 @@
 				0B893A481954E4FF00476BFE /* welcome-logo.png */,
 			);
 			name = Assets;
+			sourceTree = "<group>";
+		};
+		0B7295811982CAE8003ECEBE /* uiimage-from-animated-gif */ = {
+			isa = PBXGroup;
+			children = (
+				0B7295821982CB49003ECEBE /* UIImage+animatedGIF.h */,
+				0B7295831982CB49003ECEBE /* UIImage+animatedGIF.m */,
+			);
+			name = "uiimage-from-animated-gif";
 			sourceTree = "<group>";
 		};
 		0B9051A11975D721001E2ED5 /* RMPhoneFormat */ = {
@@ -662,6 +703,8 @@
 				0B9051AA1976F1D4001E2ED5 /* Login */,
 				0BDB655F1953C04800223093 /* DashboardViewController.h */,
 				0BDB65601953C04800223093 /* DashboardViewController.m */,
+				0B7295861982CB68003ECEBE /* TutorialViewController.h */,
+				0B7295871982CB68003ECEBE /* TutorialViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -678,6 +721,7 @@
 		0BDB64B21952150D00223093 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				0B7295811982CAE8003ECEBE /* uiimage-from-animated-gif */,
 				0B9051A11975D721001E2ED5 /* RMPhoneFormat */,
 				3CD180711971B55200EC8BE2 /* EZAudio */,
 				0BB0E8CE195B449A00C94AC0 /* Mixpanel */,
@@ -958,6 +1002,7 @@
 				0B9051A81975DE8C001E2ED5 /* PhoneFormats.dat in Resources */,
 				0B72EEEE196C672F00AC5A01 /* MPSurvey.storyboard in Resources */,
 				0B72EEEF196C672F00AC5A01 /* heard-logo-80.png in Resources */,
+				0B7295931982D0A0003ECEBE /* play1.png in Resources */,
 				0B72EEF0196C672F00AC5A01 /* record.png in Resources */,
 				0B72EEF1196C672F00AC5A01 /* PhoneNumberMetaData.json in Resources */,
 				0B72EEF2196C672F00AC5A01 /* InfoPlist.strings in Resources */,
@@ -969,10 +1014,15 @@
 				0B72EEF5196C672F00AC5A01 /* heard-logo-58.png in Resources */,
 				0B72EEF6196C672F00AC5A01 /* Main.storyboard in Resources */,
 				0B72EEF7196C672F00AC5A01 /* MPCloseBtn.png in Resources */,
+				0B72959B1982D0AF003ECEBE /* press2.png in Resources */,
+				0B72958F1982D08E003ECEBE /* hold2.png in Resources */,
 				0B72EEF8196C672F00AC5A01 /* Media.xcassets in Resources */,
+				0B7295991982D0AF003ECEBE /* press1.png in Resources */,
 				0B9051BD19771B96001E2ED5 /* checkbox@iphone.png in Resources */,
 				0B72EEF9196C672F00AC5A01 /* welcome-logo@2x~iphone.png in Resources */,
+				0B7295951982D0A0003ECEBE /* play2.png in Resources */,
 				0B72EEFA196C672F00AC5A01 /* MPNotification.storyboard in Resources */,
+				0B72958D1982D08E003ECEBE /* hold1.png in Resources */,
 				0B72EEFB196C672F00AC5A01 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
 				0B9051B919771B96001E2ED5 /* checkbox-selected@2x~iphone.png in Resources */,
 				0B72EEFC196C672F00AC5A01 /* welcome-logo.png in Resources */,
@@ -1000,6 +1050,7 @@
 				0B9051A71975DE8C001E2ED5 /* PhoneFormats.dat in Resources */,
 				0BB0E8F4195B449A00C94AC0 /* MPSurvey.storyboard in Resources */,
 				0B3651DF1959109700534386 /* heard-logo-80.png in Resources */,
+				0B7295921982D0A0003ECEBE /* play1.png in Resources */,
 				0BE55478195A4ADC00CE4669 /* record.png in Resources */,
 				0BDB64CE19521A7C00223093 /* PhoneNumberMetaData.json in Resources */,
 				0BD758CA1950F91B00CF0D85 /* InfoPlist.strings in Resources */,
@@ -1011,10 +1062,15 @@
 				0B3651E01959109700534386 /* heard-logo-58.png in Resources */,
 				0BD758D31950F91B00CF0D85 /* Main.storyboard in Resources */,
 				0BB0E8EE195B449A00C94AC0 /* MPCloseBtn.png in Resources */,
+				0B72959A1982D0AF003ECEBE /* press2.png in Resources */,
+				0B72958E1982D08E003ECEBE /* hold2.png in Resources */,
 				0BB0E8EC195B449A00C94AC0 /* Media.xcassets in Resources */,
+				0B7295981982D0AF003ECEBE /* press1.png in Resources */,
 				0B9051BC19771B96001E2ED5 /* checkbox@iphone.png in Resources */,
 				0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */,
+				0B7295941982D0A0003ECEBE /* play2.png in Resources */,
 				0BB0E8F1195B449A00C94AC0 /* MPNotification.storyboard in Resources */,
+				0B72958C1982D08E003ECEBE /* hold1.png in Resources */,
 				0BDB64CD19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
 				0B9051B819771B96001E2ED5 /* checkbox-selected@2x~iphone.png in Resources */,
 				0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */,
@@ -1034,6 +1090,7 @@
 			files = (
 				0B72EEA2196C672F00AC5A01 /* UIColor+MPColor.m in Sources */,
 				0B72EEA3196C672F00AC5A01 /* UIImage+MPImageEffects.m in Sources */,
+				0B7295891982CB68003ECEBE /* TutorialViewController.m in Sources */,
 				0B72EEA4196C672F00AC5A01 /* MPSurvey.m in Sources */,
 				0B72EEA5196C672F00AC5A01 /* RequestPhoneViewController.m in Sources */,
 				0B72EEA6196C672F00AC5A01 /* MPNotification.m in Sources */,
@@ -1075,6 +1132,7 @@
 				0B72EEC0196C672F00AC5A01 /* AFHTTPRequestOperation.m in Sources */,
 				0B72EEC1196C672F00AC5A01 /* AFHTTPRequestOperationManager.m in Sources */,
 				0B72EEC2196C672F00AC5A01 /* UIView+MPSnapshotImage.m in Sources */,
+				0B7295851982CB49003ECEBE /* UIImage+animatedGIF.m in Sources */,
 				0B72EEC3196C672F00AC5A01 /* AFHTTPSessionManager.m in Sources */,
 				0B72EEC4196C672F00AC5A01 /* Mixpanel.m in Sources */,
 				0B72EEC5196C672F00AC5A01 /* CrashReportUtils.m in Sources */,
@@ -1113,6 +1171,7 @@
 			files = (
 				0BB0E8F9195B449A00C94AC0 /* UIColor+MPColor.m in Sources */,
 				0BB0E8FB195B449A00C94AC0 /* UIImage+MPImageEffects.m in Sources */,
+				0B7295881982CB68003ECEBE /* TutorialViewController.m in Sources */,
 				0BB0E8F3195B449A00C94AC0 /* MPSurvey.m in Sources */,
 				0BDB65581953B6A000223093 /* RequestPhoneViewController.m in Sources */,
 				0BB0E8F0195B449A00C94AC0 /* MPNotification.m in Sources */,
@@ -1154,6 +1213,7 @@
 				0BDB653D1953B5EA00223093 /* AFHTTPRequestOperation.m in Sources */,
 				0BDB653E1953B5EA00223093 /* AFHTTPRequestOperationManager.m in Sources */,
 				0BB0E8FC195B449A00C94AC0 /* UIView+MPSnapshotImage.m in Sources */,
+				0B7295841982CB49003ECEBE /* UIImage+animatedGIF.m in Sources */,
 				0BDB653F1953B5EA00223093 /* AFHTTPSessionManager.m in Sources */,
 				0BB0E8ED195B449A00C94AC0 /* Mixpanel.m in Sources */,
 				3C55FD701966B11C00E818D9 /* CrashReportUtils.m in Sources */,

@@ -26,6 +26,7 @@
 #import "AddContactViewController.h"
 #import "AddressbookUtils.h"
 #import "MBProgressHUD.h"
+#import "TutorialViewController.h"
 
 #define ACTION_MAIN_MENU_OPTION_1 @"Invite Friends"
 #define ACTION_MAIN_MENU_OPTION_2 @"Add New Contact"
@@ -313,16 +314,18 @@
                                              self.tutorialView.frame.size.height);
     } completion:^(BOOL finished) {
         if (finished && self.tutorialView) {
-            [UIView animateWithDuration:0.5 delay:duration options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                self.tutorialView.frame = CGRectMake(self.tutorialView.frame.origin.x,
-                                                     self.tutorialView.frame.origin.y + self.tutorialView.frame.size.height,
-                                                     self.tutorialView.frame.size.width,
-                                                     self.tutorialView.frame.size.height);
-            } completion:^(BOOL finished) {
-                if (finished) {
-                    [self endTutorialMode];
-                }
-            }];
+            if (duration > 0) {
+                [UIView animateWithDuration:0.5 delay:duration options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                    self.tutorialView.frame = CGRectMake(self.tutorialView.frame.origin.x,
+                                                         self.tutorialView.frame.origin.y + self.tutorialView.frame.size.height,
+                                                         self.tutorialView.frame.size.width,
+                                                         self.tutorialView.frame.size.height);
+                } completion:^(BOOL finished) {
+                    if (finished) {
+                        [self endTutorialMode];
+                    }
+                }];
+            }
         }
     }];
 }
@@ -335,6 +338,17 @@
     
     [self.tutorialView.layer removeAllAnimations];
     [self.tutorialView removeFromSuperview];
+}
+
+- (void)showTutorialController
+{
+    TutorialViewController *tutorial = [self.storyboard instantiateViewControllerWithIdentifier:@"TutorialViewController"];
+    
+    tutorial.view.backgroundColor = [ImageUtils tutorialBlue];
+    
+    self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    self.navigationController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentViewController:tutorial animated:YES completion:NULL];
 }
 
 
@@ -503,7 +517,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
     
     if ([GeneralUtils isFirstOpening]) {
-        [self tutorialModeWithDuration:10];
+        [self showTutorialController];
+        
+        //Show util user does something
+        [self tutorialModeWithDuration:0];
     }
 }
 
@@ -1378,6 +1395,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)willPresentActionSheet:(UIActionSheet *)actionSheet {
     
     if (actionSheet == self.mainMenuActionSheet) {
+        self.profilePicture.image = nil;
+        
         self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", [SessionUtils getCurrentUserFirstName], [SessionUtils getCurrentUserLastName]];
         [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
         
@@ -1385,6 +1404,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     
     if (actionSheet == self.contactMenuActionSheet) {
+        self.profilePicture.image = nil;
+        
         NSString *firstName = self.lastSelectedContactView.contact.firstName ? self.lastSelectedContactView.contact.firstName : @"";
         NSString *lastName = self.lastSelectedContactView.contact.lastName ? self.lastSelectedContactView.contact.lastName : @"";
         
