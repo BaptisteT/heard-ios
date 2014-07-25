@@ -84,7 +84,6 @@
 @property (strong, nonatomic) UIView *playerContainer;
 @property (nonatomic,strong) UIView *playerLine;
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
-@property (weak, nonatomic) IBOutlet UIButton *replayButton;
 @property (nonatomic) BOOL disableProximityObserver;
 @property (nonatomic, strong) ContactView *lastContactPlayed;
 @property (nonatomic) BOOL isUsingHeadSet;
@@ -125,7 +124,6 @@
     
     self.contactScrollView.hidden = YES;
     self.retrieveNewContact = YES;
-    self.replayButton.hidden = YES;
     
     // Sound callback
     AudioServicesAddSystemSoundCompletion(1113, CFRunLoopGetMain(), kCFRunLoopDefaultMode, soundMuteNotificationCompletionProc,(__bridge void *)(self));
@@ -1077,7 +1075,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.disableProximityObserver = NO;
     [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
     
-    self.replayButton.hidden = YES;
     [self playerUIForContactView:contactView];
     self.playerContainer.hidden = NO;
     self.playerContainer.alpha = 1;
@@ -1118,13 +1115,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         } completion:^(BOOL dummy){
             if (dummy) {
                 self.playerContainer.hidden = YES;
-                [self unhideReplayButton];
             }
         }];
     } else {
         self.playerContainer.hidden = YES;
         [self setPlayerLineWidth:0];
-        [self unhideReplayButton];
     }
     
 }
@@ -1132,7 +1127,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)showLoadingIndicator
 {
     self.contactScrollView.hidden = YES;
-    self.replayButton.hidden = YES;
     if (!self.activityView) {
         self.activityView=[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         self.activityView.center = self.view.center;
@@ -1145,17 +1139,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)hideLoadingIndicator
 {
     self.contactScrollView.hidden = NO;
-    [self unhideReplayButton];
     if (self.activityView) {
         [self.activityView stopAnimating];
         [self.activityView removeFromSuperview];
-    }
-}
-
-- (void)unhideReplayButton
-{
-    if (self.mainPlayer.duration > 0) {
-        self.replayButton.hidden = NO;
     }
 }
 
@@ -1560,5 +1546,33 @@ void soundMuteNotificationCompletionProc(SystemSoundID  ssID,void* clientData){
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
+// ----------------------------------------------------------
+#pragma mark Motion event (shake)
+// ----------------------------------------------------------
+
+
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [self becomeFirstResponder];
+}
+
+- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+    if (motion == UIEventSubtypeMotionShake)
+    {
+        if (self.mainPlayer) {
+            [self endPlayerUIAnimated:NO];
+            
+            [self playerUI:([self.mainPlayer duration]) ByContactView:self.lastContactPlayed];
+            
+            [self.mainPlayer play];
+            [TrackingUtils trackReplay];
+        } else {
+            [GeneralUtils showMessage:@"No message to replay" withTitle:nil];
+        }
+    }
+}
 
 @end

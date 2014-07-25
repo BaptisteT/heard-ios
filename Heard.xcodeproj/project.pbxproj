@@ -1394,7 +1394,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (63863BWF5M)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Bastien Beurier (63863BWF5M)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1409,7 +1409,7 @@
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9FADCC52-2A13-45FE-967E-06E0B8B26653";
+				PROVISIONING_PROFILE = "4F991406-5786-466C-B06B-4BB7D18E50CC";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1433,7 +1433,7 @@
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9FADCC52-2A13-45FE-967E-06E0B8B26653";
+				PROVISIONING_PROFILE = "4F991406-5786-466C-B06B-4BB7D18E50CC";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
