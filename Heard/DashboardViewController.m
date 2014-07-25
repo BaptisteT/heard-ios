@@ -26,7 +26,6 @@
 #import "AddContactViewController.h"
 #import "AddressbookUtils.h"
 #import "MBProgressHUD.h"
-#import "TutorialViewController.h"
 
 #define ACTION_MAIN_MENU_OPTION_1 @"Invite Friends"
 #define ACTION_MAIN_MENU_OPTION_2 @"Add New Contact"
@@ -41,9 +40,9 @@
 #define ACTION_SHEET_PROFILE_OPTION_3 @"Last Name"
 #define ACTION_SHEET_PICTURE_OPTION_1 @"Camera"
 #define ACTION_SHEET_PICTURE_OPTION_2 @"Library"
-#define ACTION_CONTACT_MENU_OPTION_1 @"Replay last message"
-#define ACTION_CONTACT_MENU_OPTION_2 @"View in address book"
-#define ACTION_CONTACT_MENU_OPTION_3 @"Block contact"
+#define ACTION_CONTACT_MENU_OPTION_1 @"Replay Last"
+#define ACTION_CONTACT_MENU_OPTION_2 @"Text or Call"
+#define ACTION_CONTACT_MENU_OPTION_3 @"Block"
 #define ACTION_SHEET_CANCEL @"Cancel"
 
 #define RECORDER_LINE_HEIGHT 0.4
@@ -54,7 +53,7 @@
 #define PLAYER_UI_HEIGHT 5
 
 #define INVITE_CONTACT_BUTTON_HEIGHT 50
-#define TUTORIAL_VIEW_HEIGHT 60
+#define NO_MESSAGE_VIEW_HEIGHT 60
 
 #define USER_PROFILE_VIEW_SIZE 60
 #define USER_PROFILE_PICTURE_SIZE 50
@@ -99,7 +98,8 @@
 // Others
 @property (weak, nonatomic) UIButton *menuButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
-@property (nonatomic, strong) UIView *tutorialView;
+@property (nonatomic, strong) UIView *noMessageView;
+@property (nonatomic, strong) UILabel *noMessageViewLabel;
 @property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
 @property (nonatomic, strong) Contact *resendContact;
 @property (nonatomic, strong) UITapGestureRecognizer *oneTapResendRecognizer;
@@ -281,48 +281,54 @@
     self.noAddressBookAccessLabel.textAlignment = NSTextAlignmentCenter;
 }
 
-- (void)initTutorialView
+- (void)initNoMessageView
 {
-    self.tutorialView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, TUTORIAL_VIEW_HEIGHT)];
-    self.tutorialView.backgroundColor = [ImageUtils blue];
+    self.noMessageView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
+    self.noMessageView.backgroundColor = [ImageUtils blue];
     
-    UILabel *tutorialMessage = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, TUTORIAL_VIEW_HEIGHT)];
-    tutorialMessage.text = @"Hold contact to record.";
-    tutorialMessage.font = [UIFont fontWithName:@"Avenir-Light" size:20.0];
-    tutorialMessage.textAlignment = NSTextAlignmentCenter;
-    tutorialMessage.textColor = [UIColor whiteColor];
-    tutorialMessage.backgroundColor = [UIColor clearColor];
+    self.noMessageViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
+    self.noMessageViewLabel.font = [UIFont fontWithName:@"Avenir-Light" size:20.0];
+    self.noMessageViewLabel.textAlignment = NSTextAlignmentCenter;
+    self.noMessageViewLabel.textColor = [UIColor whiteColor];
+    self.noMessageViewLabel.backgroundColor = [UIColor clearColor];
     
-    [self.tutorialView addSubview:tutorialMessage];
+    [self.noMessageView addSubview:self.noMessageViewLabel];
 }
 
-- (void)tutorialModeWithDuration:(NSTimeInterval)duration
+- (void)noMessageModeWithDuration:(NSTimeInterval)duration
 {
-    [self endTutorialMode];
+    [self noMessageMode];
     
-    if (!self.tutorialView) {
-        [self initTutorialView];
+    if (!self.noMessageView) {
+        [self initNoMessageView];
     }
     
-    self.tutorialView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, TUTORIAL_VIEW_HEIGHT);
-    [self.view addSubview:self.tutorialView];
+    //Initial explanation message for the user
+    if (duration == 0) {
+        self.noMessageViewLabel.text = @"Hold a contact to record.";
+    } else {
+        self.noMessageViewLabel.text = @"No message, hold or double tap.";
+    }
+    
+    self.noMessageView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT);
+    [self.view addSubview:self.noMessageView];
     
     [UIView animateWithDuration:0.5 animations:^{
-        self.tutorialView.frame = CGRectMake(self.tutorialView.frame.origin.x,
-                                             self.tutorialView.frame.origin.y - self.tutorialView.frame.size.height,
-                                             self.tutorialView.frame.size.width,
-                                             self.tutorialView.frame.size.height);
+        self.noMessageView.frame = CGRectMake(self.noMessageView.frame.origin.x,
+                                             self.noMessageView.frame.origin.y - self.noMessageView.frame.size.height,
+                                             self.noMessageView.frame.size.width,
+                                             self.noMessageView.frame.size.height);
     } completion:^(BOOL finished) {
-        if (finished && self.tutorialView) {
+        if (finished && self.noMessageView) {
             if (duration > 0) {
                 [UIView animateWithDuration:0.5 delay:duration options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    self.tutorialView.frame = CGRectMake(self.tutorialView.frame.origin.x,
-                                                         self.tutorialView.frame.origin.y + self.tutorialView.frame.size.height,
-                                                         self.tutorialView.frame.size.width,
-                                                         self.tutorialView.frame.size.height);
+                    self.noMessageView.frame = CGRectMake(self.noMessageView.frame.origin.x,
+                                                         self.noMessageView.frame.origin.y + self.noMessageView.frame.size.height,
+                                                         self.noMessageView.frame.size.width,
+                                                         self.noMessageView.frame.size.height);
                 } completion:^(BOOL finished) {
                     if (finished) {
-                        [self endTutorialMode];
+                        [self noMessageMode];
                     }
                 }];
             }
@@ -330,25 +336,14 @@
     }];
 }
 
-- (void)endTutorialMode
+- (void)noMessageMode
 {
-    if (!self.tutorialView) {
+    if (!self.noMessageView) {
         return;
     }
     
-    [self.tutorialView.layer removeAllAnimations];
-    [self.tutorialView removeFromSuperview];
-}
-
-- (void)showTutorialController
-{
-    TutorialViewController *tutorial = [self.storyboard instantiateViewControllerWithIdentifier:@"TutorialViewController"];
-    
-    tutorial.view.backgroundColor = [ImageUtils tutorialBlue];
-    
-    self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
-    self.navigationController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    [self presentViewController:tutorial animated:YES completion:NULL];
+    [self.noMessageView.layer removeAllAnimations];
+    [self.noMessageView removeFromSuperview];
 }
 
 
@@ -517,10 +512,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
     
     if ([GeneralUtils isFirstOpening]) {
-        [self showTutorialController];
+        [self performSegueWithIdentifier:@"Tutorial Segue" sender:nil];
         
         //Show util user does something
-        [self tutorialModeWithDuration:0];
+        [self noMessageModeWithDuration:0];
     }
 }
 

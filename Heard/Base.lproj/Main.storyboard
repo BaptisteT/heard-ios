@@ -870,6 +870,7 @@
                         <outlet property="replayButton" destination="j4G-6T-wvn" id="dNW-0o-haL"/>
                         <segue destination="7tt-yn-mQy" kind="modal" identifier="Invite Contacts Segue" id="FDD-RE-iS8"/>
                         <segue destination="nns-Z4-R2U" kind="modal" identifier="Add Contact Segue" id="Ixl-M0-jCK"/>
+                        <segue destination="fhR-cM-N51" kind="modal" identifier="Tutorial Segue" modalTransitionStyle="flipHorizontal" id="43H-LP-g2p"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kJk-FM-4rk" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -954,8 +955,15 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap anywhere to dismiss." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ms-X2-xko">
+                                <rect key="frame" x="0.0" y="538" width="320" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="14"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
-                        <color key="backgroundColor" red="0.054901960780000002" green="0.30588235289999999" blue="0.67843137249999996" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.054901960780000002" green="0.30588235289999999" blue="0.67843137249999996" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="82s-3M-lkl" secondAttribute="trailing" id="07g-U2-kZt"/>
@@ -963,10 +971,13 @@
                             <constraint firstAttribute="trailing" secondItem="7eS-pi-5ih" secondAttribute="trailing" id="0Hj-DM-b4k"/>
                             <constraint firstItem="WTI-Ft-VtG" firstAttribute="top" secondItem="82s-3M-lkl" secondAttribute="bottom" id="1HK-5C-IXF"/>
                             <constraint firstItem="82s-3M-lkl" firstAttribute="leading" secondItem="sg6-n5-qtZ" secondAttribute="trailing" id="5IK-8v-A1W"/>
+                            <constraint firstItem="E9R-hc-DlC" firstAttribute="top" secondItem="8ms-X2-xko" secondAttribute="bottom" constant="10" id="9yb-J4-A2D"/>
                             <constraint firstAttribute="trailing" secondItem="L5I-Ct-XAh" secondAttribute="trailing" id="BAF-t6-Ezv"/>
                             <constraint firstAttribute="trailing" secondItem="WTI-Ft-VtG" secondAttribute="trailing" id="FBm-29-h2B"/>
                             <constraint firstAttribute="trailing" secondItem="Bar-dO-p0m" secondAttribute="trailing" id="IZu-G9-UCb"/>
                             <constraint firstItem="jTL-f8-rBo" firstAttribute="leading" secondItem="4fS-K1-XNY" secondAttribute="leading" constant="20" id="JW9-th-riu"/>
+                            <constraint firstItem="8ms-X2-xko" firstAttribute="leading" secondItem="4fS-K1-XNY" secondAttribute="leading" id="NU3-TJ-Jdb"/>
+                            <constraint firstAttribute="trailing" secondItem="8ms-X2-xko" secondAttribute="trailing" id="PhP-U2-8Nk"/>
                             <constraint firstItem="7eS-pi-5ih" firstAttribute="top" secondItem="EqJ-xo-nUg" secondAttribute="bottom" id="Qkc-B9-1jF"/>
                             <constraint firstItem="sg6-n5-qtZ" firstAttribute="leading" secondItem="4fS-K1-XNY" secondAttribute="leading" constant="20" id="RCX-1f-Ooe"/>
                             <constraint firstAttribute="centerY" secondItem="jTL-f8-rBo" secondAttribute="centerY" id="Z93-e4-NRp"/>
@@ -1000,7 +1011,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="3330" y="99"/>
+            <point key="canvasLocation" x="3299" y="99"/>
         </scene>
         <!--Invite ContactsTVC-->
         <scene sceneID="2Jg-73-1a5">

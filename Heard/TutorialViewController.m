@@ -75,7 +75,7 @@
 }
 
 - (IBAction)tutorialTapped:(id)sender {
-    [self dismissViewControllerAnimated:NO completion:NO];
+    [self dismissViewControllerAnimated:YES completion:NO];
 }
 
 @end

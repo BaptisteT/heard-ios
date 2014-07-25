@@ -53,9 +53,9 @@
 
 - (void)updateFrameOfContactView:(ContactView *)view;
 
-- (void)endTutorialMode;
+- (void)noMessageMode;
 
-- (void)tutorialModeWithDuration:(NSTimeInterval)duration;
+- (void)noMessageModeWithDuration:(NSTimeInterval)duration;
 
 - (void)recordSound;
 

@@ -263,7 +263,7 @@
         
         self.userInteractionEnabled = YES;
     } else {
-        [self.delegate tutorialModeWithDuration:3];
+        [self.delegate noMessageModeWithDuration:3];
     }
 }
 
@@ -499,7 +499,7 @@
     [self.recordPlayOverlay removeFromSuperview];
     self.recordPlayOverlay = nil;
     
-    [self.delegate endTutorialMode];
+    [self.delegate noMessageMode];
 }
 
 - (void)showTapOverlay
