@@ -1054,13 +1054,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)playerUIForContactView:(ContactView *)contactView
 {
-    [contactView playingUI];
+    [contactView startPlayingUI];
 }
 
 - (void)endPlayerUIForAllContactViews
 {
     for (ContactView *contactView in self.contactViews) {
-        [contactView endPlayingUI];
+        [contactView endRecordingPlayingUI];
     }
 }
 

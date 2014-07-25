@@ -19,6 +19,7 @@
 #define NO_UNREAD_MESSAGES_BORDER 0.5
 #define DELAY_BEFORE_RECORDING 0.5
 #define DELAY_FOR_SECOND_TAP 0.5
+#define TAP_OVERLAY_LENGTH 0.1
 
 @interface ContactView()
 
@@ -27,7 +28,8 @@
 @property (nonatomic) NSInteger unreadMessagesCount;
 @property (nonatomic) UILabel *unreadMessagesLabel;
 @property (strong, nonatomic) UIImageView *imageView;
-@property (nonatomic, strong) UIImageView *recordingOverlay;
+@property (nonatomic, strong) UIImageView *recordPlayOverlay;
+@property (nonatomic, strong) UIView *tapOverlay;
 @property (nonatomic, strong) UIImageView *pendingContactOverlay;
 @property (nonatomic, strong) CAShapeLayer *circleShape;
 @property (nonatomic, strong) CAShapeLayer *loadingCircleShape;
@@ -81,6 +83,13 @@
     self.longPressRecognizer.delegate = self;
     self.longPressRecognizer.minimumPressDuration = 0;
     
+    //Init tap overlay
+    self.tapOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
+    self.tapOverlay.clipsToBounds = YES;
+    self.tapOverlay.layer.cornerRadius = self.bounds.size.width/2;
+    self.tapOverlay.alpha = 0.4;
+    self.tapOverlay.backgroundColor = [ImageUtils blue];
+    
     // Init unread messages button
     [self initUnreadMessagesButton];
     self.unreadMessagesCount = 0;
@@ -117,13 +126,17 @@
 // ----------------------------------------------------------
 - (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer
 {
-    if (recognizer.state == UIGestureRecognizerStateBegan && self.firstTap) {
-        [self startRecordingUI];
-        [self performSelector:@selector(startRecording) withObject:self afterDelay:DELAY_BEFORE_RECORDING];
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        [self showTapOverlay];
+        
+        if (self.firstTap) {
+            [self performSelector:@selector(startRecording) withObject:self afterDelay:DELAY_BEFORE_RECORDING];
+        }
     }
     
     if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled || recognizer.state == UIGestureRecognizerStateFailed) {
-        [self endRecordingUI];
+        [self hideTapOverlay];
+        [self endRecordingPlayingUI];
         
         if ([self.delegate isRecording]) {
             if ([self.maxDurationTimer isValid]) {
@@ -132,21 +145,20 @@
             
             [self sendRecording];
         } else {
-            self.cancelLongPress = YES;
-            [self.delegate quitRecordingModeAnimated:NO];
-            
             if (self.firstTap) {
+                
+                //If view released after max duration time reached, consume event
                 if (self.maxDurationTimerReached) {
                     self.maxDurationTimerReached = NO;
-                    
                     return;
                 }
+                
+                self.cancelLongPress = YES;
                 
                 [self performSelector:@selector(handleSingleTapGesture) withObject:self afterDelay:DELAY_FOR_SECOND_TAP];
                 self.firstTap = NO;
             } else {
                 self.cancelSingleTap = YES;
-                self.firstTap = YES;
                 [self handleDoubleTapGesture];
             }
         }
@@ -161,6 +173,8 @@
         self.cancelLongPress = NO;
     } else {
         self.cancelLongPress = NO;
+        
+        [self startRecordingUI];
         
         // Set session
         AVAudioSession *session = [AVAudioSession sharedInstance];
@@ -319,7 +333,7 @@
     self.maxDurationTimerReached = YES;
     self.userInteractionEnabled = NO;
     
-    [self endRecordingUI];
+    [self endRecordingPlayingUI];
     [self sendRecording];
 }
 
@@ -407,16 +421,32 @@
 // ----------------------------------------------------------
 - (void)startRecordingUI
 {
-    [self endRecordingUI];
+    [self hideTapOverlay];
+    [self endRecordingPlayingUI];
     
     [self startSonarAnimationWithColor:[ImageUtils red]];
     
-    self.recordingOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
-    self.recordingOverlay.clipsToBounds = YES;
-    self.recordingOverlay.alpha = 0.7;
-    self.recordingOverlay.image = [UIImage imageNamed:@"record"];
+    self.recordPlayOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
+    self.recordPlayOverlay.clipsToBounds = YES;
+    self.recordPlayOverlay.alpha = 0.7;
+    self.recordPlayOverlay.image = [UIImage imageNamed:@"record"];
     
-    [self addSubview:self.recordingOverlay];
+    [self addSubview:self.recordPlayOverlay];
+}
+
+- (void)startPlayingUI
+{
+    [self hideTapOverlay];
+    [self endRecordingPlayingUI];
+    
+    [self startSonarAnimationWithColor:[ImageUtils green]];
+    
+    self.recordPlayOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
+    self.recordPlayOverlay.clipsToBounds = YES;
+    self.recordPlayOverlay.alpha = 0.7;
+    self.recordPlayOverlay.image = [UIImage imageNamed:@"play"];
+    
+    [self addSubview:self.recordPlayOverlay];
 }
 
 - (void)startSonarAnimationWithColor:(UIColor *)color
@@ -462,36 +492,24 @@
     [self.circleShape removeFromSuperlayer];
 }
 
-- (void)endRecordingUI
+- (void)endRecordingPlayingUI
 {
     [self endSonarAnimation];
     
-    [self.recordingOverlay removeFromSuperview];
-    self.recordingOverlay = nil;
+    [self.recordPlayOverlay removeFromSuperview];
+    self.recordPlayOverlay = nil;
     
     [self.delegate endTutorialMode];
 }
 
-- (void)playingUI
+- (void)showTapOverlay
 {
-    [self endRecordingUI];
-    
-    [self startSonarAnimationWithColor:[ImageUtils green]];
-    
-    self.recordingOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
-    self.recordingOverlay.clipsToBounds = YES;
-    self.recordingOverlay.alpha = 0.7;
-    self.recordingOverlay.image = [UIImage imageNamed:@"play"];
-    
-    [self addSubview:self.recordingOverlay];
+    [self addSubview:self.tapOverlay];
 }
 
-- (void)endPlayingUI
+- (void)hideTapOverlay
 {
-    [self endSonarAnimation];
-    
-    [self.recordingOverlay removeFromSuperview];
-    self.recordingOverlay = nil;
+    [self.tapOverlay removeFromSuperview];
 }
 
 - (void)startLoadingMessageAnimation

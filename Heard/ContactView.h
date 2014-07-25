@@ -31,9 +31,8 @@
 - (void)addUnreadMessage:(Message *)message;
 - (void)resetUnreadMessages;
 - (void)startRecordingUI;
-- (void)endRecordingUI;
-- (void)playingUI;
-- (void)endPlayingUI;
+- (void)endRecordingPlayingUI;
+- (void)startPlayingUI;
 
 
 @end
