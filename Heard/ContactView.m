@@ -24,6 +24,7 @@
 @interface ContactView()
 
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
+@property (nonatomic, strong) UITapGestureRecognizer *singleTapRecognizer;
 @property (nonatomic, strong) NSTimer *maxDurationTimer;
 @property (nonatomic) NSInteger unreadMessagesCount;
 @property (nonatomic) UILabel *unreadMessagesLabel;
@@ -81,7 +82,15 @@
     self.longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
     [self addGestureRecognizer:self.longPressRecognizer];
     self.longPressRecognizer.delegate = self;
-    self.longPressRecognizer.minimumPressDuration = 0;
+    self.longPressRecognizer.minimumPressDuration = 0.5;
+    
+    self.longPressRecognizer.minimumPressDuration = kLongPressMinDurationNoMessageCase;
+    
+    self.singleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture)];
+    [self addGestureRecognizer:self.singleTapRecognizer];
+    self.singleTapRecognizer.delegate = self;
+    self.singleTapRecognizer.numberOfTapsRequired = 1;
+
     
     //Init tap overlay
     self.tapOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
@@ -145,22 +154,7 @@
             
             [self sendRecording];
         } else {
-            if (self.firstTap) {
-                
-                //If view released after max duration time reached, consume event
-                if (self.maxDurationTimerReached) {
-                    self.maxDurationTimerReached = NO;
-                    return;
-                }
-                
-                self.cancelLongPress = YES;
-                
-                [self performSelector:@selector(handleSingleTapGesture) withObject:self afterDelay:DELAY_FOR_SECOND_TAP];
-                self.firstTap = NO;
-            } else {
-                self.cancelSingleTap = YES;
-                [self handleDoubleTapGesture];
-            }
+            [self handleTapGesture];
         }
     }
 }
@@ -193,6 +187,26 @@
                 [self.delegate startedLongPressOnContactView:self];
             }
         }];
+    }
+}
+
+- (void)handleTapGesture
+{
+    if (self.firstTap) {
+        
+        //If view released after max duration time reached, consume event
+        if (self.maxDurationTimerReached) {
+            self.maxDurationTimerReached = NO;
+            return;
+        }
+        
+        self.cancelLongPress = YES;
+        
+        [self performSelector:@selector(handleSingleTapGesture) withObject:self afterDelay:DELAY_FOR_SECOND_TAP];
+        self.firstTap = NO;
+    } else {
+        self.cancelSingleTap = YES;
+        [self handleDoubleTapGesture];
     }
 }
 
