@@ -53,7 +53,7 @@
 
 - (void)updateFrameOfContactView:(ContactView *)view;
 
-- (void)noMessageMode;
+- (void)endNoMessageMode;
 
 - (void)noMessageModeWithDuration:(NSTimeInterval)duration;
 

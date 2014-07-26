@@ -513,7 +513,7 @@
     [self.recordPlayOverlay removeFromSuperview];
     self.recordPlayOverlay = nil;
     
-    [self.delegate noMessageMode];
+    [self.delegate endNoMessageMode];
 }
 
 - (void)showTapOverlay

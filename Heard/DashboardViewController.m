@@ -144,6 +144,19 @@
     self.oneTapResendRecognizer.delegate = self;
     self.oneTapResendRecognizer.numberOfTapsRequired = 1;
     
+    //Init no message view
+    self.noMessageView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
+    self.noMessageView.backgroundColor = [ImageUtils blue];
+    
+    self.noMessageViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
+    self.noMessageViewLabel.font = [UIFont fontWithName:@"Avenir-Light" size:20.0];
+    self.noMessageViewLabel.textAlignment = NSTextAlignmentCenter;
+    self.noMessageViewLabel.textColor = [UIColor whiteColor];
+    self.noMessageViewLabel.backgroundColor = [UIColor clearColor];
+    
+    [self.noMessageView addSubview:self.noMessageViewLabel];
+    [self.view addSubview:self.noMessageView];
+    
     // Init no adress book access label
     [self initNoAddressBookAccessLabel]; // we do it here to avoid to resize text in a parrallel thread
     
@@ -289,27 +302,9 @@
     self.noAddressBookAccessLabel.textAlignment = NSTextAlignmentCenter;
 }
 
-- (void)initNoMessageView
-{
-    self.noMessageView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
-    self.noMessageView.backgroundColor = [ImageUtils blue];
-    
-    self.noMessageViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
-    self.noMessageViewLabel.font = [UIFont fontWithName:@"Avenir-Light" size:20.0];
-    self.noMessageViewLabel.textAlignment = NSTextAlignmentCenter;
-    self.noMessageViewLabel.textColor = [UIColor whiteColor];
-    self.noMessageViewLabel.backgroundColor = [UIColor clearColor];
-    
-    [self.noMessageView addSubview:self.noMessageViewLabel];
-}
-
 - (void)noMessageModeWithDuration:(NSTimeInterval)duration
 {
-    [self noMessageMode];
-    
-    if (!self.noMessageView) {
-        [self initNoMessageView];
-    }
+    [self endNoMessageMode];
     
     //Initial explanation message for the user
     if (duration == 0) {
@@ -319,7 +314,6 @@
     }
     
     self.noMessageView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT);
-    [self.view addSubview:self.noMessageView];
     
     [UIView animateWithDuration:0.5 animations:^{
         self.noMessageView.frame = CGRectMake(self.noMessageView.frame.origin.x,
@@ -336,7 +330,7 @@
                                                          self.noMessageView.frame.size.height);
                 } completion:^(BOOL finished) {
                     if (finished) {
-                        [self noMessageMode];
+                        [self endNoMessageMode];
                     }
                 }];
             }
@@ -344,14 +338,14 @@
     }];
 }
 
-- (void)noMessageMode
+- (void)endNoMessageMode
 {
     if (!self.noMessageView) {
         return;
     }
     
     [self.noMessageView.layer removeAllAnimations];
-    [self.noMessageView removeFromSuperview];
+    self.noMessageView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT);
 }
 
 
