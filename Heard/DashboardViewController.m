@@ -254,6 +254,11 @@
     [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES];   //it hides
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     NSString * segueName = segue.identifier;
@@ -1341,7 +1346,21 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Call/Text
     else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_2]) {
+        ABRecordRef person = [AddressbookUtils findContactForNumber:self.lastSelectedContactView.contact.phoneNumber];
         
+        if (!person) {
+            [GeneralUtils showMessage:@"We could not retrieve this contact" withTitle:nil];
+            [TrackingUtils trackFailedToOpenContact:self.lastSelectedContactView.contact.phoneNumber];
+            return;
+        }
+        
+        ABPersonViewController *personViewController = [[ABPersonViewController alloc] init];
+        personViewController.personViewDelegate = self;
+        personViewController.displayedPerson = person;
+        personViewController.allowsEditing = NO;
+        
+        [self.navigationController pushViewController:personViewController animated:YES];
+        self.navigationController.navigationBarHidden = NO;
     }
     
     // Block
@@ -1573,6 +1592,15 @@ void soundMuteNotificationCompletionProc(SystemSoundID  ssID,void* clientData){
             [GeneralUtils showMessage:@"No message to replay" withTitle:nil];
         }
     }
+}
+
+// ----------------------------------------------------------
+#pragma mark Address Book Delegate
+// ----------------------------------------------------------
+
+- (BOOL)personViewController:(ABPersonViewController *)personViewController shouldPerformDefaultActionForPerson:(ABRecordRef)person property:(ABPropertyID)property identifier:(ABMultiValueIdentifier)identifierForValue
+{
+    return YES;
 }
 
 @end

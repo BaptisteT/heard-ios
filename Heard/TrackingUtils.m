@@ -134,4 +134,13 @@
     }
 }
 
++ (void)trackFailedToOpenContact:(NSString *)formattedNumber
+{
+    if (!PRODUCTION || DEBUG)return;
+    
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    
+    [mixpanel track:@"Failed Open Contact" properties:@{@"Phone number":formattedNumber}];
+}
+
 @end

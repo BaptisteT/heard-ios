@@ -29,4 +29,6 @@
 
 + (void)trackInviteContacts:(NSInteger)nbrOfInvites successful:(BOOL)success justAdded:(BOOL)justAdded;
 
++ (void)trackFailedToOpenContact:(NSString *)formattedNumber;
+
 @end

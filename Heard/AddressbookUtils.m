@@ -261,5 +261,53 @@
     return addressBookFormattedContacts;
 }
 
++ (ABRecordRef)findContactForNumber:(NSString *)formattedNumber
+{
+    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+    
+    NSError *aError = nil;
+    
+    ABAddressBookRef addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
+    
+    CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(addressBook);
+    CFIndex peopleCount = CFArrayGetCount(people);
+    
+    for (CFIndex i = 0 ; i < peopleCount; i++) {
+        ABRecordRef person = CFArrayGetValueAtIndex(people, i);
+        
+        ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
+        
+        NSString *firstName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
+        NSString *lastName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
+        
+        if (ABMultiValueGetCount(phoneNumbers) > 0 &&
+            ((firstName && [firstName length] > 0) || (lastName && [lastName length] > 0))) {
+            
+            for (CFIndex j = 0; j < ABMultiValueGetCount(phoneNumbers); j++) {
+                NSString *rawPhoneNumber = (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, j);
+                NSString *personDecimalPhoneNumber = [[rawPhoneNumber componentsSeparatedByCharactersInSet:
+                                                       [[NSCharacterSet decimalDigitCharacterSet] invertedSet]]
+                                                      componentsJoinedByString:@""];
+                
+                NBPhoneNumber *nbPhoneNumber = [phoneUtil parse:formattedNumber defaultRegion:@"US" error:&aError];
+                
+                if (aError == nil && [phoneUtil isValidNumber:nbPhoneNumber]) {
+                    if ([personDecimalPhoneNumber rangeOfString:[nbPhoneNumber.nationalNumber stringValue]].location != NSNotFound) {
+                        CFRelease(people);
+                        return person;
+                    }
+                }
+            }
+        }
+        
+        CFRelease(person);
+        CFRelease(phoneNumbers);
+    }
+    
+    CFRelease(people);
+    
+    return nil;
+}
+
 @end
 

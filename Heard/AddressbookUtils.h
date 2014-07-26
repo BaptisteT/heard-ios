@@ -23,4 +23,6 @@
 
 + (NSMutableDictionary *)getFormattedPhoneNumbersFromAddressBook:(ABAddressBookRef) addressBook;
 
++ (ABRecordRef)findContactForNumber:(NSString *)formattedNumber;
+
 @end
