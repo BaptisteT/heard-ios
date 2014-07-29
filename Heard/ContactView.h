@@ -53,15 +53,11 @@
 
 - (void)updateFrameOfContactView:(ContactView *)view;
 
-- (void)endNoMessageMode;
+- (void)endTutoMode;
 
-- (void)noMessageModeWithDuration:(NSTimeInterval)duration;
-
-- (void)recordSound;
+- (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration;
 
 - (BOOL)isRecording;
-
-- (NSTimeInterval)delayBeforeRecording;
 
 - (void)doubleTappedOnContactView:(ContactView *)contactView;
 

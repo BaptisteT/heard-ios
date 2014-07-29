@@ -78,8 +78,6 @@
 @property (nonatomic,strong) UIView *recorderLine;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic, strong) UILabel *recorderMessage;
-@property (strong, nonatomic) NSDate* lastRecordSoundDate;
-@property (nonatomic) BOOL silentMode;
 // Player
 @property (strong, nonatomic) UIView *playerContainer;
 @property (nonatomic,strong) UIView *playerLine;
@@ -97,8 +95,8 @@
 // Others
 @property (weak, nonatomic) UIButton *menuButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
-@property (nonatomic, strong) UIView *noMessageView;
-@property (nonatomic, strong) UILabel *noMessageViewLabel;
+@property (nonatomic, strong) UIView *tutoView;
+@property (nonatomic, strong) UILabel *tutoViewLabel;
 @property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
 @property (nonatomic, strong) Contact *resendContact;
 @property (nonatomic, strong) UITapGestureRecognizer *oneTapResendRecognizer;
@@ -125,10 +123,6 @@
     self.contactScrollView.hidden = YES;
     self.retrieveNewContact = YES;
     
-    // Sound callback
-    AudioServicesAddSystemSoundCompletion(1113, CFRunLoopGetMain(), kCFRunLoopDefaultMode, soundMuteNotificationCompletionProc,(__bridge void *)(self));
-    self.silentMode = NO;
-    
     // Init address book
     self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
@@ -145,17 +139,17 @@
     self.oneTapResendRecognizer.numberOfTapsRequired = 1;
     
     //Init no message view
-    self.noMessageView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
-    self.noMessageView.backgroundColor = [ImageUtils blue];
+    self.tutoView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
+    self.tutoView.backgroundColor = [ImageUtils blue];
     
-    self.noMessageViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
-    self.noMessageViewLabel.font = [UIFont fontWithName:@"Avenir-Light" size:20.0];
-    self.noMessageViewLabel.textAlignment = NSTextAlignmentCenter;
-    self.noMessageViewLabel.textColor = [UIColor whiteColor];
-    self.noMessageViewLabel.backgroundColor = [UIColor clearColor];
+    self.tutoViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
+    self.tutoViewLabel.font = [UIFont fontWithName:@"Avenir-Light" size:20.0];
+    self.tutoViewLabel.textAlignment = NSTextAlignmentCenter;
+    self.tutoViewLabel.textColor = [UIColor whiteColor];
+    self.tutoViewLabel.backgroundColor = [UIColor clearColor];
     
-    [self.noMessageView addSubview:self.noMessageViewLabel];
-    [self.view addSubview:self.noMessageView];
+    [self.tutoView addSubview:self.tutoViewLabel];
+    [self.view addSubview:self.tutoView];
     
     // Init no adress book access label
     [self initNoAddressBookAccessLabel]; // we do it here to avoid to resize text in a parrallel thread
@@ -302,35 +296,29 @@
     self.noAddressBookAccessLabel.textAlignment = NSTextAlignmentCenter;
 }
 
-- (void)noMessageModeWithDuration:(NSTimeInterval)duration
+- (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration
 {
-    [self endNoMessageMode];
+    [self endTutoMode];
     
-    //Initial explanation message for the user
-    if (duration == 0) {
-        self.noMessageViewLabel.text = @"Hold a contact to record.";
-    } else {
-        self.noMessageViewLabel.text = @"No message, hold or double tap.";
-    }
-    
-    self.noMessageView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT);
+    self.tutoViewLabel.text = message;
+    self.tutoView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT);
     
     [UIView animateWithDuration:0.5 animations:^{
-        self.noMessageView.frame = CGRectMake(self.noMessageView.frame.origin.x,
-                                             self.noMessageView.frame.origin.y - self.noMessageView.frame.size.height,
-                                             self.noMessageView.frame.size.width,
-                                             self.noMessageView.frame.size.height);
+        self.tutoView.frame = CGRectMake(self.tutoView.frame.origin.x,
+                                             self.tutoView.frame.origin.y - self.tutoView.frame.size.height,
+                                             self.tutoView.frame.size.width,
+                                             self.tutoView.frame.size.height);
     } completion:^(BOOL finished) {
-        if (finished && self.noMessageView) {
+        if (finished && self.tutoView) {
             if (duration > 0) {
                 [UIView animateWithDuration:0.5 delay:duration options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    self.noMessageView.frame = CGRectMake(self.noMessageView.frame.origin.x,
-                                                         self.noMessageView.frame.origin.y + self.noMessageView.frame.size.height,
-                                                         self.noMessageView.frame.size.width,
-                                                         self.noMessageView.frame.size.height);
+                    self.tutoView.frame = CGRectMake(self.tutoView.frame.origin.x,
+                                                         self.tutoView.frame.origin.y + self.tutoView.frame.size.height,
+                                                         self.tutoView.frame.size.width,
+                                                         self.tutoView.frame.size.height);
                 } completion:^(BOOL finished) {
                     if (finished) {
-                        [self endNoMessageMode];
+                        [self endTutoMode];
                     }
                 }];
             }
@@ -338,14 +326,14 @@
     }];
 }
 
-- (void)endNoMessageMode
+- (void)endTutoMode
 {
-    if (!self.noMessageView) {
+    if (!self.tutoView) {
         return;
     }
     
-    [self.noMessageView.layer removeAllAnimations];
-    self.noMessageView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT);
+    [self.tutoView.layer removeAllAnimations];
+    self.tutoView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT);
 }
 
 
@@ -514,10 +502,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
     
     if ([GeneralUtils isFirstOpening]) {
-        [self performSegueWithIdentifier:@"Tutorial Segue" sender:nil];
-        
         //Show util user does something
-        [self noMessageModeWithDuration:0];
+        [self tutoMessage:@"Hold a contact to record." withDuration:0];
     }
 }
 
@@ -790,11 +776,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.recorderContainer addSubview:self.recorderMessage];
 }
 
-- (void)recordSound
-{
-    self.lastRecordSoundDate = [NSDate date];
-    AudioServicesPlaySystemSound(1113);
-}
 
 - (void)setRecorderLineWidth:(float)width {
     CGRect frame = self.recorderLine.frame;
@@ -965,9 +946,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     [self.playerContainer.layer removeAllAnimations];
     
-    self.lastContactPlayed = contactView;
-    
     //Change last played message id in contact
+    self.lastContactPlayed = contactView;
     contactView.contact.lastPlayedMessageId = contactView.nextMessageId;
     
     // Init player
@@ -1494,20 +1474,6 @@ withNumberOfChannels:(UInt32)numberOfChannels {
         // All the audio plot needs is the buffer data (float*) and the size. Internally the audio plot will handle all the drawing related code, history management, and freeing its own resources. Hence, one badass line of code gets you a pretty plot :)
         [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
     });
-}
-
-
-// ----------------------------------------------------------
-#pragma mark System Sound callback
-// ----------------------------------------------------------
-void soundMuteNotificationCompletionProc(SystemSoundID  ssID,void* clientData){
-    double diff = [[NSDate date] timeIntervalSinceDate:((__bridge DashboardViewController *)clientData).lastRecordSoundDate];
-    ((__bridge DashboardViewController *)clientData).silentMode = diff < 0.1;
-}
-
-- (NSTimeInterval)delayBeforeRecording
-{
-    return self.silentMode ? 0 : kMinAudioDuration;
 }
 
 

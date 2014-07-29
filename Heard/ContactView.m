@@ -17,29 +17,22 @@
 
 #define UNREAD_MESSAGES_BORDER 2.5
 #define NO_UNREAD_MESSAGES_BORDER 0.5
-#define DELAY_BEFORE_RECORDING 0.5
-#define DELAY_FOR_SECOND_TAP 0.5
-#define TAP_OVERLAY_LENGTH 0.1
 
 @interface ContactView()
 
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *singleTapRecognizer;
 @property (nonatomic, strong) NSTimer *maxDurationTimer;
+@property (nonatomic, strong) NSTimer *minDurationTimer;
 @property (nonatomic) NSInteger unreadMessagesCount;
 @property (nonatomic) UILabel *unreadMessagesLabel;
 @property (strong, nonatomic) UIImageView *imageView;
 @property (nonatomic, strong) UIImageView *recordPlayOverlay;
-@property (nonatomic, strong) UIView *tapOverlay;
 @property (nonatomic, strong) UIImageView *pendingContactOverlay;
+@property (nonatomic, strong) UIView *unreadMessagesOverlay;
 @property (nonatomic, strong) CAShapeLayer *circleShape;
 @property (nonatomic, strong) CAShapeLayer *loadingCircleShape;
-
 @property (nonatomic) BOOL cancelLongPress;
-@property (nonatomic) BOOL cancelSingleTap;
-
-@property (nonatomic) BOOL firstTap;
-@property (nonatomic) BOOL maxDurationTimerReached;
 
 @end
 
@@ -64,8 +57,6 @@
     //Initialization
     self.nextMessageId = 0;
     self.cancelLongPress = NO;
-    self.firstTap = YES;
-    self.maxDurationTimerReached = NO;
     
     // Set image view
     self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
@@ -82,22 +73,12 @@
     self.longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
     [self addGestureRecognizer:self.longPressRecognizer];
     self.longPressRecognizer.delegate = self;
-    self.longPressRecognizer.minimumPressDuration = 0.5;
+    self.longPressRecognizer.minimumPressDuration = kLongPressMinDuration;
     
-    self.longPressRecognizer.minimumPressDuration = kLongPressMinDurationNoMessageCase;
-    
-    self.singleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture)];
+    self.singleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTapGesture)];
     [self addGestureRecognizer:self.singleTapRecognizer];
     self.singleTapRecognizer.delegate = self;
     self.singleTapRecognizer.numberOfTapsRequired = 1;
-
-    
-    //Init tap overlay
-    self.tapOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
-    self.tapOverlay.clipsToBounds = YES;
-    self.tapOverlay.layer.cornerRadius = self.bounds.size.width/2;
-    self.tapOverlay.alpha = 0.4;
-    self.tapOverlay.backgroundColor = [ImageUtils blue];
     
     // Init unread messages button
     [self initUnreadMessagesButton];
@@ -136,149 +117,105 @@
 - (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer
 {
     if (recognizer.state == UIGestureRecognizerStateBegan) {
-        [self showTapOverlay];
-        
-        if (self.firstTap) {
-            [self performSelector:@selector(startRecording) withObject:self afterDelay:DELAY_BEFORE_RECORDING];
-        }
+        [self startRecording];
     }
     
     if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled || recognizer.state == UIGestureRecognizerStateFailed) {
-        [self hideTapOverlay];
         [self endRecordingPlayingUI];
         
-        if ([self.delegate isRecording]) {
+        if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled || recognizer.state == UIGestureRecognizerStateFailed) {
+            [self endRecordingPlayingUI];
+            // Stop timer if it did not fire yet
             if ([self.maxDurationTimer isValid]) {
                 [self.maxDurationTimer invalidate];
+                
+                if ([self.delegate isRecording]) {
+                    if(![self.minDurationTimer isValid]) {
+                        [self sendRecording];
+                        [TrackingUtils trackRecord];
+                    } else {
+                        [self.delegate quitRecordingModeAnimated:NO];
+                        [self.delegate tutoMessage:@"Hold to record." withDuration:1];
+                    }
+                } else {
+                    [self.delegate quitRecordingModeAnimated:NO];
+                }
             }
-            
-            [self sendRecording];
-        } else {
-            [self handleTapGesture];
-        }
+        };
     }
 }
 
 - (void)startRecording
 {
-    self.firstTap = YES;
+    [self startRecordingUI];
     
-    if (self.cancelLongPress) {
-        self.cancelLongPress = NO;
-    } else {
-        self.cancelLongPress = NO;
-        
-        [self startRecordingUI];
-        
-        // Set session
-        AVAudioSession *session = [AVAudioSession sharedInstance];
-        [session requestRecordPermission:^(BOOL granted) {
-            if (!granted) {
-                [GeneralUtils showMessage:@"To activate it, go to Settings > Privacy > Micro" withTitle:@"Waved does not have access to your micro"];
-                return;
-            } else {
-                [session setActive:YES error:nil];
-                
-                // Create Timer
-                self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
-                
-                //TODO Vibrate
-                
-                [self.delegate startedLongPressOnContactView:self];
-            }
-        }];
-    }
-}
-
-- (void)handleTapGesture
-{
-    if (self.firstTap) {
-        
-        //If view released after max duration time reached, consume event
-        if (self.maxDurationTimerReached) {
-            self.maxDurationTimerReached = NO;
+    // Set session
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    [session requestRecordPermission:^(BOOL granted) {
+        if (!granted) {
+            [GeneralUtils showMessage:@"To activate it, go to Settings > Privacy > Micro" withTitle:@"Waved does not have access to your micro"];
             return;
+        } else {
+            [session setActive:YES error:nil];
+            
+            // Create Timers
+            self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
+            self.minDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMinAudioDuration target:self selector:@selector(minRecordingDurationReached) userInfo:nil repeats:NO];
+            
+            [self.delegate startedLongPressOnContactView:self];
         }
-        
-        self.cancelLongPress = YES;
-        
-        [self performSelector:@selector(handleSingleTapGesture) withObject:self afterDelay:DELAY_FOR_SECOND_TAP];
-        self.firstTap = NO;
-    } else {
-        self.cancelSingleTap = YES;
-        [self handleDoubleTapGesture];
-    }
+    }];
 }
 
 - (void)handleSingleTapGesture {
-    self.firstTap = YES;
-    
-    if (self.cancelSingleTap) {
-        self.cancelSingleTap = NO;
-    } else {
-        if (self.pendingContact) {
-            [self handlePendingTapGesture];
-        } else {
-            [self handleNonPendingTapGesture];
-        }
-    }
-}
-
-- (void)handleDoubleTapGesture {
     if (self.pendingContact) {
         [self handlePendingTapGesture];
     } else {
-        [self.delegate doubleTappedOnContactView:self];
+        if ([self hasMessagesToPlay]) {
+            [self playNextMessage];
+        }
     }
 }
 
-- (void)handleNonPendingTapGesture
+
+- (void)playNextMessage
 {
-    if ([self hasMessagesToPlay]) {
-        self.userInteractionEnabled = NO;
-        if (!self.nextMessageAudioData) { // should not be possible
-            return;
-        }
-        
-        // Save data to file (for FDWaveFormView)
-        if (![self.nextMessageAudioData writeToURL:[GeneralUtils getPlayedAudioURL] atomically:NO]) {
-            NSLog(@"saving failure");
-        }
-        
-        // Stat playing
-        [self.delegate startedPlayingAudioFileByView:self];
-        
-        // Get data of next message (asynch) if any
-        [self hideMessageCountLabel:YES];
-        self.nextMessageAudioData = nil;
-        if (self.unreadMessagesCount > 1) {
-            // Download animation
-            [self startLoadingMessageAnimation];
-            
-            [ApiUtils downloadAudioFileAtURL:[self.unreadMessages[1] getMessageURL] success:^void(NSData *data) {
-                self.nextMessageAudioData = data;
-                [self hideMessageCountLabel:NO];
-                [self endLoadingMessageAnimation];
-            } failure:^(){
-                [self endLoadingMessageAnimation];
-            }];
-        }
-        
-        // Mark as opened on the database
-        // todo bt handle error
-        [ApiUtils markMessageAsOpened:((Message *)self.unreadMessages[0]).identifier success:nil failure:nil];
-        
-        // Remove message
-        [self.unreadMessages removeObjectAtIndex:0];
-        [self setUnreadMessagesCount:self.unreadMessagesCount-1];
-        
-        // Update badge
-        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] - 1];
-        
-        self.userInteractionEnabled = YES;
-    } else {
-        [self.delegate noMessageModeWithDuration:3];
+    self.userInteractionEnabled = NO;
+    if (!self.nextMessageAudioData) { // should not be possible
+        return;
     }
+    
+    // Stat playing
+    [self.delegate startedPlayingAudioFileByView:self];
+    
+    // Get data of next message (asynch) if any
+    [self hideMessageCountLabel:YES];
+    self.nextMessageAudioData = nil;
+    if (self.unreadMessagesCount > 1) {
+        // Download animation
+        [self startLoadingMessageAnimation];
+        
+        [ApiUtils downloadAudioFileAtURL:[self.unreadMessages[1] getMessageURL] success:^void(NSData *data) {
+            self.nextMessageAudioData = data;
+            [self hideMessageCountLabel:NO];
+            [self endLoadingMessageAnimation];
+        } failure:^(){
+            [self endLoadingMessageAnimation];
+        }];
+    }
+    
+    // Mark as opened on the database
+    // todo bt handle error
+    [ApiUtils markMessageAsOpened:((Message *)self.unreadMessages[0]).identifier success:nil failure:nil];
+    
+    // Remove message
+    [self.unreadMessages removeObjectAtIndex:0];
+    [self setUnreadMessagesCount:self.unreadMessagesCount-1];
+    
+    // Update badge
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] - 1];
+    
+    self.userInteractionEnabled = YES;
 }
 
 
@@ -289,7 +226,7 @@
 {
     _pendingContact = pendingContact;
     if (pendingContact) {
-        [self removeGestureRecognizer:self.longPressRecognizer];
+        [self.longPressRecognizer setEnabled:NO];
         if (!self.pendingContactOverlay) {
             self.pendingContactOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
             self.pendingContactOverlay.layer.borderColor = [ImageUtils blue].CGColor;
@@ -302,9 +239,9 @@
         }
         [self addSubview:self.pendingContactOverlay];
      } else {
-         [self addGestureRecognizer:self.longPressRecognizer];
          self.imageView.alpha = 1;
          if (self.pendingContactOverlay) {
+             [self.longPressRecognizer setEnabled:YES];
              [self.pendingContactOverlay removeFromSuperview];
          }
      }
@@ -344,11 +281,13 @@
 
 // Stop recording after kMaxAudioDuration
 - (void)maxRecordingDurationReached {
-    self.maxDurationTimerReached = YES;
     self.userInteractionEnabled = NO;
-    
     [self endRecordingPlayingUI];
     [self sendRecording];
+}
+
+- (void)minRecordingDurationReached {
+    // do nothing
 }
 
 
@@ -358,12 +297,8 @@
 
 - (void)sendRecording
 {
-    //TODO Vibrate
-    
     [self stopRecording];
-    
     [self.delegate sendRecordtoContact:self.contact];
-    
     [TrackingUtils trackRecord];
 }
 
@@ -383,6 +318,9 @@
     self.unreadMessagesLabel.text = [NSString stringWithFormat:@"%lu",(long)unreadMessagesCount];
     if (unreadMessagesCount == 0) {
         [self hideMessageCountLabel:YES];
+        [self.longPressRecognizer setEnabled:YES];
+    } else {
+        [self.longPressRecognizer setEnabled:NO];
     }
 }
 
@@ -422,10 +360,13 @@
         self.unreadMessagesLabel.hidden = YES;
         self.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
         self.imageView.layer.borderWidth = NO_UNREAD_MESSAGES_BORDER;
+        [self.unreadMessagesOverlay removeFromSuperview];
+        [self hideUnreadMessagesOverlay:YES];
     } else {
         self.unreadMessagesLabel.hidden = NO;
         self.imageView.layer.borderColor = [ImageUtils blue].CGColor;
         self.imageView.layer.borderWidth = UNREAD_MESSAGES_BORDER;
+        [self hideUnreadMessagesOverlay:NO];
     }
 }
 
@@ -435,7 +376,6 @@
 // ----------------------------------------------------------
 - (void)startRecordingUI
 {
-    [self hideTapOverlay];
     [self endRecordingPlayingUI];
     
     [self startSonarAnimationWithColor:[ImageUtils red]];
@@ -450,7 +390,6 @@
 
 - (void)startPlayingUI
 {
-    [self hideTapOverlay];
     [self endRecordingPlayingUI];
     
     [self startSonarAnimationWithColor:[ImageUtils green]];
@@ -461,6 +400,7 @@
     self.recordPlayOverlay.image = [UIImage imageNamed:@"play"];
     
     [self addSubview:self.recordPlayOverlay];
+    [self.loadingCircleShape setHidden:YES];
 }
 
 - (void)startSonarAnimationWithColor:(UIColor *)color
@@ -479,8 +419,7 @@
     self.circleShape.opacity = 1;
     self.circleShape.strokeColor = color.CGColor;
     self.circleShape.lineWidth = 2.0;
-    
-    //    [self.superview.superview.layer addSublayer:circleShape];
+
     [self.superview.layer addSublayer:self.circleShape];
     
     CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
@@ -504,6 +443,7 @@
 {
     [self.circleShape removeAllAnimations];
     [self.circleShape removeFromSuperlayer];
+    [self.loadingCircleShape setHidden:NO];
 }
 
 - (void)endRecordingPlayingUI
@@ -513,17 +453,7 @@
     [self.recordPlayOverlay removeFromSuperview];
     self.recordPlayOverlay = nil;
     
-    [self.delegate endNoMessageMode];
-}
-
-- (void)showTapOverlay
-{
-    [self addSubview:self.tapOverlay];
-}
-
-- (void)hideTapOverlay
-{
-    [self.tapOverlay removeFromSuperview];
+    [self.delegate endTutoMode];
 }
 
 - (void)startLoadingMessageAnimation
@@ -534,7 +464,7 @@
     self.loadingCircleShape.lineWidth = UNREAD_MESSAGES_BORDER;
     
     // Add to parent layer
-    [self.imageView.layer addSublayer:self.loadingCircleShape];
+    [self.layer addSublayer:self.loadingCircleShape];
     
     // Configure animation
     CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
@@ -559,6 +489,21 @@
 - (BOOL)hasMessagesToPlay
 {
     return self.unreadMessagesCount > 0 && self.nextMessageAudioData;
+}
+
+- (void)hideUnreadMessagesOverlay:(BOOL)flag
+{
+    if (flag) {
+        [self.unreadMessagesOverlay removeFromSuperview];
+    } else {
+        if (!self.unreadMessagesOverlay) {
+            self.unreadMessagesOverlay = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
+            self.unreadMessagesOverlay.backgroundColor = [ImageUtils blue];
+            self.unreadMessagesOverlay.clipsToBounds = YES;
+            self.unreadMessagesOverlay.alpha = 0.25;
+        }
+        [self.imageView addSubview:self.unreadMessagesOverlay];
+    }
 }
 
 @end
