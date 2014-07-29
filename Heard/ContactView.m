@@ -17,7 +17,7 @@
 
 #define UNREAD_MESSAGES_BORDER 2.5
 #define NO_UNREAD_MESSAGES_BORDER 0.5
-#define LOADING_BORDER 1
+#define LOADING_BORDER 2
 #define DEGREES_TO_RADIANS(x) (x)/180.0*M_PI
 #define RADIANS_TO_DEGREES(x) (x)/M_PI*180.0
 
@@ -334,7 +334,7 @@
     [TrackingUtils trackRecord];
     
     // Sending animation
-    [self startLoadingAnimationWithStrokeColor:[ImageUtils red]];
+    [self startLoadingAnimationWithStrokeColor:[ImageUtils blue]];
 }
 
 - (void)stopRecording
