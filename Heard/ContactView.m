@@ -95,11 +95,9 @@
     // Set up the shape of the load messagecircle
     self.loadingCircleShape = [CAShapeLayer layer];
     self.loadingCircleShape.frame = self.bounds;
-    
-    // todo BT
-    // nice v
+
     // init send / fail images
-    self.sentMessageIcon = [self allocAndInitCornerLabelWithText:@"v" andColor:[ImageUtils green]];
+    self.sentMessageIcon = [self allocAndInitCornerLabelWithText:@"\u2713" andColor:[ImageUtils green]];
     self.failedMessageIcon = [self allocAndInitCornerLabelWithText:@"!" andColor:[ImageUtils red]];
     
     return self;
@@ -123,7 +121,7 @@
     UILabel *label = [[UILabel alloc] init];
     [label setFrame:CGRectMake(kContactSize - kUnreadMessageSize/2, -15, kUnreadMessageSize, kUnreadMessageSize)];
     label.textColor = color;
-    label.font = [UIFont fontWithName:@"Avenir-Heavy" size:20];
+    label.font = [UIFont fontWithName:@"Avenir-Heavy" size:22];
     label.adjustsFontSizeToFitWidth = YES;
     label.minimumScaleFactor = 0.2;
     label.userInteractionEnabled = YES;
@@ -439,13 +437,9 @@
 - (void)hideMessageCountLabel:(BOOL)flag {
     if (flag) {
         self.unreadMessagesLabel.hidden = YES;
-        self.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        self.imageView.layer.borderWidth = NO_UNREAD_MESSAGES_BORDER;
         [self hideContactOverlay];
     } else {
         self.unreadMessagesLabel.hidden = NO;
-        self.imageView.layer.borderColor = [ImageUtils blue].CGColor;
-        self.imageView.layer.borderWidth = UNREAD_MESSAGES_BORDER;
         [self showContactOverlayOfColor:[ImageUtils blue]];
     }
 }
@@ -577,11 +571,14 @@
     // if unread messages, blue
     if ([self hasMessagesToPlay]) {
         [self showContactOverlayOfColor:[ImageUtils blue]];
-        
     // if failed, red
     } else if (self.failedMessagesMode) {
         [self showContactOverlayOfColor:[ImageUtils red]];
     } else {
+        // standard border
+        self.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        self.imageView.layer.borderWidth = NO_UNREAD_MESSAGES_BORDER;
+        // remove overlay
         [self.contactOverlay removeFromSuperview];
     }
 }
@@ -595,9 +592,14 @@
     }
     
     // Blue if unread messages, red otherwise
-    self.contactOverlay.backgroundColor = [self hasMessagesToPlay] ? [ImageUtils blue] : color;
-    
+    UIColor *dominantColor = [self hasMessagesToPlay] ? [ImageUtils blue] : color;
+    self.contactOverlay.backgroundColor = dominantColor;
     [self.imageView addSubview:self.contactOverlay];
+    
+    // Border Color
+    self.imageView.layer.borderColor = dominantColor.CGColor;
+    self.imageView.layer.borderWidth = UNREAD_MESSAGES_BORDER;
+
 }
 
 - (void)startFailedMessagesUI
@@ -606,12 +608,14 @@
     [self.sentMessageIcon.layer removeAllAnimations];
     self.sentMessageIcon.alpha = 0;
     
+    // todo bt border
     [self showContactOverlayOfColor:[ImageUtils red]];
     self.failedMessageIcon.alpha = 1;
 }
 
 - (void)endFailedMessagesUI
 {
+    // todo bt border
     [self hideContactOverlay];
     self.failedMessageIcon.alpha = 0;
 }
