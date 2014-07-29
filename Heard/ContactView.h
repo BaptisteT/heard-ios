@@ -33,6 +33,7 @@
 - (void)startRecordingUI;
 - (void)endRecordingPlayingUI;
 - (void)startPlayingUI;
+- (void)messageSentWithError:(BOOL)flag;
 
 
 @end
@@ -43,11 +44,9 @@
 
 - (void)endedLongPressOnContactView:(ContactView *)contactView;
 
-- (void)sendRecordtoContact:(Contact *)contact;
+- (void)sendRecordtoContact:(ContactView *)contactView;
 
 - (void)startedPlayingAudioFileByView:(ContactView *)view;
-
-- (void)quitRecordingModeAnimated:(BOOL)animated;
 
 - (void)pendingContactClicked:(Contact *)contact;
 
@@ -58,8 +57,6 @@
 - (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration;
 
 - (BOOL)isRecording;
-
-- (void)doubleTappedOnContactView:(ContactView *)contactView;
 
 
 @end

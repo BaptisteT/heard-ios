@@ -1,4 +1,4 @@
-    //
+//
 //  DashboardViewController.m
 //  Heard
 //
@@ -45,10 +45,8 @@
 #define ACTION_CONTACT_MENU_OPTION_3 @"Block"
 #define ACTION_SHEET_CANCEL @"Cancel"
 
-#define RECORDER_LINE_HEIGHT 0.4
-#define RECORDER_HEIGHT 50
-#define RECORDER_VERTICAL_MARGIN 5
-#define RECORDER_MESSAGE_HEIGHT 20
+
+#define RECORDER_HEIGHT 5
 
 #define PLAYER_UI_HEIGHT 5
 
@@ -73,11 +71,8 @@
 @property (nonatomic, strong) UITextView *noAddressBookAccessLabel;
 // Record
 @property (strong, nonatomic) UIView *recorderContainer;
-@property (nonatomic,strong) EZAudioPlotGL *audioPlot;
-@property (nonatomic,strong) EZMicrophone *microphone;
 @property (nonatomic,strong) UIView *recorderLine;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
-@property (nonatomic, strong) UILabel *recorderMessage;
 // Player
 @property (strong, nonatomic) UIView *playerContainer;
 @property (nonatomic,strong) UIView *playerLine;
@@ -91,16 +86,12 @@
 @property (strong, nonatomic) UIImageView *profilePicture;
 @property (nonatomic, strong) UIView *profileContainer;
 @property (nonatomic, strong) UILabel *usernameLabel;
-
 // Others
 @property (weak, nonatomic) UIButton *menuButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
 @property (nonatomic, strong) UIView *tutoView;
 @property (nonatomic, strong) UILabel *tutoViewLabel;
 @property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
-@property (nonatomic, strong) Contact *resendContact;
-@property (nonatomic, strong) UITapGestureRecognizer *oneTapResendRecognizer;
-
 //Action sheets
 @property (strong, nonatomic) UIActionSheet *mainMenuActionSheet;
 @property (strong, nonatomic) UIActionSheet *contactMenuActionSheet;
@@ -127,17 +118,6 @@
     self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
     
-    // Init recorder container
-    self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - RECORDER_HEIGHT, self.view.bounds.size.width, RECORDER_HEIGHT)];
-    self.recorderContainer.backgroundColor = [ImageUtils red];
-    [self.view addSubview:self.recorderContainer];
-    self.recorderContainer.hidden = YES;
-    
-    // Init resend gesture
-    self.oneTapResendRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleResendTapGesture)];
-    self.oneTapResendRecognizer.delegate = self;
-    self.oneTapResendRecognizer.numberOfTapsRequired = 1;
-    
     //Init no message view
     self.tutoView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
     self.tutoView.backgroundColor = [ImageUtils blue];
@@ -147,7 +127,6 @@
     self.tutoViewLabel.textAlignment = NSTextAlignmentCenter;
     self.tutoViewLabel.textColor = [UIColor whiteColor];
     self.tutoViewLabel.backgroundColor = [UIColor clearColor];
-    
     [self.tutoView addSubview:self.tutoViewLabel];
     [self.view addSubview:self.tutoView];
     
@@ -233,14 +212,16 @@
     self.recorder.meteringEnabled = YES;
     [self.recorder prepareToRecord];
     
-    // AudioPlot
-    self.microphone = [EZMicrophone microphoneWithDelegate:self];
-    self.audioPlot = [self allocAndInitAudioPlot];
+    // Init recorder container
+    self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - RECORDER_HEIGHT, self.view.bounds.size.width, RECORDER_HEIGHT)];
+    self.recorderContainer.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.recorderContainer];
+    self.recorderContainer.hidden = YES;
     
     // Recoder line
-    self.recorderLine = [[UIView alloc] initWithFrame:CGRectMake(0, self.audioPlot.bounds.size.height/2, 0, RECORDER_LINE_HEIGHT)];
-    self.recorderLine.backgroundColor = [UIColor whiteColor];
-    [self.audioPlot addSubview:self.recorderLine];
+    self.recorderLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, RECORDER_HEIGHT)];
+    self.recorderLine.backgroundColor = [ImageUtils red];
+    [self.recorderContainer addSubview:self.recorderLine];
     
     // Init player container
     self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_UI_HEIGHT, self.view.bounds.size.width, PLAYER_UI_HEIGHT)];
@@ -556,6 +537,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     Contact *contact = contactView.contact;
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - kContactMargin/4, contactView.frame.origin.y + kContactSize, contactView.frame.size.width + kContactMargin/2, kContactNameHeight)];
     
+    // Attach single tap gesture recogniser
+    UITapGestureRecognizer *recogniser = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTappedOnNameLabel:)];
+    recogniser.numberOfTapsRequired = 1;
+    [nameLabel addGestureRecognizer:recogniser];
+    nameLabel.userInteractionEnabled = YES;
+    
     if (contact.identifier == 1) {
         nameLabel.text = @"Waved";
         nameLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:14.0];
@@ -725,6 +712,61 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ------------------------------
 #pragma mark Click & navigate
 // ------------------------------
+- (void)singleTappedOnNameLabel:(UITapGestureRecognizer *)sender
+{
+    // Find corresponding contact views (not very elegant..)
+    self.lastSelectedContactView = nil;
+    for (ContactView *contactView in self.contactViews) {
+        if (contactView.nameLabel == (UILabel *)sender.view) {
+            self.lastSelectedContactView = contactView;
+            continue;
+        }
+    }
+    if (!self.lastSelectedContactView) {
+        return;
+    }
+    
+    //Show contact menu action sheet
+    
+    //No message to replay
+    if (self.lastSelectedContactView.contact.lastPlayedMessageId == 0) {
+        
+        //Waved contact
+        if (self.lastSelectedContactView.contact.identifier == 1) {
+            self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                                      delegate:self
+                                                             cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                        destructiveButtonTitle:nil
+                                                             otherButtonTitles:ACTION_CONTACT_MENU_OPTION_3, nil];
+        } else {
+            self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                                      delegate:self
+                                                             cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                        destructiveButtonTitle:nil
+                                                             otherButtonTitles:ACTION_CONTACT_MENU_OPTION_2, ACTION_CONTACT_MENU_OPTION_3, nil];
+        }
+        //Message to replay
+    } else {
+        
+        //Waved contact
+        if (self.lastSelectedContactView.contact.identifier == 1) {
+            self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                                      delegate:self
+                                                             cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                        destructiveButtonTitle:nil
+                                                             otherButtonTitles:ACTION_CONTACT_MENU_OPTION_1, ACTION_CONTACT_MENU_OPTION_3, nil];
+        } else {
+            self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                                      delegate:self
+                                                             cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                        destructiveButtonTitle:nil
+                                                             otherButtonTitles:ACTION_CONTACT_MENU_OPTION_1, ACTION_CONTACT_MENU_OPTION_2, ACTION_CONTACT_MENU_OPTION_3, nil];
+        }
+    }
+    
+    [self.contactMenuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+}
+
 - (IBAction)menuButtonClicked:(id)sender {
 
     self.mainMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
@@ -761,22 +803,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
 }
 
-- (void)addRecorderMessage:(NSString *)message color:(UIColor *)color {
-    if (self.recorderMessage) {
-        [self.recorderMessage removeFromSuperview];
-        self.recorderMessage = nil;
-    }
-    
-    self.recorderMessage = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.recorderContainer.bounds.size.width, self.recorderContainer.bounds.size.height)];
-    
-    self.recorderMessage.text = message;
-    self.recorderMessage.font = [UIFont fontWithName:@"Avenir-Light" size:20.0];
-    self.recorderMessage.textAlignment = NSTextAlignmentCenter;
-    self.recorderMessage.textColor = color;
-    [self.recorderContainer addSubview:self.recorderMessage];
-}
-
-
 - (void)setRecorderLineWidth:(float)width {
     CGRect frame = self.recorderLine.frame;
     frame.size.width = width;
@@ -787,43 +813,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Sending Messages
 // ----------------------------------
 
-- (void)handleResendTapGesture
+- (void)sendRecordtoContact:(ContactView *)contactView
 {
-    if (self.resendContact) {
-        [self addRecorderMessage:@"Sending..." color:[UIColor whiteColor]];
-        [self sendRecordtoContact:self.resendContact];
-    } else {
-        [self quitRecordingModeAnimated:NO];
-    }
-}
-
-- (void)sendRecordtoContact:(Contact *)contact
-{
-    self.recorderContainer.userInteractionEnabled = NO;
     NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
-    [ApiUtils sendMessage:audioData toUser:contact.identifier success:^{
-        // Update last message date
-        contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
-        self.resendContact = nil;
-        [self messageSentWithError:NO];
+    [ApiUtils sendMessage:audioData toUser:contactView.contact.identifier success:^{
+        [contactView messageSentWithError:NO];
     } failure:^{
-        self.resendContact = contact;
-        [self messageSentWithError:YES];
+        [contactView messageSentWithError:YES];
     }];
-}
-
-- (void)messageSentWithError:(BOOL)error
-{
-    if (error) {
-        [self addRecorderMessage:@"Failed, tap to resend." color:[UIColor whiteColor]];
-        self.recorderContainer.userInteractionEnabled = YES;
-        [self enableAllContactViews];
-        [self.recorderContainer addGestureRecognizer:self.oneTapResendRecognizer];
-    } else {
-        [self addRecorderMessage:@"Sent!" color:[UIColor whiteColor]];
-        
-        [self quitRecordingModeAnimated:YES];
-    }
 }
 
 
@@ -831,51 +828,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ----------------------------------------------------------
 #pragma mark ContactViewDelegate Protocole
 // ----------------------------------------------------------
-
-- (void)doubleTappedOnContactView:(ContactView *)contactView
-{
-    self.lastSelectedContactView = contactView;
-    
-    //Show contact menu action sheet
-    
-     //No message to replay
-    if (contactView.contact.lastPlayedMessageId == 0) {
-        
-        //Waved contact
-        if (contactView.contact.identifier == 1) {
-            self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                                      delegate:self
-                                                             cancelButtonTitle:ACTION_SHEET_CANCEL
-                                                        destructiveButtonTitle:nil
-                                                             otherButtonTitles:ACTION_CONTACT_MENU_OPTION_3, nil];
-        } else {
-            self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                                      delegate:self
-                                                             cancelButtonTitle:ACTION_SHEET_CANCEL
-                                                        destructiveButtonTitle:nil
-                                                             otherButtonTitles:ACTION_CONTACT_MENU_OPTION_2, ACTION_CONTACT_MENU_OPTION_3, nil];
-        }
-    //Message to replay
-    } else {
-        
-        //Waved contact
-        if (contactView.contact.identifier == 1) {
-            self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                                      delegate:self
-                                                             cancelButtonTitle:ACTION_SHEET_CANCEL
-                                                        destructiveButtonTitle:nil
-                                                             otherButtonTitles:ACTION_CONTACT_MENU_OPTION_1, ACTION_CONTACT_MENU_OPTION_3, nil];
-        } else {
-            self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                                      delegate:self
-                                                             cancelButtonTitle:ACTION_SHEET_CANCEL
-                                                        destructiveButtonTitle:nil
-                                                             otherButtonTitles:ACTION_CONTACT_MENU_OPTION_1, ACTION_CONTACT_MENU_OPTION_2, ACTION_CONTACT_MENU_OPTION_3, nil];
-        }
-    }
-    
-    [self.contactMenuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
-}
 
 - (void)updateFrameOfContactView:(ContactView *)view
 {
@@ -900,27 +852,19 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Case where we had a pending message
     if (!self.recorderContainer.isHidden) {
-        [self.audioPlot clear];
         [self setRecorderLineWidth:0];
-        self.resendContact = nil;
     }
 
-    [self.recorderContainer addSubview:self.audioPlot];
-    
     self.recorderContainer.hidden = NO;
-    [self.microphone startFetchingAudio];
     
-    float finalWidth = self.audioPlot.bounds.size.width;
+    float finalWidth = self.recorderContainer.bounds.size.width;
     
     [UIView animateWithDuration:30
                           delay:0
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
                          [self setRecorderLineWidth:finalWidth];
-                     } completion:^(BOOL finished){
-                         if (finished) {
-                         }
-                     }];
+                     } completion:nil];
     [self.recorder record];
 }
 
@@ -929,14 +873,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     // Stop recording
     [self.recorder stop];
-    [self.microphone stopFetchingAudio];
     
+    // Remove UI
     self.recorderLine.frame = [[self.recorderLine.layer presentationLayer] frame];
     [self.recorderLine.layer removeAllAnimations];
+    self.recorderContainer.hidden = YES;
     [self setRecorderLineWidth:0];
-    [self.audioPlot clear];
-    [self.audioPlot removeFromSuperview];
-    [self addRecorderMessage:@"Sending..." color:[UIColor whiteColor]];
+    [self enableAllContactViews];
 }
 
 - (void)startedPlayingAudioFileByView:(ContactView *)contactView
@@ -988,25 +931,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Mixpanel
     [TrackingUtils trackReplay];
-}
-
-- (void)quitRecordingModeAnimated:(BOOL)animated
-{
-    if (animated) {
-        [UIView animateWithDuration:1 animations:^{
-            self.recorderContainer.alpha = 0;
-        } completion:^(BOOL dummy){
-            [self enableAllContactViews];
-            self.recorderContainer.hidden = YES;
-            self.recorderContainer.alpha = 1;
-        }];
-    } else {
-        [self enableAllContactViews];
-        [self setRecorderLineWidth:0];
-        [self.audioPlot clear];
-        [self.audioPlot removeFromSuperview];
-        self.recorderContainer.hidden = YES;
-    }
 }
 
 - (BOOL)isRecording {
@@ -1446,35 +1370,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         NSLog(@"AVAudioSession error overrideOutputAudioPort:%@",error);
 }
 
-
-// ----------------------------------------------------------
-#pragma mark EZ audio
-// ----------------------------------------------------------
-
-- (EZAudioPlotGL *)allocAndInitAudioPlot {
-    EZAudioPlotGL *audioPlot = [[EZAudioPlotGL alloc] initWithFrame:CGRectMake(0, RECORDER_VERTICAL_MARGIN, self.recorderContainer.bounds.size.width, self.recorderContainer.bounds.size.height - RECORDER_VERTICAL_MARGIN * 2)];
-    audioPlot.backgroundColor = [ImageUtils red];
-    audioPlot.color           = [UIColor whiteColor];
-    audioPlot.plotType        = EZPlotTypeRolling;
-    audioPlot.shouldFill      = YES;
-    audioPlot.shouldMirror    = YES;
-    [audioPlot setRollingHistoryLength:1290]; // todo BT make this precise & robust
-    audioPlot.gain = 8;
-    return audioPlot;
-}
-
-- (void)microphone:(EZMicrophone *)microphone
- hasAudioReceived:(float **)buffer
-   withBufferSize:(UInt32)bufferSize
-withNumberOfChannels:(UInt32)numberOfChannels {
-    // Getting audio data as an array of float buffer arrays. What does that mean? Because the audio is coming in as a stereo signal the data is split into a left and right channel. So buffer[0] corresponds to the float* data for the left channel while buffer[1] corresponds to the float* data for the right channel.
-    
-    // See the Thread Safety warning above, but in a nutshell these callbacks happen on a separate audio thread. We wrap any UI updating in a GCD block on the main thread to avoid blocking that audio flow.
-    dispatch_async(dispatch_get_main_queue(),^{
-        // All the audio plot needs is the buffer data (float*) and the size. Internally the audio plot will handle all the drawing related code, history management, and freeing its own resources. Hence, one badass line of code gets you a pretty plot :)
-        [self.audioPlot updateBuffer:buffer[0] withBufferSize:bufferSize];
-    });
-}
 
 
 // --------------------------

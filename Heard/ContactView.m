@@ -17,6 +17,8 @@
 
 #define UNREAD_MESSAGES_BORDER 2.5
 #define NO_UNREAD_MESSAGES_BORDER 0.5
+#define DEGREES_TO_RADIANS(x) (x)/180.0*M_PI
+#define RADIANS_TO_DEGREES(x) (x)/M_PI*180.0
 
 @interface ContactView()
 
@@ -86,8 +88,7 @@
     
     // Set up the shape of the load messagecircle
     self.loadingCircleShape = [CAShapeLayer layer];
-    self.loadingCircleShape.path = [UIBezierPath bezierPathWithRoundedRect:self.imageView.frame
-                                                              cornerRadius:self.bounds.size.height/2].CGPath;
+    self.loadingCircleShape.frame = self.bounds;
     
     return self;
 }
@@ -134,11 +135,9 @@
                         [self sendRecording];
                         [TrackingUtils trackRecord];
                     } else {
-                        [self.delegate quitRecordingModeAnimated:NO];
+                        [self stopRecording];
                         [self.delegate tutoMessage:@"Hold to record." withDuration:1];
                     }
-                } else {
-                    [self.delegate quitRecordingModeAnimated:NO];
                 }
             }
         };
@@ -193,14 +192,14 @@
     self.nextMessageAudioData = nil;
     if (self.unreadMessagesCount > 1) {
         // Download animation
-        [self startLoadingMessageAnimation];
+        [self startLoadingAnimationWithStrokeColor:[ImageUtils blue]];
         
         [ApiUtils downloadAudioFileAtURL:[self.unreadMessages[1] getMessageURL] success:^void(NSData *data) {
             self.nextMessageAudioData = data;
             [self hideMessageCountLabel:NO];
-            [self endLoadingMessageAnimation];
+            [self endLoadingAnimation];
         } failure:^(){
-            [self endLoadingMessageAnimation];
+            [self endLoadingAnimation];
         }];
     }
     
@@ -298,14 +297,37 @@
 - (void)sendRecording
 {
     [self stopRecording];
-    [self.delegate sendRecordtoContact:self.contact];
+    // Send
+    [self.delegate sendRecordtoContact:self];
     [TrackingUtils trackRecord];
+    
+    // Sending animation
+    [self startLoadingAnimationWithStrokeColor:[ImageUtils red]];
 }
 
 - (void)stopRecording
 {
     [[AVAudioSession sharedInstance] setActive:NO error:nil];
     [self.delegate endedLongPressOnContactView:self];
+}
+
+- (void)messageSentWithError:(BOOL)error
+{
+    // Update last message date
+    self.contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
+    
+    // todo BT
+    // stop sending anim
+    [self endLoadingAnimation];
+    
+    if (error) {
+        // todo bt
+        // Display error image
+        // resend data
+    } else {
+        // todo bt
+        // Display success image temp
+    }
 }
 
 
@@ -332,16 +354,16 @@
     }
     if (self.unreadMessagesCount == 0) {
         // Download animation
-        [self startLoadingMessageAnimation];
+        [self startLoadingAnimationWithStrokeColor:[ImageUtils blue]];
         
         // Request data asynch 
         [ApiUtils downloadAudioFileAtURL:[message getMessageURL] success:^void(NSData *data) {
             self.nextMessageAudioData = data;
             self.nextMessageId = message.identifier;
             [self hideMessageCountLabel:NO];
-            [self endLoadingMessageAnimation];
+            [self endLoadingAnimation];
         } failure:^(){
-            [self endLoadingMessageAnimation];
+            [self endLoadingAnimation];
         }];
     }
     [self.unreadMessages addObject:message];
@@ -456,31 +478,32 @@
     [self.delegate endTutoMode];
 }
 
-- (void)startLoadingMessageAnimation
+- (void)startLoadingAnimationWithStrokeColor:(UIColor *)color
 {
     // Configure the apperence of the circle
     self.loadingCircleShape.fillColor = [UIColor clearColor].CGColor;
-    self.loadingCircleShape.strokeColor = [ImageUtils blue].CGColor;
+    self.loadingCircleShape.strokeColor = color.CGColor;
     self.loadingCircleShape.lineWidth = UNREAD_MESSAGES_BORDER;
+    [self.loadingCircleShape setPosition:CGPointMake(self.bounds.size.width/ 2, self.bounds.size.height/2)];
     
     // Add to parent layer
     [self.layer addSublayer:self.loadingCircleShape];
+    self.loadingCircleShape.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds))
+                                                          radius:self.bounds.size.width/2 - 1
+                                                      startAngle:DEGREES_TO_RADIANS(348)
+                                                        endAngle:DEGREES_TO_RADIANS(12)
+                                                       clockwise:NO].CGPath;
+    self.loadingCircleShape.strokeEnd = 1;
+    CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    rotationAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
+    rotationAnimation.toValue = [NSNumber numberWithFloat:2*M_PI];
+    rotationAnimation.duration = 1.0;
+    rotationAnimation.repeatCount = INFINITY;
     
-    // Configure animation
-    CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
-    drawAnimation.beginTime            = 0.0;
-    drawAnimation.duration            = 2.0;
-    drawAnimation.repeatCount         = INFINITY;
-    drawAnimation.fromValue = [NSNumber numberWithFloat:0.0];
-    drawAnimation.toValue   = [NSNumber numberWithFloat:1.0];
-    drawAnimation.removedOnCompletion = YES;
-    drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-    
-    // Add the animation to the circle
-    [self.loadingCircleShape addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+    [self.loadingCircleShape addAnimation:rotationAnimation forKey:@"indeterminateAnimation"];
 }
 
-- (void)endLoadingMessageAnimation
+- (void)endLoadingAnimation
 {
     [self.loadingCircleShape removeAllAnimations];
     [self.loadingCircleShape removeFromSuperlayer];
