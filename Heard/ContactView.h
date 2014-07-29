@@ -26,6 +26,7 @@
 @property (nonatomic) NSMutableArray *unreadMessages;
 @property (nonatomic, strong) NSData *nextMessageAudioData;
 @property (nonatomic) NSUInteger nextMessageId;
+@property (nonatomic, strong) NSMutableArray *failedMessages;
 
 
 - (void)addUnreadMessage:(Message *)message;
@@ -33,7 +34,10 @@
 - (void)startRecordingUI;
 - (void)endRecordingPlayingUI;
 - (void)startPlayingUI;
-- (void)messageSentWithError:(BOOL)flag;
+- (void)message:(NSData *)audioData sentWithError:(BOOL)error;
+- (void)deleteFailedMessages;
+- (void)startLoadingAnimationWithStrokeColor:(UIColor *)color;
+
 
 
 @end
@@ -44,7 +48,7 @@
 
 - (void)endedLongPressOnContactView:(ContactView *)contactView;
 
-- (void)sendRecordtoContact:(ContactView *)contactView;
+- (void)sendMessageToContact:(ContactView *)contactView;
 
 - (void)startedPlayingAudioFileByView:(ContactView *)view;
 
@@ -58,5 +62,6 @@
 
 - (BOOL)isRecording;
 
+- (void)failedMessagesModeTapGestureOnContact:(ContactView *)contactView;
 
 @end

@@ -43,6 +43,8 @@
 #define ACTION_CONTACT_MENU_OPTION_1 @"Replay Last"
 #define ACTION_CONTACT_MENU_OPTION_2 @"Text or Call"
 #define ACTION_CONTACT_MENU_OPTION_3 @"Block"
+#define ACTION_FAILED_MESSAGES_OPTION_1 @"Resend"
+#define ACTION_FAILED_MESSAGES_OPTION_2 @"Delete"
 #define ACTION_SHEET_CANCEL @"Cancel"
 
 
@@ -813,14 +815,29 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Sending Messages
 // ----------------------------------
 
-- (void)sendRecordtoContact:(ContactView *)contactView
+- (void)sendMessageToContact:(ContactView *)contactView
 {
     NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
     [ApiUtils sendMessage:audioData toUser:contactView.contact.identifier success:^{
-        [contactView messageSentWithError:NO];
+        [contactView message:nil sentWithError:NO]; // no need to pass the message here
     } failure:^{
-        [contactView messageSentWithError:YES];
+        [contactView message:audioData sentWithError:YES];
     }];
+}
+
+- (void)resendMessagestoContact:(ContactView *)contactView
+{
+    // Resend Messages
+    for (NSData *audioData in contactView.failedMessages) {
+        [ApiUtils sendMessage:audioData toUser:contactView.contact.identifier success:^{
+            [contactView message:nil sentWithError:NO];
+        } failure:^{
+            [contactView message:audioData sentWithError:YES];
+        }];
+    }
+    
+    [contactView deleteFailedMessages];
+    [contactView startLoadingAnimationWithStrokeColor:[ImageUtils red]];
 }
 
 
@@ -945,6 +962,19 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                                                            cancelButtonTitle:ACTION_SHEET_CANCEL
                                                       destructiveButtonTitle:nil
                                                            otherButtonTitles:ACTION_PENDING_OPTION_1, ACTION_PENDING_OPTION_2, nil];
+    [pendingActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+}
+
+- (void)failedMessagesModeTapGestureOnContact:(ContactView *)contactView
+{
+    self.lastSelectedContactView = contactView;
+    NSString *plural = contactView.failedMessages.count > 1 ? @"s" : @"";
+    NSString *title = [NSString stringWithFormat:@"%lu message%@ failed to send",contactView.failedMessages.count,plural];
+    UIActionSheet *pendingActionSheet = [[UIActionSheet alloc] initWithTitle:title
+                                                                    delegate:self
+                                                           cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                      destructiveButtonTitle:nil
+                                                           otherButtonTitles:ACTION_FAILED_MESSAGES_OPTION_1, ACTION_FAILED_MESSAGES_OPTION_2, nil];
     [pendingActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
@@ -1270,6 +1300,20 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                                                cancelButtonTitle:nil
                                                otherButtonTitles:@"Cancel", @"Block", nil];
         [self.blockAlertView show];
+    }
+    
+    /* -------------------------------------------------------------------------
+     FAILED MESSAGES MENU
+     ---------------------------------------------------------------------------*/
+    
+    // Resend
+    else if ([buttonTitle isEqualToString:ACTION_FAILED_MESSAGES_OPTION_1]) {
+        [self resendMessagestoContact:self.lastSelectedContactView];
+    }
+    
+    // Delete
+    else if ([buttonTitle isEqualToString:ACTION_FAILED_MESSAGES_OPTION_2]) {
+        [self.lastSelectedContactView deleteFailedMessages];
     }
 }
 
