@@ -728,43 +728,22 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         return;
     }
     
-    //Show contact menu action sheet
+    // Init contact menu action sheet
+    self.contactMenuActionSheet = [[UIActionSheet alloc] init];
+    self.contactMenuActionSheet.delegate = self;
     
-    //No message to replay
-    if (self.lastSelectedContactView.contact.lastPlayedMessageId == 0) {
-        
-        //Waved contact
-        if (self.lastSelectedContactView.contact.identifier == 1) {
-            self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                                      delegate:self
-                                                             cancelButtonTitle:ACTION_SHEET_CANCEL
-                                                        destructiveButtonTitle:nil
-                                                             otherButtonTitles:ACTION_CONTACT_MENU_OPTION_3, nil];
-        } else {
-            self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                                      delegate:self
-                                                             cancelButtonTitle:ACTION_SHEET_CANCEL
-                                                        destructiveButtonTitle:nil
-                                                             otherButtonTitles:ACTION_CONTACT_MENU_OPTION_2, ACTION_CONTACT_MENU_OPTION_3, nil];
-        }
-        //Message to replay
-    } else {
-        
-        //Waved contact
-        if (self.lastSelectedContactView.contact.identifier == 1) {
-            self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                                      delegate:self
-                                                             cancelButtonTitle:ACTION_SHEET_CANCEL
-                                                        destructiveButtonTitle:nil
-                                                             otherButtonTitles:ACTION_CONTACT_MENU_OPTION_1, ACTION_CONTACT_MENU_OPTION_3, nil];
-        } else {
-            self.contactMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                                      delegate:self
-                                                             cancelButtonTitle:ACTION_SHEET_CANCEL
-                                                        destructiveButtonTitle:nil
-                                                             otherButtonTitles:ACTION_CONTACT_MENU_OPTION_1, ACTION_CONTACT_MENU_OPTION_2, ACTION_CONTACT_MENU_OPTION_3, nil];
-        }
+    // Add buttons
+    // Message to replay
+    if (self.lastSelectedContactView.contact.lastPlayedMessageId != 0) {
+        [self.contactMenuActionSheet addButtonWithTitle:ACTION_CONTACT_MENU_OPTION_1];
     }
+    // Not the Waved contact
+    if (self.lastSelectedContactView.contact.identifier != 1) {
+        [self.contactMenuActionSheet addButtonWithTitle:ACTION_CONTACT_MENU_OPTION_2];
+    }
+    [self.contactMenuActionSheet addButtonWithTitle:ACTION_CONTACT_MENU_OPTION_3];
+    [self.contactMenuActionSheet addButtonWithTitle:ACTION_SHEET_CANCEL];
+    self.contactMenuActionSheet.cancelButtonIndex = self.contactMenuActionSheet.numberOfButtons - 1;
     
     [self.contactMenuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
@@ -772,9 +751,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (IBAction)menuButtonClicked:(id)sender {
 
     self.mainMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                       delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
-                                         destructiveButtonTitle:nil
-                                              otherButtonTitles:ACTION_MAIN_MENU_OPTION_1, ACTION_MAIN_MENU_OPTION_2 , ACTION_MAIN_MENU_OPTION_3, nil];
+                                                           delegate:self
+                                                  cancelButtonTitle:ACTION_SHEET_CANCEL
+                                             destructiveButtonTitle:nil
+                                                  otherButtonTitles:ACTION_MAIN_MENU_OPTION_1, ACTION_MAIN_MENU_OPTION_2 , ACTION_MAIN_MENU_OPTION_3, nil];
+    
     [self.mainMenuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
@@ -1120,10 +1101,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     // Other
     else if ([buttonTitle isEqualToString:ACTION_MAIN_MENU_OPTION_3]) {
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:[NSString stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
-                                                           delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
-                                             destructiveButtonTitle:nil
-                                                  otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, nil];
-        
+                                                                 delegate:self
+                                                        cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                   destructiveButtonTitle:nil
+                                                        otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, nil];
         [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
     
@@ -1134,9 +1115,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     // Profile
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_1]) {
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                           delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
-                                             destructiveButtonTitle:nil
-                                                  otherButtonTitles:ACTION_SHEET_PROFILE_OPTION_1, ACTION_SHEET_PROFILE_OPTION_2, ACTION_SHEET_PROFILE_OPTION_3, nil];
+                                                                 delegate:self
+                                                        cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                   destructiveButtonTitle:nil
+                                                        otherButtonTitles:ACTION_SHEET_PROFILE_OPTION_1, ACTION_SHEET_PROFILE_OPTION_2, ACTION_SHEET_PROFILE_OPTION_3, nil];
         
         [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
