@@ -142,6 +142,12 @@
 // ----------------------------------------------------------
 - (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer
 {
+    // Safety: Case where long press should be disabled
+    if (self.pendingContact || self.failedMessagesMode || [self hasMessagesToPlay]) {
+        [self.longPressRecognizer setEnabled:NO];
+        return;
+    }
+    
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         [self startRecording];
     }
