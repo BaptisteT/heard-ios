@@ -15,13 +15,17 @@
 #import "EZMicrophone.h"
 #import "AddContactViewController.h"
 #import <AddressBookUI/AddressBookUI.h>
+#import "EditContactsViewController.h"
 
-@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, EZMicrophoneDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, AddContactViewControllerDelegate, AVAudioRecorderDelegate, ABPersonViewControllerDelegate>
+@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, EZMicrophoneDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, AddContactViewControllerDelegate, AVAudioRecorderDelegate, ABPersonViewControllerDelegate, EditContactsVCDelegate>
 
 - (BOOL)attributeMessageToExistingContacts:(Message *)message;
 - (void) retrieveUnreadMessagesAndNewContacts;
 - (void)distributeNonAttributedMessages;
 - (void)endPlayerUIAnimated:(BOOL)animated;
+- (void)reorderContactViews;
+- (void)hideContact:(Contact *)contact;
+- (void)showContact:(Contact *)contact;
 
 @property (nonatomic) BOOL isSignUp;
 

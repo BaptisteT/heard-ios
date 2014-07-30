@@ -26,13 +26,15 @@
 #import "AddContactViewController.h"
 #import "AddressbookUtils.h"
 #import "MBProgressHUD.h"
+#import "EditContactsViewController.h"
 
 #define ACTION_MAIN_MENU_OPTION_1 @"Invite Friends"
 #define ACTION_MAIN_MENU_OPTION_2 @"Add New Contact"
 #define ACTION_MAIN_MENU_OPTION_3 @"Other"
 #define ACTION_OTHER_MENU_OPTION_1 @"Edit Profile"
-#define ACTION_OTHER_MENU_OPTION_2 @"Share"
-#define ACTION_OTHER_MENU_OPTION_3 @"Feedback"
+#define ACTION_OTHER_MENU_OPTION_2 @"Edit Contacts"
+#define ACTION_OTHER_MENU_OPTION_3 @"Share"
+#define ACTION_OTHER_MENU_OPTION_4 @"Feedback"
 #define ACTION_PENDING_OPTION_1 @"Add Contact"
 #define ACTION_PENDING_OPTION_2 @"Block User"
 #define ACTION_SHEET_PROFILE_OPTION_1 @"Picture"
@@ -43,6 +45,7 @@
 #define ACTION_CONTACT_MENU_OPTION_1 @"Replay Last"
 #define ACTION_CONTACT_MENU_OPTION_2 @"Text or Call"
 #define ACTION_CONTACT_MENU_OPTION_3 @"Block"
+#define ACTION_CONTACT_MENU_OPTION_4 @"Hide"
 #define ACTION_FAILED_MESSAGES_OPTION_1 @"Resend"
 #define ACTION_FAILED_MESSAGES_OPTION_2 @"Delete"
 #define ACTION_SHEET_CANCEL @"Cancel"
@@ -241,7 +244,7 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
+    [self setScrollViewSizeForContactCount:(int)MAX([self.contactViews count],[ContactUtils numberOfNonHiddenContacts:self.contacts])];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -255,6 +258,9 @@
     
     if ([segueName isEqualToString: @"Add Contact Segue"]) {
         ((AddContactViewController *) [segue destinationViewController]).delegate = self;
+    } else if ([segueName isEqualToString: @"Edit Contacts Segue"]) {
+        ((EditContactsViewController *) [segue destinationViewController]).delegate = self;
+        ((EditContactsViewController *) [segue destinationViewController]).contacts = self.contacts;
     }
 }
 
@@ -446,15 +452,17 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     self.contactScrollView.hidden = NO;
     
-    NSUInteger contactCount = [self.contacts count];
-    if (contactCount == 0) {
+    NSUInteger nonHiddenContactsCount = [ContactUtils numberOfNonHiddenContacts:self.contacts];
+    if (nonHiddenContactsCount == 0) {
         return;
     }
-    self.contactViews = [[NSMutableArray alloc] initWithCapacity:contactCount];
+    self.contactViews = [[NSMutableArray alloc] initWithCapacity:nonHiddenContactsCount];
     
     // Create bubbles
     for (Contact *contact in self.contacts) {
-        [self createContactViewWithContact:contact andPosition:1];
+        if (!contact.isHidden) {
+            [self createContactViewWithContact:contact andPosition:1];
+        }
     }
     
     [self reorderContactViews];
@@ -482,7 +490,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self showContactViewAsPending];
     
     // Resize view
-    [self setScrollViewSizeForContactCount:(int)[self.contacts count]];
+    [self setScrollViewSizeForContactCount:(int)[self.contactViews count]];
     
     if ([GeneralUtils isFirstOpening]) {
         //Show util user does something
@@ -493,7 +501,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)displayAdditionnalContact:(Contact *)contact
 {
     if (!self.contactViews) {
-        self.contactViews = [[NSMutableArray alloc] initWithCapacity:[self.contacts count]];
+        self.contactViews = [[NSMutableArray alloc] initWithCapacity:[ContactUtils numberOfNonHiddenContacts:self.contacts]];
     }
     [self createContactViewWithContact:contact andPosition:(int)[self.contactViews count]+1];
 }
@@ -586,9 +594,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         // block user + delete bubble / contact
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
-        NSInteger holePosition = 0;
         [contactView removeFromSuperview];
-        holePosition = contactView.orderPosition;
         [self.contacts removeObject:contactView.contact];
         [contactView.nameLabel removeFromSuperview];
         
@@ -601,12 +607,34 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self reorderContactViews];
     }failure:^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        
-        [GeneralUtils showMessage:@"Failed to hide contact, please try again." withTitle:nil];
+        [GeneralUtils showMessage:@"Failed to block contact, please try again." withTitle:nil];
     }];
-
 }
 
+- (void)hideContactOfView:(ContactView *)contactView
+{
+    contactView.contact.isHidden = YES;
+    [self.contactViews removeObject:contactView];
+    [contactView removeFromSuperview];
+    [contactView.nameLabel removeFromSuperview];
+    [self reorderContactViews];
+}
+
+- (void)hideContact:(Contact *)contact
+{
+    for (ContactView *contactView in self.contactViews) {
+        if (contactView.contact == contact) {
+            [self hideContactOfView:contactView];
+            return;
+        }
+    }
+}
+
+- (void)showContact:(Contact *)contact
+{
+    contact.isHidden = NO;
+    [self displayAdditionnalContact:contact];
+}
 
 // ----------------------------------
 #pragma mark Messages
@@ -626,7 +654,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         
         // Check if we have new contacts
         // App launch - Change in address book - Message from unknown - New user added current user - 0 contact
-        if (self.retrieveNewContact || !areAttributed || newContactOnServer || self.contacts.count == 0) {
+        if (self.retrieveNewContact || !areAttributed || newContactOnServer) {
             [self requestAddressBookAccessAndRetrieveFriends];
             self.retrieveNewContact = NO;
         } else {
@@ -741,7 +769,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (self.lastSelectedContactView.contact.identifier != 1) {
         [self.contactMenuActionSheet addButtonWithTitle:ACTION_CONTACT_MENU_OPTION_2];
     }
-    [self.contactMenuActionSheet addButtonWithTitle:ACTION_CONTACT_MENU_OPTION_3];
+    [self.contactMenuActionSheet addButtonWithTitle:ACTION_CONTACT_MENU_OPTION_4];
     [self.contactMenuActionSheet addButtonWithTitle:ACTION_SHEET_CANCEL];
     self.contactMenuActionSheet.cancelButtonIndex = self.contactMenuActionSheet.numberOfButtons - 1;
     
@@ -1105,7 +1133,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                                                                  delegate:self
                                                         cancelButtonTitle:ACTION_SHEET_CANCEL
                                                    destructiveButtonTitle:nil
-                                                        otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, nil];
+                                                        otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, nil];
         [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
     
@@ -1125,8 +1153,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
     
-    // Share
+    // Edit contacts
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_2]) {
+        [self performSegueWithIdentifier:@"Edit Contacts Segue" sender:nil];
+    }
+    
+    // Share
+    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_3]) {
         NSString *shareString = @"Download Waved, the fastest way to say a lot.";
         
         NSURL *shareUrl = [NSURL URLWithString:kProdAFHeardWebsite];
@@ -1150,7 +1183,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     
     //Send feedback
-    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_3]) {
+    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_4]) {
         NSString *email = [NSString stringWithFormat:@"mailto:%@?subject=Feedback for Waved on iOS (v%@)", kFeedbackEmail,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
         
         email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -1284,6 +1317,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                                                cancelButtonTitle:nil
                                                otherButtonTitles:@"Cancel", @"Block", nil];
         [self.blockAlertView show];
+    }
+    // Hide
+    else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_4]) {
+        [self hideContactOfView:self.lastSelectedContactView];
+        self.lastSelectedContactView = nil;
     }
     
     /* -------------------------------------------------------------------------

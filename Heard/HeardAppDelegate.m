@@ -70,7 +70,7 @@
     
     if ([SessionUtils isSignedIn]) {
         // For backward compatibilty
-        // To do bt remove for prod
+        // Todo bt remove for prod
         if (![SessionUtils getCurrentUserFirstName]) {
             [ApiUtils getNewContactInfo:[SessionUtils getCurrentUserId] AndExecuteSuccess:^(Contact *contact) {
                 [SessionUtils saveUserInfo:contact];

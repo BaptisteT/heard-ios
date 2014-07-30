@@ -614,14 +614,12 @@
     [self.sentMessageIcon.layer removeAllAnimations];
     self.sentMessageIcon.alpha = 0;
     
-    // todo bt border
     [self showContactOverlayOfColor:[ImageUtils red]];
     self.failedMessageIcon.alpha = 1;
 }
 
 - (void)endFailedMessagesUI
 {
-    // todo bt border
     [self hideContactOverlay];
     self.failedMessageIcon.alpha = 0;
 }

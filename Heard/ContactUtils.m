@@ -15,6 +15,7 @@
 #define CONTACTS_FIRST_NAME_PREF @"Contact First Name Preference"
 #define CONTACTS_LAST_NAME_PREF @"Contact Last Name Preference"
 #define CONTACTS_PENDING_PREF @"Contact Pending Preference"
+#define CONTACTS_HIDDEN_PREF @"Contact Hidden Preference"
 #define CONTACTS_LAST_MESSAGE_DATE_PREF @"Contact Last Message Date Preference"
 #define CONTACTS_LAST_MESSAGE_IDENTIFIER_PREF @"Contact Last Message Identifier Preference"
 
@@ -27,6 +28,7 @@
     NSArray *firstNameArray = [[NSUserDefaults standardUserDefaults] arrayForKey:CONTACTS_FIRST_NAME_PREF];
     NSArray *lastNameArray = [[NSUserDefaults standardUserDefaults] arrayForKey:CONTACTS_LAST_NAME_PREF];
     NSArray *pendingArray = [[NSUserDefaults standardUserDefaults] arrayForKey:CONTACTS_PENDING_PREF];
+    NSArray *hiddenArray = [[NSUserDefaults standardUserDefaults] arrayForKey:CONTACTS_HIDDEN_PREF];
     NSArray *lastMessageDateArray = [[NSUserDefaults standardUserDefaults] arrayForKey:CONTACTS_LAST_MESSAGE_DATE_PREF];
     NSArray *lastMessageIdArray = [[NSUserDefaults standardUserDefaults] arrayForKey:CONTACTS_LAST_MESSAGE_IDENTIFIER_PREF];
     
@@ -36,6 +38,7 @@
         Contact *contact = [Contact createContactWithId:[idArray[i] integerValue] phoneNumber:phoneArray[i] firstName:firstNameArray[i] lastName:lastNameArray[i]];
         contact.lastMessageDate = [lastMessageDateArray[i] integerValue];
         contact.isPending = [pendingArray[i] boolValue];
+        contact.isHidden = hiddenArray ? [hiddenArray[i] boolValue] : NO;
         contact.lastPlayedMessageId = [lastMessageIdArray[i] integerValue];
         [contacts addObject:contact];
     }
@@ -51,6 +54,7 @@
     NSMutableArray *firstNameArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
     NSMutableArray *lastNameArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
     NSMutableArray *pendingArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
+    NSMutableArray *hiddenArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
     NSMutableArray *lastMessageDateArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
     NSMutableArray *lastMessageIdArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
     for (Contact * contact in contacts) {
@@ -59,6 +63,7 @@
         [firstNameArray addObject:(contact.firstName && contact.firstName!=(id)[NSNull null]) ? contact.firstName : @""];
         [lastNameArray addObject:(contact.lastName && contact.lastName!=(id)[NSNull null])? contact.lastName : @""];
         [pendingArray addObject:[NSNumber numberWithInteger:contact.isPending]];
+        [hiddenArray addObject:[NSNumber numberWithInteger:contact.isHidden]];
         [lastMessageDateArray addObject:[NSNumber numberWithInteger:contact.lastMessageDate]];
         [lastMessageIdArray addObject:[NSNumber numberWithInteger:contact.lastPlayedMessageId]];
     }
@@ -67,6 +72,7 @@
     [prefs setObject:firstNameArray forKey:CONTACTS_FIRST_NAME_PREF];
     [prefs setObject:lastNameArray forKey:CONTACTS_LAST_NAME_PREF];
     [prefs setObject:pendingArray forKey:CONTACTS_PENDING_PREF];
+    [prefs setObject:hiddenArray forKey:CONTACTS_HIDDEN_PREF];
     [prefs setObject:lastMessageDateArray forKey:CONTACTS_LAST_MESSAGE_DATE_PREF];
     [prefs setObject:lastMessageIdArray forKey:CONTACTS_LAST_MESSAGE_IDENTIFIER_PREF];
     [prefs synchronize];
@@ -100,4 +106,16 @@
     }
     return nil;
 }
+
++ (NSInteger)numberOfNonHiddenContacts:(NSArray *)contacts
+{
+    NSInteger count = 0;
+    for (Contact * contact in contacts) {
+        if (!contact.isHidden) {
+            count ++;
+        }
+    }
+    return count;
+}
+
 @end

@@ -20,4 +20,6 @@
 
 + (Contact *)findContact:(NSInteger)contactId inContactsArray:(NSArray *)contacts;
 
++ (NSInteger)numberOfNonHiddenContacts:(NSArray *)contacts;
+
 @end
