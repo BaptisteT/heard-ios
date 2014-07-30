@@ -155,6 +155,12 @@
 		0B9051BD19771B96001E2ED5 /* checkbox@iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9051B619771B96001E2ED5 /* checkbox@iphone.png */; };
 		0B9051BE19771B96001E2ED5 /* checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9051B719771B96001E2ED5 /* checkbox.png */; };
 		0B9051BF19771B96001E2ED5 /* checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9051B719771B96001E2ED5 /* checkbox.png */; };
+		0B969125198997620048E4BB /* EditContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B969124198997620048E4BB /* EditContactsViewController.m */; };
+		0B969126198997620048E4BB /* EditContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B969124198997620048E4BB /* EditContactsViewController.m */; };
+		0B969128198997700048E4BB /* EditContactsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0B969127198997700048E4BB /* EditContactsTableViewCell.xib */; };
+		0B969129198997700048E4BB /* EditContactsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0B969127198997700048E4BB /* EditContactsTableViewCell.xib */; };
+		0B96912C1989977C0048E4BB /* EditContactsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */; };
+		0B96912D1989977C0048E4BB /* EditContactsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */; };
 		0BAF4FE219560AEE00838D7D /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BAF4FE119560AEE00838D7D /* MessageUI.framework */; };
 		0BB0E8EC195B449A00C94AC0 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8CF195B449A00C94AC0 /* Media.xcassets */; };
 		0BB0E8ED195B449A00C94AC0 /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8D1195B449A00C94AC0 /* Mixpanel.m */; };
@@ -306,6 +312,11 @@
 		0B9051B519771B96001E2ED5 /* checkbox-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox-selected.png"; sourceTree = "<group>"; };
 		0B9051B619771B96001E2ED5 /* checkbox@iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox@iphone.png"; sourceTree = "<group>"; };
 		0B9051B719771B96001E2ED5 /* checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkbox.png; sourceTree = "<group>"; };
+		0B969123198997620048E4BB /* EditContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditContactsViewController.h; sourceTree = "<group>"; };
+		0B969124198997620048E4BB /* EditContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditContactsViewController.m; sourceTree = "<group>"; };
+		0B969127198997700048E4BB /* EditContactsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditContactsTableViewCell.xib; sourceTree = "<group>"; };
+		0B96912A1989977C0048E4BB /* EditContactsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditContactsTableViewCell.h; sourceTree = "<group>"; };
+		0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditContactsTableViewCell.m; sourceTree = "<group>"; };
 		0BAF4FE119560AEE00838D7D /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		0BB0E8CF195B449A00C94AC0 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		0BB0E8D0195B449A00C94AC0 /* Mixpanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mixpanel.h; sourceTree = "<group>"; };
@@ -705,6 +716,8 @@
 				0BDB65601953C04800223093 /* DashboardViewController.m */,
 				0B7295861982CB68003ECEBE /* TutorialViewController.h */,
 				0B7295871982CB68003ECEBE /* TutorialViewController.m */,
+				0B969123198997620048E4BB /* EditContactsViewController.h */,
+				0B969124198997620048E4BB /* EditContactsViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -712,6 +725,7 @@
 		0BD758F919511A6500CF0D85 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				0B969127198997700048E4BB /* EditContactsTableViewCell.xib */,
 				0BD758D71950F91B00CF0D85 /* Images.xcassets */,
 				0BD758D11950F91B00CF0D85 /* Main.storyboard */,
 			);
@@ -869,6 +883,8 @@
 		3CB8B7F2195453B10090D657 /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
+				0B96912A1989977C0048E4BB /* EditContactsTableViewCell.h */,
+				0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */,
 				3CB8B7F3195453E50090D657 /* ContactView.h */,
 				3CB8B7F4195453E50090D657 /* ContactView.m */,
 			);
@@ -1027,6 +1043,7 @@
 				0B9051B919771B96001E2ED5 /* checkbox-selected@2x~iphone.png in Resources */,
 				0B72EEFC196C672F00AC5A01 /* welcome-logo.png in Resources */,
 				0B56F657197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
+				0B969129198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
 				0B25845C1974884B00321261 /* replay.png in Resources */,
 				0B72EEFD196C672F00AC5A01 /* contact-placeholder.png in Resources */,
 				3CD180A61971B55200EC8BE2 /* CHANGELOG in Resources */,
@@ -1075,6 +1092,7 @@
 				0B9051B819771B96001E2ED5 /* checkbox-selected@2x~iphone.png in Resources */,
 				0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */,
 				0B56F656197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
+				0B969128198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
 				0B25845B1974884B00321261 /* replay.png in Resources */,
 				0B3651D61958AC5000534386 /* contact-placeholder.png in Resources */,
 				3CD180A51971B55200EC8BE2 /* CHANGELOG in Resources */,
@@ -1102,6 +1120,7 @@
 				0B72EEAB196C672F00AC5A01 /* MPSurveyQuestion.m in Sources */,
 				0B72EEAC196C672F00AC5A01 /* AudioUtils.m in Sources */,
 				3CD180901971B55200EC8BE2 /* EZAudio.m in Sources */,
+				0B96912D1989977C0048E4BB /* EditContactsTableViewCell.m in Sources */,
 				0B72EEAD196C672F00AC5A01 /* NBPhoneNumber.m in Sources */,
 				3CD1808E1971B55200EC8BE2 /* AEFloatConverter.m in Sources */,
 				0B72EEAE196C672F00AC5A01 /* NBPhoneNumberDesc.m in Sources */,
@@ -1115,6 +1134,7 @@
 				0B9051AF1976F618001E2ED5 /* InviteContactsViewController.m in Sources */,
 				0B22CD031978439D00E1C7AF /* AddContactViewController.m in Sources */,
 				0B72EEB5196C672F00AC5A01 /* ContactView.m in Sources */,
+				0B969126198997620048E4BB /* EditContactsViewController.m in Sources */,
 				0B72EEB6196C672F00AC5A01 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				0B72EEB7196C672F00AC5A01 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				0B72EEB8196C672F00AC5A01 /* UIAlertView+AFNetworking.m in Sources */,
@@ -1183,6 +1203,7 @@
 				0BB0E8F6195B449A00C94AC0 /* MPSurveyQuestion.m in Sources */,
 				3C0D0061195C5E500058A0E0 /* AudioUtils.m in Sources */,
 				3CD1808F1971B55200EC8BE2 /* EZAudio.m in Sources */,
+				0B96912C1989977C0048E4BB /* EditContactsTableViewCell.m in Sources */,
 				0BDB65541953B60D00223093 /* NBPhoneNumber.m in Sources */,
 				3CD1808D1971B55200EC8BE2 /* AEFloatConverter.m in Sources */,
 				0BDB65551953B60D00223093 /* NBPhoneNumberDesc.m in Sources */,
@@ -1196,6 +1217,7 @@
 				0B9051AE1976F618001E2ED5 /* InviteContactsViewController.m in Sources */,
 				0B22CD021978439D00E1C7AF /* AddContactViewController.m in Sources */,
 				3CB8B7F5195453E50090D657 /* ContactView.m in Sources */,
+				0B969125198997620048E4BB /* EditContactsViewController.m in Sources */,
 				0BDB65341953B5EA00223093 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				0BDB65351953B5EA00223093 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				0BDB65361953B5EA00223093 /* UIAlertView+AFNetworking.m in Sources */,
