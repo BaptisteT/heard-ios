@@ -1100,12 +1100,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Other
     else if ([buttonTitle isEqualToString:ACTION_MAIN_MENU_OPTION_3]) {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:[NSString stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
+        [actionSheet dismissWithClickedButtonIndex:2 animated:NO];
+        UIActionSheet *newActionSheet = [[UIActionSheet alloc] initWithTitle:[NSString stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
                                                                  delegate:self
                                                         cancelButtonTitle:ACTION_SHEET_CANCEL
                                                    destructiveButtonTitle:nil
                                                         otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, nil];
-        [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
+        [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
     
     /* -------------------------------------------------------------------------
@@ -1114,13 +1115,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Profile
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_1]) {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+        [actionSheet dismissWithClickedButtonIndex:2 animated:NO];
+        UIActionSheet *newActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                                  delegate:self
                                                         cancelButtonTitle:ACTION_SHEET_CANCEL
                                                    destructiveButtonTitle:nil
                                                         otherButtonTitles:ACTION_SHEET_PROFILE_OPTION_1, ACTION_SHEET_PROFILE_OPTION_2, ACTION_SHEET_PROFILE_OPTION_3, nil];
         
-        [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
+        [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
     
     // Share
