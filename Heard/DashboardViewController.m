@@ -503,6 +503,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (!self.contactViews) {
         self.contactViews = [[NSMutableArray alloc] initWithCapacity:[ContactUtils numberOfNonHiddenContacts:self.contacts]];
     }
+    // Check that contact does not exist
+    for (ContactView *contactView in self.contactViews) {
+        if (contactView.contact == contact) {
+            return;
+        }
+    }
     [self createContactViewWithContact:contact andPosition:(int)[self.contactViews count]+1];
 }
 
