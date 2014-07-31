@@ -26,6 +26,8 @@
 @property (nonatomic) NSMutableArray *unreadMessages;
 @property (nonatomic, strong) NSData *nextMessageAudioData;
 @property (nonatomic) NSUInteger nextMessageId;
+@property (nonatomic, strong) NSMutableArray *failedMessages;
+@property (strong, nonatomic) UIImageView *imageView;
 
 
 - (void)addUnreadMessage:(Message *)message;
@@ -33,6 +35,10 @@
 - (void)startRecordingUI;
 - (void)endRecordingPlayingUI;
 - (void)startPlayingUI;
+- (void)message:(NSData *)audioData sentWithError:(BOOL)error;
+- (void)deleteFailedMessages;
+- (void)startLoadingAnimationWithStrokeColor:(UIColor *)color;
+
 
 
 @end
@@ -43,27 +49,20 @@
 
 - (void)endedLongPressOnContactView:(ContactView *)contactView;
 
-- (void)sendRecordtoContact:(Contact *)contact;
+- (void)sendMessageToContact:(ContactView *)contactView;
 
 - (void)startedPlayingAudioFileByView:(ContactView *)view;
-
-- (void)quitRecordingModeAnimated:(BOOL)animated;
 
 - (void)pendingContactClicked:(Contact *)contact;
 
 - (void)updateFrameOfContactView:(ContactView *)view;
 
-- (void)endNoMessageMode;
+- (void)endTutoMode;
 
-- (void)noMessageModeWithDuration:(NSTimeInterval)duration;
-
-- (void)recordSound;
+- (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration;
 
 - (BOOL)isRecording;
 
-- (NSTimeInterval)delayBeforeRecording;
-
-- (void)doubleTappedOnContactView:(ContactView *)contactView;
-
+- (void)failedMessagesModeTapGestureOnContact:(ContactView *)contactView;
 
 @end

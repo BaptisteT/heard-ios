@@ -16,6 +16,7 @@
 @property (strong, nonatomic) NSString *lastName;
 @property (nonatomic) NSInteger lastMessageDate;
 @property (nonatomic) BOOL isPending;
+@property (nonatomic) BOOL isHidden;
 @property (nonatomic) NSUInteger lastPlayedMessageId;
 
 

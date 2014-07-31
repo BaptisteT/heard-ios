@@ -22,6 +22,7 @@
     contact.firstName = firstName;
     contact.lastName = lastName;
     contact.isPending = NO;
+    contact.isHidden = NO;
     
     return contact;
 }
