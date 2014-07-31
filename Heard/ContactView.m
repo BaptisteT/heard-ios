@@ -54,7 +54,7 @@
 
 - (id)initWithContact:(Contact *)contact andFrame:(CGRect)frame
 {
-    self  = [super initWithFrame:frame];
+    self = [super initWithFrame:frame];
     self.contact = contact;
     _failedMessagesMode = NO; // custom setter
     _pendingContact = NO; // custom setter

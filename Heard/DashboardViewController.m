@@ -27,10 +27,10 @@
 #import "AddressbookUtils.h"
 #import "MBProgressHUD.h"
 #import "EditContactsViewController.h"
+#import "CustomActionSheet.h"
 
 #define ACTION_MAIN_MENU_OPTION_1 @"Invite Friends"
 #define ACTION_MAIN_MENU_OPTION_2 @"Add New Contact"
-#define ACTION_MAIN_MENU_OPTION_3 @"Other"
 #define ACTION_OTHER_MENU_OPTION_1 @"Edit Profile"
 #define ACTION_OTHER_MENU_OPTION_2 @"Edit Contacts"
 #define ACTION_OTHER_MENU_OPTION_3 @"Share"
@@ -43,7 +43,6 @@
 #define ACTION_SHEET_PICTURE_OPTION_1 @"Camera"
 #define ACTION_SHEET_PICTURE_OPTION_2 @"Library"
 #define ACTION_CONTACT_MENU_OPTION_1 @"Replay Last"
-#define ACTION_CONTACT_MENU_OPTION_2 @"Text or Call"
 #define ACTION_CONTACT_MENU_OPTION_3 @"Block"
 #define ACTION_CONTACT_MENU_OPTION_4 @"Hide"
 #define ACTION_FAILED_MESSAGES_OPTION_1 @"Resend"
@@ -57,10 +56,6 @@
 
 #define INVITE_CONTACT_BUTTON_HEIGHT 50
 #define NO_MESSAGE_VIEW_HEIGHT 60
-
-#define USER_PROFILE_VIEW_SIZE 60
-#define USER_PROFILE_PICTURE_SIZE 50
-#define USER_PROFILE_PICTURE_MARGIN 5
 
 
 @interface DashboardViewController ()
@@ -89,8 +84,6 @@
 @property (nonatomic, strong) NSString *currentUserPhoneNumber;
 @property (strong, nonatomic) UIImagePickerController *imagePickerController;
 @property (strong, nonatomic) UIImageView *profilePicture;
-@property (nonatomic, strong) UIView *profileContainer;
-@property (nonatomic, strong) UILabel *usernameLabel;
 // Others
 @property (weak, nonatomic) UIButton *menuButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
@@ -98,10 +91,9 @@
 @property (nonatomic, strong) UILabel *tutoViewLabel;
 @property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
 //Action sheets
-@property (strong, nonatomic) UIActionSheet *mainMenuActionSheet;
-@property (strong, nonatomic) UIActionSheet *contactMenuActionSheet;
+@property (strong, nonatomic) CustomActionSheet *mainMenuActionSheet;
+@property (strong, nonatomic) CustomActionSheet *contactMenuActionSheet;
 @property (strong, nonatomic) ContactView *lastSelectedContactView;
-
 //Alertview
 @property (strong, nonatomic) UIAlertView *blockAlertView;
 
@@ -141,29 +133,9 @@
     //Current User phone number
     self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
     
-    //Action sheet menu profile container
-    self.profileContainer = [[UIView alloc] initWithFrame:CGRectMake(8, -8 - USER_PROFILE_VIEW_SIZE, 304, USER_PROFILE_VIEW_SIZE)];
-    self.profileContainer.layer.cornerRadius = 3;
-    self.profileContainer.backgroundColor = [UIColor colorWithRed:240/256.0 green:240/256.0 blue:240/256.0 alpha:0.98];
-    
-    //Menu profile picture
-    self.profilePicture = [[UIImageView alloc] initWithFrame:CGRectMake(USER_PROFILE_PICTURE_MARGIN,USER_PROFILE_PICTURE_MARGIN,USER_PROFILE_PICTURE_SIZE,USER_PROFILE_PICTURE_SIZE)];
-    self.profilePicture.layer.cornerRadius = USER_PROFILE_PICTURE_SIZE/2;
-    self.profilePicture.clipsToBounds = YES;
-    self.profilePicture.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.profilePicture.layer.borderWidth = 0.5;
-    //Preload
+    // Preload profile picture
+    self.profilePicture = [UIImageView new];
     [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
-    [self.profileContainer addSubview:self.profilePicture];
-    
-    //Action sheet menu name label
-    float usernameOffset = self.profilePicture.frame.origin.x + self.profilePicture.frame.size.width + USER_PROFILE_PICTURE_MARGIN;
-    self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(usernameOffset, 0,
-                                                                       self.profileContainer.bounds.size.width - 2 * usernameOffset, self.profileContainer.bounds.size.height)];
-    self.usernameLabel.textAlignment = NSTextAlignmentCenter;
-    self.usernameLabel.font = [UIFont systemFontOfSize:15.0];
-    self.usernameLabel.textColor = [UIColor grayColor];
-    [self.profileContainer addSubview:self.usernameLabel];
     
     // Create bubble with contacts
     self.contacts = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).contacts;
@@ -552,7 +524,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - kContactMargin/4, contactView.frame.origin.y + kContactSize, contactView.frame.size.width + kContactMargin/2, kContactNameHeight)];
     
     // Attach single tap gesture recogniser
-    UITapGestureRecognizer *recogniser = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTappedOnNameLabel:)];
+    UITapGestureRecognizer *recogniser = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapOnNameLabel:)];
     recogniser.numberOfTapsRequired = 1;
     [nameLabel addGestureRecognizer:recogniser];
     nameLabel.userInteractionEnabled = YES;
@@ -751,7 +723,18 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ------------------------------
 #pragma mark Click & navigate
 // ------------------------------
-- (void)singleTappedOnNameLabel:(UITapGestureRecognizer *)sender
+//- (void)singleTapOnProfileContainer:(UITapGestureRecognizer *)sender
+//{
+//    [self.mainMenuActionSheet dismissWithClickedButtonIndex:0 animated:NO];
+//    UIActionSheet *newActionSheet = [[UIActionSheet alloc] initWithTitle:[NSString stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
+//                                                                delegate:self
+//                                                       cancelButtonTitle:ACTION_SHEET_CANCEL
+//                                                  destructiveButtonTitle:nil
+//                                                       otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, nil];
+//    [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+//}
+
+- (void)singleTapOnNameLabel:(UITapGestureRecognizer *)sender
 {
     // Find corresponding contact views (not very elegant..)
     self.lastSelectedContactView = nil;
@@ -766,7 +749,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     
     // Init contact menu action sheet
-    self.contactMenuActionSheet = [[UIActionSheet alloc] init];
+    self.contactMenuActionSheet = [CustomActionSheet new];
     self.contactMenuActionSheet.delegate = self;
     
     // Add buttons
@@ -774,27 +757,67 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (self.lastSelectedContactView.contact.lastPlayedMessageId != 0) {
         [self.contactMenuActionSheet addButtonWithTitle:ACTION_CONTACT_MENU_OPTION_1];
     }
-    // Not the Waved contact
-    if (self.lastSelectedContactView.contact.identifier != 1) {
-        [self.contactMenuActionSheet addButtonWithTitle:ACTION_CONTACT_MENU_OPTION_2];
-    }
+    
     [self.contactMenuActionSheet addButtonWithTitle:ACTION_CONTACT_MENU_OPTION_4];
     [self.contactMenuActionSheet addButtonWithTitle:ACTION_SHEET_CANCEL];
     self.contactMenuActionSheet.cancelButtonIndex = self.contactMenuActionSheet.numberOfButtons - 1;
     
+    // Add title
+    NSString *firstName = self.lastSelectedContactView.contact.firstName ? self.lastSelectedContactView.contact.firstName : @"";
+    NSString *lastName = self.lastSelectedContactView.contact.lastName ? self.lastSelectedContactView.contact.lastName : @"";
+
+
+    // One tap on title block
+    void (^titleTapBlock)() = nil;
+    if (self.lastSelectedContactView.contact.identifier != 1) { // Not the Waved contact
+        __weak __typeof__(self) weakSelf = self;
+        titleTapBlock = ^void() {
+            ABRecordRef person = [AddressbookUtils findContactForNumber:self.lastSelectedContactView.contact.phoneNumber];
+            if (!person) {
+                [GeneralUtils showMessage:@"We could not retrieve this contact" withTitle:nil];
+                [TrackingUtils trackFailedToOpenContact:self.lastSelectedContactView.contact.phoneNumber];
+                return;
+            }
+            ABPersonViewController *personViewController = [[ABPersonViewController alloc] init];
+            personViewController.personViewDelegate = weakSelf;
+            personViewController.displayedPerson = person;
+            personViewController.allowsEditing = NO;
+            [weakSelf.navigationController pushViewController:personViewController animated:YES];
+            weakSelf.navigationController.navigationBarHidden = NO;
+        };
+    }
+
+    [self.contactMenuActionSheet addTitleViewWithUsername:[NSString stringWithFormat:@"%@ %@", firstName, lastName]
+                                                    image:self.lastSelectedContactView.imageView.image
+     andOneTapBlock:titleTapBlock];
     [self.contactMenuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
 - (IBAction)menuButtonClicked:(id)sender {
 
-    self.mainMenuActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+    self.mainMenuActionSheet = [[CustomActionSheet alloc] initWithTitle:nil
                                                            delegate:self
                                                   cancelButtonTitle:ACTION_SHEET_CANCEL
                                              destructiveButtonTitle:nil
-                                                  otherButtonTitles:ACTION_MAIN_MENU_OPTION_1, ACTION_MAIN_MENU_OPTION_2 , ACTION_MAIN_MENU_OPTION_3, nil];
+                                                  otherButtonTitles:ACTION_MAIN_MENU_OPTION_1, ACTION_MAIN_MENU_OPTION_2, nil];
     
+    __weak __typeof__(self) weakSelf = self;
+    void (^titleTapBlock)() = ^void() {
+        UIActionSheet *newActionSheet = [[UIActionSheet alloc]
+                                         initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
+                                         delegate:weakSelf
+                                         cancelButtonTitle:ACTION_SHEET_CANCEL
+                                         destructiveButtonTitle:nil
+                                         otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, nil];
+        [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+    };
+    
+    [self.mainMenuActionSheet addTitleViewWithUsername:[NSString stringWithFormat:@"%@ %@", [SessionUtils getCurrentUserFirstName], [SessionUtils getCurrentUserLastName]]
+                                                 image:self.profilePicture.image
+                                        andOneTapBlock:titleTapBlock];
     [self.mainMenuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
+
 
 // ----------------------------------------------------------
 #pragma mark Recording Mode
@@ -1136,15 +1159,15 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     
     // Other
-    else if ([buttonTitle isEqualToString:ACTION_MAIN_MENU_OPTION_3]) {
-        [actionSheet dismissWithClickedButtonIndex:2 animated:NO];
-        UIActionSheet *newActionSheet = [[UIActionSheet alloc] initWithTitle:[NSString stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
-                                                                 delegate:self
-                                                        cancelButtonTitle:ACTION_SHEET_CANCEL
-                                                   destructiveButtonTitle:nil
-                                                        otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, nil];
-        [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
-    }
+//    else if ([buttonTitle isEqualToString:ACTION_MAIN_MENU_OPTION_3]) {
+//        [actionSheet dismissWithClickedButtonIndex:2 animated:NO];
+//        UIActionSheet *newActionSheet = [[UIActionSheet alloc] initWithTitle:[NSString stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
+//                                                                 delegate:self
+//                                                        cancelButtonTitle:ACTION_SHEET_CANCEL
+//                                                   destructiveButtonTitle:nil
+//                                                        otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, nil];
+//        [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+//    }
     
     /* -------------------------------------------------------------------------
      OTHER MENU
@@ -1299,23 +1322,23 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     
     // Call/Text
-    else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_2]) {
-        ABRecordRef person = [AddressbookUtils findContactForNumber:self.lastSelectedContactView.contact.phoneNumber];
-        
-        if (!person) {
-            [GeneralUtils showMessage:@"We could not retrieve this contact" withTitle:nil];
-            [TrackingUtils trackFailedToOpenContact:self.lastSelectedContactView.contact.phoneNumber];
-            return;
-        }
-        
-        ABPersonViewController *personViewController = [[ABPersonViewController alloc] init];
-        personViewController.personViewDelegate = self;
-        personViewController.displayedPerson = person;
-        personViewController.allowsEditing = NO;
-        
-        [self.navigationController pushViewController:personViewController animated:YES];
-        self.navigationController.navigationBarHidden = NO;
-    }
+//    else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_2]) {
+//        ABRecordRef person = [AddressbookUtils findContactForNumber:self.lastSelectedContactView.contact.phoneNumber];
+//        
+//        if (!person) {
+//            [GeneralUtils showMessage:@"We could not retrieve this contact" withTitle:nil];
+//            [TrackingUtils trackFailedToOpenContact:self.lastSelectedContactView.contact.phoneNumber];
+//            return;
+//        }
+//        
+//        ABPersonViewController *personViewController = [[ABPersonViewController alloc] init];
+//        personViewController.personViewDelegate = self;
+//        personViewController.displayedPerson = person;
+//        personViewController.allowsEditing = NO;
+//        
+//        [self.navigationController pushViewController:personViewController animated:YES];
+//        self.navigationController.navigationBarHidden = NO;
+//    }
     
     // Block
     else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_3]) {
@@ -1383,36 +1406,36 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
 }
 
-- (void)willPresentActionSheet:(UIActionSheet *)actionSheet {
-    
-    if (actionSheet == self.mainMenuActionSheet) {
-        self.profilePicture.image = nil;
-        
-        self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", [SessionUtils getCurrentUserFirstName], [SessionUtils getCurrentUserLastName]];
-        [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
-        
-        [actionSheet addSubview:self.profileContainer];
-    }
-    
-    if (actionSheet == self.contactMenuActionSheet) {
-        self.profilePicture.image = nil;
-        
-        NSString *firstName = self.lastSelectedContactView.contact.firstName ? self.lastSelectedContactView.contact.firstName : @"";
-        NSString *lastName = self.lastSelectedContactView.contact.lastName ? self.lastSelectedContactView.contact.lastName : @"";
-        
-        self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
-        [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:self.lastSelectedContactView.contact.identifier]];
-        
-        [actionSheet addSubview:self.profileContainer];
-    }
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet willDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if (actionSheet == self.mainMenuActionSheet || actionSheet == self.contactMenuActionSheet) {
-        [self.profileContainer removeFromSuperview];
-    }
-}
+//- (void)willPresentActionSheet:(UIActionSheet *)actionSheet {
+//    
+//    if (actionSheet == self.mainMenuActionSheet) {
+//        self.profilePicture.image = nil;
+//        
+//        self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", [SessionUtils getCurrentUserFirstName], [SessionUtils getCurrentUserLastName]];
+//        [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
+//        
+//        [actionSheet addSubview:self.profileContainer];
+//    }
+//    
+//    if (actionSheet == self.contactMenuActionSheet) {
+//        self.profilePicture.image = nil;
+//        
+//        NSString *firstName = self.lastSelectedContactView.contact.firstName ? self.lastSelectedContactView.contact.firstName : @"";
+//        NSString *lastName = self.lastSelectedContactView.contact.lastName ? self.lastSelectedContactView.contact.lastName : @"";
+//        
+//        self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
+//        [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:self.lastSelectedContactView.contact.identifier]];
+//        
+//        [actionSheet addSubview:self.profileContainer];
+//    }
+//}
+//
+//- (void)actionSheet:(UIActionSheet *)actionSheet willDismissWithButtonIndex:(NSInteger)buttonIndex
+//{
+//    if (actionSheet == self.mainMenuActionSheet || actionSheet == self.contactMenuActionSheet) {
+//        [self.profileContainer removeFromSuperview];
+//    }
+//}
 
 
 // ----------------------------------------------------------
