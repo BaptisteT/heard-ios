@@ -24,7 +24,6 @@
 - (void)distributeNonAttributedMessages;
 - (void)endPlayerUIAnimated:(BOOL)animated;
 
-
 @property (nonatomic) BOOL isSignUp;
 
 @end

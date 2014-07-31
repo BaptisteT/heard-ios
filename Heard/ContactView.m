@@ -154,20 +154,17 @@
     if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled || recognizer.state == UIGestureRecognizerStateFailed) {
         [self endRecordingPlayingUI];
         
-        if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled || recognizer.state == UIGestureRecognizerStateFailed) {
-            [self endRecordingPlayingUI];
-            // Stop timer if it did not fire yet
-            if ([self.maxDurationTimer isValid]) {
-                [self.maxDurationTimer invalidate];
-                
-                if ([self.delegate isRecording]) {
-                    if(![self.minDurationTimer isValid]) {
-                        [self sendRecording];
-                        [TrackingUtils trackRecord];
-                    } else {
-                        [self stopRecording];
-                        [self.delegate tutoMessage:@"Hold to record." withDuration:1];
-                    }
+        // Stop timer if it did not fire yet
+        if ([self.maxDurationTimer isValid]) {
+            [self.maxDurationTimer invalidate];
+            
+            if ([self.delegate isRecording]) {
+                if(![self.minDurationTimer isValid]) {
+                    [self sendRecording];
+                    [TrackingUtils trackRecord];
+                } else {
+                    [self stopRecording];
+                    [self.delegate tutoMessage:@"Hold to record." withDuration:1];
                 }
             }
         };
@@ -345,7 +342,7 @@
 - (void)stopRecording
 {
     [[AVAudioSession sharedInstance] setActive:NO error:nil];
-    [self.delegate endedLongPressOnContactView:self];
+    [self.delegate endedLongPressRecording];
 }
 
 - (void)message:(NSData *)audioData sentWithError:(BOOL)error
@@ -456,6 +453,7 @@
 - (void)startRecordingUI
 {
     [self endRecordingPlayingUI];
+    [self.delegate endTutoMode];
     
     [self startSonarAnimationWithColor:[ImageUtils red]];
     
@@ -470,6 +468,7 @@
 - (void)startPlayingUI
 {
     [self endRecordingPlayingUI];
+    [self.delegate endTutoMode];
     
     [self startSonarAnimationWithColor:[ImageUtils green]];
     
@@ -531,8 +530,6 @@
     
     [self.recordPlayOverlay removeFromSuperview];
     self.recordPlayOverlay = nil;
-    
-    [self.delegate endTutoMode];
 }
 
 - (void)startLoadingAnimationWithStrokeColor:(UIColor *)color

@@ -47,7 +47,7 @@
 
 - (void)startedLongPressOnContactView:(ContactView *)contactView;
 
-- (void)endedLongPressOnContactView:(ContactView *)contactView;
+- (void)endedLongPressRecording;
 
 - (void)sendMessageToContact:(ContactView *)contactView;
 

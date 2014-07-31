@@ -91,7 +91,6 @@
         if (contact.isHidden) {
             [cell.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:contact.identifier]];
         } else {
-            // todo bt
             cell.profilePicture.image = [self.delegate getViewOfContact:contact].imageView.image;
         }
         cell.profilePicture.clipsToBounds = YES;

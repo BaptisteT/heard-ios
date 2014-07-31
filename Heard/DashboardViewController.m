@@ -904,7 +904,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 //User stop pressing screen
-- (void)endedLongPressOnContactView:(ContactView *)contactView
+- (void)endedLongPressRecording
 {
     // Stop recording
     [self.recorder stop];
@@ -1511,18 +1511,18 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
     if (motion == UIEventSubtypeMotionShake)
     {
-        if (self.mainPlayer) {
-            [self endPlayerUIAnimated:NO];
-            
-            [self playerUI:([self.mainPlayer duration]) ByContactView:self.lastContactPlayed];
-            
-            [self.mainPlayer play];
-            [TrackingUtils trackReplay];
-        } else {
-            [GeneralUtils showMessage:@"No message to replay" withTitle:nil];
+        // cancel recording
+        if (self.recorder.isRecording) {
+            [[AVAudioSession sharedInstance] setActive:NO error:nil];
+            [self endedLongPressRecording];
+            for (ContactView *contactView in self.contactViews) {
+                [contactView endRecordingPlayingUI];
+            }
+            [self tutoMessage:@"Message canceled" withDuration:2];
         }
     }
 }
+
 
 // ----------------------------------------------------------
 #pragma mark Address Book Delegate
