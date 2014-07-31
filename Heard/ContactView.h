@@ -27,6 +27,7 @@
 @property (nonatomic, strong) NSData *nextMessageAudioData;
 @property (nonatomic) NSUInteger nextMessageId;
 @property (nonatomic, strong) NSMutableArray *failedMessages;
+@property (strong, nonatomic) UIImageView *imageView;
 
 
 - (void)addUnreadMessage:(Message *)message;

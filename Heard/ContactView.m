@@ -29,7 +29,6 @@
 @property (nonatomic, strong) NSTimer *minDurationTimer;
 @property (nonatomic) NSInteger unreadMessagesCount;
 @property (nonatomic) UILabel *unreadMessagesLabel;
-@property (strong, nonatomic) UIImageView *imageView;
 @property (nonatomic, strong) UIImageView *recordPlayOverlay;
 @property (nonatomic, strong) UIImageView *pendingContactOverlay;
 @property (nonatomic, strong) UIView *contactOverlay;

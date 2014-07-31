@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "EditContactsTableViewCell.h"
+#import "ContactView.h"
 
 @protocol EditContactsVCDelegate;
 
@@ -21,7 +22,8 @@
 @protocol EditContactsVCDelegate
 
 - (void)reorderContactViews;
-- (void)hideContact:(Contact *)contact;
-- (void)showContact:(Contact *)contact;
+- (void)hideViewOfContact:(Contact *)contact;
+- (void)showViewOfContact:(Contact *)contact;
+- (ContactView *)getViewOfContact:(Contact *)contact;
 
 @end

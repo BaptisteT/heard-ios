@@ -504,11 +504,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         self.contactViews = [[NSMutableArray alloc] initWithCapacity:[ContactUtils numberOfNonHiddenContacts:self.contacts]];
     }
     // Check that contact does not exist
-    for (ContactView *contactView in self.contactViews) {
-        if (contactView.contact == contact) {
-            return;
-        }
-    }
+    if ([self getViewOfContact:contact])
+        return;
+    
     [self createContactViewWithContact:contact andPosition:(int)[self.contactViews count]+1];
 }
 
@@ -617,7 +615,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }];
 }
 
-- (void)hideContactOfView:(ContactView *)contactView
+- (void)hideContactView:(ContactView *)contactView
 {
     contactView.contact.isHidden = YES;
     [self.contactViews removeObject:contactView];
@@ -626,20 +624,25 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self reorderContactViews];
 }
 
-- (void)hideContact:(Contact *)contact
+- (void)hideViewOfContact:(Contact *)contact
 {
-    for (ContactView *contactView in self.contactViews) {
-        if (contactView.contact == contact) {
-            [self hideContactOfView:contactView];
-            return;
-        }
-    }
+    [self hideContactView:[self getViewOfContact:contact]];
 }
 
-- (void)showContact:(Contact *)contact
+- (void)showViewOfContact:(Contact *)contact
 {
     contact.isHidden = NO;
     [self displayAdditionnalContact:contact];
+}
+
+- (ContactView *)getViewOfContact:(Contact *)contact
+{
+    for (ContactView *contactView in self.contactViews) {
+        if (contactView.contact == contact) {
+            return contactView;
+        }
+    }
+    return nil;
 }
 
 // ----------------------------------
@@ -1326,7 +1329,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     // Hide
     else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_4]) {
-        [self hideContactOfView:self.lastSelectedContactView];
+        [self hideContactView:self.lastSelectedContactView];
         self.lastSelectedContactView = nil;
     }
     

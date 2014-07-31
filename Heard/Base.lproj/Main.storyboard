@@ -884,17 +884,13 @@
                                             <constraint firstAttribute="height" constant="50" id="Pid-xq-1R8"/>
                                             <constraint firstAttribute="width" constant="320" id="YuU-BN-aEM"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="20"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="22"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZHN-r3-gZR">
-                                        <rect key="frame" x="265" y="15" width="50" height="50"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZHN-r3-gZR">
+                                        <rect key="frame" x="265" y="17" width="50" height="49"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="50" id="lRE-XN-Rtn"/>
-                                            <constraint firstAttribute="height" constant="50" id="zJV-rf-LVU"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="16"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="20"/>
                                         <state key="normal" title="Done">
                                             <color key="titleColor" red="0.054901960780000002" green="0.30588235289999999" blue="0.67843137249999996" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -908,9 +904,7 @@
                                 <constraints>
                                     <constraint firstAttribute="centerX" secondItem="vhf-NS-Cg3" secondAttribute="centerX" id="Hq9-5t-rUE"/>
                                     <constraint firstAttribute="width" constant="320" id="PnP-z1-jnp"/>
-                                    <constraint firstAttribute="trailing" secondItem="ZHN-r3-gZR" secondAttribute="trailing" constant="5" id="a11-U3-p7B"/>
                                     <constraint firstItem="vhf-NS-Cg3" firstAttribute="top" secondItem="cIF-7u-vdn" secondAttribute="top" constant="15" id="gqf-FS-9yY"/>
-                                    <constraint firstItem="ZHN-r3-gZR" firstAttribute="top" secondItem="cIF-7u-vdn" secondAttribute="top" constant="15" id="mWd-aN-2Zq"/>
                                     <constraint firstAttribute="height" constant="65" id="rnb-Qo-tDk"/>
                                     <constraint firstItem="vhf-NS-Cg3" firstAttribute="leading" secondItem="cIF-7u-vdn" secondAttribute="leading" id="wlG-5Z-eC5"/>
                                 </constraints>
@@ -949,6 +943,7 @@
                     <navigationItem key="navigationItem" id="XJm-27-hve"/>
                     <connections>
                         <outlet property="contactsTableView" destination="fGa-P4-Vlg" id="sa1-am-tTg"/>
+                        <outlet property="navBar" destination="vhf-NS-Cg3" id="dH9-z4-6fV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BPv-cs-mCH" userLabel="First Responder" sceneMemberID="firstResponder"/>
