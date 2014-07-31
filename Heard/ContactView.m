@@ -152,20 +152,19 @@
     }
     
     if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled || recognizer.state == UIGestureRecognizerStateFailed) {
+        
         [self endRecordingPlayingUI];
         
         // Stop timer if it did not fire yet
         if ([self.maxDurationTimer isValid]) {
             [self.maxDurationTimer invalidate];
             
-            if ([self.delegate isRecording]) {
-                if(![self.minDurationTimer isValid]) {
-                    [self sendRecording];
-                    [TrackingUtils trackRecord];
-                } else {
-                    [self stopRecording];
-                    [self.delegate tutoMessage:@"Hold to record." withDuration:1];
-                }
+            if([self.delegate isRecording] && ![self.minDurationTimer isValid]) {
+                [self sendRecording];
+                [TrackingUtils trackRecord];
+            } else {
+                [self stopRecording];
+                [self.delegate tutoMessage:@"Hold to record." withDuration:1];
             }
         };
     }
@@ -183,7 +182,6 @@
             return;
         } else {
             [session setActive:YES error:nil];
-            
             // Create Timers
             self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
             self.minDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMinAudioDuration target:self selector:@selector(minRecordingDurationReached) userInfo:nil repeats:NO];

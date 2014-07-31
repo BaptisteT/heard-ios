@@ -77,8 +77,8 @@
 @property (strong, nonatomic) UIView *playerContainer;
 @property (nonatomic,strong) UIView *playerLine;
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
+@property (nonatomic, strong) AVAudioPlayer *recordSoundPlayer;
 @property (nonatomic) BOOL disableProximityObserver;
-@property (nonatomic, strong) ContactView *lastContactPlayed;
 @property (nonatomic) BOOL isUsingHeadSet;
 // Current user
 @property (nonatomic, strong) NSString *currentUserPhoneNumber;
@@ -151,7 +151,9 @@
     // Create audio session
     AVAudioSession* session = [AVAudioSession sharedInstance];
     BOOL success; NSError* error;
-    success = [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+    success = [session setCategory:AVAudioSessionCategoryPlayAndRecord
+                       withOptions:AVAudioSessionCategoryOptionMixWithOthers
+                             error:&error];
     if (!success)
         NSLog(@"AVAudioSession error setting category:%@",error);
     
@@ -210,6 +212,11 @@
     self.playerLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, PLAYER_UI_HEIGHT)];
     self.playerLine.backgroundColor = [ImageUtils green];
     [self.playerContainer addSubview:self.playerLine];
+    
+    //
+    self.recordSoundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:@"/System/Library/Audio/UISounds/Tink.caf"] error:nil];
+    [self.recordSoundPlayer prepareToPlay];
+
 }
 
 // Make sure scroll view has been resized (necessary because layout constraints change scroll view size)
@@ -912,6 +919,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if ([self.mainPlayer isPlaying]) {
         [self endPlayerUIAnimated:NO];
     }
+    
+    float appPlayerVolume = [MPMusicPlayerController applicationMusicPlayer].volume;
+    if (appPlayerVolume > 0.25) {
+        [self.recordSoundPlayer setVolume:1/(4*appPlayerVolume)];
+    }
+    [self.recordSoundPlayer play];
     [self disableAllContactViews];
     
     [self recordingUIForContactView:contactView];
@@ -931,6 +944,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                      animations:^{
                          [self setRecorderLineWidth:finalWidth];
                      } completion:nil];
+    [NSThread sleepForTimeInterval:.1];
     [self.recorder record];
 }
 
@@ -939,6 +953,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     // Stop recording
     [self.recorder stop];
+    [self.recordSoundPlayer play];
     
     // Remove UI
     self.recorderLine.frame = [[self.recorderLine.layer presentationLayer] frame];
@@ -956,7 +971,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.playerContainer.layer removeAllAnimations];
     
     //Change last played message id in contact
-    self.lastContactPlayed = contactView;
     contactView.contact.lastPlayedMessageId = contactView.nextMessageId;
     
     // Init player
@@ -981,8 +995,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     
     [self.playerContainer.layer removeAllAnimations];
-    
-    self.lastContactPlayed = contactView;
     
     // Init player
     self.mainPlayer = [[AVAudioPlayer alloc] initWithData:audioData error:nil];
@@ -1125,15 +1137,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self.activityView stopAnimating];
         [self.activityView removeFromSuperview];
     }
-}
-
-- (IBAction)replayButtonClicked:(id)sender {
-    [self endPlayerUIAnimated:NO];
-    
-    [self playerUI:([self.mainPlayer duration]) ByContactView:self.lastContactPlayed];
-    
-    [self.mainPlayer play];
-    [TrackingUtils trackReplay];
 }
 
 - (void)setPlayerLineWidth:(float)width {
