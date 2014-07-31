@@ -224,6 +224,10 @@
     [self.navigationController setNavigationBarHidden:YES];   //it hides
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [self becomeFirstResponder];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     NSString * segueName = segue.identifier;
@@ -436,12 +440,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [self createContactViewWithContact:contact andPosition:1];
         }
     }
-    
     [self reorderContactViews];
 }
 
 - (void)reorderContactViews
 {
+    // Remove hidden contact without message
+    [self removeViewOfHiddenContacts];
+    
     // Sort contact
     [self.contactViews sortUsingComparator:^(ContactView *contactView1, ContactView * contactView2) {
         if (contactView1.contact.lastMessageDate < contactView2.contact.lastMessageDate) {
@@ -593,7 +599,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.contactViews removeObject:contactView];
     [contactView removeFromSuperview];
     [contactView.nameLabel removeFromSuperview];
-    [self reorderContactViews];
 }
 
 - (void)hideViewOfContact:(Contact *)contact
@@ -617,6 +622,19 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     return nil;
 }
 
+- (void)removeViewOfHiddenContacts
+{
+    NSMutableArray *viewsToRemove = [NSMutableArray new];
+    for (ContactView *contactView in self.contactViews) {
+        if (contactView.contact.isHidden && (!contactView.unreadMessages || contactView.unreadMessages.count == 0)) {
+            [viewsToRemove addObject:contactView];
+        }
+    }
+    for (ContactView *contactView in viewsToRemove) {
+        [self hideContactView:contactView];
+    }
+}
+
 // ----------------------------------
 #pragma mark Messages
 // ----------------------------------
@@ -634,7 +652,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:messages.count];
         
         // Check if we have new contacts
-        // App launch - Change in address book - Message from unknown - New user added current user - 0 contact
+        // App launch or Change in address book or Message from unknown or New user added current user
         if (self.retrieveNewContact || !areAttributed || newContactOnServer) {
             [self requestAddressBookAccessAndRetrieveFriends];
             self.retrieveNewContact = NO;
@@ -723,16 +741,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ------------------------------
 #pragma mark Click & navigate
 // ------------------------------
-//- (void)singleTapOnProfileContainer:(UITapGestureRecognizer *)sender
-//{
-//    [self.mainMenuActionSheet dismissWithClickedButtonIndex:0 animated:NO];
-//    UIActionSheet *newActionSheet = [[UIActionSheet alloc] initWithTitle:[NSString stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
-//                                                                delegate:self
-//                                                       cancelButtonTitle:ACTION_SHEET_CANCEL
-//                                                  destructiveButtonTitle:nil
-//                                                       otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, nil];
-//    [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
-//}
 
 - (void)singleTapOnNameLabel:(UITapGestureRecognizer *)sender
 {
@@ -1158,17 +1166,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self performSegueWithIdentifier:@"Add Contact Segue" sender:nil];
     }
     
-    // Other
-//    else if ([buttonTitle isEqualToString:ACTION_MAIN_MENU_OPTION_3]) {
-//        [actionSheet dismissWithClickedButtonIndex:2 animated:NO];
-//        UIActionSheet *newActionSheet = [[UIActionSheet alloc] initWithTitle:[NSString stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
-//                                                                 delegate:self
-//                                                        cancelButtonTitle:ACTION_SHEET_CANCEL
-//                                                   destructiveButtonTitle:nil
-//                                                        otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, nil];
-//        [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
-//    }
-    
     /* -------------------------------------------------------------------------
      OTHER MENU
      ---------------------------------------------------------------------------*/
@@ -1321,25 +1318,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         }];
     }
     
-    // Call/Text
-//    else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_2]) {
-//        ABRecordRef person = [AddressbookUtils findContactForNumber:self.lastSelectedContactView.contact.phoneNumber];
-//        
-//        if (!person) {
-//            [GeneralUtils showMessage:@"We could not retrieve this contact" withTitle:nil];
-//            [TrackingUtils trackFailedToOpenContact:self.lastSelectedContactView.contact.phoneNumber];
-//            return;
-//        }
-//        
-//        ABPersonViewController *personViewController = [[ABPersonViewController alloc] init];
-//        personViewController.personViewDelegate = self;
-//        personViewController.displayedPerson = person;
-//        personViewController.allowsEditing = NO;
-//        
-//        [self.navigationController pushViewController:personViewController animated:YES];
-//        self.navigationController.navigationBarHidden = NO;
-//    }
-    
     // Block
     else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_3]) {
         
@@ -1354,6 +1332,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_4]) {
         [self hideContactView:self.lastSelectedContactView];
         self.lastSelectedContactView = nil;
+        [self reorderContactViews];
     }
     
     /* -------------------------------------------------------------------------
@@ -1405,37 +1384,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self blockContact:self.lastSelectedContactView];
     }
 }
-
-//- (void)willPresentActionSheet:(UIActionSheet *)actionSheet {
-//    
-//    if (actionSheet == self.mainMenuActionSheet) {
-//        self.profilePicture.image = nil;
-//        
-//        self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", [SessionUtils getCurrentUserFirstName], [SessionUtils getCurrentUserLastName]];
-//        [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
-//        
-//        [actionSheet addSubview:self.profileContainer];
-//    }
-//    
-//    if (actionSheet == self.contactMenuActionSheet) {
-//        self.profilePicture.image = nil;
-//        
-//        NSString *firstName = self.lastSelectedContactView.contact.firstName ? self.lastSelectedContactView.contact.firstName : @"";
-//        NSString *lastName = self.lastSelectedContactView.contact.lastName ? self.lastSelectedContactView.contact.lastName : @"";
-//        
-//        self.usernameLabel.text = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
-//        [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:self.lastSelectedContactView.contact.identifier]];
-//        
-//        [actionSheet addSubview:self.profileContainer];
-//    }
-//}
-//
-//- (void)actionSheet:(UIActionSheet *)actionSheet willDismissWithButtonIndex:(NSInteger)buttonIndex
-//{
-//    if (actionSheet == self.mainMenuActionSheet || actionSheet == self.contactMenuActionSheet) {
-//        [self.profileContainer removeFromSuperview];
-//    }
-//}
 
 
 // ----------------------------------------------------------
@@ -1522,13 +1470,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Motion event (shake)
 // ----------------------------------------------------------
 
-
 - (BOOL)canBecomeFirstResponder {
     return YES;
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [self becomeFirstResponder];
 }
 
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
