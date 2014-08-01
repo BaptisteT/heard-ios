@@ -218,16 +218,7 @@
     [self hideMessageCountLabel:YES];
     self.nextMessageAudioData = nil;
     if (self.unreadMessagesCount > 1) {
-        // Download animation
-        [self startLoadingAnimationWithStrokeColor:[ImageUtils blue]];
-        
-        [ApiUtils downloadAudioFileAtURL:[self.unreadMessages[1] getMessageURL] success:^void(NSData *data) {
-            self.nextMessageAudioData = data;
-            [self hideMessageCountLabel:NO];
-            [self endLoadingAnimation];
-        } failure:^(){
-            [self endLoadingAnimation];
-        }];
+        [self downloadAudioAndAnim:(Message *)self.unreadMessages[1]];
     }
     
     // Mark as opened on the database
@@ -391,6 +382,22 @@
 // ----------------------------------------------------------
 #pragma mark Message utility
 // ----------------------------------------------------------
+- (void)downloadAudioAndAnim:(Message *)message
+{
+    // Download animation
+    [self startLoadingAnimationWithStrokeColor:[ImageUtils blue]];
+    
+    // Request data asynch
+    [ApiUtils downloadAudioFileAtURL:[message getMessageURL] success:^void(NSData *data) {
+        self.nextMessageAudioData = data;
+        self.nextMessageId = message.identifier;
+        [self hideMessageCountLabel:NO];
+        [self endLoadingAnimation];
+    } failure:^(){
+        [self endLoadingAnimation];
+    }];
+}
+
 - (void)setUnreadMessagesCount:(NSInteger)unreadMessagesCount
 {
     _unreadMessagesCount = unreadMessagesCount;
@@ -410,18 +417,7 @@
         self.unreadMessagesCount = 0;
     }
     if (self.unreadMessagesCount == 0) {
-        // Download animation
-        [self startLoadingAnimationWithStrokeColor:[ImageUtils blue]];
-        
-        // Request data asynch 
-        [ApiUtils downloadAudioFileAtURL:[message getMessageURL] success:^void(NSData *data) {
-            self.nextMessageAudioData = data;
-            self.nextMessageId = message.identifier;
-            [self hideMessageCountLabel:NO];
-            [self endLoadingAnimation];
-        } failure:^(){
-            [self endLoadingAnimation];
-        }];
+        [self downloadAudioAndAnim:message];
     }
     [self.unreadMessages addObject:message];
     [self setUnreadMessagesCount:self.unreadMessagesCount+1];
@@ -484,8 +480,6 @@
     CGRect pathFrame = CGRectMake(-CGRectGetMidX(self.bounds), -CGRectGetMidY(self.bounds), self.bounds.size.width, self.bounds.size.height);
     UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:pathFrame cornerRadius:self.bounds.size.height];
     
-    // accounts for left/right offset and contentOffset of scroll view
-    //    CGPoint shapePosition = [self.superview.superview convertPoint:self.center fromView:self.superview.superview];
     CGPoint shapePosition = [self.superview convertPoint:self.center fromView:self.superview];
     
     self.circleShape = [CAShapeLayer layer];
