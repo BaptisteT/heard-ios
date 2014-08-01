@@ -81,7 +81,6 @@
                                                       self.view.frame.size.height,
                                                       self.inviteButtonContainer.frame.size.width,
                                                       self.inviteButtonContainer.frame.size.height);
-        
         self.inviteButtonContainer.hidden = NO;
         
         [UIView animateWithDuration:0.5 animations:^{

@@ -41,12 +41,12 @@
 // ----------------------------------------------------------
 - (void)hideContact:(Contact *)contact
 {
-    [self.delegate hideViewOfContact:contact];
+    [self.delegate removeViewOfContact:contact];
 }
 
 - (void)showContact:(Contact *)contact
 {
-    [self.delegate showViewOfContact:contact];
+    [self.delegate displayViewOfContact:contact];
 }
 
 
@@ -86,7 +86,7 @@
         
         cell.contact = contact;
         cell.username.text = [NSString stringWithFormat:@"%@ %@", contact.firstName, contact.lastName];
-        cell.phoneNumber.text = contact.identifier == 1 ? @"" : contact.phoneNumber;
+        cell.phoneNumber.text = [GeneralUtils isAdminContact:contact.identifier] ? @"" : contact.phoneNumber;
         cell.switchButton.on = ! contact.isHidden;
         if (contact.isHidden) {
             [cell.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:contact.identifier]];

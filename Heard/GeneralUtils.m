@@ -96,4 +96,9 @@
     return [NSURL fileURLWithPath:dataPath];
 }
 
++ (BOOL)isAdminContact:(NSUInteger)identifier
+{
+    return identifier == kAdminId;
+}
+
 @end

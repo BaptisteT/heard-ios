@@ -26,4 +26,6 @@
 
 + (NSURL *)getPlayedAudioURL;
 
++ (BOOL)isAdminContact:(NSUInteger)identifier;
+
 @end

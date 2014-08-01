@@ -542,7 +542,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [nameLabel addGestureRecognizer:recogniser];
     nameLabel.userInteractionEnabled = YES;
     
-    if (contact.identifier == 1) {
+    if ([GeneralUtils isAdminContact:contact.identifier]) {
         nameLabel.text = @"Waved";
         nameLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:14.0];
     } else if ([self.currentUserPhoneNumber isEqualToString:contact.phoneNumber]) {
@@ -600,7 +600,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }];
 }
 
-- (void)hideContactView:(ContactView *)contactView
+- (void)removeContactView:(ContactView *)contactView
 {
     contactView.contact.isHidden = YES;
     [self.contactViews removeObject:contactView];
@@ -608,12 +608,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [contactView.nameLabel removeFromSuperview];
 }
 
-- (void)hideViewOfContact:(Contact *)contact
+- (void)removeViewOfContact:(Contact *)contact
 {
-    [self hideContactView:[self getViewOfContact:contact]];
+    [self removeContactView:[self getViewOfContact:contact]];
 }
 
-- (void)showViewOfContact:(Contact *)contact
+- (void)displayViewOfContact:(Contact *)contact
 {
     contact.isHidden = NO;
     [self displayAdditionnalContact:contact];
@@ -638,7 +638,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         }
     }
     for (ContactView *contactView in viewsToRemove) {
-        [self hideContactView:contactView];
+        [self removeContactView:contactView];
     }
 }
 
@@ -784,7 +784,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
     // One tap on title block
     void (^titleTapBlock)() = nil;
-    if (self.lastSelectedContactView.contact.identifier != 1) { // Not the Waved contact
+    if (![GeneralUtils isAdminContact:self.lastSelectedContactView.contact.identifier]) {
         __weak __typeof__(self) weakSelf = self;
         titleTapBlock = ^void() {
             ABRecordRef person = [AddressbookUtils findContactForNumber:self.lastSelectedContactView.contact.phoneNumber];
@@ -1333,7 +1333,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     // Hide
     else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_4]) {
-        [self hideContactView:self.lastSelectedContactView];
+        [self removeContactView:self.lastSelectedContactView];
         self.lastSelectedContactView = nil;
         [self reorderContactViews];
     }
@@ -1363,8 +1363,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [GeneralUtils showMessage:[alertView.title stringByAppendingString:@" must between 1 and 20 characters."] withTitle:nil];
         }
         if (buttonIndex == 1) {
-            
-            
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             
             [alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] ? [ApiUtils updateFirstName:textField.text success:^{

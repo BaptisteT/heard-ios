@@ -22,8 +22,8 @@
 @protocol EditContactsVCDelegate
 
 - (void)reorderContactViews;
-- (void)hideViewOfContact:(Contact *)contact;
-- (void)showViewOfContact:(Contact *)contact;
+- (void)removeViewOfContact:(Contact *)contact;
+- (void)displayViewOfContact:(Contact *)contact;
 - (ContactView *)getViewOfContact:(Contact *)contact;
 
 @end

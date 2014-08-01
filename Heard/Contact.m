@@ -7,6 +7,7 @@
 //
 
 #import "Contact.h"
+#import "GeneralUtils.h"
 
 @implementation Contact
 
@@ -22,8 +23,12 @@
     contact.firstName = firstName;
     contact.lastName = lastName;
     contact.isPending = NO;
-    contact.isHidden = NO;
     
+    if ([GeneralUtils isAdminContact:identifier]) {
+        contact.isHidden = YES;
+    } else {
+        contact.isHidden = NO;
+    }
     return contact;
 }
 
@@ -40,13 +45,10 @@
 
 + (Contact *)rawContactToInstance:(NSDictionary *)rawContact
 {
-    Contact *contact= [[Contact alloc] init];
-    contact.identifier = [[rawContact objectForKey:@"id"] integerValue];
-    contact.phoneNumber = [rawContact objectForKey:@"phone_number"];
-    contact.firstName = [rawContact objectForKey:@"first_name"];
-    contact.lastName = [rawContact objectForKey:@"last_name"];
-    contact.isPending = NO; // default
-    return contact;
+    return [Contact createContactWithId:[[rawContact objectForKey:@"id"] integerValue]
+                            phoneNumber:[rawContact objectForKey:@"phone_number"]
+                              firstName:[rawContact objectForKey:@"first_name"]
+                               lastName:[rawContact objectForKey:@"last_name"]];
 }
 
 - (NSString *)description {
