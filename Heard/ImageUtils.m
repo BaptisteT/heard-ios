@@ -9,6 +9,9 @@
 #import "ImageUtils.h"
 #import "UIImageView+AFNetworking.h"
 
+#define DEGREES_TO_RADIANS(x) (x)/180.0*M_PI
+#define RADIANS_TO_DEGREES(x) (x)/M_PI*180.0
+
 @implementation ImageUtils
 
 + (UIColor *)blue
@@ -119,6 +122,44 @@
     [request addValue:@"image/*" forHTTPHeaderField:@"Accept"];
     request.cachePolicy=NSURLRequestReloadIgnoringCacheData;
     [imageView setImageWithURLRequest:request placeholderImage:nil success:nil failure:nil];
+}
+
++ (CAShapeLayer *)createGradientCircleLayerWithFrame:(CGRect)frame
+                                         borderWidth:(NSInteger)borderWidth
+                                               Color:(UIColor *)color
+                                        subDivisions:(NSInteger)nbSubDivisions
+{
+    CGPoint center = CGPointMake(CGRectGetMidX(frame), CGRectGetMidY(frame));
+    CGFloat red, green, blue, alpha, subAlpha = 0, startAngle = 0, endAngle = DEGREES_TO_RADIANS(360)/nbSubDivisions;
+    [color getRed:&red green:&green blue:&blue alpha:&alpha];
+    
+    CAShapeLayer *containingLayer = [CAShapeLayer new];
+    containingLayer.frame = frame;
+//    containingLayer.fillColor = [UIColor clearColor].CGColor;
+//    containingLayer.strokeColor = [UIColor clearColor].CGColor;
+//    containingLayer.lineWidth = borderWidth;
+//    [containingLayer setPosition:center];
+    
+    for (int i=0; i<nbSubDivisions; i++) {
+        CAShapeLayer *subLayer = [CAShapeLayer new];
+        subLayer.frame = frame;
+        subLayer.fillColor = [UIColor clearColor].CGColor;
+        subLayer.lineWidth = borderWidth;
+        subLayer.strokeColor = [UIColor colorWithRed:red green:green blue:blue alpha:subAlpha].CGColor;
+
+        subLayer.path = [UIBezierPath bezierPathWithArcCenter:center
+                                                                      radius:frame.size.width/2
+                                                                  startAngle:startAngle
+                                                                    endAngle:endAngle
+                                                                   clockwise:YES].CGPath;
+        [containingLayer addSublayer:subLayer];
+                                
+        // Prepare next subdiv
+        subAlpha += alpha / nbSubDivisions;
+        startAngle = endAngle;
+        endAngle += DEGREES_TO_RADIANS(360)/nbSubDivisions;
+    }
+    return containingLayer;
 }
 
 @end
