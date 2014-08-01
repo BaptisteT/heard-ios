@@ -24,7 +24,7 @@
     contact.lastName = lastName;
     contact.isPending = NO;
     
-    if ([GeneralUtils isAdminContact:identifier]) {
+    if ([GeneralUtils isAdminContact:contact]) {
         contact.isHidden = YES;
     } else {
         contact.isHidden = NO;

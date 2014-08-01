@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Contact.h"
 
 @interface GeneralUtils : NSObject
 
@@ -26,6 +27,8 @@
 
 + (NSURL *)getPlayedAudioURL;
 
-+ (BOOL)isAdminContact:(NSUInteger)identifier;
++ (BOOL)isAdminContact:(Contact *)contact;
+
++ (BOOL)isCurrentUser:(Contact *)contact;
 
 @end

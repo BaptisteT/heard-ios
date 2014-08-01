@@ -81,9 +81,9 @@
 @property (nonatomic) BOOL disableProximityObserver;
 @property (nonatomic) BOOL isUsingHeadSet;
 // Current user
-@property (nonatomic, strong) NSString *currentUserPhoneNumber;
 @property (strong, nonatomic) UIImagePickerController *imagePickerController;
 @property (strong, nonatomic) UIImageView *profilePicture;
+@property (weak, nonatomic) ContactView *currentUserContactView;
 // Others
 @property (weak, nonatomic) UIButton *menuButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
@@ -129,9 +129,6 @@
     
     // Init no adress book access label
     [self initNoAddressBookAccessLabel]; // we do it here to avoid to resize text in a parrallel thread
-    
-    //Current User phone number
-    self.currentUserPhoneNumber = [SessionUtils getCurrentUserPhoneNumber];
     
     // Preload profile picture
     self.profilePicture = [UIImageView new];
@@ -511,6 +508,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     ContactView *contactView = [[ContactView alloc] initWithContact:contact];
     
+    if ([GeneralUtils isCurrentUser:contact]) {
+        self.currentUserContactView = contactView;
+    }
+    
     // if pending, and missing name, request info
     if (contact.isPending && contact.phoneNumber.length == 0) {
         void(^successBlock)(Contact *) = ^void(Contact *serverContact) {
@@ -542,10 +543,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [nameLabel addGestureRecognizer:recogniser];
     nameLabel.userInteractionEnabled = YES;
     
-    if ([GeneralUtils isAdminContact:contact.identifier]) {
+    if ([GeneralUtils isAdminContact:contact]) {
         nameLabel.text = @"Waved";
         nameLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:14.0];
-    } else if ([self.currentUserPhoneNumber isEqualToString:contact.phoneNumber]) {
+    } else if ([GeneralUtils isCurrentUser:contact]) {
         nameLabel.text = @"Me";
         nameLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:14.0];
     } else {
@@ -784,8 +785,18 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
     // One tap on title block
     void (^titleTapBlock)() = nil;
-    if (![GeneralUtils isAdminContact:self.lastSelectedContactView.contact.identifier]) {
-        __weak __typeof__(self) weakSelf = self;
+    __weak __typeof__(self) weakSelf = self;
+    if ([GeneralUtils isCurrentUser:self.lastSelectedContactView.contact]) {
+        titleTapBlock = ^void() {
+            UIActionSheet *newActionSheet = [[UIActionSheet alloc]
+                                             initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
+                                             delegate:weakSelf
+                                             cancelButtonTitle:ACTION_SHEET_CANCEL
+                                             destructiveButtonTitle:nil
+                                             otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, nil];
+            [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+        };
+    } else if (![GeneralUtils isAdminContact:self.lastSelectedContactView.contact]) { // not Waved
         titleTapBlock = ^void() {
             ABRecordRef person = [AddressbookUtils findContactForNumber:self.lastSelectedContactView.contact.phoneNumber];
             if (!person) {
@@ -1450,7 +1461,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         NSString *encodedImage = [ImageUtils encodeToBase64String:image];
         [ApiUtils updateProfilePicture:encodedImage success:^{
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            // Update image
+            self.profilePicture.image = image;
+            if (self.currentUserContactView) {
+                self.currentUserContactView.imageView.image = image;
+            }
             [GeneralUtils showMessage:@"Profile picture successfully updated." withTitle:nil];
+            
+            // Reset the cache
             [ImageUtils setWithoutCachingImageView:self.profilePicture withURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
         }failure:^{
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];

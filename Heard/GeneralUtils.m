@@ -10,6 +10,7 @@
 
 #import "GeneralUtils.h"
 #import "Constants.h"
+#import "SessionUtils.h"
 
 @implementation GeneralUtils
 
@@ -96,9 +97,14 @@
     return [NSURL fileURLWithPath:dataPath];
 }
 
-+ (BOOL)isAdminContact:(NSUInteger)identifier
++ (BOOL)isAdminContact:(Contact *)contact
 {
-    return identifier == kAdminId;
+    return contact.identifier == kAdminId;
+}
+
++ (BOOL)isCurrentUser:(Contact *)contact
+{
+    return contact.identifier == [SessionUtils getCurrentUserId];
 }
 
 @end

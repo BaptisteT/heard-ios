@@ -86,7 +86,7 @@
         
         cell.contact = contact;
         cell.username.text = [NSString stringWithFormat:@"%@ %@", contact.firstName, contact.lastName];
-        cell.phoneNumber.text = [GeneralUtils isAdminContact:contact.identifier] ? @"" : contact.phoneNumber;
+        cell.phoneNumber.text = [GeneralUtils isAdminContact:contact] ? @"" : contact.phoneNumber;
         cell.switchButton.on = ! contact.isHidden;
         if (contact.isHidden) {
             [cell.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:contact.identifier]];
