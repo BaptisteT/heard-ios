@@ -13,6 +13,8 @@
 #import "MBProgressHUD.h"
 #import "RMPhoneFormat.h"
 #import "AddressbookUtils.h"
+#import "NBPhoneNumberUtil.h"
+#import "NBPhoneNumber.h"
 
 #define BORDER_SIZE 0.5
 #define DEFAULT_COUNTRY @"USA"
@@ -88,9 +90,26 @@
 }
 
 - (IBAction)nextButtonPressed:(id)sender {
+    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+    NSError *aError = nil;
+    NSString *internationalPhoneNumber = [NSString stringWithFormat:@"+%@%@", [self.countryCodeButton.titleLabel.text substringFromIndex:1], self.decimalPhoneNumber];
+    NBPhoneNumber *myNumber = [phoneUtil parse:internationalPhoneNumber
+                                 defaultRegion:nil error:&aError];
+    
+    if (aError || ![phoneUtil isValidNumber:myNumber]) {
+        [GeneralUtils showMessage:@"Invalid phone number." withTitle:nil];
+        return;
+    }
+    NSString *formattedPhoneNumber = [phoneUtil format:myNumber
+                                          numberFormat:NBEPhoneNumberFormatE164
+                                                 error:&aError];
+    if (aError) {
+        [GeneralUtils showMessage:@"Invalid phone number." withTitle:nil];
+        return;
+    }
+
     if ([self.phoneFormat isPhoneNumberValid:self.decimalPhoneNumber]) {
-        NSString *internationalPhoneNumber = [NSString stringWithFormat:@"+%@%@", [self.countryCodeButton.titleLabel.text substringFromIndex:1], self.decimalPhoneNumber];
-        [self sendCodeRequest:internationalPhoneNumber];
+        [self sendCodeRequest:formattedPhoneNumber];
     } else {
         [GeneralUtils showMessage:nil withTitle:@"Invalid phone number"];
     }

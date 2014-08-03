@@ -16,6 +16,8 @@
 #import "Constants.h"
 #import "TrackingUtils.h"
 #import "AddressbookUtils.h"
+#import "NBPhoneNumberUtil.h"
+#import "NBPhoneNumber.h"
 
 #define INVITE_ADDED_CONTACT_ALERT_TITLE @"Invite recently added contact alert"
 #define BORDER_WIDTH 0.5
@@ -84,10 +86,22 @@
     }
 }
 
-- (IBAction)nextButtonClicked:(id)sender {    
-    NSString *formattedPhoneNumber = [self.countryCodeButton.titleLabel.text stringByAppendingString:self.decimalPhoneNumber];
-    
-    if (![self.phoneFormat isPhoneNumberValid:formattedPhoneNumber]) {
+- (IBAction)nextButtonClicked:(id)sender {
+    NSString *internationalPhoneNumber = [NSString stringWithFormat:@"+%@%@", [self.countryCodeButton.titleLabel.text substringFromIndex:1], self.decimalPhoneNumber];
+ 
+    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+    NSError *aError = nil;
+    NBPhoneNumber *myNumber = [phoneUtil parse:internationalPhoneNumber
+                                 defaultRegion:nil error:&aError];
+
+    if (aError || ![phoneUtil isValidNumber:myNumber]) {
+        [GeneralUtils showMessage:@"Invalid phone number." withTitle:nil];
+        return;
+    }
+    NSString *formattedPhoneNumber = [phoneUtil format:myNumber
+                                          numberFormat:NBEPhoneNumberFormatE164
+                                                 error:&aError];
+    if (aError) {
         [GeneralUtils showMessage:@"Invalid phone number." withTitle:nil];
         return;
     }
