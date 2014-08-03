@@ -11,7 +11,6 @@
 #import <MessageUI/MessageUI.h>
 #import "Message.h"
 #import "ContactView.h"
-#import "EZAudioPlotGL.h"
 #import "AddContactViewController.h"
 #import <AddressBookUI/AddressBookUI.h>
 #import "EditContactsViewController.h"

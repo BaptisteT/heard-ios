@@ -49,14 +49,10 @@
 #define ACTION_FAILED_MESSAGES_OPTION_2 @"Delete"
 #define ACTION_SHEET_CANCEL @"Cancel"
 
-
 #define RECORDER_HEIGHT 5
-
 #define PLAYER_UI_HEIGHT 5
-
 #define INVITE_CONTACT_BUTTON_HEIGHT 50
 #define NO_MESSAGE_VIEW_HEIGHT 60
-
 
 @interface DashboardViewController ()
 
@@ -677,7 +673,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [SessionUtils redirectToSignIn];
         }
     };
-    [self showLoadingIndicator];
+//    [self showLoadingIndicator];
     [ApiUtils getUnreadMessagesAndExecuteSuccess:successBlock failure:failureBlock];
 }
 

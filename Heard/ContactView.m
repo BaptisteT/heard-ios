@@ -216,7 +216,7 @@
     [self hideMessageCountLabel:YES];
     self.nextMessageAudioData = nil;
     if (self.unreadMessagesCount > 1) {
-        [self downloadAudioAndAnim:(Message *)self.unreadMessages[1]];
+        [self downloadAudioAndAnimate:(Message *)self.unreadMessages[1]];
     }
     
     // Mark as opened on the database
@@ -380,7 +380,7 @@
 // ----------------------------------------------------------
 #pragma mark Message utility
 // ----------------------------------------------------------
-- (void)downloadAudioAndAnim:(Message *)message
+- (void)downloadAudioAndAnimate:(Message *)message
 {
     // Download animation
     [self startLoadingAnimationWithStrokeColor:[ImageUtils blue]];
@@ -415,7 +415,7 @@
         self.unreadMessagesCount = 0;
     }
     if (self.unreadMessagesCount == 0) {
-        [self downloadAudioAndAnim:message];
+        [self downloadAudioAndAnimate:message];
     }
     [self.unreadMessages addObject:message];
     [self setUnreadMessagesCount:self.unreadMessagesCount+1];
@@ -520,6 +520,7 @@
     
     [self.recordPlayOverlay removeFromSuperview];
     self.recordPlayOverlay = nil;
+    [self.contactOverlay removeFromSuperview];
 }
 
 - (void)startLoadingAnimationWithStrokeColor:(UIColor *)color
