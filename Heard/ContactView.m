@@ -130,8 +130,10 @@
 
 - (void)setOrderPosition:(NSInteger)orderPosition
 {
-    _orderPosition = orderPosition;
-    [self.delegate updateFrameOfContactView:self];
+    if (_orderPosition != orderPosition) {
+        _orderPosition = orderPosition;
+        [self.delegate updateFrameOfContactView:self];
+    }
 }
 
 // ----------------------------------------------------------

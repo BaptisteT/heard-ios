@@ -32,7 +32,7 @@
 #define ACTION_MAIN_MENU_OPTION_1 @"Invite Friends"
 #define ACTION_MAIN_MENU_OPTION_2 @"Add New Contact"
 #define ACTION_OTHER_MENU_OPTION_1 @"Edit Profile"
-#define ACTION_OTHER_MENU_OPTION_2 @"Edit Contacts"
+#define ACTION_OTHER_MENU_OPTION_2 @"Hide Contacts"
 #define ACTION_OTHER_MENU_OPTION_3 @"Share"
 #define ACTION_OTHER_MENU_OPTION_4 @"Feedback"
 #define ACTION_PENDING_OPTION_1 @"Add Contact"

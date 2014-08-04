@@ -135,10 +135,6 @@
     
     CAShapeLayer *containingLayer = [CAShapeLayer new];
     containingLayer.frame = frame;
-//    containingLayer.fillColor = [UIColor clearColor].CGColor;
-//    containingLayer.strokeColor = [UIColor clearColor].CGColor;
-//    containingLayer.lineWidth = borderWidth;
-//    [containingLayer setPosition:center];
     
     for (int i=0; i<nbSubDivisions; i++) {
         CAShapeLayer *subLayer = [CAShapeLayer new];
