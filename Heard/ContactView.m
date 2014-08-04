@@ -146,7 +146,6 @@
         [self.longPressRecognizer setEnabled:NO];
         return;
     }
-    
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         [self startRecording];
     }
@@ -319,7 +318,12 @@
 
 - (void)sendRecording
 {
+    // Update last message date
+    self.contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
+    
+    // Stop recording & UI
     [self stopRecording];
+    
     // Send
     [self.delegate sendMessageToContact:self];
     [TrackingUtils trackRecord];
@@ -336,9 +340,6 @@
 
 - (void)message:(NSData *)audioData sentWithError:(BOOL)error
 {
-    // Update last message date
-    self.contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
-    
     // stop sending anim
     [self endLoadingAnimation];
     

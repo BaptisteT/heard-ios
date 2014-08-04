@@ -122,6 +122,7 @@
     if ([visibleController isKindOfClass:[DashboardViewController class]]) {
         // Clean UI
         [(DashboardViewController *)visibleController endPlayerUIAnimated:NO];
+        [(DashboardViewController *)visibleController removeViewOfHiddenContacts];
         [(DashboardViewController *)visibleController reorderContactViews];
     }
 }
@@ -164,8 +165,12 @@
             if (!isAttributed) {
                 [(DashboardViewController *)visibleController distributeNonAttributedMessages];
             }
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-            AudioServicesPlaySystemSound(1000);
+            
+            if (! [(DashboardViewController *)visibleController isRecording]) {
+                [(DashboardViewController *)visibleController reorderContactViews];
+                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+                AudioServicesPlaySystemSound(1000);
+            }
         }
     }
 }

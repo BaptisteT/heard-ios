@@ -21,6 +21,7 @@
 - (void)retrieveUnreadMessagesAndNewContacts;
 - (void)distributeNonAttributedMessages;
 - (void)endPlayerUIAnimated:(BOOL)animated;
+- (void)removeViewOfHiddenContacts;
 
 @property (nonatomic) BOOL isSignUp;
 

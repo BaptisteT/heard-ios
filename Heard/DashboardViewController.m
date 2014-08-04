@@ -453,8 +453,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)reorderContactViews
 {
-    // Remove hidden contact without message
-    [self removeViewOfHiddenContacts];
+    if ([self isRecording]) {
+        return;
+    }
     
     // Sort contact
     [self.contactViews sortUsingComparator:^(ContactView *contactView1, ContactView * contactView2) {
@@ -479,7 +480,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self setScrollViewSizeForContactCount:(int)[self.contactViews count]];
     
     if ([GeneralUtils isFirstOpening]) {
-        //Show util user does something
+        //Show until user does something
         [self tutoMessage:@"Hold a contact to record." withDuration:0];
     }
 }
@@ -708,7 +709,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
     // unread message pool
     if (!self.nonAttributedUnreadMessages) {
-            self.nonAttributedUnreadMessages = [[NSMutableArray alloc] init];
+        self.nonAttributedUnreadMessages = [[NSMutableArray alloc] init];
     }
     [self.nonAttributedUnreadMessages addObject:message];
     return NO;
@@ -975,6 +976,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.recorderLine.layer removeAllAnimations];
     self.recorderContainer.hidden = YES;
     [self setRecorderLineWidth:0];
+    
+    // Reorder views
+    // todo bt animation
+    [self reorderContactViews];
     [self enableAllContactViews];
 }
 
@@ -1501,7 +1506,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (motion == UIEventSubtypeMotionShake)
     {
         // cancel recording
-        if (self.recorder.isRecording) {
+        if ([self isRecording]) {
             [[AVAudioSession sharedInstance] setActive:NO error:nil];
             [self endedLongPressRecording];
             for (ContactView *contactView in self.contactViews) {
