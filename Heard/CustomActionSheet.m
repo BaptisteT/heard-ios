@@ -31,6 +31,9 @@
     self.titleContainer.layer.cornerRadius = 3;
     self.titleContainer.backgroundColor = [UIColor colorWithRed:240/256.0 green:240/256.0 blue:240/256.0 alpha:0.98];
     
+    // Add observer
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hide) name:@"UIApplicationWillResignActiveNotification" object:nil];
+    
     //Menu profile picture
     self.profilePicture = [[UIImageView alloc] initWithFrame:CGRectMake(USER_PROFILE_PICTURE_MARGIN,USER_PROFILE_PICTURE_MARGIN,USER_PROFILE_PICTURE_SIZE,USER_PROFILE_PICTURE_SIZE)];
     self.profilePicture.layer.cornerRadius = USER_PROFILE_PICTURE_SIZE/2;
@@ -83,6 +86,10 @@
 {
     [self.titleContainer removeFromSuperview];
     [super dismissWithClickedButtonIndex:buttonIndex animated:animated];
+}
+
+- (void) hide {
+    [self dismissWithClickedButtonIndex:0 animated:YES];
 }
 
 @end
