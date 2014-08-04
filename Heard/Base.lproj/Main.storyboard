@@ -854,7 +854,7 @@
                         <segue destination="7tt-yn-mQy" kind="modal" identifier="Invite Contacts Segue" id="FDD-RE-iS8"/>
                         <segue destination="nns-Z4-R2U" kind="modal" identifier="Add Contact Segue" id="Ixl-M0-jCK"/>
                         <segue destination="fhR-cM-N51" kind="modal" identifier="Tutorial Segue" modalTransitionStyle="flipHorizontal" id="43H-LP-g2p"/>
-                        <segue destination="eqq-1x-hnn" kind="push" identifier="Edit Contacts Segue" id="5hE-YK-o4D"/>
+                        <segue destination="eqq-1x-hnn" kind="modal" identifier="Edit Contacts Segue" id="5hE-YK-o4D"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kJk-FM-4rk" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -164,6 +164,9 @@
     // Headset observer
     self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:session];
     
+    // Add background transition observer
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hide) name:@"UIApplicationWillResignActiveNotification" object:nil];
+    
     // Set the audio file
     NSArray *pathComponents = [NSArray arrayWithObjects:
                                [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
@@ -238,6 +241,11 @@
         ((EditContactsViewController *) [segue destinationViewController]).delegate = self;
         ((EditContactsViewController *) [segue destinationViewController]).contacts = self.contacts;
     }
+}
+
+- (void)hide
+{
+    [self dismissViewControllerAnimated:NO completion:NO];
 }
 
 // ------------------------------
@@ -784,7 +792,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     __weak __typeof__(self) weakSelf = self;
     if ([GeneralUtils isCurrentUser:self.lastSelectedContactView.contact]) {
         titleTapBlock = ^void() {
-            UIActionSheet *newActionSheet = [[UIActionSheet alloc]
+            CustomActionSheet *newActionSheet = [[CustomActionSheet alloc]
                                              initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
                                              delegate:weakSelf
                                              cancelButtonTitle:ACTION_SHEET_CANCEL
@@ -825,7 +833,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     __weak __typeof__(self) weakSelf = self;
     void (^titleTapBlock)() = ^void() {
-        UIActionSheet *newActionSheet = [[UIActionSheet alloc]
+        CustomActionSheet *newActionSheet = [[CustomActionSheet alloc]
                                          initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
                                          delegate:weakSelf
                                          cancelButtonTitle:ACTION_SHEET_CANCEL
@@ -1025,7 +1033,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)pendingContactClicked:(Contact *)contact
 {
     self.contactToAdd = contact;
-    UIActionSheet *pendingActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+    CustomActionSheet *pendingActionSheet = [[CustomActionSheet alloc] initWithTitle:nil
                                                                     delegate:self
                                                            cancelButtonTitle:ACTION_SHEET_CANCEL
                                                       destructiveButtonTitle:nil
@@ -1038,7 +1046,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.lastSelectedContactView = contactView;
     NSString *plural = contactView.failedMessages.count > 1 ? @"s" : @"";
     NSString *title = [NSString stringWithFormat:@"%lu message%@ failed to send",contactView.failedMessages.count,plural];
-    UIActionSheet *pendingActionSheet = [[UIActionSheet alloc] initWithTitle:title
+    CustomActionSheet *pendingActionSheet = [[CustomActionSheet alloc] initWithTitle:title
                                                                     delegate:self
                                                            cancelButtonTitle:ACTION_SHEET_CANCEL
                                                       destructiveButtonTitle:nil
@@ -1183,7 +1191,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     // Profile
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_1]) {
         [actionSheet dismissWithClickedButtonIndex:2 animated:NO];
-        UIActionSheet *newActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+        CustomActionSheet *newActionSheet = [[CustomActionSheet alloc] initWithTitle:nil
                                                                  delegate:self
                                                         cancelButtonTitle:ACTION_SHEET_CANCEL
                                                    destructiveButtonTitle:nil
@@ -1268,7 +1276,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Picture
     else if ([buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_1]) {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+        CustomActionSheet *actionSheet = [[CustomActionSheet alloc] initWithTitle:nil
                                                            delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                              destructiveButtonTitle:nil
                                                   otherButtonTitles:ACTION_SHEET_PICTURE_OPTION_1, ACTION_SHEET_PICTURE_OPTION_2, nil];

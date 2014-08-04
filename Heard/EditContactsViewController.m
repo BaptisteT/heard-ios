@@ -55,7 +55,7 @@
 // ----------------------------------------------------------
 - (IBAction)doneButtonClicked:(id)sender {
     [self.delegate reorderContactViews];
-    [[self navigationController] popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 

@@ -20,6 +20,7 @@
 #import "ContactUtils.h"
 #import <CrashReporter/CrashReporter.h>
 #import "CrashReportUtils.h"
+#import "InviteContactsViewController.h"
 
 @interface HeardAppDelegate()
 
@@ -116,9 +117,12 @@
     [ContactUtils saveContactsInMemory:self.contacts];
     
     UIViewController *visibleController = [self getVisibleController];
+    
+    // Reorder dashboard
     if ([visibleController isKindOfClass:[DashboardViewController class]]) {
         // Clean UI
         [(DashboardViewController *)visibleController endPlayerUIAnimated:NO];
+        [(DashboardViewController *)visibleController reorderContactViews];
     }
 }
 

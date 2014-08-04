@@ -25,14 +25,18 @@
 
 @implementation CustomActionSheet
 
+- (id)init
+{
+    // Add observer
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hide) name:@"UIApplicationWillResignActiveNotification" object:nil];
+    return [super init];
+}
+
 - (void)addTitleViewWithUsername:(NSString *)username image:(UIImage *)image andOneTapBlock:(void(^)())oneTapBlock
 {
     self.titleContainer = [[UIView alloc] initWithFrame:CGRectMake(8, -8 - USER_PROFILE_VIEW_SIZE, 304, USER_PROFILE_VIEW_SIZE)];
     self.titleContainer.layer.cornerRadius = 3;
     self.titleContainer.backgroundColor = [UIColor colorWithRed:240/256.0 green:240/256.0 blue:240/256.0 alpha:0.98];
-    
-    // Add observer
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hide) name:@"UIApplicationWillResignActiveNotification" object:nil];
     
     //Menu profile picture
     self.profilePicture = [[UIImageView alloc] initWithFrame:CGRectMake(USER_PROFILE_PICTURE_MARGIN,USER_PROFILE_PICTURE_MARGIN,USER_PROFILE_PICTURE_SIZE,USER_PROFILE_PICTURE_SIZE)];
@@ -84,12 +88,13 @@
 
 - (void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex animated:(BOOL)animated
 {
-    [self.titleContainer removeFromSuperview];
+    if (self.titleContainer)
+        [self.titleContainer removeFromSuperview];
     [super dismissWithClickedButtonIndex:buttonIndex animated:animated];
 }
 
 - (void) hide {
-    [self dismissWithClickedButtonIndex:0 animated:YES];
+    [self dismissWithClickedButtonIndex:0 animated:NO];
 }
 
 @end
