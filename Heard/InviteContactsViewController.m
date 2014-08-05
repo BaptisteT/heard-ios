@@ -116,7 +116,7 @@
 {
     //Redirect to sms
     MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
-    viewController.body = [NSString stringWithFormat:@"Let's start chating on Waved! Download at %@", kProdAFHeardWebsite];
+    viewController.body = [NSString stringWithFormat:@"Let's start chatting on Waved! Download at %@", kProdAFHeardWebsite];
     viewController.recipients = self.selectedContacts;
     viewController.messageComposeDelegate = self;
     

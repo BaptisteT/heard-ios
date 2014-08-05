@@ -219,7 +219,7 @@
     if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:ALERT_VIEW_INVITE_BUTTON]) {
         //Redirect to sms
         MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
-        viewController.body = [NSString stringWithFormat:@"Hey %@, let's start chating on Waved! Download at %@", self.firstNameField.text ? self.firstNameField.text : self.lastNameField.text, kProdAFHeardWebsite];
+        viewController.body = [NSString stringWithFormat:@"Hey %@, let's start chatting on Waved! Download at %@", self.firstNameField.text ? self.firstNameField.text : self.lastNameField.text, kProdAFHeardWebsite];
         viewController.recipients = @[[self.countryCodeButton.titleLabel.text stringByAppendingString:self.decimalPhoneNumber]];
         viewController.messageComposeDelegate = self;
         
