@@ -141,8 +141,6 @@
 
 - (void)setDiscussionState:(NSInteger)discussionState
 {
-    _discussionState = discussionState;
-    
     //Remove all discussion UI
     
     //Pending
@@ -169,6 +167,8 @@
     [self setOneTapMode:NO];
     
     if (discussionState == PENDING_STATE) {
+        _discussionState = discussionState;
+        
         [self setOneTapMode:YES];
         self.imageView.alpha = 0.3;
         
@@ -184,7 +184,10 @@
         [self addSubview:self.pendingContactOverlay];
     }
     
-    else if (discussionState == RECORD_STATE) {
+    else if (discussionState == RECORD_STATE && !(
+             self.discussionState == FAILED_STATE || self.discussionState == UNREAD_STATE || self.discussionState == PENDING_STATE)) {
+        _discussionState = discussionState;
+        
         [self.delegate endTutoMode];
         
         [self startSonarAnimationWithColor:[ImageUtils red]];
@@ -197,13 +200,17 @@
         [self addSubview:self.recordPlayOverlay];
     }
     
-    else if (discussionState == FAILED_STATE) {
+    else if (discussionState == FAILED_STATE && !(self.discussionState == PENDING_STATE)) {
+        _discussionState = discussionState;
+        
         [self setOneTapMode:YES];
         [self.layer addSublayer:self.failedCircleShape];
         self.failedMessageIcon.hidden = NO;
     }
     
-    else if (discussionState == PLAY_STATE) {
+    else if (discussionState == PLAY_STATE && self.discussionState == UNREAD_STATE) {
+        _discussionState = discussionState;
+        
         [self.delegate endTutoMode];
         
         [self startSonarAnimationWithColor:[ImageUtils green]];
@@ -216,17 +223,24 @@
         [self addSubview:self.recordPlayOverlay];
     }
     
-    else if (discussionState == UNREAD_STATE) {
+    else if (discussionState == UNREAD_STATE && !(
+        self.discussionState == FAILED_STATE || self.discussionState == RECORD_STATE || self.discussionState == PENDING_STATE || self.discussionState == PLAY_STATE || self.discussionState == SENDING_STATE)) {
+        _discussionState = discussionState;
+        
         [self setOneTapMode:YES];
         self.unreadMessagesLabel.hidden = NO;
         [self.layer addSublayer:self.unreadCircleShape];
     }
     
-    else if (discussionState == LOADING_STATE) {
+    else if (discussionState == LOADING_STATE && !(self.discussionState == FAILED_STATE || self.discussionState == RECORD_STATE || self.discussionState == PENDING_STATE || self.discussionState == PLAY_STATE || self.discussionState == SENDING_STATE || self.discussionState == UNREAD_STATE)) {
+        _discussionState = discussionState;
+        
         [self startLoadingAnimation];
     }
     
-    else if (discussionState == SENDING_STATE) {
+    else if (discussionState == SENDING_STATE || self.discussionState == RECORD_STATE) {
+        _discussionState = discussionState;
+        
         [self startLoadingAnimation];
     }
 }
