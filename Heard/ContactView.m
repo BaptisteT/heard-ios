@@ -141,31 +141,35 @@
 // ----------------------------------------------------------
 - (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer
 {
-    // Safety: Case where long press should be disabled
-    if (self.pendingContact || self.failedMessagesMode || [self hasMessagesToPlay]) {
-        [self.longPressRecognizer setEnabled:NO];
-        return;
-    }
     if (recognizer.state == UIGestureRecognizerStateBegan) {
-        [self startRecording];
+        // Case where long press comes to one tap
+        if (! [self isOneTapMode]) {
+            [self startRecording];
+        }
     }
     
     if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled || recognizer.state == UIGestureRecognizerStateFailed) {
         
-        [self endRecordingPlayingUI];
-        
-        // Stop timer if it did not fire yet
-        if ([self.maxDurationTimer isValid]) {
-            [self.maxDurationTimer invalidate];
+        // Case where long press comes to one tap
+        if ([self isOneTapMode]) {
+            [self handleSingleTapGesture];
+
+        } else {
+            [self endRecordingPlayingUI];
             
-            if([self.delegate isRecording] && ![self.minDurationTimer isValid]) {
-                [self sendRecording];
-                [TrackingUtils trackRecord];
-            } else {
-                [self stopRecording];
-                [self.delegate tutoMessage:@"Hold to record." withDuration:1];
-            }
-        };
+            // Stop timer if it did not fire yet
+            if ([self.maxDurationTimer isValid]) {
+                [self.maxDurationTimer invalidate];
+                
+                if([self.delegate isRecording] && ![self.minDurationTimer isValid]) {
+                    [self sendRecording];
+                    [TrackingUtils trackRecord];
+                } else {
+                    [self stopRecording];
+                    [self.delegate tutoMessage:@"Hold to record." withDuration:1];
+                }
+            };
+        }
     }
 }
 
@@ -234,6 +238,15 @@
     self.userInteractionEnabled = YES;
 }
 
+- (void)setOneTapMode:(BOOL)flag
+{
+    if (flag) {
+        self.longPressRecognizer.minimumPressDuration = kLongPressMinDurationForOneTapMode;
+    } else {
+        self.longPressRecognizer.minimumPressDuration = kLongPressMinDuration;
+    }
+}
+
 
 // ----------------------------------------------------------
 #pragma mark Pending Contact
@@ -242,7 +255,7 @@
 {
     _pendingContact = pendingContact;
     if (pendingContact) {
-        [self.longPressRecognizer setEnabled:NO];
+        [self setOneTapMode:YES];
         if (!self.pendingContactOverlay) {
             self.pendingContactOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
             self.pendingContactOverlay.layer.borderColor = [ImageUtils blue].CGColor;
@@ -257,7 +270,7 @@
      } else {
          self.imageView.alpha = 1;
          if (self.pendingContactOverlay) {
-             [self.longPressRecognizer setEnabled:YES];
+             [self setOneTapMode:NO];
              [self.pendingContactOverlay removeFromSuperview];
          }
      }
@@ -370,11 +383,11 @@
 {
     if (failedMessagesMode) {
         _failedMessagesMode = YES;
-        [self.longPressRecognizer setEnabled:NO];
+        [self setOneTapMode:YES];
         [self startFailedMessagesUI];
     } else {
         _failedMessagesMode = NO;
-        [self.longPressRecognizer setEnabled:YES];
+        [self setOneTapMode:NO];
         [self endFailedMessagesUI];
     }
 }
@@ -405,9 +418,9 @@
     self.unreadMessagesLabel.text = [NSString stringWithFormat:@"%lu",(long)unreadMessagesCount];
     if (unreadMessagesCount == 0) {
         [self hideMessageCountLabel:YES];
-        [self.longPressRecognizer setEnabled:YES];
+        [self setOneTapMode:NO];
     } else {
-        [self.longPressRecognizer setEnabled:NO];
+        [self setOneTapMode:YES];
     }
 }
 
@@ -548,6 +561,11 @@
 - (BOOL)hasMessagesToPlay
 {
     return self.unreadMessagesCount > 0 && self.nextMessageAudioData;
+}
+
+- (BOOL)isOneTapMode
+{
+    return self.longPressRecognizer.minimumPressDuration == kLongPressMinDurationForOneTapMode;
 }
 
 - (void)hideContactOverlay
