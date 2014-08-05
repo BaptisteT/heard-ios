@@ -15,11 +15,19 @@
 #import "ImageUtils.h"
 #import "TrackingUtils.h"
 
-#define UNREAD_MESSAGES_BORDER 2.5
-#define NO_UNREAD_MESSAGES_BORDER 0.5
-#define LOADING_BORDER 2
+#define ACTION_CIRCLE_BORDER 2.5
+#define CONTACT_BORDER 0.5
 #define DEGREES_TO_RADIANS(x) (x)/180.0*M_PI
 #define RADIANS_TO_DEGREES(x) (x)/M_PI*180.0
+
+#define EMPTY_STATE 0
+#define PENDING_STATE 1
+#define RECORD_STATE 2
+#define FAILED_STATE 3
+#define PLAY_STATE 4
+#define UNREAD_STATE 5
+#define LOADING_STATE 6
+#define SENDING_STATE 7
 
 @interface ContactView()
 
@@ -31,13 +39,14 @@
 @property (nonatomic) UILabel *unreadMessagesLabel;
 @property (nonatomic, strong) UIImageView *recordPlayOverlay;
 @property (nonatomic, strong) UIImageView *pendingContactOverlay;
-@property (nonatomic, strong) UIView *contactOverlay;
 @property (nonatomic, strong) CAShapeLayer *circleShape;
 @property (nonatomic, strong) CAShapeLayer *loadingCircleShape;
+@property (nonatomic, strong) CAShapeLayer *unreadCircleShape;
+@property (nonatomic, strong) CAShapeLayer *failedCircleShape;
 @property (nonatomic) BOOL cancelLongPress;
-@property (nonatomic) BOOL failedMessagesMode;
 @property (nonatomic, strong) UILabel *failedMessageIcon;
 @property (nonatomic, strong) UILabel *sentMessageIcon;
+@property (nonatomic) NSInteger previousState;
 
 @end
 
@@ -56,9 +65,8 @@
 {
     self = [super initWithFrame:frame];
     self.contact = contact;
-    _failedMessagesMode = NO; // custom setter
-    _pendingContact = NO; // custom setter
     self.clipsToBounds = NO;
+    self.previousState = 0;
     
     //Initialization
     self.nextMessageId = 0;
@@ -92,31 +100,153 @@
     self.unreadMessagesCount = 0;
     
     // Set up the shape of the load messagecircle
-    self.loadingCircleShape = [ImageUtils createGradientCircleLayerWithFrame:self.frame borderWidth:LOADING_BORDER Color:[ImageUtils blue] subDivisions:100];
+    self.loadingCircleShape = [ImageUtils createGradientCircleLayerWithFrame:self.frame borderWidth:ACTION_CIRCLE_BORDER Color:[ImageUtils blue] subDivisions:100];
     // init send / fail images
     self.sentMessageIcon = [self allocAndInitCornerLabelWithText:@"\u2713" andColor:[ImageUtils green]];
     self.failedMessageIcon = [self allocAndInitCornerLabelWithText:@"!" andColor:[ImageUtils red]];
     
+    // Set up the shape of the unread message circle
+    CGPoint center = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
+    self.unreadCircleShape = [CAShapeLayer new];
+    self.unreadCircleShape.frame = frame;
+    self.unreadCircleShape.fillColor = [UIColor clearColor].CGColor;
+    self.unreadCircleShape.lineWidth = ACTION_CIRCLE_BORDER;
+    self.unreadCircleShape.strokeColor = [ImageUtils blue].CGColor;
+    self.unreadCircleShape.path = [UIBezierPath bezierPathWithArcCenter:center
+                                                                 radius:frame.size.width/2 + 4
+                                                             startAngle:DEGREES_TO_RADIANS(0)
+                                                               endAngle:DEGREES_TO_RADIANS(360)
+                                                              clockwise:YES].CGPath;
+    
+    // Set up the shape of the failed message circle
+    self.failedCircleShape = [CAShapeLayer new];
+    self.failedCircleShape.frame = frame;
+    self.failedCircleShape.fillColor = [UIColor clearColor].CGColor;
+    self.failedCircleShape.lineWidth = ACTION_CIRCLE_BORDER;
+    self.failedCircleShape.strokeColor = [ImageUtils red].CGColor;
+    self.failedCircleShape.path = [UIBezierPath bezierPathWithArcCenter:center
+                                                                 radius:frame.size.width/2 + 4
+                                                             startAngle:DEGREES_TO_RADIANS(0)
+                                                               endAngle:DEGREES_TO_RADIANS(360)
+                                                              clockwise:YES].CGPath;
+    
+    //Contact border
+    self.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.imageView.layer.borderWidth = CONTACT_BORDER;
+    
+    [self setDiscussionState:EMPTY_STATE];
+    
     return self;
+}
+
+- (void)setDiscussionState:(NSInteger)discussionState
+{
+    _discussionState = discussionState;
+    
+    //Remove all discussion UI
+    
+    //Pending
+    self.imageView.alpha = 1;
+    [self.pendingContactOverlay removeFromSuperview];
+    
+    //Record/Play
+    [self endSonarAnimation];
+    [self.recordPlayOverlay removeFromSuperview];
+    
+    //Failed
+    self.failedMessageIcon.hidden = YES;
+    [self.failedCircleShape removeFromSuperlayer];
+    
+    //Unread
+    self.unreadMessagesLabel.hidden = YES;
+    [self.unreadCircleShape removeFromSuperlayer];
+    
+    //Loading/sending
+    [self.loadingCircleShape removeAllAnimations];
+    [self.loadingCircleShape removeFromSuperlayer];
+    
+    //Default tap mode: long tap
+    [self setOneTapMode:NO];
+    
+    if (discussionState == PENDING_STATE) {
+        [self setOneTapMode:YES];
+        self.imageView.alpha = 0.3;
+        
+        if (!self.pendingContactOverlay) {
+            self.pendingContactOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
+            [self.layer addSublayer:self.unreadCircleShape];
+            self.pendingContactOverlay.clipsToBounds = YES;
+            self.pendingContactOverlay.layer.cornerRadius = self.bounds.size.height/2;
+            [self.pendingContactOverlay setBackgroundColor:[UIColor clearColor]];
+            [self.pendingContactOverlay setImage:[UIImage imageNamed:@"unknown-user.png"]];
+        }
+        
+        [self addSubview:self.pendingContactOverlay];
+    }
+    
+    else if (discussionState == RECORD_STATE) {
+        [self.delegate endTutoMode];
+        
+        [self startSonarAnimationWithColor:[ImageUtils red]];
+        
+        self.recordPlayOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
+        self.recordPlayOverlay.clipsToBounds = YES;
+        self.recordPlayOverlay.alpha = 0.7;
+        self.recordPlayOverlay.image = [UIImage imageNamed:@"record"];
+        
+        [self addSubview:self.recordPlayOverlay];
+    }
+    
+    else if (discussionState == FAILED_STATE) {
+        [self setOneTapMode:YES];
+        [self.layer addSublayer:self.failedCircleShape];
+        self.failedMessageIcon.hidden = NO;
+    }
+    
+    else if (discussionState == PLAY_STATE) {
+        [self.delegate endTutoMode];
+        
+        [self startSonarAnimationWithColor:[ImageUtils green]];
+        
+        self.recordPlayOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
+        self.recordPlayOverlay.clipsToBounds = YES;
+        self.recordPlayOverlay.alpha = 0.7;
+        self.recordPlayOverlay.image = [UIImage imageNamed:@"play"];
+        
+        [self addSubview:self.recordPlayOverlay];
+    }
+    
+    else if (discussionState == UNREAD_STATE) {
+        [self setOneTapMode:YES];
+        self.unreadMessagesLabel.hidden = NO;
+        [self.layer addSublayer:self.unreadCircleShape];
+    }
+    
+    else if (discussionState == LOADING_STATE) {
+        [self startLoadingAnimation];
+    }
+    
+    else if (discussionState == SENDING_STATE) {
+        [self startLoadingAnimation];
+    }
 }
 
 - (void)initUnreadMessagesLabel
 {
     self.unreadMessagesLabel = [[UILabel alloc] init];
-    [self.unreadMessagesLabel setFrame:CGRectMake(kContactSize - kUnreadMessageSize/2, -15, kUnreadMessageSize, kUnreadMessageSize)];
+    [self.unreadMessagesLabel setFrame:CGRectMake(kContactSize - kUnreadMessageSize/2 + 5, -20, kUnreadMessageSize, kUnreadMessageSize)];
     self.unreadMessagesLabel.textColor = [ImageUtils blue];
-    self.unreadMessagesLabel.font = [UIFont fontWithName:@"Avenir" size:16.0];
+    self.unreadMessagesLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:18.0];
     self.unreadMessagesLabel.adjustsFontSizeToFitWidth = YES;
     self.unreadMessagesLabel.minimumScaleFactor = 0.2;
     self.unreadMessagesLabel.userInteractionEnabled = YES;
     [self addSubview:self.unreadMessagesLabel];
-    [self hideMessageCountLabel:YES];
 }
 
 - (UILabel *)allocAndInitCornerLabelWithText:(NSString *)text andColor:(UIColor *)color
 {
     UILabel *label = [[UILabel alloc] init];
-    [label setFrame:CGRectMake(kContactSize - kUnreadMessageSize/2, -15, kUnreadMessageSize, kUnreadMessageSize)];
+    [label setFrame:CGRectMake(kContactSize - kUnreadMessageSize/2 + 5, -20, kUnreadMessageSize, kUnreadMessageSize)];
     label.textColor = color;
     label.font = [UIFont fontWithName:@"Avenir-Heavy" size:22];
     label.adjustsFontSizeToFitWidth = YES;
@@ -153,19 +283,18 @@
         // Case where long press comes to one tap
         if ([self isOneTapMode]) {
             [self handleSingleTapGesture];
-
         } else {
-            [self endRecordingPlayingUI];
-            
             // Stop timer if it did not fire yet
             if ([self.maxDurationTimer isValid]) {
                 [self.maxDurationTimer invalidate];
                 
                 if([self.delegate isRecording] && ![self.minDurationTimer isValid]) {
+                    [self stopRecording];
                     [self sendRecording];
                     [TrackingUtils trackRecord];
                 } else {
                     [self stopRecording];
+                    [self setDiscussionState:EMPTY_STATE];
                     [self.delegate tutoMessage:@"Hold to record." withDuration:1];
                 }
             };
@@ -175,8 +304,6 @@
 
 - (void)startRecording
 {
-    [self startRecordingUI];
-    
     // Set session
     AVAudioSession *session = [AVAudioSession sharedInstance];
     [session requestRecordPermission:^(BOOL granted) {
@@ -184,6 +311,7 @@
             [GeneralUtils showMessage:@"To activate it, go to Settings > Privacy > Micro" withTitle:@"Waved does not have access to your micro"];
             return;
         } else {
+            [self setDiscussionState:RECORD_STATE];
             [session setActive:YES error:nil];
             // Create Timers
             self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
@@ -195,17 +323,16 @@
 }
 
 - (void)handleSingleTapGesture {
-    if (self.pendingContact) {
+    if (self.discussionState == PENDING_STATE) {
         [self handlePendingTapGesture];
     } else {
-        if ([self hasMessagesToPlay]) {
+        if (self.discussionState == UNREAD_STATE) {
             [self playNextMessage];
-        } else if (self.failedMessagesMode){
+        } else if (self.discussionState == FAILED_STATE){
             [self handleFailedMessagesModeTapGesture];
         }
     }
 }
-
 
 - (void)playNextMessage
 {
@@ -214,11 +341,11 @@
         return;
     }
     
-    // Stat playing
+    // Start playing
     [self.delegate startedPlayingAudioFileByView:self];
+    [self setDiscussionState:PLAY_STATE];
     
     // Get data of next message (asynch) if any
-    [self hideMessageCountLabel:YES];
     self.nextMessageAudioData = nil;
     if (self.unreadMessagesCount > 1) {
         [self downloadAudioAndAnimate:(Message *)self.unreadMessages[1]];
@@ -247,34 +374,16 @@
     }
 }
 
+- (void)endRecordingPlayingUI
+{
+    //previousState not implemented
+    [self setDiscussionState:self.previousState];
+}
+
 
 // ----------------------------------------------------------
 #pragma mark Pending Contact
 // ----------------------------------------------------------
-- (void)setPendingContact:(BOOL)pendingContact
-{
-    _pendingContact = pendingContact;
-    if (pendingContact) {
-        [self setOneTapMode:YES];
-        if (!self.pendingContactOverlay) {
-            self.pendingContactOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
-            self.pendingContactOverlay.layer.borderColor = [ImageUtils blue].CGColor;
-            self.pendingContactOverlay.layer.borderWidth = UNREAD_MESSAGES_BORDER;
-            self.pendingContactOverlay.clipsToBounds = YES;
-            self.pendingContactOverlay.layer.cornerRadius = self.bounds.size.height/2;
-            [self.pendingContactOverlay setBackgroundColor:[UIColor clearColor]];
-            self.imageView.alpha = 0.3;
-            [self.pendingContactOverlay setImage:[UIImage imageNamed:@"unknown-user.png"]];
-        }
-        [self addSubview:self.pendingContactOverlay];
-     } else {
-         self.imageView.alpha = 1;
-         if (self.pendingContactOverlay) {
-             [self setOneTapMode:NO];
-             [self.pendingContactOverlay removeFromSuperview];
-         }
-     }
-}
 
 - (void)setContactPicture
 {
@@ -329,39 +438,35 @@
 #pragma mark Recording utility
 // ----------------------------------------------------------
 
-- (void)sendRecording
-{
-    // Update last message date
-    self.contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
-    
-    // Stop recording & UI
-    [self stopRecording];
-    
-    // Send
-    [self.delegate sendMessageToContact:self];
-    [TrackingUtils trackRecord];
-    
-    // Sending animation
-    [self startLoadingAnimationWithStrokeColor:[ImageUtils blue]];
-}
-
 - (void)stopRecording
 {
     [[AVAudioSession sharedInstance] setActive:NO error:nil];
     [self.delegate endedLongPressRecording];
 }
 
+- (void)sendRecording
+{
+    // Update last message date
+    self.contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
+    
+    [self setDiscussionState:SENDING_STATE];
+    
+    // Send
+    [self.delegate sendMessageToContact:self];
+    [TrackingUtils trackRecord];
+}
+
 - (void)message:(NSData *)audioData sentWithError:(BOOL)error
 {
-    // stop sending anim
-    [self endLoadingAnimation];
-    
     if (error) {
         // Stock failed message
         [self.failedMessages addObject:audioData];
-        self.failedMessagesMode = YES;
+        
+        [self setDiscussionState:FAILED_STATE];
     } else {
-        if (!self.failedMessagesMode) {
+        if (self.discussionState != FAILED_STATE) {
+            [self setDiscussionState:EMPTY_STATE];
+            
             // Sent message anim
             self.sentMessageIcon.alpha = 1;
             [UIView animateWithDuration:1
@@ -376,20 +481,22 @@
 
 - (void)deleteFailedMessages {
     self.failedMessages = [NSMutableArray new];
-    self.failedMessagesMode = NO;
+    [self setDiscussionState:EMPTY_STATE];
 }
 
-- (void)setFailedMessagesMode:(BOOL)failedMessagesMode
+- (void)resendFailedMessages
 {
-    if (failedMessagesMode) {
-        _failedMessagesMode = YES;
-        [self setOneTapMode:YES];
-        [self startFailedMessagesUI];
-    } else {
-        _failedMessagesMode = NO;
-        [self setOneTapMode:NO];
-        [self endFailedMessagesUI];
+    // Resend Messages
+    for (NSData *audioData in self.failedMessages) {
+        [ApiUtils sendMessage:audioData toUser:self.contact.identifier success:^{
+            [self message:nil sentWithError:NO];
+        } failure:^{
+            [self message:audioData sentWithError:YES];
+        }];
     }
+    
+    [self deleteFailedMessages];
+    [self setDiscussionState:SENDING_STATE];
 }
 
 
@@ -399,16 +506,15 @@
 - (void)downloadAudioAndAnimate:(Message *)message
 {
     // Download animation
-    [self startLoadingAnimationWithStrokeColor:[ImageUtils blue]];
+    [self setDiscussionState:LOADING_STATE];
     
     // Request data asynch
     [ApiUtils downloadAudioFileAtURL:[message getMessageURL] success:^void(NSData *data) {
         self.nextMessageAudioData = data;
         self.nextMessageId = message.identifier;
-        [self hideMessageCountLabel:NO];
-        [self endLoadingAnimation];
+        [self setDiscussionState:UNREAD_STATE];
     } failure:^(){
-        [self endLoadingAnimation];
+        [self downloadAudioAndAnimate:message];
     }];
 }
 
@@ -416,12 +522,6 @@
 {
     _unreadMessagesCount = unreadMessagesCount;
     self.unreadMessagesLabel.text = [NSString stringWithFormat:@"%lu",(long)unreadMessagesCount];
-    if (unreadMessagesCount == 0) {
-        [self hideMessageCountLabel:YES];
-        [self setOneTapMode:NO];
-    } else {
-        [self setOneTapMode:YES];
-    }
 }
 
 - (void)addUnreadMessage:(Message *)message
@@ -430,9 +530,11 @@
         self.unreadMessages = [[NSMutableArray alloc] init];
         self.unreadMessagesCount = 0;
     }
+    
     if (self.unreadMessagesCount == 0) {
         [self downloadAudioAndAnimate:message];
     }
+    
     [self.unreadMessages addObject:message];
     [self setUnreadMessagesCount:self.unreadMessagesCount+1];
 }
@@ -444,50 +546,10 @@
     self.nextMessageAudioData = nil;
 }
 
-- (void)hideMessageCountLabel:(BOOL)flag {
-    if (flag) {
-        self.unreadMessagesLabel.hidden = YES;
-        [self hideContactOverlay];
-    } else {
-        self.unreadMessagesLabel.hidden = NO;
-        [self showContactOverlayOfColor:[ImageUtils blue]];
-    }
-}
-
 
 // ----------------------------------------------------------
 #pragma mark Design utility
 // ----------------------------------------------------------
-- (void)startRecordingUI
-{
-    [self endRecordingPlayingUI];
-    [self.delegate endTutoMode];
-    
-    [self startSonarAnimationWithColor:[ImageUtils red]];
-    
-    self.recordPlayOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
-    self.recordPlayOverlay.clipsToBounds = YES;
-    self.recordPlayOverlay.alpha = 0.7;
-    self.recordPlayOverlay.image = [UIImage imageNamed:@"record"];
-    
-    [self addSubview:self.recordPlayOverlay];
-}
-
-- (void)startPlayingUI
-{
-    [self endRecordingPlayingUI];
-    [self.delegate endTutoMode];
-    
-    [self startSonarAnimationWithColor:[ImageUtils green]];
-    
-    self.recordPlayOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
-    self.recordPlayOverlay.clipsToBounds = YES;
-    self.recordPlayOverlay.alpha = 0.7;
-    self.recordPlayOverlay.image = [UIImage imageNamed:@"play"];
-    
-    [self addSubview:self.recordPlayOverlay];
-    [self.loadingCircleShape setHidden:YES];
-}
 
 - (void)startSonarAnimationWithColor:(UIColor *)color
 {
@@ -527,97 +589,24 @@
 {
     [self.circleShape removeAllAnimations];
     [self.circleShape removeFromSuperlayer];
-    [self.loadingCircleShape setHidden:NO];
 }
 
-- (void)endRecordingPlayingUI
-{
-    [self endSonarAnimation];
-    
-    [self.recordPlayOverlay removeFromSuperview];
-    self.recordPlayOverlay = nil;
-    [self.contactOverlay removeFromSuperview];
-}
-
-- (void)startLoadingAnimationWithStrokeColor:(UIColor *)color
+- (void)startLoadingAnimation
 {
     // Add to parent layer
     [self.layer addSublayer:self.loadingCircleShape];
     CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     rotationAnimation.fromValue = [NSNumber numberWithFloat:0.0f];
     rotationAnimation.toValue = [NSNumber numberWithFloat:2*M_PI];
-    rotationAnimation.duration = 1.0;
+    rotationAnimation.duration = 0.7;
     rotationAnimation.repeatCount = INFINITY;
     
     [self.loadingCircleShape addAnimation:rotationAnimation forKey:@"indeterminateAnimation"];
 }
 
-- (void)endLoadingAnimation
-{
-    [self.loadingCircleShape removeAllAnimations];
-    [self.loadingCircleShape removeFromSuperlayer];
-}
-
-- (BOOL)hasMessagesToPlay
-{
-    return self.unreadMessagesCount > 0 && self.nextMessageAudioData;
-}
-
 - (BOOL)isOneTapMode
 {
     return self.longPressRecognizer.minimumPressDuration == kLongPressMinDurationForOneTapMode;
-}
-
-- (void)hideContactOverlay
-{
-    // if unread messages, blue
-    if ([self hasMessagesToPlay]) {
-        [self showContactOverlayOfColor:[ImageUtils blue]];
-    // if failed, red
-    } else if (self.failedMessagesMode) {
-        [self showContactOverlayOfColor:[ImageUtils red]];
-    } else {
-        // standard border
-        self.imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        self.imageView.layer.borderWidth = NO_UNREAD_MESSAGES_BORDER;
-        // remove overlay
-        [self.contactOverlay removeFromSuperview];
-    }
-}
-
-- (void)showContactOverlayOfColor:(UIColor *)color
-{
-    if (!self.contactOverlay) {
-        self.contactOverlay = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
-        self.contactOverlay.clipsToBounds = YES;
-        self.contactOverlay.alpha = 0.25;
-    }
-    
-    // Blue if unread messages, red otherwise
-    UIColor *dominantColor = [self hasMessagesToPlay] ? [ImageUtils blue] : color;
-    self.contactOverlay.backgroundColor = dominantColor;
-    [self.imageView addSubview:self.contactOverlay];
-    
-    // Border Color
-    self.imageView.layer.borderColor = dominantColor.CGColor;
-    self.imageView.layer.borderWidth = UNREAD_MESSAGES_BORDER;
-
-}
-
-- (void)startFailedMessagesUI
-{
-    // start by hiding success
-    [self.sentMessageIcon.layer removeAllAnimations];
-    self.sentMessageIcon.alpha = 0;
-    
-    [self showContactOverlayOfColor:[ImageUtils red]];
-    self.failedMessageIcon.alpha = 1;
-}
-
-- (void)endFailedMessagesUI
-{
-    [self hideContactOverlay];
-    self.failedMessageIcon.alpha = 0;
 }
 
 

@@ -20,7 +20,7 @@
 
 @property (strong, nonatomic) Contact *contact;
 @property (weak, nonatomic) id <ContactBubbleViewDelegate> delegate;
-@property (nonatomic) BOOL pendingContact;
+@property (nonatomic) NSInteger discussionState;
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic) NSInteger orderPosition;
 @property (nonatomic) NSMutableArray *unreadMessages;
@@ -32,12 +32,10 @@
 
 - (void)addUnreadMessage:(Message *)message;
 - (void)resetUnreadMessages;
-- (void)startRecordingUI;
-- (void)endRecordingPlayingUI;
-- (void)startPlayingUI;
 - (void)message:(NSData *)audioData sentWithError:(BOOL)error;
 - (void)deleteFailedMessages;
-- (void)startLoadingAnimationWithStrokeColor:(UIColor *)color;
+- (void)resendFailedMessages;
+- (void)endRecordingPlayingUI;
 
 
 

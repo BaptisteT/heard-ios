@@ -42,9 +42,6 @@
 #define ACTION_SHEET_PROFILE_OPTION_3 @"Last Name"
 #define ACTION_SHEET_PICTURE_OPTION_1 @"Camera"
 #define ACTION_SHEET_PICTURE_OPTION_2 @"Library"
-#define ACTION_CONTACT_MENU_OPTION_1 @"Replay Last"
-#define ACTION_CONTACT_MENU_OPTION_3 @"Block"
-#define ACTION_CONTACT_MENU_OPTION_4 @"Hide"
 #define ACTION_FAILED_MESSAGES_OPTION_1 @"Resend"
 #define ACTION_FAILED_MESSAGES_OPTION_2 @"Delete"
 #define ACTION_SHEET_CANCEL @"Cancel"
@@ -88,7 +85,6 @@
 @property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
 //Action sheets
 @property (strong, nonatomic) CustomActionSheet *mainMenuActionSheet;
-@property (strong, nonatomic) CustomActionSheet *contactMenuActionSheet;
 @property (strong, nonatomic) ContactView *lastSelectedContactView;
 //Alertview
 @property (strong, nonatomic) UIAlertView *blockAlertView;
@@ -542,12 +538,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     Contact *contact = contactView.contact;
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - kContactMargin/4, contactView.frame.origin.y + kContactSize, contactView.frame.size.width + kContactMargin/2, kContactNameHeight)];
     
-    // Attach single tap gesture recogniser
-    UITapGestureRecognizer *recogniser = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapOnNameLabel:)];
-    recogniser.numberOfTapsRequired = 1;
-    [nameLabel addGestureRecognizer:recogniser];
-    nameLabel.userInteractionEnabled = YES;
-    
     if ([GeneralUtils isAdminContact:contact]) {
         nameLabel.text = @"Waved";
         nameLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:14.0];
@@ -575,9 +565,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     for (ContactView *contactView in self.contactViews) {
         if (contactView.contact.isPending && contactView.contact.identifier != kAdminId) {
-            [contactView setPendingContact:YES];
-        } else {
-            [contactView setPendingContact:NO];
+            [contactView setDiscussionState:1];
         }
     }
 }
@@ -755,75 +743,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Click & navigate
 // ------------------------------
 
-- (void)singleTapOnNameLabel:(UITapGestureRecognizer *)sender
-{
-    // Find corresponding contact views (not very elegant..)
-    self.lastSelectedContactView = nil;
-    for (ContactView *contactView in self.contactViews) {
-        if (contactView.nameLabel == (UILabel *)sender.view) {
-            self.lastSelectedContactView = contactView;
-            continue;
-        }
-    }
-    if (!self.lastSelectedContactView) {
-        return;
-    }
-    
-    // Init contact menu action sheet
-    self.contactMenuActionSheet = [CustomActionSheet new];
-    self.contactMenuActionSheet.delegate = self;
-    
-    // Add buttons
-    // Message to replay
-    if (self.lastSelectedContactView.contact.lastPlayedMessageId != 0) {
-        [self.contactMenuActionSheet addButtonWithTitle:ACTION_CONTACT_MENU_OPTION_1];
-    }
-    
-    [self.contactMenuActionSheet addButtonWithTitle:ACTION_CONTACT_MENU_OPTION_4];
-    [self.contactMenuActionSheet addButtonWithTitle:ACTION_SHEET_CANCEL];
-    self.contactMenuActionSheet.cancelButtonIndex = self.contactMenuActionSheet.numberOfButtons - 1;
-    
-    // Add title
-    NSString *firstName = self.lastSelectedContactView.contact.firstName ? self.lastSelectedContactView.contact.firstName : @"";
-    NSString *lastName = self.lastSelectedContactView.contact.lastName ? self.lastSelectedContactView.contact.lastName : @"";
-
-
-    // One tap on title block
-    void (^titleTapBlock)() = nil;
-    __weak __typeof__(self) weakSelf = self;
-    if ([GeneralUtils isCurrentUser:self.lastSelectedContactView.contact]) {
-        titleTapBlock = ^void() {
-            CustomActionSheet *newActionSheet = [[CustomActionSheet alloc]
-                                             initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
-                                             delegate:weakSelf
-                                             cancelButtonTitle:ACTION_SHEET_CANCEL
-                                             destructiveButtonTitle:nil
-                                             otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, nil];
-            [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
-        };
-    } else if (![GeneralUtils isAdminContact:self.lastSelectedContactView.contact]) { // not Waved
-        titleTapBlock = ^void() {
-            ABRecordRef person = [AddressbookUtils findContactForNumber:self.lastSelectedContactView.contact.phoneNumber];
-            if (!person) {
-                [GeneralUtils showMessage:@"We could not retrieve this contact" withTitle:nil];
-                [TrackingUtils trackFailedToOpenContact:self.lastSelectedContactView.contact.phoneNumber];
-                return;
-            }
-            ABPersonViewController *personViewController = [[ABPersonViewController alloc] init];
-            personViewController.personViewDelegate = weakSelf;
-            personViewController.displayedPerson = person;
-            personViewController.allowsEditing = NO;
-            [weakSelf.navigationController pushViewController:personViewController animated:YES];
-            weakSelf.navigationController.navigationBarHidden = NO;
-        };
-    }
-
-    [self.contactMenuActionSheet addTitleViewWithUsername:[NSString stringWithFormat:@"%@ %@", firstName, lastName]
-                                                    image:self.lastSelectedContactView.imageView.image
-     andOneTapBlock:titleTapBlock];
-    [self.contactMenuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
-}
-
 - (IBAction)menuButtonClicked:(id)sender {
 
     self.mainMenuActionSheet = [[CustomActionSheet alloc] initWithTitle:nil
@@ -853,11 +772,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ----------------------------------------------------------
 #pragma mark Recording Mode
 // ----------------------------------------------------------
-
-- (void)recordingUIForContactView:(ContactView *)contactView
-{
-    [contactView startRecordingUI];
-}
 
 - (void)disableAllContactViews
 {
@@ -897,23 +811,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }];
 }
 
-- (void)resendMessagestoContact:(ContactView *)contactView
-{
-    // Resend Messages
-    for (NSData *audioData in contactView.failedMessages) {
-        [ApiUtils sendMessage:audioData toUser:contactView.contact.identifier success:^{
-            [contactView message:nil sentWithError:NO];
-        } failure:^{
-            [contactView message:audioData sentWithError:YES];
-        }];
-    }
-    
-    [contactView deleteFailedMessages];
-    [contactView startLoadingAnimationWithStrokeColor:[ImageUtils red]];
-}
-
-
-
 // ----------------------------------------------------------
 #pragma mark ContactViewDelegate Protocole
 // ----------------------------------------------------------
@@ -942,8 +839,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     [self.recordSoundPlayer play];
     [self disableAllContactViews];
-    
-    [self recordingUIForContactView:contactView];
     
     // Case where we had a pending message
     if (!self.recorderContainer.isHidden) {
@@ -1008,29 +903,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [TrackingUtils trackPlayWithDuration:duration];
 }
 
-- (void)startedReplayingAudioFile:(NSData *)audioData ByView:(ContactView *)contactView
-{
-    if ([self.mainPlayer isPlaying]) {
-        [self endPlayerUIAnimated:NO];
-    }
-    
-    [self.playerContainer.layer removeAllAnimations];
-    
-    // Init player
-    self.mainPlayer = [[AVAudioPlayer alloc] initWithData:audioData error:nil];
-    [self.mainPlayer setVolume:kAudioPlayerVolume];
-    
-    // Player UI
-    NSTimeInterval duration = self.mainPlayer.duration;
-    [self playerUI:duration ByContactView:contactView];
-    
-    // play
-    [self.mainPlayer play];
-    
-    // Mixpanel
-    [TrackingUtils trackReplay];
-}
-
 - (BOOL)isRecording {
     return self.recorder.isRecording;
 }
@@ -1064,21 +936,20 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Player Mode
 // ----------------------------------------------------------
 
-- (void)playerUIForContactView:(ContactView *)contactView
-{
-    [contactView startPlayingUI];
-}
-
 - (void)endPlayerUIForAllContactViews
 {
     for (ContactView *contactView in self.contactViews) {
-        [contactView endRecordingPlayingUI];
+        if (contactView != self.playingContactView) {
+            [contactView endRecordingPlayingUI];
+        }
     }
 }
 
 // Audio Playing UI + volume setting
 - (void)playerUI:(NSTimeInterval)duration ByContactView:(ContactView *)contactView
 {
+    self.playingContactView = contactView;
+    
     // Min volume (legal / deprecated ?)
     MPMusicPlayerController *appPlayer = [MPMusicPlayerController applicationMusicPlayer];
     if (appPlayer.volume < 0.25) {
@@ -1089,7 +960,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.disableProximityObserver = NO;
     [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
     
-    [self playerUIForContactView:contactView];
     self.playerContainer.hidden = NO;
     self.playerContainer.alpha = 1;
     [self setPlayerLineWidth:0];
@@ -1108,6 +978,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)endPlayerUIAnimated:(BOOL)animated
 {
+    self.playingContactView = nil;
+    
     // Remove proximity state (here because player delegate not working)
     if ([UIDevice currentDevice].proximityState) {
         self.disableProximityObserver = YES;
@@ -1317,54 +1189,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     
     /* -------------------------------------------------------------------------
-     CONTACT MENU
-     ---------------------------------------------------------------------------*/
-    
-    // Replay
-    else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_1]) {
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        
-        NSUInteger contactLastMessageId = self.lastSelectedContactView.contact.lastPlayedMessageId;
-        
-        if (contactLastMessageId == 0) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            return;
-        }
-        
-        [ApiUtils downloadAudioFileAtURL:[Message getMessageURL:contactLastMessageId] success:^void(NSData *data) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            
-            [self startedReplayingAudioFile:data ByView:self.lastSelectedContactView];
-        } failure:^(){
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            [GeneralUtils showMessage:@"Failed to retrieve last message, please try again" withTitle:nil];
-        }];
-    }
-    
-    // Block
-    else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_3]) {
-        
-        self.blockAlertView = [[UIAlertView alloc] initWithTitle:nil
-                                                         message:[NSString stringWithFormat:@"Are you sure you want to remove %@ from your contacts?", self.lastSelectedContactView.contact.firstName ? self.lastSelectedContactView.contact.firstName : self.lastSelectedContactView.contact.lastName]
-                                                        delegate:self
-                                               cancelButtonTitle:nil
-                                               otherButtonTitles:@"Cancel", @"Block", nil];
-        [self.blockAlertView show];
-    }
-    // Hide
-    else if ([buttonTitle isEqualToString:ACTION_CONTACT_MENU_OPTION_4]) {
-        [self removeContactView:self.lastSelectedContactView];
-        self.lastSelectedContactView = nil;
-        [self reorderContactViews];
-    }
-    
-    /* -------------------------------------------------------------------------
      FAILED MESSAGES MENU
      ---------------------------------------------------------------------------*/
     
     // Resend
     else if ([buttonTitle isEqualToString:ACTION_FAILED_MESSAGES_OPTION_1]) {
-        [self resendMessagestoContact:self.lastSelectedContactView];
+        [self.lastSelectedContactView resendFailedMessages];
     }
     
     // Delete

@@ -34,7 +34,6 @@
     return [UIColor colorWithRed:231/256.0 green:29/256.0 blue:37/256.0 alpha:0.25];
 }
 
-
 + (UIColor *)green
 {
     return [UIColor colorWithRed:52/256.0 green:180/256.0 blue:74/256.0 alpha:1.0];
@@ -144,7 +143,7 @@
         subLayer.strokeColor = [UIColor colorWithRed:red green:green blue:blue alpha:subAlpha].CGColor;
 
         subLayer.path = [UIBezierPath bezierPathWithArcCenter:center
-                                                                      radius:frame.size.width/2
+                                                                      radius:frame.size.width/2 + 4
                                                                   startAngle:startAngle
                                                                     endAngle:endAngle
                                                                    clockwise:YES].CGPath;
@@ -153,7 +152,7 @@
         // Prepare next subdiv
         subAlpha += alpha / nbSubDivisions;
         startAngle = endAngle;
-        endAngle += DEGREES_TO_RADIANS(360)/nbSubDivisions;
+        endAngle += DEGREES_TO_RADIANS(180)/nbSubDivisions;
     }
     return containingLayer;
 }

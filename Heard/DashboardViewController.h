@@ -24,5 +24,6 @@
 - (void)removeViewOfHiddenContacts;
 
 @property (nonatomic) BOOL isSignUp;
+@property (nonatomic, strong) ContactView *playingContactView;
 
 @end
