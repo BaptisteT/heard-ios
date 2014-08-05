@@ -139,10 +139,8 @@
     return self;
 }
 
-- (void)setDiscussionState:(NSInteger)discussionState
+- (void)removeDiscussionUI
 {
-    //Remove all discussion UI
-    
     //Pending
     self.imageView.alpha = 1;
     [self.pendingContactOverlay removeFromSuperview];
@@ -165,9 +163,16 @@
     
     //Default tap mode: long tap
     [self setOneTapMode:NO];
+
+}
+
+- (void)setDiscussionState:(NSInteger)discussionState
+{
+    //Remove all discussion UI
     
     if (discussionState == PENDING_STATE) {
         _discussionState = discussionState;
+        [self removeDiscussionUI];
         
         [self setOneTapMode:YES];
         self.imageView.alpha = 0.3;
@@ -187,6 +192,7 @@
     else if (discussionState == RECORD_STATE && !(
              self.discussionState == FAILED_STATE || self.discussionState == UNREAD_STATE || self.discussionState == PENDING_STATE)) {
         _discussionState = discussionState;
+        [self removeDiscussionUI];
         
         [self.delegate endTutoMode];
         
@@ -202,6 +208,7 @@
     
     else if (discussionState == FAILED_STATE && !(self.discussionState == PENDING_STATE)) {
         _discussionState = discussionState;
+        [self removeDiscussionUI];
         
         [self setOneTapMode:YES];
         [self.layer addSublayer:self.failedCircleShape];
@@ -210,6 +217,7 @@
     
     else if (discussionState == PLAY_STATE && self.discussionState == UNREAD_STATE) {
         _discussionState = discussionState;
+        [self removeDiscussionUI];
         
         [self.delegate endTutoMode];
         
@@ -226,6 +234,7 @@
     else if (discussionState == UNREAD_STATE && !(
         self.discussionState == FAILED_STATE || self.discussionState == RECORD_STATE || self.discussionState == PENDING_STATE || self.discussionState == PLAY_STATE || self.discussionState == SENDING_STATE)) {
         _discussionState = discussionState;
+        [self removeDiscussionUI];
         
         [self setOneTapMode:YES];
         self.unreadMessagesLabel.hidden = NO;
@@ -234,12 +243,14 @@
     
     else if (discussionState == LOADING_STATE && !(self.discussionState == FAILED_STATE || self.discussionState == RECORD_STATE || self.discussionState == PENDING_STATE || self.discussionState == PLAY_STATE || self.discussionState == SENDING_STATE || self.discussionState == UNREAD_STATE)) {
         _discussionState = discussionState;
+        [self removeDiscussionUI];
         
         [self startLoadingAnimation];
     }
     
     else if (discussionState == SENDING_STATE || self.discussionState == RECORD_STATE) {
         _discussionState = discussionState;
+        [self removeDiscussionUI];
         
         [self startLoadingAnimation];
     }
