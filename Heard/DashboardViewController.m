@@ -654,9 +654,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                     idFound = YES;
                     continue;
                 }
-                if (!idFound) {
-                    contactView.messageNotReadByContact = NO;
-                }
+            }
+            if (!idFound) {
+                contactView.messageNotReadByContact = NO;
             }
             [contactView resetDiscussionState];
         }

@@ -550,7 +550,7 @@
 }
 
 - (BOOL)lastMessageSentReadByContact {
-    return ![self currentUserDidNotAnswerLastMessage] && !self.messageNotReadByContact ;
+    return self.contact.lastMessageDate != 0 && ![self currentUserDidNotAnswerLastMessage] && !self.messageNotReadByContact ;
 }
 
 - (BOOL)currentUserDidNotAnswerLastMessage {
