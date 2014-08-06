@@ -205,7 +205,7 @@
 }
 
 // Get unread messages
-+ (void)getUnreadMessagesAndExecuteSuccess:(void(^)(NSArray *messages, BOOL newContactOnServer))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock
++ (void)getUnreadMessagesAndExecuteSuccess:(void(^)(NSArray *messages, BOOL newContactOnServer, NSArray *unreadMessageContacts))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages/unread_messages.json"];
     
@@ -219,8 +219,12 @@
         NSArray *rawMessages = [result objectForKey:@"messages"];
         BOOL newContactOnServer = [[result objectForKey:@"retrieve_contacts"] boolValue];
         
+        // todo BT
+        // put this somewhere else
+        NSArray *unreadMessageContacts = [result objectForKey:@"unread_users"];
+        
         if (successBlock) {
-            successBlock([Message rawMessagesToInstances:rawMessages], newContactOnServer);
+            successBlock([Message rawMessagesToInstances:rawMessages], newContactOnServer, unreadMessageContacts);
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (failureBlock) {

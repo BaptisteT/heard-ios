@@ -28,8 +28,8 @@
 #define UNREAD_STATE 5
 #define LOADING_STATE 6
 #define SENDING_STATE 7
-#define MESSAGE_RECEIVED_STATE 8
-#define MESSAGE_READ_STATE 9
+#define LAST_MESSAGE_NOT_READ_BY_CONTACT_STATE 8
+#define LAST_MESSAGE_READ_BY_CONTACT_STATE 9
 #define CURRENT_USER_DID_NOT_ANSWER_STATE 10
 
 @interface ContactView()
@@ -40,19 +40,24 @@
 @property (nonatomic, strong) NSTimer *minDurationTimer;
 
 @property (nonatomic) NSInteger unreadMessagesCount;
-@property (nonatomic) UILabel *unreadMessagesLabel;
 @property (nonatomic) NSInteger sendingMessageCount;
 @property (nonatomic) NSInteger loadingMessageCount;
 
 @property (nonatomic, strong) UIImageView *recordOverlay;
 @property (nonatomic, strong) UIImageView *playOverlay;
 @property (nonatomic, strong) UIImageView *pendingContactOverlay;
+
 @property (nonatomic, strong) CAShapeLayer *circleShape;
 @property (nonatomic, strong) CAShapeLayer *loadingCircleShape;
 @property (nonatomic, strong) CAShapeLayer *unreadCircleShape;
 @property (nonatomic, strong) CAShapeLayer *failedCircleShape;
-@property (nonatomic, strong) UILabel *failedMessageIcon;
-@property (nonatomic, strong) UILabel *sentMessageIcon;
+
+@property (nonatomic) UILabel *unreadMessagesLabel;
+@property (nonatomic, strong) UILabel *failedMessageLabel;
+
+@property (nonatomic, strong) UIImageView *readStateIcon;
+@property (nonatomic, strong) UIImageView *unreadStateIcon;
+@property (nonatomic, strong) UIImageView *unrespondedStateIcon;
 
 @end
 
@@ -79,9 +84,9 @@
     self.contact = contact;
     self.failedMessages = [NSMutableArray new];
     self.unreadMessages = [NSMutableArray new];
-    [self initUnreadMessagesLabel];
     self.unreadMessagesCount = 0;
-    self.isRecording = NO; self.isPlaying = NO; self.sendingMessageCount = 0; self.loadingMessageCount = 0;
+    self.isRecording = NO; self.isPlaying = NO; self.messageNotReadByContact = NO;
+    self.sendingMessageCount = 0; self.loadingMessageCount = 0;
     
     // Image view
     [self initImageView];
@@ -96,39 +101,18 @@
     [self initFailedCircleShape];
     [self initUnreadCircleShape];
     [self initLoadingCircleShape];
-    self.sentMessageIcon = [self allocAndInitCornerLabelWithText:@"\u2713" andColor:[ImageUtils green]];
-    self.failedMessageIcon = [self allocAndInitCornerLabelWithText:@"!" andColor:[ImageUtils red]];
+    [self initReadStateImageView];
+    [self initUnreadStateImageView];
+    [self initUnrespondedStateImageView];
     
+    // Init labels
+    self.unreadMessagesLabel = [self allocAndInitCornerLabelWithText:@"0" andColor:[ImageUtils blue]];
+    self.failedMessageLabel = [self allocAndInitCornerLabelWithText:@"!" andColor:[ImageUtils red]];
+
     // Discussion state
     [self resetDiscussionState];
     
     return self;
-}
-
-
-
-- (void)removeDiscussionUI
-{
-    //Pending
-    self.imageView.alpha = 1;
-    [self.pendingContactOverlay removeFromSuperview];
-    
-    //Record/Play
-    [self endSonarAnimation];
-    [self.recordOverlay removeFromSuperview];
-    [self.playOverlay removeFromSuperview];
-    
-    //Failed
-    self.failedMessageIcon.hidden = YES;
-    [self.failedCircleShape removeFromSuperlayer];
-    
-    //Unread
-    self.unreadMessagesLabel.hidden = YES;
-    [self.unreadCircleShape removeFromSuperlayer];
-    
-    //Loading/sending
-    [self.loadingCircleShape removeAllAnimations];
-    [self.loadingCircleShape removeFromSuperlayer];
 }
 
 - (void)setOrderPosition:(NSInteger)orderPosition
@@ -163,8 +147,13 @@
         self.discussionState = LOADING_STATE;
     } else if ([self isSendingMessage]) {
         self.discussionState = SENDING_STATE;
+    } else if ([self currentUserDidNotAnswerLastMessage]) {
+        self.discussionState = CURRENT_USER_DID_NOT_ANSWER_STATE;
+    } else if ([self lastMessageSentReadByContact]) {
+        self.discussionState = LAST_MESSAGE_READ_BY_CONTACT_STATE;
+    } else if ([self messageNotReadByContact]) {
+        self.discussionState = LAST_MESSAGE_NOT_READ_BY_CONTACT_STATE;
     }
-    
     else {
         self.discussionState = EMPTY_STATE;
     }
@@ -192,7 +181,7 @@
     }
     else if (discussionState == FAILED_STATE) {
         [self.layer addSublayer:self.failedCircleShape];
-        self.failedMessageIcon.hidden = NO;
+        self.failedMessageLabel.hidden = NO;
     }
     
     else if (discussionState == PLAY_STATE) {
@@ -213,6 +202,47 @@
     else if (discussionState == SENDING_STATE) {
         [self startLoadingAnimation];
     }
+    
+    else if (discussionState == CURRENT_USER_DID_NOT_ANSWER_STATE) {
+        self.unrespondedStateIcon.hidden = NO;
+    }
+    
+    else if (discussionState == LAST_MESSAGE_READ_BY_CONTACT_STATE) {
+        self.readStateIcon.hidden = NO;
+    }
+    
+    else if (discussionState == LAST_MESSAGE_NOT_READ_BY_CONTACT_STATE) {
+        self.unreadStateIcon.hidden = NO;
+    }
+}
+
+- (void)removeDiscussionUI
+{
+    //Pending
+    self.imageView.alpha = 1;
+    [self.pendingContactOverlay removeFromSuperview];
+    
+    //Record/Play
+    [self endSonarAnimation];
+    [self.recordOverlay removeFromSuperview];
+    [self.playOverlay removeFromSuperview];
+    
+    //Failed
+    self.failedMessageLabel.hidden = YES;
+    [self.failedCircleShape removeFromSuperlayer];
+    
+    //Unread
+    self.unreadMessagesLabel.hidden = YES;
+    [self.unreadCircleShape removeFromSuperlayer];
+    
+    //Loading/sending
+    [self.loadingCircleShape removeAllAnimations];
+    [self.loadingCircleShape removeFromSuperlayer];
+    
+    // Discussion state icons
+    self.unrespondedStateIcon.hidden = YES;
+    self.readStateIcon.hidden = YES;
+    self.unreadStateIcon.hidden = YES;
 }
 
 
@@ -359,6 +389,8 @@
 //                                 self.sentMessageIcon.alpha = 0;
 //                             } completion:nil];
 //        }
+        self.contact.currentUserDidNotAnswerLastMessage = NO;
+        self.messageNotReadByContact = YES;
     }
     [self resetDiscussionState];
 }
@@ -372,6 +404,7 @@
 {
     // Resend Messages
     for (NSData *audioData in self.failedMessages) {
+        self.sendingMessageCount ++;
         [ApiUtils sendMessage:audioData toUser:self.contact.identifier success:^{
             [self message:nil sentWithError:NO];
         } failure:^{
@@ -380,7 +413,6 @@
     }
     
     [self deleteFailedMessages];
-    [self resetDiscussionState];
 }
 
 
@@ -391,6 +423,7 @@
 - (void)playNextMessage
 {
     self.isPlaying = YES;
+    self.contact.currentUserDidNotAnswerLastMessage = YES;
     [self.delegate startedPlayingAudioMessagesOfView:self];
     [self resetDiscussionState];
 }
@@ -502,6 +535,7 @@
 - (BOOL)isPlaying {
     return _isPlaying;
 }
+
 // not necessary (just for symmetry)
 - (BOOL)isRecording {
     return _isRecording;
@@ -513,6 +547,19 @@
 
 - (BOOL)isSendingMessage {
     return self.sendingMessageCount > 0;
+}
+
+- (BOOL)lastMessageSentReadByContact {
+    return ![self currentUserDidNotAnswerLastMessage] && !self.messageNotReadByContact ;
+}
+
+- (BOOL)currentUserDidNotAnswerLastMessage {
+    return self.contact.currentUserDidNotAnswerLastMessage;
+}
+
+// not necessary (just for symmetry)
+- (BOOL)messageNotReadByContact {
+    return _messageNotReadByContact ;
 }
 
 
@@ -621,33 +668,44 @@
     [self.pendingContactOverlay setImage:[UIImage imageNamed:@"unknown-user.png"]];
 }
 
-- (void)initUnreadMessagesLabel
-{
-    self.unreadMessagesLabel = [[UILabel alloc] init];
-    [self.unreadMessagesLabel setFrame:CGRectMake(kContactSize - kUnreadMessageSize/2 + 5, -20, kUnreadMessageSize, kUnreadMessageSize)];
-    self.unreadMessagesLabel.textColor = [ImageUtils blue];
-    self.unreadMessagesLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:18.0];
-    self.unreadMessagesLabel.adjustsFontSizeToFitWidth = YES;
-    self.unreadMessagesLabel.minimumScaleFactor = 0.2;
-    self.unreadMessagesLabel.hidden = YES;
-    [self addSubview:self.unreadMessagesLabel];
-}
-
 - (UILabel *)allocAndInitCornerLabelWithText:(NSString *)text andColor:(UIColor *)color
 {
     UILabel *label = [[UILabel alloc] init];
     [label setFrame:CGRectMake(kContactSize - kUnreadMessageSize/2 + 5, -20, kUnreadMessageSize, kUnreadMessageSize)];
     label.textColor = color;
-    label.font = [UIFont fontWithName:@"Avenir-Heavy" size:22];
+    label.font = [UIFont fontWithName:@"Avenir-Heavy" size:18];
     label.adjustsFontSizeToFitWidth = YES;
     label.minimumScaleFactor = 0.2;
-    label.userInteractionEnabled = YES;
     label.text = text;
-    label.alpha = 0;
+    label.hidden = YES;
     [self addSubview:label];
     return label;
 }
 
+- (void)initReadStateImageView
+{
+    self.readStateIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"read_icon"]];
+    [self.readStateIcon setFrame:CGRectMake(kContactSize - 10, -5, 20, 10)];
+    self.readStateIcon.hidden = YES;
+    [self addSubview:self.readStateIcon];
+}
+
+- (void)initUnreadStateImageView
+{
+    self.unreadStateIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"unread_icon"]];
+    [self.unreadStateIcon setFrame:CGRectMake(kContactSize - 10, -10, 20, 20)];
+    self.unreadStateIcon.hidden = YES;
+    [self addSubview:self.unreadStateIcon];
+}
+                            
+- (void)initUnrespondedStateImageView
+{
+    self.unrespondedStateIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Unresponded_icon"]];
+    [self.unrespondedStateIcon setFrame:CGRectMake(kContactSize - 5, 0, 10, 2)];
+    self.unrespondedStateIcon.hidden = YES;
+    [self addSubview:self.unrespondedStateIcon];
+}
+                            
 - (void)initTapAndLongPressGestureRecognisers
 {
     self.longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];

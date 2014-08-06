@@ -28,6 +28,7 @@
 @property (strong, nonatomic) UIImageView *imageView;
 @property (nonatomic) BOOL isPlaying;
 @property (nonatomic) BOOL isRecording;
+@property (nonatomic) BOOL messageNotReadByContact;
 
 - (void)addUnreadMessage:(Message *)message;
 - (void)resetUnreadMessages;
@@ -36,6 +37,7 @@
 - (void)resendFailedMessages;
 - (void)messageFinishPlaying;
 - (void)resetDiscussionState;
+
 
 
 @end

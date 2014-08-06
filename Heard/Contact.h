@@ -18,6 +18,7 @@
 @property (nonatomic) BOOL isPending;
 @property (nonatomic) BOOL isHidden;
 @property (nonatomic) NSUInteger lastPlayedMessageId;
+@property (nonatomic) BOOL currentUserDidNotAnswerLastMessage;
 
 
 + (Contact *)createContactWithId:(NSUInteger)identifier

@@ -635,7 +635,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // Retrieve unread messages and display alert
 - (void) retrieveUnreadMessagesAndNewContacts
 {
-    void (^successBlock)(NSArray*,BOOL) = ^void(NSArray *messages, BOOL newContactOnServer) {
+    void (^successBlock)(NSArray*,BOOL,NSArray*) = ^void(NSArray *messages, BOOL newContactOnServer, NSArray *unreadMessageContacts) {
         //Reset unread messages
         [self resetUnreadMessages];
         BOOL areAttributed = YES;
@@ -643,6 +643,25 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             areAttributed &= [self attributeMessageToExistingContacts:message];
         }
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:messages.count];
+        
+        // todo BT
+        // Clean / robust / somewhere else
+        for (ContactView *contactView in self.contactViews) {
+            BOOL idFound = NO;
+            for (NSString *id in unreadMessageContacts) {
+                if (contactView.contact.identifier == [id intValue]) {
+                    contactView.messageNotReadByContact = YES;
+                    idFound = YES;
+                    continue;
+                }
+                if (!idFound) {
+                    contactView.messageNotReadByContact = NO;
+                }
+            }
+            [contactView resetDiscussionState];
+        }
+       
+        
         
         // Check if we have new contacts
         // App launch or Change in address book or Message from unknown or New user added current user
@@ -662,7 +681,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [SessionUtils redirectToSignIn];
         }
     };
-//    [self showLoadingIndicator];
     [ApiUtils getUnreadMessagesAndExecuteSuccess:successBlock failure:failureBlock];
 }
 
