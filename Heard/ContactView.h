@@ -38,8 +38,6 @@
 - (void)resetDiscussionState;
 
 
-
-
 @end
 
 @protocol ContactBubbleViewDelegate
@@ -63,6 +61,8 @@
 - (BOOL)isRecording;
 
 - (void)failedMessagesModeTapGestureOnContact:(ContactView *)contactView;
+
+- (void)endPlayerAtCompletion:(BOOL)completed;
 
 
 @end

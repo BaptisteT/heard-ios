@@ -90,10 +90,8 @@
 		0B72EEE2196C672F00AC5A01 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD758C31950F91B00CF0D85 /* UIKit.framework */; };
 		0B72EEE3196C672F00AC5A01 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD758BF1950F91B00CF0D85 /* Foundation.framework */; };
 		0B72EEE5196C672F00AC5A01 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0BD758D71950F91B00CF0D85 /* Images.xcassets */; };
-		0B72EEE6196C672F00AC5A01 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55477195A4ADC00CE4669 /* play.png */; };
 		0B72EEE7196C672F00AC5A01 /* unknown-user@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55470195A340500CE4669 /* unknown-user@2x~iphone.png */; };
 		0B72EEE8196C672F00AC5A01 /* record@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55476195A4ADC00CE4669 /* record@2x~iphone.png */; };
-		0B72EEE9196C672F00AC5A01 /* play@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55475195A4ADC00CE4669 /* play@2x~iphone.png */; };
 		0B72EEEA196C672F00AC5A01 /* contact-placeholder@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */; };
 		0B72EEEB196C672F00AC5A01 /* NBPhoneNumberMetadata.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64B919521A7C00223093 /* NBPhoneNumberMetadata.plist */; };
 		0B72EEEC196C672F00AC5A01 /* MPCloseBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8D3195B449A00C94AC0 /* MPCloseBtn@2x.png */; };
@@ -211,14 +209,16 @@
 		0BE55472195A340500CE4669 /* unknown-user@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55470195A340500CE4669 /* unknown-user@2x~iphone.png */; };
 		0BE55473195A340500CE4669 /* unknown-user.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55471195A340500CE4669 /* unknown-user.png */; };
 		0BE55478195A4ADC00CE4669 /* record.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55474195A4ADC00CE4669 /* record.png */; };
-		0BE55479195A4ADC00CE4669 /* play@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55475195A4ADC00CE4669 /* play@2x~iphone.png */; };
 		0BE5547A195A4ADC00CE4669 /* record@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55476195A4ADC00CE4669 /* record@2x~iphone.png */; };
-		0BE5547B195A4ADC00CE4669 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55477195A4ADC00CE4669 /* play.png */; };
 		3C06C3A019659C2400B8D70C /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C06C39F19659C2400B8D70C /* MediaPlayer.framework */; };
 		3C0D0061195C5E500058A0E0 /* AudioUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D0060195C5E500058A0E0 /* AudioUtils.m */; };
 		3C0D0064196330E40058A0E0 /* ContactUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D0063196330E40058A0E0 /* ContactUtils.m */; };
 		3C55FD6D1966AA3500E818D9 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */; };
 		3C55FD701966B11C00E818D9 /* CrashReportUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */; };
+		3C95862619927E9400FF54B0 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862419927E9400FF54B0 /* play.png */; };
+		3C95862719927E9400FF54B0 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862419927E9400FF54B0 /* play.png */; };
+		3C95862819927E9400FF54B0 /* play@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862519927E9400FF54B0 /* play@2x~iphone.png */; };
+		3C95862919927E9400FF54B0 /* play@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862519927E9400FF54B0 /* play@2x~iphone.png */; };
 		3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA177E91958B74000096266 /* AudioToolbox.framework */; };
 		3CB8B7F5195453E50090D657 /* ContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactView.m */; };
 		3CF2E981198E76110098087B /* CustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF2E980198E76110098087B /* CustomActionSheet.m */; };
@@ -372,9 +372,7 @@
 		0BE55470195A340500CE4669 /* unknown-user@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unknown-user@2x~iphone.png"; sourceTree = "<group>"; };
 		0BE55471195A340500CE4669 /* unknown-user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unknown-user.png"; sourceTree = "<group>"; };
 		0BE55474195A4ADC00CE4669 /* record.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = record.png; sourceTree = "<group>"; };
-		0BE55475195A4ADC00CE4669 /* play@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x~iphone.png"; sourceTree = "<group>"; };
 		0BE55476195A4ADC00CE4669 /* record@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record@2x~iphone.png"; sourceTree = "<group>"; };
-		0BE55477195A4ADC00CE4669 /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		3C06C39F19659C2400B8D70C /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		3C0D005F195C5E500058A0E0 /* AudioUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioUtils.h; sourceTree = "<group>"; };
 		3C0D0060195C5E500058A0E0 /* AudioUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioUtils.m; sourceTree = "<group>"; };
@@ -383,6 +381,8 @@
 		3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
 		3C55FD6E1966B11C00E818D9 /* CrashReportUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashReportUtils.h; sourceTree = "<group>"; };
 		3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashReportUtils.m; sourceTree = "<group>"; };
+		3C95862419927E9400FF54B0 /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
+		3C95862519927E9400FF54B0 /* play@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x~iphone.png"; sourceTree = "<group>"; };
 		3C9BBDFD195345A6001C6C4D /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
 		3C9BBDFE195345A6001C6C4D /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
 		3C9BBDFF195345A6001C6C4D /* UIActivityIndicatorView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActivityIndicatorView+AFNetworking.h"; sourceTree = "<group>"; };
@@ -455,10 +455,10 @@
 				0B9051B519771B96001E2ED5 /* checkbox-selected.png */,
 				0B9051B619771B96001E2ED5 /* checkbox@iphone.png */,
 				0B9051B719771B96001E2ED5 /* checkbox.png */,
+				3C95862419927E9400FF54B0 /* play.png */,
+				3C95862519927E9400FF54B0 /* play@2x~iphone.png */,
 				0BE55474195A4ADC00CE4669 /* record.png */,
-				0BE55475195A4ADC00CE4669 /* play@2x~iphone.png */,
 				0BE55476195A4ADC00CE4669 /* record@2x~iphone.png */,
-				0BE55477195A4ADC00CE4669 /* play.png */,
 				0B3651DC1959109700534386 /* heard-logo-80.png */,
 				0B3651DD1959109700534386 /* heard-logo-58.png */,
 				0B3651DE1959109700534386 /* heard-logo-120.png */,
@@ -882,13 +882,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B72EEE5196C672F00AC5A01 /* Images.xcassets in Resources */,
-				0B72EEE6196C672F00AC5A01 /* play.png in Resources */,
 				0B72EEE7196C672F00AC5A01 /* unknown-user@2x~iphone.png in Resources */,
 				0B72EEE8196C672F00AC5A01 /* record@2x~iphone.png in Resources */,
-				0B72EEE9196C672F00AC5A01 /* play@2x~iphone.png in Resources */,
 				0B72EEEA196C672F00AC5A01 /* contact-placeholder@2x~iphone.png in Resources */,
 				0B72EEEB196C672F00AC5A01 /* NBPhoneNumberMetadata.plist in Resources */,
 				0B72EEEC196C672F00AC5A01 /* MPCloseBtn@2x.png in Resources */,
+				3C95862919927E9400FF54B0 /* play@2x~iphone.png in Resources */,
 				0B72EEED196C672F00AC5A01 /* heard-logo-120.png in Resources */,
 				0B9051A81975DE8C001E2ED5 /* PhoneFormats.dat in Resources */,
 				0B72EEEE196C672F00AC5A01 /* MPSurvey.storyboard in Resources */,
@@ -903,6 +902,7 @@
 				0B72EEF5196C672F00AC5A01 /* heard-logo-58.png in Resources */,
 				0B72EEF6196C672F00AC5A01 /* Main.storyboard in Resources */,
 				0B72EEF7196C672F00AC5A01 /* MPCloseBtn.png in Resources */,
+				3C95862719927E9400FF54B0 /* play.png in Resources */,
 				0B72EEF8196C672F00AC5A01 /* Media.xcassets in Resources */,
 				0B9051BD19771B96001E2ED5 /* checkbox@iphone.png in Resources */,
 				0B72EEF9196C672F00AC5A01 /* welcome-logo@2x~iphone.png in Resources */,
@@ -921,13 +921,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				0BD758D81950F91B00CF0D85 /* Images.xcassets in Resources */,
-				0BE5547B195A4ADC00CE4669 /* play.png in Resources */,
 				0BE55472195A340500CE4669 /* unknown-user@2x~iphone.png in Resources */,
 				0BE5547A195A4ADC00CE4669 /* record@2x~iphone.png in Resources */,
-				0BE55479195A4ADC00CE4669 /* play@2x~iphone.png in Resources */,
 				0B3651D71958AC5000534386 /* contact-placeholder@2x~iphone.png in Resources */,
 				0BDB64CC19521A7C00223093 /* NBPhoneNumberMetadata.plist in Resources */,
 				0BB0E8EF195B449A00C94AC0 /* MPCloseBtn@2x.png in Resources */,
+				3C95862819927E9400FF54B0 /* play@2x~iphone.png in Resources */,
 				0B3651E11959109700534386 /* heard-logo-120.png in Resources */,
 				0B9051A71975DE8C001E2ED5 /* PhoneFormats.dat in Resources */,
 				0BB0E8F4195B449A00C94AC0 /* MPSurvey.storyboard in Resources */,
@@ -942,6 +941,7 @@
 				0B3651E01959109700534386 /* heard-logo-58.png in Resources */,
 				0BD758D31950F91B00CF0D85 /* Main.storyboard in Resources */,
 				0BB0E8EE195B449A00C94AC0 /* MPCloseBtn.png in Resources */,
+				3C95862619927E9400FF54B0 /* play.png in Resources */,
 				0BB0E8EC195B449A00C94AC0 /* Media.xcassets in Resources */,
 				0B9051BC19771B96001E2ED5 /* checkbox@iphone.png in Resources */,
 				0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */,
@@ -1130,8 +1130,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (63863BWF5M)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Bastien Beurier (63863BWF5M)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1146,7 +1146,7 @@
 				INFOPLIST_FILE = "Waved copy-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = WavedStaging;
-				PROVISIONING_PROFILE = "B847C88E-088D-4B35-9A28-3E4510B9E366";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1155,8 +1155,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (9X2H84A9C9)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Bastien Beurier (9X2H84A9C9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1170,7 +1170,7 @@
 				INFOPLIST_FILE = "Waved copy-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = WavedStaging;
-				PROVISIONING_PROFILE = "B847C88E-088D-4B35-9A28-3E4510B9E366";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -417,8 +417,8 @@
 }
 
 - (void)handlePlayingTapGesture {
-    // todo bt stop play
     // unread state
+    [self.delegate endPlayerAtCompletion:NO];
     self.isPlaying = NO;
     [self resetDiscussionState];
 }
