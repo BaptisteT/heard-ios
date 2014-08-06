@@ -19,5 +19,6 @@
 @property (nonatomic) NSUInteger senderId;
 @property (nonatomic) NSUInteger receiverId;
 @property (nonatomic) NSInteger createdAt;
+@property (nonatomic) NSData *audioData;
 
 @end

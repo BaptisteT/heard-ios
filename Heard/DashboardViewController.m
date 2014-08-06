@@ -462,15 +462,15 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         }
     }];
     
-    // Create bubbles
     int position = 1;
     for (ContactView *contactView in self.contactViews) {
+        // Order view
         [contactView setOrderPosition:position];
         position ++;
+        
+        // Set discussion state
+        [contactView resetDiscussionState];
     }
-    
-    // Pending contact UI
-    [self showContactViewAsPending];
     
     // Resize view
     [self setScrollViewSizeForContactCount:(int)[self.contactViews count]];
@@ -561,14 +561,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.contactScrollView addSubview:nameLabel];
 }
 
-- (void)showContactViewAsPending
-{
-    for (ContactView *contactView in self.contactViews) {
-        if (contactView.contact.isPending && contactView.contact.identifier != kAdminId) {
-            [contactView setDiscussionState:1];
-        }
-    }
-}
 
 - (void)blockContact:(ContactView *)contactView
 {
@@ -830,7 +822,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)startedLongPressOnContactView:(ContactView *)contactView
 {
     if ([self.mainPlayer isPlaying]) {
-        [self endPlayerUIAnimated:NO];
+        [self endPlayerAtCompletion:NO];
     }
     
     float appPlayerVolume = [MPMusicPlayerController applicationMusicPlayer].volume;
@@ -872,25 +864,20 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.recorderContainer.hidden = YES;
     [self setRecorderLineWidth:0];
     
-    // Reorder views
-    // todo bt animation
-    [self reorderContactViews];
     [self enableAllContactViews];
 }
 
-- (void)startedPlayingAudioFileByView:(ContactView *)contactView
+- (void)startedPlayingAudioMessagesOfView:(ContactView *)contactView
 {
+    self.lastSelectedContactView = contactView;
     if ([self.mainPlayer isPlaying]) {
-        [self endPlayerUIAnimated:NO];
+        [self endPlayerAtCompletion:NO];
     }
     [self.playerContainer.layer removeAllAnimations];
     
-    //Change last played message id in contact
-    contactView.contact.lastPlayedMessageId = contactView.nextMessageId;
-    
     // Init player
-    self.mainPlayer = [[AVAudioPlayer alloc] initWithData:contactView.nextMessageAudioData error:nil];
-    [self.mainPlayer setVolume:kAudioPlayerVolume];
+    Message *message = (Message *)contactView.unreadMessages[0];
+    self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.audioData error:nil];
     
     // Player UI
     NSTimeInterval duration = self.mainPlayer.duration;
@@ -939,17 +926,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)endPlayerUIForAllContactViews
 {
     for (ContactView *contactView in self.contactViews) {
-        if (contactView != self.playingContactView) {
-            [contactView endRecordingPlayingUI];
-        }
+        contactView.isPlaying = NO;
+        [contactView resetDiscussionState];
     }
 }
 
 // Audio Playing UI + volume setting
 - (void)playerUI:(NSTimeInterval)duration ByContactView:(ContactView *)contactView
 {
-    self.playingContactView = contactView;
-    
     // Min volume (legal / deprecated ?)
     MPMusicPlayerController *appPlayer = [MPMusicPlayerController applicationMusicPlayer];
     if (appPlayer.volume < 0.25) {
@@ -971,43 +955,43 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                          [self setPlayerLineWidth:self.playerContainer.bounds.size.width];
                      } completion:^(BOOL finished){
                          if (finished) {
-                             [self endPlayerUIAnimated:YES];
+                             [self endPlayerAtCompletion:YES];
                          }
                      }];
 }
 
-- (void)endPlayerUIAnimated:(BOOL)animated
+
+- (void)endPlayerAtCompletion:(BOOL)completed
 {
-    self.playingContactView = nil;
-    
-    // Remove proximity state (here because player delegate not working)
+    // Remove proximity state
     if ([UIDevice currentDevice].proximityState) {
         self.disableProximityObserver = YES;
     } else {
         [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
     }
     
+    // End contact player UI
     [self endPlayerUIForAllContactViews];
     
-    if ([self.mainPlayer isPlaying]) {
-        [self.mainPlayer stop];
-        self.mainPlayer.currentTime = 0;
-    }
+    // End central player UI
+    [self.mainPlayer stop];
+    self.mainPlayer.currentTime = 0;
     [self.playerLine.layer removeAllAnimations];
+    self.playerContainer.hidden = YES;
+    [self setPlayerLineWidth:0];
     
-    if (animated) {
-        [UIView animateWithDuration:0.5 animations:^{
-            self.playerContainer.alpha = 0;
-        } completion:^(BOOL dummy){
-            if (dummy) {
-                self.playerContainer.hidden = YES;
-            }
-        }];
-    } else {
-        self.playerContainer.hidden = YES;
-        [self setPlayerLineWidth:0];
+    // If audio completion, delete message
+    if (completed) {
+        if (self.lastSelectedContactView) {
+            [self.lastSelectedContactView messageFinishPlaying];
+        }
     }
-    
+}
+
+- (void)setPlayerLineWidth:(float)width {
+    CGRect frame = self.playerLine.frame;
+    frame.size.width = width;
+    self.playerLine.frame = frame;
 }
 
 - (void)showLoadingIndicator
@@ -1029,12 +1013,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self.activityView stopAnimating];
         [self.activityView removeFromSuperview];
     }
-}
-
-- (void)setPlayerLineWidth:(float)width {
-    CGRect frame = self.playerLine.frame;
-    frame.size.width = width;
-    self.playerLine.frame = frame;
 }
 
 // ----------------------------------------------------------
@@ -1340,7 +1318,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [[AVAudioSession sharedInstance] setActive:NO error:nil];
             [self endedLongPressRecording];
             for (ContactView *contactView in self.contactViews) {
-                [contactView endRecordingPlayingUI];
+                contactView.isRecording = NO;
+                [contactView resetDiscussionState];
             }
             [self tutoMessage:@"Message canceled" withDuration:2];
         }

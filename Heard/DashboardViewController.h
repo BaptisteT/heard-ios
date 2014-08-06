@@ -20,10 +20,9 @@
 - (BOOL)attributeMessageToExistingContacts:(Message *)message;
 - (void)retrieveUnreadMessagesAndNewContacts;
 - (void)distributeNonAttributedMessages;
-- (void)endPlayerUIAnimated:(BOOL)animated;
+- (void)endPlayerAtCompletion:(BOOL)completed;
 - (void)removeViewOfHiddenContacts;
 
 @property (nonatomic) BOOL isSignUp;
-@property (nonatomic, strong) ContactView *playingContactView;
 
 @end

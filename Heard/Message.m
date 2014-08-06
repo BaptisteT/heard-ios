@@ -33,6 +33,7 @@
     message.senderId = [[rawMessage objectForKey:SENDER_ID] integerValue];
     message.receiverId = [[rawMessage objectForKey:RECEIVER_ID] integerValue];
     message.createdAt = [[rawMessage objectForKey:CREATED_AT] integerValue];
+    message.audioData = nil;
     return message;
 }
 

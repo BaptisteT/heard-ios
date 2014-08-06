@@ -121,7 +121,7 @@
     // Reorder dashboard
     if ([visibleController isKindOfClass:[DashboardViewController class]]) {
         // Clean UI
-        [(DashboardViewController *)visibleController endPlayerUIAnimated:NO];
+        [(DashboardViewController *)visibleController endPlayerAtCompletion:NO];
         [(DashboardViewController *)visibleController removeViewOfHiddenContacts];
         [(DashboardViewController *)visibleController reorderContactViews];
     }
@@ -167,7 +167,6 @@
             }
             
             if (! [(DashboardViewController *)visibleController isRecording]) {
-                [(DashboardViewController *)visibleController reorderContactViews];
                 AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
                 AudioServicesPlaySystemSound(1000);
             }

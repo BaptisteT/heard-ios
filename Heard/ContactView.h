@@ -24,18 +24,19 @@
 @property (nonatomic, strong) UILabel *nameLabel;
 @property (nonatomic) NSInteger orderPosition;
 @property (nonatomic) NSMutableArray *unreadMessages;
-@property (nonatomic, strong) NSData *nextMessageAudioData;
-@property (nonatomic) NSUInteger nextMessageId;
 @property (nonatomic, strong) NSMutableArray *failedMessages;
 @property (strong, nonatomic) UIImageView *imageView;
-
+@property (nonatomic) BOOL isPlaying;
+@property (nonatomic) BOOL isRecording;
 
 - (void)addUnreadMessage:(Message *)message;
 - (void)resetUnreadMessages;
 - (void)message:(NSData *)audioData sentWithError:(BOOL)error;
 - (void)deleteFailedMessages;
 - (void)resendFailedMessages;
-- (void)endRecordingPlayingUI;
+- (void)messageFinishPlaying;
+- (void)resetDiscussionState;
+
 
 
 
@@ -49,7 +50,7 @@
 
 - (void)sendMessageToContact:(ContactView *)contactView;
 
-- (void)startedPlayingAudioFileByView:(ContactView *)view;
+- (void)startedPlayingAudioMessagesOfView:(ContactView *)view;
 
 - (void)pendingContactClicked:(Contact *)contact;
 
@@ -62,5 +63,6 @@
 - (BOOL)isRecording;
 
 - (void)failedMessagesModeTapGestureOnContact:(ContactView *)contactView;
+
 
 @end
