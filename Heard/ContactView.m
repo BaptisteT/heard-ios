@@ -684,24 +684,24 @@
 
 - (void)initReadStateImageView
 {
-    self.readStateIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"read_icon"]];
-    [self.readStateIcon setFrame:CGRectMake(kContactSize - 10, -5, 20, 10)];
+    self.readStateIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"contact-eye"]];
+    [self.readStateIcon setFrame:CGRectMake(kContactSize - 10, -10, 25, 25)];
     self.readStateIcon.hidden = YES;
     [self addSubview:self.readStateIcon];
 }
 
 - (void)initUnreadStateImageView
 {
-    self.unreadStateIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"unread_icon"]];
-    [self.unreadStateIcon setFrame:CGRectMake(kContactSize - 10, -10, 20, 20)];
+    self.unreadStateIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"contact-sent"]];
+    [self.unreadStateIcon setFrame:CGRectMake(kContactSize - 10, -10, 25, 25)];
     self.unreadStateIcon.hidden = YES;
     [self addSubview:self.unreadStateIcon];
 }
                             
 - (void)initUnrespondedStateImageView
 {
-    self.unrespondedStateIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Unresponded_icon"]];
-    [self.unrespondedStateIcon setFrame:CGRectMake(kContactSize - 5, 0, 10, 2)];
+    self.unrespondedStateIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"contact-suspension.png"]];
+    [self.unrespondedStateIcon setFrame:CGRectMake(kContactSize - 10, -10, 25, 25)];
     self.unrespondedStateIcon.hidden = YES;
     [self addSubview:self.unrespondedStateIcon];
 }

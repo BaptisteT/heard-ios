@@ -139,6 +139,14 @@
 		0B969129198997700048E4BB /* EditContactsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0B969127198997700048E4BB /* EditContactsTableViewCell.xib */; };
 		0B96912C1989977C0048E4BB /* EditContactsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */; };
 		0B96912D1989977C0048E4BB /* EditContactsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */; };
+		0BADABC519930005007B4538 /* contact-sent.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BADABC319930005007B4538 /* contact-sent.png */; };
+		0BADABC619930005007B4538 /* contact-sent.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BADABC319930005007B4538 /* contact-sent.png */; };
+		0BADABC719930005007B4538 /* contact-suspension.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BADABC419930005007B4538 /* contact-suspension.png */; };
+		0BADABC819930005007B4538 /* contact-suspension.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BADABC419930005007B4538 /* contact-suspension.png */; };
+		0BADABCB1993000D007B4538 /* contact-blue-eye.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BADABC91993000D007B4538 /* contact-blue-eye.png */; };
+		0BADABCC1993000D007B4538 /* contact-blue-eye.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BADABC91993000D007B4538 /* contact-blue-eye.png */; };
+		0BADABCD1993000D007B4538 /* contact-eye.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BADABCA1993000D007B4538 /* contact-eye.png */; };
+		0BADABCE1993000D007B4538 /* contact-eye.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BADABCA1993000D007B4538 /* contact-eye.png */; };
 		0BAF4FE219560AEE00838D7D /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BAF4FE119560AEE00838D7D /* MessageUI.framework */; };
 		0BB0E8EC195B449A00C94AC0 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8CF195B449A00C94AC0 /* Media.xcassets */; };
 		0BB0E8ED195B449A00C94AC0 /* Mixpanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8D1195B449A00C94AC0 /* Mixpanel.m */; };
@@ -277,6 +285,10 @@
 		0B969127198997700048E4BB /* EditContactsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditContactsTableViewCell.xib; sourceTree = "<group>"; };
 		0B96912A1989977C0048E4BB /* EditContactsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditContactsTableViewCell.h; sourceTree = "<group>"; };
 		0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditContactsTableViewCell.m; sourceTree = "<group>"; };
+		0BADABC319930005007B4538 /* contact-sent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-sent.png"; sourceTree = "<group>"; };
+		0BADABC419930005007B4538 /* contact-suspension.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-suspension.png"; sourceTree = "<group>"; };
+		0BADABC91993000D007B4538 /* contact-blue-eye.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-blue-eye.png"; sourceTree = "<group>"; };
+		0BADABCA1993000D007B4538 /* contact-eye.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-eye.png"; sourceTree = "<group>"; };
 		0BAF4FE119560AEE00838D7D /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		0BB0E8CF195B449A00C94AC0 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		0BB0E8D0195B449A00C94AC0 /* Mixpanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mixpanel.h; sourceTree = "<group>"; };
@@ -468,6 +480,10 @@
 		0B58BB001954D7E200E9FF70 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				0BADABC91993000D007B4538 /* contact-blue-eye.png */,
+				0BADABCA1993000D007B4538 /* contact-eye.png */,
+				0BADABC319930005007B4538 /* contact-sent.png */,
+				0BADABC419930005007B4538 /* contact-suspension.png */,
 				0B9051C019771B9E001E2ED5 /* Files */,
 				3C95862A1992964300FF54B0 /* Unresponded_icon.png */,
 				3C95862B1992964300FF54B0 /* Unresponded_icon@2x~iphone.png */,
@@ -914,6 +930,7 @@
 				0B72EEEC196C672F00AC5A01 /* MPCloseBtn@2x.png in Resources */,
 				3C95862919927E9400FF54B0 /* play@2x~iphone.png in Resources */,
 				0B72EEED196C672F00AC5A01 /* heard-logo-120.png in Resources */,
+				0BADABC819930005007B4538 /* contact-suspension.png in Resources */,
 				0B9051A81975DE8C001E2ED5 /* PhoneFormats.dat in Resources */,
 				0B72EEEE196C672F00AC5A01 /* MPSurvey.storyboard in Resources */,
 				0B72EEEF196C672F00AC5A01 /* heard-logo-80.png in Resources */,
@@ -938,11 +955,14 @@
 				3C95863B1992A07300FF54B0 /* unread_icon@2x~iphone.png in Resources */,
 				0B9051B919771B96001E2ED5 /* checkbox-selected@2x~iphone.png in Resources */,
 				0B72EEFC196C672F00AC5A01 /* welcome-logo.png in Resources */,
+				0BADABCE1993000D007B4538 /* contact-eye.png in Resources */,
 				0B56F657197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
 				0B969129198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
 				3C9586391992A07300FF54B0 /* unread_icon.png in Resources */,
 				0B72EEFD196C672F00AC5A01 /* contact-placeholder.png in Resources */,
 				3C95862F1992964300FF54B0 /* Unresponded_icon@2x~iphone.png in Resources */,
+				0BADABC619930005007B4538 /* contact-sent.png in Resources */,
+				0BADABCC1993000D007B4538 /* contact-blue-eye.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -959,6 +979,7 @@
 				0BB0E8EF195B449A00C94AC0 /* MPCloseBtn@2x.png in Resources */,
 				3C95862819927E9400FF54B0 /* play@2x~iphone.png in Resources */,
 				0B3651E11959109700534386 /* heard-logo-120.png in Resources */,
+				0BADABC719930005007B4538 /* contact-suspension.png in Resources */,
 				0B9051A71975DE8C001E2ED5 /* PhoneFormats.dat in Resources */,
 				0BB0E8F4195B449A00C94AC0 /* MPSurvey.storyboard in Resources */,
 				0B3651DF1959109700534386 /* heard-logo-80.png in Resources */,
@@ -983,11 +1004,14 @@
 				3C95863A1992A07300FF54B0 /* unread_icon@2x~iphone.png in Resources */,
 				0B9051B819771B96001E2ED5 /* checkbox-selected@2x~iphone.png in Resources */,
 				0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */,
+				0BADABCD1993000D007B4538 /* contact-eye.png in Resources */,
 				0B56F656197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
 				0B969128198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
 				3C9586381992A07300FF54B0 /* unread_icon.png in Resources */,
 				0B3651D61958AC5000534386 /* contact-placeholder.png in Resources */,
 				3C95862E1992964300FF54B0 /* Unresponded_icon@2x~iphone.png in Resources */,
+				0BADABC519930005007B4538 /* contact-sent.png in Resources */,
+				0BADABCB1993000D007B4538 /* contact-blue-eye.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
