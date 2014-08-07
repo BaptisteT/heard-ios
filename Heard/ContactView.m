@@ -340,6 +340,7 @@
 // Stop recording after kMaxAudioDuration
 - (void)maxRecordingDurationReached {
     self.userInteractionEnabled = NO;
+    [self stopRecording];
     [self sendRecording];
 }
 
