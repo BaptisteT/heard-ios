@@ -73,6 +73,7 @@
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 @property (nonatomic) BOOL disableProximityObserver;
 @property (nonatomic) BOOL isUsingHeadSet;
+@property (nonatomic, strong) AVAudioPlayer *soundPlayer;
 // Current user
 @property (strong, nonatomic) UIImagePickerController *imagePickerController;
 @property (strong, nonatomic) UIImageView *profilePicture;
@@ -88,8 +89,6 @@
 @property (strong, nonatomic) ContactView *lastSelectedContactView;
 //Alertview
 @property (strong, nonatomic) UIAlertView *blockAlertView;
-//Sounds
-@property (nonatomic) SystemSoundID sound;
 
 @end
 
@@ -1343,22 +1342,22 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)playSound:(NSString *)sound
 {
-    //TODO BB: homogene volume, even in silence mode?
-    
-    //Waiting for JB's sounds for start/end recording
     if ([sound isEqualToString:kStartRecordSound]) {
-        AudioServicesPlaySystemSound(1103); //Tink
+        self.soundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:@"/System/Library/Audio/UISounds/Tink.caf"] error:nil];
+        [self.soundPlayer prepareToPlay];
     } else if ([sound isEqualToString:kEndRecordSound]) {
-        AudioServicesPlaySystemSound(1104); //Tock
+        self.soundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:@"/System/Library/Audio/UISounds/Tock.caf"] error:nil];
     } else  {
-        //Init recording sound
         NSString *soundPath = [[NSBundle mainBundle] pathForResource:sound ofType:@"aif"];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-        AudioServicesCreateSystemSoundID((__bridge CFURLRef)soundURL, &_sound);
-        AudioServicesPlaySystemSound(self.sound);
+        self.soundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:nil];
     }
     
-    
+    float appPlayerVolume = [MPMusicPlayerController applicationMusicPlayer].volume;
+    if (appPlayerVolume > 0.25) {
+        [self.soundPlayer setVolume:1/(4*appPlayerVolume)];
+    }
+    [self.soundPlayer play];
 }
 
 // ----------------------------------------------------------
