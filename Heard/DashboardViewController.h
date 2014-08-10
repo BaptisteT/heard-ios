@@ -22,6 +22,7 @@
 - (void)distributeNonAttributedMessages;
 - (void)endPlayerAtCompletion:(BOOL)completed;
 - (void)removeViewOfHiddenContacts;
+- (void)playSound:(NSString *)sound;
 
 @property (nonatomic) BOOL isSignUp;
 

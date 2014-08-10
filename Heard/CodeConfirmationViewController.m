@@ -15,7 +15,7 @@
 #import "SessionUtils.h"
 #import "TrackingUtils.h"
 
-#define CONFIMATION_CODE_DIGITS 5
+#define CONFIMATION_CODE_DIGITS 4
 #define BORDER_SIZE 0.5
 
 @interface CodeConfirmationViewController ()

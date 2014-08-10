@@ -28,6 +28,7 @@
 #import "MBProgressHUD.h"
 #import "EditContactsViewController.h"
 #import "CustomActionSheet.h"
+#import <AudioToolbox/AudioToolbox.h>
 
 #define ACTION_MAIN_MENU_OPTION_1 @"Invite Friends"
 #define ACTION_MAIN_MENU_OPTION_2 @"Add New Contact"
@@ -45,6 +46,14 @@
 #define ACTION_FAILED_MESSAGES_OPTION_1 @"Resend"
 #define ACTION_FAILED_MESSAGES_OPTION_2 @"Delete"
 #define ACTION_SHEET_CANCEL @"Cancel"
+
+#define START_RECORD_SOUND @"start-record-sound"
+#define END_RECORD_SOUND @"end-record-sound"
+#define SENT_SOUND @"sent-sound"
+#define FAILED_SOUND @"failed-sound"
+#define RECEIVED_SOUND @"received-sound"
+#define TYPING_SOUND @"typing-sound"
+#define LISTENED_SOUND @"listened-sound"
 
 #define RECORDER_HEIGHT 5
 #define PLAYER_UI_HEIGHT 5
@@ -88,6 +97,8 @@
 @property (strong, nonatomic) ContactView *lastSelectedContactView;
 //Alertview
 @property (strong, nonatomic) UIAlertView *blockAlertView;
+//Sounds
+@property (nonatomic) SystemSoundID sound;
 
 @end
 
@@ -1344,6 +1355,19 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
 }
 
+// ----------------------------------------------------------
+#pragma mark Sounds
+// ----------------------------------------------------------
+
+- (void)playSound:(NSString *)sound
+{
+    //Init recording sound
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:sound ofType:@"aif"];
+    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)soundURL, &_sound);
+    
+    AudioServicesPlaySystemSound(self.sound);
+}
 
 // ----------------------------------------------------------
 #pragma mark Address Book Delegate

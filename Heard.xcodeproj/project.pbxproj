@@ -139,6 +139,20 @@
 		0B969129198997700048E4BB /* EditContactsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0B969127198997700048E4BB /* EditContactsTableViewCell.xib */; };
 		0B96912C1989977C0048E4BB /* EditContactsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */; };
 		0B96912D1989977C0048E4BB /* EditContactsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */; };
+		0BA145771997A4A60031716F /* end-record-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145711997A4A60031716F /* end-record-sound.aif */; };
+		0BA145781997A4A60031716F /* end-record-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145711997A4A60031716F /* end-record-sound.aif */; };
+		0BA145791997A4A60031716F /* received-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145721997A4A60031716F /* received-sound.aif */; };
+		0BA1457A1997A4A60031716F /* received-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145721997A4A60031716F /* received-sound.aif */; };
+		0BA1457B1997A4A60031716F /* sent-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145731997A4A60031716F /* sent-sound.aif */; };
+		0BA1457C1997A4A60031716F /* sent-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145731997A4A60031716F /* sent-sound.aif */; };
+		0BA1457D1997A4A60031716F /* failed-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145741997A4A60031716F /* failed-sound.aif */; };
+		0BA1457E1997A4A60031716F /* failed-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145741997A4A60031716F /* failed-sound.aif */; };
+		0BA1457F1997A4A60031716F /* start-record-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145751997A4A60031716F /* start-record-sound.aif */; };
+		0BA145801997A4A60031716F /* start-record-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145751997A4A60031716F /* start-record-sound.aif */; };
+		0BA145811997A4A60031716F /* typing-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145761997A4A60031716F /* typing-sound.aif */; };
+		0BA145821997A4A60031716F /* typing-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145761997A4A60031716F /* typing-sound.aif */; };
+		0BA145841997A5620031716F /* agogo.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145831997A5620031716F /* agogo.aif */; };
+		0BA145851997A5620031716F /* agogo.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145831997A5620031716F /* agogo.aif */; };
 		0BADABC519930005007B4538 /* contact-sent.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BADABC319930005007B4538 /* contact-sent.png */; };
 		0BADABC619930005007B4538 /* contact-sent.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BADABC319930005007B4538 /* contact-sent.png */; };
 		0BADABC719930005007B4538 /* contact-suspension.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BADABC419930005007B4538 /* contact-suspension.png */; };
@@ -227,18 +241,6 @@
 		3C95862719927E9400FF54B0 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862419927E9400FF54B0 /* play.png */; };
 		3C95862819927E9400FF54B0 /* play@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862519927E9400FF54B0 /* play@2x~iphone.png */; };
 		3C95862919927E9400FF54B0 /* play@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862519927E9400FF54B0 /* play@2x~iphone.png */; };
-		3C95862C1992964300FF54B0 /* Unresponded_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862A1992964300FF54B0 /* Unresponded_icon.png */; };
-		3C95862D1992964300FF54B0 /* Unresponded_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862A1992964300FF54B0 /* Unresponded_icon.png */; };
-		3C95862E1992964300FF54B0 /* Unresponded_icon@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862B1992964300FF54B0 /* Unresponded_icon@2x~iphone.png */; };
-		3C95862F1992964300FF54B0 /* Unresponded_icon@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862B1992964300FF54B0 /* Unresponded_icon@2x~iphone.png */; };
-		3C9586341992A07300FF54B0 /* read_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9586301992A07300FF54B0 /* read_icon.png */; };
-		3C9586351992A07300FF54B0 /* read_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9586301992A07300FF54B0 /* read_icon.png */; };
-		3C9586361992A07300FF54B0 /* read_icon@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9586311992A07300FF54B0 /* read_icon@2x~iphone.png */; };
-		3C9586371992A07300FF54B0 /* read_icon@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9586311992A07300FF54B0 /* read_icon@2x~iphone.png */; };
-		3C9586381992A07300FF54B0 /* unread_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9586321992A07300FF54B0 /* unread_icon.png */; };
-		3C9586391992A07300FF54B0 /* unread_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9586321992A07300FF54B0 /* unread_icon.png */; };
-		3C95863A1992A07300FF54B0 /* unread_icon@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9586331992A07300FF54B0 /* unread_icon@2x~iphone.png */; };
-		3C95863B1992A07300FF54B0 /* unread_icon@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C9586331992A07300FF54B0 /* unread_icon@2x~iphone.png */; };
 		3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA177E91958B74000096266 /* AudioToolbox.framework */; };
 		3CB8B7F5195453E50090D657 /* ContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactView.m */; };
 		3CF2E981198E76110098087B /* CustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF2E980198E76110098087B /* CustomActionSheet.m */; };
@@ -285,6 +287,13 @@
 		0B969127198997700048E4BB /* EditContactsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditContactsTableViewCell.xib; sourceTree = "<group>"; };
 		0B96912A1989977C0048E4BB /* EditContactsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditContactsTableViewCell.h; sourceTree = "<group>"; };
 		0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditContactsTableViewCell.m; sourceTree = "<group>"; };
+		0BA145711997A4A60031716F /* end-record-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "end-record-sound.aif"; sourceTree = "<group>"; };
+		0BA145721997A4A60031716F /* received-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "received-sound.aif"; sourceTree = "<group>"; };
+		0BA145731997A4A60031716F /* sent-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sent-sound.aif"; sourceTree = "<group>"; };
+		0BA145741997A4A60031716F /* failed-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "failed-sound.aif"; sourceTree = "<group>"; };
+		0BA145751997A4A60031716F /* start-record-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "start-record-sound.aif"; sourceTree = "<group>"; };
+		0BA145761997A4A60031716F /* typing-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "typing-sound.aif"; sourceTree = "<group>"; };
+		0BA145831997A5620031716F /* agogo.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = agogo.aif; sourceTree = "<group>"; };
 		0BADABC319930005007B4538 /* contact-sent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-sent.png"; sourceTree = "<group>"; };
 		0BADABC419930005007B4538 /* contact-suspension.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-suspension.png"; sourceTree = "<group>"; };
 		0BADABC91993000D007B4538 /* contact-blue-eye.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-blue-eye.png"; sourceTree = "<group>"; };
@@ -407,12 +416,6 @@
 		3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashReportUtils.m; sourceTree = "<group>"; };
 		3C95862419927E9400FF54B0 /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		3C95862519927E9400FF54B0 /* play@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x~iphone.png"; sourceTree = "<group>"; };
-		3C95862A1992964300FF54B0 /* Unresponded_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Unresponded_icon.png; sourceTree = "<group>"; };
-		3C95862B1992964300FF54B0 /* Unresponded_icon@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Unresponded_icon@2x~iphone.png"; sourceTree = "<group>"; };
-		3C9586301992A07300FF54B0 /* read_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = read_icon.png; sourceTree = "<group>"; };
-		3C9586311992A07300FF54B0 /* read_icon@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "read_icon@2x~iphone.png"; sourceTree = "<group>"; };
-		3C9586321992A07300FF54B0 /* unread_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unread_icon.png; sourceTree = "<group>"; };
-		3C9586331992A07300FF54B0 /* unread_icon@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unread_icon@2x~iphone.png"; sourceTree = "<group>"; };
 		3C9BBDFD195345A6001C6C4D /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
 		3C9BBDFE195345A6001C6C4D /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
 		3C9BBDFF195345A6001C6C4D /* UIActivityIndicatorView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActivityIndicatorView+AFNetworking.h"; sourceTree = "<group>"; };
@@ -480,34 +483,15 @@
 		0B58BB001954D7E200E9FF70 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				0BADABC91993000D007B4538 /* contact-blue-eye.png */,
-				0BADABCA1993000D007B4538 /* contact-eye.png */,
-				0BADABC319930005007B4538 /* contact-sent.png */,
-				0BADABC419930005007B4538 /* contact-suspension.png */,
+				0BA145831997A5620031716F /* agogo.aif */,
+				0BA145711997A4A60031716F /* end-record-sound.aif */,
+				0BA145721997A4A60031716F /* received-sound.aif */,
+				0BA145731997A4A60031716F /* sent-sound.aif */,
+				0BA145741997A4A60031716F /* failed-sound.aif */,
+				0BA145751997A4A60031716F /* start-record-sound.aif */,
+				0BA145761997A4A60031716F /* typing-sound.aif */,
+				0BA1455E199786A30031716F /* Images */,
 				0B9051C019771B9E001E2ED5 /* Files */,
-				3C95862A1992964300FF54B0 /* Unresponded_icon.png */,
-				3C95862B1992964300FF54B0 /* Unresponded_icon@2x~iphone.png */,
-				3C9586301992A07300FF54B0 /* read_icon.png */,
-				3C9586311992A07300FF54B0 /* read_icon@2x~iphone.png */,
-				3C9586321992A07300FF54B0 /* unread_icon.png */,
-				3C9586331992A07300FF54B0 /* unread_icon@2x~iphone.png */,
-				0B9051B419771B96001E2ED5 /* checkbox-selected@2x~iphone.png */,
-				0B9051B519771B96001E2ED5 /* checkbox-selected.png */,
-				0B9051B619771B96001E2ED5 /* checkbox@iphone.png */,
-				0B9051B719771B96001E2ED5 /* checkbox.png */,
-				3C95862419927E9400FF54B0 /* play.png */,
-				3C95862519927E9400FF54B0 /* play@2x~iphone.png */,
-				0BE55474195A4ADC00CE4669 /* record.png */,
-				0BE55476195A4ADC00CE4669 /* record@2x~iphone.png */,
-				0B3651DC1959109700534386 /* heard-logo-80.png */,
-				0B3651DD1959109700534386 /* heard-logo-58.png */,
-				0B3651DE1959109700534386 /* heard-logo-120.png */,
-				0BE55470195A340500CE4669 /* unknown-user@2x~iphone.png */,
-				0BE55471195A340500CE4669 /* unknown-user.png */,
-				0B3651D41958AC5000534386 /* contact-placeholder.png */,
-				0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */,
-				0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */,
-				0B893A481954E4FF00476BFE /* welcome-logo.png */,
 			);
 			name = Assets;
 			sourceTree = "<group>";
@@ -562,6 +546,34 @@
 				0B22CD011978439D00E1C7AF /* AddContactViewController.m */,
 			);
 			name = Contacts;
+			sourceTree = "<group>";
+		};
+		0BA1455E199786A30031716F /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				0B9051B419771B96001E2ED5 /* checkbox-selected@2x~iphone.png */,
+				0B9051B519771B96001E2ED5 /* checkbox-selected.png */,
+				0B9051B619771B96001E2ED5 /* checkbox@iphone.png */,
+				0B9051B719771B96001E2ED5 /* checkbox.png */,
+				3C95862419927E9400FF54B0 /* play.png */,
+				3C95862519927E9400FF54B0 /* play@2x~iphone.png */,
+				0BE55474195A4ADC00CE4669 /* record.png */,
+				0BE55476195A4ADC00CE4669 /* record@2x~iphone.png */,
+				0B3651DC1959109700534386 /* heard-logo-80.png */,
+				0B3651DD1959109700534386 /* heard-logo-58.png */,
+				0B3651DE1959109700534386 /* heard-logo-120.png */,
+				0BE55470195A340500CE4669 /* unknown-user@2x~iphone.png */,
+				0BE55471195A340500CE4669 /* unknown-user.png */,
+				0B3651D41958AC5000534386 /* contact-placeholder.png */,
+				0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */,
+				0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */,
+				0B893A481954E4FF00476BFE /* welcome-logo.png */,
+				0BADABC91993000D007B4538 /* contact-blue-eye.png */,
+				0BADABCA1993000D007B4538 /* contact-eye.png */,
+				0BADABC319930005007B4538 /* contact-sent.png */,
+				0BADABC419930005007B4538 /* contact-suspension.png */,
+			);
+			name = Images;
 			sourceTree = "<group>";
 		};
 		0BB0E8CE195B449A00C94AC0 /* Mixpanel */ = {
@@ -921,9 +933,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BA1457C1997A4A60031716F /* sent-sound.aif in Resources */,
 				0B72EEE5196C672F00AC5A01 /* Images.xcassets in Resources */,
-				3C9586351992A07300FF54B0 /* read_icon.png in Resources */,
 				0B72EEE7196C672F00AC5A01 /* unknown-user@2x~iphone.png in Resources */,
+				0BA145821997A4A60031716F /* typing-sound.aif in Resources */,
 				0B72EEE8196C672F00AC5A01 /* record@2x~iphone.png in Resources */,
 				0B72EEEA196C672F00AC5A01 /* contact-placeholder@2x~iphone.png in Resources */,
 				0B72EEEB196C672F00AC5A01 /* NBPhoneNumberMetadata.plist in Resources */,
@@ -941,28 +954,28 @@
 				0B72EEF4196C672F00AC5A01 /* unknown-user.png in Resources */,
 				0B9051BB19771B96001E2ED5 /* checkbox-selected.png in Resources */,
 				0B9051BF19771B96001E2ED5 /* checkbox.png in Resources */,
+				0BA1457E1997A4A60031716F /* failed-sound.aif in Resources */,
 				0B72EEF5196C672F00AC5A01 /* heard-logo-58.png in Resources */,
 				0B72EEF6196C672F00AC5A01 /* Main.storyboard in Resources */,
 				0B72EEF7196C672F00AC5A01 /* MPCloseBtn.png in Resources */,
 				3C95862719927E9400FF54B0 /* play.png in Resources */,
 				0B72EEF8196C672F00AC5A01 /* Media.xcassets in Resources */,
 				0B9051BD19771B96001E2ED5 /* checkbox@iphone.png in Resources */,
-				3C95862D1992964300FF54B0 /* Unresponded_icon.png in Resources */,
 				0B72EEF9196C672F00AC5A01 /* welcome-logo@2x~iphone.png in Resources */,
 				0B72EEFA196C672F00AC5A01 /* MPNotification.storyboard in Resources */,
 				0B72EEFB196C672F00AC5A01 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
-				3C9586371992A07300FF54B0 /* read_icon@2x~iphone.png in Resources */,
-				3C95863B1992A07300FF54B0 /* unread_icon@2x~iphone.png in Resources */,
 				0B9051B919771B96001E2ED5 /* checkbox-selected@2x~iphone.png in Resources */,
+				0BA145801997A4A60031716F /* start-record-sound.aif in Resources */,
 				0B72EEFC196C672F00AC5A01 /* welcome-logo.png in Resources */,
+				0BA145781997A4A60031716F /* end-record-sound.aif in Resources */,
+				0BA1457A1997A4A60031716F /* received-sound.aif in Resources */,
 				0BADABCE1993000D007B4538 /* contact-eye.png in Resources */,
 				0B56F657197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
 				0B969129198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
-				3C9586391992A07300FF54B0 /* unread_icon.png in Resources */,
 				0B72EEFD196C672F00AC5A01 /* contact-placeholder.png in Resources */,
-				3C95862F1992964300FF54B0 /* Unresponded_icon@2x~iphone.png in Resources */,
 				0BADABC619930005007B4538 /* contact-sent.png in Resources */,
 				0BADABCC1993000D007B4538 /* contact-blue-eye.png in Resources */,
+				0BA145851997A5620031716F /* agogo.aif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -970,9 +983,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BA1457B1997A4A60031716F /* sent-sound.aif in Resources */,
 				0BD758D81950F91B00CF0D85 /* Images.xcassets in Resources */,
-				3C9586341992A07300FF54B0 /* read_icon.png in Resources */,
 				0BE55472195A340500CE4669 /* unknown-user@2x~iphone.png in Resources */,
+				0BA145811997A4A60031716F /* typing-sound.aif in Resources */,
 				0BE5547A195A4ADC00CE4669 /* record@2x~iphone.png in Resources */,
 				0B3651D71958AC5000534386 /* contact-placeholder@2x~iphone.png in Resources */,
 				0BDB64CC19521A7C00223093 /* NBPhoneNumberMetadata.plist in Resources */,
@@ -990,28 +1004,28 @@
 				0BE55473195A340500CE4669 /* unknown-user.png in Resources */,
 				0B9051BA19771B96001E2ED5 /* checkbox-selected.png in Resources */,
 				0B9051BE19771B96001E2ED5 /* checkbox.png in Resources */,
+				0BA1457D1997A4A60031716F /* failed-sound.aif in Resources */,
 				0B3651E01959109700534386 /* heard-logo-58.png in Resources */,
 				0BD758D31950F91B00CF0D85 /* Main.storyboard in Resources */,
 				0BB0E8EE195B449A00C94AC0 /* MPCloseBtn.png in Resources */,
 				3C95862619927E9400FF54B0 /* play.png in Resources */,
 				0BB0E8EC195B449A00C94AC0 /* Media.xcassets in Resources */,
 				0B9051BC19771B96001E2ED5 /* checkbox@iphone.png in Resources */,
-				3C95862C1992964300FF54B0 /* Unresponded_icon.png in Resources */,
 				0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */,
 				0BB0E8F1195B449A00C94AC0 /* MPNotification.storyboard in Resources */,
 				0BDB64CD19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
-				3C9586361992A07300FF54B0 /* read_icon@2x~iphone.png in Resources */,
-				3C95863A1992A07300FF54B0 /* unread_icon@2x~iphone.png in Resources */,
 				0B9051B819771B96001E2ED5 /* checkbox-selected@2x~iphone.png in Resources */,
+				0BA1457F1997A4A60031716F /* start-record-sound.aif in Resources */,
 				0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */,
+				0BA145771997A4A60031716F /* end-record-sound.aif in Resources */,
+				0BA145791997A4A60031716F /* received-sound.aif in Resources */,
 				0BADABCD1993000D007B4538 /* contact-eye.png in Resources */,
 				0B56F656197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
 				0B969128198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
-				3C9586381992A07300FF54B0 /* unread_icon.png in Resources */,
 				0B3651D61958AC5000534386 /* contact-placeholder.png in Resources */,
-				3C95862E1992964300FF54B0 /* Unresponded_icon@2x~iphone.png in Resources */,
 				0BADABC519930005007B4538 /* contact-sent.png in Resources */,
 				0BADABCB1993000D007B4538 /* contact-blue-eye.png in Resources */,
+				0BA145841997A5620031716F /* agogo.aif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -66,5 +66,7 @@
 
 - (void)endPlayerAtCompletion:(BOOL)completed;
 
+- (void)playSound:(NSString *)sound;
+
 
 @end

@@ -14,6 +14,7 @@
 #import "SessionUtils.h"
 #import "ImageUtils.h"
 #import "TrackingUtils.h"
+#import "DashboardViewController.h"
 
 #define ACTION_CIRCLE_BORDER 2.5
 #define CONTACT_BORDER 0.5
@@ -32,6 +33,14 @@
 #define LAST_MESSAGE_READ_BY_CONTACT_STATE 9
 #define CURRENT_USER_DID_NOT_ANSWER_STATE 10
 
+#define START_RECORD_SOUND @"start-record-sound"
+#define END_RECORD_SOUND @"end-record-sound"
+#define SENT_SOUND @"sent-sound"
+#define FAILED_SOUND @"failed-sound"
+#define RECEIVED_SOUND @"received-sound"
+#define TYPING_SOUND @"typing-sound"
+#define LISTENED_SOUND @"listened-sound"
+
 @interface ContactView()
 
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
@@ -46,6 +55,7 @@
 @property (nonatomic, strong) UIImageView *recordOverlay;
 @property (nonatomic, strong) UIImageView *playOverlay;
 @property (nonatomic, strong) UIImageView *pendingContactOverlay;
+@property (nonatomic, strong) UIView *sentOverlay;
 
 @property (nonatomic, strong) CAShapeLayer *circleShape;
 @property (nonatomic, strong) CAShapeLayer *loadingCircleShape;
@@ -98,6 +108,7 @@
     [self initRecordOverlay];
     [self initPlayOverlay];
     [self initPendingContactOverlay];
+    [self initSentOverlay];
     [self initFailedCircleShape];
     [self initUnreadCircleShape];
     [self initLoadingCircleShape];
@@ -374,22 +385,13 @@
     self.sendingMessageCount --;
     
     if (error) {
+        [self.delegate playSound:FAILED_SOUND];
         // Stock failed message
         [self.failedMessages addObject:audioData];
     } else {
-        // todo BT
-        // animation message sent
-//        if (self.discussionState != FAILED_STATE) {
-//
-//            // Sent message anim
-//            self.sentMessageIcon.alpha = 1;
-//            [UIView animateWithDuration:1
-//                                  delay:1
-//                                options:UIViewAnimationOptionCurveLinear
-//                             animations:^{
-//                                 self.sentMessageIcon.alpha = 0;
-//                             } completion:nil];
-//        }
+        [self sentAnimation];
+        [self.delegate playSound:SENT_SOUND];
+        
         self.contact.currentUserDidNotAnswerLastMessage = NO;
         self.messageNotReadByContact = YES;
     }
@@ -414,6 +416,21 @@
     }
     
     [self deleteFailedMessages];
+}
+
+- (void)sentAnimation
+{
+    self.sentOverlay.alpha = 0;
+    
+    [self addSubview:self.sentOverlay];
+    
+    [UIView animateWithDuration:0.15 animations:^{
+        self.sentOverlay.alpha = 0.5;
+    } completion:^(BOOL finished) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            self.sentOverlay.alpha = 0;
+        });
+    }];
 }
 
 
@@ -667,6 +684,14 @@
     self.pendingContactOverlay.layer.cornerRadius = self.bounds.size.height/2;
     [self.pendingContactOverlay setBackgroundColor:[UIColor clearColor]];
     [self.pendingContactOverlay setImage:[UIImage imageNamed:@"unknown-user.png"]];
+}
+
+- (void)initSentOverlay
+{
+    self.sentOverlay = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
+    self.sentOverlay.clipsToBounds = YES;
+    self.sentOverlay.layer.cornerRadius = self.bounds.size.height/2;
+    [self.sentOverlay setBackgroundColor:[ImageUtils blue]];
 }
 
 - (UILabel *)allocAndInitCornerLabelWithText:(NSString *)text andColor:(UIColor *)color
