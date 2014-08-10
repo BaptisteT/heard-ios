@@ -33,14 +33,6 @@
 #define LAST_MESSAGE_READ_BY_CONTACT_STATE 9
 #define CURRENT_USER_DID_NOT_ANSWER_STATE 10
 
-#define START_RECORD_SOUND @"start-record-sound"
-#define END_RECORD_SOUND @"end-record-sound"
-#define SENT_SOUND @"sent-sound"
-#define FAILED_SOUND @"failed-sound"
-#define RECEIVED_SOUND @"received-sound"
-#define TYPING_SOUND @"typing-sound"
-#define LISTENED_SOUND @"listened-sound"
-
 @interface ContactView()
 
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
@@ -385,12 +377,12 @@
     self.sendingMessageCount --;
     
     if (error) {
-        [self.delegate playSound:FAILED_SOUND];
+        [self.delegate playSound:kFailedSound];
         // Stock failed message
         [self.failedMessages addObject:audioData];
     } else {
         [self sentAnimation];
-        [self.delegate playSound:SENT_SOUND];
+        [self.delegate playSound:kSentSound];
         
         self.contact.currentUserDidNotAnswerLastMessage = NO;
         self.messageNotReadByContact = YES;

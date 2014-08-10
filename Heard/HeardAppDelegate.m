@@ -167,8 +167,8 @@
             }
             
             if (! [(DashboardViewController *)visibleController isRecording]) {
+                [(DashboardViewController *)visibleController playSound:kReceivedSound];
                 AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-                AudioServicesPlaySystemSound(1000);
             }
         }
     }

@@ -47,14 +47,6 @@
 #define ACTION_FAILED_MESSAGES_OPTION_2 @"Delete"
 #define ACTION_SHEET_CANCEL @"Cancel"
 
-#define START_RECORD_SOUND @"start-record-sound"
-#define END_RECORD_SOUND @"end-record-sound"
-#define SENT_SOUND @"sent-sound"
-#define FAILED_SOUND @"failed-sound"
-#define RECEIVED_SOUND @"received-sound"
-#define TYPING_SOUND @"typing-sound"
-#define LISTENED_SOUND @"listened-sound"
-
 #define RECORDER_HEIGHT 5
 #define PLAYER_UI_HEIGHT 5
 #define INVITE_CONTACT_BUTTON_HEIGHT 50
@@ -848,14 +840,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self endPlayerAtCompletion:NO];
     }
     
-//    float appPlayerVolume = [MPMusicPlayerController applicationMusicPlayer].volume;
-//    if (appPlayerVolume > 0.25) {
-//        [self playSound:START_RECORD_SOUND];
-//        [self.recordSoundPlayer setVolume:1/(4*appPlayerVolume)];
-//    }
-//    [self.recordSoundPlayer play];
-    
-    [self playSound:START_RECORD_SOUND];
+    [self playSound:kStartRecordSound];
     [self disableAllContactViews];
     
     // Case where we had a pending message
@@ -882,8 +867,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     // Stop recording
     [self.recorder stop];
-//    [self.recordSoundPlayer play];
-    [self playSound:END_RECORD_SOUND];
+    [self playSound:kEndRecordSound];
     
     // Remove UI
     self.recorderLine.frame = [[self.recorderLine.layer presentationLayer] frame];
@@ -1359,9 +1343,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)playSound:(NSString *)sound
 {
-    if ([sound isEqualToString:START_RECORD_SOUND]) {
+    //TODO BB: homogene volume, even in silence mode?
+    
+    //Waiting for JB's sounds for start/end recording
+    if ([sound isEqualToString:kStartRecordSound]) {
         AudioServicesPlaySystemSound(1103); //Tink
-    } else if ([sound isEqualToString:END_RECORD_SOUND]) {
+    } else if ([sound isEqualToString:kEndRecordSound]) {
         AudioServicesPlaySystemSound(1104); //Tock
     } else  {
         //Init recording sound

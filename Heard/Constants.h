@@ -39,6 +39,15 @@ static const CGFloat kLongPressMinDuration = 0.05;
 static const CGFloat kLongPressMinDurationForOneTapMode = 0.5;
 static const CGFloat kAudioPlayerVolume = 1;
 
+//Sounds
+static NSString * const kStartRecordSound = @"start-record-sound";
+static NSString * const kEndRecordSound = @"end-record-sound";
+static NSString * const kSentSound = @"sent-sound";
+static NSString * const kFailedSound = @"failed-sound";
+static NSString * const kReceivedSound = @"received-sound";
+static NSString * const kTypingSound = @"typing-sound";
+static NSString * const kListenedSound = @"listened-sound";
+
 // Admin
 static const NSUInteger kAdminId = 1;
 
