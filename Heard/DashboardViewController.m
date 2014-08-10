@@ -79,7 +79,6 @@
 @property (strong, nonatomic) UIView *playerContainer;
 @property (nonatomic,strong) UIView *playerLine;
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
-@property (nonatomic, strong) AVAudioPlayer *recordSoundPlayer;
 @property (nonatomic) BOOL disableProximityObserver;
 @property (nonatomic) BOOL isUsingHeadSet;
 // Current user
@@ -215,11 +214,6 @@
     self.playerLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, PLAYER_UI_HEIGHT)];
     self.playerLine.backgroundColor = [ImageUtils green];
     [self.playerContainer addSubview:self.playerLine];
-    
-    //
-    self.recordSoundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:@"/System/Library/Audio/UISounds/Tink.caf"] error:nil];
-    [self.recordSoundPlayer prepareToPlay];
-
 }
 
 // Make sure scroll view has been resized (necessary because layout constraints change scroll view size)
@@ -854,11 +848,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self endPlayerAtCompletion:NO];
     }
     
-    float appPlayerVolume = [MPMusicPlayerController applicationMusicPlayer].volume;
-    if (appPlayerVolume > 0.25) {
-        [self.recordSoundPlayer setVolume:1/(4*appPlayerVolume)];
-    }
-    [self.recordSoundPlayer play];
+//    float appPlayerVolume = [MPMusicPlayerController applicationMusicPlayer].volume;
+//    if (appPlayerVolume > 0.25) {
+//        [self playSound:START_RECORD_SOUND];
+//        [self.recordSoundPlayer setVolume:1/(4*appPlayerVolume)];
+//    }
+//    [self.recordSoundPlayer play];
+    
+    [self playSound:START_RECORD_SOUND];
     [self disableAllContactViews];
     
     // Case where we had a pending message
@@ -885,7 +882,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     // Stop recording
     [self.recorder stop];
-    [self.recordSoundPlayer play];
+//    [self.recordSoundPlayer play];
+    [self playSound:END_RECORD_SOUND];
     
     // Remove UI
     self.recorderLine.frame = [[self.recorderLine.layer presentationLayer] frame];
@@ -1361,12 +1359,19 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)playSound:(NSString *)sound
 {
-    //Init recording sound
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:sound ofType:@"aif"];
-    NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef)soundURL, &_sound);
+    if ([sound isEqualToString:START_RECORD_SOUND]) {
+        AudioServicesPlaySystemSound(1103); //Tink
+    } else if ([sound isEqualToString:END_RECORD_SOUND]) {
+        AudioServicesPlaySystemSound(1104); //Tock
+    } else  {
+        //Init recording sound
+        NSString *soundPath = [[NSBundle mainBundle] pathForResource:sound ofType:@"aif"];
+        NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+        AudioServicesCreateSystemSoundID((__bridge CFURLRef)soundURL, &_sound);
+        AudioServicesPlaySystemSound(self.sound);
+    }
     
-    AudioServicesPlaySystemSound(self.sound);
+    
 }
 
 // ----------------------------------------------------------
