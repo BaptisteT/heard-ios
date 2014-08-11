@@ -46,7 +46,7 @@ static NSString * const kSentSound = @"sent-sound";
 static NSString * const kFailedSound = @"failed-sound";
 static NSString * const kReceivedSound = @"received-sound";
 static NSString * const kTypingSound = @"typing-sound";
-static NSString * const kListenedSound = @"listened-sound";
+static NSString * const kListenedSound = @"typing-sound";
 
 // Admin
 static const NSUInteger kAdminId = 1;

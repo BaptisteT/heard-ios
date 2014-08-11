@@ -146,29 +146,43 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    Message *newMessage = [Message rawMessageToInstance:[userInfo valueForKey:@"message"]];
-    
-    // Update Contact
-    [ContactUtils updateContacts:self.contacts withNewMessage:newMessage];
     UIApplicationState state = [application applicationState];
-    if (state == UIApplicationStateActive) {
-        // Update badge
-        NSNumber *badgeNumber = [[userInfo valueForKey:@"aps"] valueForKey:@"badge"];
-        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[badgeNumber integerValue]];
-        
-        // Add unread message
-        UIViewController *visibleController = [self getVisibleController];
-        if ([visibleController isKindOfClass:[DashboardViewController class]]) {
-            BOOL isAttributed = [(DashboardViewController *)visibleController attributeMessageToExistingContacts:newMessage];
+    
+    //Unread message push
+    if ([userInfo valueForKey:@"message"]) {
+        Message *newMessage = [Message rawMessageToInstance:[userInfo valueForKey:@"message"]];
+        // Update Contact
+        [ContactUtils updateContacts:self.contacts withNewMessage:newMessage];
+        if (state == UIApplicationStateActive) {
+            // Update badge
+            NSNumber *badgeNumber = [[userInfo valueForKey:@"aps"] valueForKey:@"badge"];
+            [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[badgeNumber integerValue]];
             
-            // distribute NonAttributedMessages
-            if (!isAttributed) {
-                [(DashboardViewController *)visibleController distributeNonAttributedMessages];
+            // Add unread message
+            UIViewController *visibleController = [self getVisibleController];
+            if ([visibleController isKindOfClass:[DashboardViewController class]]) {
+                BOOL isAttributed = [(DashboardViewController *)visibleController attributeMessageToExistingContacts:newMessage];
+                
+                // distribute NonAttributedMessages
+                if (!isAttributed) {
+                    [(DashboardViewController *)visibleController distributeNonAttributedMessages];
+                }
+                
+                if (! [(DashboardViewController *)visibleController isRecording]) {
+                    [(DashboardViewController *)visibleController playSound:kReceivedSound];
+                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+                }
             }
-            
-            if (! [(DashboardViewController *)visibleController isRecording]) {
-                [(DashboardViewController *)visibleController playSound:kReceivedSound];
-                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+        }
+    //Read message read
+    } else if ([userInfo valueForKey:@"receiver_id"] && [userInfo valueForKey:@"message_id"]) {
+        if (state == UIApplicationStateActive) {
+            UIViewController *visibleController = [self getVisibleController];
+            if ([visibleController isKindOfClass:[DashboardViewController class]]) {
+                NSUInteger contactId = [[userInfo valueForKey:@"receiver_id"] unsignedIntegerValue];
+                NSUInteger messageId = [[userInfo valueForKey:@"message_id"] unsignedIntegerValue];
+                
+                [(DashboardViewController *)visibleController message:messageId listenedByContact:contactId];
             }
         }
     }

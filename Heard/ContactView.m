@@ -58,6 +58,7 @@
 @property (nonatomic, strong) UILabel *failedMessageLabel;
 
 @property (nonatomic, strong) UIImageView *readStateIcon;
+@property (nonatomic, strong) UIImageView *readAnimationIcon;
 @property (nonatomic, strong) UIImageView *unreadStateIcon;
 @property (nonatomic, strong) UIImageView *unrespondedStateIcon;
 
@@ -105,6 +106,7 @@
     [self initUnreadCircleShape];
     [self initLoadingCircleShape];
     [self initReadStateImageView];
+    [self initReadAnimationImageView];
     [self initUnreadStateImageView];
     [self initUnrespondedStateImageView];
     
@@ -113,7 +115,7 @@
     self.failedMessageLabel = [self allocAndInitCornerLabelWithText:@"!" andColor:[ImageUtils red]];
 
     // Discussion state
-    [self resetDiscussionState];
+    [self resetDiscussionStateAnimated:NO];
     
     return self;
 }
@@ -132,40 +134,40 @@
 #pragma mark State
 // ----------------------------------------------------------
 
-- (void)resetDiscussionState
+- (void)resetDiscussionStateAnimated:(BOOL)animated
 {
-    // !! Order is key here !!
+    // !! Order is key here !! (pressiooooon)
     
     if ([self viewIsPending]) {
-        self.discussionState = PENDING_STATE;
+        [self setDiscussionState:PENDING_STATE animated:animated];
     } else if ([self isRecording]){
-        self.discussionState = RECORD_STATE;
+        [self setDiscussionState:RECORD_STATE animated:animated];
     } else if ([self isPlaying]) {
-        self.discussionState = PLAY_STATE;
+        [self setDiscussionState:PLAY_STATE animated:animated];
     } else if ([self hasFailedMessages]) {
-        self.discussionState = FAILED_STATE;
+        [self setDiscussionState:FAILED_STATE animated:animated];
     } else if ([self hasUnreadMessages]) {
-        self.discussionState = UNREAD_STATE;
+        [self setDiscussionState:UNREAD_STATE animated:animated];
     } else if ([self isloadingMessage]) {
-        self.discussionState = LOADING_STATE;
+        [self setDiscussionState:LOADING_STATE animated:animated];
     } else if ([self isSendingMessage]) {
-        self.discussionState = SENDING_STATE;
+        [self setDiscussionState:SENDING_STATE animated:animated];
     } else if ([self currentUserDidNotAnswerLastMessage]) {
-        self.discussionState = CURRENT_USER_DID_NOT_ANSWER_STATE;
+        [self setDiscussionState:CURRENT_USER_DID_NOT_ANSWER_STATE animated:animated];
     } else if ([self lastMessageSentReadByContact]) {
-        self.discussionState = LAST_MESSAGE_READ_BY_CONTACT_STATE;
+        [self setDiscussionState:LAST_MESSAGE_READ_BY_CONTACT_STATE animated:animated];
     } else if ([self messageNotReadByContact]) {
-        self.discussionState = LAST_MESSAGE_NOT_READ_BY_CONTACT_STATE;
+        [self setDiscussionState:LAST_MESSAGE_NOT_READ_BY_CONTACT_STATE animated:animated];
     }
     else {
-        self.discussionState = EMPTY_STATE;
+        [self setDiscussionState:EMPTY_STATE animated:animated];
     }
     
     // Reset One tap mode
     [self resetOneTapMode];
 }
 
-- (void)setDiscussionState:(NSInteger)discussionState
+- (void)setDiscussionState:(NSInteger)discussionState animated:(BOOL)animated
 {
     if (_discussionState == discussionState)
         return;
@@ -211,7 +213,22 @@
     }
     
     else if (discussionState == LAST_MESSAGE_READ_BY_CONTACT_STATE) {
-        self.readStateIcon.hidden = NO;
+        if (animated) {
+            [self.delegate playSound:kListenedSound];
+            self.readAnimationIcon.hidden = NO;
+            self.readAnimationIcon.alpha = 1;
+            self.readStateIcon.hidden = NO;
+            [UIView animateWithDuration:0.5 animations:^{
+                self.readAnimationIcon.alpha = 0;
+            }completion:^(BOOL finished) {
+                if (finished) {
+                    self.readAnimationIcon.hidden = YES;
+                    self.readAnimationIcon.alpha = 1;
+                }
+            }];
+        } else {
+            self.readStateIcon.hidden = NO;
+        }
     }
     
     else if (discussionState == LAST_MESSAGE_NOT_READ_BY_CONTACT_STATE) {
@@ -238,6 +255,10 @@
     self.unreadMessagesLabel.hidden = YES;
     [self.unreadCircleShape removeFromSuperlayer];
     
+    //Read animation
+    [self.readAnimationIcon.layer removeAllAnimations];
+    self.readAnimationIcon.hidden = YES;
+    
     //Loading/sending
     [self.loadingCircleShape removeAllAnimations];
     [self.loadingCircleShape removeFromSuperlayer];
@@ -245,6 +266,7 @@
     // Discussion state icons
     self.unrespondedStateIcon.hidden = YES;
     self.readStateIcon.hidden = YES;
+    self.readAnimationIcon.hidden = YES;
     self.unreadStateIcon.hidden = YES;
 }
 
@@ -277,7 +299,7 @@
                     [TrackingUtils trackRecord];
                 } else {
                     [self stopRecording];
-                    [self resetDiscussionState];
+                    [self resetDiscussionStateAnimated:NO];
                     [self.delegate tutoMessage:@"Hold to record." withDuration:1];
                 }
             };
@@ -334,7 +356,7 @@
             self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
             self.minDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMinAudioDuration target:self selector:@selector(minRecordingDurationReached) userInfo:nil repeats:NO];
             
-            [self resetDiscussionState];
+            [self resetDiscussionStateAnimated:NO];
             [self.delegate startedLongPressOnContactView:self];
         }
     }];
@@ -354,7 +376,7 @@
 - (void)stopRecording
 {
     self.isRecording = NO;
-    [self resetDiscussionState];
+    [self resetDiscussionStateAnimated:NO];
     [[AVAudioSession sharedInstance] setActive:NO error:nil];
     [self.delegate endedLongPressRecording];
 }
@@ -365,7 +387,7 @@
     self.contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
     
     self.sendingMessageCount ++;
-    [self resetDiscussionState];
+    [self resetDiscussionStateAnimated:NO];
     
     // Send
     [self.delegate sendMessageToContact:self];
@@ -387,12 +409,12 @@
         self.contact.currentUserDidNotAnswerLastMessage = NO;
         self.messageNotReadByContact = YES;
     }
-    [self resetDiscussionState];
+    [self resetDiscussionStateAnimated:NO];
 }
 
 - (void)deleteFailedMessages {
     self.failedMessages = [NSMutableArray new];
-    [self resetDiscussionState];
+    [self resetDiscussionStateAnimated:NO];
 }
 
 - (void)resendFailedMessages
@@ -435,14 +457,14 @@
     self.isPlaying = YES;
     self.contact.currentUserDidNotAnswerLastMessage = YES;
     [self.delegate startedPlayingAudioMessagesOfView:self];
-    [self resetDiscussionState];
+    [self resetDiscussionStateAnimated:NO];
 }
 
 - (void)messageFinishPlaying
 {
     [self deleteMessage:self.unreadMessages[0]];
     self.isPlaying = NO;
-    [self resetDiscussionState];
+    [self resetDiscussionStateAnimated:NO];
     
     if ([self hasUnreadMessages])
         [self playNextMessage];
@@ -463,7 +485,7 @@
     // unread state
     [self.delegate endPlayerAtCompletion:NO];
     self.isPlaying = NO;
-    [self resetDiscussionState];
+    [self resetDiscussionStateAnimated:NO];
 }
 
 
@@ -489,17 +511,17 @@
     if (message.audioData)
         return;
     self.loadingMessageCount ++;
-    [self resetDiscussionState];
+    [self resetDiscussionStateAnimated:NO];
     
     // Request data asynch
     [ApiUtils downloadAudioFileAtURL:[message getMessageURL] success:^void(NSData *data) {
         message.audioData = data;
         self.loadingMessageCount --;
-        [self resetDiscussionState];
+        [self resetDiscussionStateAnimated:NO];
     } failure:^(){
         [self downloadAudio:message];
         self.loadingMessageCount --;
-        [self resetDiscussionState];
+        [self resetDiscussionStateAnimated:NO];
     }];
 }
 
@@ -522,7 +544,7 @@
     self.unreadMessagesCount = 0;
     self.loadingMessageCount = 0;
     self.sendingMessageCount = 0;
-    [self resetDiscussionState];
+    [self resetDiscussionStateAnimated:NO];
 }
 
 
@@ -706,6 +728,14 @@
     [self.readStateIcon setFrame:CGRectMake(kContactSize - 10, -10, 25, 25)];
     self.readStateIcon.hidden = YES;
     [self addSubview:self.readStateIcon];
+}
+
+- (void)initReadAnimationImageView
+{
+    self.readAnimationIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"contact-blue-eye"]];
+    [self.readAnimationIcon setFrame:CGRectMake(kContactSize - 10, -10, 25, 25)];
+    self.readAnimationIcon.hidden = YES;
+    [self addSubview:self.readAnimationIcon];
 }
 
 - (void)initUnreadStateImageView

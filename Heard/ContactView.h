@@ -36,7 +36,7 @@
 - (void)deleteFailedMessages;
 - (void)resendFailedMessages;
 - (void)messageFinishPlaying;
-- (void)resetDiscussionState;
+- (void)resetDiscussionStateAnimated:(BOOL)animated;
 
 
 

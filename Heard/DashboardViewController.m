@@ -465,7 +465,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         position ++;
         
         // Set discussion state
-        [contactView resetDiscussionState];
+        [contactView resetDiscussionStateAnimated:NO];
     }
     
     // Resize view
@@ -654,7 +654,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             if (!idFound) {
                 contactView.messageNotReadByContact = NO;
             }
-            [contactView resetDiscussionState];
+            [contactView resetDiscussionStateAnimated:NO];
         }
        
         
@@ -742,6 +742,19 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     // Redisplay correctly
     self.nonAttributedUnreadMessages = nil;
     [self reorderContactViews];
+}
+
+- (void)message:(NSUInteger)messageId listenedByContact:(NSUInteger)contactId
+{
+    for (ContactView *contactView in self.contactViews) {
+        if (contactId == contactView.contact.identifier) {
+            //TODO BB: Check that message from server matches last message sent
+            contactView.messageNotReadByContact = NO;
+            
+            [contactView resetDiscussionStateAnimated:YES];
+            break;
+        }
+    }
 }
 
 
@@ -937,7 +950,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     for (ContactView *contactView in self.contactViews) {
         contactView.isPlaying = NO;
-        [contactView resetDiscussionState];
+        [contactView resetDiscussionStateAnimated:NO];
     }
 }
 
@@ -1329,7 +1342,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [self endedLongPressRecording];
             for (ContactView *contactView in self.contactViews) {
                 contactView.isRecording = NO;
-                [contactView resetDiscussionState];
+                [contactView resetDiscussionStateAnimated:NO];
             }
             [self tutoMessage:@"Message canceled" withDuration:2];
         }
