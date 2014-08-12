@@ -16,7 +16,7 @@
 static NSString * const kApiVersion = @"1";
 
 static NSString * const kProdAFHeardAPIBaseURLString = @"http://heard.herokuapp.com/";
-static NSString * const kProdAFHeardWebsite = @"www.waved.io/beta";
+static NSString * const kProdAFHeardWebsite = @"www.waved.io";
 
 static NSString * const kStagingAFHeardAPIBaseURLString = @"http://heard-staging.herokuapp.com/";
     
