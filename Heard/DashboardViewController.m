@@ -142,7 +142,6 @@
     AVAudioSession* session = [AVAudioSession sharedInstance];
     BOOL success; NSError* error;
     success = [session setCategory:AVAudioSessionCategoryPlayAndRecord
-                       withOptions:AVAudioSessionCategoryOptionMixWithOthers
                              error:&error];
     if (!success)
         NSLog(@"AVAudioSession error setting category:%@",error);
