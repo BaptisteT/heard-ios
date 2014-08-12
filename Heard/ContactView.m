@@ -403,8 +403,10 @@
         // Stock failed message
         [self.failedMessages addObject:audioData];
     } else {
-        [self sentAnimation];
-        [self.delegate playSound:kSentSound];
+        if (!self.isRecording && !self.isPlaying) {
+            [self sentAnimation];
+            [self.delegate playSound:kSentSound];
+        }
         
         self.contact.currentUserDidNotAnswerLastMessage = NO;
         self.messageNotReadByContact = YES;
