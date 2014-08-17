@@ -296,7 +296,6 @@
                 if([self.delegate isRecording] && ![self.minDurationTimer isValid]) {
                     [self stopRecording];
                     [self sendRecording];
-                    [TrackingUtils trackRecord];
                 } else {
                     [self stopRecording];
                     [self resetDiscussionStateAnimated:NO];
