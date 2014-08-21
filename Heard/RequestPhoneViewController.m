@@ -107,12 +107,8 @@
         [GeneralUtils showMessage:@"Invalid phone number." withTitle:nil];
         return;
     }
-
-    if ([self.phoneFormat isPhoneNumberValid:self.decimalPhoneNumber]) {
-        [self sendCodeRequest:formattedPhoneNumber];
-    } else {
-        [GeneralUtils showMessage:nil withTitle:@"Invalid phone number"];
-    }
+    
+    [self sendCodeRequest:formattedPhoneNumber];
 }
 
 - (IBAction)countryCodeButtonClicked:(id)sender {
