@@ -124,8 +124,8 @@
         if ([countryName hasSuffix:@"\r"])
             countryName = [countryName substringToIndex:countryName.length - 1];
         
-        if ([self.indexedCountries valueForKey:[countryName substringToIndex:1]]) {
-            [(NSMutableArray *)[self.indexedCountries valueForKey:[countryName substringToIndex:1]] addObject:countryName];
+        if ([self.indexedCountries objectForKey:[countryName substringToIndex:1]]) {
+            [(NSMutableArray *)[self.indexedCountries objectForKey:[countryName substringToIndex:1]] addObject:countryName];
         } else {
             [self.indexedCountries setValue:[[NSMutableArray alloc] initWithObjects:countryName, nil] forKey:[countryName substringToIndex:1]];
         }

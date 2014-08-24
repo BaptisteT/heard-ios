@@ -137,8 +137,8 @@
             if ([contact[0] length] > 0) {
                 NSString *key = [[contact[0] substringToIndex:1] uppercaseString];
                 
-                if ([self.indexedContacts valueForKey:key]) {
-                    [[self.indexedContacts valueForKey:key] addObject:contact];
+                if ([self.indexedContacts objectForKey:key]) {
+                    [[self.indexedContacts objectForKey:key] addObject:contact];
                 } else {
                     [self.indexedContacts setValue:[[NSMutableArray alloc] initWithObjects:contact, nil]
                                             forKey:key];
