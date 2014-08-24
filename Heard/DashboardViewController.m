@@ -958,8 +958,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     // Min volume (legal / deprecated ?)
     MPMusicPlayerController *appPlayer = [MPMusicPlayerController applicationMusicPlayer];
-    if (appPlayer.volume < 0.25) {
-        [appPlayer setVolume:0.25];
+    if (appPlayer.volume < 0.5) {
+        [appPlayer setVolume:0.5];
     }
     
     // Set loud speaker and proximity check
