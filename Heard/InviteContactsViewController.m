@@ -96,8 +96,6 @@
 {
     [self.selectedContacts removeObject:phoneNumber];
     
-    NSLog(@"COUNT: %ld", [self.selectedContacts count]);
-    
     self.inviteButtonLabel.text = [NSString stringWithFormat:@"Invite to Waved (%ld)", [self.selectedContacts count]];
     
     if ([self.selectedContacts count] == 0) {
@@ -114,14 +112,16 @@
 
 - (void)inviteButtonClicked
 {
-    //Redirect to sms
-    MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
-    viewController.body = [NSString stringWithFormat:@"Let's start chatting on Waved! Download at %@", kProdAFHeardWebsite];
-    viewController.recipients = self.selectedContacts;
-    viewController.messageComposeDelegate = self;
-    
-    
-    [self presentViewController:viewController animated:YES completion:nil];
+    if ([MFMessageComposeViewController canSendText]) {
+        //Redirect to sms
+        MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
+        viewController.body = [NSString stringWithFormat:@"Let's start chatting on Waved! Download at %@", kProdAFHeardWebsite];
+        viewController.recipients = self.selectedContacts;
+        viewController.messageComposeDelegate = self;
+        [self presentViewController:viewController animated:YES completion:nil];
+    } else {
+        [GeneralUtils showMessage:@"Your device is not properly configured to send messages" withTitle:nil];
+    }
 }
 
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result

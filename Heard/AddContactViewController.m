@@ -216,7 +216,7 @@
 
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:ALERT_VIEW_INVITE_BUTTON]) {
+    if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:ALERT_VIEW_INVITE_BUTTON] && [MFMessageComposeViewController canSendText]) {
         //Redirect to sms
         MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
         viewController.body = [NSString stringWithFormat:@"Hey %@, let's start chatting on Waved! Download at %@", self.firstNameField.text ? self.firstNameField.text : self.lastNameField.text, kProdAFHeardWebsite];
