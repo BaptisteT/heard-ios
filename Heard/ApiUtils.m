@@ -60,7 +60,10 @@
 // Enrich parameters with token
 + (void) enrichParametersWithToken:(NSMutableDictionary *) parameters
 {
-    [parameters setObject:[SessionUtils getCurrentUserToken] forKey:@"auth_token"];
+    NSString *token = [SessionUtils getCurrentUserToken];
+    if (token) {
+        [parameters setObject:token forKey:@"auth_token"];
+    }
 }
 
 + (void)requestSmsCode:(NSString *)phoneNumber
