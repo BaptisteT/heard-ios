@@ -104,10 +104,25 @@
 }
 
 - (IBAction)profilePicturePressed:(id)sender {
-    self.pictureActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                          delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
-                                            destructiveButtonTitle:nil
-                                                 otherButtonTitles:ACTION_SHEET_OPTION_1, ACTION_SHEET_OPTION_2, nil];
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+        self.pictureActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                              delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                destructiveButtonTitle:nil
+                                                     otherButtonTitles:ACTION_SHEET_OPTION_1, ACTION_SHEET_OPTION_2, nil];
+    } else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+        self.pictureActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                              delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                destructiveButtonTitle:nil
+                                                     otherButtonTitles:ACTION_SHEET_OPTION_2, nil];
+    } else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        self.pictureActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                              delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                destructiveButtonTitle:nil
+                                                     otherButtonTitles:ACTION_SHEET_OPTION_1, nil];
+    } else {
+        [GeneralUtils showMessage:@"Your camera and photo library are not available" withTitle:nil];
+        return;
+    }
     
     [self.pictureActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
