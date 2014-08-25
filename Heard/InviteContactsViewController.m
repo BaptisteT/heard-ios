@@ -115,7 +115,7 @@
     if ([MFMessageComposeViewController canSendText]) {
         //Redirect to sms
         MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
-        viewController.body = [NSString stringWithFormat:@"Hey, let's start chatting on Waved! It's a new app which lets you send short voice messages in one tap! Download it at %@", kProdAFHeardWebsite];
+        viewController.body = [NSString stringWithFormat:@"Hey, let's start chatting on Waved! It's a new app which lets you send short voice messages in one tap. Download it at %@", kProdAFHeardWebsite];
         viewController.recipients = self.selectedContacts;
         viewController.messageComposeDelegate = self;
         [self presentViewController:viewController animated:YES completion:nil];
