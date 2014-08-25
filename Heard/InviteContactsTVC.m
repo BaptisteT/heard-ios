@@ -8,6 +8,7 @@
 
 #import "InviteContactsTVC.h"
 #import <AddressBook/AddressBook.h>
+#import "NBPhoneNumberUtil.h"
 
 @interface InviteContactsTVC ()
 
@@ -110,38 +111,41 @@
 - (void)retrieveFriendsFromAddressBook
 {
     ABAddressBookRef addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
-    
     CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(addressBook);
     CFIndex peopleCount = CFArrayGetCount(people);
+    
+    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
     
     //Structure: @{ "A": @[ @[@"Artois", @"Jonathan", @"(415)-509-9382", @"not selected], @["Azta", "Lorainne", @"06 92 83 48 58", @"selected"]], "B": etc.
     self.indexedContacts = [[NSMutableDictionary alloc] init];
     
     for (CFIndex i = 0 ; i < peopleCount; i++) {
         ABRecordRef person = CFArrayGetValueAtIndex(people, i);
-        
         ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
-        
         NSString *firstName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
         NSString *lastName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
         
-        if (ABMultiValueGetCount(phoneNumbers) > 0 &&
-            ((firstName && [firstName length] > 0) || (lastName && [lastName length] > 0))) {
-            
-            NSMutableArray *contact = [[NSMutableArray alloc] initWithObjects:lastName ? lastName : firstName,
-                                       firstName && lastName ? firstName : @"",
-                                       (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, 0),
-                                       @"not selected", nil];
-            
-            //Exclude case where contact has no first name and no last name
-            if ([contact[0] length] > 0) {
-                NSString *key = [[contact[0] substringToIndex:1] uppercaseString];
+        if ((firstName && [firstName length] > 0) || (lastName && [lastName length] > 0)) {
+            for (int i=0; i<ABMultiValueGetCount(phoneNumbers);i++) {
+                NSString *number = (__bridge NSString *) ABMultiValueCopyValueAtIndex(phoneNumbers, i);
+                NSError *aError = nil;
+                NBPhoneNumber *nbPhoneNumber = [phoneUtil parseWithPhoneCarrierRegion:number error:&aError];
                 
-                if ([self.indexedContacts objectForKey:key]) {
-                    [[self.indexedContacts objectForKey:key] addObject:contact];
-                } else {
-                    [self.indexedContacts setValue:[[NSMutableArray alloc] initWithObjects:contact, nil]
-                                            forKey:key];
+                if (aError == nil && ([phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeMOBILE
+                    || [phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeFIXED_LINE_OR_MOBILE) ) {
+                    NSMutableArray *contact = [[NSMutableArray alloc] initWithObjects:lastName ? lastName : firstName,
+                                               firstName && lastName ? firstName : @"",
+                                               (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, 0),
+                                               @"not selected", nil];
+
+                    NSString *key = [[contact[0] substringToIndex:1] uppercaseString];
+                    
+                    if ([self.indexedContacts objectForKey:key]) {
+                        [[self.indexedContacts objectForKey:key] addObject:contact];
+                    } else {
+                        [self.indexedContacts setValue:[[NSMutableArray alloc] initWithObjects:contact, nil]
+                                                forKey:key];
+                    }
                 }
             }
         }
