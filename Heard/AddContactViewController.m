@@ -20,8 +20,8 @@
 #import "NBPhoneNumber.h"
 
 #define BORDER_WIDTH 0.5
-#define ALERT_VIEW_DONE_BUTTON NSLocalizedStringFromTable(@"done_button_title",@"strings",@"comment")
-#define ALERT_VIEW_INVITE_BUTTON NSLocalizedStringFromTable(@"invite_button_title",@"strings",@"comment")
+#define ALERT_VIEW_DONE_BUTTON NSLocalizedStringFromTable(@"done_button_title",kStringFile,@"comment")
+#define ALERT_VIEW_INVITE_BUTTON NSLocalizedStringFromTable(@"invite_button_title",kStringFile,@"comment")
 
 #define DEFAULT_COUNTRY @"USA"
 #define DEFAULT_COUNTRY_CODE 1
@@ -94,20 +94,20 @@
                                  defaultRegion:nil error:&aError];
 
     if (aError || ![phoneUtil isValidNumber:myNumber]) {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"phone_number_error_message",@"strings",@"comment") withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"phone_number_error_message",kStringFile,@"comment") withTitle:nil];
         return;
     }
     NSString *formattedPhoneNumber = [phoneUtil format:myNumber
                                           numberFormat:NBEPhoneNumberFormatE164
                                                  error:&aError];
     if (aError) {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"phone_number_error_message",@"strings",@"comment") withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"phone_number_error_message",kStringFile,@"comment") withTitle:nil];
         return;
     }
     
     if ((!self.firstNameField.text || [self.firstNameField.text length] == 0) &&
         (!self.lastNameField.text || [self.lastNameField.text length] == 0)) {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"add_contact_missing_name_message",@"strings",@"comment") withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"add_contact_missing_name_message",kStringFile,@"comment") withTitle:nil];
         return;
     }
     
@@ -126,7 +126,7 @@
         //Already on Waved
         if (present) {
             [self dismissViewControllerAnimated:YES completion:^{
-                [GeneralUtils showMessage: [NSLocalizedStringFromTable(@"add_contact_success_message",@"strings",@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:contactName]
+                [GeneralUtils showMessage: [NSLocalizedStringFromTable(@"add_contact_success_message",kStringFile,@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:contactName]
                                 withTitle:nil];
                 
                 [self.delegate didFinishedAddingContact];
@@ -136,7 +136,7 @@
         //Not on Waved
         } else {
             [[[UIAlertView alloc] initWithTitle:nil
-                                        message: [NSLocalizedStringFromTable(@"add_contact_not_waved_user_message",@"strings",@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:contactName]
+                                        message: [NSLocalizedStringFromTable(@"add_contact_not_waved_user_message",kStringFile,@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:contactName]
                                        delegate:self
                               cancelButtonTitle:nil
                               otherButtonTitles:ALERT_VIEW_DONE_BUTTON, ALERT_VIEW_INVITE_BUTTON, nil] show];
@@ -146,7 +146,7 @@
     } failure:^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
-        [GeneralUtils showMessage:[NSLocalizedStringFromTable(@"add_contact_failure_message",@"strings",@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:contactName]
+        [GeneralUtils showMessage:[NSLocalizedStringFromTable(@"add_contact_failure_message",kStringFile,@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:contactName]
                         withTitle:nil];
     }];
 }
@@ -218,7 +218,7 @@
     if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:ALERT_VIEW_INVITE_BUTTON] && [MFMessageComposeViewController canSendText]) {
         //Redirect to sms
         MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
-        viewController.body = [NSString stringWithFormat:@"%@ %@",[NSLocalizedStringFromTable(@"personal_invite_text_message",@"strings",@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:self.firstNameField.text ? self.firstNameField.text : self.lastNameField.text], kProdAFHeardWebsite];
+        viewController.body = [NSString stringWithFormat:@"%@ %@",[NSLocalizedStringFromTable(@"personal_invite_text_message",kStringFile,@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:self.firstNameField.text ? self.firstNameField.text : self.lastNameField.text], kProdAFHeardWebsite];
         viewController.recipients = @[[self.countryCodeButton.titleLabel.text stringByAppendingString:self.decimalPhoneNumber]];
         viewController.messageComposeDelegate = self;
         
@@ -235,7 +235,7 @@
         
         [self dismissViewControllerAnimated:NO completion:^{
             [self dismissViewControllerAnimated:NO completion:^{
-                [GeneralUtils showMessage:[NSLocalizedStringFromTable(@"personal_invite_text_success_message",@"strings",@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:self.firstNameField.text ? self.firstNameField.text : self.lastNameField.text]
+                [GeneralUtils showMessage:[NSLocalizedStringFromTable(@"personal_invite_text_success_message",kStringFile,@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:self.firstNameField.text ? self.firstNameField.text : self.lastNameField.text]
                                 withTitle:nil];
             }];
         }];

@@ -13,6 +13,9 @@
 
 @end
 
+// Name of the string files (depend on language / app store!)
+static NSString * const kStringFile = @"english_strings";
+
 static NSString * const kApiVersion = @"1";
 
 static NSString * const kProdAFHeardAPIBaseURLString = @"http://heard.herokuapp.com/";

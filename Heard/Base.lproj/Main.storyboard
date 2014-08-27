@@ -1101,9 +1101,11 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="backButton" destination="ReW-zr-3e4" id="59V-5s-iKi"/>
                         <outlet property="inviteButtonContainer" destination="Kbg-bh-YP9" id="0kY-R5-FLb"/>
                         <outlet property="inviteButtonLabel" destination="Cwj-fN-yDZ" id="nMj-Lx-0v6"/>
                         <outlet property="navigationContainer" destination="nSC-nt-ya9" id="6df-7N-mR7"/>
+                        <outlet property="selectAllButton" destination="Ovf-kr-nWU" id="21V-cK-fNb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MLa-RA-hds" userLabel="First Responder" sceneMemberID="firstResponder"/>

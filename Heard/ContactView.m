@@ -299,8 +299,7 @@
                     [self sendRecording];
                 } else {
                     [self stopRecording];
-                    [self resetDiscussionStateAnimated:NO];
-                    [self.delegate tutoMessage:NSLocalizedStringFromTable(@"audio_too_short_error",@"strings", @"comment") withDuration:1];
+                    [self.delegate tutoMessage:NSLocalizedStringFromTable(@"audio_too_short_error",kStringFile, @"comment") withDuration:1];
                 }
             };
         }
@@ -347,7 +346,7 @@
     AVAudioSession *session = [AVAudioSession sharedInstance];
     [session requestRecordPermission:^(BOOL granted) {
         if (!granted) {
-            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"micro_access_error_message",@"strings",@"comment") withTitle:NSLocalizedStringFromTable(@"micro_access_error_title",@"strings",@"comment")];
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"micro_access_error_message",kStringFile,@"comment") withTitle:NSLocalizedStringFromTable(@"micro_access_error_title",kStringFile,@"comment")];
             return;
         } else {
             self.isRecording = YES;

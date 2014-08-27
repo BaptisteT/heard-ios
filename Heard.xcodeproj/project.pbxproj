@@ -241,8 +241,10 @@
 		3C95862719927E9400FF54B0 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862419927E9400FF54B0 /* play.png */; };
 		3C95862819927E9400FF54B0 /* play@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862519927E9400FF54B0 /* play@2x~iphone.png */; };
 		3C95862919927E9400FF54B0 /* play@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862519927E9400FF54B0 /* play@2x~iphone.png */; };
-		3CA16D2619ADCCC000C1F2A5 /* strings.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3CA16D2519ADCCC000C1F2A5 /* strings.strings */; };
-		3CA16D2719ADCCC000C1F2A5 /* strings.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3CA16D2519ADCCC000C1F2A5 /* strings.strings */; };
+		3CA16D2919AE407200C1F2A5 /* english_strings.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3CA16D2819AE407200C1F2A5 /* english_strings.strings */; };
+		3CA16D2A19AE407200C1F2A5 /* english_strings.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3CA16D2819AE407200C1F2A5 /* english_strings.strings */; };
+		3CA16D2C19AE42CE00C1F2A5 /* french_strings.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3CA16D2B19AE42CE00C1F2A5 /* french_strings.strings */; };
+		3CA16D2D19AE42CE00C1F2A5 /* french_strings.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3CA16D2B19AE42CE00C1F2A5 /* french_strings.strings */; };
 		3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA177E91958B74000096266 /* AudioToolbox.framework */; };
 		3CB8B7F5195453E50090D657 /* ContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactView.m */; };
 		3CF2E981198E76110098087B /* CustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF2E980198E76110098087B /* CustomActionSheet.m */; };
@@ -435,7 +437,8 @@
 		3C9BBE0B195345A6001C6C4D /* UIRefreshControl+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIRefreshControl+AFNetworking.m"; sourceTree = "<group>"; };
 		3C9BBE0C195345A6001C6C4D /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		3C9BBE0D195345A6001C6C4D /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
-		3CA16D2519ADCCC000C1F2A5 /* strings.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = strings.strings; sourceTree = "<group>"; };
+		3CA16D2819AE407200C1F2A5 /* english_strings.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = english_strings.strings; sourceTree = "<group>"; };
+		3CA16D2B19AE42CE00C1F2A5 /* french_strings.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = french_strings.strings; sourceTree = "<group>"; };
 		3CA177E91958B74000096266 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		3CB8B7EA195346620090D657 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		3CB8B7EB195346620090D657 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
@@ -681,7 +684,8 @@
 				0BD758C81950F91B00CF0D85 /* InfoPlist.strings */,
 				0BD758CB1950F91B00CF0D85 /* main.m */,
 				0BD758CD1950F91B00CF0D85 /* Heard-Prefix.pch */,
-				3CA16D2519ADCCC000C1F2A5 /* strings.strings */,
+				3CA16D2819AE407200C1F2A5 /* english_strings.strings */,
+				3CA16D2B19AE42CE00C1F2A5 /* french_strings.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -945,6 +949,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CA16D2A19AE407200C1F2A5 /* english_strings.strings in Resources */,
 				0BA1457C1997A4A60031716F /* sent-sound.aif in Resources */,
 				0B72EEE5196C672F00AC5A01 /* Images.xcassets in Resources */,
 				0B72EEE7196C672F00AC5A01 /* unknown-user@2x~iphone.png in Resources */,
@@ -964,13 +969,13 @@
 				0B72EEF2196C672F00AC5A01 /* InfoPlist.strings in Resources */,
 				0B72EEF3196C672F00AC5A01 /* PhoneNumberMetaDataForTesting.json in Resources */,
 				0B72EEF4196C672F00AC5A01 /* unknown-user.png in Resources */,
+				3CA16D2D19AE42CE00C1F2A5 /* french_strings.strings in Resources */,
 				0B9051BB19771B96001E2ED5 /* checkbox-selected.png in Resources */,
 				0B9051BF19771B96001E2ED5 /* checkbox.png in Resources */,
 				0BA1457E1997A4A60031716F /* failed-sound.aif in Resources */,
 				0B72EEF5196C672F00AC5A01 /* heard-logo-58.png in Resources */,
 				0B72EEF6196C672F00AC5A01 /* Main.storyboard in Resources */,
 				0B72EEF7196C672F00AC5A01 /* MPCloseBtn.png in Resources */,
-				3CA16D2719ADCCC000C1F2A5 /* strings.strings in Resources */,
 				3C95862719927E9400FF54B0 /* play.png in Resources */,
 				0B72EEF8196C672F00AC5A01 /* Media.xcassets in Resources */,
 				0B9051BD19771B96001E2ED5 /* checkbox@iphone.png in Resources */,
@@ -996,6 +1001,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CA16D2919AE407200C1F2A5 /* english_strings.strings in Resources */,
 				0BA1457B1997A4A60031716F /* sent-sound.aif in Resources */,
 				0BD758D81950F91B00CF0D85 /* Images.xcassets in Resources */,
 				0BE55472195A340500CE4669 /* unknown-user@2x~iphone.png in Resources */,
@@ -1015,13 +1021,13 @@
 				0BD758CA1950F91B00CF0D85 /* InfoPlist.strings in Resources */,
 				0BDB64CF19521A7C00223093 /* PhoneNumberMetaDataForTesting.json in Resources */,
 				0BE55473195A340500CE4669 /* unknown-user.png in Resources */,
+				3CA16D2C19AE42CE00C1F2A5 /* french_strings.strings in Resources */,
 				0B9051BA19771B96001E2ED5 /* checkbox-selected.png in Resources */,
 				0B9051BE19771B96001E2ED5 /* checkbox.png in Resources */,
 				0BA1457D1997A4A60031716F /* failed-sound.aif in Resources */,
 				0B3651E01959109700534386 /* heard-logo-58.png in Resources */,
 				0BD758D31950F91B00CF0D85 /* Main.storyboard in Resources */,
 				0BB0E8EE195B449A00C94AC0 /* MPCloseBtn.png in Resources */,
-				3CA16D2619ADCCC000C1F2A5 /* strings.strings in Resources */,
 				3C95862619927E9400FF54B0 /* play.png in Resources */,
 				0BB0E8EC195B449A00C94AC0 /* Media.xcassets in Resources */,
 				0B9051BC19771B96001E2ED5 /* checkbox@iphone.png in Resources */,

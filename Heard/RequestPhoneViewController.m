@@ -15,6 +15,7 @@
 #import "AddressbookUtils.h"
 #import "NBPhoneNumberUtil.h"
 #import "NBPhoneNumber.h"
+#import "Constants.h"
 
 #define BORDER_SIZE 0.5
 #define DEFAULT_COUNTRY @"USA"
@@ -97,14 +98,14 @@
                                  defaultRegion:nil error:&aError];
     
     if (aError || ![phoneUtil isValidNumber:myNumber]) {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"phone_number_error_message",@"strings",@"comment") withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"phone_number_error_message",kStringFile,@"comment") withTitle:nil];
         return;
     }
     NSString *formattedPhoneNumber = [phoneUtil format:myNumber
                                           numberFormat:NBEPhoneNumberFormatE164
                                                  error:&aError];
     if (aError) {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"phone_number_error_message",@"strings",@"comment") withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"phone_number_error_message",kStringFile,@"comment") withTitle:nil];
         return;
     }
     
@@ -155,7 +156,7 @@
         [self performSegueWithIdentifier:@"Code Confirmation Push Segue" sender:phoneNumber];
     } failure:^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"confirmation_code_error_message",@"strings",@"comment") withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"confirmation_code_error_message",kStringFile,@"comment") withTitle:nil];
     }];
 }
 

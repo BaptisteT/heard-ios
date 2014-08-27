@@ -30,23 +30,23 @@
 #import "CustomActionSheet.h"
 #import <AudioToolbox/AudioToolbox.h>
 
-#define ACTION_MAIN_MENU_OPTION_1 NSLocalizedStringFromTable(@"invite_friends_button_title",@"strings",@"comment")
-#define ACTION_MAIN_MENU_OPTION_2 NSLocalizedStringFromTable(@"add_new_contact_button_title",@"strings",@"comment")
-#define ACTION_OTHER_MENU_OPTION_1 NSLocalizedStringFromTable(@"edit_profile_button_title",@"strings",@"comment")
-#define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"hide_contacts_button_title",@"strings",@"comment")
-#define ACTION_OTHER_MENU_OPTION_3 NSLocalizedStringFromTable(@"share_button_title",@"strings",@"comment")
-#define ACTION_OTHER_MENU_OPTION_4 NSLocalizedStringFromTable(@"feedback_button_title",@"strings",@"comment")
-#define ACTION_OTHER_MENU_OPTION_5 NSLocalizedStringFromTable(@"log_out_button_title",@"strings",@"comment")
-#define ACTION_PENDING_OPTION_1 NSLocalizedStringFromTable(@"add_to_contact_button_title",@"strings",@"comment")
-#define ACTION_PENDING_OPTION_2 NSLocalizedStringFromTable(@"block_button_title",@"strings",@"comment")
-#define ACTION_SHEET_PROFILE_OPTION_1 NSLocalizedStringFromTable(@"edit_picture_button_title",@"strings",@"comment")
-#define ACTION_SHEET_PROFILE_OPTION_2 NSLocalizedStringFromTable(@"edit_first_name_button_title",@"strings",@"comment")
-#define ACTION_SHEET_PROFILE_OPTION_3 NSLocalizedStringFromTable(@"edit_last_name_button_title",@"strings",@"comment")
-#define ACTION_SHEET_PICTURE_OPTION_1 NSLocalizedStringFromTable(@"camera_button_title",@"strings",@"comment")
-#define ACTION_SHEET_PICTURE_OPTION_2 NSLocalizedStringFromTable(@"library_button_title",@"strings",@"comment")
-#define ACTION_FAILED_MESSAGES_OPTION_1 NSLocalizedStringFromTable(@"resend_button_title",@"strings",@"comment")
-#define ACTION_FAILED_MESSAGES_OPTION_2 NSLocalizedStringFromTable(@"delete_button_title",@"strings",@"comment")
-#define ACTION_SHEET_CANCEL NSLocalizedStringFromTable(@"cancel_button_title",@"strings",@"comment")
+#define ACTION_MAIN_MENU_OPTION_1 NSLocalizedStringFromTable(@"invite_friends_button_title",kStringFile,@"comment")
+#define ACTION_MAIN_MENU_OPTION_2 NSLocalizedStringFromTable(@"add_new_contact_button_title",kStringFile,@"comment")
+#define ACTION_OTHER_MENU_OPTION_1 NSLocalizedStringFromTable(@"edit_profile_button_title",kStringFile,@"comment")
+#define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"hide_contacts_button_title",kStringFile,@"comment")
+#define ACTION_OTHER_MENU_OPTION_3 NSLocalizedStringFromTable(@"share_button_title",kStringFile,@"comment")
+#define ACTION_OTHER_MENU_OPTION_4 NSLocalizedStringFromTable(@"feedback_button_title",kStringFile,@"comment")
+#define ACTION_OTHER_MENU_OPTION_5 NSLocalizedStringFromTable(@"log_out_button_title",kStringFile,@"comment")
+#define ACTION_PENDING_OPTION_1 NSLocalizedStringFromTable(@"add_to_contact_button_title",kStringFile,@"comment")
+#define ACTION_PENDING_OPTION_2 NSLocalizedStringFromTable(@"block_button_title",kStringFile,@"comment")
+#define ACTION_SHEET_PROFILE_OPTION_1 NSLocalizedStringFromTable(@"edit_picture_button_title",kStringFile,@"comment")
+#define ACTION_SHEET_PROFILE_OPTION_2 NSLocalizedStringFromTable(@"edit_first_name_button_title",kStringFile,@"comment")
+#define ACTION_SHEET_PROFILE_OPTION_3 NSLocalizedStringFromTable(@"edit_last_name_button_title",kStringFile,@"comment")
+#define ACTION_SHEET_PICTURE_OPTION_1 NSLocalizedStringFromTable(@"camera_button_title",kStringFile,@"comment")
+#define ACTION_SHEET_PICTURE_OPTION_2 NSLocalizedStringFromTable(@"library_button_title",kStringFile,@"comment")
+#define ACTION_FAILED_MESSAGES_OPTION_1 NSLocalizedStringFromTable(@"resend_button_title",kStringFile,@"comment")
+#define ACTION_FAILED_MESSAGES_OPTION_2 NSLocalizedStringFromTable(@"delete_button_title",kStringFile,@"comment")
+#define ACTION_SHEET_CANCEL NSLocalizedStringFromTable(@"cancel_button_title",kStringFile,@"comment")
 
 #define RECORDER_HEIGHT 5
 #define PLAYER_UI_HEIGHT 5
@@ -256,7 +256,7 @@
     NSUInteger labelHeight = 100;
     self.noAddressBookAccessLabel = [[UITextView alloc] initWithFrame:CGRectMake(0, (self.view.bounds.size.height - labelHeight)/2, self.view.bounds.size.width, labelHeight)];
     self.noAddressBookAccessLabel.userInteractionEnabled = NO;
-    self.noAddressBookAccessLabel.text = NSLocalizedStringFromTable(@"contact_access_error_message", @"strings", @"comment");
+    self.noAddressBookAccessLabel.text = NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment");
     self.noAddressBookAccessLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
     self.noAddressBookAccessLabel.textAlignment = NSTextAlignmentCenter;
 }
@@ -394,7 +394,7 @@
         [self hideLoadingIndicator];
         //In this case, 401 means that the auth token is no valid.
         if ([SessionUtils invalidTokenResponse:task]) {
-            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"authentification_error_message",@"strings",@"comment") withTitle:NSLocalizedStringFromTable(@"authentification_error_title",@"strings",@"comment")];
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"authentification_error_message",kStringFile,@"comment") withTitle:NSLocalizedStringFromTable(@"authentification_error_title",kStringFile,@"comment")];
             [SessionUtils redirectToSignIn:self.navigationController];
         }
     }];
@@ -477,7 +477,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     if ([GeneralUtils isFirstOpening]) {
         //Show until user does something
-        [self tutoMessage:NSLocalizedStringFromTable(@"tuto_message", @"strings", @"comment") withDuration:0];
+        [self tutoMessage:NSLocalizedStringFromTable(@"tuto_message",kStringFile, @"comment") withDuration:0];
     }
 }
 
@@ -582,7 +582,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self reorderContactViews];
     }failure:^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"block_failure_error_message", @"strings", @"comment") withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"block_failure_error_message",kStringFile, @"comment") withTitle:nil];
     }];
 }
 
@@ -677,7 +677,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self hideLoadingIndicator];
         //In this case, 401 means that the auth token is no valid.
         if ([SessionUtils invalidTokenResponse:task]) {
-            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"authentification_error_message",@"strings",@"comment") withTitle:NSLocalizedStringFromTable(@"authentification_error_title",@"strings",@"comment")];
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"authentification_error_message",kStringFile,@"comment") withTitle:NSLocalizedStringFromTable(@"authentification_error_title",kStringFile,@"comment")];
             [SessionUtils redirectToSignIn:self.navigationController];
         }
     };
@@ -935,7 +935,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)failedMessagesModeTapGestureOnContact:(ContactView *)contactView
 {
     self.lastSelectedContactView = contactView;
-    NSString *partial_message = contactView.failedMessages.count > 1 ? NSLocalizedStringFromTable(@"multiple_messages_send_failure_error_message", @"strings", @"comment") : NSLocalizedStringFromTable(@"one_message_send_failure_error_message", @"strings", @"comment");
+    NSString *partial_message = contactView.failedMessages.count > 1 ? NSLocalizedStringFromTable(@"multiple_messages_send_failure_error_message",kStringFile, @"comment") : NSLocalizedStringFromTable(@"one_message_send_failure_error_message",kStringFile, @"comment");
     NSString *title = [NSString stringWithFormat:@"%lu %@",contactView.failedMessages.count,partial_message];
     CustomActionSheet *pendingActionSheet = [[CustomActionSheet alloc] initWithTitle:title
                                                                     delegate:self
@@ -1089,14 +1089,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Share
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_3]) {
-        NSString *shareString = NSLocalizedStringFromTable(@"invite_text_message", @"strings", @"comment");
+        NSString *shareString = NSLocalizedStringFromTable(@"invite_text_message",kStringFile, @"comment");
         
         NSURL *shareUrl = [NSURL URLWithString:kProdAFHeardWebsite];
         
         NSArray *activityItems = [NSArray arrayWithObjects:shareString, shareUrl, nil];
         
         UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-        [activityViewController setValue:NSLocalizedStringFromTable(@"share_mail_object_message", @"strings", @"comment") forKey:@"subject"];
+        [activityViewController setValue:NSLocalizedStringFromTable(@"share_mail_object_message",kStringFile, @"comment") forKey:@"subject"];
         activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         activityViewController.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeAssignToContact, UIActivityTypeAddToReadingList, UIActivityTypeAirDrop, UIActivityTypeSaveToCameraRoll, UIActivityTypeCopyToPasteboard];
         
@@ -1174,7 +1174,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // First Name
     else if ([buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] || [buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_3]) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:buttonTitle message:nil delegate:self cancelButtonTitle:NSLocalizedStringFromTable(@"cancel_button_title", @"strings", @"comment") otherButtonTitles:NSLocalizedStringFromTable(@"ok_button_title", @"strings", @"comment"), nil];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:buttonTitle message:nil delegate:self cancelButtonTitle:NSLocalizedStringFromTable(@"cancel_button_title",kStringFile, @"comment") otherButtonTitles:NSLocalizedStringFromTable(@"ok_button_title",kStringFile, @"comment"), nil];
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
         UITextField *textField = [alert textFieldAtIndex:0];
         textField.textAlignment = NSTextAlignmentCenter;
@@ -1221,16 +1221,16 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             return;
         
         if ([textField.text length] <= 0) {
-            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_error_message", @"strings", @"comment") withTitle:nil];
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_error_message",kStringFile, @"comment") withTitle:nil];
         }
         if (buttonIndex == 1) {
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             [ApiUtils updateFirstName:textField.text success:^{
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_edit_success_message", @"strings", @"comment") withTitle:nil];
+                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_edit_success_message",kStringFile, @"comment") withTitle:nil];
             } failure:^{
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_edit_error_message", @"strings", @"comment") withTitle:nil];
+                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_edit_error_message",kStringFile, @"comment") withTitle:nil];
             }];
         }
     }
@@ -1241,16 +1241,16 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             return;
         
         if ([textField.text length] <= 0) {
-            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_error_message", @"strings", @"comment") withTitle:nil];
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_error_message",kStringFile, @"comment") withTitle:nil];
         }
         if (buttonIndex == 1) {
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             [ApiUtils updateLastName:textField.text success:^{
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_edit_success_message", @"strings", @"comment") withTitle:nil];
+                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_edit_success_message",kStringFile, @"comment") withTitle:nil];
             } failure:^{
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_edit_error_message", @"strings", @"comment") withTitle:nil];
+                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_edit_error_message",kStringFile, @"comment") withTitle:nil];
             }];
         }
     }
@@ -1329,7 +1329,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             if (self.currentUserContactView) {
                 self.currentUserContactView.imageView.image = image;
             }
-            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"picture_edit_success_message", @"strings", @"comment") withTitle:nil];
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"picture_edit_success_message",kStringFile, @"comment") withTitle:nil];
             
             // Reset the cache
             [ImageUtils setWithoutCachingImageView:self.profilePicture withURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
@@ -1337,7 +1337,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         }];
     } else {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"picture_edit_error_message", @"strings", @"comment") withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"picture_edit_error_message",kStringFile, @"comment") withTitle:nil];
     }
     
     [self dismissViewControllerAnimated:YES completion:NULL];
@@ -1367,7 +1367,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                 contactView.isRecording = NO;
                 [contactView resetDiscussionStateAnimated:NO];
             }
-            [self tutoMessage:NSLocalizedStringFromTable(@"cancel_success_message", @"strings", @"comment") withDuration:2];
+            [self tutoMessage:NSLocalizedStringFromTable(@"cancel_success_message",kStringFile, @"comment") withDuration:2];
         }
     }
 }

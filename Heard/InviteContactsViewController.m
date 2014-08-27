@@ -14,6 +14,8 @@
 
 @interface InviteContactsViewController ()
 
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (weak, nonatomic) IBOutlet UIButton *selectAllButton;
 @property (weak, nonatomic) IBOutlet UIView *navigationContainer;
 @property (weak, nonatomic) IBOutlet UIView *inviteButtonContainer;
 @property (weak, nonatomic) IBOutlet UILabel *inviteButtonLabel;
@@ -34,8 +36,15 @@
         [self dismissViewControllerAnimated:YES completion:nil];
     }
     
-    [GeneralUtils addBottomBorder:self.navigationContainer borderSize:0.5];
+    self.backButton.titleLabel.text = NSLocalizedStringFromTable(@"back_button_title",kStringFile,@"comment");
+//    self.selectAllButton.titleLabel.text = NSLocalizedStringFromTable(@"select_all_button_title",kStringFile,@"comment");
+
+//    self.selectAllButton.titleLabel.numberOfLines = 1;
+//    self.selectAllButton.titleLabel.adjustsFontSizeToFitWidth = YES;
+//    self.selectAllButton.titleLabel.lineBreakMode = NSLineBreakByClipping;
+    [self.selectAllButton setTitle:NSLocalizedStringFromTable(@"select_all_button_title",kStringFile,@"comment") forState:UIControlStateNormal];
     
+    [GeneralUtils addBottomBorder:self.navigationContainer borderSize:0.5];
     [GeneralUtils addTopBorder:self.inviteButtonContainer borderSize:0.5];
     
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(inviteButtonClicked)];
@@ -72,7 +81,7 @@
         [self.selectedContacts addObject:phoneNumber];
     }
     
-    self.inviteButtonLabel.text = [NSString stringWithFormat:@"%@ (%ld)",NSLocalizedStringFromTable(@"invite_label_text",@"strings",@"comment"), [self.selectedContacts count]];
+    self.inviteButtonLabel.text = [NSString stringWithFormat:@"%@ (%ld)",NSLocalizedStringFromTable(@"invite_label_text",kStringFile,@"comment"), [self.selectedContacts count]];
     
     if ([self.selectedContacts count] == 1) {
         [self.inviteButtonContainer.layer removeAllAnimations];
@@ -96,7 +105,7 @@
 {
     [self.selectedContacts removeObject:phoneNumber];
     
-    self.inviteButtonLabel.text = [NSString stringWithFormat:@"%@ (%ld)",NSLocalizedStringFromTable(@"invite_label_text",@"strings",@"comment"), [self.selectedContacts count]];
+    self.inviteButtonLabel.text = [NSString stringWithFormat:@"%@ (%ld)",NSLocalizedStringFromTable(@"invite_label_text",kStringFile,@"comment"), [self.selectedContacts count]];
     
     if ([self.selectedContacts count] == 0) {
         [self.inviteButtonContainer.layer removeAllAnimations];
@@ -115,12 +124,12 @@
     if ([MFMessageComposeViewController canSendText]) {
         //Redirect to sms
         MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
-        viewController.body = [NSString stringWithFormat:@"%@ %@", NSLocalizedStringFromTable(@"invite_text_message",@"strings",@"comment"),kProdAFHeardWebsite];
+        viewController.body = [NSString stringWithFormat:@"%@ %@", NSLocalizedStringFromTable(@"invite_text_message",kStringFile,@"comment"),kProdAFHeardWebsite];
         viewController.recipients = self.selectedContacts;
         viewController.messageComposeDelegate = self;
         [self presentViewController:viewController animated:YES completion:nil];
     } else {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"text_access_error_message",@"strings",@"comment") withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"text_access_error_message",kStringFile,@"comment") withTitle:nil];
     }
 }
 

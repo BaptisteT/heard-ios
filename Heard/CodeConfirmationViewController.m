@@ -14,6 +14,7 @@
 #import "RequestUserInfoViewController.h"
 #import "SessionUtils.h"
 #import "TrackingUtils.h"
+#import "Constants.h"
 
 #define CONFIMATION_CODE_DIGITS 4
 #define BORDER_SIZE 0.5
@@ -70,7 +71,7 @@
     
     if (remainingTime <= 0) {
         [self.countdownTimer invalidate];
-        self.resendLabel.text = NSLocalizedStringFromTable(@"code_resent_label_text",@"strings",@"comment");
+        self.resendLabel.text = NSLocalizedStringFromTable(@"code_resent_label_text",kStringFile,@"comment");
         self.timeRemainLabel.hidden = YES;
         
         [self.countdownTimer invalidate];
@@ -119,7 +120,7 @@
         }
     } failure:^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"invalid_code_error_message",@"strings",@"comment") withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"invalid_code_error_message",kStringFile,@"comment") withTitle:nil];
         self.codeTextField.text = @"";
     }];
 }

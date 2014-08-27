@@ -7,6 +7,7 @@
 //
 
 #import "WelcomeViewController.h"
+#import "Constants.h"
 
 @interface WelcomeViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
@@ -23,9 +24,9 @@
 {
     [super viewDidLoad];
     
-    self.subTitleLabel.text = NSLocalizedStringFromTable(@"subtitle_label", @"strings", @"comment");
+    self.subTitleLabel.text = NSLocalizedStringFromTable(@"subtitle_label",kStringFile, @"comment");
     [self.startButton.titleLabel sizeToFit];
-    self.startButton.titleLabel.text = NSLocalizedStringFromTable(@"start_button_text", @"strings", @"comment");
+    self.startButton.titleLabel.text = NSLocalizedStringFromTable(@"start_button_text",kStringFile, @"comment");
     
     self.titleLabel.alpha = 0;
     self.subTitleLabel.alpha = 0;
