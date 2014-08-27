@@ -299,7 +299,7 @@
                 } else {
                     [self stopRecording];
                     [self resetDiscussionStateAnimated:NO];
-                    [self.delegate tutoMessage:@"Hold to record." withDuration:1];
+                    [self.delegate tutoMessage:NSLocalizedStringFromTable(@"audio_too_short_error",@"strings", @"comment") withDuration:1];
                 }
             };
         }
@@ -346,7 +346,7 @@
     AVAudioSession *session = [AVAudioSession sharedInstance];
     [session requestRecordPermission:^(BOOL granted) {
         if (!granted) {
-            [GeneralUtils showMessage:@"To activate it, go to Settings > Privacy > Micro" withTitle:@"Waved does not have access to your micro"];
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"micro_access_error_message",@"strings",@"comment") withTitle:NSLocalizedStringFromTable(@"micro_access_error_title",@"strings",@"comment")];
             return;
         } else {
             self.isRecording = YES;

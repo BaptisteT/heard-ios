@@ -1,0 +1,93 @@
+/*
+  strings.strings
+  Heard
+
+  Created by Baptiste Truchot on 8/27/14.
+  Copyright (c) 2014 streetshout. All rights reserved.
+*/
+/* Below, TRUCHOV is replaced by the right name at run time */
+
+// Button
+"cancel_button_title" = "Cancel";
+"ok_button_title" = "Ok";
+"done_button_title" = "Done";
+"confirm_button_title" = "Confirm";
+"camera_button_title" = "Camera";
+"library_button_title" = "Library";
+"invite_button_title" = "Invite";
+"invite_friends_button_title" = "Invite Friends";
+"add_new_contact_button_title" = "Add New Contact";
+"edit_profile_button_title" = "Edit Profile";
+"hide_contacts_button_title" = "Hide / Unhide Contacts";
+"share_button_title" = "Share";
+"feedback_button_title" = "Feedback";
+"add_to_contact_button_title" = "Add Contact";
+"block_button_title" = "Block User";
+"edit_picture_button_title" = "Picture";
+"edit_first_name_button_title" = "First Name";
+"edit_last_name_button_title" = "Last Name";
+"delete_button_title" = "Delete";
+"resend_button_title" = "Resend";
+
+// Record
+"tuto_message" = "Hold to record.";
+"audio_too_short_error" = "Hold to record.";
+
+// Micro access
+"micro_access_error_title" = "Waved does not have access to your micro";
+"micro_access_error_message" = "To activate it, go to Settings > Privacy > Micro";
+
+// Contact access
+"contact_access_error_message" = "Waved uses your address book to find your contacts. Please allow access in Settings > Privacy > Contacts.";
+
+// Auth
+"authentification_error_title" = "Authentification error";
+"authentification_error_message" = "Please, sign in again";
+
+// Phone
+"phone_number_error_message" = "Invalid phone number.";
+
+// Code
+"confirmation_code_error_message" = "We failed to send your confirmation code, the provided phone number might be invalid.";
+"code_resent_label_text" = "We sent a second SMS.";
+"invalid_code_error_message" = "Invalid code, please try again.";
+
+// Sign up
+"back_to_phone_verification_confirmation_message" = "Are you sure you want to go back to phone verification?";
+"first_name_error_message" = "First name must between 1 and 20 characters.";
+"last_name_error_message" = "Last name must between 1 and 20 characters.";
+"profile_picture_error_message" = "Please provide a profile picture.";
+"camera_and_library_access_error_message" = "Your camera and photo library are not available";
+"sign_up_error_message" = "We failed to sign you up, please try again.";
+
+// Edit
+"first_name_edit_success_message" = "First name successfully updated."
+"first_name_edit_error_message" = "We couldn't update your first name, please try again."
+"last_name_edit_success_message" = "Last name successfully updated."
+"last_name_edit_error_message" = "We couldn't update your last name, please try again."
+"picture_edit_success_message" = "Profile picture successfully updated."
+"picture_edit_error_message" = "We couldn't update your profile picture, please try again."
+
+// Invite & share
+"invite_label_text" = "Invite to Waved";
+"invite_text_message" = "Hey, let's start chatting on Waved! It's a new app which lets you send short voice messages in one tap. Download it at:";
+"personal_invite_text_message" = "Hey TRUCHOV, let's start chatting on Waved! It's a new app which lets you send short voice messages in one tap. Download it at:";
+"text_access_error_message" = "Your device is not properly configured to send messages";
+"personal_invite_text_success_message" = "TRUCHOV successfully invited.";
+"share_mail_object_message" = "Let your friends hear your voice!";
+
+// Add
+"add_contact_missing_name_message" = "Please provide a first name or a last name.";
+"add_contact_success_message" = "TRUCHOV is now in your phone and Waved contacts";
+"add_contact_failure_message" = "Failed to add TRUCHOV. Please try again.";
+"add_contact_not_waved_user_message" = "Successfully added to your phone contacts. But TRUCHOV is not yet on Waved and will not be visible in your contacts. You should invite TRUCHOV!";
+
+// Block
+"block_failure_error_message" = "Failed to block contact, please try again.";
+
+// Send messages
+"one_message_send_failure_error_message" = "message failed to send";
+"multiple_messages_send_failure_error_message" = "messages failed to send";
+
+// Cancel
+"cancel_success_message" = "Message successfully canceled!";

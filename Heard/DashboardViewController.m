@@ -30,22 +30,22 @@
 #import "CustomActionSheet.h"
 #import <AudioToolbox/AudioToolbox.h>
 
-#define ACTION_MAIN_MENU_OPTION_1 @"Invite Friends"
-#define ACTION_MAIN_MENU_OPTION_2 @"Add New Contact"
-#define ACTION_OTHER_MENU_OPTION_1 @"Edit Profile"
-#define ACTION_OTHER_MENU_OPTION_2 @"Hide Contacts"
-#define ACTION_OTHER_MENU_OPTION_3 @"Share"
-#define ACTION_OTHER_MENU_OPTION_4 @"Feedback"
-#define ACTION_PENDING_OPTION_1 @"Add Contact"
-#define ACTION_PENDING_OPTION_2 @"Block User"
-#define ACTION_SHEET_PROFILE_OPTION_1 @"Picture"
-#define ACTION_SHEET_PROFILE_OPTION_2 @"First Name"
-#define ACTION_SHEET_PROFILE_OPTION_3 @"Last Name"
-#define ACTION_SHEET_PICTURE_OPTION_1 @"Camera"
-#define ACTION_SHEET_PICTURE_OPTION_2 @"Library"
-#define ACTION_FAILED_MESSAGES_OPTION_1 @"Resend"
-#define ACTION_FAILED_MESSAGES_OPTION_2 @"Delete"
-#define ACTION_SHEET_CANCEL @"Cancel"
+#define ACTION_MAIN_MENU_OPTION_1 NSLocalizedStringFromTable(@"invite_friends_button_title",@"strings",@"comment")
+#define ACTION_MAIN_MENU_OPTION_2 NSLocalizedStringFromTable(@"add_new_contact_button_title",@"strings",@"comment")
+#define ACTION_OTHER_MENU_OPTION_1 NSLocalizedStringFromTable(@"edit_profile_button_title",@"strings",@"comment")
+#define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"hide_contacts_button_title",@"strings",@"comment")
+#define ACTION_OTHER_MENU_OPTION_3 NSLocalizedStringFromTable(@"share_button_title",@"strings",@"comment")
+#define ACTION_OTHER_MENU_OPTION_4 NSLocalizedStringFromTable(@"feedback_button_title",@"strings",@"comment")
+#define ACTION_PENDING_OPTION_1 NSLocalizedStringFromTable(@"add_to_contact_button_title",@"strings",@"comment")
+#define ACTION_PENDING_OPTION_2 NSLocalizedStringFromTable(@"block_button_title",@"strings",@"comment")
+#define ACTION_SHEET_PROFILE_OPTION_1 NSLocalizedStringFromTable(@"edit_picture_button_title",@"strings",@"comment")
+#define ACTION_SHEET_PROFILE_OPTION_2 NSLocalizedStringFromTable(@"edit_first_name_button_title",@"strings",@"comment")
+#define ACTION_SHEET_PROFILE_OPTION_3 NSLocalizedStringFromTable(@"edit_last_name_button_title",@"strings",@"comment")
+#define ACTION_SHEET_PICTURE_OPTION_1 NSLocalizedStringFromTable(@"camera_button_title",@"strings",@"comment")
+#define ACTION_SHEET_PICTURE_OPTION_2 NSLocalizedStringFromTable(@"library_button_title",@"strings",@"comment")
+#define ACTION_FAILED_MESSAGES_OPTION_1 NSLocalizedStringFromTable(@"resend_button_title",@"strings",@"comment")
+#define ACTION_FAILED_MESSAGES_OPTION_2 NSLocalizedStringFromTable(@"delete_button_title",@"strings",@"comment")
+#define ACTION_SHEET_CANCEL NSLocalizedStringFromTable(@"cancel_button_title",@"strings",@"comment")
 
 #define RECORDER_HEIGHT 5
 #define PLAYER_UI_HEIGHT 5
@@ -255,7 +255,7 @@
     NSUInteger labelHeight = 100;
     self.noAddressBookAccessLabel = [[UITextView alloc] initWithFrame:CGRectMake(0, (self.view.bounds.size.height - labelHeight)/2, self.view.bounds.size.width, labelHeight)];
     self.noAddressBookAccessLabel.userInteractionEnabled = NO;
-    self.noAddressBookAccessLabel.text = @"Waved uses your address book to find your contacts. Please allow access in Settings > Privacy > Contacts.";
+    self.noAddressBookAccessLabel.text = NSLocalizedStringFromTable(@"contact_access_error_message", @"strings", @"comment");
     self.noAddressBookAccessLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
     self.noAddressBookAccessLabel.textAlignment = NSTextAlignmentCenter;
 }
@@ -411,8 +411,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 //After adding a contact with AddContactViewController (delegate method) or after adding pending contact
 - (void)didFinishedAddingContact
 {
-    [GeneralUtils showMessage:@"Contact successfully added." withTitle:nil];
-    
     [self requestAddressBookAccessAndRetrieveFriends];
 }
 
@@ -472,7 +470,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     if ([GeneralUtils isFirstOpening]) {
         //Show until user does something
-        [self tutoMessage:@"Hold a contact to record." withDuration:0];
+        [self tutoMessage:NSLocalizedStringFromTable(@"tuto_message", @"strings", @"comment") withDuration:0];
     }
 }
 
@@ -577,7 +575,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self reorderContactViews];
     }failure:^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [GeneralUtils showMessage:@"Failed to block contact, please try again." withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"block_failure_error_message", @"strings", @"comment") withTitle:nil];
     }];
 }
 
@@ -656,7 +654,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [contactView resetDiscussionStateAnimated:NO];
         }
        
-        
         
         // Check if we have new contacts
         // App launch or Change in address book or Message from unknown or New user added current user
@@ -930,8 +927,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)failedMessagesModeTapGestureOnContact:(ContactView *)contactView
 {
     self.lastSelectedContactView = contactView;
-    NSString *plural = contactView.failedMessages.count > 1 ? @"s" : @"";
-    NSString *title = [NSString stringWithFormat:@"%lu message%@ failed to send",contactView.failedMessages.count,plural];
+    NSString *partial_message = contactView.failedMessages.count > 1 ? NSLocalizedStringFromTable(@"multiple_messages_send_failure_error_message", @"strings", @"comment") : NSLocalizedStringFromTable(@"one_message_send_failure_error_message", @"strings", @"comment");
+    NSString *title = [NSString stringWithFormat:@"%lu %@",contactView.failedMessages.count,partial_message];
     CustomActionSheet *pendingActionSheet = [[CustomActionSheet alloc] initWithTitle:title
                                                                     delegate:self
                                                            cancelButtonTitle:ACTION_SHEET_CANCEL
@@ -1084,14 +1081,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Share
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_3]) {
-        NSString *shareString = @"Download Waved, the fastest way to say a lot.";
+        NSString *shareString = NSLocalizedStringFromTable(@"invite_text_message", @"strings", @"comment");
         
         NSURL *shareUrl = [NSURL URLWithString:kProdAFHeardWebsite];
         
         NSArray *activityItems = [NSArray arrayWithObjects:shareString, shareUrl, nil];
         
         UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-        [activityViewController setValue:@"You should download Waved." forKey:@"subject"];
+        [activityViewController setValue:NSLocalizedStringFromTable(@"share_mail_object_message", @"strings", @"comment") forKey:@"subject"];
         activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         activityViewController.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeAssignToContact, UIActivityTypeAddToReadingList, UIActivityTypeAirDrop, UIActivityTypeSaveToCameraRoll, UIActivityTypeCopyToPasteboard];
         
@@ -1164,7 +1161,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // First Name
     else if ([buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] || [buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_3]) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:buttonTitle message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:buttonTitle message:nil delegate:self cancelButtonTitle:NSLocalizedStringFromTable(@"cancel_button_title", @"strings", @"comment") otherButtonTitles:NSLocalizedStringFromTable(@"ok_button_title", @"strings", @"comment"), nil];
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
         UITextField *textField = [alert textFieldAtIndex:0];
         textField.textAlignment = NSTextAlignmentCenter;
@@ -1204,29 +1201,43 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if ([alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] || [alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_3]) {
+    // First name
+    if ([alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2]) {
         UITextField *textField = [alertView textFieldAtIndex:0];
         if (buttonIndex == 0) // cancel
             return;
-
+        
         if ([textField.text length] <= 0) {
-            [GeneralUtils showMessage:[alertView.title stringByAppendingString:@" must between 1 and 20 characters."] withTitle:nil];
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_error_message", @"strings", @"comment") withTitle:nil];
         }
         if (buttonIndex == 1) {
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            
-            [alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] ? [ApiUtils updateFirstName:textField.text success:^{
+            [ApiUtils updateFirstName:textField.text success:^{
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [GeneralUtils showMessage:@"First name successfully updated." withTitle:nil];
+                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_edit_success_message", @"strings", @"comment") withTitle:nil];
             } failure:^{
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [GeneralUtils showMessage:@"We couldn't update your first name, please try again." withTitle:nil];
-            }]: [ApiUtils updateLastName:textField.text success:^{
+                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_edit_error_message", @"strings", @"comment") withTitle:nil];
+            }];
+        }
+    }
+    // Last name
+    if ([alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_3]) {
+        UITextField *textField = [alertView textFieldAtIndex:0];
+        if (buttonIndex == 0) // cancel
+            return;
+        
+        if ([textField.text length] <= 0) {
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_error_message", @"strings", @"comment") withTitle:nil];
+        }
+        if (buttonIndex == 1) {
+            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            [ApiUtils updateLastName:textField.text success:^{
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [GeneralUtils showMessage:@"Last name successfully updated." withTitle:nil];
+                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_edit_success_message", @"strings", @"comment") withTitle:nil];
             } failure:^{
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [GeneralUtils showMessage:@"We couldn't update your last name, please try again." withTitle:nil];
+                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_edit_error_message", @"strings", @"comment") withTitle:nil];
             }];
         }
     }
@@ -1305,7 +1316,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             if (self.currentUserContactView) {
                 self.currentUserContactView.imageView.image = image;
             }
-            [GeneralUtils showMessage:@"Profile picture successfully updated." withTitle:nil];
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"picture_edit_success_message", @"strings", @"comment") withTitle:nil];
             
             // Reset the cache
             [ImageUtils setWithoutCachingImageView:self.profilePicture withURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
@@ -1313,7 +1324,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         }];
     } else {
-        [GeneralUtils showMessage:@"We could not update your profile picture, please try again." withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"picture_edit_error_message", @"strings", @"comment") withTitle:nil];
     }
     
     [self dismissViewControllerAnimated:YES completion:NULL];
@@ -1343,7 +1354,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                 contactView.isRecording = NO;
                 [contactView resetDiscussionStateAnimated:NO];
             }
-            [self tutoMessage:@"Message canceled" withDuration:2];
+            [self tutoMessage:NSLocalizedStringFromTable(@"cancel_success_message", @"strings", @"comment") withDuration:2];
         }
     }
 }

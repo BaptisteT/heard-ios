@@ -92,7 +92,7 @@
     
     UINavigationController *navigationController = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
     [navigationController popToRootViewControllerAnimated:NO];
-    [GeneralUtils showMessage:@"Please, sign in again" withTitle:@"Authentification error"];
+    [GeneralUtils showMessage:NSLocalizedStringFromTable(@"authentification_error_message",@"strings",@"comment") withTitle:NSLocalizedStringFromTable(@"authentification_error_title",@"strings",@"comment")];
 }
 
 // Remove FB session and user token

@@ -70,7 +70,7 @@
     
     if (remainingTime <= 0) {
         [self.countdownTimer invalidate];
-        self.resendLabel.text = @"We sent a second SMS.";
+        self.resendLabel.text = NSLocalizedStringFromTable(@"code_resent_label_text",@"strings",@"comment");
         self.timeRemainLabel.hidden = YES;
         
         [self.countdownTimer invalidate];
@@ -119,7 +119,7 @@
         }
     } failure:^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [GeneralUtils showMessage:@"Invalid code, please try again." withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"invalid_code_error_message",@"strings",@"comment") withTitle:nil];
         self.codeTextField.text = @"";
     }];
 }

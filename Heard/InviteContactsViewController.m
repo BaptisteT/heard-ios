@@ -72,7 +72,7 @@
         [self.selectedContacts addObject:phoneNumber];
     }
     
-    self.inviteButtonLabel.text = [NSString stringWithFormat:@"Invite to Waved (%ld)", [self.selectedContacts count]];
+    self.inviteButtonLabel.text = [NSString stringWithFormat:@"%@ (%ld)",NSLocalizedStringFromTable(@"invite_label_text",@"strings",@"comment"), [self.selectedContacts count]];
     
     if ([self.selectedContacts count] == 1) {
         [self.inviteButtonContainer.layer removeAllAnimations];
@@ -96,7 +96,7 @@
 {
     [self.selectedContacts removeObject:phoneNumber];
     
-    self.inviteButtonLabel.text = [NSString stringWithFormat:@"Invite to Waved (%ld)", [self.selectedContacts count]];
+    self.inviteButtonLabel.text = [NSString stringWithFormat:@"%@ (%ld)",NSLocalizedStringFromTable(@"invite_label_text",@"strings",@"comment"), [self.selectedContacts count]];
     
     if ([self.selectedContacts count] == 0) {
         [self.inviteButtonContainer.layer removeAllAnimations];
@@ -115,12 +115,12 @@
     if ([MFMessageComposeViewController canSendText]) {
         //Redirect to sms
         MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
-        viewController.body = [NSString stringWithFormat:@"Hey, let's start chatting on Waved! It's a new app which lets you send short voice messages in one tap. Download it at %@", kProdAFHeardWebsite];
+        viewController.body = [NSString stringWithFormat:@"%@ %@", NSLocalizedStringFromTable(@"invite_text_message",@"strings",@"comment"),kProdAFHeardWebsite];
         viewController.recipients = self.selectedContacts;
         viewController.messageComposeDelegate = self;
         [self presentViewController:viewController animated:YES completion:nil];
     } else {
-        [GeneralUtils showMessage:@"Your device is not properly configured to send messages" withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"text_access_error_message",@"strings",@"comment") withTitle:nil];
     }
 }
 

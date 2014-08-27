@@ -17,9 +17,9 @@
 #import "Constants.h"
 
 #define BORDER_SIZE 0.5
-#define ACTION_SHEET_OPTION_1 @"Camera"
-#define ACTION_SHEET_OPTION_2 @"Library"
-#define ACTION_SHEET_CANCEL @"Cancel"
+#define ACTION_SHEET_OPTION_1 NSLocalizedStringFromTable(@"camera_button_title",@"strings",@"comment")
+#define ACTION_SHEET_OPTION_2 NSLocalizedStringFromTable(@"library_button_title",@"strings",@"comment")
+#define ACTION_SHEET_CANCEL NSLocalizedStringFromTable(@"cancel_button_title",@"strings",@"comment")
 
 
 @interface RequestUserInfoViewController ()
@@ -81,22 +81,22 @@
 - (IBAction)backButtonPressed:(id)sender {
     
     [[[UIAlertView alloc] initWithTitle:nil
-                                message:@"Are you sure you want to go back to phone verification?"
+                message:NSLocalizedStringFromTable(@"back_to_phone_verification_confirmation_message",@"strings",@"comment")
                                delegate:self
-                      cancelButtonTitle:@"Cancel"
-                      otherButtonTitles:@"Confirm", nil] show];
+                      cancelButtonTitle:NSLocalizedStringFromTable(@"cancel_button_title",@"strings",@"comment")
+                      otherButtonTitles:NSLocalizedStringFromTable(@"confirm_button_title",@"strings",@"comment"), nil] show];
 }
 
 - (IBAction)nextButtonPressed:(id)sender {
     
     if (![GeneralUtils validName:self.firstNameTextField.text]) {
-        [GeneralUtils showMessage:@"First name must between 1 and 20 characters." withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_error_message",@"strings",@"comment") withTitle:nil];
         return;
     } else if (![GeneralUtils validName:self.lastNameTextField.text]) {
-        [GeneralUtils showMessage:@"Last name must between 1 and 20 characters." withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_error_message",@"strings",@"comment") withTitle:nil];
         return;
     } else if (!self.profilePictureImageView.image) {
-        [GeneralUtils showMessage:@"Please provide a profile picture." withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"profile_picture_error_message",@"strings",@"comment") withTitle:nil];
         return;
     }
     
@@ -120,7 +120,7 @@
                                                 destructiveButtonTitle:nil
                                                      otherButtonTitles:ACTION_SHEET_OPTION_1, nil];
     } else {
-        [GeneralUtils showMessage:@"Your camera and photo library are not available" withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"camera_and_library_access_error_message",@"strings",@"comment") withTitle:nil];
         return;
     }
     
@@ -148,7 +148,7 @@
     FailureBlock failureBlock = ^{
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         
-        [GeneralUtils showMessage:@"We failed to sign you up, please try again." withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"sign_up_error_message",@"strings",@"comment") withTitle:nil];
     };
     
     [ApiUtils createUserWithPhoneNumber:self.phoneNumber

@@ -97,14 +97,14 @@
                                  defaultRegion:nil error:&aError];
     
     if (aError || ![phoneUtil isValidNumber:myNumber]) {
-        [GeneralUtils showMessage:@"Invalid phone number." withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"phone_number_error_message",@"strings",@"comment") withTitle:nil];
         return;
     }
     NSString *formattedPhoneNumber = [phoneUtil format:myNumber
                                           numberFormat:NBEPhoneNumberFormatE164
                                                  error:&aError];
     if (aError) {
-        [GeneralUtils showMessage:@"Invalid phone number." withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"phone_number_error_message",@"strings",@"comment") withTitle:nil];
         return;
     }
     
@@ -155,7 +155,7 @@
         [self performSegueWithIdentifier:@"Code Confirmation Push Segue" sender:phoneNumber];
     } failure:^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [GeneralUtils showMessage:@"We failed to send your confirmation code, the provided phone number might be invalid." withTitle:nil];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"confirmation_code_error_message",@"strings",@"comment") withTitle:nil];
     }];
 }
 
