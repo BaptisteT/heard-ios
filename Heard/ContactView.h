@@ -26,6 +26,7 @@
 @property (nonatomic) NSMutableArray *unreadMessages;
 @property (nonatomic, strong) NSMutableArray *failedMessages;
 @property (strong, nonatomic) UIImageView *imageView;
+@property (nonatomic) BOOL pictureIsLoaded;
 @property (nonatomic) BOOL isPlaying;
 @property (nonatomic) BOOL isRecording;
 @property (nonatomic) BOOL messageNotReadByContact;
@@ -37,7 +38,7 @@
 - (void)resendFailedMessages;
 - (void)messageFinishPlaying;
 - (void)resetDiscussionStateAnimated:(BOOL)animated;
-
+- (void)setContactPicture;
 
 
 @end

@@ -82,6 +82,7 @@
     [self setMultipleTouchEnabled:NO];
     self.userInteractionEnabled = YES;
     self.exclusiveTouch = YES;
+    self.pictureIsLoaded = NO;
     
     // Init variables
     self.contact = contact;
@@ -672,21 +673,21 @@
 - (void)setContactPicture
 {
     NSURLRequest *imageRequest = [NSURLRequest requestWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:self.contact.identifier]];
-    
-    UIImageView *imageView = self.imageView;
+    __weak __typeof(self)weakSelf = self;
     
     //Fade in profile picture
     [self.imageView setImageWithURLRequest:imageRequest placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-        [UIView transitionWithView:imageView
+        [UIView transitionWithView:weakSelf.imageView
                           duration:1.0f
                            options:UIViewAnimationOptionTransitionCrossDissolve
-                        animations:^{[imageView setImage:image];}
+                        animations:^{[weakSelf.imageView setImage:image];}
                         completion:nil];
+        weakSelf.pictureIsLoaded = YES;
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-        [UIView transitionWithView:imageView
+        [UIView transitionWithView:weakSelf.imageView
                           duration:1.0f
                            options:UIViewAnimationOptionTransitionCrossDissolve
-                        animations:^{[imageView setImage:[UIImage imageNamed:@"contact-placeholder.png"]];}
+                        animations:^{[weakSelf.imageView setImage:[UIImage imageNamed:@"contact-placeholder.png"]];}
                         completion:nil];
     }];
     

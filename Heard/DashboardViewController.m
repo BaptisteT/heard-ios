@@ -465,6 +465,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         
         // Set discussion state
         [contactView resetDiscussionStateAnimated:NO];
+        
+        // Load picture if it fails
+        if (!contactView.pictureIsLoaded) {
+            [contactView setContactPicture];
+        }
     }
     
     // Resize view
