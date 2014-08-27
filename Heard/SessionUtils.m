@@ -86,13 +86,10 @@
 }
 
 // redirect to entry view (sign in)
-+ (void)redirectToSignIn
++ (void)redirectToSignIn:(UINavigationController *)navigationController
 {
     [SessionUtils wipeOffCredentials];
-    
-    UINavigationController *navigationController = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
     [navigationController popToRootViewControllerAnimated:NO];
-    [GeneralUtils showMessage:NSLocalizedStringFromTable(@"authentification_error_message",@"strings",@"comment") withTitle:NSLocalizedStringFromTable(@"authentification_error_title",@"strings",@"comment")];
 }
 
 // Remove FB session and user token

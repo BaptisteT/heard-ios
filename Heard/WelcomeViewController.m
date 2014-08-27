@@ -9,7 +9,7 @@
 #import "WelcomeViewController.h"
 
 @interface WelcomeViewController ()
-@property (weak, nonatomic) IBOutlet UILabel *titbleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *subTitleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *startButton;
 @property (weak, nonatomic) IBOutlet UIImageView *logoImage;
@@ -23,7 +23,11 @@
 {
     [super viewDidLoad];
     
-    self.titbleLabel.alpha = 0;
+    self.subTitleLabel.text = NSLocalizedStringFromTable(@"subtitle_label", @"strings", @"comment");
+    [self.startButton.titleLabel sizeToFit];
+    self.startButton.titleLabel.text = NSLocalizedStringFromTable(@"start_button_text", @"strings", @"comment");
+    
+    self.titleLabel.alpha = 0;
     self.subTitleLabel.alpha = 0;
     self.startButton.alpha = 0;
     
@@ -52,7 +56,7 @@
     } completion:^(BOOL dummy){
         [UIView animateWithDuration:1.0 animations:^{
             
-            self.titbleLabel.alpha = 1;
+            self.titleLabel.alpha = 1;
             self.subTitleLabel.alpha = 1;
             self.startButton.alpha = 1;
         }];

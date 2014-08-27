@@ -21,6 +21,7 @@
 "hide_contacts_button_title" = "Hide / Unhide Contacts";
 "share_button_title" = "Share";
 "feedback_button_title" = "Feedback";
+"log_out_button_title" = "Log Out";
 "add_to_contact_button_title" = "Add Contact";
 "block_button_title" = "Block User";
 "edit_picture_button_title" = "Picture";
@@ -28,6 +29,14 @@
 "edit_last_name_button_title" = "Last Name";
 "delete_button_title" = "Delete";
 "resend_button_title" = "Resend";
+
+// Welcome
+"subtitle_label" = "Meaningful communication";
+"start_button_text" = "Start Talking ❯";
+
+// Code request
+"tuto_label" = "Please select your country code and enter your phone number.";
+
 
 // Record
 "tuto_message" = "Hold to record.";
@@ -61,16 +70,16 @@
 "sign_up_error_message" = "We failed to sign you up, please try again.";
 
 // Edit
-"first_name_edit_success_message" = "First name successfully updated."
-"first_name_edit_error_message" = "We couldn't update your first name, please try again."
-"last_name_edit_success_message" = "Last name successfully updated."
-"last_name_edit_error_message" = "We couldn't update your last name, please try again."
-"picture_edit_success_message" = "Profile picture successfully updated."
-"picture_edit_error_message" = "We couldn't update your profile picture, please try again."
+"first_name_edit_success_message" = "First name successfully updated.";
+"first_name_edit_error_message" = "We couldn't update your first name, please try again.";
+"last_name_edit_success_message" = "Last name successfully updated.";
+"last_name_edit_error_message" = "We couldn't update your last name, please try again.";
+"picture_edit_success_message" = "Profile picture successfully updated.";
+"picture_edit_error_message" = "We couldn't update your profile picture, please try again.";
 
 // Invite & share
 "invite_label_text" = "Invite to Waved";
-"invite_text_message" = "Hey, let's start chatting on Waved! It's a new app which lets you send short voice messages in one tap. Download it at:";
+"invite_text_message" = "Hey, let's start chatting on Waved! It's a new app which lets you send voice messages in one tap. Download it at";
 "personal_invite_text_message" = "Hey TRUCHOV, let's start chatting on Waved! It's a new app which lets you send short voice messages in one tap. Download it at:";
 "text_access_error_message" = "Your device is not properly configured to send messages";
 "personal_invite_text_success_message" = "TRUCHOV successfully invited.";
@@ -78,7 +87,7 @@
 
 // Add
 "add_contact_missing_name_message" = "Please provide a first name or a last name.";
-"add_contact_success_message" = "TRUCHOV is now in your phone and Waved contacts";
+"add_contact_success_message" = "TRUCHOV has been successfully added to your phone and Waved contacts!";
 "add_contact_failure_message" = "Failed to add TRUCHOV. Please try again.";
 "add_contact_not_waved_user_message" = "Successfully added to your phone contacts. But TRUCHOV is not yet on Waved and will not be visible in your contacts. You should invite TRUCHOV!";
 

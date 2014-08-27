@@ -36,6 +36,7 @@
 #define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"hide_contacts_button_title",@"strings",@"comment")
 #define ACTION_OTHER_MENU_OPTION_3 NSLocalizedStringFromTable(@"share_button_title",@"strings",@"comment")
 #define ACTION_OTHER_MENU_OPTION_4 NSLocalizedStringFromTable(@"feedback_button_title",@"strings",@"comment")
+#define ACTION_OTHER_MENU_OPTION_5 NSLocalizedStringFromTable(@"log_out_button_title",@"strings",@"comment")
 #define ACTION_PENDING_OPTION_1 NSLocalizedStringFromTable(@"add_to_contact_button_title",@"strings",@"comment")
 #define ACTION_PENDING_OPTION_2 NSLocalizedStringFromTable(@"block_button_title",@"strings",@"comment")
 #define ACTION_SHEET_PROFILE_OPTION_1 NSLocalizedStringFromTable(@"edit_picture_button_title",@"strings",@"comment")
@@ -393,7 +394,8 @@
         [self hideLoadingIndicator];
         //In this case, 401 means that the auth token is no valid.
         if ([SessionUtils invalidTokenResponse:task]) {
-            [SessionUtils redirectToSignIn];
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"authentification_error_message",@"strings",@"comment") withTitle:NSLocalizedStringFromTable(@"authentification_error_title",@"strings",@"comment")];
+            [SessionUtils redirectToSignIn:self.navigationController];
         }
     }];
     self.isSignUp = NO;
@@ -670,7 +672,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self hideLoadingIndicator];
         //In this case, 401 means that the auth token is no valid.
         if ([SessionUtils invalidTokenResponse:task]) {
-            [SessionUtils redirectToSignIn];
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"authentification_error_message",@"strings",@"comment") withTitle:NSLocalizedStringFromTable(@"authentification_error_title",@"strings",@"comment")];
+            [SessionUtils redirectToSignIn:self.navigationController];
         }
     };
     [ApiUtils getUnreadMessagesAndExecuteSuccess:successBlock failure:failureBlock];
@@ -773,7 +776,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                                          delegate:weakSelf
                                          cancelButtonTitle:ACTION_SHEET_CANCEL
                                          destructiveButtonTitle:nil
-                                         otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, nil];
+                                         otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
         [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
     };
     
@@ -1110,6 +1113,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
+    }
+    
+    // Log out
+    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_5]) {
+        [SessionUtils redirectToSignIn:self.navigationController];
     }
     
     /* -------------------------------------------------------------------------

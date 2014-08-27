@@ -25,6 +25,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
+        return;
+    }
     
     self.allSelected = NO;
     
@@ -133,9 +136,9 @@
                 
                 if (aError == nil && ([phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeMOBILE
                     || [phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeFIXED_LINE_OR_MOBILE) ) {
-                    NSMutableArray *contact = [[NSMutableArray alloc] initWithObjects:lastName ? lastName : firstName,
-                                               firstName && lastName ? firstName : @"",
-                                               (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, 0),
+                    NSMutableArray *contact = [[NSMutableArray alloc] initWithObjects:lastName && [lastName length] > 0 ? lastName : firstName,
+                                               firstName && lastName && [lastName length] > 0 ? firstName : @"",
+                                               number,
                                                @"not selected", nil];
 
                     NSString *key = [[contact[0] substringToIndex:1] uppercaseString];

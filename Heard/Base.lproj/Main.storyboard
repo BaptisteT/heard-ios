@@ -28,12 +28,12 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Meaningful communication" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LYj-fg-v2e">
-                                <rect key="frame" x="0.0" y="308" width="320" height="21"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtitle" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LYj-fg-v2e">
+                                <rect key="frame" x="0.0" y="308" width="320" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="CQs-ap-Iyd"/>
                                     <constraint firstAttribute="width" constant="320" id="IK8-dU-TLz"/>
+                                    <constraint firstAttribute="height" constant="25" id="ay6-Ct-s2u"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="18"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -81,7 +81,7 @@
                         <outlet property="logoImage" destination="dwm-Cy-B4c" id="tyV-pV-YAA"/>
                         <outlet property="startButton" destination="J5D-hb-dnh" id="iXF-cU-5sp"/>
                         <outlet property="subTitleLabel" destination="LYj-fg-v2e" id="YgK-fa-4pM"/>
-                        <outlet property="titbleLabel" destination="yMe-3M-kKz" id="cWm-sR-7PE"/>
+                        <outlet property="titleLabel" destination="yMe-3M-kKz" id="RHj-0f-0uf"/>
                         <segue destination="2uU-ai-Tsy" kind="push" identifier="Dashboard Push Segue From Welcome" id="xdp-at-Nje"/>
                     </connections>
                 </viewController>
@@ -1400,6 +1400,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="qZZ-1Y-ErH"/>
+        <segue reference="xdp-at-Nje"/>
     </inferredMetricsTieBreakers>
 </document>

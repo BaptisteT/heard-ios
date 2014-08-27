@@ -218,7 +218,7 @@
     if ([[alertView buttonTitleAtIndex:buttonIndex] isEqualToString:ALERT_VIEW_INVITE_BUTTON] && [MFMessageComposeViewController canSendText]) {
         //Redirect to sms
         MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
-        viewController.body = [NSString stringWithFormat:[NSLocalizedStringFromTable(@"personal_invite_text_message",@"strings",@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:self.firstNameField.text ? self.firstNameField.text : self.lastNameField.text], kProdAFHeardWebsite];
+        viewController.body = [NSString stringWithFormat:@"%@ %@",[NSLocalizedStringFromTable(@"personal_invite_text_message",@"strings",@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:self.firstNameField.text ? self.firstNameField.text : self.lastNameField.text], kProdAFHeardWebsite];
         viewController.recipients = @[[self.countryCodeButton.titleLabel.text stringByAppendingString:self.decimalPhoneNumber]];
         viewController.messageComposeDelegate = self;
         

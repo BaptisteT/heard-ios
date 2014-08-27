@@ -27,7 +27,7 @@
 
 + (BOOL)isSignedIn;
 
-+ (void)redirectToSignIn;
++ (void)redirectToSignIn:(UINavigationController *)navigationController;
 
 + (void)wipeOffCredentials;
 
