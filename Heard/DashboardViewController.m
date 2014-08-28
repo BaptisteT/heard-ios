@@ -411,8 +411,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 //After adding a contact with AddContactViewController (delegate method) or after adding pending contact
-- (void)didFinishedAddingContact
+- (void)didFinishedAddingContact:(NSString *)contactName
 {
+    [GeneralUtils showMessage: [NSLocalizedStringFromTable(@"add_contact_success_message",kStringFile,@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:contactName]
+                    withTitle:nil];
     [self requestAddressBookAccessAndRetrieveFriends];
 }
 
@@ -1144,7 +1146,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
-        [self didFinishedAddingContact];
+        [self didFinishedAddingContact:self.contactToAdd.firstName];
     }
     
     // Block user

@@ -126,10 +126,7 @@
         //Already on Waved
         if (present) {
             [self dismissViewControllerAnimated:YES completion:^{
-                [GeneralUtils showMessage: [NSLocalizedStringFromTable(@"add_contact_success_message",kStringFile,@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:contactName]
-                                withTitle:nil];
-                
-                [self.delegate didFinishedAddingContact];
+                [self.delegate didFinishedAddingContact:contactName];
             }];
             
             [TrackingUtils trackAddContactSuccessful:YES Present:YES Pending:NO];

@@ -20,6 +20,6 @@
 
 @protocol AddContactViewControllerDelegate
 
-- (void)didFinishedAddingContact;
+- (void)didFinishedAddingContact:(NSString *)contactName;
 
 @end

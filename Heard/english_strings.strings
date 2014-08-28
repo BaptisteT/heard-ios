@@ -101,4 +101,4 @@
 "multiple_messages_send_failure_error_message" = "messages failed to send";
 
 // Cancel
-"cancel_success_message" = "Message successfully canceled!";
+"cancel_success_message" = "Message canceled!";

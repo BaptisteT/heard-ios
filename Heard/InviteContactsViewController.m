@@ -37,11 +37,6 @@
     }
     
     self.backButton.titleLabel.text = NSLocalizedStringFromTable(@"back_button_title",kStringFile,@"comment");
-//    self.selectAllButton.titleLabel.text = NSLocalizedStringFromTable(@"select_all_button_title",kStringFile,@"comment");
-
-//    self.selectAllButton.titleLabel.numberOfLines = 1;
-//    self.selectAllButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-//    self.selectAllButton.titleLabel.lineBreakMode = NSLineBreakByClipping;
     [self.selectAllButton setTitle:NSLocalizedStringFromTable(@"select_all_button_title",kStringFile,@"comment") forState:UIControlStateNormal];
     
     [GeneralUtils addBottomBorder:self.navigationContainer borderSize:0.5];
