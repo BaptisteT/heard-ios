@@ -67,7 +67,7 @@
 "back_to_phone_verification_confirmation_message" = "Voulez vous revenir à l'écran de validation du code?";
 "first_name_error_message" = "Votre prénom doit contenir entre 1 et 20 caractères";
 "last_name_error_message" = "Votre nom doit contenir entre 1 et 20 caractères.";
-"profile_picture_error_message" = "Please provide a profile picture.";
+"profile_picture_error_message" = "Dsl, on a besoin d'une photo pour que vos contacts vous reconnaissent!";
 "camera_and_library_access_error_message" = "Votre appareil photo et votre librairie ne sont pas accessibles.";
 "sign_up_error_message" = "Votre enregistrement a échoué. Réessayer svp.";
 
@@ -84,7 +84,7 @@
 "invite_text_message" = "Hé, rejoins moi sur Waved! C'est une appli gratuite qui te permet d'envoyer des messages vocaux en un clic:"; // twitter constraint
 "personal_invite_text_message" = "Hé TRUCHOV, viens discuter avec moi sur Waved! C'est une appli gratuite qui te permet d'envoyer des messages vocaux en un clic. Télécharge la sur";
 "text_access_error_message" = "Votre téléphone ne semble pas configurer pour envoyer des messages.";
-"personal_invite_text_success_message" = "TRUCHOV invité avec succès.";
+"personal_invite_text_success_message" = "TRUCHOV a été invité avec succès.";
 "share_mail_object_message" = "Let your friends hear your voice!";
 
 // Add
@@ -98,7 +98,7 @@
 
 // Send messages
 "one_message_send_failure_error_message" = "message n'a pu etre envoyé";
-"multiple_messages_send_failure_error_message" = "n'ont pu etre envoyé";
+"multiple_messages_send_failure_error_message" = "n'ont pu etre envoyés";
 
 // Cancel
 "cancel_success_message" = "Votre message a été annulé!";
