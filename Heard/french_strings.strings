@@ -100,5 +100,6 @@
 "one_message_send_failure_error_message" = "message n'a pu etre envoyé";
 "multiple_messages_send_failure_error_message" = "n'ont pu etre envoyés";
 
-// Cancel
+// Shake
 "cancel_success_message" = "Votre message a été annulé!";
+"no_last_message_played_message" = "Aucun message à réécouter";

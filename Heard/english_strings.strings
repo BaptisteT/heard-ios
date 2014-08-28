@@ -100,5 +100,6 @@
 "one_message_send_failure_error_message" = "message failed to send";
 "multiple_messages_send_failure_error_message" = "messages failed to send";
 
-// Cancel
+// Shake
 "cancel_success_message" = "Message canceled!";
+"no_last_message_played_message" = "No message to replay";

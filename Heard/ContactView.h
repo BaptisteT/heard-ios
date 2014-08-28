@@ -39,6 +39,8 @@
 - (void)messageFinishPlaying;
 - (void)resetDiscussionStateAnimated:(BOOL)animated;
 - (void)setContactPicture;
+- (void)playNextMessage;
+- (void)addPlayedMessages:(NSMutableArray *)messages;
 
 
 @end
@@ -68,6 +70,10 @@
 - (void)endPlayerAtCompletion:(BOOL)completed;
 
 - (void)playSound:(NSString *)sound;
+
+- (void)resetLastMessagesPlayed;
+
+- (void)addMessagesToLastMessagesPlayed:(Message *)message;
 
 
 @end

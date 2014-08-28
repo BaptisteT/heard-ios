@@ -85,6 +85,7 @@
 @property (nonatomic, strong) UIView *tutoView;
 @property (nonatomic, strong) UILabel *tutoViewLabel;
 @property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
+@property (strong, nonatomic) NSMutableArray *lastMessagesPlayed;
 //Action sheets
 @property (strong, nonatomic) CustomActionSheet *mainMenuActionSheet;
 @property (strong, nonatomic) ContactView *lastSelectedContactView;
@@ -646,7 +647,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         }
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:messages.count];
         
-        // todo BT
         // Clean / robust / somewhere else
         for (ContactView *contactView in self.contactViews) {
             BOOL idFound = NO;
@@ -763,6 +763,22 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
 }
 
+- (void)resetLastMessagesPlayed
+{
+    self.lastMessagesPlayed = nil;
+}
+
+- (void)addMessagesToLastMessagesPlayed:(Message *)message
+{
+    if (!self.lastMessagesPlayed) {
+        self.lastMessagesPlayed = [NSMutableArray new];
+    }
+    // Check that it's the same sender
+    if (self.lastMessagesPlayed.count>0 && ((Message *)[self.lastMessagesPlayed lastObject]).senderId != message.senderId) {
+        self.lastMessagesPlayed = [NSMutableArray new];
+    }
+    [self.lastMessagesPlayed addObject:message];
+}
 
 // ------------------------------
 #pragma mark Click & navigate
@@ -907,7 +923,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     // Init player
     Message *message = (Message *)contactView.unreadMessages[0];
     self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.audioData error:nil];
-    
     // Player UI
     NSTimeInterval duration = self.mainPlayer.duration;
     [self playerUI:duration ByContactView:contactView];
@@ -1370,6 +1385,23 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                 [contactView resetDiscussionStateAnimated:NO];
             }
             [self tutoMessage:NSLocalizedStringFromTable(@"cancel_success_message",kStringFile, @"comment") withDuration:2];
+        } else if (self.lastMessagesPlayed && self.lastMessagesPlayed.count > 0){
+            if ([self.mainPlayer isPlaying]) {
+                [self.mainPlayer stop];
+                [self endPlayerUIForAllContactViews];
+            }
+            // Add last messages played to contact view
+            NSInteger contactId = ((Message *)self.lastMessagesPlayed[0]).senderId;
+            for (ContactView *contactView in self.contactViews) {
+                if (contactView.contact.identifier == contactId) {
+                    [contactView addPlayedMessages:self.lastMessagesPlayed];
+                    [self resetLastMessagesPlayed];
+                    [contactView playNextMessage];
+                    continue;
+                }
+            }
+        } else {
+            [self tutoMessage:NSLocalizedStringFromTable(@"no_last_message_played_message",kStringFile, @"comment") withDuration:2];
         }
     }
 }

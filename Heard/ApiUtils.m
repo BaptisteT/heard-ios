@@ -222,8 +222,7 @@
         NSArray *rawMessages = [result objectForKey:@"messages"];
         BOOL newContactOnServer = [[result objectForKey:@"retrieve_contacts"] boolValue];
         
-        // todo BT
-        // put this somewhere else
+        // Should be put somewhere else ?
         NSArray *unreadMessageContacts = [result objectForKey:@"unread_users"];
         
         if (successBlock) {

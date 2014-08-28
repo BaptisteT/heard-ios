@@ -312,9 +312,10 @@
     if (self.discussionState == PENDING_STATE) {
         [self handlePendingTapGesture];
     } else if (self.discussionState == UNREAD_STATE) {
-            [self playNextMessage];
+        [self.delegate resetLastMessagesPlayed];
+        [self playNextMessage];
     } else if (self.discussionState == FAILED_STATE){
-            [self handleFailedMessagesModeTapGesture];
+        [self handleFailedMessagesModeTapGesture];
     } else if (self.discussionState == PLAY_STATE) {
         [self handlePlayingTapGesture];
     }
@@ -457,14 +458,15 @@
 
 - (void)playNextMessage
 {
-    self.isPlaying = YES;
     self.contact.currentUserDidNotAnswerLastMessage = YES;
     [self.delegate startedPlayingAudioMessagesOfView:self];
+    self.isPlaying = YES;
     [self resetDiscussionStateAnimated:NO];
 }
 
 - (void)messageFinishPlaying
 {
+    [self.delegate addMessagesToLastMessagesPlayed:self.unreadMessages[0]];
     [self deleteMessage:self.unreadMessages[0]];
     self.isPlaying = NO;
     [self resetDiscussionStateAnimated:NO];
@@ -548,6 +550,18 @@
     self.loadingMessageCount = 0;
     self.sendingMessageCount = 0;
     [self resetDiscussionStateAnimated:NO];
+}
+
+- (void)addPlayedMessages:(NSMutableArray *)messages
+{
+    if (!self.unreadMessages) {
+        self.unreadMessages = messages;
+    } else {
+        NSRange range = NSMakeRange(0, [messages count]);
+        NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:range];
+        [self.unreadMessages insertObjects:messages atIndexes:indexSet];
+    }
+    self.unreadMessagesCount = [self.unreadMessages count];
 }
 
 
