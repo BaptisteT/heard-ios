@@ -293,12 +293,15 @@
             // Stop timer if it did not fire yet
             if ([self.maxDurationTimer isValid]) {
                 [self.maxDurationTimer invalidate];
-                [self stopRecording];
                 
                 if ([self.minDurationTimer isValid]) {
+                    [self stopRecording];
                     [self.delegate tutoMessage:NSLocalizedStringFromTable(@"audio_too_short_error",kStringFile, @"comment") withDuration:1];
                 } else if ([self.delegate isRecording]) {
+                    [self stopRecording];
                     [self sendRecording];
+                } else {
+                    [self stopRecording];
                 }
             }
         }
