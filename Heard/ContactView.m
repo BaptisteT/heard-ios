@@ -466,7 +466,6 @@
 
 - (void)messageFinishPlaying
 {
-    [self.delegate addMessagesToLastMessagesPlayed:self.unreadMessages[0]];
     [self deleteMessage:self.unreadMessages[0]];
     self.isPlaying = NO;
     [self resetDiscussionStateAnimated:NO];
@@ -557,6 +556,10 @@
     if (!self.unreadMessages) {
         self.unreadMessages = messages;
     } else {
+        // Case where message was not finished playing (do not add it again)
+        if (self.unreadMessages.count>0 && [messages lastObject]==self.unreadMessages[0]) {
+            [messages removeLastObject];
+        }
         NSRange range = NSMakeRange(0, [messages count]);
         NSIndexSet *indexSet = [NSIndexSet indexSetWithIndexesInRange:range];
         [self.unreadMessages insertObjects:messages atIndexes:indexSet];

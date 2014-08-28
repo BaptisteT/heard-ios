@@ -73,7 +73,6 @@
 
 - (void)resetLastMessagesPlayed;
 
-- (void)addMessagesToLastMessagesPlayed:(Message *)message;
 
 
 @end

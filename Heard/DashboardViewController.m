@@ -923,6 +923,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     // Init player
     Message *message = (Message *)contactView.unreadMessages[0];
     self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.audioData error:nil];
+    [self addMessagesToLastMessagesPlayed:message];
+    
     // Player UI
     NSTimeInterval duration = self.mainPlayer.duration;
     [self playerUI:duration ByContactView:contactView];
