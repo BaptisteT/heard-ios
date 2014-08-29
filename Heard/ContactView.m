@@ -464,13 +464,13 @@
     [self resetDiscussionStateAnimated:NO];
 }
 
-- (void)messageFinishPlaying
+- (void)messageFinishPlaying:(BOOL)completed
 {
     [self deleteMessage:self.unreadMessages[0]];
     self.isPlaying = NO;
     [self resetDiscussionStateAnimated:NO];
     
-    if ([self hasUnreadMessages])
+    if (completed && [self hasUnreadMessages])
         [self playNextMessage];
 }
 

@@ -36,7 +36,7 @@
 - (void)message:(NSData *)audioData sentWithError:(BOOL)error;
 - (void)deleteFailedMessages;
 - (void)resendFailedMessages;
-- (void)messageFinishPlaying;
+- (void)messageFinishPlaying:(BOOL)completed;
 - (void)resetDiscussionStateAnimated:(BOOL)animated;
 - (void)setContactPicture;
 - (void)playNextMessage;

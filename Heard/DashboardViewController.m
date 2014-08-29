@@ -1009,6 +1009,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)endPlayerAtCompletion:(BOOL)completed
 {
+    // Check that audio is playing or completed
+    if (![self.mainPlayer isPlaying] && !completed) {
+        return;
+    }
     // Remove proximity state
     if ([UIDevice currentDevice].proximityState) {
         self.disableProximityObserver = YES;
@@ -1026,11 +1030,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.playerContainer.hidden = YES;
     [self setPlayerLineWidth:0];
     
-    // If audio completion, delete message
-    if (completed) {
-        if (self.lastSelectedContactView) {
-            [self.lastSelectedContactView messageFinishPlaying];
-        }
+    if (self.lastSelectedContactView) {
+        [self.lastSelectedContactView messageFinishPlaying:completed];
     }
 }
 
