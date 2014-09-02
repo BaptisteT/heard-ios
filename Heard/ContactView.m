@@ -458,7 +458,9 @@
 
 - (void)playNextMessage
 {
-    self.contact.currentUserDidNotAnswerLastMessage = YES;
+    if (self.contact.lastMessageDate <= ((Message *)self.unreadMessages[0]).createdAt) {
+        self.contact.currentUserDidNotAnswerLastMessage = YES;
+    }
     [self.delegate startedPlayingAudioMessagesOfView:self];
     self.isPlaying = YES;
     [self resetDiscussionStateAnimated:NO];
