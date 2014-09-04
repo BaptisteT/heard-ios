@@ -15,6 +15,7 @@
 #import "TrackingUtils.h"
 #import "DashboardViewController.h"
 #import "Constants.h"
+#import "CameraUtils.h"
 
 #define BORDER_SIZE 0.5
 #define ACTION_SHEET_OPTION_1 NSLocalizedStringFromTable(@"camera_button_title",kStringFile,@"comment")
@@ -193,14 +194,7 @@
 
 - (void)showImagePickerForSourceType:(UIImagePickerControllerSourceType)sourceType
 {
-    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-    imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
-    imagePickerController.sourceType = sourceType;
-    imagePickerController.delegate = self;
-    if (sourceType == UIImagePickerControllerSourceTypeCamera) {
-        imagePickerController.cameraDevice = UIImagePickerControllerCameraDeviceFront;
-    }
-    self.imagePickerController = imagePickerController;
+    self.imagePickerController = [CameraUtils allocCameraWithSourceType:sourceType delegate:self];
     [self presentViewController:self.imagePickerController animated:YES completion:nil];
 }
 
@@ -226,6 +220,18 @@
     [self dismissViewControllerAnimated:YES completion:NULL];
     [self.firstNameTextField becomeFirstResponder];
 }
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if ((UINavigationController *)self.imagePickerController != navigationController || self.imagePickerController.sourceType == UIImagePickerControllerSourceTypeCamera) {
+        return;
+    }
+    if ([navigationController.viewControllers indexOfObject:viewController] == 2)
+    {
+        [CameraUtils addCircleOverlayToEditView:viewController];
+    }
+}
+
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1)  {

@@ -29,6 +29,7 @@
 #import "EditContactsViewController.h"
 #import "CustomActionSheet.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import "CameraUtils.h"
 
 #define ACTION_MAIN_MENU_OPTION_1 NSLocalizedStringFromTable(@"invite_friends_button_title",kStringFile,@"comment")
 #define ACTION_MAIN_MENU_OPTION_2 NSLocalizedStringFromTable(@"add_new_contact_button_title",kStringFile,@"comment")
@@ -1319,21 +1320,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)showImagePickerForSourceType:(UIImagePickerControllerSourceType)sourceType
 {
-    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-    imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
-    imagePickerController.sourceType = sourceType;
-    imagePickerController.delegate = self;
-    if (sourceType == UIImagePickerControllerSourceTypeCamera) {
-        imagePickerController.cameraDevice = UIImagePickerControllerCameraDeviceFront;
-    }
-    self.imagePickerController = imagePickerController;
+    self.imagePickerController = [CameraUtils allocCameraWithSourceType:sourceType delegate:self];
     [self presentViewController:self.imagePickerController animated:YES completion:nil];
 }
 
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    UIImage *image =  [info objectForKey:UIImagePickerControllerOriginalImage];
+    UIImage *image =  [info objectForKey:UIImagePickerControllerEditedImage] ? [info objectForKey:UIImagePickerControllerEditedImage] : [info objectForKey:UIImagePickerControllerOriginalImage];
     
     if (image) {
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -1367,6 +1361,18 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     [self dismissViewControllerAnimated:YES completion:NULL];
 }
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if ((UINavigationController *)self.imagePickerController != navigationController || self.imagePickerController.sourceType == UIImagePickerControllerSourceTypeCamera ) {
+        return;
+    }
+    if ([navigationController.viewControllers indexOfObject:viewController] == 2)
+    {
+        [CameraUtils addCircleOverlayToEditView:viewController];
+    }
+}
+
 
 // ----------------------------------------------------------
 #pragma mark Motion event (shake)

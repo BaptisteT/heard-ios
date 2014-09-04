@@ -246,6 +246,8 @@
 		3CA16D2C19AE42CE00C1F2A5 /* french_strings.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3CA16D2B19AE42CE00C1F2A5 /* french_strings.strings */; };
 		3CA16D2D19AE42CE00C1F2A5 /* french_strings.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3CA16D2B19AE42CE00C1F2A5 /* french_strings.strings */; };
 		3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CA177E91958B74000096266 /* AudioToolbox.framework */; };
+		3CB753D419B8908F00E4C75F /* CameraUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB753D319B8908F00E4C75F /* CameraUtils.m */; };
+		3CB753D519B8909A00E4C75F /* CameraUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB753D319B8908F00E4C75F /* CameraUtils.m */; };
 		3CB8B7F5195453E50090D657 /* ContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactView.m */; };
 		3CF2E981198E76110098087B /* CustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF2E980198E76110098087B /* CustomActionSheet.m */; };
 		3CF2E982198E76110098087B /* CustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF2E980198E76110098087B /* CustomActionSheet.m */; };
@@ -440,6 +442,8 @@
 		3CA16D2819AE407200C1F2A5 /* english_strings.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = english_strings.strings; sourceTree = "<group>"; };
 		3CA16D2B19AE42CE00C1F2A5 /* french_strings.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = french_strings.strings; sourceTree = "<group>"; };
 		3CA177E91958B74000096266 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		3CB753D219B8908F00E4C75F /* CameraUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraUtils.h; sourceTree = "<group>"; };
+		3CB753D319B8908F00E4C75F /* CameraUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraUtils.m; sourceTree = "<group>"; };
 		3CB8B7EA195346620090D657 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
 		3CB8B7EB195346620090D657 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		3CB8B7F3195453E50090D657 /* ContactView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactView.h; sourceTree = "<group>"; };
@@ -783,6 +787,8 @@
 				3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */,
 				0B87247819799684007219AF /* AddressbookUtils.h */,
 				0B87247919799684007219AF /* AddressbookUtils.m */,
+				3CB753D219B8908F00E4C75F /* CameraUtils.h */,
+				3CB753D319B8908F00E4C75F /* CameraUtils.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -1078,6 +1084,7 @@
 				0B72EEB3196C672F00AC5A01 /* Message.m in Sources */,
 				0B72EEB4196C672F00AC5A01 /* main.m in Sources */,
 				0B9051AF1976F618001E2ED5 /* InviteContactsViewController.m in Sources */,
+				3CB753D519B8909A00E4C75F /* CameraUtils.m in Sources */,
 				0B22CD031978439D00E1C7AF /* AddContactViewController.m in Sources */,
 				0B72EEB5196C672F00AC5A01 /* ContactView.m in Sources */,
 				0B969126198997620048E4BB /* EditContactsViewController.m in Sources */,
@@ -1151,6 +1158,7 @@
 				0BDB654F1953B5FD00223093 /* Message.m in Sources */,
 				0BDB65501953B5FD00223093 /* main.m in Sources */,
 				0B9051AE1976F618001E2ED5 /* InviteContactsViewController.m in Sources */,
+				3CB753D419B8908F00E4C75F /* CameraUtils.m in Sources */,
 				0B22CD021978439D00E1C7AF /* AddContactViewController.m in Sources */,
 				3CB8B7F5195453E50090D657 /* ContactView.m in Sources */,
 				0B969125198997620048E4BB /* EditContactsViewController.m in Sources */,
