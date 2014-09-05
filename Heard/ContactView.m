@@ -458,6 +458,8 @@
 
 - (void)playNextMessage
 {
+    if (self.unreadMessages.count == 0)
+        return;
     if (self.contact.lastMessageDate <= ((Message *)self.unreadMessages[0]).createdAt) {
         self.contact.currentUserDidNotAnswerLastMessage = YES;
     }
