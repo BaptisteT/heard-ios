@@ -915,10 +915,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)startedPlayingAudioMessagesOfView:(ContactView *)contactView
 {
-    self.lastSelectedContactView = contactView;
     if ([self.mainPlayer isPlaying]) {
         [self endPlayerAtCompletion:NO];
     }
+    self.lastSelectedContactView = contactView;
     [self.playerContainer.layer removeAllAnimations];
     
     // Init player
