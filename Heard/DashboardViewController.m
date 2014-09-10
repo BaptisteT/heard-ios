@@ -817,19 +817,15 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)disableAllContactViews
 {
-    for (UIView *view in [self.contactScrollView subviews]) {
-        if ([view isKindOfClass:[ContactView class]]) {
-            view.userInteractionEnabled = NO;
-        }
+    for (ContactView *view in self.contactViews) {
+        view.userInteractionEnabled = NO;
     }
 }
 
 - (void)enableAllContactViews
 {
-    for (UIView *view in [self.contactScrollView subviews]) {
-        if ([view isKindOfClass:[ContactView class]]) {
-            view.userInteractionEnabled = YES;
-        }
+    for (ContactView *view in self.contactViews) {
+        view.userInteractionEnabled = YES;
     }
 }
 
