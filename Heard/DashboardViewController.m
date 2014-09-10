@@ -139,7 +139,7 @@
     [self displayContactViews];
 
     // Retrieve messages & contacts
-    [self retrieveUnreadMessagesAndNewContacts];
+//    [self retrieveUnreadMessagesAndNewContacts];
     
     // Create audio session
     AVAudioSession* session = [AVAudioSession sharedInstance];
@@ -209,6 +209,7 @@
     [self.playerContainer addSubview:self.playerLine];
 }
 
+
 // Make sure scroll view has been resized (necessary because layout constraints change scroll view size)
 - (void)viewDidLayoutSubviews
 {
@@ -219,6 +220,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES];   //it hides
+    [self retrieveUnreadMessagesAndNewContacts];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -448,7 +450,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)reorderContactViews
 {
-    if ([self isRecording]) {
+    if ([self isRecording] || [self.mainPlayer isPlaying]) {
         return;
     }
     
@@ -642,11 +644,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     void (^successBlock)(NSArray*,BOOL,NSArray*) = ^void(NSArray *messages, BOOL newContactOnServer, NSArray *unreadMessageContacts) {
         //Reset unread messages
         [self resetUnreadMessages];
+        
+        // Attribute messages and reorder view
         BOOL areAttributed = YES;
         for (Message *message in messages) {
             areAttributed &= [self attributeMessageToExistingContacts:message];
         }
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:messages.count];
+        [self reorderContactViews];
         
         // Clean / robust / somewhere else
         for (ContactView *contactView in self.contactViews) {
@@ -663,7 +668,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             }
             [contactView resetDiscussionStateAnimated:NO];
         }
-       
         
         // Check if we have new contacts
         // App launch or Change in address book or Message from unknown or New user added current user
@@ -672,7 +676,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             self.retrieveNewContact = NO;
         } else {
             [self hideLoadingIndicator];
-            [self reorderContactViews];
         }
     };
     
