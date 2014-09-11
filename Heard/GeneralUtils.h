@@ -31,4 +31,8 @@
 
 + (BOOL)isCurrentUser:(Contact *)contact;
 
++ (void)registerForRemoteNotif;
+
++ (BOOL)pushNotifRequestSeen;
+
 @end

@@ -100,7 +100,6 @@
         [GeneralUtils showMessage:NSLocalizedStringFromTable(@"profile_picture_error_message",kStringFile,@"comment") withTitle:nil];
         return;
     }
-    
     [self signupUser];
 }
 
@@ -124,7 +123,6 @@
         [GeneralUtils showMessage:NSLocalizedStringFromTable(@"camera_and_library_access_error_message",kStringFile,@"comment") withTitle:nil];
         return;
     }
-    
     [self.pictureActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
@@ -140,15 +138,13 @@
         [SessionUtils saveUserInfo:contact];
         
         [TrackingUtils identifyWithMixpanel:contact signup:YES];
-        
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
+
         [self performSegueWithIdentifier:@"Dashboard Push Segue" sender:nil];
     };
     
     typedef void (^FailureBlock)();
     FailureBlock failureBlock = ^{
         [MBProgressHUD hideHUDForView:self.view animated:YES];
-        
         [GeneralUtils showMessage:NSLocalizedStringFromTable(@"sign_up_error_message",kStringFile,@"comment") withTitle:nil];
     };
     

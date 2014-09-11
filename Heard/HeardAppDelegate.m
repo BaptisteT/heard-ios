@@ -24,7 +24,8 @@
 
 @interface HeardAppDelegate()
 
-@property (nonatomic, strong) UIAlertView *apiMessagealertView;
+@property (nonatomic, strong) UIAlertView *apiMessageAlertView;
+@property (nonatomic, strong) UIAlertView *notifPreRequestAlertView;
 @property (nonatomic, strong) NSURL *redirectURL;
 @property (nonatomic, strong) NSString *messageContent;
 @property (nonatomic, strong) NSString *messageType;
@@ -74,7 +75,7 @@
         [welcomeViewController performSegueWithIdentifier:@"Dashboard Push Segue From Welcome" sender:nil];
         
         // register for remote
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
+        [self requestRegistrationForRemoteNotif];
     }
     
     return YES;
@@ -190,24 +191,28 @@ NSString* stringFromDeviceTokenData(NSData *deviceToken)
 // API related alert
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (alertView == self.apiMessagealertView) {
+    if (alertView == self.apiMessageAlertView) {
         if (self.redirectURL) {
             [[UIApplication sharedApplication] openURL:self.redirectURL];
         }
         if ([self.messageType isEqualToString:@"Blocking alert"]) {
             [self createObsoleteAPIAlertView];
         }
+    } else if (alertView == self.notifPreRequestAlertView) {
+        if (buttonIndex == 1) {
+            [GeneralUtils registerForRemoteNotif];
+        }
     }
 }
 
 - (void)createObsoleteAPIAlertView
 {
-    self.apiMessagealertView = [[UIAlertView alloc] initWithTitle:nil
+    self.apiMessageAlertView = [[UIAlertView alloc] initWithTitle:nil
                                                           message:self.messageContent
                                                          delegate:self
                                                 cancelButtonTitle:@"OK"
                                                 otherButtonTitles:nil];
-    [self.apiMessagealertView show];
+    [self.apiMessageAlertView show];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -219,6 +224,16 @@ NSString* stringFromDeviceTokenData(NSData *deviceToken)
     }
 }
 
+- (void)requestRegistrationForRemoteNotif
+{
+    if ([GeneralUtils pushNotifRequestSeen]) {
+        [GeneralUtils registerForRemoteNotif];
+    } else {
+        // Present pre-request notif alert view
+        self.notifPreRequestAlertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedStringFromTable(@"notif_pre_request_message",kStringFile, @"comment") delegate:self cancelButtonTitle:NSLocalizedStringFromTable(@"no_thanks_button_title",kStringFile, @"comment") otherButtonTitles:NSLocalizedStringFromTable(@"notify_me_button_title",kStringFile, @"comment"), nil];
+        [self.notifPreRequestAlertView show];
+    }
+}
 
 
 @end

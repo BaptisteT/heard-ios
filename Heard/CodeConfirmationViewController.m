@@ -15,6 +15,7 @@
 #import "SessionUtils.h"
 #import "TrackingUtils.h"
 #import "Constants.h"
+#import "HeardAppDelegate.h"
 
 #define CONFIMATION_CODE_DIGITS 4
 #define BORDER_SIZE 0.5
@@ -114,7 +115,8 @@
             [TrackingUtils identifyWithMixpanel:contact signup:NO];
             
             [self performSegueWithIdentifier:@"Dashboard Push Segue From Code Confirmation" sender:nil];
-            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
+            // register for remote
+            [(HeardAppDelegate *)([[UIApplication sharedApplication] delegate]) requestRegistrationForRemoteNotif];
         } else {
             [self performSegueWithIdentifier:@"Request User Info Push Segue" sender:nil];
         }

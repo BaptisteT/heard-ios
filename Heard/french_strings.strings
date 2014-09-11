@@ -32,6 +32,10 @@
 "resend_button_title" = "Renvoyer";
 "back_button_title" = "❮ Back";
 "select_all_button_title" = "Select All";
+"not_now_button_title" = "Pas Maintenant";
+"give_access_button_title" = "Donner Accès";
+"no_thanks_button_title" = "Non merci";
+"notify_me_button_title" = "Me Notifier";
 
 // Welcome
 "subtitle_label" = "Meaningful communication";
@@ -70,7 +74,7 @@
 "back_to_phone_verification_confirmation_message" = "Voulez vous revenir à l'écran de validation du code?";
 "first_name_error_message" = "Votre prénom doit contenir entre 1 et 20 caractères";
 "last_name_error_message" = "Votre nom doit contenir entre 1 et 20 caractères.";
-"profile_picture_error_message" = "Dsl, on a besoin d'une photo pour que vos contacts vous reconnaissent!";
+"profile_picture_error_message" = "Dsl, on a besoin d'une photo pour que vos contacts vous reconnaissent !";
 "camera_and_library_access_error_message" = "Votre appareil photo et votre librairie ne sont pas accessibles.";
 "sign_up_error_message" = "Votre enregistrement a échoué. Réessayer svp.";
 
@@ -88,13 +92,13 @@
 "personal_invite_text_message" = "Hé TRUCHOV, viens discuter avec moi sur Waved! C'est une appli gratuite qui te permet d'envoyer des messages vocaux en un clic. Télécharge la sur";
 "text_access_error_message" = "Votre téléphone ne semble pas configurer pour envoyer des messages.";
 "personal_invite_text_success_message" = "TRUCHOV a été invité avec succès.";
-"share_mail_object_message" = "Let your friends hear your voice!";
+"share_mail_object_message" = "Let your friends hear your voice !";
 
 // Add
 "add_contact_missing_name_message" = "Ajoutez svp un nom ou un prénom.";
-"add_contact_success_message" = "TRUCHOV a été ajouté avec succès à vos contacts!";
+"add_contact_success_message" = "TRUCHOV a été ajouté avec succès à vos contacts !";
 "add_contact_failure_message" = "Echec de l'ajout de TRUCHOV. Réessayez svp.";
-"add_contact_not_waved_user_message" = "TRUCHOV a été ajouté à votre répertoire. Mais il n'est pas encore inscrit sur Waved et ne sera pas visible dans vos contacts. Vous devriez l'inviter!";
+"add_contact_not_waved_user_message" = "TRUCHOV a été ajouté à votre répertoire. Mais il n'est pas encore inscrit sur Waved et ne sera pas visible dans vos contacts. Vous devriez l'inviter !";
 
 // Block
 "block_failure_error_message" = "Echec du blocage du contact. Réessayez svp.";
@@ -106,3 +110,11 @@
 // Shake
 "cancel_success_message" = "Votre message a été annulé!";
 "no_last_message_played_message" = "Aucun message à réécouter";
+
+// Notif request
+"notif_pre_request_message" = "Voulez vous être alerté quand un ami vous envoie un message ?";
+
+// Contact request
+"contact_access_button_title" = "Chercher les contacts de votre répertoire";
+"contact_pre_request_title" = "Donner accès à votre répertoire ?";
+"contact_pre_request_message" = "Waved en a besoin pour trouver vos contacts";

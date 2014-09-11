@@ -7,6 +7,7 @@
 //
 
 #define FIRST_OPENING_PREF @"First Opening"
+#define PUSH_NOTIF_SEEN_PREF @"Push Notif Seen"
 
 #import "GeneralUtils.h"
 #import "Constants.h"
@@ -105,6 +106,23 @@
 + (BOOL)isCurrentUser:(Contact *)contact
 {
     return contact.identifier == [SessionUtils getCurrentUserId];
+}
+
++ (void)registerForRemoteNotif
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs setObject:[NSNumber numberWithBool:YES] forKey:PUSH_NOTIF_SEEN_PREF];
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
+}
+
++ (BOOL)pushNotifRequestSeen
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if([prefs objectForKey:PUSH_NOTIF_SEEN_PREF]) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 @end

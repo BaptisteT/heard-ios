@@ -36,6 +36,10 @@
 	<string>5</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSContactsUsageDescription</key>
+	<string>Waved will only use it to synchronize your contacts with your address book</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Waved needs it to record your voice messages</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Waved will only use an image of your choice as profile picture</string>
 	<key>UIMainStoryboardFile</key>

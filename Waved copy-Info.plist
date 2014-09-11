@@ -23,7 +23,7 @@
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.streetshout.HeardStaging.6</string>
+	<string>com.streetshout.HeardStaging.10</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -38,6 +38,10 @@
 	<string>5</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSContactsUsageDescription</key>
+	<string>Waved will only use it to synchronize your contacts with your address book</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Waved needs it to record your voice messages</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Waved will only use an image of your choice as profile picture</string>
 	<key>UIMainStoryboardFile</key>

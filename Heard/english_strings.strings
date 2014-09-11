@@ -17,7 +17,7 @@
 "library_button_title" = "Library";
 "invite_button_title" = "Invite";
 "invite_friends_button_title" = "Invite Friends";
-"add_new_contact_button_title" = "Add New Contact";
+"add_new_contact_button_title" = "Add By Phone Number";
 "edit_profile_button_title" = "Edit Profile";
 "hide_contacts_button_title" = "Hide / Unhide Contacts";
 "share_button_title" = "Share";
@@ -32,6 +32,10 @@
 "resend_button_title" = "Resend";
 "back_button_title" = "❮ Back";
 "select_all_button_title" = "Select All";
+"not_now_button_title" = "Not Now";
+"give_access_button_title" = "Give Access";
+"no_thanks_button_title" = "No Thanks";
+"notify_me_button_title" = "Notify Me";
 
 // Welcome
 "subtitle_label" = "Meaningful communication";
@@ -106,3 +110,12 @@
 // Shake
 "cancel_success_message" = "Message canceled!";
 "no_last_message_played_message" = "No message to replay";
+
+// Notif request
+"notif_pre_request_message" = "Would you like to be alerted when a friend sends you a message?";
+
+// Contact request
+"contact_access_button_title" = "Search contacts in your address book";
+"contact_pre_request_title" = "Let Waved access your contacts?";
+"contact_pre_request_message" = "Waved need it to find your Waved contacts";
+

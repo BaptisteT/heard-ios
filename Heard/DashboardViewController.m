@@ -64,7 +64,7 @@
 @property (weak, nonatomic) UIScrollView *contactScrollView;
 @property (nonatomic) BOOL retrieveNewContact;
 @property (nonatomic, strong) Contact *contactToAdd;
-@property (nonatomic, strong) UITextView *noAddressBookAccessLabel;
+@property (nonatomic, strong) UIButton *contactAccessButton;
 // Record
 @property (strong, nonatomic) UIView *recorderContainer;
 @property (nonatomic,strong) UIView *recorderLine;
@@ -92,6 +92,7 @@
 @property (strong, nonatomic) ContactView *lastSelectedContactView;
 //Alertview
 @property (strong, nonatomic) UIAlertView *blockAlertView;
+@property (strong, nonatomic) UIAlertView *contactAccessAlertView;
 
 @end
 
@@ -123,9 +124,6 @@
     [self.tutoView addSubview:self.tutoViewLabel];
     [self.view addSubview:self.tutoView];
     
-    // Init no adress book access label
-    [self initNoAddressBookAccessLabel]; // we do it here to avoid to resize text in a parrallel thread
-    
     // Preload profile picture
     self.profilePicture = [UIImageView new];
     [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
@@ -137,9 +135,18 @@
         [self.contacts removeAllObjects];
     }
     [self displayContactViews];
-
-    // Create audio session
+    
+    // Ask micro access
     AVAudioSession* session = [AVAudioSession sharedInstance];
+    [session requestRecordPermission:^(BOOL granted) {
+        // ask contact access
+        if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
+            self.contactAccessAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"contact_pre_request_title",kStringFile, @"comment") message:NSLocalizedStringFromTable(@"contact_pre_request_message",kStringFile, @"comment") delegate:self cancelButtonTitle:NSLocalizedStringFromTable(@"not_now_button_title",kStringFile, @"comment") otherButtonTitles:NSLocalizedStringFromTable(@"give_access_button_title",kStringFile, @"comment"), nil];
+            [self.contactAccessAlertView show];
+        }
+    }];
+    
+    // Set audio session category
     BOOL success; NSError* error;
     success = [session setCategory:AVAudioSessionCategoryPlayAndRecord
                              error:&error];
@@ -204,6 +211,14 @@
     self.playerLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, PLAYER_UI_HEIGHT)];
     self.playerLine.backgroundColor = [ImageUtils green];
     [self.playerContainer addSubview:self.playerLine];
+    
+    // Allow contact access button
+    self.contactAccessButton = [UIButton new];
+    self.contactAccessButton.layer.cornerRadius = self.contactAccessButton.bounds.size.height/2;
+    self.contactAccessButton.layer.borderColor = [ImageUtils blue].CGColor;
+    self.contactAccessButton.frame = CGRectMake(30, 300, 260, 60);
+    [self.contactAccessButton setTitle:NSLocalizedStringFromTable(@"contact_access_button_title",kStringFile, @"comment") forState:UIControlStateNormal];
+    [self.contactAccessButton addTarget:self action:@selector(contactAccessButtonClicked) forControlEvents:UIControlEventTouchUpInside];
 }
 
 
@@ -246,24 +261,6 @@
 // ------------------------------
 #pragma mark UI Modes
 // ------------------------------
-
-- (void)noAddressBookAccessMode
-{
-    self.contactScrollView.hidden = YES;
-    
-    [self.view addSubview:self.noAddressBookAccessLabel];
-}
-
-- (void)initNoAddressBookAccessLabel
-{
-    NSUInteger labelHeight = 100;
-    self.noAddressBookAccessLabel = [[UITextView alloc] initWithFrame:CGRectMake(0, (self.view.bounds.size.height - labelHeight)/2, self.view.bounds.size.width, labelHeight)];
-    self.noAddressBookAccessLabel.userInteractionEnabled = NO;
-    self.noAddressBookAccessLabel.text = NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment");
-    self.noAddressBookAccessLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
-    self.noAddressBookAccessLabel.textAlignment = NSTextAlignmentCenter;
-}
-
 - (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration
 {
     [self endTutoMode];
@@ -312,32 +309,16 @@
 - (void)requestAddressBookAccessAndRetrieveFriends
 {
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
-        // todo bt
-        // shoudl not happen (or it may 1st opening)
-        // display allow contact button return
-        ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
-            if (granted) {
-                // First time access has been granted, add the contact
-                self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
-                [self matchPhoneContactsWithHeardUsers];
-            } else {
-                // User denied access
-                [self noAddressBookAccessMode];
-            }
-        });
+        // display allow contact button
+        [self.view addSubview:self.contactAccessButton];
     }
     else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
         // The user has previously given access, add the contact
         self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
         [self matchPhoneContactsWithHeardUsers];
-
-        if (self.noAddressBookAccessLabel) {
-            [self.noAddressBookAccessLabel removeFromSuperview];
-        }
     }
     else {
-        // The user has previously denied access
-        [self noAddressBookAccessMode];
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment") withTitle:nil];
     }
 }
 
@@ -422,6 +403,21 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [GeneralUtils showMessage: [NSLocalizedStringFromTable(@"add_contact_success_message",kStringFile,@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:contactName]
                     withTitle:nil];
     [self requestAddressBookAccessAndRetrieveFriends];
+}
+
+// Display address book access request
+- (void)contactAccessButtonClicked
+{
+    [self.contactAccessButton removeFromSuperview];
+    ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
+        if (granted) {
+            // First time access has been granted, add the contact
+            self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
+            [self matchPhoneContactsWithHeardUsers];
+        } else {
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment") withTitle:nil];
+        }
+    });
 }
 
 
@@ -786,28 +782,33 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ------------------------------
 
 - (IBAction)menuButtonClicked:(id)sender {
-
-    self.mainMenuActionSheet = [[CustomActionSheet alloc] initWithTitle:nil
-                                                           delegate:self
-                                                  cancelButtonTitle:ACTION_SHEET_CANCEL
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
+        [self.contactAccessAlertView show];
+    } else if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment") withTitle:nil];
+    } else {
+        self.mainMenuActionSheet = [[CustomActionSheet alloc] initWithTitle:nil
+                                                               delegate:self
+                                                      cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                 destructiveButtonTitle:nil
+                                                      otherButtonTitles:ACTION_MAIN_MENU_OPTION_1, ACTION_MAIN_MENU_OPTION_2, nil];
+        
+        __weak __typeof__(self) weakSelf = self;
+        void (^titleTapBlock)() = ^void() {
+            CustomActionSheet *newActionSheet = [[CustomActionSheet alloc]
+                                             initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
+                                             delegate:weakSelf
+                                             cancelButtonTitle:ACTION_SHEET_CANCEL
                                              destructiveButtonTitle:nil
-                                                  otherButtonTitles:ACTION_MAIN_MENU_OPTION_1, ACTION_MAIN_MENU_OPTION_2, nil];
-    
-    __weak __typeof__(self) weakSelf = self;
-    void (^titleTapBlock)() = ^void() {
-        CustomActionSheet *newActionSheet = [[CustomActionSheet alloc]
-                                         initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
-                                         delegate:weakSelf
-                                         cancelButtonTitle:ACTION_SHEET_CANCEL
-                                         destructiveButtonTitle:nil
-                                         otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
-        [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
-    };
-    
-    [self.mainMenuActionSheet addTitleViewWithUsername:[NSString stringWithFormat:@"%@ %@", [SessionUtils getCurrentUserFirstName], [SessionUtils getCurrentUserLastName]]
-                                                 image:self.profilePicture.image
-                                        andOneTapBlock:titleTapBlock];
-    [self.mainMenuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+                                             otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
+            [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+        };
+        
+        [self.mainMenuActionSheet addTitleViewWithUsername:[NSString stringWithFormat:@"%@ %@", [SessionUtils getCurrentUserFirstName], [SessionUtils getCurrentUserLastName]]
+                                                     image:self.profilePicture.image
+                                            andOneTapBlock:titleTapBlock];
+        [self.mainMenuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+    }
 }
 
 
@@ -1231,8 +1232,17 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    // Contact access
+    if (alertView == self.contactAccessAlertView) {
+        if (buttonIndex == 0) {
+            // display allow contact button
+            [self.view addSubview:self.contactAccessButton];
+        } else if (buttonIndex == 1) {
+            [self contactAccessButtonClicked];
+        }
+    }
     // First name
-    if ([alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2]) {
+    else if ([alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2]) {
         UITextField *textField = [alertView textFieldAtIndex:0];
         if (buttonIndex == 0) // cancel
             return;
@@ -1252,7 +1262,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         }
     }
     // Last name
-    if ([alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_3]) {
+    else if ([alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_3]) {
         UITextField *textField = [alertView textFieldAtIndex:0];
         if (buttonIndex == 0) // cancel
             return;
@@ -1271,8 +1281,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             }];
         }
     }
-    
-    if (alertView == self.blockAlertView && buttonIndex == 1) {
+    // block
+    else if (alertView == self.blockAlertView && buttonIndex == 1) {
         [self blockContact:self.lastSelectedContactView];
     }
 }
