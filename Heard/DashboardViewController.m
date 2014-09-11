@@ -1386,8 +1386,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [[AVAudioSession sharedInstance] setActive:NO error:nil];
             [self endedLongPressRecording];
             for (ContactView *contactView in self.contactViews) {
-                contactView.isRecording = NO;
-                [contactView resetDiscussionStateAnimated:NO];
+                [contactView cancelRecording];
             }
             [self tutoMessage:NSLocalizedStringFromTable(@"cancel_success_message",kStringFile, @"comment") withDuration:2];
         } else if (self.lastMessagesPlayed && self.lastMessagesPlayed.count > 0){

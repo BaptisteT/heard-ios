@@ -447,6 +447,13 @@
     }];
 }
 
+- (void)cancelRecording
+{
+    [self.maxDurationTimer invalidate];
+    self.isRecording = NO;
+    [self resetDiscussionStateAnimated:NO];
+}
+
 
 // ----------------------------------------------------------
 #pragma mark Playing

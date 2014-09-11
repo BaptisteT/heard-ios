@@ -41,6 +41,7 @@
 - (void)setContactPicture;
 - (void)playNextMessage;
 - (void)addPlayedMessages:(NSMutableArray *)messages;
+- (void)cancelRecording;
 
 
 @end
