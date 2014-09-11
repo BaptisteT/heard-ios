@@ -42,14 +42,17 @@
 
 // Record
 "tuto_message" = "Hold to record.";
-"audio_too_short_error" = "Hold to record.";
+"audio_too_short_error" = "Hold longer to record.";
+
+// Play
+"shake_to_replay_message" = "Shake your phone to replay";
 
 // Micro access
 "micro_access_error_title" = "Waved does not have access to your micro";
-"micro_access_error_message" = "To activate it, go to Settings > Privacy > Micro";
+"micro_access_error_message" = "To activate it, go to Settings > Privacy > Micro"; // todo BT ios8
 
 // Contact access
-"contact_access_error_message" = "Waved uses your address book to find your contacts. Please allow access in Settings > Privacy > Contacts.";
+"contact_access_error_message" = "Waved uses your address book to find your contacts. Please allow access in Settings > Privacy > Contacts."; // todo BT ios 8
 
 // Auth
 "authentification_error_title" = "Authentification error";

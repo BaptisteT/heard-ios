@@ -44,6 +44,9 @@
 "tuto_message" = "Maintenir appuyer pour enregistrer.";
 "audio_too_short_error" = "Maintenir appuyer pour enregistrer.";
 
+// Play
+"shake_to_replay_message" = "Secouez pour réécouter";
+
 // Micro access
 "micro_access_error_title" = "Waved n'a pas accès à votre micro";
 "micro_access_error_message" = "Pour l'autoriser, aller dans Settings > Privacy > Micro";

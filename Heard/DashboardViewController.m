@@ -138,9 +138,6 @@
     }
     [self displayContactViews];
 
-    // Retrieve messages & contacts
-//    [self retrieveUnreadMessagesAndNewContacts];
-    
     // Create audio session
     AVAudioSession* session = [AVAudioSession sharedInstance];
     BOOL success; NSError* error;
@@ -220,6 +217,8 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES];   //it hides
+    
+    // Retrieve messages & contacts
     [self retrieveUnreadMessagesAndNewContacts];
 }
 
@@ -313,6 +312,9 @@
 - (void)requestAddressBookAccessAndRetrieveFriends
 {
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
+        // todo bt
+        // shoudl not happen (or it may 1st opening)
+        // display allow contact button return
         ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
             if (granted) {
                 // First time access has been granted, add the contact
@@ -480,11 +482,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Resize view
     [self setScrollViewSizeForContactCount:(int)[self.contactViews count]];
-    
-    if ([GeneralUtils isFirstOpening]) {
-        //Show until user does something
-        [self tutoMessage:NSLocalizedStringFromTable(@"tuto_message",kStringFile, @"comment") withDuration:0];
-    }
 }
 
 - (void)displayAdditionnalContact:(Contact *)contact
