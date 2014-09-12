@@ -830,10 +830,28 @@
                                             <action selector="menuButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="4ge-39-XlM"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tUn-Ou-poo">
+                                        <rect key="frame" x="60" y="438" width="200" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="EWO-tP-q8k"/>
+                                            <constraint firstAttribute="width" constant="200" id="mLr-5f-1tg"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="18"/>
+                                        <state key="normal" title="Find Friends">
+                                            <color key="titleColor" red="0.054901960784313725" green="0.30588235294117649" blue="0.67843137254901964" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="contactAccessButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="PVI-46-H9D"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="3eZ-vS-6nf" secondAttribute="trailing" constant="220" id="AnU-za-cqK"/>
                                     <constraint firstItem="3eZ-vS-6nf" firstAttribute="top" secondItem="a0u-JM-gz3" secondAttribute="top" constant="20" id="BZj-Fm-jVN"/>
+                                    <constraint firstAttribute="bottom" secondItem="tUn-Ou-poo" secondAttribute="bottom" constant="100" id="DLq-8Z-HJv"/>
+                                    <constraint firstItem="tUn-Ou-poo" firstAttribute="leading" secondItem="a0u-JM-gz3" secondAttribute="leading" constant="60" id="Qih-LI-A2t"/>
                                     <constraint firstItem="3eZ-vS-6nf" firstAttribute="leading" secondItem="a0u-JM-gz3" secondAttribute="leading" constant="20" id="b6q-of-lMm"/>
                                     <constraint firstAttribute="bottom" secondItem="3eZ-vS-6nf" secondAttribute="bottom" constant="468" id="kZa-8H-c5I"/>
                                 </constraints>
@@ -849,6 +867,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="Fgn-qW-csE"/>
                     <connections>
+                        <outlet property="contactAccessButton" destination="tUn-Ou-poo" id="Opf-pu-2Nk"/>
                         <outlet property="contactScrollView" destination="a0u-JM-gz3" id="7ew-mq-LGy"/>
                         <outlet property="menuButton" destination="3eZ-vS-6nf" id="DVk-PZ-hkG"/>
                         <segue destination="7tt-yn-mQy" kind="modal" identifier="Invite Contacts Segue" id="FDD-RE-iS8"/>

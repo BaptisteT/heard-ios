@@ -8,6 +8,7 @@
 
 #define FIRST_OPENING_PREF @"First Opening"
 #define PUSH_NOTIF_SEEN_PREF @"Push Notif Seen"
+#define MICRO_REQUEST_SEEN_PREF @"Micro Request Seen"
 
 #import "GeneralUtils.h"
 #import "Constants.h"
@@ -124,5 +125,22 @@
         return NO;
     }
 }
+
++ (void)setMicroRequestSeen
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs setObject:[NSNumber numberWithBool:YES] forKey:MICRO_REQUEST_SEEN_PREF];
+}
+
++ (BOOL)microRequestSeen
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if([prefs objectForKey:MICRO_REQUEST_SEEN_PREF]) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
 
 @end

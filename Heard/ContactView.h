@@ -74,6 +74,8 @@
 
 - (void)resetLastMessagesPlayed;
 
+- (NSData *)getLastRecordedData;
+
 
 
 @end

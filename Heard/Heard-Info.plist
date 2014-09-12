@@ -37,7 +37,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSContactsUsageDescription</key>
-	<string>Waved will only use it to synchronize your contacts with your address book</string>
+	<string>Waved needs it to find your friends</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Waved needs it to record your voice messages</string>
 	<key>NSPhotoLibraryUsageDescription</key>

@@ -115,7 +115,7 @@
 "notif_pre_request_message" = "Would you like to be alerted when a friend sends you a message?";
 
 // Contact request
-"contact_access_button_title" = "Search contacts in your address book";
+"contact_access_button_title" = "Find friends";
 "contact_pre_request_title" = "Let Waved access your contacts?";
-"contact_pre_request_message" = "Waved need it to find your Waved contacts";
+"contact_pre_request_message" = "This will allow to find your friends";
 

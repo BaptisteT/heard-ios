@@ -24,12 +24,7 @@
     contact.lastName = lastName;
     contact.isPending = NO;
     contact.currentUserDidNotAnswerLastMessage = NO;
-    
-    if ([GeneralUtils isAdminContact:contact]) {
-        contact.isHidden = YES;
-    } else {
-        contact.isHidden = NO;
-    }
+    contact.isHidden = NO;
     return contact;
 }
 

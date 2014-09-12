@@ -344,6 +344,10 @@
     // Set session
     AVAudioSession *session = [AVAudioSession sharedInstance];
     [session requestRecordPermission:^(BOOL granted) {
+        if (![GeneralUtils microRequestSeen]) { // First record case
+            [GeneralUtils setMicroRequestSeen];
+            return;
+        }
         if (!granted) {
             [GeneralUtils showMessage:NSLocalizedStringFromTable(@"micro_access_error_message",kStringFile,@"comment") withTitle:NSLocalizedStringFromTable(@"micro_access_error_title",kStringFile,@"comment")];
             return;
@@ -384,12 +388,20 @@
     // Update last message date
     self.contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
     
-    self.sendingMessageCount ++;
-    [self resetDiscussionStateAnimated:NO];
-    
-    // Send
-    [self.delegate sendMessageToContact:self];
-    [TrackingUtils trackRecord];
+    if ([GeneralUtils isCurrentUser:self.contact]) {
+        Message *message = [Message new];
+        message.senderId = self.contact.identifier;
+        message.audioData = [self.delegate getLastRecordedData];
+        [self addUnreadMessage:message];
+        [self resetDiscussionStateAnimated:NO];
+    } else {
+        self.sendingMessageCount ++;
+        [self resetDiscussionStateAnimated:NO];
+        
+        // Send
+        [self.delegate sendMessageToContact:self];
+        [TrackingUtils trackRecord];
+    }
 }
 
 - (void)message:(NSData *)audioData sentWithError:(BOOL)error
@@ -484,7 +496,9 @@
 - (void)deleteMessage:(Message *)message
 {
     // Mark as unread in DB
-    [ApiUtils markMessageAsOpened:message.identifier success:nil failure:nil];
+    if (![GeneralUtils isCurrentUser:self.contact]) {
+        [ApiUtils markMessageAsOpened:message.identifier success:nil failure:nil];
+    }
     
     // Delete & update counter
     [self.unreadMessages removeObject:message];
@@ -520,8 +534,9 @@
 // ----------------------------------------------------------
 - (void)downloadAudio:(Message *)message
 {
-    if (message.audioData)
+    if (message.audioData) {
         return;
+    }
     self.loadingMessageCount ++;
     [self resetDiscussionStateAnimated:NO];
     
@@ -710,11 +725,7 @@
                         completion:nil];
         weakSelf.pictureIsLoaded = YES;
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-        [UIView transitionWithView:weakSelf.imageView
-                          duration:1.0f
-                           options:UIViewAnimationOptionTransitionCrossDissolve
-                        animations:^{[weakSelf.imageView setImage:[UIImage imageNamed:@"contact-placeholder.png"]];}
-                        completion:nil];
+        weakSelf.pictureIsLoaded = NO;
     }];
     
 }
@@ -755,7 +766,8 @@
     self.readStateIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"contact-eye"]];
     [self.readStateIcon setFrame:CGRectMake(kContactSize - 10, -10, 25, 25)];
     self.readStateIcon.hidden = YES;
-    [self addSubview:self.readStateIcon];
+    if (![GeneralUtils isCurrentUser:self.contact])
+        [self addSubview:self.readStateIcon];
 }
 
 - (void)initReadAnimationImageView
@@ -771,7 +783,8 @@
     self.unreadStateIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"contact-sent"]];
     [self.unreadStateIcon setFrame:CGRectMake(kContactSize - 10, -10, 25, 25)];
     self.unreadStateIcon.hidden = YES;
-    [self addSubview:self.unreadStateIcon];
+    if (![GeneralUtils isCurrentUser:self.contact])
+        [self addSubview:self.unreadStateIcon];
 }
                             
 - (void)initUnrespondedStateImageView
@@ -779,7 +792,8 @@
     self.unrespondedStateIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"contact-suspension.png"]];
     [self.unrespondedStateIcon setFrame:CGRectMake(kContactSize - 10, -10, 25, 25)];
     self.unrespondedStateIcon.hidden = YES;
-    [self addSubview:self.unrespondedStateIcon];
+    if (![GeneralUtils isCurrentUser:self.contact])
+        [self addSubview:self.unrespondedStateIcon];
 }
                             
 - (void)initTapAndLongPressGestureRecognisers

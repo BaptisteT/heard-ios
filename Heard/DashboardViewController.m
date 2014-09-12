@@ -64,7 +64,7 @@
 @property (weak, nonatomic) UIScrollView *contactScrollView;
 @property (nonatomic) BOOL retrieveNewContact;
 @property (nonatomic, strong) Contact *contactToAdd;
-@property (nonatomic, strong) UIButton *contactAccessButton;
+@property (weak, nonatomic) IBOutlet UIButton *contactAccessButton;
 // Record
 @property (strong, nonatomic) UIView *recorderContainer;
 @property (nonatomic,strong) UIView *recorderLine;
@@ -105,7 +105,6 @@
 {
     [super viewDidLoad];
     
-    self.contactScrollView.hidden = YES;
     self.retrieveNewContact = YES;
     
     // Init address book
@@ -128,25 +127,25 @@
     self.profilePicture = [UIImageView new];
     [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
     
-    // Create bubble with contacts
+    // Get contacts
     self.contacts = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).contacts;
-    // We remove contact if we do not have access to address book
-    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusDenied) {
-        [self.contacts removeAllObjects];
+    if (self.contacts.count == 0) {
+        // add admin and me contact
+        [self.contacts addObject:[Contact createContactWithId:kAdminId phoneNumber:nil firstName:nil lastName:nil]];
+        [self.contacts addObject:[Contact createContactWithId:[SessionUtils getCurrentUserId] phoneNumber:[SessionUtils getCurrentUserPhoneNumber] firstName:[SessionUtils getCurrentUserFirstName] lastName:[SessionUtils getCurrentUserLastName]]];
     }
+    
+    // Create contact views
     [self displayContactViews];
+    
+    // ask contact access
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
+        self.contactAccessAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"contact_pre_request_title",kStringFile, @"comment") message:NSLocalizedStringFromTable(@"contact_pre_request_message",kStringFile, @"comment") delegate:self cancelButtonTitle:NSLocalizedStringFromTable(@"not_now_button_title",kStringFile, @"comment") otherButtonTitles:NSLocalizedStringFromTable(@"give_access_button_title",kStringFile, @"comment"), nil];
+        [self.contactAccessAlertView show];
+    }
     
     // Ask micro access
     AVAudioSession* session = [AVAudioSession sharedInstance];
-    [session requestRecordPermission:^(BOOL granted) {
-        // ask contact access
-        if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
-            self.contactAccessAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"contact_pre_request_title",kStringFile, @"comment") message:NSLocalizedStringFromTable(@"contact_pre_request_message",kStringFile, @"comment") delegate:self cancelButtonTitle:NSLocalizedStringFromTable(@"not_now_button_title",kStringFile, @"comment") otherButtonTitles:NSLocalizedStringFromTable(@"give_access_button_title",kStringFile, @"comment"), nil];
-            [self.contactAccessAlertView show];
-        }
-    }];
-    
-    // Set audio session category
     BOOL success; NSError* error;
     success = [session setCategory:AVAudioSessionCategoryPlayAndRecord
                              error:&error];
@@ -188,7 +187,6 @@
     self.recorder = [[AVAudioRecorder alloc] initWithURL:outputFileURL settings:recordSetting error:nil];
     self.recorder.delegate = self;
     self.recorder.meteringEnabled = YES;
-    [self.recorder prepareToRecord];
     
     // Init recorder container
     self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - RECORDER_HEIGHT, self.view.bounds.size.width, RECORDER_HEIGHT)];
@@ -212,13 +210,11 @@
     self.playerLine.backgroundColor = [ImageUtils green];
     [self.playerContainer addSubview:self.playerLine];
     
-    // Allow contact access button
-    self.contactAccessButton = [UIButton new];
+    // Allow contact access button;
     self.contactAccessButton.layer.cornerRadius = self.contactAccessButton.bounds.size.height/2;
     self.contactAccessButton.layer.borderColor = [ImageUtils blue].CGColor;
-    self.contactAccessButton.frame = CGRectMake(30, 300, 260, 60);
-    [self.contactAccessButton setTitle:NSLocalizedStringFromTable(@"contact_access_button_title",kStringFile, @"comment") forState:UIControlStateNormal];
-    [self.contactAccessButton addTarget:self action:@selector(contactAccessButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    self.contactAccessButton.layer.borderWidth = 1.0f;
+    self.contactAccessButton.hidden = YES;
 }
 
 
@@ -309,12 +305,9 @@
 - (void)requestAddressBookAccessAndRetrieveFriends
 {
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
-        // display allow contact button
-        [self.view addSubview:self.contactAccessButton];
+        return;
     }
     else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
-        // The user has previously given access, add the contact
-        self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
         [self matchPhoneContactsWithHeardUsers];
     }
     else {
@@ -324,6 +317,8 @@
 
 - (void)matchPhoneContactsWithHeardUsers
 {
+    self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
+    
     NSMutableArray *phoneNumbers = [[NSMutableArray alloc] init];
     NSMutableDictionary * adressBookWithFormattedKey = [NSMutableDictionary new];
     for (NSString* phoneNumber in self.addressBookFormattedContacts) {
@@ -406,13 +401,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 // Display address book access request
-- (void)contactAccessButtonClicked
-{
-    [self.contactAccessButton removeFromSuperview];
+- (IBAction)contactAccessButtonClicked:(id)sender {
     ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
+        [self.contactAccessButton removeFromSuperview];
         if (granted) {
-            // First time access has been granted, add the contact
-            self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
             [self matchPhoneContactsWithHeardUsers];
         } else {
             [GeneralUtils showMessage:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment") withTitle:nil];
@@ -428,8 +420,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)displayContactViews
 {
     [TrackingUtils trackNumberOfContacts:[self.contacts count]];
-    
-    self.contactScrollView.hidden = NO;
     
     NSUInteger nonHiddenContactsCount = [ContactUtils numberOfNonHiddenContacts:self.contacts];
     if (nonHiddenContactsCount == 0) {
@@ -842,12 +832,17 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)sendMessageToContact:(ContactView *)contactView
 {
-    NSData *audioData = [[NSData alloc] initWithContentsOfURL:self.recorder.url];
+    NSData *audioData = [self getLastRecordedData];
     [ApiUtils sendMessage:audioData toUser:contactView.contact.identifier success:^{
         [contactView message:nil sentWithError:NO]; // no need to pass the message here
     } failure:^{
         [contactView message:audioData sentWithError:YES];
     }];
+}
+
+- (NSData *)getLastRecordedData
+{
+    return [[NSData alloc] initWithContentsOfURL:self.recorder.url];
 }
 
 // ----------------------------------------------------------
@@ -1236,9 +1231,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (alertView == self.contactAccessAlertView) {
         if (buttonIndex == 0) {
             // display allow contact button
-            [self.view addSubview:self.contactAccessButton];
+            self.contactAccessButton.hidden = NO;
         } else if (buttonIndex == 1) {
-            [self contactAccessButtonClicked];
+            [self contactAccessButtonClicked:nil];
         }
     }
     // First name

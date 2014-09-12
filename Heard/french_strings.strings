@@ -115,6 +115,6 @@
 "notif_pre_request_message" = "Voulez vous être alerté quand un ami vous envoie un message ?";
 
 // Contact request
-"contact_access_button_title" = "Chercher les contacts de votre répertoire";
+"contact_access_button_title" = "Ajouter des contacts";
 "contact_pre_request_title" = "Donner accès à votre répertoire ?";
 "contact_pre_request_message" = "Waved en a besoin pour trouver vos contacts";
