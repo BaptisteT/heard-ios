@@ -343,9 +343,10 @@
 {
     // Set session
     AVAudioSession *session = [AVAudioSession sharedInstance];
+    int preRequestTime = [[NSDate date] timeIntervalSince1970];
     [session requestRecordPermission:^(BOOL granted) {
-        if (![GeneralUtils microRequestSeen]) { // First record case
-            [GeneralUtils setMicroRequestSeen];
+        int postRequestTime = [[NSDate date] timeIntervalSince1970];
+        if (postRequestTime - preRequestTime > 0.1) { // First record case
             return;
         }
         if (!granted) {

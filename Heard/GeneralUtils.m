@@ -126,21 +126,6 @@
     }
 }
 
-+ (void)setMicroRequestSeen
-{
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setObject:[NSNumber numberWithBool:YES] forKey:MICRO_REQUEST_SEEN_PREF];
-}
-
-+ (BOOL)microRequestSeen
-{
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if([prefs objectForKey:MICRO_REQUEST_SEEN_PREF]) {
-        return YES;
-    } else {
-        return NO;
-    }
-}
 
 
 @end

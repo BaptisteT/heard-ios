@@ -35,8 +35,5 @@
 
 + (BOOL)pushNotifRequestSeen;
 
-+ (void)setMicroRequestSeen;
-
-+ (BOOL)microRequestSeen;
 
 @end
