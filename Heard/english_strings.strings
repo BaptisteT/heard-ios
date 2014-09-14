@@ -45,7 +45,7 @@
 "tuto_label" = "Please select your country code and enter your phone number.";
 
 // Record
-"tuto_message" = "Hold to record.";
+"tuto_message" = "Tap to listen.";
 "audio_too_short_error" = "Hold longer to record.";
 
 // Play

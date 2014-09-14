@@ -45,7 +45,7 @@
 "tuto_label" = "Please select your country code and enter your phone number.";
 
 // Record
-"tuto_message" = "Maintenir appuyer pour enregistrer.";
+"tuto_message" = "Appuyez pour écouter";
 "audio_too_short_error" = "Maintenir appuyer pour enregistrer.";
 
 // Play
@@ -112,7 +112,7 @@
 "no_last_message_played_message" = "Aucun message à réécouter";
 
 // Notif request
-"notif_pre_request_message" = "Voulez vous être alerté quand un ami vous envoie un message ?";
+"notif_pre_request_message" = "Voulez vous être prévenu quand un ami vous envoie un message ?";
 
 // Contact request
 "contact_access_button_title" = "Ajouter des contacts";
