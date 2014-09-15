@@ -834,6 +834,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
+                                            <action selector="authRequestAllowButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="fGY-Qw-pZG"/>
                                             <action selector="authRequestSkipButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="EWa-8X-V0Y"/>
                                         </connections>
                                     </button>

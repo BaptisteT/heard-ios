@@ -1503,7 +1503,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.authRequestView.hidden = NO;
 }
 
-- (IBAction)allowButtonClicked:(id)sender
+- (IBAction)authRequestAllowButtonClicked:(id)sender
 {
     if ([self.authRequestAllowButton.titleLabel.text isEqualToString:NSLocalizedStringFromTable(@"contact_access_button_title", kStringFile, @"comment")]) {
         [self requestContactAuth:nil];
