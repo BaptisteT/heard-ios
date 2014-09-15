@@ -76,6 +76,8 @@
 
 - (NSData *)getLastRecordedData;
 
+- (BOOL) displayOpeningTuto;
 
+- (void)displayTutoWithLabel:(NSString *)label;
 
 @end
