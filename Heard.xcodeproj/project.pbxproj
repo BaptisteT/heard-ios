@@ -133,6 +133,14 @@
 		0B9051BD19771B96001E2ED5 /* checkbox@iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9051B619771B96001E2ED5 /* checkbox@iphone.png */; };
 		0B9051BE19771B96001E2ED5 /* checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9051B719771B96001E2ED5 /* checkbox.png */; };
 		0B9051BF19771B96001E2ED5 /* checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9051B719771B96001E2ED5 /* checkbox.png */; };
+		0B90E67019C7822E004A8F16 /* notif-perm.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B90E66C19C7822E004A8F16 /* notif-perm.png */; };
+		0B90E67119C7822E004A8F16 /* notif-perm.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B90E66C19C7822E004A8F16 /* notif-perm.png */; };
+		0B90E67219C7822E004A8F16 /* contact-perm.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B90E66D19C7822E004A8F16 /* contact-perm.png */; };
+		0B90E67319C7822E004A8F16 /* contact-perm.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B90E66D19C7822E004A8F16 /* contact-perm.png */; };
+		0B90E67419C7822E004A8F16 /* contact-perm@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B90E66E19C7822E004A8F16 /* contact-perm@2x~iphone.png */; };
+		0B90E67519C7822E004A8F16 /* contact-perm@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B90E66E19C7822E004A8F16 /* contact-perm@2x~iphone.png */; };
+		0B90E67619C7822E004A8F16 /* notif-perm@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B90E66F19C7822E004A8F16 /* notif-perm@2x~iphone.png */; };
+		0B90E67719C7822E004A8F16 /* notif-perm@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B90E66F19C7822E004A8F16 /* notif-perm@2x~iphone.png */; };
 		0B969125198997620048E4BB /* EditContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B969124198997620048E4BB /* EditContactsViewController.m */; };
 		0B969126198997620048E4BB /* EditContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B969124198997620048E4BB /* EditContactsViewController.m */; };
 		0B969128198997700048E4BB /* EditContactsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0B969127198997700048E4BB /* EditContactsTableViewCell.xib */; };
@@ -288,6 +296,10 @@
 		0B9051B519771B96001E2ED5 /* checkbox-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox-selected.png"; sourceTree = "<group>"; };
 		0B9051B619771B96001E2ED5 /* checkbox@iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox@iphone.png"; sourceTree = "<group>"; };
 		0B9051B719771B96001E2ED5 /* checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkbox.png; sourceTree = "<group>"; };
+		0B90E66C19C7822E004A8F16 /* notif-perm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notif-perm.png"; sourceTree = "<group>"; };
+		0B90E66D19C7822E004A8F16 /* contact-perm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-perm.png"; sourceTree = "<group>"; };
+		0B90E66E19C7822E004A8F16 /* contact-perm@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-perm@2x~iphone.png"; sourceTree = "<group>"; };
+		0B90E66F19C7822E004A8F16 /* notif-perm@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notif-perm@2x~iphone.png"; sourceTree = "<group>"; };
 		0B969123198997620048E4BB /* EditContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditContactsViewController.h; sourceTree = "<group>"; };
 		0B969124198997620048E4BB /* EditContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditContactsViewController.m; sourceTree = "<group>"; };
 		0B969127198997700048E4BB /* EditContactsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditContactsTableViewCell.xib; sourceTree = "<group>"; };
@@ -555,6 +567,10 @@
 		0BA1455E199786A30031716F /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0B90E66C19C7822E004A8F16 /* notif-perm.png */,
+				0B90E66D19C7822E004A8F16 /* contact-perm.png */,
+				0B90E66E19C7822E004A8F16 /* contact-perm@2x~iphone.png */,
+				0B90E66F19C7822E004A8F16 /* notif-perm@2x~iphone.png */,
 				0B9051B419771B96001E2ED5 /* checkbox-selected@2x~iphone.png */,
 				0B9051B519771B96001E2ED5 /* checkbox-selected.png */,
 				0B9051B619771B96001E2ED5 /* checkbox@iphone.png */,
@@ -976,6 +992,7 @@
 				0B72EEF3196C672F00AC5A01 /* PhoneNumberMetaDataForTesting.json in Resources */,
 				0B72EEF4196C672F00AC5A01 /* unknown-user.png in Resources */,
 				3CA16D2D19AE42CE00C1F2A5 /* french_strings.strings in Resources */,
+				0B90E67519C7822E004A8F16 /* contact-perm@2x~iphone.png in Resources */,
 				0B9051BB19771B96001E2ED5 /* checkbox-selected.png in Resources */,
 				0B9051BF19771B96001E2ED5 /* checkbox.png in Resources */,
 				0BA1457E1997A4A60031716F /* failed-sound.aif in Resources */,
@@ -992,9 +1009,12 @@
 				0BA145801997A4A60031716F /* start-record-sound.aif in Resources */,
 				0B72EEFC196C672F00AC5A01 /* welcome-logo.png in Resources */,
 				0BA145781997A4A60031716F /* end-record-sound.aif in Resources */,
+				0B90E67719C7822E004A8F16 /* notif-perm@2x~iphone.png in Resources */,
 				0BA1457A1997A4A60031716F /* received-sound.aif in Resources */,
+				0B90E67119C7822E004A8F16 /* notif-perm.png in Resources */,
 				0BADABCE1993000D007B4538 /* contact-eye.png in Resources */,
 				0B56F657197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
+				0B90E67319C7822E004A8F16 /* contact-perm.png in Resources */,
 				0B969129198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
 				0B72EEFD196C672F00AC5A01 /* contact-placeholder.png in Resources */,
 				0BADABC619930005007B4538 /* contact-sent.png in Resources */,
@@ -1028,6 +1048,7 @@
 				0BDB64CF19521A7C00223093 /* PhoneNumberMetaDataForTesting.json in Resources */,
 				0BE55473195A340500CE4669 /* unknown-user.png in Resources */,
 				3CA16D2C19AE42CE00C1F2A5 /* french_strings.strings in Resources */,
+				0B90E67419C7822E004A8F16 /* contact-perm@2x~iphone.png in Resources */,
 				0B9051BA19771B96001E2ED5 /* checkbox-selected.png in Resources */,
 				0B9051BE19771B96001E2ED5 /* checkbox.png in Resources */,
 				0BA1457D1997A4A60031716F /* failed-sound.aif in Resources */,
@@ -1044,9 +1065,12 @@
 				0BA1457F1997A4A60031716F /* start-record-sound.aif in Resources */,
 				0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */,
 				0BA145771997A4A60031716F /* end-record-sound.aif in Resources */,
+				0B90E67619C7822E004A8F16 /* notif-perm@2x~iphone.png in Resources */,
 				0BA145791997A4A60031716F /* received-sound.aif in Resources */,
+				0B90E67019C7822E004A8F16 /* notif-perm.png in Resources */,
 				0BADABCD1993000D007B4538 /* contact-eye.png in Resources */,
 				0B56F656197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
+				0B90E67219C7822E004A8F16 /* contact-perm.png in Resources */,
 				0B969128198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
 				0B3651D61958AC5000534386 /* contact-placeholder.png in Resources */,
 				0BADABC519930005007B4538 /* contact-sent.png in Resources */,

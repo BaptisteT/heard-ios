@@ -112,10 +112,14 @@
 "no_last_message_played_message" = "Aucun message à réécouter";
 
 // Notif request
+"notif_permission_message" = "Be notified when you get messages from friends!";
+"notif_permission_note" = "You will only get notifications for new messages";
 "notif_pre_request_message" = "Voulez vous être prévenu quand un ami vous envoie un message ?";
 "notify_me_button_title" = "Me notifier";
 
 // Contact request
+"contact_permission_message" = "Waved automatically syncs with your Address Book.";
+"contact_permission_note" = "No contact information will be uploaded anywhere.";
 "contact_access_button_title" = "Ajouter des contacts";
 "contact_pre_request_title" = "Donner accès à votre répertoire ?";
 "contact_pre_request_message" = "Waved en a besoin pour trouver vos contacts";

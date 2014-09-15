@@ -112,14 +112,18 @@
 "no_last_message_played_message" = "No message to replay";
 
 // Notif request
+"notif_permission_message" = "Be notified when you get messages from friends!";
+"notif_permission_note" = "You will only get notifications for new messages";
 "notif_pre_request_message" = "Would you like to be alerted when a friend sends you a message?";
-"notify_me_button_title" = "Notify me";
+"notify_me_button_title" = "NOTIFY ME";
 
 // Contact request
+"contact_permission_message" = "Waved automatically syncs with your Address Book.";
+"contact_permission_note" = "No contact information will be uploaded anywhere.";
 "contact_access_button_title" = "Find friends";
 "contact_pre_request_title" = "Let Waved access your contacts?";
 "contact_pre_request_message" = "This will allow to find your friends";
 "skip_button_title" = "Skip";
-"contact_access_button_title" = "Allow access";
+"contact_access_button_title" = "ALLOW CONTACT ACCESS";
 
 

@@ -96,6 +96,9 @@
 @property (strong, nonatomic) IBOutlet UIView *authRequestView;
 @property (strong, nonatomic) IBOutlet UIButton *allowButton;
 @property (strong, nonatomic) IBOutlet UIButton *skipButton;
+@property (weak, nonatomic) IBOutlet UIImageView *permissionImage;
+@property (weak, nonatomic) IBOutlet UITextView *permissionMessage;
+@property (weak, nonatomic) IBOutlet UITextView *permissionNote;
 @property (nonatomic) BOOL contactAuthViewSeen;
 @property (nonatomic) BOOL pushAuthViewSeen;
 
@@ -114,6 +117,11 @@
     self.pushAuthViewSeen = NO;
     self.contactAuthViewSeen = NO;
     self.authRequestView.hidden = YES;
+    
+    //Perms
+    self.allowButton.clipsToBounds = YES;
+    self.allowButton.layer.cornerRadius = 5;
+    
     // Init address book
     self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
@@ -1461,6 +1469,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ----------------------------------------
 - (void)displayContactAuthView
 {
+    self.permissionMessage.text = NSLocalizedStringFromTable(@"contact_permission_message", kStringFile, @"comment");
+    self.permissionNote.text = NSLocalizedStringFromTable(@"contact_permission_note", kStringFile, @"comment");
+    
+    self.permissionImage.image = [UIImage imageNamed:@"contact-perm"];
+    
     [self.skipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
     [self.allowButton setTitle:NSLocalizedStringFromTable(@"contact_access_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
     self.authRequestView.hidden = NO;
@@ -1468,6 +1481,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)displayPushAuthView
 {
+    self.permissionMessage.text = NSLocalizedStringFromTable(@"notif_permission_message", kStringFile, @"comment");
+    self.permissionNote.text = NSLocalizedStringFromTable(@"notif_permission_note", kStringFile, @"comment");
+    
+    self.permissionImage.image = [UIImage imageNamed:@"notif-perm"];
+    
     [self.skipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
     [self.allowButton setTitle:NSLocalizedStringFromTable(@"notify_me_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
     self.authRequestView.hidden = NO;
