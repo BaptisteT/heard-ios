@@ -33,6 +33,7 @@
 
 - (IBAction)contactAccessButtonClicked:(id)sender {
     ABAddressBookRequestAccessWithCompletion([self.delegate addressBook], ^(bool granted, CFErrorRef error) {
+        [self.delegate removeAllowContactButton];
         [self quitController];
     });
 }
@@ -40,7 +41,7 @@
 - (void)quitController
 {
     if ([GeneralUtils pushNotifRequestSeen]) {
-        [self.navigationController popViewControllerAnimated:YES];
+        [self dismissViewControllerAnimated:NO completion:nil];
     } else {
         [self performSegueWithIdentifier:@"Push Request From Contact Request" sender:nil];
     }

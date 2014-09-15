@@ -410,7 +410,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // Display address book access request
 - (IBAction)contactAccessButtonClicked:(id)sender {
     ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
-        [self.contactAccessButton removeFromSuperview];
+        [self removeAllowContactButton];
         if (granted) {
             [self matchPhoneContactsWithHeardUsers];
         } else {
@@ -419,6 +419,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     });
 }
 
+- (void)removeAllowContactButton
+{
+    [self.contactAccessButton removeFromSuperview];
+}
 
 // ----------------------------------
 #pragma mark Contact Views

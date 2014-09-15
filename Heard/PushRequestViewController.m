@@ -27,12 +27,17 @@
 }
 
 - (IBAction)skipButtonClicked:(id)sender {
-    [self.navigationController popToViewController:self.dashboardViewController animated:YES];
+    [self dismissController];
 }
 
 - (IBAction)notifyMeButtonClicked:(id)sender {
     [GeneralUtils registerForRemoteNotif];
-    [self.navigationController popToViewController:self.dashboardViewController animated:YES];
+    [self dismissController];
+}
+
+- (void)dismissController
+{
+    [self.dashboardViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
 @end

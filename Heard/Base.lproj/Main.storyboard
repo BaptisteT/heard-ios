@@ -873,7 +873,7 @@
                         <segue destination="7tt-yn-mQy" kind="modal" identifier="Invite Contacts Segue" id="FDD-RE-iS8"/>
                         <segue destination="nns-Z4-R2U" kind="modal" identifier="Add Contact Segue" id="Ixl-M0-jCK"/>
                         <segue destination="eqq-1x-hnn" kind="modal" identifier="Edit Contacts Segue" id="5hE-YK-o4D"/>
-                        <segue destination="Xb5-dQ-521" kind="push" identifier="Contact Request From Dashboard" id="Z2T-Pl-bGk"/>
+                        <segue destination="Xb5-dQ-521" kind="modal" identifier="Contact Request From Dashboard" animates="NO" id="Z2T-Pl-bGk"/>
                         <segue destination="oRZ-Fj-sFM" kind="push" identifier="Push Request From Dashboard" id="5PN-g3-9bp"/>
                     </connections>
                 </viewController>
@@ -1013,7 +1013,7 @@
                     <connections>
                         <outlet property="contactAccessButton" destination="u2e-Jt-ZKu" id="Z6q-qZ-Ndj"/>
                         <outlet property="skipButton" destination="0Bm-Yh-h6a" id="e1A-mO-IC5"/>
-                        <segue destination="oRZ-Fj-sFM" kind="push" identifier="Push Request From Contact Request" id="LdS-kj-viz"/>
+                        <segue destination="oRZ-Fj-sFM" kind="modal" identifier="Push Request From Contact Request" animates="NO" id="LdS-kj-viz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oj6-29-yEf" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -20,5 +20,6 @@
 @protocol ContactRequestVCDelegate
 
 - (ABAddressBookRef)addressBook;
+- (void)removeAllowContactButton;
 
 @end
