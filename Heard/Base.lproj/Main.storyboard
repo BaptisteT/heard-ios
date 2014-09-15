@@ -856,6 +856,38 @@
                                     <constraint firstAttribute="bottom" secondItem="3eZ-vS-6nf" secondAttribute="bottom" constant="468" id="kZa-8H-c5I"/>
                                 </constraints>
                             </scrollView>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rAY-VR-0Tm">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3jI-7E-FHp">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="calibratedRGB"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LQ3-Tp-x6B">
+                                        <rect key="frame" x="120" y="269" width="81" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="skip_button">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="skipButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="fG0-oM-FJa"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4gs-dc-CNa">
+                                        <rect key="frame" x="116" y="219" width="88" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="allow_button">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="allowButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="sZq-Nn-2ex"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -867,14 +899,15 @@
                     </view>
                     <navigationItem key="navigationItem" id="Fgn-qW-csE"/>
                     <connections>
+                        <outlet property="allowButton" destination="4gs-dc-CNa" id="M7d-nq-Dax"/>
+                        <outlet property="authRequestView" destination="rAY-VR-0Tm" id="KNt-GX-wkw"/>
                         <outlet property="contactAccessButton" destination="tUn-Ou-poo" id="Opf-pu-2Nk"/>
                         <outlet property="contactScrollView" destination="a0u-JM-gz3" id="7ew-mq-LGy"/>
                         <outlet property="menuButton" destination="3eZ-vS-6nf" id="DVk-PZ-hkG"/>
+                        <outlet property="skipButton" destination="LQ3-Tp-x6B" id="WUT-Ve-rOY"/>
                         <segue destination="7tt-yn-mQy" kind="modal" identifier="Invite Contacts Segue" id="FDD-RE-iS8"/>
                         <segue destination="nns-Z4-R2U" kind="modal" identifier="Add Contact Segue" id="Ixl-M0-jCK"/>
                         <segue destination="eqq-1x-hnn" kind="modal" identifier="Edit Contacts Segue" id="5hE-YK-o4D"/>
-                        <segue destination="Xb5-dQ-521" kind="modal" identifier="Contact Request From Dashboard" animates="NO" id="Z2T-Pl-bGk"/>
-                        <segue destination="oRZ-Fj-sFM" kind="push" identifier="Push Request From Dashboard" id="5PN-g3-9bp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kJk-FM-4rk" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -972,98 +1005,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BPv-cs-mCH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3299" y="81"/>
-        </scene>
-        <!--Contact Request View Controller-->
-        <scene sceneID="E6z-yl-cqe">
-            <objects>
-                <viewController id="Xb5-dQ-521" customClass="ContactRequestViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="fWM-eL-llE"/>
-                        <viewControllerLayoutGuide type="bottom" id="cuM-hc-4vd"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="aIa-JI-IgS">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u2e-Jt-ZKu">
-                                <rect key="frame" x="114" y="294" width="149" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Allow_Access_Button">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="contactAccessButtonClicked:" destination="Xb5-dQ-521" eventType="touchUpInside" id="JQg-Co-dNV"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Bm-Yh-h6a">
-                                <rect key="frame" x="145" y="487" width="84" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Skip_Button">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="skipButtonClicked:" destination="Xb5-dQ-521" eventType="touchUpInside" id="bdU-bX-ndq"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="IQi-4b-f76"/>
-                    <connections>
-                        <outlet property="contactAccessButton" destination="u2e-Jt-ZKu" id="Z6q-qZ-Ndj"/>
-                        <outlet property="skipButton" destination="0Bm-Yh-h6a" id="e1A-mO-IC5"/>
-                        <segue destination="oRZ-Fj-sFM" kind="modal" identifier="Push Request From Contact Request" animates="NO" id="LdS-kj-viz"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="oj6-29-yEf" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3299" y="819"/>
-        </scene>
-        <!--Push Request View Controller-->
-        <scene sceneID="dgW-aV-mK8">
-            <objects>
-                <viewController id="oRZ-Fj-sFM" customClass="PushRequestViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="fse-2k-WQv"/>
-                        <viewControllerLayoutGuide type="bottom" id="eC3-3j-h3J"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="87J-YS-QBD">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zvz-iz-LLU">
-                                <rect key="frame" x="86" y="242" width="119" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="notify_me_button">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="notifyMeButtonClicked:" destination="oRZ-Fj-sFM" eventType="touchUpInside" id="CV8-x3-Hpy"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xaS-8M-y5G">
-                                <rect key="frame" x="118" y="463" width="84" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Skip_Button">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="skipButtonClicked:" destination="oRZ-Fj-sFM" eventType="touchUpInside" id="R78-KT-wkb"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="Yde-H1-GQZ"/>
-                    <connections>
-                        <outlet property="notifyMeButton" destination="zvz-iz-LLU" id="Vya-2l-4fq"/>
-                        <outlet property="skipButton" destination="xaS-8M-y5G" id="5Ai-ge-YPM"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="JKj-Hb-og0" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3299" y="1571"/>
+            <point key="canvasLocation" x="3299" y="99"/>
         </scene>
         <!--Invite ContactsTVC-->
         <scene sceneID="2Jg-73-1a5">
@@ -1519,6 +1461,5 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="lrb-7Z-tIJ"/>
-        <segue reference="LdS-kj-viz"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -30,7 +30,6 @@
 #import "CustomActionSheet.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "CameraUtils.h"
-#import "PushRequestViewController.h"
 
 #define ACTION_MAIN_MENU_OPTION_1 NSLocalizedStringFromTable(@"invite_friends_button_title",kStringFile,@"comment")
 #define ACTION_MAIN_MENU_OPTION_2 NSLocalizedStringFromTable(@"add_new_contact_button_title",kStringFile,@"comment")
@@ -93,6 +92,12 @@
 @property (strong, nonatomic) ContactView *lastSelectedContactView;
 //Alertview
 @property (strong, nonatomic) UIAlertView *blockAlertView;
+// Authorization Request View
+@property (strong, nonatomic) IBOutlet UIView *authRequestView;
+@property (strong, nonatomic) IBOutlet UIButton *allowButton;
+@property (strong, nonatomic) IBOutlet UIButton *skipButton;
+@property (nonatomic) BOOL contactAuthViewSeen;
+@property (nonatomic) BOOL pushAuthViewSeen;
 
 @end
 
@@ -106,7 +111,9 @@
     [super viewDidLoad];
     
     self.retrieveNewContact = YES;
-    
+    self.pushAuthViewSeen = NO;
+    self.contactAuthViewSeen = NO;
+    self.authRequestView.hidden = YES;
     // Init address book
     self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
@@ -210,12 +217,14 @@
     self.contactAccessButton.hidden = YES;
     
     // Go to access view controller if acces has not yet been granted
-    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
-        [self performSegueWithIdentifier:@"Contact Request From Dashboard" sender:nil];
-    } else if ([GeneralUtils pushNotifRequestSeen]) {
-        [GeneralUtils registerForRemoteNotif];
+    if (!self.contactAuthViewSeen && ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
+        self.contactAuthViewSeen = YES;
+        [self displayContactAuthView];
+    } else if (!self.pushAuthViewSeen && ![GeneralUtils pushNotifRequestSeen]) {
+        self.pushAuthViewSeen = YES;
+        [self displayPushAuthView];
     } else {
-        [self performSegueWithIdentifier:@"Push Request From Dashboard" sender:nil];
+        [GeneralUtils registerForRemoteNotif];
     }
 }
 
@@ -248,10 +257,6 @@
     } else if ([segueName isEqualToString: @"Edit Contacts Segue"]) {
         ((EditContactsViewController *) [segue destinationViewController]).delegate = self;
         ((EditContactsViewController *) [segue destinationViewController]).contacts = self.contacts;
-    } else if ([segueName isEqualToString: @"Contact Request From Dashboard"]) {
-        ((ContactRequestViewController *) [segue destinationViewController]).delegate = self;
-    } else if ([segueName isEqualToString: @"Push Request From Dashboard"]) {
-        ((PushRequestViewController *) [segue destinationViewController]).dashboardViewController = self;
     }
 }
 
@@ -1449,5 +1454,50 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     return YES;
 }
+
+
+// ----------------------------------------
+#pragma mark Auth Request View
+// ----------------------------------------
+- (void)displayContactAuthView
+{
+    [self.skipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
+    [self.allowButton setTitle:NSLocalizedStringFromTable(@"contact_access_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
+    self.authRequestView.hidden = NO;
+}
+
+- (void)displayPushAuthView
+{
+    [self.skipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
+    [self.allowButton setTitle:NSLocalizedStringFromTable(@"notify_me_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
+    self.authRequestView.hidden = NO;
+}
+
+- (IBAction)allowButtonClicked:(id)sender
+{
+    if ([self.allowButton.titleLabel.text isEqualToString:NSLocalizedStringFromTable(@"contact_access_button_title", kStringFile, @"comment")]) {
+        ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
+            
+        });
+        if (!self.pushAuthViewSeen && ![GeneralUtils pushNotifRequestSeen]) {
+            self.pushAuthViewSeen = YES;
+            [self displayPushAuthView];
+        } else {
+            self.authRequestView.hidden = YES;
+        }
+    } else if ([self.allowButton.titleLabel.text isEqualToString:NSLocalizedStringFromTable(@"notify_me_button_title", kStringFile, @"comment")]) {
+        [GeneralUtils registerForRemoteNotif];
+        self.authRequestView.hidden = YES;
+    }
+}
+- (IBAction)skipButtonClicked:(id)sender {
+    if (!self.pushAuthViewSeen && ![GeneralUtils pushNotifRequestSeen]) {
+        self.pushAuthViewSeen = YES;
+        [self displayPushAuthView];
+    } else {
+        [self.authRequestView removeFromSuperview];
+    }
+}
+
 
 @end
