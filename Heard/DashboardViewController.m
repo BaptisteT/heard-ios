@@ -92,6 +92,9 @@
 @property (strong, nonatomic) UIAlertView *blockAlertView;
 // Authorization Request View
 @property (strong, nonatomic) IBOutlet UIView *authRequestView;
+@property (weak, nonatomic) IBOutlet UIImageView *permissionImage;
+@property (weak, nonatomic) IBOutlet UITextView *permissionMessage;
+@property (weak, nonatomic) IBOutlet UITextView *permissionNote;
 @property (strong, nonatomic) IBOutlet UIButton *authRequestAllowButton;
 @property (strong, nonatomic) IBOutlet UIButton *authRequestSkipButton;
 @property (nonatomic) BOOL contactAuthViewSeen;
@@ -119,7 +122,13 @@
     self.pushAuthViewSeen = NO;
     self.contactAuthViewSeen = NO;
     self.authRequestView.hidden = YES;
+    
     self.displayOpeningTuto = [GeneralUtils isFirstOpening];
+    
+    //Perms
+    self.authRequestAllowButton.clipsToBounds = YES;
+    self.authRequestAllowButton.layer.cornerRadius = 5;
+    
     // Init address book
     self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
@@ -1476,6 +1485,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // -------------------------------------------
 - (void)displayContactAuthView
 {
+    self.permissionMessage.text = NSLocalizedStringFromTable(@"contact_permission_message", kStringFile, @"comment");
+    self.permissionNote.text = NSLocalizedStringFromTable(@"contact_permission_note", kStringFile, @"comment");
+    
+    self.permissionImage.image = [UIImage imageNamed:@"contact-perm"];
+    
     [self.authRequestSkipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
     [self.authRequestAllowButton setTitle:NSLocalizedStringFromTable(@"contact_access_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
     self.authRequestView.hidden = NO;
@@ -1483,12 +1497,17 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)displayPushAuthView
 {
+    self.permissionMessage.text = NSLocalizedStringFromTable(@"notif_permission_message", kStringFile, @"comment");
+    self.permissionNote.text = NSLocalizedStringFromTable(@"notif_permission_note", kStringFile, @"comment");
+    
+    self.permissionImage.image = [UIImage imageNamed:@"notif-perm"];
+
     [self.authRequestSkipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
     [self.authRequestAllowButton setTitle:NSLocalizedStringFromTable(@"notify_me_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
     self.authRequestView.hidden = NO;
 }
 
-- (IBAction)allowButtonClicked:(id)sender
+- (IBAction)authRequestAllowButtonClicked:(id)sender
 {
     if ([self.authRequestAllowButton.titleLabel.text isEqualToString:NSLocalizedStringFromTable(@"contact_access_button_title", kStringFile, @"comment")]) {
         [self requestContactAuth:nil];
