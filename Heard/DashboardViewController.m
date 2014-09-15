@@ -104,7 +104,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *openingTutoLabel;
 @property (strong, nonatomic) IBOutlet UIButton *openingTutoSkipButton;
 
-
 @end
 
 @implementation DashboardViewController 
@@ -793,6 +792,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ------------------------------
 
 - (IBAction)menuButtonClicked:(id)sender {
+    if (self.displayOpeningTuto) {
+        [self hideOpeningTuto];
+        self.displayOpeningTuto = NO;
+    }
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         [self performSegueWithIdentifier:@"Contact Request From Dashboard" sender:nil];
     } else if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
@@ -929,10 +932,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)startedPlayingAudioMessagesOfView:(ContactView *)contactView
 {
-    if (self.displayOpeningTuto) {
-        [self hideOpeningTuto];
-        self.displayOpeningTuto = NO;
-    }
+    [self hideOpeningTuto];
     if ([self.mainPlayer isPlaying]) {
         [self endPlayerAtCompletion:NO];
     }
@@ -1028,6 +1028,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)endPlayerAtCompletion:(BOOL)completed
 {
+    if (self.displayOpeningTuto) {
+        [self displayTutoWithLabel:NSLocalizedStringFromTable(@"menu_tuto_label", kStringFile, @"comment")];
+        self.displayOpeningTuto = NO;
+    }
     // Check that audio is playing or completed
     if (![self.mainPlayer isPlaying] && !completed) {
         return;
@@ -1530,7 +1534,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)displayTutoWithLabel:(NSString *)label
 {
     [self.openingTutoLabel setText:label];
-    [self.openingTutoSkipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
+    [self.openingTutoSkipButton setTitle:NSLocalizedStringFromTable(@"hold_tuto_label", kStringFile, @"comment") forState:UIControlStateNormal];
     self.openingTutoView.hidden = NO;
 }
 
