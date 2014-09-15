@@ -14,8 +14,9 @@
 #import "AddContactViewController.h"
 #import <AddressBookUI/AddressBookUI.h>
 #import "EditContactsViewController.h"
+#import "ContactRequestViewController.h"
 
-@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, AddContactViewControllerDelegate, AVAudioRecorderDelegate, ABPersonViewControllerDelegate, EditContactsVCDelegate>
+@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, AddContactViewControllerDelegate, AVAudioRecorderDelegate, ABPersonViewControllerDelegate, EditContactsVCDelegate, ContactRequestVCDelegate>
 
 - (BOOL)attributeMessageToExistingContacts:(Message *)message;
 - (void)retrieveUnreadMessagesAndNewContacts;

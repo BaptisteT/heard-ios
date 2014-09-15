@@ -115,8 +115,6 @@
             [TrackingUtils identifyWithMixpanel:contact signup:NO];
             
             [self performSegueWithIdentifier:@"Dashboard Push Segue From Code Confirmation" sender:nil];
-            // register for remote
-            [(HeardAppDelegate *)([[UIApplication sharedApplication] delegate]) requestRegistrationForRemoteNotif];
         } else {
             [self performSegueWithIdentifier:@"Request User Info Push Segue" sender:nil];
         }

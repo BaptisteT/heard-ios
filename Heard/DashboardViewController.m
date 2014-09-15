@@ -30,6 +30,7 @@
 #import "CustomActionSheet.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "CameraUtils.h"
+#import "PushRequestViewController.h"
 
 #define ACTION_MAIN_MENU_OPTION_1 NSLocalizedStringFromTable(@"invite_friends_button_title",kStringFile,@"comment")
 #define ACTION_MAIN_MENU_OPTION_2 NSLocalizedStringFromTable(@"add_new_contact_button_title",kStringFile,@"comment")
@@ -92,7 +93,6 @@
 @property (strong, nonatomic) ContactView *lastSelectedContactView;
 //Alertview
 @property (strong, nonatomic) UIAlertView *blockAlertView;
-@property (strong, nonatomic) UIAlertView *contactAccessAlertView;
 
 @end
 
@@ -131,18 +131,11 @@
     self.contacts = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).contacts;
     if (self.contacts.count == 0) {
         // add admin and me contact
-        [self.contacts addObject:[Contact createContactWithId:kAdminId phoneNumber:nil firstName:nil lastName:nil]];
         [self.contacts addObject:[Contact createContactWithId:[SessionUtils getCurrentUserId] phoneNumber:[SessionUtils getCurrentUserPhoneNumber] firstName:[SessionUtils getCurrentUserFirstName] lastName:[SessionUtils getCurrentUserLastName]]];
     }
     
     // Create contact views
     [self displayContactViews];
-    
-    // ask contact access
-    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
-        self.contactAccessAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"contact_pre_request_title",kStringFile, @"comment") message:NSLocalizedStringFromTable(@"contact_pre_request_message",kStringFile, @"comment") delegate:self cancelButtonTitle:NSLocalizedStringFromTable(@"not_now_button_title",kStringFile, @"comment") otherButtonTitles:NSLocalizedStringFromTable(@"give_access_button_title",kStringFile, @"comment"), nil];
-        [self.contactAccessAlertView show];
-    }
     
     // Ask micro access
     AVAudioSession* session = [AVAudioSession sharedInstance];
@@ -215,6 +208,15 @@
     self.contactAccessButton.layer.borderColor = [ImageUtils blue].CGColor;
     self.contactAccessButton.layer.borderWidth = 1.0f;
     self.contactAccessButton.hidden = YES;
+    
+    // Go to access view controller if acces has not yet been granted
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
+        [self performSegueWithIdentifier:@"Contact Request From Dashboard" sender:nil];
+    } else if ([GeneralUtils pushNotifRequestSeen]) {
+        [GeneralUtils registerForRemoteNotif];
+    } else {
+        [self performSegueWithIdentifier:@"Push Request From Dashboard" sender:nil];
+    }
 }
 
 
@@ -246,6 +248,10 @@
     } else if ([segueName isEqualToString: @"Edit Contacts Segue"]) {
         ((EditContactsViewController *) [segue destinationViewController]).delegate = self;
         ((EditContactsViewController *) [segue destinationViewController]).contacts = self.contacts;
+    } else if ([segueName isEqualToString: @"Contact Request From Dashboard"]) {
+        ((ContactRequestViewController *) [segue destinationViewController]).delegate = self;
+    } else if ([segueName isEqualToString: @"Push Request From Dashboard"]) {
+        ((PushRequestViewController *) [segue destinationViewController]).dashboardViewController = self;
     }
 }
 
@@ -305,6 +311,7 @@
 - (void)requestAddressBookAccessAndRetrieveFriends
 {
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
+        self.contactAccessButton.hidden = NO;
         return;
     }
     else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
@@ -773,7 +780,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (IBAction)menuButtonClicked:(id)sender {
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
-        [self.contactAccessAlertView show];
+        [self performSegueWithIdentifier:@"Contact Request From Dashboard" sender:nil];
     } else if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
         [GeneralUtils showMessage:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment") withTitle:nil];
     } else {
@@ -1227,17 +1234,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    // Contact access
-    if (alertView == self.contactAccessAlertView) {
-        if (buttonIndex == 0) {
-            // display allow contact button
-            self.contactAccessButton.hidden = NO;
-        } else if (buttonIndex == 1) {
-            [self contactAccessButtonClicked:nil];
-        }
-    }
     // First name
-    else if ([alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2]) {
+    if ([alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2]) {
         UITextField *textField = [alertView textFieldAtIndex:0];
         if (buttonIndex == 0) // cancel
             return;

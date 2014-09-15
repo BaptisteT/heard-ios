@@ -25,7 +25,6 @@
 @interface HeardAppDelegate()
 
 @property (nonatomic, strong) UIAlertView *apiMessageAlertView;
-@property (nonatomic, strong) UIAlertView *notifPreRequestAlertView;
 @property (nonatomic, strong) NSURL *redirectURL;
 @property (nonatomic, strong) NSString *messageContent;
 @property (nonatomic, strong) NSString *messageType;
@@ -73,9 +72,6 @@
     if ([SessionUtils isSignedIn]) {
         WelcomeViewController* welcomeViewController = (WelcomeViewController *)  self.window.rootViewController.childViewControllers[0];
         [welcomeViewController performSegueWithIdentifier:@"Dashboard Push Segue From Welcome" sender:nil];
-        
-        // register for remote
-        [self requestRegistrationForRemoteNotif];
     }
     
     return YES;
@@ -131,7 +127,6 @@
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
-    // todo BT (later)
     // Handle this case to ask the user to change his mind
     NSLog(@"Error in registration. Error: %@", err);
 }
@@ -198,10 +193,6 @@ NSString* stringFromDeviceTokenData(NSData *deviceToken)
         if ([self.messageType isEqualToString:@"Blocking alert"]) {
             [self createObsoleteAPIAlertView];
         }
-    } else if (alertView == self.notifPreRequestAlertView) {
-        if (buttonIndex == 1) {
-            [GeneralUtils registerForRemoteNotif];
-        }
     }
 }
 
@@ -221,17 +212,6 @@ NSString* stringFromDeviceTokenData(NSData *deviceToken)
     
     if ([segueName isEqualToString: @"Dashboard Push Segue From Welcome"]) {
         ((DashboardViewController *) [segue destinationViewController]).isSignUp = NO;
-    }
-}
-
-- (void)requestRegistrationForRemoteNotif
-{
-    if ([GeneralUtils pushNotifRequestSeen]) {
-        [GeneralUtils registerForRemoteNotif];
-    } else {
-        // Present pre-request notif alert view
-        self.notifPreRequestAlertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedStringFromTable(@"notif_pre_request_message",kStringFile, @"comment") delegate:self cancelButtonTitle:NSLocalizedStringFromTable(@"no_thanks_button_title",kStringFile, @"comment") otherButtonTitles:NSLocalizedStringFromTable(@"notify_me_button_title",kStringFile, @"comment"), nil];
-        [self.notifPreRequestAlertView show];
     }
 }
 

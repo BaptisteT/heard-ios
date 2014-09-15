@@ -113,9 +113,13 @@
 
 // Notif request
 "notif_pre_request_message" = "Would you like to be alerted when a friend sends you a message?";
+"notify_me_button_title" = "Notify me";
 
 // Contact request
 "contact_access_button_title" = "Find friends";
 "contact_pre_request_title" = "Let Waved access your contacts?";
 "contact_pre_request_message" = "This will allow to find your friends";
+"skip_button_title" = "Skip";
+"contact_access_button_title" = "Allow access";
+
 

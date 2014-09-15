@@ -14,6 +14,5 @@
 
 @property (strong, nonatomic) NSMutableArray *contacts;
 
-- (void)requestRegistrationForRemoteNotif;
 
 @end

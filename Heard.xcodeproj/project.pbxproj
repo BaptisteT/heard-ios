@@ -237,6 +237,10 @@
 		3C0D0064196330E40058A0E0 /* ContactUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D0063196330E40058A0E0 /* ContactUtils.m */; };
 		3C55FD6D1966AA3500E818D9 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */; };
 		3C55FD701966B11C00E818D9 /* CrashReportUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */; };
+		3C8049D919C5239C00643B35 /* ContactRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C8049D819C5239C00643B35 /* ContactRequestViewController.m */; };
+		3C8049DA19C5279200643B35 /* ContactRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C8049D819C5239C00643B35 /* ContactRequestViewController.m */; };
+		3C8049DD19C658AE00643B35 /* PushRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C8049DC19C658AE00643B35 /* PushRequestViewController.m */; };
+		3C8049DE19C658AE00643B35 /* PushRequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C8049DC19C658AE00643B35 /* PushRequestViewController.m */; };
 		3C95862619927E9400FF54B0 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862419927E9400FF54B0 /* play.png */; };
 		3C95862719927E9400FF54B0 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862419927E9400FF54B0 /* play.png */; };
 		3C95862819927E9400FF54B0 /* play@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862519927E9400FF54B0 /* play@2x~iphone.png */; };
@@ -420,6 +424,10 @@
 		3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
 		3C55FD6E1966B11C00E818D9 /* CrashReportUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashReportUtils.h; sourceTree = "<group>"; };
 		3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashReportUtils.m; sourceTree = "<group>"; };
+		3C8049D719C5239C00643B35 /* ContactRequestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactRequestViewController.h; sourceTree = "<group>"; };
+		3C8049D819C5239C00643B35 /* ContactRequestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactRequestViewController.m; sourceTree = "<group>"; };
+		3C8049DB19C658AE00643B35 /* PushRequestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushRequestViewController.h; sourceTree = "<group>"; };
+		3C8049DC19C658AE00643B35 /* PushRequestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushRequestViewController.m; sourceTree = "<group>"; };
 		3C95862419927E9400FF54B0 /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		3C95862519927E9400FF54B0 /* play@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x~iphone.png"; sourceTree = "<group>"; };
 		3C9BBDFD195345A6001C6C4D /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
@@ -697,6 +705,7 @@
 		0BD758F419511A1E00CF0D85 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				3C8049D619C5237B00643B35 /* Permission */,
 				0B9051C11977383B001E2ED5 /* Contacts */,
 				0B9051AA1976F1D4001E2ED5 /* Login */,
 				0BDB655F1953C04800223093 /* DashboardViewController.h */,
@@ -826,6 +835,17 @@
 				0BDB6504195295A800223093 /* MBProgressHUD.m */,
 			);
 			name = MBProgressHUD;
+			sourceTree = "<group>";
+		};
+		3C8049D619C5237B00643B35 /* Permission */ = {
+			isa = PBXGroup;
+			children = (
+				3C8049D719C5239C00643B35 /* ContactRequestViewController.h */,
+				3C8049D819C5239C00643B35 /* ContactRequestViewController.m */,
+				3C8049DB19C658AE00643B35 /* PushRequestViewController.h */,
+				3C8049DC19C658AE00643B35 /* PushRequestViewController.m */,
+			);
+			name = Permission;
 			sourceTree = "<group>";
 		};
 		3C9BBDFC195345A6001C6C4D /* UIKit+AFNetworking */ = {
@@ -1083,6 +1103,7 @@
 				0B72EEB2196C672F00AC5A01 /* RequestUserInfoViewController.m in Sources */,
 				0B72EEB3196C672F00AC5A01 /* Message.m in Sources */,
 				0B72EEB4196C672F00AC5A01 /* main.m in Sources */,
+				3C8049DA19C5279200643B35 /* ContactRequestViewController.m in Sources */,
 				0B9051AF1976F618001E2ED5 /* InviteContactsViewController.m in Sources */,
 				3CB753D519B8909A00E4C75F /* CameraUtils.m in Sources */,
 				0B22CD031978439D00E1C7AF /* AddContactViewController.m in Sources */,
@@ -1108,6 +1129,7 @@
 				0B72EEC7196C672F00AC5A01 /* MPSurveyQuestionViewController.m in Sources */,
 				0B56F65319758D9600DB6FF1 /* CountryCodeTVC.m in Sources */,
 				0B72EEC8196C672F00AC5A01 /* AFNetworkReachabilityManager.m in Sources */,
+				3C8049DE19C658AE00643B35 /* PushRequestViewController.m in Sources */,
 				0B56F65B1975AE4D00DB6FF1 /* CountryCodeViewController.m in Sources */,
 				0B72EEC9196C672F00AC5A01 /* MPNotificationViewController.m in Sources */,
 				0B72EECA196C672F00AC5A01 /* AFSecurityPolicy.m in Sources */,
@@ -1157,6 +1179,7 @@
 				0BDB654E1953B5FD00223093 /* RequestUserInfoViewController.m in Sources */,
 				0BDB654F1953B5FD00223093 /* Message.m in Sources */,
 				0BDB65501953B5FD00223093 /* main.m in Sources */,
+				3C8049D919C5239C00643B35 /* ContactRequestViewController.m in Sources */,
 				0B9051AE1976F618001E2ED5 /* InviteContactsViewController.m in Sources */,
 				3CB753D419B8908F00E4C75F /* CameraUtils.m in Sources */,
 				0B22CD021978439D00E1C7AF /* AddContactViewController.m in Sources */,
@@ -1182,6 +1205,7 @@
 				0BB0E8F7195B449A00C94AC0 /* MPSurveyQuestionViewController.m in Sources */,
 				0B56F65219758D9600DB6FF1 /* CountryCodeTVC.m in Sources */,
 				0BDB65401953B5EA00223093 /* AFNetworkReachabilityManager.m in Sources */,
+				3C8049DD19C658AE00643B35 /* PushRequestViewController.m in Sources */,
 				0B56F65A1975AE4D00DB6FF1 /* CountryCodeViewController.m in Sources */,
 				0BB0E8F2195B449A00C94AC0 /* MPNotificationViewController.m in Sources */,
 				0BDB65411953B5EA00223093 /* AFSecurityPolicy.m in Sources */,
