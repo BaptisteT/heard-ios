@@ -396,6 +396,10 @@
         message.audioData = [self.delegate getLastRecordedData];
         [self addUnreadMessage:message];
         [self resetDiscussionStateAnimated:NO];
+        
+        if ([self.delegate displayOpeningTuto]) {
+            [self.delegate displayTutoWithLabel:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment")];
+        }
     } else {
         self.sendingMessageCount ++;
         [self resetDiscussionStateAnimated:NO];

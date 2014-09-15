@@ -843,7 +843,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="contactAccessButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="PVI-46-H9D"/>
+                                            <action selector="requestContactAuth:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="pSW-Zq-D1p"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -872,7 +872,7 @@
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="skipButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="fG0-oM-FJa"/>
+                                            <action selector="authRequestSkipButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="EWa-8X-V0Y"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4gs-dc-CNa">
@@ -899,12 +899,12 @@
                     </view>
                     <navigationItem key="navigationItem" id="Fgn-qW-csE"/>
                     <connections>
-                        <outlet property="allowButton" destination="4gs-dc-CNa" id="M7d-nq-Dax"/>
+                        <outlet property="authRequestAllowButton" destination="4gs-dc-CNa" id="L4e-sL-HO5"/>
+                        <outlet property="authRequestSkipButton" destination="LQ3-Tp-x6B" id="njF-al-4oO"/>
                         <outlet property="authRequestView" destination="rAY-VR-0Tm" id="KNt-GX-wkw"/>
                         <outlet property="contactAccessButton" destination="tUn-Ou-poo" id="Opf-pu-2Nk"/>
                         <outlet property="contactScrollView" destination="a0u-JM-gz3" id="7ew-mq-LGy"/>
                         <outlet property="menuButton" destination="3eZ-vS-6nf" id="DVk-PZ-hkG"/>
-                        <outlet property="skipButton" destination="LQ3-Tp-x6B" id="WUT-Ve-rOY"/>
                         <segue destination="7tt-yn-mQy" kind="modal" identifier="Invite Contacts Segue" id="FDD-RE-iS8"/>
                         <segue destination="nns-Z4-R2U" kind="modal" identifier="Add Contact Segue" id="Ixl-M0-jCK"/>
                         <segue destination="eqq-1x-hnn" kind="modal" identifier="Edit Contacts Segue" id="5hE-YK-o4D"/>

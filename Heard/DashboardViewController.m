@@ -83,21 +83,27 @@
 // Others
 @property (weak, nonatomic) UIButton *menuButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityView;
-@property (nonatomic, strong) UIView *tutoView;
-@property (nonatomic, strong) UILabel *tutoViewLabel;
 @property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
 @property (strong, nonatomic) NSMutableArray *lastMessagesPlayed;
-//Action sheets
+// Action sheets
 @property (strong, nonatomic) CustomActionSheet *mainMenuActionSheet;
 @property (strong, nonatomic) ContactView *lastSelectedContactView;
-//Alertview
+// Alertview
 @property (strong, nonatomic) UIAlertView *blockAlertView;
 // Authorization Request View
 @property (strong, nonatomic) IBOutlet UIView *authRequestView;
-@property (strong, nonatomic) IBOutlet UIButton *allowButton;
-@property (strong, nonatomic) IBOutlet UIButton *skipButton;
+@property (strong, nonatomic) IBOutlet UIButton *authRequestAllowButton;
+@property (strong, nonatomic) IBOutlet UIButton *authRequestSkipButton;
 @property (nonatomic) BOOL contactAuthViewSeen;
 @property (nonatomic) BOOL pushAuthViewSeen;
+// Tuto
+@property (nonatomic) BOOL displayOpeningTuto;
+@property (nonatomic, strong) UIView *bottomTutoView;
+@property (nonatomic, strong) UILabel *bottomTutoViewLabel;
+@property (strong, nonatomic) IBOutlet UIView *openingTutoView;
+@property (strong, nonatomic) IBOutlet UILabel *openingTutoLabel;
+@property (strong, nonatomic) IBOutlet UIButton *openingTutoSkipButton;
+
 
 @end
 
@@ -114,21 +120,22 @@
     self.pushAuthViewSeen = NO;
     self.contactAuthViewSeen = NO;
     self.authRequestView.hidden = YES;
+    self.displayOpeningTuto = [GeneralUtils isFirstOpening];
     // Init address book
     self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
     
     //Init no message view
-    self.tutoView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
-    self.tutoView.backgroundColor = [ImageUtils blue];
+    self.bottomTutoView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
+    self.bottomTutoView.backgroundColor = [ImageUtils blue];
     
-    self.tutoViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
-    self.tutoViewLabel.font = [UIFont fontWithName:@"Avenir-Light" size:20.0];
-    self.tutoViewLabel.textAlignment = NSTextAlignmentCenter;
-    self.tutoViewLabel.textColor = [UIColor whiteColor];
-    self.tutoViewLabel.backgroundColor = [UIColor clearColor];
-    [self.tutoView addSubview:self.tutoViewLabel];
-    [self.view addSubview:self.tutoView];
+    self.bottomTutoViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
+    self.bottomTutoViewLabel.font = [UIFont fontWithName:@"Avenir-Light" size:20.0];
+    self.bottomTutoViewLabel.textAlignment = NSTextAlignmentCenter;
+    self.bottomTutoViewLabel.textColor = [UIColor whiteColor];
+    self.bottomTutoViewLabel.backgroundColor = [UIColor clearColor];
+    [self.bottomTutoView addSubview:self.bottomTutoViewLabel];
+    [self.view addSubview:self.bottomTutoView];
     
     // Preload profile picture
     self.profilePicture = [UIImageView new];
@@ -272,22 +279,22 @@
 {
     [self endTutoMode];
     
-    self.tutoViewLabel.text = message;
-    self.tutoView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT);
+    self.bottomTutoViewLabel.text = message;
+    self.bottomTutoView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT);
     
     [UIView animateWithDuration:0.5 animations:^{
-        self.tutoView.frame = CGRectMake(self.tutoView.frame.origin.x,
-                                             self.tutoView.frame.origin.y - self.tutoView.frame.size.height,
-                                             self.tutoView.frame.size.width,
-                                             self.tutoView.frame.size.height);
+        self.bottomTutoView.frame = CGRectMake(self.bottomTutoView.frame.origin.x,
+                                             self.bottomTutoView.frame.origin.y - self.bottomTutoView.frame.size.height,
+                                             self.bottomTutoView.frame.size.width,
+                                             self.bottomTutoView.frame.size.height);
     } completion:^(BOOL finished) {
-        if (finished && self.tutoView) {
+        if (finished && self.bottomTutoView) {
             if (duration > 0) {
                 [UIView animateWithDuration:0.5 delay:duration options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    self.tutoView.frame = CGRectMake(self.tutoView.frame.origin.x,
-                                                         self.tutoView.frame.origin.y + self.tutoView.frame.size.height,
-                                                         self.tutoView.frame.size.width,
-                                                         self.tutoView.frame.size.height);
+                    self.bottomTutoView.frame = CGRectMake(self.bottomTutoView.frame.origin.x,
+                                                         self.bottomTutoView.frame.origin.y + self.bottomTutoView.frame.size.height,
+                                                         self.bottomTutoView.frame.size.width,
+                                                         self.bottomTutoView.frame.size.height);
                 } completion:^(BOOL finished) {
                     if (finished) {
                         [self endTutoMode];
@@ -300,12 +307,12 @@
 
 - (void)endTutoMode
 {
-    if (!self.tutoView) {
+    if (!self.bottomTutoView) {
         return;
     }
     
-    [self.tutoView.layer removeAllAnimations];
-    self.tutoView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT);
+    [self.bottomTutoView.layer removeAllAnimations];
+    self.bottomTutoView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT);
 }
 
 
@@ -413,13 +420,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 // Display address book access request
-- (IBAction)contactAccessButtonClicked:(id)sender {
+- (IBAction)requestContactAuth:(id)sender {
     ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
         [self removeAllowContactButton];
         if (granted) {
             [self matchPhoneContactsWithHeardUsers];
-        } else {
-            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment") withTitle:nil];
         }
     });
 }
@@ -879,6 +884,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 //Create recording mode screen
 - (void)startedLongPressOnContactView:(ContactView *)contactView
 {
+    [self hideOpeningTuto];
     if ([self.mainPlayer isPlaying]) {
         [self endPlayerAtCompletion:NO];
     }
@@ -923,6 +929,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)startedPlayingAudioMessagesOfView:(ContactView *)contactView
 {
+    if (self.displayOpeningTuto) {
+        [self hideOpeningTuto];
+        self.displayOpeningTuto = NO;
+    }
     if ([self.mainPlayer isPlaying]) {
         [self endPlayerAtCompletion:NO];
     }
@@ -1022,6 +1032,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (![self.mainPlayer isPlaying] && !completed) {
         return;
     }
+
     // Remove proximity state
     if ([UIDevice currentDevice].proximityState) {
         self.disableProximityObserver = YES;
@@ -1456,41 +1467,40 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 
-// ----------------------------------------
+// -------------------------------------------
 #pragma mark Auth Request View
-// ----------------------------------------
+// -------------------------------------------
 - (void)displayContactAuthView
 {
-    [self.skipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
-    [self.allowButton setTitle:NSLocalizedStringFromTable(@"contact_access_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
+    [self.authRequestSkipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
+    [self.authRequestAllowButton setTitle:NSLocalizedStringFromTable(@"contact_access_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
     self.authRequestView.hidden = NO;
 }
 
 - (void)displayPushAuthView
 {
-    [self.skipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
-    [self.allowButton setTitle:NSLocalizedStringFromTable(@"notify_me_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
+    [self.authRequestSkipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
+    [self.authRequestAllowButton setTitle:NSLocalizedStringFromTable(@"notify_me_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
     self.authRequestView.hidden = NO;
 }
 
 - (IBAction)allowButtonClicked:(id)sender
 {
-    if ([self.allowButton.titleLabel.text isEqualToString:NSLocalizedStringFromTable(@"contact_access_button_title", kStringFile, @"comment")]) {
-        ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
-            
-        });
+    if ([self.authRequestAllowButton.titleLabel.text isEqualToString:NSLocalizedStringFromTable(@"contact_access_button_title", kStringFile, @"comment")]) {
+        [self requestContactAuth:nil];
         if (!self.pushAuthViewSeen && ![GeneralUtils pushNotifRequestSeen]) {
             self.pushAuthViewSeen = YES;
             [self displayPushAuthView];
         } else {
-            self.authRequestView.hidden = YES;
+            [self hideAuthRequestView];
         }
-    } else if ([self.allowButton.titleLabel.text isEqualToString:NSLocalizedStringFromTable(@"notify_me_button_title", kStringFile, @"comment")]) {
+    } else if ([self.authRequestAllowButton.titleLabel.text isEqualToString:NSLocalizedStringFromTable(@"notify_me_button_title", kStringFile, @"comment")]) {
         [GeneralUtils registerForRemoteNotif];
-        self.authRequestView.hidden = YES;
+        [self hideAuthRequestView];
     }
 }
-- (IBAction)skipButtonClicked:(id)sender {
+
+- (IBAction)authRequestSkipButtonClicked:(id)sender {
     if (!self.pushAuthViewSeen && ![GeneralUtils pushNotifRequestSeen]) {
         self.pushAuthViewSeen = YES;
         [self displayPushAuthView];
@@ -1499,5 +1509,34 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
 }
 
+- (void)hideAuthRequestView
+{
+    self.authRequestView.hidden = YES;
+    if (self.displayOpeningTuto) {
+        // todo BT
+        // only me visible + 1st contact
+        [self displayTutoWithLabel:NSLocalizedStringFromTable(@"", kStringFile, @"comment")];
+    }
+}
+
+// -------------------------------------------
+#pragma mark Opening Tuto
+// -------------------------------------------
+- (IBAction)openingTutoSkipButtonClicked:(id)sender {
+    [self hideOpeningTuto];
+    self.displayOpeningTuto = NO;
+}
+
+- (void)displayTutoWithLabel:(NSString *)label
+{
+    [self.openingTutoLabel setText:label];
+    [self.openingTutoSkipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
+    self.openingTutoView.hidden = NO;
+}
+
+- (void)hideOpeningTuto
+{
+    self.openingTutoView.hidden = YES;
+}
 
 @end
