@@ -106,7 +106,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *openingTutoDescLabel;
 @property (strong, nonatomic) IBOutlet UIButton *openingTutoSkipButton;
 @property (weak, nonatomic) IBOutlet UIView *openingTutoDescView;
-@property (weak, nonatomic) IBOutlet UIImageView *openingTutoImage;
+@property (strong, nonatomic) UIImageView *openingTutoArrow;
 
 @end
 
@@ -1024,7 +1024,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (self.displayOpeningTuto) {
         [self.contactScrollView bringSubviewToFront:self.openingTutoView];
         [self.contactScrollView bringSubviewToFront:self.menuButton];
-        [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"menu_tuto_action_label", kStringFile, @"comment")];
+        [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"menu_tuto_action_label", kStringFile, @"comment") forOrigin:self.menuButton.frame.origin.x + self.menuButton.frame.size.width/2];
     }
     // Check that audio is playing or completed
     if (![self.mainPlayer isPlaying] && !completed) {
@@ -1536,7 +1536,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // -------------------------------------------
 - (void)prepareAndDisplayTuto
 {
-    [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"hold_tuto_action_label", kStringFile, @"comment")];
+    ContactView *firstContactView = ((ContactView *)[self.contactViews firstObject]);
+    
+    [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"hold_tuto_action_label", kStringFile, @"comment") forOrigin:firstContactView.frame.origin.x + firstContactView.frame.size.width/2];
     [self.contactScrollView bringSubviewToFront:self.openingTutoView];
     // only me visible + 1st contact
     for (ContactView *contactView in self.contactViews) {
@@ -1556,10 +1558,19 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.displayOpeningTuto = NO;
 }
 
-- (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel
+- (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel forOrigin:(float)x
 {
+    if (self.openingTutoArrow) {
+        [self.openingTutoArrow removeFromSuperview];
+    }
+    
+    self.openingTutoArrow = [[UIImageView alloc] initWithFrame:CGRectMake(x - 100/2,110,100,100)];
+    self.openingTutoArrow.image = [UIImage imageNamed:@"tuto-arrow.png"];
+    [self.openingTutoView addSubview:self.openingTutoArrow];
+    
     [self.openingTutoDescLabel setText:actionLabel];
     [self.openingTutoSkipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
+    
     self.openingTutoView.hidden = NO;
 }
 

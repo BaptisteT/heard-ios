@@ -398,7 +398,7 @@
         [self resetDiscussionStateAnimated:NO];
         
         if ([self.delegate displayOpeningTuto]) {
-            [self.delegate displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"tap_tuto_action_label", kStringFile, @"comment")];
+            [self.delegate displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"tap_tuto_action_label", kStringFile, @"comment") forOrigin:self.frame.origin.x + self.frame.size.width/2];
         }
     } else {
         self.sendingMessageCount ++;

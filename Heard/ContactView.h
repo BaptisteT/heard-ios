@@ -78,6 +78,6 @@
 
 - (BOOL) displayOpeningTuto;
 
-- (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel;
+- (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel forOrigin:(float)x;
 
 @end

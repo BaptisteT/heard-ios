@@ -127,9 +127,9 @@
 "contact_access_button_title" = "ALLOW CONTACT ACCESS";
 
 // tuto
-"hold_tuto_action_label" = "Hold to record.";
-"tap_tuto_action_label" = "Tap to play.";
-"menu_tuto_action_label" = "Record messages for new friends!";
+"hold_tuto_action_label" = "Hold contact to record.";
+"tap_tuto_action_label" = "Tap contact to play.";
+"menu_tuto_action_label" = "Invite new friends!";
 
 
 
