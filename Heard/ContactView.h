@@ -78,6 +78,6 @@
 
 - (BOOL) displayOpeningTuto;
 
-- (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel andDescLabel:(NSString *)descLabel;
+- (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel;
 
 @end

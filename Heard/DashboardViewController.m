@@ -103,9 +103,10 @@
 @property (nonatomic, strong) UIView *bottomTutoView;
 @property (nonatomic, strong) UILabel *bottomTutoViewLabel;
 @property (strong, nonatomic) IBOutlet UIView *openingTutoView;
-@property (strong, nonatomic) IBOutlet UILabel *openingTutoActionLabel;
 @property (strong, nonatomic) IBOutlet UILabel *openingTutoDescLabel;
 @property (strong, nonatomic) IBOutlet UIButton *openingTutoSkipButton;
+@property (weak, nonatomic) IBOutlet UIView *openingTutoDescView;
+@property (weak, nonatomic) IBOutlet UIImageView *openingTutoImage;
 
 @end
 
@@ -124,6 +125,8 @@
     self.authRequestView.hidden = YES;
     self.openingTutoView.hidden = YES;
     self.displayOpeningTuto = [GeneralUtils isFirstOpening];
+    
+    self.openingTutoDescView.layer.cornerRadius = 5;
     
     //Perms
     self.authRequestAllowButton.clipsToBounds = YES;
@@ -277,7 +280,7 @@
 
 - (void)hide
 {
-    [self dismissViewControllerAnimated:NO completion:NO];
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 // ------------------------------
@@ -1021,7 +1024,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (self.displayOpeningTuto) {
         [self.contactScrollView bringSubviewToFront:self.openingTutoView];
         [self.contactScrollView bringSubviewToFront:self.menuButton];
-        [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"menu_tuto_action_label", kStringFile, @"comment") andDescLabel:NSLocalizedStringFromTable(@"menu_tuto_desc_label", kStringFile, @"comment")];
+        [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"menu_tuto_action_label", kStringFile, @"comment")];
     }
     // Check that audio is playing or completed
     if (![self.mainPlayer isPlaying] && !completed) {
@@ -1533,7 +1536,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // -------------------------------------------
 - (void)prepareAndDisplayTuto
 {
-    [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"hold_tuto_action_label", kStringFile, @"comment") andDescLabel:NSLocalizedStringFromTable(@"hold_tuto_desc_label", kStringFile, @"comment")];
+    [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"hold_tuto_action_label", kStringFile, @"comment")];
     [self.contactScrollView bringSubviewToFront:self.openingTutoView];
     // only me visible + 1st contact
     for (ContactView *contactView in self.contactViews) {
@@ -1553,10 +1556,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.displayOpeningTuto = NO;
 }
 
-- (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel andDescLabel:(NSString *)descLabel
+- (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel
 {
-    [self.openingTutoActionLabel setText:actionLabel];
-    [self.openingTutoDescLabel setText:descLabel];
+    [self.openingTutoDescLabel setText:actionLabel];
     [self.openingTutoSkipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
     self.openingTutoView.hidden = NO;
 }

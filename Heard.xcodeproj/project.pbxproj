@@ -147,6 +147,30 @@
 		0B969129198997700048E4BB /* EditContactsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0B969127198997700048E4BB /* EditContactsTableViewCell.xib */; };
 		0B96912C1989977C0048E4BB /* EditContactsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */; };
 		0B96912D1989977C0048E4BB /* EditContactsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */; };
+		0B9EC30519C8C38300F520B8 /* hold2@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC2F919C8C38300F520B8 /* hold2@2x~iphone.png */; };
+		0B9EC30619C8C38300F520B8 /* hold2@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC2F919C8C38300F520B8 /* hold2@2x~iphone.png */; };
+		0B9EC30719C8C38300F520B8 /* press1@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC2FA19C8C38300F520B8 /* press1@2x~iphone.png */; };
+		0B9EC30819C8C38300F520B8 /* press1@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC2FA19C8C38300F520B8 /* press1@2x~iphone.png */; };
+		0B9EC30919C8C38300F520B8 /* hold2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC2FB19C8C38300F520B8 /* hold2.png */; };
+		0B9EC30A19C8C38300F520B8 /* hold2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC2FB19C8C38300F520B8 /* hold2.png */; };
+		0B9EC30B19C8C38300F520B8 /* play1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC2FC19C8C38300F520B8 /* play1.png */; };
+		0B9EC30C19C8C38300F520B8 /* play1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC2FC19C8C38300F520B8 /* play1.png */; };
+		0B9EC30D19C8C38300F520B8 /* press2@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC2FD19C8C38300F520B8 /* press2@2x~iphone.png */; };
+		0B9EC30E19C8C38300F520B8 /* press2@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC2FD19C8C38300F520B8 /* press2@2x~iphone.png */; };
+		0B9EC30F19C8C38300F520B8 /* hold1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC2FE19C8C38300F520B8 /* hold1.png */; };
+		0B9EC31019C8C38300F520B8 /* hold1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC2FE19C8C38300F520B8 /* hold1.png */; };
+		0B9EC31119C8C38300F520B8 /* press1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC2FF19C8C38300F520B8 /* press1.png */; };
+		0B9EC31219C8C38300F520B8 /* press1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC2FF19C8C38300F520B8 /* press1.png */; };
+		0B9EC31319C8C38300F520B8 /* play2@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC30019C8C38300F520B8 /* play2@2x~iphone.png */; };
+		0B9EC31419C8C38300F520B8 /* play2@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC30019C8C38300F520B8 /* play2@2x~iphone.png */; };
+		0B9EC31519C8C38300F520B8 /* play2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC30119C8C38300F520B8 /* play2.png */; };
+		0B9EC31619C8C38300F520B8 /* play2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC30119C8C38300F520B8 /* play2.png */; };
+		0B9EC31719C8C38300F520B8 /* play1@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC30219C8C38300F520B8 /* play1@2x~iphone.png */; };
+		0B9EC31819C8C38300F520B8 /* play1@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC30219C8C38300F520B8 /* play1@2x~iphone.png */; };
+		0B9EC31919C8C38300F520B8 /* hold1@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC30319C8C38300F520B8 /* hold1@2x~iphone.png */; };
+		0B9EC31A19C8C38300F520B8 /* hold1@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC30319C8C38300F520B8 /* hold1@2x~iphone.png */; };
+		0B9EC31B19C8C38300F520B8 /* press2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC30419C8C38300F520B8 /* press2.png */; };
+		0B9EC31C19C8C38300F520B8 /* press2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC30419C8C38300F520B8 /* press2.png */; };
 		0BA145771997A4A60031716F /* end-record-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145711997A4A60031716F /* end-record-sound.aif */; };
 		0BA145781997A4A60031716F /* end-record-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145711997A4A60031716F /* end-record-sound.aif */; };
 		0BA145791997A4A60031716F /* received-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145721997A4A60031716F /* received-sound.aif */; };
@@ -305,6 +329,18 @@
 		0B969127198997700048E4BB /* EditContactsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditContactsTableViewCell.xib; sourceTree = "<group>"; };
 		0B96912A1989977C0048E4BB /* EditContactsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditContactsTableViewCell.h; sourceTree = "<group>"; };
 		0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditContactsTableViewCell.m; sourceTree = "<group>"; };
+		0B9EC2F919C8C38300F520B8 /* hold2@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hold2@2x~iphone.png"; sourceTree = "<group>"; };
+		0B9EC2FA19C8C38300F520B8 /* press1@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "press1@2x~iphone.png"; sourceTree = "<group>"; };
+		0B9EC2FB19C8C38300F520B8 /* hold2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hold2.png; sourceTree = "<group>"; };
+		0B9EC2FC19C8C38300F520B8 /* play1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play1.png; sourceTree = "<group>"; };
+		0B9EC2FD19C8C38300F520B8 /* press2@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "press2@2x~iphone.png"; sourceTree = "<group>"; };
+		0B9EC2FE19C8C38300F520B8 /* hold1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hold1.png; sourceTree = "<group>"; };
+		0B9EC2FF19C8C38300F520B8 /* press1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = press1.png; sourceTree = "<group>"; };
+		0B9EC30019C8C38300F520B8 /* play2@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play2@2x~iphone.png"; sourceTree = "<group>"; };
+		0B9EC30119C8C38300F520B8 /* play2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play2.png; sourceTree = "<group>"; };
+		0B9EC30219C8C38300F520B8 /* play1@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play1@2x~iphone.png"; sourceTree = "<group>"; };
+		0B9EC30319C8C38300F520B8 /* hold1@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "hold1@2x~iphone.png"; sourceTree = "<group>"; };
+		0B9EC30419C8C38300F520B8 /* press2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = press2.png; sourceTree = "<group>"; };
 		0BA145711997A4A60031716F /* end-record-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "end-record-sound.aif"; sourceTree = "<group>"; };
 		0BA145721997A4A60031716F /* received-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "received-sound.aif"; sourceTree = "<group>"; };
 		0BA145731997A4A60031716F /* sent-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sent-sound.aif"; sourceTree = "<group>"; };
@@ -567,6 +603,18 @@
 		0BA1455E199786A30031716F /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0B9EC2F919C8C38300F520B8 /* hold2@2x~iphone.png */,
+				0B9EC2FA19C8C38300F520B8 /* press1@2x~iphone.png */,
+				0B9EC2FB19C8C38300F520B8 /* hold2.png */,
+				0B9EC2FC19C8C38300F520B8 /* play1.png */,
+				0B9EC2FD19C8C38300F520B8 /* press2@2x~iphone.png */,
+				0B9EC2FE19C8C38300F520B8 /* hold1.png */,
+				0B9EC2FF19C8C38300F520B8 /* press1.png */,
+				0B9EC30019C8C38300F520B8 /* play2@2x~iphone.png */,
+				0B9EC30119C8C38300F520B8 /* play2.png */,
+				0B9EC30219C8C38300F520B8 /* play1@2x~iphone.png */,
+				0B9EC30319C8C38300F520B8 /* hold1@2x~iphone.png */,
+				0B9EC30419C8C38300F520B8 /* press2.png */,
 				0B90E66C19C7822E004A8F16 /* notif-perm.png */,
 				0B90E66D19C7822E004A8F16 /* contact-perm.png */,
 				0B90E66E19C7822E004A8F16 /* contact-perm@2x~iphone.png */,
@@ -976,6 +1024,8 @@
 				0B72EEE5196C672F00AC5A01 /* Images.xcassets in Resources */,
 				0B72EEE7196C672F00AC5A01 /* unknown-user@2x~iphone.png in Resources */,
 				0BA145821997A4A60031716F /* typing-sound.aif in Resources */,
+				0B9EC30A19C8C38300F520B8 /* hold2.png in Resources */,
+				0B9EC31019C8C38300F520B8 /* hold1.png in Resources */,
 				0B72EEE8196C672F00AC5A01 /* record@2x~iphone.png in Resources */,
 				0B72EEEA196C672F00AC5A01 /* contact-placeholder@2x~iphone.png in Resources */,
 				0B72EEEB196C672F00AC5A01 /* NBPhoneNumberMetadata.plist in Resources */,
@@ -986,9 +1036,13 @@
 				0B9051A81975DE8C001E2ED5 /* PhoneFormats.dat in Resources */,
 				0B72EEEE196C672F00AC5A01 /* MPSurvey.storyboard in Resources */,
 				0B72EEEF196C672F00AC5A01 /* heard-logo-80.png in Resources */,
+				0B9EC31A19C8C38300F520B8 /* hold1@2x~iphone.png in Resources */,
 				0B72EEF0196C672F00AC5A01 /* record.png in Resources */,
+				0B9EC30619C8C38300F520B8 /* hold2@2x~iphone.png in Resources */,
+				0B9EC31219C8C38300F520B8 /* press1.png in Resources */,
 				0B72EEF1196C672F00AC5A01 /* PhoneNumberMetaData.json in Resources */,
 				0B72EEF2196C672F00AC5A01 /* InfoPlist.strings in Resources */,
+				0B9EC31819C8C38300F520B8 /* play1@2x~iphone.png in Resources */,
 				0B72EEF3196C672F00AC5A01 /* PhoneNumberMetaDataForTesting.json in Resources */,
 				0B72EEF4196C672F00AC5A01 /* unknown-user.png in Resources */,
 				3CA16D2D19AE42CE00C1F2A5 /* french_strings.strings in Resources */,
@@ -1008,17 +1062,23 @@
 				0B9051B919771B96001E2ED5 /* checkbox-selected@2x~iphone.png in Resources */,
 				0BA145801997A4A60031716F /* start-record-sound.aif in Resources */,
 				0B72EEFC196C672F00AC5A01 /* welcome-logo.png in Resources */,
+				0B9EC31419C8C38300F520B8 /* play2@2x~iphone.png in Resources */,
+				0B9EC31619C8C38300F520B8 /* play2.png in Resources */,
 				0BA145781997A4A60031716F /* end-record-sound.aif in Resources */,
 				0B90E67719C7822E004A8F16 /* notif-perm@2x~iphone.png in Resources */,
+				0B9EC30E19C8C38300F520B8 /* press2@2x~iphone.png in Resources */,
+				0B9EC30C19C8C38300F520B8 /* play1.png in Resources */,
 				0BA1457A1997A4A60031716F /* received-sound.aif in Resources */,
 				0B90E67119C7822E004A8F16 /* notif-perm.png in Resources */,
 				0BADABCE1993000D007B4538 /* contact-eye.png in Resources */,
 				0B56F657197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
 				0B90E67319C7822E004A8F16 /* contact-perm.png in Resources */,
+				0B9EC31C19C8C38300F520B8 /* press2.png in Resources */,
 				0B969129198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
 				0B72EEFD196C672F00AC5A01 /* contact-placeholder.png in Resources */,
 				0BADABC619930005007B4538 /* contact-sent.png in Resources */,
 				0BADABCC1993000D007B4538 /* contact-blue-eye.png in Resources */,
+				0B9EC30819C8C38300F520B8 /* press1@2x~iphone.png in Resources */,
 				0BA145851997A5620031716F /* agogo.aif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1032,6 +1092,8 @@
 				0BD758D81950F91B00CF0D85 /* Images.xcassets in Resources */,
 				0BE55472195A340500CE4669 /* unknown-user@2x~iphone.png in Resources */,
 				0BA145811997A4A60031716F /* typing-sound.aif in Resources */,
+				0B9EC30919C8C38300F520B8 /* hold2.png in Resources */,
+				0B9EC30F19C8C38300F520B8 /* hold1.png in Resources */,
 				0BE5547A195A4ADC00CE4669 /* record@2x~iphone.png in Resources */,
 				0B3651D71958AC5000534386 /* contact-placeholder@2x~iphone.png in Resources */,
 				0BDB64CC19521A7C00223093 /* NBPhoneNumberMetadata.plist in Resources */,
@@ -1042,9 +1104,13 @@
 				0B9051A71975DE8C001E2ED5 /* PhoneFormats.dat in Resources */,
 				0BB0E8F4195B449A00C94AC0 /* MPSurvey.storyboard in Resources */,
 				0B3651DF1959109700534386 /* heard-logo-80.png in Resources */,
+				0B9EC31919C8C38300F520B8 /* hold1@2x~iphone.png in Resources */,
 				0BE55478195A4ADC00CE4669 /* record.png in Resources */,
+				0B9EC30519C8C38300F520B8 /* hold2@2x~iphone.png in Resources */,
+				0B9EC31119C8C38300F520B8 /* press1.png in Resources */,
 				0BDB64CE19521A7C00223093 /* PhoneNumberMetaData.json in Resources */,
 				0BD758CA1950F91B00CF0D85 /* InfoPlist.strings in Resources */,
+				0B9EC31719C8C38300F520B8 /* play1@2x~iphone.png in Resources */,
 				0BDB64CF19521A7C00223093 /* PhoneNumberMetaDataForTesting.json in Resources */,
 				0BE55473195A340500CE4669 /* unknown-user.png in Resources */,
 				3CA16D2C19AE42CE00C1F2A5 /* french_strings.strings in Resources */,
@@ -1064,17 +1130,23 @@
 				0B9051B819771B96001E2ED5 /* checkbox-selected@2x~iphone.png in Resources */,
 				0BA1457F1997A4A60031716F /* start-record-sound.aif in Resources */,
 				0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */,
+				0B9EC31319C8C38300F520B8 /* play2@2x~iphone.png in Resources */,
+				0B9EC31519C8C38300F520B8 /* play2.png in Resources */,
 				0BA145771997A4A60031716F /* end-record-sound.aif in Resources */,
 				0B90E67619C7822E004A8F16 /* notif-perm@2x~iphone.png in Resources */,
+				0B9EC30D19C8C38300F520B8 /* press2@2x~iphone.png in Resources */,
+				0B9EC30B19C8C38300F520B8 /* play1.png in Resources */,
 				0BA145791997A4A60031716F /* received-sound.aif in Resources */,
 				0B90E67019C7822E004A8F16 /* notif-perm.png in Resources */,
 				0BADABCD1993000D007B4538 /* contact-eye.png in Resources */,
 				0B56F656197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
 				0B90E67219C7822E004A8F16 /* contact-perm.png in Resources */,
+				0B9EC31B19C8C38300F520B8 /* press2.png in Resources */,
 				0B969128198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
 				0B3651D61958AC5000534386 /* contact-placeholder.png in Resources */,
 				0BADABC519930005007B4538 /* contact-sent.png in Resources */,
 				0BADABCB1993000D007B4538 /* contact-blue-eye.png in Resources */,
+				0B9EC30719C8C38300F520B8 /* press1@2x~iphone.png in Resources */,
 				0BA145841997A5620031716F /* agogo.aif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
