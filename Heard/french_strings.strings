@@ -125,3 +125,11 @@
 "contact_pre_request_message" = "Waved en a besoin pour trouver vos contacts";
 "skip_button_title" = "Skip";
 "contact_access_button_title" = "Allow access";
+
+// tuto
+"hold_tuto_action_label" = "";
+"hold_tuto_desc_label" = "";
+"tap_tuto_action_label" = "";
+"tap_tuto_desc_label" = "";
+"menu_tuto_action_label" = "";
+"menu_tuto_desc_label" = "";

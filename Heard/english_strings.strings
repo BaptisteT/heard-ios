@@ -127,8 +127,12 @@
 "contact_access_button_title" = "ALLOW CONTACT ACCESS";
 
 // tuto
-"hold_tuto_label" = "
-"tap_tuto_label" = "
-"menu_tuto_label" =
+"hold_tuto_action_label" = "bla";
+"hold_tuto_desc_label" = "bla";
+"tap_tuto_action_label" = "bla";
+"tap_tuto_desc_label" = "bla";
+"menu_tuto_action_label" = "bla";
+"menu_tuto_desc_label" = "bla";
+
 
 

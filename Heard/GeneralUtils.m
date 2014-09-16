@@ -113,14 +113,12 @@
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     [prefs setObject:[NSNumber numberWithBool:YES] forKey:PUSH_NOTIF_SEEN_PREF];
-    NSLog(@"%@", [[prefs objectForKey:PUSH_NOTIF_SEEN_PREF] boolValue] ? @"YES" : @"NO");
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound)];
 }
 
 + (BOOL)pushNotifRequestSeen
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSLog(@"%@", [[prefs objectForKey:PUSH_NOTIF_SEEN_PREF] boolValue] ? @"YES" : @"NO");
     if([[prefs objectForKey:PUSH_NOTIF_SEEN_PREF] boolValue]) {
         return YES;
     } else {
