@@ -479,7 +479,7 @@
 
 - (void)playNextMessage
 {
-    if (self.unreadMessages.count == 0)
+    if (!self.unreadMessages || self.unreadMessages.count == 0)
         return;
     if (self.contact.lastMessageDate <= ((Message *)self.unreadMessages[0]).createdAt) {
         self.contact.currentUserDidNotAnswerLastMessage = YES;
@@ -491,12 +491,15 @@
 
 - (void)messageFinishPlaying:(BOOL)completed
 {
-    [self deleteMessage:self.unreadMessages[0]];
+    if ([self hasUnreadMessages]) {
+        [self deleteMessage:self.unreadMessages[0]];
+    }
     self.isPlaying = NO;
     [self resetDiscussionStateAnimated:NO];
     
-    if (completed && [self hasUnreadMessages])
+    if (completed && [self hasUnreadMessages]) {
         [self playNextMessage];
+    }
 }
 
 - (void)deleteMessage:(Message *)message
@@ -605,7 +608,7 @@
 }
 
 - (BOOL)hasUnreadMessages {
-    return self.unreadMessagesCount > 0 && self.unreadMessages && ((Message *)self.unreadMessages[0]).audioData;
+    return self.unreadMessagesCount > 0 && self.unreadMessages && self.unreadMessages.count>0 && ((Message *)self.unreadMessages[0]).audioData;
 }
 
 - (BOOL)hasFailedMessages {
