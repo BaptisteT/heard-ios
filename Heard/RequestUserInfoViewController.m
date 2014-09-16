@@ -63,7 +63,24 @@
     self.firstNameTextField.delegate = self;
     self.lastNameTextField.delegate = self;
     
-    [self.firstNameTextField becomeFirstResponder];
+    // Prefill if possible
+    NSString *ownerName = [[UIDevice currentDevice] name];
+    NSRange t = [ownerName rangeOfString:@"'s"];
+    if (t.location != NSNotFound) {
+        ownerName = [ownerName substringToIndex:t.location];
+        NSArray *ownerNames = [ownerName componentsSeparatedByString:@" "];
+        if (ownerNames.count == 1) {
+            self.firstNameTextField.text = ownerNames[0];
+            [self.lastNameTextField becomeFirstResponder];
+        } else if (ownerNames.count == 2) {
+            self.firstNameTextField.text = ownerNames[0];
+            self.lastNameTextField.text = ownerNames[1];
+        } else {
+            [self.firstNameTextField becomeFirstResponder];
+        }
+    } else {
+        [self.firstNameTextField becomeFirstResponder];
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -197,7 +214,7 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    UIImage *image =  [info objectForKey:UIImagePickerControllerOriginalImage];
+    UIImage *image =  [info objectForKey:UIImagePickerControllerEditedImage] ? [info objectForKey:UIImagePickerControllerEditedImage] : [info objectForKey:UIImagePickerControllerOriginalImage];
     
     CGSize rescaleSize = {kProfilePictureSize, kProfilePictureSize};
     
