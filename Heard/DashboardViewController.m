@@ -531,7 +531,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     contactView.delegate = self;
     contactView.orderPosition = position;
     [self.contactViews addObject:contactView];
-//    [self.contactScrollView addSubview:contactView];
     [self.contactScrollView insertSubview:contactView atIndex:0];
 }
 
@@ -1023,7 +1022,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self.contactScrollView bringSubviewToFront:self.openingTutoView];
         [self.contactScrollView bringSubviewToFront:self.menuButton];
         [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"menu_tuto_action_label", kStringFile, @"comment") andDescLabel:NSLocalizedStringFromTable(@"menu_tuto_desc_label", kStringFile, @"comment")];
-        self.displayOpeningTuto = NO;
     }
     // Check that audio is playing or completed
     if (![self.mainPlayer isPlaying] && !completed) {
@@ -1541,7 +1539,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     for (ContactView *contactView in self.contactViews) {
         if ([GeneralUtils isCurrentUser:contactView.contact]) {
             if (contactView.orderPosition != 1) {
-                // todo BT
                 NSLog(@"me should be first");
             }
             [self.contactScrollView bringSubviewToFront:contactView];

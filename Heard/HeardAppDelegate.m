@@ -35,8 +35,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // todo bt remove
-    [[UIApplication sharedApplication] unregisterForRemoteNotifications];
     // Manage the network activity indicator
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     
