@@ -507,12 +507,12 @@
     // Mark as unread in DB
     if (![GeneralUtils isCurrentUser:self.contact]) {
         [ApiUtils markMessageAsOpened:message.identifier success:nil failure:nil];
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] - 1];
     }
     
     // Delete & update counter
     [self.unreadMessages removeObject:message];
     [self setUnreadMessagesCount:self.unreadMessagesCount-1];
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] - 1];
 }
 
 - (void)handlePlayingTapGesture {
@@ -576,6 +576,9 @@
 
 - (void)resetUnreadMessages
 {
+    if ([GeneralUtils isCurrentUser:self.contact]) {
+        return;
+    }
     self.unreadMessages = [NSMutableArray new];
     self.unreadMessagesCount = 0;
     self.loadingMessageCount = 0;
