@@ -112,7 +112,7 @@
 "no_last_message_played_message" = "No message to replay";
 
 // Notif request
-"notif_permission_message" = "Be notified when you get messages from friends!";
+"notif_permission_message" = "Be notified when a friend sends you a message!";
 "notif_permission_note" = "You will only get notifications for new messages";
 "notif_pre_request_message" = "Would you like to be alerted when a friend sends you a message?";
 "notify_me_button_title" = "NOTIFY ME";
