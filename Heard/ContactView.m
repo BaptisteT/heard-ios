@@ -348,6 +348,7 @@
         int postRequestTime = [[NSDate date] timeIntervalSince1970];
         // todo BT (later) : ios8
         if (postRequestTime - preRequestTime > 0.1) { // First record case
+            [ApiUtils updateMicroAuth:granted success:nil failure:nil];
             return;
         }
         if (!granted) {
