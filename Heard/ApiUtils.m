@@ -269,6 +269,7 @@
     NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     [parameters setObject:appVersion forKey:@"app_version"];
     [parameters setObject:kApiVersion forKey:@"api_version"];
+    [parameters setObject:[[UIDevice currentDevice] systemVersion] forKey:@"os_version"];
     
     [self enrichParametersWithToken:parameters];
     
