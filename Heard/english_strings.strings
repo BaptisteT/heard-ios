@@ -48,9 +48,6 @@
 "tuto_message" = "Tap to listen.";
 "audio_too_short_error" = "Hold longer to record.";
 
-// Play
-"shake_to_replay_message" = "Shake your phone to replay";
-
 // Micro access
 "micro_access_error_title" = "Waved does not have access to your micro";
 "micro_access_error_message" = "To activate it, go to Settings > Privacy > Micro"; // todo BT ios8
@@ -130,6 +127,11 @@
 "hold_tuto_action_label" = "Hold contact to record.";
 "tap_tuto_action_label" = "Tap contact to play.";
 "menu_tuto_action_label" = "Invite new friends!";
+
+//Alerts
+"shake_to_cancel_tuto" = "Shake your phone to cancel.";
+"shake_to_replay_tuto" = "Shake your phone to replay.";
+"phone_to_ear_tuto" = "Put phone to ear for private mode.";
 
 
 

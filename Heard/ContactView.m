@@ -181,7 +181,6 @@
         [self addSubview:self.pendingContactOverlay];
     }
     else if (discussionState == RECORD_STATE) {
-        [self.delegate endTutoMode];
         [self startSonarAnimationWithColor:[ImageUtils red]];
         [self addSubview:self.recordOverlay];
     }
@@ -191,7 +190,6 @@
     }
     
     else if (discussionState == PLAY_STATE) {
-        [self.delegate endTutoMode];
         [self startSonarAnimationWithColor:[ImageUtils green]];
         [self addSubview:self.playOverlay];
     }
@@ -517,7 +515,7 @@
 
 - (void)handlePlayingTapGesture {
     // unread state
-    [self.delegate tutoMessage:NSLocalizedStringFromTable(@"shake_to_replay_message",kStringFile, @"comment") withDuration:1];
+    [self.delegate tutoMessage:NSLocalizedStringFromTable(@"shake_to_replay_tuto",kStringFile, @"comment") withDuration:5];
     [self.delegate endPlayerAtCompletion:NO];
     self.isPlaying = NO;
     [self resetDiscussionStateAnimated:NO];
