@@ -515,9 +515,8 @@
 }
 
 - (void)handlePlayingTapGesture {
-    // unread state
-    [self.delegate tutoMessage:NSLocalizedStringFromTable(@"shake_to_replay_tuto",kStringFile, @"comment") withDuration:3 priority:NO];
     [self.delegate endPlayerAtCompletion:NO];
+    [self.delegate tutoMessage:NSLocalizedStringFromTable(@"shake_to_replay_tuto",kStringFile, @"comment") withDuration:1 priority:NO];
     self.isPlaying = NO;
     [self resetDiscussionStateAnimated:NO];
 }

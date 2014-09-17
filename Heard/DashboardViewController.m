@@ -177,22 +177,28 @@
     if (!success)
         NSLog(@"AVAudioSession error setting category:%@",error);
     
-    // Add headset observer
-    [session addObserver:self forKeyPath:@"inputDataSources" options:NSKeyValueObservingOptionNew context:nil];
-    
-    // Add proximity state observer
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIDeviceProximityStateDidChangeNotification
-                                                      object:nil
-                                                       queue:[NSOperationQueue mainQueue]
-                                                  usingBlock:^(NSNotification *notification) {
-                                                                 [self updateOutputAudioPort];
-                                                             }];
-    
-    // Headset observer
+    // Add observers
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(routeChangeCallback:)
+                                                 name: AVAudioSessionRouteChangeNotification
+                                               object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(proximityStateDidChangeCallback)
+                                                 name: UIDeviceProximityStateDidChangeNotification
+                                               object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(willResignActiveCallback)
+                                                 name: UIApplicationWillResignActiveNotification
+                                               object: nil];
+    // todo BT later
+    // handle interruption
+    //    [[NSNotificationCenter defaultCenter] addObserver: self
+    //                                             selector: @selector(handleInterruption:)
+    //                                                 name: AVAudioSessionInterruptionNotification
+    //                                               object: session];
+    // Resign active observer
+
     self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:session];
-    
-    // Add background transition observer
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hide) name:@"UIApplicationWillResignActiveNotification" object:nil];
     
     // Set the audio file
     NSArray *pathComponents = [NSArray arrayWithObjects:
@@ -283,10 +289,6 @@
     }
 }
 
-- (void)hide
-{
-    [self dismissViewControllerAnimated:NO completion:nil];
-}
 
 // ------------------------------
 #pragma mark UI Modes
@@ -1337,31 +1339,34 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 
 // ----------------------------------------------------------
-#pragma mark OutPut Port
+#pragma mark Observer callback
 // ----------------------------------------------------------
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if([keyPath isEqualToString:@"inputDataSources"]) {
-        self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:[AVAudioSession sharedInstance]];
-    }
+-(void)willResignActiveCallback {
+    // Dismiss modal
+    [self dismissViewControllerAnimated:NO completion:nil];
+}
+
+-(void)routeChangeCallback:(NSNotification*)notification {
+    self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:[AVAudioSession sharedInstance]];
 }
 
 - (void)setIsUsingHeadSet:(BOOL)isUsingHeadSet {
     _isUsingHeadSet = isUsingHeadSet;
-    [self updateOutputAudioPort];
+    [self proximityStateDidChangeCallback];
 }
 
-- (void)updateOutputAudioPort {
+- (void)proximityStateDidChangeCallback {
     BOOL success; NSError* error;
     AVAudioSession *session = [AVAudioSession sharedInstance];
     if (self.isUsingHeadSet || [UIDevice currentDevice].proximityState ) {
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error];
-        
+        NSLog(@"%d - %d",self.isUsingHeadSet,[UIDevice currentDevice].proximityState);
         if ([UIDevice currentDevice].proximityState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             [prefs setObject:@"dummy" forKey:USER_PHONE_TO_EAR_PREF];
         }
     } else {
+        NSLog(@"no prox");
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
         if (self.disableProximityObserver) {
             [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
