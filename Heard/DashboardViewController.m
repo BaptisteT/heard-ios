@@ -37,8 +37,8 @@
 #define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"hide_contacts_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_3 NSLocalizedStringFromTable(@"share_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_4 NSLocalizedStringFromTable(@"feedback_button_title",kStringFile,@"comment")
-#define ACTION_OTHER_MENU_OPTION_5 NSLocalizedStringFromTable(@"log_out_button_title",kStringFile,@"comment")
-#define ACTION_OTHER_MENU_OPTION_6 NSLocalizedStringFromTable(@"rate_button_title",kStringFile,@"comment")
+#define ACTION_OTHER_MENU_OPTION_5 NSLocalizedStringFromTable(@"rate_button_title",kStringFile,@"comment")
+#define ACTION_OTHER_MENU_OPTION_6 NSLocalizedStringFromTable(@"log_out_button_title",kStringFile,@"comment")
 #define ACTION_PENDING_OPTION_1 NSLocalizedStringFromTable(@"add_to_contact_button_title",kStringFile,@"comment")
 #define ACTION_PENDING_OPTION_2 NSLocalizedStringFromTable(@"block_button_title",kStringFile,@"comment")
 #define ACTION_SHEET_PROFILE_OPTION_1 NSLocalizedStringFromTable(@"edit_picture_button_title",kStringFile,@"comment")
@@ -1187,15 +1187,16 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
     }
     
-    // Log out
-    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_5]) {
-        [SessionUtils redirectToSignIn:self.navigationController];
-    }
-    
     // Rate us
-    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_6]) {
+    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_5]) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kAppStoreLink]];
     }
+    
+    // Log out
+    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_6]) {
+        [SessionUtils redirectToSignIn:self.navigationController];
+    }
+
     
     /* -------------------------------------------------------------------------
      PENDING MENU
