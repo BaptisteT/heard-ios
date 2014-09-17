@@ -247,7 +247,7 @@
 }
 
 
-// Make sure scroll view has been resized (necessary because layout constraints change scroll view size)
+// Make sure scroll view h<as been resized (necessary because layout constraints change scroll view size)
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
