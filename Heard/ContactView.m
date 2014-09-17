@@ -293,7 +293,7 @@
                 [self.maxDurationTimer invalidate];
                 [self stopRecording];
                 if ([self.minDurationTimer isValid]) {
-                    [self.delegate tutoMessage:NSLocalizedStringFromTable(@"audio_too_short_error",kStringFile, @"comment") withDuration:1];
+                    [self.delegate tutoMessage:NSLocalizedStringFromTable(@"audio_too_short_error",kStringFile, @"comment") withDuration:1 priority:YES];
                 } else {
                     [self sendRecording];
                 }
@@ -516,7 +516,7 @@
 
 - (void)handlePlayingTapGesture {
     // unread state
-    [self.delegate tutoMessage:NSLocalizedStringFromTable(@"shake_to_replay_tuto",kStringFile, @"comment") withDuration:5];
+    [self.delegate tutoMessage:NSLocalizedStringFromTable(@"shake_to_replay_tuto",kStringFile, @"comment") withDuration:3 priority:NO];
     [self.delegate endPlayerAtCompletion:NO];
     self.isPlaying = NO;
     [self resetDiscussionStateAnimated:NO];

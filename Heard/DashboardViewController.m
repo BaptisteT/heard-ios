@@ -291,10 +291,12 @@
 // ------------------------------
 #pragma mark UI Modes
 // ------------------------------
-- (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration
+- (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration priority:(BOOL)prority
 {
     [self endTutoMode];
-    
+    if (self.displayOpeningTuto && !prority) {
+        return;
+    }
     self.bottomTutoViewLabel.text = message;
     self.bottomTutoView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT);
     
@@ -889,7 +891,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     if (![prefs objectForKey:USER_CANCELED_PREF]) {
-        [self tutoMessage:NSLocalizedStringFromTable(@"shake_to_cancel_tuto",kStringFile, @"comment")  withDuration:0];
+        [self tutoMessage:NSLocalizedStringFromTable(@"shake_to_cancel_tuto",kStringFile, @"comment")  withDuration:0 priority:NO];
     }
     
     if ([self.mainPlayer isPlaying]) {
@@ -943,7 +945,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     if (![prefs objectForKey:USER_PHONE_TO_EAR_PREF] && !self.isUsingHeadSet) {
-        [self tutoMessage:NSLocalizedStringFromTable(@"phone_to_ear_tuto",kStringFile, @"comment") withDuration:0];
+        [self tutoMessage:NSLocalizedStringFromTable(@"phone_to_ear_tuto",kStringFile, @"comment") withDuration:0 priority:NO];
     }
     
     if ([self.mainPlayer isPlaying]) {
@@ -1078,7 +1080,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     if (![prefs objectForKey:USER_REPLAYED_PREF]) {
-        [self tutoMessage:NSLocalizedStringFromTable(@"shake_to_replay_tuto",kStringFile, @"comment")  withDuration:5];
+        [self tutoMessage:NSLocalizedStringFromTable(@"shake_to_replay_tuto",kStringFile, @"comment")  withDuration:3 priority:NO];
     }
 }
 
@@ -1450,7 +1452,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                 [contactView cancelRecording];
             }
             
-            [self tutoMessage:NSLocalizedStringFromTable(@"cancel_success_message",kStringFile, @"comment") withDuration:5];
+            [self tutoMessage:NSLocalizedStringFromTable(@"cancel_success_message",kStringFile, @"comment") withDuration:3 priority:NO];
             
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             [prefs setObject:@"dummy" forKey:USER_CANCELED_PREF];
@@ -1472,7 +1474,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                 }
             }
         } else {
-            [self tutoMessage:NSLocalizedStringFromTable(@"no_last_message_played_message",kStringFile, @"comment") withDuration:2];
+            [self tutoMessage:NSLocalizedStringFromTable(@"no_last_message_played_message",kStringFile, @"comment") withDuration:2 priority:NO];
         }
     }
 }

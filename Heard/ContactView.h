@@ -62,7 +62,7 @@
 
 - (void)endTutoMode;
 
-- (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration;
+- (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration priority:(BOOL)prority;
 
 - (BOOL)isRecording;
 
