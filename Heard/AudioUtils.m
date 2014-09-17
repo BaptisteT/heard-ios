@@ -15,10 +15,8 @@
 {
     AVAudioSessionPortDescription *output = [[session.currentRoute.outputs count]?session.currentRoute.outputs:nil objectAtIndex:0];
     if ([output.portType isEqualToString:AVAudioSessionPortHeadphones]) {
-        NSLog(@"yes %@", output.portType);
         return YES;
     } else {
-        NSLog(@"no %@", output.portType);
         return NO;
     }
 }

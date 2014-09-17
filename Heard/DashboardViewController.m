@@ -1360,13 +1360,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     AVAudioSession *session = [AVAudioSession sharedInstance];
     if (self.isUsingHeadSet || [UIDevice currentDevice].proximityState ) {
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error];
-        NSLog(@"%d - %d",self.isUsingHeadSet,[UIDevice currentDevice].proximityState);
         if ([UIDevice currentDevice].proximityState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             [prefs setObject:@"dummy" forKey:USER_PHONE_TO_EAR_PREF];
         }
     } else {
-        NSLog(@"no prox");
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
         if (self.disableProximityObserver) {
             [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
