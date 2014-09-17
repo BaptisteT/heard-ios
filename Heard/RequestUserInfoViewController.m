@@ -65,6 +65,7 @@
     
     // Prefill if possible
     NSString *ownerName = [[UIDevice currentDevice] name];
+    ownerName =[ownerName stringByReplacingOccurrencesOfString:@"’" withString:@"'"];
     NSRange t = [ownerName rangeOfString:@"'s"];
     if (t.location != NSNotFound) {
         ownerName = [ownerName substringToIndex:t.location];
