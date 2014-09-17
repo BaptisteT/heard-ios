@@ -151,6 +151,12 @@
 		0B9EC33019C8F5EB00F520B8 /* tuto-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC32D19C8F5EB00F520B8 /* tuto-arrow.png */; };
 		0B9EC33119C8F5EB00F520B8 /* tuto-arrow@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC32E19C8F5EB00F520B8 /* tuto-arrow@2x~iphone.png */; };
 		0B9EC33219C8F5EB00F520B8 /* tuto-arrow@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9EC32E19C8F5EB00F520B8 /* tuto-arrow@2x~iphone.png */; };
+		0B9EC33719C9250A00F520B8 /* libFlurry_5.3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B9EC33619C9250A00F520B8 /* libFlurry_5.3.0.a */; };
+		0B9EC33819C9250A00F520B8 /* libFlurry_5.3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B9EC33619C9250A00F520B8 /* libFlurry_5.3.0.a */; };
+		0B9EC33A19C9253400F520B8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B9EC33919C9253400F520B8 /* SystemConfiguration.framework */; };
+		0B9EC33B19C9253B00F520B8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B9EC33919C9253400F520B8 /* SystemConfiguration.framework */; };
+		0B9EC33D19C9254D00F520B8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B9EC33C19C9254D00F520B8 /* Security.framework */; };
+		0B9EC33E19C9255300F520B8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B9EC33C19C9254D00F520B8 /* Security.framework */; };
 		0BA145771997A4A60031716F /* end-record-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145711997A4A60031716F /* end-record-sound.aif */; };
 		0BA145781997A4A60031716F /* end-record-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145711997A4A60031716F /* end-record-sound.aif */; };
 		0BA145791997A4A60031716F /* received-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145721997A4A60031716F /* received-sound.aif */; };
@@ -311,6 +317,10 @@
 		0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditContactsTableViewCell.m; sourceTree = "<group>"; };
 		0B9EC32D19C8F5EB00F520B8 /* tuto-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tuto-arrow.png"; sourceTree = "<group>"; };
 		0B9EC32E19C8F5EB00F520B8 /* tuto-arrow@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tuto-arrow@2x~iphone.png"; sourceTree = "<group>"; };
+		0B9EC33519C9250A00F520B8 /* Flurry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flurry.h; sourceTree = "<group>"; };
+		0B9EC33619C9250A00F520B8 /* libFlurry_5.3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurry_5.3.0.a; sourceTree = "<group>"; };
+		0B9EC33919C9253400F520B8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		0B9EC33C19C9254D00F520B8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		0BA145711997A4A60031716F /* end-record-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "end-record-sound.aif"; sourceTree = "<group>"; };
 		0BA145721997A4A60031716F /* received-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "received-sound.aif"; sourceTree = "<group>"; };
 		0BA145731997A4A60031716F /* sent-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sent-sound.aif"; sourceTree = "<group>"; };
@@ -475,8 +485,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B9EC33D19C9254D00F520B8 /* Security.framework in Frameworks */,
+				0B9EC33B19C9253B00F520B8 /* SystemConfiguration.framework in Frameworks */,
 				0B56F64C19757D5900DB6FF1 /* CoreData.framework in Frameworks */,
 				0B56F64A19757D5300DB6FF1 /* QuartzCore.framework in Frameworks */,
+				0B9EC33819C9250A00F520B8 /* libFlurry_5.3.0.a in Frameworks */,
 				0B72EEDB196C672F00AC5A01 /* MediaPlayer.framework in Frameworks */,
 				0B72EEDC196C672F00AC5A01 /* CrashReporter.framework in Frameworks */,
 				0B72EEDD196C672F00AC5A01 /* AudioToolbox.framework in Frameworks */,
@@ -493,8 +506,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B9EC33E19C9255300F520B8 /* Security.framework in Frameworks */,
+				0B9EC33A19C9253400F520B8 /* SystemConfiguration.framework in Frameworks */,
 				3C06C3A019659C2400B8D70C /* MediaPlayer.framework in Frameworks */,
 				3C55FD6D1966AA3500E818D9 /* CrashReporter.framework in Frameworks */,
+				0B9EC33719C9250A00F520B8 /* libFlurry_5.3.0.a in Frameworks */,
 				3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */,
 				0BAF4FE219560AEE00838D7D /* MessageUI.framework in Frameworks */,
 				0B58BAFD1954B47700E9FF70 /* AddressBook.framework in Frameworks */,
@@ -568,6 +584,15 @@
 				0B22CD011978439D00E1C7AF /* AddContactViewController.m */,
 			);
 			name = Contacts;
+			sourceTree = "<group>";
+		};
+		0B9EC33419C9250A00F520B8 /* Flurry */ = {
+			isa = PBXGroup;
+			children = (
+				0B9EC33519C9250A00F520B8 /* Flurry.h */,
+				0B9EC33619C9250A00F520B8 /* libFlurry_5.3.0.a */,
+			);
+			path = Flurry;
 			sourceTree = "<group>";
 		};
 		0BA1455E199786A30031716F /* Images */ = {
@@ -675,6 +700,8 @@
 		0BD758BE1950F91B00CF0D85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0B9EC33C19C9254D00F520B8 /* Security.framework */,
+				0B9EC33919C9253400F520B8 /* SystemConfiguration.framework */,
 				0B56F64B19757D5900DB6FF1 /* CoreData.framework */,
 				0B56F64919757D5300DB6FF1 /* QuartzCore.framework */,
 				3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */,
@@ -742,6 +769,7 @@
 		0BDB64B21952150D00223093 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				0B9EC33419C9250A00F520B8 /* Flurry */,
 				0B9051A11975D721001E2ED5 /* RMPhoneFormat */,
 				0BB0E8CE195B449A00C94AC0 /* Mixpanel */,
 				3C9BBDFC195345A6001C6C4D /* UIKit+AFNetworking */,
@@ -1282,6 +1310,10 @@
 					"PRODUCTION=0",
 				);
 				INFOPLIST_FILE = "Waved copy-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Heard/Flurry",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = WavedStaging;
 				PROVISIONING_PROFILE = "";
@@ -1306,6 +1338,10 @@
 					"DEBUG=0",
 				);
 				INFOPLIST_FILE = "Waved copy-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Heard/Flurry",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = WavedStaging;
 				PROVISIONING_PROFILE = "";
@@ -1403,6 +1439,10 @@
 					"PRODUCTION=1",
 				);
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Heard/Flurry",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "AA0DAED0-A310-4A33-8778-F8C0B541C5DC";
@@ -1427,6 +1467,10 @@
 					"DEBUG=0",
 				);
 				INFOPLIST_FILE = "Heard/Heard-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Heard/Flurry",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "AA0DAED0-A310-4A33-8778-F8C0B541C5DC";

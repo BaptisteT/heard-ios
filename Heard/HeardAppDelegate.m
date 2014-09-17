@@ -21,6 +21,7 @@
 #import <CrashReporter/CrashReporter.h>
 #import "CrashReportUtils.h"
 #import "InviteContactsViewController.h"
+#import "Flurry.h"
 
 @interface HeardAppDelegate()
 
@@ -41,6 +42,12 @@
     //Mixpanel
     if (PRODUCTION && !DEBUG) {
         [Mixpanel sharedInstanceWithToken:kProdMixPanelToken];
+        
+        //note: iOS only allows one crash reporting tool per app; if using another, set to: NO
+        [Flurry setCrashReportingEnabled:YES];
+        
+        // Replace YOUR_API_KEY with the api key in the downloaded package
+        [Flurry startSession:kProdFlurryToken];
     }
     
     // Crash report

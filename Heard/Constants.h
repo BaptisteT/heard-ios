@@ -63,3 +63,6 @@ static const NSUInteger kProfilePictureSize = 200;
 
 //Mixpanel token
 static NSString * const kProdMixPanelToken = @"898ed29f5309c83be61a27a41d55c879";
+
+//Flurry token
+static NSString * const kProdFlurryToken = @"QMNY7MKKJTHS3YT7VTMP";
