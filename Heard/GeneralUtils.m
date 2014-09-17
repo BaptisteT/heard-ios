@@ -119,8 +119,7 @@
 + (BOOL)pushNotifRequestSeen
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    UIRemoteNotificationType types =    [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
-    if(types != UIRemoteNotificationTypeNone || [[prefs objectForKey:PUSH_NOTIF_SEEN_PREF] boolValue]) {
+    if([[prefs objectForKey:PUSH_NOTIF_SEEN_PREF] boolValue]) {
         return YES;
     } else {
         return NO;
