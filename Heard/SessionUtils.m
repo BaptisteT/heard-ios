@@ -95,8 +95,12 @@
 // Remove FB session and user token
 + (void)wipeOffCredentials
 {
-    NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
-    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs removeObjectForKey:USER_AUTH_TOKEN_PREF];
+    [prefs removeObjectForKey:USER_ID_PREF];
+    [prefs removeObjectForKey:USER_PHONE_NUMBER_PREF];
+    [prefs removeObjectForKey:USER_FIRST_NAME_PREF];
+    [prefs removeObjectForKey:USER_LAST_NAME_PREF];
 }
 
 // Check if this is an invalid token response
