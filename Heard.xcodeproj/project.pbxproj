@@ -979,7 +979,7 @@
 						DevelopmentTeam = 9688VHJV6U;
 					};
 					0BD758BB1950F91B00CF0D85 = {
-						DevelopmentTeam = 9688VHJV6U;
+						DevelopmentTeam = Y7RQR83KUE;
 					};
 				};
 			};
@@ -1296,7 +1296,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1316,7 +1316,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = WavedStaging;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "9FADCC52-2A13-45FE-967E-06E0B8B26653";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1325,7 +1325,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1344,7 +1344,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = WavedStaging;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "9FADCC52-2A13-45FE-967E-06E0B8B26653";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1426,8 +1426,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Bastien Beurier (9688VHJV6U)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Bastien Beurier (9688VHJV6U)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: LINCS";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1445,7 +1445,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "AA0DAED0-A310-4A33-8778-F8C0B541C5DC";
+				PROVISIONING_PROFILE = "9FADCC52-2A13-45FE-967E-06E0B8B26653";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1454,8 +1454,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Bastien Beurier (9688VHJV6U)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Bastien Beurier (9688VHJV6U)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: LINCS";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1473,7 +1473,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "AA0DAED0-A310-4A33-8778-F8C0B541C5DC";
+				PROVISIONING_PROFILE = "9FADCC52-2A13-45FE-967E-06E0B8B26653";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
