@@ -176,6 +176,7 @@
                              error:&error];
     if (!success)
         NSLog(@"AVAudioSession error setting category:%@",error);
+    [session setActive:YES error:nil];
     
     // Add observers
     [[NSNotificationCenter defaultCenter] addObserver: self
@@ -1448,7 +1449,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     {
         // cancel recording
         if ([self isRecording]) {
-            [[AVAudioSession sharedInstance] setActive:NO error:nil];
             [self endedLongPressRecording];
             for (ContactView *contactView in self.contactViews) {
                 [contactView cancelRecording];

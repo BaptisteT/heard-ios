@@ -354,7 +354,6 @@
             return;
         } else {
             self.isRecording = YES;
-            [session setActive:YES error:nil];
             // Create Timers
             self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
             self.minDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMinAudioDuration target:self selector:@selector(minRecordingDurationReached) userInfo:nil repeats:NO];
@@ -380,7 +379,6 @@
 {
     self.isRecording = NO;
     [self resetDiscussionStateAnimated:NO];
-    [[AVAudioSession sharedInstance] setActive:NO error:nil];
     [self.delegate endedLongPressRecording];
 }
 
