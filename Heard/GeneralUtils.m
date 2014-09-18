@@ -19,16 +19,8 @@
 // Show an alert message
 + (void)showMessage:(NSString *)text withTitle:(NSString *)title
 {
-    if (!text) {
-        text = @"";
-    }
-    
-    if (!title) {
-        title = @"";
-    }
-    
-    [[[UIAlertView alloc] initWithTitle:title
-                                message:text
+    [[[UIAlertView alloc] initWithTitle:title ? title : @""
+                                message:text ? text : @""
                                delegate:nil
                       cancelButtonTitle:@"OK"
                       otherButtonTitles:nil] show];
@@ -154,6 +146,15 @@
 + (BOOL)systemVersionIsGreaterThanOrEqualTo:(NSString *)v
 {
     return [[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending;
+}
+
++ (void)openSettings
+{
+    BOOL canOpenSettings = (&UIApplicationOpenSettingsURLString != NULL);
+    if (canOpenSettings) {
+        NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+        [[UIApplication sharedApplication] openURL:url];
+    }
 }
 
 

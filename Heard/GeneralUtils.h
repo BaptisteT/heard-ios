@@ -41,4 +41,6 @@
 
 + (BOOL)systemVersionIsGreaterThanOrEqualTo:(NSString *)v;
 
++ (void)openSettings;
+
 @end
