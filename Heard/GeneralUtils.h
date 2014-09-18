@@ -35,5 +35,10 @@
 
 + (BOOL)pushNotifRequestSeen;
 
++ (BOOL)systemVersionIsEqualTo:(NSString *)v;
+
++ (BOOL)systemVersionIsGreaterThan:(NSString *)v;
+
++ (BOOL)systemVersionIsGreaterThanOrEqualTo:(NSString *)v;
 
 @end

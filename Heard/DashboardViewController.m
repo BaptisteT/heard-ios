@@ -196,7 +196,6 @@
     //                                             selector: @selector(handleInterruption:)
     //                                                 name: AVAudioSessionInterruptionNotification
     //                                               object: session];
-    // Resign active observer
 
     self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:session];
     
