@@ -132,7 +132,7 @@
             [TrackingUtils trackAddContactSuccessful:YES Present:YES Pending:NO];
         //Not on Waved
         } else {
-            [[[UIAlertView alloc] initWithTitle:nil
+            [[[UIAlertView alloc] initWithTitle:@""
                                         message: [NSLocalizedStringFromTable(@"add_contact_not_waved_user_message",kStringFile,@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:contactName]
                                        delegate:self
                               cancelButtonTitle:nil

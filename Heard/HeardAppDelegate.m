@@ -223,7 +223,7 @@ NSString* stringFromDeviceTokenData(NSData *deviceToken)
 
 - (void)createObsoleteAPIAlertView
 {
-    self.apiMessageAlertView = [[UIAlertView alloc] initWithTitle:nil
+    self.apiMessageAlertView = [[UIAlertView alloc] initWithTitle:@""
                                                           message:self.messageContent
                                                          delegate:self
                                                 cancelButtonTitle:@"OK"
