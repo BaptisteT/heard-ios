@@ -33,6 +33,7 @@
 
 #define ACTION_MAIN_MENU_OPTION_1 NSLocalizedStringFromTable(@"invite_friends_button_title",kStringFile,@"comment")
 #define ACTION_MAIN_MENU_OPTION_2 NSLocalizedStringFromTable(@"add_new_contact_button_title",kStringFile,@"comment")
+#define ACTION_MAIN_MENU_OPTION_3 NSLocalizedStringFromTable(@"other_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_1 NSLocalizedStringFromTable(@"edit_profile_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"hide_contacts_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_3 NSLocalizedStringFromTable(@"share_button_title",kStringFile,@"comment")
@@ -258,7 +259,7 @@
 }
 
 
-// Make sure scroll view h<as been resized (necessary because layout constraints change scroll view size)
+// Make sure scroll view has been resized (necessary because layout constraints change scroll view size)
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
@@ -274,6 +275,7 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     [self becomeFirstResponder];
 }
 
@@ -807,22 +809,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                                                                delegate:self
                                                       cancelButtonTitle:ACTION_SHEET_CANCEL
                                                  destructiveButtonTitle:nil
-                                                      otherButtonTitles:ACTION_MAIN_MENU_OPTION_1, ACTION_MAIN_MENU_OPTION_2, nil];
-        
-        __weak __typeof__(self) weakSelf = self;
-        void (^titleTapBlock)() = ^void() {
-            CustomActionSheet *newActionSheet = [[CustomActionSheet alloc]
-                                             initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
-                                             delegate:weakSelf
-                                             cancelButtonTitle:ACTION_SHEET_CANCEL
-                                             destructiveButtonTitle:nil
-                                             otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, ACTION_OTHER_MENU_OPTION_6, nil];
-            [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
-        };
-        
-        [self.mainMenuActionSheet addTitleViewWithUsername:[NSString stringWithFormat:@"%@ %@", [SessionUtils getCurrentUserFirstName], [SessionUtils getCurrentUserLastName]]
-                                                     image:self.profilePicture.image
-                                            andOneTapBlock:titleTapBlock];
+                                                      otherButtonTitles:ACTION_MAIN_MENU_OPTION_1, ACTION_MAIN_MENU_OPTION_2, ACTION_MAIN_MENU_OPTION_3, nil];
         [self.mainMenuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
 }
@@ -1137,6 +1124,17 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self performSegueWithIdentifier:@"Add Contact Segue" sender:nil];
     }
     
+    // Other
+    else if ([buttonTitle isEqualToString:ACTION_MAIN_MENU_OPTION_3]) {
+        CustomActionSheet *newActionSheet = [[CustomActionSheet alloc]
+                                             initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
+                                             delegate:self
+                                             cancelButtonTitle:ACTION_SHEET_CANCEL
+                                             destructiveButtonTitle:nil
+                                             otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, ACTION_OTHER_MENU_OPTION_6, nil];
+        [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+    }
+
     /* -------------------------------------------------------------------------
      OTHER MENU
      ---------------------------------------------------------------------------*/

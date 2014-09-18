@@ -18,6 +18,7 @@
 "invite_button_title" = "Inviter";
 "invite_friends_button_title" = "Inviter des amis";
 "add_new_contact_button_title" = "Ajouter un contact";
+"other_button_title" = "Autre";
 "edit_profile_button_title" = "Modifier le profil";
 "hide_contacts_button_title" = "Afficher / Cacher des contacts";
 "share_button_title" = "Partager";
