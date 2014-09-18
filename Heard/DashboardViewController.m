@@ -648,6 +648,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // Retrieve unread messages and display alert
 - (void) retrieveUnreadMessagesAndNewContacts
 {
+    // Come back to top
+    [self.contactScrollView setContentOffset:CGPointMake(0, -self.contactScrollView.contentInset.top) animated:YES];
+    
     void (^successBlock)(NSArray*,BOOL,NSArray*) = ^void(NSArray *messages, BOOL newContactOnServer, NSArray *unreadMessageContacts) {
         //Reset unread messages
         [self resetUnreadMessages];
