@@ -18,6 +18,7 @@
 "invite_button_title" = "Invite";
 "invite_friends_button_title" = "Invite Friends";
 "add_new_contact_button_title" = "Add By Phone Number";
+"other_button_title" = "Other";
 "edit_profile_button_title" = "Edit Profile";
 "hide_contacts_button_title" = "Hide / Unhide Contacts";
 "share_button_title" = "Share";

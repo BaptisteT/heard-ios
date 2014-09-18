@@ -10,6 +10,6 @@
 
 @interface CustomActionSheet : UIActionSheet
 
-- (void)addTitleViewWithUsername:(NSString *)username image:(UIImage *)image andOneTapBlock:(void(^)())oneTapBlock;
+//- (void)addTitleViewWithUsername:(NSString *)username image:(UIImage *)image andOneTapBlock:(void(^)())oneTapBlock;
 
 @end
