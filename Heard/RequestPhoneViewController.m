@@ -62,6 +62,13 @@
     [self.tutoLabel sizeToFit];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [self.phoneTextField becomeFirstResponder];
+}
+
 - (void)setInitialCountryInfo
 {
     NSDictionary *letterCodeToCountryNameAndCallingCode = [AddressbookUtils getCountriesAndCallingCodesForLetterCodes];
@@ -77,13 +84,6 @@
     } else {
         [self updateCountryName:DEFAULT_COUNTRY code:[NSNumber numberWithInt:DEFAULT_COUNTRY_CODE] letterCode:DEFAULT_COUNTRY_LETTER_CODE];
     }
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    [self.phoneTextField becomeFirstResponder];
 }
 
 - (IBAction)backButtonPressed:(id)sender {
