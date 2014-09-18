@@ -19,6 +19,14 @@
 // Show an alert message
 + (void)showMessage:(NSString *)text withTitle:(NSString *)title
 {
+    if (!text) {
+        text = @"";
+    }
+    
+    if (!title) {
+        title = @"";
+    }
+    
     [[[UIAlertView alloc] initWithTitle:title
                                 message:text
                                delegate:nil
