@@ -670,7 +670,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                 if (contactView.contact.identifier == [id intValue]) {
                     contactView.messageNotReadByContact = YES;
                     idFound = YES;
-                    continue;
+                    break;
                 }
             }
             if (!idFound) {
@@ -1473,7 +1473,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                     [contactView playNextMessage];
                     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
                     [prefs setObject:@"dummy" forKey:USER_REPLAYED_PREF];
-                    continue;
+                    break;
                 }
             }
         } else {
@@ -1599,7 +1599,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             }
             [self.contactScrollView bringSubviewToFront:contactView];
             [self.contactScrollView bringSubviewToFront:contactView.nameLabel];
-            continue;
+            break;
         }
     }
 }
