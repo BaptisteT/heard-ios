@@ -11,6 +11,10 @@
 #import "GeneralUtils.h"
 #import "Constants.h"
 #import "TrackingUtils.h"
+#import <MediaPlayer/MPMusicPlayerController.h>
+#import <AudioToolbox/AudioToolbox.h>
+#import "AudioUtils.h"
+#import <AVFoundation/AVFoundation.h>
 
 @interface InviteContactsViewController ()
 
@@ -23,6 +27,11 @@
 @property (weak, nonatomic) InviteContactsTVC *inviteConctactsTVC;
 
 @property (strong, nonatomic) NSMutableArray *selectedContacts;
+
+// Player
+@property (nonatomic, strong) AVAudioPlayer *mainPlayer;
+@property (nonatomic) BOOL disableProximityObserver;
+@property (nonatomic) BOOL isUsingHeadSet;
 
 @end
 
@@ -50,6 +59,28 @@
     self.inviteButtonContainer.hidden = YES;
     
     self.selectedContacts = [[NSMutableArray alloc] init];
+    
+    // Add observers
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(routeChangeCallback:)
+                                                 name: AVAudioSessionRouteChangeNotification
+                                               object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(proximityStateDidChangeCallback)
+                                                 name: UIDeviceProximityStateDidChangeNotification
+                                               object: nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    // Remove proximity state
+    if ([UIDevice currentDevice].proximityState) {
+        self.disableProximityObserver = YES;
+    } else {
+        [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+    }
 }
 
 - (IBAction)backButtonClicked:(id)sender {
@@ -57,7 +88,7 @@
 }
 
 - (IBAction)selectAllButtonClicked:(id)sender {
-    [self.inviteConctactsTVC selectAll];
+    [self play];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -139,6 +170,50 @@
     } else {
         [TrackingUtils trackInviteContacts:[self.selectedContacts count] successful:NO justAdded:NO];
     }
+}
+
+- (void)play
+{
+    // Min volume (legal / deprecated ?)
+    MPMusicPlayerController *appPlayer = [MPMusicPlayerController applicationMusicPlayer];
+    if (appPlayer.volume < 0.5) {
+        [appPlayer setVolume:0.5];
+    }
+    
+    // Set loud speaker and proximity check
+    self.disableProximityObserver = NO;
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    
+    self.mainPlayer = [[AVAudioPlayer alloc] initWithData:self.message.audioData error:nil];
+    [self.mainPlayer play];
+}
+
+// ----------------------------------------------------------
+#pragma mark Observer callback
+// ----------------------------------------------------------
+
+-(void)routeChangeCallback:(NSNotification*)notification {
+    self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:[AVAudioSession sharedInstance]];
+}
+
+- (void)setIsUsingHeadSet:(BOOL)isUsingHeadSet {
+    _isUsingHeadSet = isUsingHeadSet;
+    [self proximityStateDidChangeCallback];
+}
+
+- (void)proximityStateDidChangeCallback {
+    BOOL success; NSError* error;
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    if (self.isUsingHeadSet || [UIDevice currentDevice].proximityState ) {
+        success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error];
+    } else {
+        success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
+        if (self.disableProximityObserver) {
+            [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+        }
+    }
+    if (!success)
+        NSLog(@"AVAudioSession error overrideOutputAudioPort:%@",error);
 }
 
 

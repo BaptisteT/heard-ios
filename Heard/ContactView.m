@@ -40,10 +40,6 @@
 @property (nonatomic, strong) NSTimer *maxDurationTimer;
 @property (nonatomic, strong) NSTimer *minDurationTimer;
 
-@property (nonatomic) NSInteger unreadMessagesCount;
-@property (nonatomic) NSInteger sendingMessageCount;
-@property (nonatomic) NSInteger loadingMessageCount;
-
 @property (nonatomic, strong) UIImageView *recordOverlay;
 @property (nonatomic, strong) UIImageView *playOverlay;
 @property (nonatomic, strong) UIImageView *pendingContactOverlay;
@@ -120,6 +116,7 @@
     
     return self;
 }
+
 
 - (void)setOrderPosition:(NSInteger)orderPosition
 {

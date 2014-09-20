@@ -22,5 +22,6 @@
 
 - (void)selectContactWithPhoneNumber:(NSString *)phoneNumber;
 - (void)deselectContactWithPhoneNumber:(NSString *)phoneNumber;
+@property (strong, nonatomic) NSMutableDictionary *indexedContacts;
 
 @end

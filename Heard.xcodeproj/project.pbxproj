@@ -14,6 +14,12 @@
 		0B3651DF1959109700534386 /* heard-logo-80.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DC1959109700534386 /* heard-logo-80.png */; };
 		0B3651E01959109700534386 /* heard-logo-58.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DD1959109700534386 /* heard-logo-58.png */; };
 		0B3651E11959109700534386 /* heard-logo-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DE1959109700534386 /* heard-logo-120.png */; };
+		0B37D42E19CCFCE900A2D074 /* InviteContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B37D42D19CCFCE900A2D074 /* InviteContactView.m */; };
+		0B37D42F19CCFCE900A2D074 /* InviteContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B37D42D19CCFCE900A2D074 /* InviteContactView.m */; };
+		0B37D43519CD10D400A2D074 /* invite-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B37D43319CD10D400A2D074 /* invite-button.png */; };
+		0B37D43619CD10D400A2D074 /* invite-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B37D43319CD10D400A2D074 /* invite-button.png */; };
+		0B37D43719CD10D400A2D074 /* invite-button@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B37D43419CD10D400A2D074 /* invite-button@2x~iphone.png */; };
+		0B37D43819CD10D400A2D074 /* invite-button@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B37D43419CD10D400A2D074 /* invite-button@2x~iphone.png */; };
 		0B56F64A19757D5300DB6FF1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B56F64919757D5300DB6FF1 /* QuartzCore.framework */; };
 		0B56F64C19757D5900DB6FF1 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B56F64B19757D5900DB6FF1 /* CoreData.framework */; };
 		0B56F65219758D9600DB6FF1 /* CountryCodeTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B56F65119758D9600DB6FF1 /* CountryCodeTVC.m */; };
@@ -281,6 +287,10 @@
 		0B3651DC1959109700534386 /* heard-logo-80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-80.png"; sourceTree = "<group>"; };
 		0B3651DD1959109700534386 /* heard-logo-58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-58.png"; sourceTree = "<group>"; };
 		0B3651DE1959109700534386 /* heard-logo-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-120.png"; sourceTree = "<group>"; };
+		0B37D42C19CCFCE900A2D074 /* InviteContactView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteContactView.h; sourceTree = "<group>"; };
+		0B37D42D19CCFCE900A2D074 /* InviteContactView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteContactView.m; sourceTree = "<group>"; };
+		0B37D43319CD10D400A2D074 /* invite-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invite-button.png"; sourceTree = "<group>"; };
+		0B37D43419CD10D400A2D074 /* invite-button@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invite-button@2x~iphone.png"; sourceTree = "<group>"; };
 		0B56F64919757D5300DB6FF1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0B56F64B19757D5900DB6FF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		0B56F65019758D9600DB6FF1 /* CountryCodeTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryCodeTVC.h; sourceTree = "<group>"; };
@@ -602,6 +612,8 @@
 		0BA1455E199786A30031716F /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0B37D43319CD10D400A2D074 /* invite-button.png */,
+				0B37D43419CD10D400A2D074 /* invite-button@2x~iphone.png */,
 				0B9EC32D19C8F5EB00F520B8 /* tuto-arrow.png */,
 				0B9EC32E19C8F5EB00F520B8 /* tuto-arrow@2x~iphone.png */,
 				0B90E66C19C7822E004A8F16 /* notif-perm.png */,
@@ -930,6 +942,8 @@
 				0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */,
 				3CB8B7F3195453E50090D657 /* ContactView.h */,
 				3CB8B7F4195453E50090D657 /* ContactView.m */,
+				0B37D42C19CCFCE900A2D074 /* InviteContactView.h */,
+				0B37D42D19CCFCE900A2D074 /* InviteContactView.m */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -1026,6 +1040,7 @@
 				0B72EEED196C672F00AC5A01 /* heard-logo-120.png in Resources */,
 				0BADABC819930005007B4538 /* contact-suspension.png in Resources */,
 				0B9051A81975DE8C001E2ED5 /* PhoneFormats.dat in Resources */,
+				0B37D43819CD10D400A2D074 /* invite-button@2x~iphone.png in Resources */,
 				0B72EEEE196C672F00AC5A01 /* MPSurvey.storyboard in Resources */,
 				0B72EEEF196C672F00AC5A01 /* heard-logo-80.png in Resources */,
 				0B72EEF0196C672F00AC5A01 /* record.png in Resources */,
@@ -1045,6 +1060,7 @@
 				0B72EEF8196C672F00AC5A01 /* Media.xcassets in Resources */,
 				0B9EC33219C8F5EB00F520B8 /* tuto-arrow@2x~iphone.png in Resources */,
 				0B9051BD19771B96001E2ED5 /* checkbox@iphone.png in Resources */,
+				0B37D43619CD10D400A2D074 /* invite-button.png in Resources */,
 				0B72EEF9196C672F00AC5A01 /* welcome-logo@2x~iphone.png in Resources */,
 				0B72EEFA196C672F00AC5A01 /* MPNotification.storyboard in Resources */,
 				0B72EEFB196C672F00AC5A01 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
@@ -1084,6 +1100,7 @@
 				0B3651E11959109700534386 /* heard-logo-120.png in Resources */,
 				0BADABC719930005007B4538 /* contact-suspension.png in Resources */,
 				0B9051A71975DE8C001E2ED5 /* PhoneFormats.dat in Resources */,
+				0B37D43719CD10D400A2D074 /* invite-button@2x~iphone.png in Resources */,
 				0BB0E8F4195B449A00C94AC0 /* MPSurvey.storyboard in Resources */,
 				0B3651DF1959109700534386 /* heard-logo-80.png in Resources */,
 				0BE55478195A4ADC00CE4669 /* record.png in Resources */,
@@ -1103,6 +1120,7 @@
 				0BB0E8EC195B449A00C94AC0 /* Media.xcassets in Resources */,
 				0B9EC33119C8F5EB00F520B8 /* tuto-arrow@2x~iphone.png in Resources */,
 				0B9051BC19771B96001E2ED5 /* checkbox@iphone.png in Resources */,
+				0B37D43519CD10D400A2D074 /* invite-button.png in Resources */,
 				0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */,
 				0BB0E8F1195B449A00C94AC0 /* MPNotification.storyboard in Resources */,
 				0BDB64CD19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
@@ -1200,6 +1218,7 @@
 				0B72EED7196C672F00AC5A01 /* GeneralUtils.m in Sources */,
 				0B72EED8196C672F00AC5A01 /* ImageUtils.m in Sources */,
 				0B72EED9196C672F00AC5A01 /* WelcomeViewController.m in Sources */,
+				0B37D42F19CCFCE900A2D074 /* InviteContactView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1275,6 +1294,7 @@
 				0BDB65491953B5EA00223093 /* GeneralUtils.m in Sources */,
 				0BDB654A1953B5EA00223093 /* ImageUtils.m in Sources */,
 				0BDB654C1953B5EA00223093 /* WelcomeViewController.m in Sources */,
+				0B37D42E19CCFCE900A2D074 /* InviteContactView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

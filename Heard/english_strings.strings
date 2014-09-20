@@ -33,7 +33,7 @@
 "delete_button_title" = "Delete";
 "resend_button_title" = "Resend";
 "back_button_title" = "❮ Back";
-"select_all_button_title" = "Select All";
+"select_all_button_title" = "Play";
 "not_now_button_title" = "Not Now";
 "give_access_button_title" = "Give Access";
 "no_thanks_button_title" = "No Thanks";
@@ -88,6 +88,7 @@
 // Invite & share
 "invite_label_text" = "Invite to Waved";
 "invite_text_message" = "Hey, let's start chatting on Waved! It's a free app which lets you send voice messages in one tap. Download it at";  // twitter constraint
+"invite_with_message_text" = "Hey, let's start chatting on Waved! It's a free app which lets you send voice messages in one tap. Download it at";  // twitter constraint
 "personal_invite_text_message" = "Hey TRUCHOV, let's start chatting on Waved! It's a free app which lets you send short voice messages in one tap. Download it at:";
 "text_access_error_message" = "Your device is not properly configured to send messages";
 "personal_invite_text_success_message" = "TRUCHOV successfully invited.";
