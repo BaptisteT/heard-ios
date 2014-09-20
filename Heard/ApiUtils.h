@@ -40,6 +40,7 @@
 + (void)updateProfilePicture:(NSString *)picture success:(void(^)())successBlock failure:(void(^)())failureBlock;
 + (void)updateFirstName:(NSString *)firstName success:(void(^)())successBlock failure:(void(^)())failureBlock;
 + (void)updateLastName:(NSString *)lastName success:(void(^)())successBlock failure:(void(^)())failureBlock;
++ (void)updateAppInfoAndExecuteSuccess:(void(^)())successBlock failure:(void(^)())failureBlock;
 
 + (void)getUnreadMessagesAndExecuteSuccess:(void(^)(NSArray *messages, BOOL newContactOnServer, NSArray *unreadMessageContacts))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock;
 

@@ -511,4 +511,32 @@
     }];
 }
 
+// Update App info
++ (void)updateAppInfoAndExecuteSuccess:(void(^)())successBlock failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/update_app_info.json"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    [parameters setObject:appVersion forKey:@"app_version"];
+    [parameters setObject:kApiVersion forKey:@"api_version"];
+    [parameters setObject:[[UIDevice currentDevice] systemVersion] forKey:@"os_version"];
+    
+    [self enrichParametersWithToken:parameters];
+    
+    [[ApiUtils sharedClient] PATCH:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        NSDictionary *result = [JSON valueForKeyPath:@"result"];
+        Contact *contact = [Contact rawContactToInstance:[result objectForKey:@"user"]];
+        [SessionUtils saveUserInfo:contact];
+        if (successBlock) {
+            successBlock();
+        }
+    }failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"ERROR: %@, %@", task.description, error);
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
 @end

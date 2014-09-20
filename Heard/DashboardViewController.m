@@ -256,6 +256,9 @@
     if (self.displayOpeningTuto) {
         [self prepareAndDisplayTuto];
     }
+    
+    // Update app info
+    [ApiUtils updateAppInfoAndExecuteSuccess:nil failure:nil];
 }
 
 
