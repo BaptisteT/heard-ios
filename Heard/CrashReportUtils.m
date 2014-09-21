@@ -10,6 +10,7 @@
 #import <CrashReporter/CrashReporter.h>
 #import "ApiUtils.h"
 #import "SessionUtils.h"
+#import "Constants.h"
 
 @implementation CrashReportUtils
 
@@ -183,6 +184,7 @@
         [text appendFormat: @"Path:            %@\n", processPath];
         [text appendFormat: @"Identifier:      %@\n", report.applicationInfo.applicationIdentifier];
         [text appendFormat: @"Version:         %@\n", report.applicationInfo.applicationVersion];
+        [text appendFormat: @"app_version:         %@\n", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]];
         [text appendFormat: @"Code Type:       %@\n", codeType];
         [text appendFormat: @"Parent Process:  %@ [%@]\n", parentProcessName, parentProcessId];
     }
