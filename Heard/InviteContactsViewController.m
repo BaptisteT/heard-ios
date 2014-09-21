@@ -14,12 +14,11 @@
 #import <MediaPlayer/MPMusicPlayerController.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import "AudioUtils.h"
-#import <AVFoundation/AVFoundation.h>
 
 @interface InviteContactsViewController ()
 
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UIButton *selectAllButton;
+@property (weak, nonatomic) IBOutlet UIButton *playerButton;
 @property (weak, nonatomic) IBOutlet UIView *navigationContainer;
 @property (weak, nonatomic) IBOutlet UIView *inviteButtonContainer;
 @property (weak, nonatomic) IBOutlet UILabel *inviteButtonLabel;
@@ -46,7 +45,8 @@
     }
     
     self.backButton.titleLabel.text = NSLocalizedStringFromTable(@"back_button_title",kStringFile,@"comment");
-    [self.selectAllButton setTitle:NSLocalizedStringFromTable(@"select_all_button_title",kStringFile,@"comment") forState:UIControlStateNormal];
+    
+    [self.playerButton setTitle:NSLocalizedStringFromTable(@"invite_play_button_title",kStringFile,@"comment") forState:UIControlStateNormal];
     
     [GeneralUtils addBottomBorder:self.navigationContainer borderSize:0.5];
     [GeneralUtils addTopBorder:self.inviteButtonContainer borderSize:0.5];
@@ -88,7 +88,16 @@
 }
 
 - (IBAction)selectAllButtonClicked:(id)sender {
-    [self play];
+    if (self.mainPlayer && [self.mainPlayer isPlaying]) {
+        [self.playerButton setTitle:NSLocalizedStringFromTable(@"invite_play_button_title",kStringFile,@"comment") forState:UIControlStateNormal];
+        [self.mainPlayer pause];
+    } else if (self.mainPlayer) {
+        [self.playerButton setTitle:NSLocalizedStringFromTable(@"invite_pause_button_title",kStringFile,@"comment") forState:UIControlStateNormal];
+        [self.mainPlayer play];
+    } else {
+        [self.playerButton setTitle:NSLocalizedStringFromTable(@"invite_pause_button_title",kStringFile,@"comment") forState:UIControlStateNormal];
+        [self play];
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -150,7 +159,7 @@
     if ([MFMessageComposeViewController canSendText]) {
         //Redirect to sms
         MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
-        viewController.body = [NSString stringWithFormat:@"%@ %@", NSLocalizedStringFromTable(@"invite_text_message",kStringFile,@"comment"),kProdAFHeardWebsite];
+        viewController.body = [NSString stringWithFormat:@"%@ %@ %@",NSLocalizedStringFromTable(@"invite_text_message_one",kStringFile,@"comment"),kProdAFHeardWebsite,NSLocalizedStringFromTable(@"invite_text_message_two",kStringFile,@"comment")];
         viewController.recipients = self.selectedContacts;
         viewController.messageComposeDelegate = self;
         [self presentViewController:viewController animated:YES completion:nil];
@@ -185,6 +194,7 @@
     [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
     
     self.mainPlayer = [[AVAudioPlayer alloc] initWithData:self.message.audioData error:nil];
+    self.mainPlayer.delegate = self;
     [self.mainPlayer play];
 }
 
@@ -214,6 +224,12 @@
     }
     if (!success)
         NSLog(@"AVAudioSession error overrideOutputAudioPort:%@",error);
+}
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player
+                       successfully:(BOOL)flag
+{
+    [self.playerButton setTitle:NSLocalizedStringFromTable(@"invite_play_button_title",kStringFile,@"comment") forState:UIControlStateNormal];
 }
 
 

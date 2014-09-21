@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		0B22CD021978439D00E1C7AF /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B22CD011978439D00E1C7AF /* AddContactViewController.m */; };
 		0B22CD031978439D00E1C7AF /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B22CD011978439D00E1C7AF /* AddContactViewController.m */; };
-		0B3651D61958AC5000534386 /* contact-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651D41958AC5000534386 /* contact-placeholder.png */; };
-		0B3651D71958AC5000534386 /* contact-placeholder@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */; };
 		0B3651DF1959109700534386 /* heard-logo-80.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DC1959109700534386 /* heard-logo-80.png */; };
 		0B3651E01959109700534386 /* heard-logo-58.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DD1959109700534386 /* heard-logo-58.png */; };
 		0B3651E11959109700534386 /* heard-logo-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DE1959109700534386 /* heard-logo-120.png */; };
@@ -98,7 +96,6 @@
 		0B72EEE5196C672F00AC5A01 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0BD758D71950F91B00CF0D85 /* Images.xcassets */; };
 		0B72EEE7196C672F00AC5A01 /* unknown-user@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55470195A340500CE4669 /* unknown-user@2x~iphone.png */; };
 		0B72EEE8196C672F00AC5A01 /* record@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55476195A4ADC00CE4669 /* record@2x~iphone.png */; };
-		0B72EEEA196C672F00AC5A01 /* contact-placeholder@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */; };
 		0B72EEEB196C672F00AC5A01 /* NBPhoneNumberMetadata.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64B919521A7C00223093 /* NBPhoneNumberMetadata.plist */; };
 		0B72EEEC196C672F00AC5A01 /* MPCloseBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8D3195B449A00C94AC0 /* MPCloseBtn@2x.png */; };
 		0B72EEED196C672F00AC5A01 /* heard-logo-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DE1959109700534386 /* heard-logo-120.png */; };
@@ -117,7 +114,6 @@
 		0B72EEFA196C672F00AC5A01 /* MPNotification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8D6195B449A00C94AC0 /* MPNotification.storyboard */; };
 		0B72EEFB196C672F00AC5A01 /* NBPhoneNumberMetadataForTesting.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64BA19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist */; };
 		0B72EEFC196C672F00AC5A01 /* welcome-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A481954E4FF00476BFE /* welcome-logo.png */; };
-		0B72EEFD196C672F00AC5A01 /* contact-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651D41958AC5000534386 /* contact-placeholder.png */; };
 		0B87247A19799684007219AF /* AddressbookUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B87247919799684007219AF /* AddressbookUtils.m */; };
 		0B87247B19799684007219AF /* AddressbookUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B87247919799684007219AF /* AddressbookUtils.m */; };
 		0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */; };
@@ -282,8 +278,6 @@
 /* Begin PBXFileReference section */
 		0B22CD001978439D00E1C7AF /* AddContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddContactViewController.h; sourceTree = "<group>"; };
 		0B22CD011978439D00E1C7AF /* AddContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContactViewController.m; sourceTree = "<group>"; };
-		0B3651D41958AC5000534386 /* contact-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-placeholder.png"; sourceTree = "<group>"; };
-		0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-placeholder@2x~iphone.png"; sourceTree = "<group>"; };
 		0B3651DC1959109700534386 /* heard-logo-80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-80.png"; sourceTree = "<group>"; };
 		0B3651DD1959109700534386 /* heard-logo-58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-58.png"; sourceTree = "<group>"; };
 		0B3651DE1959109700534386 /* heard-logo-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-120.png"; sourceTree = "<group>"; };
@@ -633,8 +627,6 @@
 				0B3651DE1959109700534386 /* heard-logo-120.png */,
 				0BE55470195A340500CE4669 /* unknown-user@2x~iphone.png */,
 				0BE55471195A340500CE4669 /* unknown-user.png */,
-				0B3651D41958AC5000534386 /* contact-placeholder.png */,
-				0B3651D51958AC5000534386 /* contact-placeholder@2x~iphone.png */,
 				0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */,
 				0B893A481954E4FF00476BFE /* welcome-logo.png */,
 				0BADABC91993000D007B4538 /* contact-blue-eye.png */,
@@ -1033,7 +1025,6 @@
 				0B72EEE7196C672F00AC5A01 /* unknown-user@2x~iphone.png in Resources */,
 				0BA145821997A4A60031716F /* typing-sound.aif in Resources */,
 				0B72EEE8196C672F00AC5A01 /* record@2x~iphone.png in Resources */,
-				0B72EEEA196C672F00AC5A01 /* contact-placeholder@2x~iphone.png in Resources */,
 				0B72EEEB196C672F00AC5A01 /* NBPhoneNumberMetadata.plist in Resources */,
 				0B72EEEC196C672F00AC5A01 /* MPCloseBtn@2x.png in Resources */,
 				3C95862919927E9400FF54B0 /* play@2x~iphone.png in Resources */,
@@ -1076,7 +1067,6 @@
 				0B56F657197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
 				0B90E67319C7822E004A8F16 /* contact-perm.png in Resources */,
 				0B969129198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
-				0B72EEFD196C672F00AC5A01 /* contact-placeholder.png in Resources */,
 				0BADABC619930005007B4538 /* contact-sent.png in Resources */,
 				0BADABCC1993000D007B4538 /* contact-blue-eye.png in Resources */,
 				0BA145851997A5620031716F /* agogo.aif in Resources */,
@@ -1093,7 +1083,6 @@
 				0BE55472195A340500CE4669 /* unknown-user@2x~iphone.png in Resources */,
 				0BA145811997A4A60031716F /* typing-sound.aif in Resources */,
 				0BE5547A195A4ADC00CE4669 /* record@2x~iphone.png in Resources */,
-				0B3651D71958AC5000534386 /* contact-placeholder@2x~iphone.png in Resources */,
 				0BDB64CC19521A7C00223093 /* NBPhoneNumberMetadata.plist in Resources */,
 				0BB0E8EF195B449A00C94AC0 /* MPCloseBtn@2x.png in Resources */,
 				3C95862819927E9400FF54B0 /* play@2x~iphone.png in Resources */,
@@ -1136,7 +1125,6 @@
 				0B56F656197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
 				0B90E67219C7822E004A8F16 /* contact-perm.png in Resources */,
 				0B969128198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
-				0B3651D61958AC5000534386 /* contact-placeholder.png in Resources */,
 				0BADABC519930005007B4538 /* contact-sent.png in Resources */,
 				0BADABCB1993000D007B4538 /* contact-blue-eye.png in Resources */,
 				0BA145841997A5620031716F /* agogo.aif in Resources */,

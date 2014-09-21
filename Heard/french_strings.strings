@@ -33,7 +33,8 @@
 "delete_button_title" = "Supprimer";
 "resend_button_title" = "Renvoyer";
 "back_button_title" = "❮ Back";
-"select_all_button_title" = "Play";
+"invite_play_button_title" = "Play";
+"invite_pause_button_title" = "Pause";
 "not_now_button_title" = "Pas Maintenant";
 "give_access_button_title" = "Donner Accès";
 "no_thanks_button_title" = "Non merci";
@@ -86,8 +87,9 @@
 "picture_edit_error_message" = "Nous n'avons pu mettre à jour votre photo. Réessayez svp.";
 
 // Invite & share
-"invite_label_text" = "Inviter";
-"invite_text_message" = "Hé, rejoins moi sur Waved! C'est une appli gratuite qui te permet d'envoyer des messages vocaux en un clic:"; // twitter constraint
+"invite_label_text" = "Envoyer message";
+"invite_text_message_one" = "Hey, I just left you a message on Waved. Download for free at";
+"invite_text_message_two" = "to hear it!";
 "personal_invite_text_message" = "Hé TRUCHOV, viens discuter avec moi sur Waved! C'est une appli gratuite qui te permet d'envoyer des messages vocaux en un clic. Télécharge la sur";
 "text_access_error_message" = "Votre téléphone ne semble pas configurer pour envoyer des messages.";
 "personal_invite_text_success_message" = "TRUCHOV a été invité avec succès.";
