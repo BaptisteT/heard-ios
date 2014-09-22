@@ -54,8 +54,8 @@
 #define ACTION_FAILED_MESSAGES_OPTION_2 NSLocalizedStringFromTable(@"delete_button_title",kStringFile,@"comment")
 #define ACTION_SHEET_CANCEL NSLocalizedStringFromTable(@"cancel_button_title",kStringFile,@"comment")
 
-#define RECORDER_HEIGHT 5
-#define PLAYER_UI_HEIGHT 5
+#define RECORDER_HEIGHT 70
+#define PLAYER_UI_HEIGHT 70
 #define NO_MESSAGE_VIEW_HEIGHT 60
 
 @interface DashboardViewController ()
@@ -113,6 +113,7 @@
 @property (strong, nonatomic) UIImageView *openingTutoArrow;
 //Invite new contacts
 @property (strong, nonatomic) NSMutableDictionary *indexedContacts;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @end
 
@@ -230,25 +231,25 @@
     self.recorder.meteringEnabled = YES;
     
     // Init recorder container
-    self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - RECORDER_HEIGHT, self.view.bounds.size.width, RECORDER_HEIGHT)];
-    self.recorderContainer.backgroundColor = [UIColor whiteColor];
+    self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, RECORDER_HEIGHT)];
+    self.recorderContainer.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
     [self.view addSubview:self.recorderContainer];
     self.recorderContainer.hidden = YES;
     
     // Recoder line
     self.recorderLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, RECORDER_HEIGHT)];
-    self.recorderLine.backgroundColor = [ImageUtils red];
+    self.recorderLine.backgroundColor = [ImageUtils transparentRed];
     [self.recorderContainer addSubview:self.recorderLine];
     
     // Init player container
-    self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_UI_HEIGHT, self.view.bounds.size.width, PLAYER_UI_HEIGHT)];
-    self.playerContainer.backgroundColor = [UIColor clearColor];
+    self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, PLAYER_UI_HEIGHT)];
+    self.playerContainer.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
     [self.view addSubview:self.playerContainer];
     self.playerContainer.hidden = YES;
     
     // player line
     self.playerLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, PLAYER_UI_HEIGHT)];
-    self.playerLine.backgroundColor = [ImageUtils green];
+    self.playerLine.backgroundColor = [ImageUtils transparentGreen];
     [self.playerContainer addSubview:self.playerLine];
     
     // Go to access view controller if acces has not yet been granted
@@ -837,6 +838,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)disableAllContactViews
 {
+    //Hide menu and title
+    self.menuButton.hidden = YES;
+    self.titleLabel.hidden = YES;
+    self.contactScrollView.clipsToBounds = NO;
+    
     for (ContactView *view in self.contactViews) {
         view.userInteractionEnabled = NO;
     }
@@ -844,6 +850,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)enableAllContactViews
 {
+    //Show menu and title
+    self.menuButton.hidden = NO;
+    self.titleLabel.hidden = NO;
+    self.contactScrollView.clipsToBounds = YES;
+    
     for (ContactView *view in self.contactViews) {
         view.userInteractionEnabled = YES;
     }
@@ -953,7 +964,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     float rowHeight = kContactMargin + kContactSize + kContactNameHeight;
     view.frame = CGRectMake(kContactMargin + (horizontalPosition - 1) * (kContactSize + kContactMargin), kContactMargin + (row - 1)* rowHeight, kContactSize, kContactSize);
     
-    // Update frame of Name Label too
+    // Update frame of Name Label tool
     view.nameLabel.frame = CGRectMake(view.frame.origin.x - kContactMargin/4, view.frame.origin.y + kContactSize, view.frame.size.width + kContactMargin/2, kContactNameHeight);
 }
 
@@ -1097,6 +1108,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.disableProximityObserver = NO;
     [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
     
+    //Hide menu and title
+    self.menuButton.hidden = YES;
+    self.titleLabel.hidden = YES;
+    self.contactScrollView.clipsToBounds = NO;
+    
     self.playerContainer.hidden = NO;
     self.playerContainer.alpha = 1;
     [self setPlayerLineWidth:0];
@@ -1136,6 +1152,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // End contact player UI
     [self endPlayerUIForAllContactViews];
+    
+    //Show menu and title
+    self.menuButton.hidden = NO;
+    self.titleLabel.hidden = NO;
+    self.contactScrollView.clipsToBounds = YES;
     
     // End central player UI
     [self.mainPlayer stop];
