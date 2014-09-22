@@ -493,6 +493,14 @@
     
     if (completed && [self hasUnreadMessages]) {
         [self playNextMessage];
+    } else {
+        [self.delegate endTutoMode];
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        if (![prefs objectForKey:kUserReplayedPref]) {
+            [self.delegate tutoMessage:NSLocalizedStringFromTable(@"shake_to_replay_tuto",kStringFile, @"comment")  withDuration:3 priority:NO];
+        }
     }
 }
 

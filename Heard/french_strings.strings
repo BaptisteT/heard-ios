@@ -139,6 +139,6 @@
 "menu_tuto_desc_label" = "";
 
 //Alerts
-"shake_to_cancel_tuto" = "Shake your phone to cancel.";
-"shake_to_replay_tuto" = "Shake your phone to replay.";
-"phone_to_ear_tuto" = "Put phone to ear for private mode.";
+"shake_to_cancel_tuto" = "Shake your phone -> Cancel";
+"shake_to_replay_tuto" = "Shake your phone -> Replay";
+"phone_to_ear_tuto" = "Phone to ear -> Private mode";

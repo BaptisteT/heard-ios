@@ -59,10 +59,6 @@
 #define INVITE_CONTACT_BUTTON_HEIGHT 50
 #define NO_MESSAGE_VIEW_HEIGHT 60
 
-#define USER_CANCELED_PREF @"User Canceled Waved"
-#define USER_REPLAYED_PREF @"User Replayed Waved"
-#define USER_PHONE_TO_EAR_PREF @"User Put Phone To Ear"
-
 @interface DashboardViewController ()
 
 // Contacts
@@ -968,7 +964,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self hideOpeningTuto];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    if (![prefs objectForKey:USER_CANCELED_PREF]) {
+    if (![prefs objectForKey:kUserCanceledPref]) {
         [self tutoMessage:NSLocalizedStringFromTable(@"shake_to_cancel_tuto",kStringFile, @"comment")  withDuration:0 priority:NO];
     }
     
@@ -1022,7 +1018,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    if (![prefs objectForKey:USER_PHONE_TO_EAR_PREF] && !self.isUsingHeadSet) {
+    if (![prefs objectForKey:kUserPhoneToEarPref] && !self.isUsingHeadSet) {
         [self tutoMessage:NSLocalizedStringFromTable(@"phone_to_ear_tuto",kStringFile, @"comment") withDuration:0 priority:NO];
     }
     
@@ -1121,8 +1117,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)endPlayerAtCompletion:(BOOL)completed
 {
-    [self endTutoMode];
-    
     if (self.displayOpeningTuto) {
         [self.contactScrollView bringSubviewToFront:self.openingTutoView];
         [self.contactScrollView bringSubviewToFront:self.menuButton];
@@ -1153,12 +1147,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     if (self.lastSelectedContactView) {
         [self.lastSelectedContactView messageFinishPlaying:completed];
-    }
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    if (![prefs objectForKey:USER_REPLAYED_PREF]) {
-        [self tutoMessage:NSLocalizedStringFromTable(@"shake_to_replay_tuto",kStringFile, @"comment")  withDuration:3 priority:NO];
     }
 }
 
@@ -1449,7 +1437,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error];
         if ([UIDevice currentDevice].proximityState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            [prefs setObject:@"dummy" forKey:USER_PHONE_TO_EAR_PREF];
+            [prefs setObject:@"dummy" forKey:kUserPhoneToEarPref];
         }
     } else {
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
@@ -1544,7 +1532,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [self tutoMessage:NSLocalizedStringFromTable(@"cancel_success_message",kStringFile, @"comment") withDuration:3 priority:NO];
             
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            [prefs setObject:@"dummy" forKey:USER_CANCELED_PREF];
+            [prefs setObject:@"dummy" forKey:kUserCanceledPref];
         } else if (self.lastMessagesPlayed && self.lastMessagesPlayed.count > 0){
             if ([self.mainPlayer isPlaying]) {
                 [self.mainPlayer stop];
@@ -1558,7 +1546,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                     [self resetLastMessagesPlayed];
                     [contactView playNextMessage];
                     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-                    [prefs setObject:@"dummy" forKey:USER_REPLAYED_PREF];
+                    [prefs setObject:@"dummy" forKey:kUserReplayedPref];
                     break;
                 }
             }

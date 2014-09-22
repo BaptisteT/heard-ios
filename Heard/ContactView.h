@@ -86,4 +86,6 @@
 
 - (void)inviteContactsWithMessage:(Message *)message;
 
+- (void)endTutoMode;
+
 @end
