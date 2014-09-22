@@ -7,11 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B02D36519D09CEF0010C58D /* heard-logo-58.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B02D36219D09CEF0010C58D /* heard-logo-58.png */; };
+		0B02D36619D09CEF0010C58D /* heard-logo-58.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B02D36219D09CEF0010C58D /* heard-logo-58.png */; };
+		0B02D36719D09CEF0010C58D /* heard-logo-80.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B02D36319D09CEF0010C58D /* heard-logo-80.png */; };
+		0B02D36819D09CEF0010C58D /* heard-logo-80.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B02D36319D09CEF0010C58D /* heard-logo-80.png */; };
+		0B02D36919D09CEF0010C58D /* heard-logo-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B02D36419D09CEF0010C58D /* heard-logo-120.png */; };
+		0B02D36A19D09CEF0010C58D /* heard-logo-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B02D36419D09CEF0010C58D /* heard-logo-120.png */; };
 		0B22CD021978439D00E1C7AF /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B22CD011978439D00E1C7AF /* AddContactViewController.m */; };
 		0B22CD031978439D00E1C7AF /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B22CD011978439D00E1C7AF /* AddContactViewController.m */; };
-		0B3651DF1959109700534386 /* heard-logo-80.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DC1959109700534386 /* heard-logo-80.png */; };
-		0B3651E01959109700534386 /* heard-logo-58.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DD1959109700534386 /* heard-logo-58.png */; };
-		0B3651E11959109700534386 /* heard-logo-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DE1959109700534386 /* heard-logo-120.png */; };
 		0B37D42E19CCFCE900A2D074 /* InviteContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B37D42D19CCFCE900A2D074 /* InviteContactView.m */; };
 		0B37D42F19CCFCE900A2D074 /* InviteContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B37D42D19CCFCE900A2D074 /* InviteContactView.m */; };
 		0B37D43519CD10D400A2D074 /* invite-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B37D43319CD10D400A2D074 /* invite-button.png */; };
@@ -98,15 +101,12 @@
 		0B72EEE8196C672F00AC5A01 /* record@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55476195A4ADC00CE4669 /* record@2x~iphone.png */; };
 		0B72EEEB196C672F00AC5A01 /* NBPhoneNumberMetadata.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64B919521A7C00223093 /* NBPhoneNumberMetadata.plist */; };
 		0B72EEEC196C672F00AC5A01 /* MPCloseBtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8D3195B449A00C94AC0 /* MPCloseBtn@2x.png */; };
-		0B72EEED196C672F00AC5A01 /* heard-logo-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DE1959109700534386 /* heard-logo-120.png */; };
 		0B72EEEE196C672F00AC5A01 /* MPSurvey.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8DB195B449A00C94AC0 /* MPSurvey.storyboard */; };
-		0B72EEEF196C672F00AC5A01 /* heard-logo-80.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DC1959109700534386 /* heard-logo-80.png */; };
 		0B72EEF0196C672F00AC5A01 /* record.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55474195A4ADC00CE4669 /* record.png */; };
 		0B72EEF1196C672F00AC5A01 /* PhoneNumberMetaData.json in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64BB19521A7C00223093 /* PhoneNumberMetaData.json */; };
 		0B72EEF2196C672F00AC5A01 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0BD758C81950F91B00CF0D85 /* InfoPlist.strings */; };
 		0B72EEF3196C672F00AC5A01 /* PhoneNumberMetaDataForTesting.json in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64BC19521A7C00223093 /* PhoneNumberMetaDataForTesting.json */; };
 		0B72EEF4196C672F00AC5A01 /* unknown-user.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BE55471195A340500CE4669 /* unknown-user.png */; };
-		0B72EEF5196C672F00AC5A01 /* heard-logo-58.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B3651DD1959109700534386 /* heard-logo-58.png */; };
 		0B72EEF6196C672F00AC5A01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0BD758D11950F91B00CF0D85 /* Main.storyboard */; };
 		0B72EEF7196C672F00AC5A01 /* MPCloseBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8D2195B449A00C94AC0 /* MPCloseBtn.png */; };
 		0B72EEF8196C672F00AC5A01 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8CF195B449A00C94AC0 /* Media.xcassets */; };
@@ -276,11 +276,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0B02D36219D09CEF0010C58D /* heard-logo-58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-58.png"; sourceTree = "<group>"; };
+		0B02D36319D09CEF0010C58D /* heard-logo-80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-80.png"; sourceTree = "<group>"; };
+		0B02D36419D09CEF0010C58D /* heard-logo-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-120.png"; sourceTree = "<group>"; };
 		0B22CD001978439D00E1C7AF /* AddContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddContactViewController.h; sourceTree = "<group>"; };
 		0B22CD011978439D00E1C7AF /* AddContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContactViewController.m; sourceTree = "<group>"; };
-		0B3651DC1959109700534386 /* heard-logo-80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-80.png"; sourceTree = "<group>"; };
-		0B3651DD1959109700534386 /* heard-logo-58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-58.png"; sourceTree = "<group>"; };
-		0B3651DE1959109700534386 /* heard-logo-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-120.png"; sourceTree = "<group>"; };
 		0B37D42C19CCFCE900A2D074 /* InviteContactView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteContactView.h; sourceTree = "<group>"; };
 		0B37D42D19CCFCE900A2D074 /* InviteContactView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteContactView.m; sourceTree = "<group>"; };
 		0B37D43319CD10D400A2D074 /* invite-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invite-button.png"; sourceTree = "<group>"; };
@@ -606,6 +606,9 @@
 		0BA1455E199786A30031716F /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0B02D36219D09CEF0010C58D /* heard-logo-58.png */,
+				0B02D36319D09CEF0010C58D /* heard-logo-80.png */,
+				0B02D36419D09CEF0010C58D /* heard-logo-120.png */,
 				0B37D43319CD10D400A2D074 /* invite-button.png */,
 				0B37D43419CD10D400A2D074 /* invite-button@2x~iphone.png */,
 				0B9EC32D19C8F5EB00F520B8 /* tuto-arrow.png */,
@@ -622,9 +625,6 @@
 				3C95862519927E9400FF54B0 /* play@2x~iphone.png */,
 				0BE55474195A4ADC00CE4669 /* record.png */,
 				0BE55476195A4ADC00CE4669 /* record@2x~iphone.png */,
-				0B3651DC1959109700534386 /* heard-logo-80.png */,
-				0B3651DD1959109700534386 /* heard-logo-58.png */,
-				0B3651DE1959109700534386 /* heard-logo-120.png */,
 				0BE55470195A340500CE4669 /* unknown-user@2x~iphone.png */,
 				0BE55471195A340500CE4669 /* unknown-user.png */,
 				0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */,
@@ -960,9 +960,9 @@
 			productReference = 0B72EF01196C672F00AC5A01 /* WavedStaging.app */;
 			productType = "com.apple.product-type.application";
 		};
-		0BD758BB1950F91B00CF0D85 /* Waved */ = {
+		0BD758BB1950F91B00CF0D85 /* Telepath */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0BD758EE1950F91B00CF0D85 /* Build configuration list for PBXNativeTarget "Waved" */;
+			buildConfigurationList = 0BD758EE1950F91B00CF0D85 /* Build configuration list for PBXNativeTarget "Telepath" */;
 			buildPhases = (
 				0BD758B81950F91B00CF0D85 /* Sources */,
 				0BD758B91950F91B00CF0D85 /* Frameworks */,
@@ -972,7 +972,7 @@
 			);
 			dependencies = (
 			);
-			name = Waved;
+			name = Telepath;
 			productName = Heard;
 			productReference = 0BD758BC1950F91B00CF0D85 /* Waved.app */;
 			productType = "com.apple.product-type.application";
@@ -1008,7 +1008,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0BD758BB1950F91B00CF0D85 /* Waved */,
+				0BD758BB1950F91B00CF0D85 /* Telepath */,
 				0B72EEA0196C672F00AC5A01 /* Waved Staging */,
 			);
 		};
@@ -1028,12 +1028,11 @@
 				0B72EEEB196C672F00AC5A01 /* NBPhoneNumberMetadata.plist in Resources */,
 				0B72EEEC196C672F00AC5A01 /* MPCloseBtn@2x.png in Resources */,
 				3C95862919927E9400FF54B0 /* play@2x~iphone.png in Resources */,
-				0B72EEED196C672F00AC5A01 /* heard-logo-120.png in Resources */,
 				0BADABC819930005007B4538 /* contact-suspension.png in Resources */,
 				0B9051A81975DE8C001E2ED5 /* PhoneFormats.dat in Resources */,
 				0B37D43819CD10D400A2D074 /* invite-button@2x~iphone.png in Resources */,
+				0B02D36619D09CEF0010C58D /* heard-logo-58.png in Resources */,
 				0B72EEEE196C672F00AC5A01 /* MPSurvey.storyboard in Resources */,
-				0B72EEEF196C672F00AC5A01 /* heard-logo-80.png in Resources */,
 				0B72EEF0196C672F00AC5A01 /* record.png in Resources */,
 				0B72EEF1196C672F00AC5A01 /* PhoneNumberMetaData.json in Resources */,
 				0B72EEF2196C672F00AC5A01 /* InfoPlist.strings in Resources */,
@@ -1043,8 +1042,8 @@
 				0B90E67519C7822E004A8F16 /* contact-perm@2x~iphone.png in Resources */,
 				0B9051BB19771B96001E2ED5 /* checkbox-selected.png in Resources */,
 				0B9051BF19771B96001E2ED5 /* checkbox.png in Resources */,
+				0B02D36A19D09CEF0010C58D /* heard-logo-120.png in Resources */,
 				0BA1457E1997A4A60031716F /* failed-sound.aif in Resources */,
-				0B72EEF5196C672F00AC5A01 /* heard-logo-58.png in Resources */,
 				0B72EEF6196C672F00AC5A01 /* Main.storyboard in Resources */,
 				0B72EEF7196C672F00AC5A01 /* MPCloseBtn.png in Resources */,
 				3C95862719927E9400FF54B0 /* play.png in Resources */,
@@ -1070,6 +1069,7 @@
 				0BADABC619930005007B4538 /* contact-sent.png in Resources */,
 				0BADABCC1993000D007B4538 /* contact-blue-eye.png in Resources */,
 				0BA145851997A5620031716F /* agogo.aif in Resources */,
+				0B02D36819D09CEF0010C58D /* heard-logo-80.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1086,12 +1086,11 @@
 				0BDB64CC19521A7C00223093 /* NBPhoneNumberMetadata.plist in Resources */,
 				0BB0E8EF195B449A00C94AC0 /* MPCloseBtn@2x.png in Resources */,
 				3C95862819927E9400FF54B0 /* play@2x~iphone.png in Resources */,
-				0B3651E11959109700534386 /* heard-logo-120.png in Resources */,
 				0BADABC719930005007B4538 /* contact-suspension.png in Resources */,
 				0B9051A71975DE8C001E2ED5 /* PhoneFormats.dat in Resources */,
 				0B37D43719CD10D400A2D074 /* invite-button@2x~iphone.png in Resources */,
+				0B02D36519D09CEF0010C58D /* heard-logo-58.png in Resources */,
 				0BB0E8F4195B449A00C94AC0 /* MPSurvey.storyboard in Resources */,
-				0B3651DF1959109700534386 /* heard-logo-80.png in Resources */,
 				0BE55478195A4ADC00CE4669 /* record.png in Resources */,
 				0BDB64CE19521A7C00223093 /* PhoneNumberMetaData.json in Resources */,
 				0BD758CA1950F91B00CF0D85 /* InfoPlist.strings in Resources */,
@@ -1101,8 +1100,8 @@
 				0B90E67419C7822E004A8F16 /* contact-perm@2x~iphone.png in Resources */,
 				0B9051BA19771B96001E2ED5 /* checkbox-selected.png in Resources */,
 				0B9051BE19771B96001E2ED5 /* checkbox.png in Resources */,
+				0B02D36919D09CEF0010C58D /* heard-logo-120.png in Resources */,
 				0BA1457D1997A4A60031716F /* failed-sound.aif in Resources */,
-				0B3651E01959109700534386 /* heard-logo-58.png in Resources */,
 				0BD758D31950F91B00CF0D85 /* Main.storyboard in Resources */,
 				0BB0E8EE195B449A00C94AC0 /* MPCloseBtn.png in Resources */,
 				3C95862619927E9400FF54B0 /* play.png in Resources */,
@@ -1128,6 +1127,7 @@
 				0BADABC519930005007B4538 /* contact-sent.png in Resources */,
 				0BADABCB1993000D007B4538 /* contact-blue-eye.png in Resources */,
 				0BA145841997A5620031716F /* agogo.aif in Resources */,
+				0B02D36719D09CEF0010C58D /* heard-logo-80.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1515,7 +1515,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0BD758EE1950F91B00CF0D85 /* Build configuration list for PBXNativeTarget "Waved" */ = {
+		0BD758EE1950F91B00CF0D85 /* Build configuration list for PBXNativeTarget "Telepath" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0BD758EF1950F91B00CF0D85 /* Debug */,
