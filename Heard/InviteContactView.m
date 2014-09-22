@@ -13,7 +13,7 @@
 
 - (id)init
 {
-    self = [super initWithFrame:CGRectMake(kContactMargin, kContactMargin, kContactSize, kContactSize)];
+    self = [super initWithFrame:CGRectMake(kContactMargin, 0, kContactSize, kContactSize)];
     self.clipsToBounds = NO;
     [self setMultipleTouchEnabled:NO];
     self.userInteractionEnabled = YES;
@@ -44,7 +44,7 @@
 }
 
 - (void) initImageView {
-    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
+    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, kContactMargin, self.bounds.size.width, self.bounds.size.height)];
     [self setContactPicture];
     [self addSubview:self.imageView];
     self.imageView.userInteractionEnabled = YES;

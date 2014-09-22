@@ -56,7 +56,6 @@
 
 #define RECORDER_HEIGHT 5
 #define PLAYER_UI_HEIGHT 5
-#define INVITE_CONTACT_BUTTON_HEIGHT 50
 #define NO_MESSAGE_VIEW_HEIGHT 60
 
 @interface DashboardViewController ()
