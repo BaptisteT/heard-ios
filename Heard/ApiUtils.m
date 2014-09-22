@@ -287,19 +287,13 @@
     }];
 }
 
-+ (void)getMyContacts:(NSArray *)phoneNumbers atSignUp:(BOOL)isSignUp success:(void(^)(NSArray *contacts))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock
++ (void)getMyContacts:(NSMutableDictionary *)contactsInfo atSignUp:(BOOL)isSignUp success:(void(^)(NSArray *contacts))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock
 {
-    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/get_my_contact.json"];
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/get_contacts_and_futures.json"];
     
     NSMutableDictionary *parameters = [NSMutableDictionary new];
-    [parameters setObject:phoneNumbers forKey:@"contact_numbers"];
+    [parameters setObject:contactsInfo forKey:@"contact_infos"];
     [parameters setObject:[NSNumber numberWithBool:isSignUp] forKey:@"sign_up"];
-    
-    // Add api & app version
-    NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    [parameters setObject:appVersion forKey:@"app_version"];
-    [parameters setObject:kApiVersion forKey:@"api_version"];
-    [parameters setObject:[[UIDevice currentDevice] systemVersion] forKey:@"os_version"];
     
     [self enrichParametersWithToken:parameters];
     
@@ -308,11 +302,11 @@
         NSDictionary *result = [JSON valueForKeyPath:@"result"];
         NSArray *rawContacts = [result valueForKeyPath:@"contacts"];
         NSArray *contacts = [Contact rawContactsToInstances:rawContacts];
-        
         if (successBlock) {
             successBlock(contacts);
         }
     }failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"ERROR: %@, %@", task.description, error);
         if (failureBlock) {
             failureBlock(task);
         }

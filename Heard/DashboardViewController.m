@@ -30,6 +30,7 @@
 #import "CustomActionSheet.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "CameraUtils.h"
+#import "PotentialContact.h"
 #import "InviteContactView.h"
 #import "InviteContactsViewController.h"
 
@@ -378,21 +379,19 @@
 {
     self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
     
-    NSMutableArray *phoneNumbers = [[NSMutableArray alloc] init];
+    NSMutableDictionary *contactsInfo = [[NSMutableDictionary alloc] init];
     NSMutableDictionary * adressBookWithFormattedKey = [NSMutableDictionary new];
     for (NSString* phoneNumber in self.addressBookFormattedContacts) {
-        Contact *object = [self.addressBookFormattedContacts objectForKey:phoneNumber];
+        PotentialContact *object = [self.addressBookFormattedContacts objectForKey:phoneNumber];
         [adressBookWithFormattedKey setObject:object forKey:object.phoneNumber];
+        
+        [contactsInfo setObject:[NSArray arrayWithObjects:object.facebookId,[NSNumber numberWithBool:object.hasPhoto],[NSNumber numberWithBool:object.isFavorite], nil] forKey:object.phoneNumber];
     }
     // The keys are now formatted numbers (to use local names for retrieved contacts)
     self.addressBookFormattedContacts = adressBookWithFormattedKey;
     
-    for (NSString* phoneNumber in self.addressBookFormattedContacts) {
-        [phoneNumbers addObject:phoneNumber];
-    }
-    
     // Get contacts and compare with contact in memory
-    [ApiUtils getMyContacts:phoneNumbers atSignUp:self.isSignUp success:^(NSArray *contacts) {
+    [ApiUtils getMyContacts:contactsInfo atSignUp:self.isSignUp success:^(NSArray *contacts) {
         [self hideLoadingIndicator];
         
         for (Contact *contact in contacts) {
@@ -401,13 +400,13 @@
                 [self.contacts addObject:contact];
                 
                 //Use server name if blank in address book
-                NSString *firstName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
+                NSString *firstName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
                 
                 if (firstName && [firstName length] > 0) {
                     contact.firstName = firstName;
                 }
                 
-                contact.lastName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
+                contact.lastName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
                 
                 contact.lastMessageDate = 0;
                 [self displayAdditionnalContact:contact];
@@ -417,12 +416,12 @@
                 existingContact.isPending = NO;
                 
                 //Use server name if blank in address book
-                NSString *firstName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
+                NSString *firstName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
                 
                 if (firstName && [firstName length] > 0) {
                     contact.firstName = firstName;
                 }
-                contact.lastName = ((Contact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
+                contact.lastName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
                 existingContact.phoneNumber = contact.phoneNumber;
             }
         }
@@ -1532,7 +1531,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     return YES;
 }
 
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+- (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event {
     if (motion == UIEventSubtypeMotionShake)
     {
         // cancel recording
