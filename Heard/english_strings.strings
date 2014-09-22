@@ -33,7 +33,8 @@
 "delete_button_title" = "Delete";
 "resend_button_title" = "Resend";
 "back_button_title" = "❮ Back";
-"select_all_button_title" = "Select All";
+"invite_play_button_title" = "Play";
+"invite_pause_button_title" = "Pause";
 "not_now_button_title" = "Not Now";
 "give_access_button_title" = "Give Access";
 "no_thanks_button_title" = "No Thanks";
@@ -86,12 +87,17 @@
 "picture_edit_error_message" = "We couldn't update your profile picture, please try again.";
 
 // Invite & share
-"invite_label_text" = "Invite to Waved";
-"invite_text_message" = "Hey, let's start chatting on Waved! It's a free app which lets you send voice messages in one tap. Download it at";  // twitter constraint
+"invite_label_text" = "Send recorded message";
+"invite_text_message_one" = "Hey, I just left you a message on Waved. Go to";
+"invite_text_message_two" = "to hear it!";
+"invite_with_message_text" = "Hey, let's start chatting on Waved! It's a free app which lets you send voice messages in one tap. Download it at";  // twitter constraint
 "personal_invite_text_message" = "Hey TRUCHOV, let's start chatting on Waved! It's a free app which lets you send short voice messages in one tap. Download it at:";
 "text_access_error_message" = "Your device is not properly configured to send messages";
 "personal_invite_text_success_message" = "TRUCHOV successfully invited.";
 "share_mail_object_message" = "Let your friends hear your voice!";
+"send_invite_message_error_message" = "We failed to send your message, please try again.";
+"invite_messages_success_title" = "Message successfully sent.";
+"invite_messages_success_message" = "You sent a message to friends that are not yet on Waved, let's tell them!";
 
 // Add
 "add_contact_missing_name_message" = "Please provide a first name or a last name.";

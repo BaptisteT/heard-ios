@@ -31,6 +31,8 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "CameraUtils.h"
 #import "PotentialContact.h"
+#import "InviteContactView.h"
+#import "InviteContactsViewController.h"
 
 #define ACTION_MAIN_MENU_OPTION_1 NSLocalizedStringFromTable(@"invite_friends_button_title",kStringFile,@"comment")
 #define ACTION_MAIN_MENU_OPTION_2 NSLocalizedStringFromTable(@"add_new_contact_button_title",kStringFile,@"comment")
@@ -114,6 +116,8 @@
 @property (strong, nonatomic) IBOutlet UIButton *openingTutoSkipButton;
 @property (weak, nonatomic) IBOutlet UIView *openingTutoDescView;
 @property (strong, nonatomic) UIImageView *openingTutoArrow;
+//Invite new contacts
+@property (strong, nonatomic) NSMutableDictionary *indexedContacts;
 
 @end
 
@@ -134,6 +138,10 @@
     self.displayOpeningTuto = [GeneralUtils isFirstOpening];
     
     self.openingTutoDescView.layer.cornerRadius = 5;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self retrieveFriendsFromAddressBook];
+    });
     
     //Perms
     self.authRequestAllowButton.clipsToBounds = YES;
@@ -167,6 +175,11 @@
         meContact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
         [self.contacts addObject:meContact];
     }
+    
+    //Create invite contact view
+    ContactView *inviteContactView = [[InviteContactView alloc] init];
+    inviteContactView.delegate = self;
+    [self.contactScrollView addSubview:inviteContactView];
     
     // Create contact views
     [self displayContactViews];
@@ -292,6 +305,9 @@
     } else if ([segueName isEqualToString: @"Edit Contacts Segue"]) {
         ((EditContactsViewController *) [segue destinationViewController]).delegate = self;
         ((EditContactsViewController *) [segue destinationViewController]).contacts = self.contacts;
+    } else if ([segueName isEqualToString:@"Invite Contacts Segue"]) {
+        ((InviteContactsViewController *) [segue destinationViewController]).message = sender;
+         ((InviteContactsViewController *) [segue destinationViewController]).indexedContacts = self.indexedContacts;
     }
 }
 
@@ -861,6 +877,74 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (NSData *)getLastRecordedData
 {
     return [[NSData alloc] initWithContentsOfURL:self.recorder.url];
+}
+
+- (void)inviteContactsWithMessage:(Message *)message
+{
+    if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
+        //BB TODO show contact permission
+        return;
+    }
+    
+    [self performSegueWithIdentifier:@"Invite Contacts Segue" sender:message];
+}
+
+- (void)retrieveFriendsFromAddressBook
+{
+    ABAddressBookRef addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
+    CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(addressBook);
+    CFIndex peopleCount = CFArrayGetCount(people);
+    
+    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+    
+    //Structure: @{ "A": @[ @[@"Artois", @"Jonathan", @"(415)-509-9382", @"not selected], @["Azta", "Lorainne", @"06 92 83 48 58", @"selected"]], "B": etc.
+    self.indexedContacts = [[NSMutableDictionary alloc] init];
+    
+    for (CFIndex i = 0 ; i < peopleCount; i++) {
+        ABRecordRef person = CFArrayGetValueAtIndex(people, i);
+        ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
+        NSString *firstName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
+        NSString *lastName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
+        
+        if ((firstName && [firstName length] > 0) || (lastName && [lastName length] > 0)) {
+            for (int i=0; i<ABMultiValueGetCount(phoneNumbers);i++) {
+                NSString *number = (__bridge NSString *) ABMultiValueCopyValueAtIndex(phoneNumbers, i);
+                NSError *aError = nil;
+                NBPhoneNumber *nbPhoneNumber = [phoneUtil parseWithPhoneCarrierRegion:number error:&aError];
+                
+                if (aError == nil && ([phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeMOBILE
+                                      || [phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeFIXED_LINE_OR_MOBILE) ) {
+                    NSMutableArray *contact = [[NSMutableArray alloc] initWithObjects:lastName && [lastName length] > 0 ? lastName : firstName,
+                                               firstName && lastName && [lastName length] > 0 ? firstName : @"",
+                                               number,
+                                               @"not selected", nil];
+                    
+                    NSString *key = [[contact[0] substringToIndex:1] uppercaseString];
+                    
+                    if ([self.indexedContacts objectForKey:key]) {
+                        [[self.indexedContacts objectForKey:key] addObject:contact];
+                    } else {
+                        [self.indexedContacts setValue:[[NSMutableArray alloc] initWithObjects:contact, nil]
+                                                forKey:key];
+                    }
+                }
+            }
+        }
+        
+        CFRelease(person);
+        CFRelease(phoneNumbers);
+    }
+    
+    CFRelease(people);
+    
+    //Order contacts alphabetically
+    for (NSString *key in [self.indexedContacts allKeys]) {
+        [self.indexedContacts setObject:[[self.indexedContacts objectForKey:key]
+                                         sortedArrayUsingComparator:^NSComparisonResult(NSArray *contact1, NSArray *contact2) {
+                                             return [contact1[0] localizedCaseInsensitiveCompare:contact2[0]];
+                                         }]
+                                 forKey:key];
+    }
 }
 
 // ----------------------------------------------------------

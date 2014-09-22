@@ -25,7 +25,7 @@
 
 @implementation CustomActionSheet
 
-- (id)init
+- (id)init  
 {
     // Add observer
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hide) name:@"UIApplicationWillResignActiveNotification" object:nil];

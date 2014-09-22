@@ -185,6 +185,36 @@
                           }];
 }
 
++ (void)sendFutureMessage:(NSData *)audioData
+            toFutureUsers:(NSArray *)userPhoneNumbers
+                  success:(void(^)())successBlock
+                  failure:(void (^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages/create_future_messages.json"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setObject:userPhoneNumbers forKey:@"future_contact_phones"];
+    
+    [self enrichParametersWithToken:parameters];
+    
+    [[ApiUtils sharedClient] POST:path
+                       parameters:parameters
+        constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            [formData appendPartWithFileData:audioData name:@"record" fileName:@"data.m4a" mimeType:@"audio/m4a"];
+        }
+                          success:^(NSURLSessionDataTask *task, id JSON) {
+                              if (successBlock) {
+                                  successBlock();
+                              }
+                          }failure:^(NSURLSessionDataTask *task, NSError *error) {
+                              NSLog(@"ERROR: %@, %@", task.description, error);
+                              if (failureBlock) {
+                                  failureBlock();
+                              }
+                          }];
+
+}
+
 // Update token
 + (void)updatePushToken:(NSString *)token success:(void(^)())successBlock failure:(void(^)())failureBlock
 {

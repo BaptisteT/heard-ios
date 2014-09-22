@@ -30,6 +30,9 @@
 @property (nonatomic) BOOL isPlaying;
 @property (nonatomic) BOOL isRecording;
 @property (nonatomic) BOOL messageNotReadByContact;
+@property (nonatomic) NSInteger unreadMessagesCount;
+@property (nonatomic) NSInteger sendingMessageCount;
+@property (nonatomic) NSInteger loadingMessageCount;
 
 - (void)addUnreadMessage:(Message *)message;
 - (void)resetUnreadMessages;
@@ -42,6 +45,9 @@
 - (void)playNextMessage;
 - (void)addPlayedMessages:(NSMutableArray *)messages;
 - (void)cancelRecording;
+- (void) initImageView;
+- (void)initTapAndLongPressGestureRecognisers;
+- (void)initRecordOverlay;
 
 
 @end
@@ -77,5 +83,7 @@
 - (BOOL) displayOpeningTuto;
 
 - (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel forOrigin:(float)x;
+
+- (void)inviteContactsWithMessage:(Message *)message;
 
 @end

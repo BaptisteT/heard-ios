@@ -36,6 +36,11 @@
             success:(void(^)())successBlock
             failure:(void (^)())failureBlock;
 
++ (void)sendFutureMessage:(NSData *)audioData
+            toFutureUsers:(NSArray *)userPhoneNumbers
+                  success:(void(^)())successBlock
+                  failure:(void (^)())failureBlock;
+
 + (void)updatePushToken:(NSString *)token success:(void(^)())successBlock failure:(void(^)())failureBlock;
 + (void)updateProfilePicture:(NSString *)picture success:(void(^)())successBlock failure:(void(^)())failureBlock;
 + (void)updateFirstName:(NSString *)firstName success:(void(^)())successBlock failure:(void(^)())failureBlock;
