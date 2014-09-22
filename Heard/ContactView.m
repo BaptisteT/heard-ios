@@ -56,7 +56,6 @@
 @property (nonatomic, strong) UIImageView *readStateIcon;
 @property (nonatomic, strong) UIImageView *readAnimationIcon;
 @property (nonatomic, strong) UIImageView *unreadStateIcon;
-@property (nonatomic, strong) UIImageView *unrespondedStateIcon;
 
 @end
 
@@ -105,7 +104,6 @@
     [self initReadStateImageView];
     [self initReadAnimationImageView];
     [self initUnreadStateImageView];
-    [self initUnrespondedStateImageView];
     
     // Init labels
     self.unreadMessagesLabel = [self allocAndInitCornerLabelWithText:@"0" andColor:[ImageUtils blue]];
@@ -205,7 +203,6 @@
     }
     
     else if (discussionState == CURRENT_USER_DID_NOT_ANSWER_STATE) {
-        self.unrespondedStateIcon.hidden = NO;
     }
     
     else if (discussionState == LAST_MESSAGE_READ_BY_CONTACT_STATE) {
@@ -260,7 +257,6 @@
     [self.loadingCircleShape removeFromSuperlayer];
     
     // Discussion state icons
-    self.unrespondedStateIcon.hidden = YES;
     self.readStateIcon.hidden = YES;
     self.readAnimationIcon.hidden = YES;
     self.unreadStateIcon.hidden = YES;
@@ -798,15 +794,6 @@
     self.unreadStateIcon.hidden = YES;
     if (![GeneralUtils isCurrentUser:self.contact])
         [self addSubview:self.unreadStateIcon];
-}
-                            
-- (void)initUnrespondedStateImageView
-{
-    self.unrespondedStateIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"contact-suspension.png"]];
-    [self.unrespondedStateIcon setFrame:CGRectMake(kContactSize - 10, -10, 25, 25)];
-    self.unrespondedStateIcon.hidden = YES;
-    if (![GeneralUtils isCurrentUser:self.contact])
-        [self addSubview:self.unrespondedStateIcon];
 }
                             
 - (void)initTapAndLongPressGestureRecognisers
