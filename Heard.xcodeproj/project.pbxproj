@@ -257,6 +257,8 @@
 		3C0D0064196330E40058A0E0 /* ContactUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D0063196330E40058A0E0 /* ContactUtils.m */; };
 		3C55FD6D1966AA3500E818D9 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */; };
 		3C55FD701966B11C00E818D9 /* CrashReportUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */; };
+		3C91A80D19CD00AC00DCA8BC /* PotentialContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C91A80C19CD00AC00DCA8BC /* PotentialContact.m */; };
+		3C91A80E19CD00AC00DCA8BC /* PotentialContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C91A80C19CD00AC00DCA8BC /* PotentialContact.m */; };
 		3C95862619927E9400FF54B0 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862419927E9400FF54B0 /* play.png */; };
 		3C95862719927E9400FF54B0 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862419927E9400FF54B0 /* play.png */; };
 		3C95862819927E9400FF54B0 /* play@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3C95862519927E9400FF54B0 /* play@2x~iphone.png */; };
@@ -452,6 +454,8 @@
 		3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
 		3C55FD6E1966B11C00E818D9 /* CrashReportUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashReportUtils.h; sourceTree = "<group>"; };
 		3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashReportUtils.m; sourceTree = "<group>"; };
+		3C91A80B19CD00AC00DCA8BC /* PotentialContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PotentialContact.h; sourceTree = "<group>"; };
+		3C91A80C19CD00AC00DCA8BC /* PotentialContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PotentialContact.m; sourceTree = "<group>"; };
 		3C95862419927E9400FF54B0 /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		3C95862519927E9400FF54B0 /* play@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x~iphone.png"; sourceTree = "<group>"; };
 		3C9BBDFD195345A6001C6C4D /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
@@ -917,6 +921,8 @@
 				3CB8B7EB195346620090D657 /* Message.m */,
 				0B893A4B19550FF000476BFE /* Contact.h */,
 				0B893A4C19550FF000476BFE /* Contact.m */,
+				3C91A80B19CD00AC00DCA8BC /* PotentialContact.h */,
+				3C91A80C19CD00AC00DCA8BC /* PotentialContact.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1178,6 +1184,7 @@
 				0B72EEC6196C672F00AC5A01 /* SessionUtils.m in Sources */,
 				0B72EEC7196C672F00AC5A01 /* MPSurveyQuestionViewController.m in Sources */,
 				0B56F65319758D9600DB6FF1 /* CountryCodeTVC.m in Sources */,
+				3C91A80E19CD00AC00DCA8BC /* PotentialContact.m in Sources */,
 				0B72EEC8196C672F00AC5A01 /* AFNetworkReachabilityManager.m in Sources */,
 				0B56F65B1975AE4D00DB6FF1 /* CountryCodeViewController.m in Sources */,
 				0B72EEC9196C672F00AC5A01 /* MPNotificationViewController.m in Sources */,
@@ -1253,6 +1260,7 @@
 				0BDB655E1953BE9100223093 /* SessionUtils.m in Sources */,
 				0BB0E8F7195B449A00C94AC0 /* MPSurveyQuestionViewController.m in Sources */,
 				0B56F65219758D9600DB6FF1 /* CountryCodeTVC.m in Sources */,
+				3C91A80D19CD00AC00DCA8BC /* PotentialContact.m in Sources */,
 				0BDB65401953B5EA00223093 /* AFNetworkReachabilityManager.m in Sources */,
 				0B56F65A1975AE4D00DB6FF1 /* CountryCodeViewController.m in Sources */,
 				0BB0E8F2195B449A00C94AC0 /* MPNotificationViewController.m in Sources */,
@@ -1305,7 +1313,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (63863BWF5M)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Bastien Beurier (63863BWF5M)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1334,7 +1342,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (63863BWF5M)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Bastien Beurier (63863BWF5M)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1453,7 +1461,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "AA0DAED0-A310-4A33-8778-F8C0B541C5DC";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1481,7 +1489,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "AA0DAED0-A310-4A33-8778-F8C0B541C5DC";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

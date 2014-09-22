@@ -10,6 +10,7 @@
 #import "NBPhoneNumberUtil.h"
 #import "NBPhoneNumber.h"
 #import "Contact.h"
+#import "PotentialContact.h"
 
 @implementation AddressbookUtils
 
@@ -190,21 +191,24 @@
     
     for (CFIndex i = 0 ; i < peopleCount; i++) {
         ABRecordRef person = CFArrayGetValueAtIndex(people, i);
-        
+        BOOL attributed = NO;
         ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
         for (CFIndex j = 0; j < ABMultiValueGetCount(phoneNumbers); j++) {
             NSString* phoneNumber = (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, j);
-            
             NSError *aError = nil;
             NBPhoneNumber *nbPhoneNumber = [phoneUtil parseWithPhoneCarrierRegion:phoneNumber error:&aError];
             
             if (aError == nil && [phoneUtil isValidNumber:nbPhoneNumber]) {
-                Contact *contact = [Contact createContactWithId:0 phoneNumber:[NSString stringWithFormat:@"+%@%@", nbPhoneNumber.countryCode, nbPhoneNumber.nationalNumber]
-                                                      firstName:(__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty)
-                                                       lastName:(__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty)];
-                
-                if (contact.firstName != nil || contact.lastName != nil) {
-                    // We need unformatted numbers for the keys
+                PotentialContact *contact = [PotentialContact createContactFromABRecord:person andPhoneNumber:nbPhoneNumber];
+                if (contact) {
+                    // avoid repetition in favorites
+                    if (attributed) {
+                        contact.hasPhoto = NO;
+                        contact.isFavorite = NO;
+                    } else {
+                        attributed = YES;
+                    }
+                    // Stock potential contact
                     [addressBookFormattedContacts setObject:contact forKey:phoneNumber];
                 }
                 
@@ -233,22 +237,26 @@
     // Try to rematch invalid phone numbers by using this country code
     for (CFIndex j = 0 ; j < peopleCount; j++) {
         ABRecordRef person = CFArrayGetValueAtIndex(people, j);
-        
+        BOOL attributed = NO;
         ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
         for (CFIndex k = 0; k < ABMultiValueGetCount(phoneNumbers); k++) {
             NSString* phoneNumber = (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, k);
             
             if (![addressBookFormattedContacts objectForKey:phoneNumber]) {
                 NSError *aError = nil;
-                
                 NBPhoneNumber *nbPhoneNumber = [phoneUtil parse:phoneNumber defaultRegion:[[phoneUtil regionCodeFromCountryCode:mostCommonCountryCode] firstObject] error:&aError];
                 
                 if (aError == nil && [phoneUtil isValidNumber:nbPhoneNumber]) {
-                    Contact *contact = [Contact createContactWithId:0 phoneNumber:[NSString stringWithFormat:@"+%@%@", nbPhoneNumber.countryCode, nbPhoneNumber.nationalNumber]
-                                                          firstName:(__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty)
-                                                           lastName:(__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty)];
-                    
-                    if (contact.firstName != nil || contact.lastName != nil) {
+                    PotentialContact *contact = [PotentialContact createContactFromABRecord:person andPhoneNumber:nbPhoneNumber];
+                    if (contact) {
+                        // avoid repetition in favorites
+                        if (attributed) {
+                            contact.hasPhoto = NO;
+                            contact.isFavorite = NO;
+                        } else {
+                            attributed = YES;
+                        }
+                        // Stock potential contact
                         [addressBookFormattedContacts setObject:contact forKey:phoneNumber];
                     }
                 }
@@ -257,7 +265,6 @@
     }
     
     CFRelease(people);
-    
     return addressBookFormattedContacts;
 }
 
@@ -274,7 +281,6 @@
     
     for (CFIndex i = 0 ; i < peopleCount; i++) {
         ABRecordRef person = CFArrayGetValueAtIndex(people, i);
-        
         ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
         
         NSString *firstName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
@@ -308,6 +314,10 @@
     
     return nil;
 }
+
+
+
+
 
 @end
 
