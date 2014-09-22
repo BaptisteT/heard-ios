@@ -14,6 +14,10 @@
 #import <MediaPlayer/MPMusicPlayerController.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import "AudioUtils.h"
+#import "MBProgressHUD.h"
+#import "ApiUtils.h"
+#import "NBPhoneNumber.h"
+#import "NBPhoneNumberUtil.h"
 
 @interface InviteContactsViewController ()
 
@@ -31,6 +35,8 @@
 @property (nonatomic, strong) AVAudioPlayer *mainPlayer;
 @property (nonatomic) BOOL disableProximityObserver;
 @property (nonatomic) BOOL isUsingHeadSet;
+
+@property (nonatomic, strong) UIAlertView *inviteSuccessAlertView;
 
 @end
 
@@ -87,7 +93,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction)selectAllButtonClicked:(id)sender {
+- (IBAction)playerButtonClicked:(id)sender {
     if (self.mainPlayer && [self.mainPlayer isPlaying]) {
         [self.playerButton setTitle:NSLocalizedStringFromTable(@"invite_play_button_title",kStringFile,@"comment") forState:UIControlStateNormal];
         [self.mainPlayer pause];
@@ -156,15 +162,55 @@
 
 - (void)inviteButtonClicked
 {
-    if ([MFMessageComposeViewController canSendText]) {
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    NSMutableArray *formattedContactPhoneNumbers = [NSMutableArray new];
+    
+    for (NSString *phoneNumber in self.selectedContacts) {
+        NSError *aError = nil;
+        
+        NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+        NBPhoneNumber *nbPhoneNumber = [phoneUtil parseWithPhoneCarrierRegion:phoneNumber error:&aError];
+        
+        if (aError == nil && [phoneUtil isValidNumber:nbPhoneNumber]) {
+            [formattedContactPhoneNumbers addObject:[NSString stringWithFormat:@"+%@%@", nbPhoneNumber.countryCode, nbPhoneNumber.nationalNumber]];
+        }
+    }
+    
+    [ApiUtils sendFutureMessage:self.message.audioData toFutureUsers:formattedContactPhoneNumbers success:^{
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        if ([MFMessageComposeViewController canSendText]) {
+            self.inviteSuccessAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"invite_messages_success_title",kStringFile,@"comment")
+                                                                     message:NSLocalizedStringFromTable(@"invite_messages_success_message",kStringFile,@"comment")
+                                                                    delegate:self
+                                                           cancelButtonTitle:@"OK"
+                                                           otherButtonTitles:nil];
+            
+            [self.inviteSuccessAlertView show];
+        } else {
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"text_access_error_message",kStringFile,@"comment") withTitle:nil];
+        }
+    } failure:^{
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"send_invite_message_error_message",kStringFile,@"comment") withTitle:nil];
+    }];
+}
+
+- (void)alertView:(UIAlertView *)alertView
+clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+    if (alertView == self.inviteSuccessAlertView) {
         //Redirect to sms
         MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
         viewController.body = [NSString stringWithFormat:@"%@ %@ %@",NSLocalizedStringFromTable(@"invite_text_message_one",kStringFile,@"comment"),kProdAFHeardWebsite,NSLocalizedStringFromTable(@"invite_text_message_two",kStringFile,@"comment")];
         viewController.recipients = self.selectedContacts;
         viewController.messageComposeDelegate = self;
+        
         [self presentViewController:viewController animated:YES completion:nil];
-    } else {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"text_access_error_message",kStringFile,@"comment") withTitle:nil];
+
     }
 }
 
@@ -172,10 +218,10 @@
 {
     [self dismissViewControllerAnimated:YES completion:nil];
     
+    [self.inviteConctactsTVC deselectAll];
+    
     if (result == MessageComposeResultSent) {
         [TrackingUtils trackInviteContacts:[self.selectedContacts count] successful:YES justAdded:NO];
-        
-        [self.inviteConctactsTVC deselectAll];
     } else {
         [TrackingUtils trackInviteContacts:[self.selectedContacts count] successful:NO justAdded:NO];
     }

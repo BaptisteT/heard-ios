@@ -12,7 +12,7 @@
 #import "Message.h"
 #import <AVFoundation/AVFoundation.h>
 
-@interface InviteContactsViewController : UIViewController <InviteContactsTVCDelegate, UIGestureRecognizerDelegate, MFMessageComposeViewControllerDelegate, AVAudioPlayerDelegate>
+@interface InviteContactsViewController : UIViewController <InviteContactsTVCDelegate, UIGestureRecognizerDelegate, MFMessageComposeViewControllerDelegate, AVAudioPlayerDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) Message *message;
 @property (strong, nonatomic) NSMutableDictionary *indexedContacts;

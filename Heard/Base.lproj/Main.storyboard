@@ -1127,7 +1127,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="65"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Invite" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fv7-Uo-S29">
-                                        <rect key="frame" x="134" y="25" width="53" height="30.5"/>
+                                        <rect key="frame" x="134" y="25" width="53" height="31"/>
                                         <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="22"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -1159,7 +1159,7 @@
                                         </state>
                                         <connections>
                                             <action selector="cancelButtonClicked:" destination="QaH-Z6-GeZ" eventType="touchUpInside" id="CVb-ZH-y3g"/>
-                                            <action selector="selectAllButtonClicked:" destination="7tt-yn-mQy" eventType="touchUpInside" id="rt2-8A-rWg"/>
+                                            <action selector="playerButtonClicked:" destination="7tt-yn-mQy" eventType="touchUpInside" id="o1T-Ah-v3V"/>
                                         </connections>
                                     </button>
                                 </subviews>
