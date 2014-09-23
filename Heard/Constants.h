@@ -19,7 +19,7 @@ static NSString * const kStringFile = @"english_strings";
 static NSString * const kApiVersion = @"1";
 
 static NSString * const kProdAFHeardAPIBaseURLString = @"http://heard.herokuapp.com/";
-static NSString * const kProdAFHeardWebsite = @"www.waved.io";
+static NSString * const kProdAFHeardWebsite = @"www.telepath.me";
 static NSString * const kAppStoreLink = @"https://itunes.apple.com/us/app/waved/id891201506?ls=1&mt=8";
 
 static NSString * const kStagingAFHeardAPIBaseURLString = @"http://heard-staging.herokuapp.com/";
@@ -71,6 +71,6 @@ static NSString * const kProdMixPanelToken = @"898ed29f5309c83be61a27a41d55c879"
 static NSString * const kProdFlurryToken = @"QMNY7MKKJTHS3YT7VTMP";
 
 //Prefs
-static NSString * const kUserCanceledPref = @"User Canceled Waved";
-static NSString * const kUserReplayedPref = @"User Replayed Waved";
+static NSString * const kUserCanceledPref = @"User Canceled Telepath";
+static NSString * const kUserReplayedPref = @"User Replayed Telepath";
 static NSString * const kUserPhoneToEarPref = @"User Put Phone To Ear";
