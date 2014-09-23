@@ -200,12 +200,6 @@
                                              selector: @selector(willResignActiveCallback)
                                                  name: UIApplicationWillResignActiveNotification
                                                object: nil];
-    // todo BT later
-    // handle interruption
-    //    [[NSNotificationCenter defaultCenter] addObserver: self
-    //                                             selector: @selector(handleInterruption:)
-    //                                                 name: AVAudioSessionInterruptionNotification
-    //                                               object: session];
 
     self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:session];
     
@@ -401,7 +395,7 @@
         [self hideLoadingIndicator];
         
         for (Contact *contact in contacts) {
-            Contact *existingContact = [ContactUtils findContact:contact.identifier inContactsArray:self.contacts];
+            Contact *existingContact = [ContactUtils findContact:contact inContactsArray:self.contacts];
             if (!existingContact) {
                 [self.contacts addObject:contact];
     
@@ -413,6 +407,10 @@
                 contact.lastName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
                 contact.lastMessageDate = 0;
                 [self displayAdditionnalContact:contact];
+            }
+            else if (existingContact.isFutureContact) {
+                existingContact.identifier = contact.identifier;
+                existingContact.isFutureContact = NO;
             }
             else if (existingContact.isPending) {
                 // Mark as non pending
@@ -428,8 +426,6 @@
             }
         }
         for (NSDictionary *futureContact in futureContacts) {
-            // todo BT
-            // accept on certain conditions (no contact with same first and last name / no contact with the same number as other contacts )
             NSString *phoneNumber = (NSString *)[futureContact objectForKey:@"phone_number"];
             Contact *contact = [Contact createContactWithId:0 phoneNumber:phoneNumber
                                                   firstName:((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).firstName
@@ -438,13 +434,16 @@
             contact.isFutureContact = YES;
             contact.recordId = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).recordId;
             // Security check
+            BOOL remove = NO;
             for (Contact *normalContact in self.contacts) {
                 if ([normalContact.phoneNumber isEqualToString:phoneNumber] || ([normalContact.firstName isEqualToString:contact.firstName] && [normalContact.lastName isEqualToString:contact.lastName])) {
-                    continue;
+                    remove = YES;
                 }
             }
-            [self.contacts addObject:contact];
-            [self displayAdditionnalContact:contact];
+            if (!remove) {
+                [self.contacts addObject:contact];
+                [self displayAdditionnalContact:contact];
+            }
         }
         self.addressBookFormattedContacts = nil;
         
@@ -707,12 +706,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             BOOL idFound = NO;
             for (NSString *id in unreadMessageContacts) {
                 if (contactView.contact.identifier == [id intValue]) {
-                    contactView.messageNotReadByContact = YES;
                     idFound = YES;
                     break;
                 }
             }
-            if (!idFound) {
+            if (idFound || contactView.contact.isFutureContact) {
+                contactView.messageNotReadByContact = YES;
+            } else {
                 contactView.messageNotReadByContact = NO;
             }
             [contactView resetDiscussionStateAnimated:NO];
@@ -785,7 +785,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         
         if (!isAttributed) {
             // create contact if does not exists
-            Contact *contact = [ContactUtils findContact:message.senderId inContactsArray:self.contacts];
+            Contact *contact = [ContactUtils findContactFromId:message.senderId inContactsArray:self.contacts];
             if (!contact) {
                 contact = [Contact createContactWithId:message.senderId phoneNumber:nil firstName:nil lastName:nil];
                 contact.lastMessageDate = message.createdAt;

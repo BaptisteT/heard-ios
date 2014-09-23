@@ -52,11 +52,11 @@
                                                                            firstName:firstName
                                                                             lastName:lastName
                                                                           facebookId:facebookUsername];
-    
-    if ([phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeMOBILE) {
+// todo bt
+    //    if ([phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeMOBILE) {
         contact.hasPhoto = ABPersonHasImageData(person);
         [contact checkIfFavoriteContact:person];
-    }
+//    }
     return contact;
 }
 

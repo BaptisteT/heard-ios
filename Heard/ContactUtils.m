@@ -118,11 +118,29 @@
     }
 }
 
-+ (Contact *)findContact:(NSInteger)contactId inContactsArray:(NSArray *)contacts
++ (Contact *)findContactFromId:(NSInteger)contactId inContactsArray:(NSArray *)contacts
 {
+    if (contactId == 0) {
+        return nil;
+    }
     for (Contact * existingContact in contacts) {
         if (existingContact.identifier == contactId) {
             return existingContact;
+        }
+    }
+    return nil;
+}
+
++ (Contact *)findContact:(Contact *)contact inContactsArray:(NSArray *)contacts
+{
+    Contact *foundContact = [self findContactFromId:contact.identifier inContactsArray:contacts];
+    if (foundContact) {
+        return foundContact;
+    } else {
+        for (Contact * existingContact in contacts) {
+            if ([existingContact.phoneNumber isEqualToString:contact.phoneNumber]) {
+                return existingContact;
+            }
         }
     }
     return nil;
