@@ -55,7 +55,6 @@
     [self.playerButton setTitle:NSLocalizedStringFromTable(@"invite_play_button_title",kStringFile,@"comment") forState:UIControlStateNormal];
     
     [GeneralUtils addBottomBorder:self.navigationContainer borderSize:0.5];
-    [GeneralUtils addTopBorder:self.inviteButtonContainer borderSize:0.5];
     
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(inviteButtonClicked)];
     [self.inviteButtonContainer addGestureRecognizer:tapRecognizer];
