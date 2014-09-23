@@ -841,10 +841,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ------------------------------
 
 - (IBAction)menuButtonClicked:(id)sender {
-    if (self.displayOpeningTuto) {
-        [self hideOpeningTuto];
-        self.displayOpeningTuto = NO;
-    }
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         [self displayContactAuthView];
     } else if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
@@ -916,6 +912,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)inviteContactsWithMessage:(Message *)message
 {
+    if (self.displayOpeningTuto) {
+        [self hideOpeningTuto];
+        self.displayOpeningTuto = NO;
+    }
+    
     if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
         [self displayContactAuthView];
         return;
@@ -1168,8 +1169,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     if (self.displayOpeningTuto) {
         [self.contactScrollView bringSubviewToFront:self.openingTutoView];
-        [self.contactScrollView bringSubviewToFront:self.menuButton];
-        [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"menu_tuto_action_label", kStringFile, @"comment") forOrigin:self.menuButton.frame.origin.x + self.menuButton.frame.size.width/2];
+        [self.contactScrollView bringSubviewToFront:self.inviteContactView];
+        [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"menu_tuto_action_label", kStringFile, @"comment") forOrigin:self.inviteContactView.frame.origin.x + self.inviteContactView.frame.size.width/2];
     }
     
     // Check that audio is playing or completed
@@ -1188,7 +1189,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self endPlayerUIForAllContactViews];
     
     //Show menu and title
-    self.menuButton.hidden = NO;
+    if (!self.displayOpeningTuto) {
+        self.menuButton.hidden = NO;
+    }
+    
     self.titleLabel.hidden = NO;
     self.contactScrollView.clipsToBounds = YES;
     
@@ -1719,6 +1723,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel forOrigin:(float)x
 {
+    self.menuButton.hidden = YES;
+    
     if (self.openingTutoArrow) {
         [self.openingTutoArrow removeFromSuperview];
     }
@@ -1735,6 +1741,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)hideOpeningTuto
 {
+    self.menuButton.hidden = NO;
+    
     self.openingTutoView.hidden = YES;
 }
 
