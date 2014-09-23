@@ -751,6 +751,7 @@
 
         //Fade in profile picture
         [self.imageView setImageWithURLRequest:imageRequest placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+            image = [ImageUtils cropBiggestCenteredSquareImageFromImage:image withSide:0];
             [UIView transitionWithView:weakSelf.imageView
                               duration:1.0f
                                options:UIViewAnimationOptionTransitionCrossDissolve
