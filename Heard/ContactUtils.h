@@ -18,7 +18,9 @@
 
 + (void)updateContacts:(NSMutableArray *)contacts withNewMessage:(Message *)message;
 
-+ (Contact *)findContact:(NSInteger)contactId inContactsArray:(NSArray *)contacts;
++ (Contact *)findContactFromId:(NSInteger)contactId inContactsArray:(NSArray *)contacts;
+
++ (Contact *)findContact:(Contact *)contact inContactsArray:(NSArray *)contacts;
 
 + (NSInteger)numberOfNonHiddenContacts:(NSArray *)contacts;
 

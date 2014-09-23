@@ -85,9 +85,11 @@
         } else {
             url = [GeneralUtils getUserProfilePictureURLFromUserId:contact.identifier];
         }
-        [imageView setImageWithURL:url];
-        // Square it
-        imageView.image = [ImageUtils cropBiggestCenteredSquareImageFromImage:imageView.image withSide:0];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request addValue:@"image/*" forHTTPHeaderField:@"Accept"];
+        [[UIImageView alloc] setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image){
+            imageView.image = [ImageUtils cropBiggestCenteredSquareImageFromImage:image withSide:0];
+        }failure:nil];
     }
 }
 

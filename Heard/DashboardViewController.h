@@ -19,7 +19,6 @@
 
 - (BOOL)attributeMessageToExistingContacts:(Message *)message;
 - (void)retrieveUnreadMessagesAndNewContacts;
-- (void)distributeNonAttributedMessages;
 - (void)endPlayerAtCompletion:(BOOL)completed;
 - (void)removeViewOfHiddenContacts;
 - (void)playSound:(NSString *)sound;
