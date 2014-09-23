@@ -400,6 +400,7 @@
         [self.delegate sendMessageToContact:self];
         
         if (self.contact.isFutureContact) {
+            // todo BT
             [TrackingUtils trackRecord];
         } else {
             [TrackingUtils trackRecord];

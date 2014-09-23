@@ -58,7 +58,7 @@
     NSMutableArray *contact = [sectionContacts objectAtIndex:indexPath.row];
     
     cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", contact[0], contact[1]];
-    
+    NSLog(@"%@",cell.textLabel.text);
     cell.detailTextLabel.text = contact[2];
     
     if ([contact[3] isEqualToString:@"selected"]) {

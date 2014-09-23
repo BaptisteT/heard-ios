@@ -34,8 +34,8 @@
 #import "InviteContactView.h"
 #import "InviteContactsViewController.h"
 
-#define ACTION_OTHER_MENU_OPTION_1 NSLocalizedStringFromTable(@"edit_profile_button_title",kStringFile,@"comment")
-#define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"hide_contacts_button_title",kStringFile,@"comment")
+#define ACTION_OTHER_MENU_OPTION_1 NSLocalizedStringFromTable(@"hide_contacts_button_title",kStringFile,@"comment")
+#define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"edit_profile_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_3 NSLocalizedStringFromTable(@"share_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_4 NSLocalizedStringFromTable(@"feedback_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_5 NSLocalizedStringFromTable(@"rate_button_title",kStringFile,@"comment")
@@ -1039,7 +1039,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Stop recording
     [self.recorder stop];
-    [self playSound:kEndRecordSound];
     
     // Remove UI
     self.recorderLine.frame = [[self.recorderLine.layer presentationLayer] frame];
@@ -1048,6 +1047,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self setRecorderLineWidth:0];
     
     [self enableAllContactViews];
+    
+    // stop sound
+    [self playSound:kEndRecordSound];
 }
 
 - (void)startedPlayingAudioMessagesOfView:(ContactView *)contactView
@@ -1248,21 +1250,21 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
      OTHER MENU
      ---------------------------------------------------------------------------*/
     
-    // Profile
+    // Edit contacts
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_1]) {
-        [actionSheet dismissWithClickedButtonIndex:2 animated:NO];
-        CustomActionSheet *newActionSheet = [[CustomActionSheet alloc] initWithTitle:nil
-                                                                 delegate:self
-                                                        cancelButtonTitle:ACTION_SHEET_CANCEL
-                                                   destructiveButtonTitle:nil
-                                                        otherButtonTitles:ACTION_SHEET_PROFILE_OPTION_1, ACTION_SHEET_PROFILE_OPTION_2, ACTION_SHEET_PROFILE_OPTION_3, nil];
-        
-        [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+        [self performSegueWithIdentifier:@"Edit Contacts Segue" sender:nil];
     }
     
-    // Edit contacts
+    // Profile
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_2]) {
-        [self performSegueWithIdentifier:@"Edit Contacts Segue" sender:nil];
+        [actionSheet dismissWithClickedButtonIndex:2 animated:NO];
+        CustomActionSheet *newActionSheet = [[CustomActionSheet alloc] initWithTitle:nil
+                                                                            delegate:self
+                                                                   cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                              destructiveButtonTitle:nil
+                                                                   otherButtonTitles:ACTION_SHEET_PROFILE_OPTION_1, ACTION_SHEET_PROFILE_OPTION_2, ACTION_SHEET_PROFILE_OPTION_3, nil];
+        
+        [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
     
     // Share
@@ -1594,22 +1596,28 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)playSound:(NSString *)sound
 {
+    if ([self.soundPlayer isPlaying]) {
+        [self.soundPlayer stop];
+    }
+    NSError* error;
     if ([sound isEqualToString:kStartRecordSound]) {
-        self.soundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:@"/System/Library/Audio/UISounds/Tink.caf"] error:nil];
-        [self.soundPlayer prepareToPlay];
+        self.soundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:@"/System/Library/Audio/UISounds/Tink.caf"] error:&error];
     } else if ([sound isEqualToString:kEndRecordSound]) {
-        self.soundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:@"/System/Library/Audio/UISounds/Tock.caf"] error:nil];
+        self.soundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:@"/System/Library/Audio/UISounds/Tock.caf"] error:&error];
     } else  {
         NSString *soundPath = [[NSBundle mainBundle] pathForResource:sound ofType:@"aif"];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-        self.soundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:nil];
+        self.soundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:&error];
     }
-    
-    float appPlayerVolume = [MPMusicPlayerController applicationMusicPlayer].volume;
-    if (appPlayerVolume > 0.25) {
-        [self.soundPlayer setVolume:1/(4*appPlayerVolume)];
+    if (error || ![self.soundPlayer prepareToPlay]) {
+        NSLog(@"%@",error);
+    } else {
+        float appPlayerVolume = [MPMusicPlayerController applicationMusicPlayer].volume;
+        if (appPlayerVolume > 0.25) {
+            [self.soundPlayer setVolume:1/(4*appPlayerVolume)];
+        }
+        [self.soundPlayer play];
     }
-    [self.soundPlayer play];
 }
 
 // ----------------------------------------------------------
