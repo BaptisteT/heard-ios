@@ -8,6 +8,7 @@
 
 #import "InviteContactView.h"
 #import "Constants.h"
+#import "Contact.h"
 
 @implementation InviteContactView
 
@@ -34,6 +35,8 @@
     
     // Init Discussion UI elements
     [self initRecordOverlay];
+    
+    self.contact = [Contact createContactWithId:0 phoneNumber:@"" firstName:NSLocalizedStringFromTable(@"invite_contact_name",kStringFile, @"comment") lastName:@""];
     
     return self;
 }
