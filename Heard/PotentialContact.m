@@ -7,7 +7,7 @@
 //
 
 #import "PotentialContact.h"
-
+#import "SessionUtils.h"
 
 @implementation PotentialContact
 
@@ -56,6 +56,19 @@
         contact.hasPhoto = ABPersonHasImageData(person);
         [contact checkIfFavoriteContact:person];
     }
+    
+//    if (CFArrayGetCount(ABPersonCopyArrayOfAllLinkedPeople(person))>1) {
+//        for (CFIndex i = 0 ; i < CFArrayGetCount(ABPersonCopyArrayOfAllLinkedPeople(person)); i++) {
+//            ABRecordRef friend = CFArrayGetValueAtIndex(ABPersonCopyArrayOfAllLinkedPeople(person), i);
+//            NSString *firstNamef = (__bridge NSString *)ABRecordCopyValue(friend, kABPersonFirstNameProperty);
+//            NSString *lastNamef = (__bridge NSString *)ABRecordCopyValue(friend, kABPersonLastNameProperty);
+//            NSLog(@"%@ %@ - %@ %@", firstName, lastName, firstNamef, lastNamef);
+//        }
+//    }
+    ABMultiValueRef relatedNames = ABRecordCopyValue(person, kABPersonRelatedNamesProperty);
+    if (ABMultiValueGetCount(relatedNames) > 0) {
+        NSLog(@"aa");
+    }
     return contact;
 }
 
@@ -64,9 +77,13 @@
     if (self.hasPhoto && (!self.facebookId || self.facebookId.length == 0)) {
         self.isFavorite = YES;
     }
-    // todo BT
-    // same name ?
-    // relatives
+    if ([self.lastName isEqualToString:[SessionUtils getCurrentUserLastName]]) {
+        if ([self.firstName isEqualToString:[SessionUtils getCurrentUserFirstName]]) {
+            self.isFavorite = NO;
+        } else {
+            self.isFavorite = YES;
+        }
+    }
 }
 
 @end

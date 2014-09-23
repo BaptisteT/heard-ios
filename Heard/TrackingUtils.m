@@ -40,6 +40,17 @@
     [mixpanel.people increment:@"Records" by:[NSNumber numberWithInt:1]];
 }
 
++ (void)trackFutureRecord
+{
+    if (!PRODUCTION || DEBUG)return;
+    
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    
+    [mixpanel track:@"Future record"];
+    
+    [mixpanel.people increment:@"Future records" by:[NSNumber numberWithInt:1]];
+}
+
 + (void)trackPlayWithDuration:(NSTimeInterval)duration
 {
     if (!PRODUCTION || DEBUG)return;

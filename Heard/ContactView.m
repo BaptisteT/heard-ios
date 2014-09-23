@@ -401,8 +401,7 @@
         [self.delegate sendMessageToContact:self];
         
         if (self.contact.isFutureContact) {
-            // todo BT
-            // tracking
+            [TrackingUtils trackFutureRecord];
         } else {
             [TrackingUtils trackRecord];
         }

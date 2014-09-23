@@ -15,6 +15,8 @@
 
 + (void)trackRecord;
 
++ (void)trackFutureRecord;
+
 + (void)trackPlayWithDuration:(NSTimeInterval)duration;
 
 + (void)trackReplay;
