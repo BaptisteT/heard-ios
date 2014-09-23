@@ -34,9 +34,6 @@
 #import "InviteContactView.h"
 #import "InviteContactsViewController.h"
 
-#define ACTION_MAIN_MENU_OPTION_1 NSLocalizedStringFromTable(@"invite_friends_button_title",kStringFile,@"comment")
-#define ACTION_MAIN_MENU_OPTION_2 NSLocalizedStringFromTable(@"add_new_contact_button_title",kStringFile,@"comment")
-#define ACTION_MAIN_MENU_OPTION_3 NSLocalizedStringFromTable(@"other_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_1 NSLocalizedStringFromTable(@"edit_profile_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"hide_contacts_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_3 NSLocalizedStringFromTable(@"share_button_title",kStringFile,@"comment")
@@ -54,9 +51,8 @@
 #define ACTION_FAILED_MESSAGES_OPTION_2 NSLocalizedStringFromTable(@"delete_button_title",kStringFile,@"comment")
 #define ACTION_SHEET_CANCEL NSLocalizedStringFromTable(@"cancel_button_title",kStringFile,@"comment")
 
-#define RECORDER_HEIGHT 5
-#define PLAYER_UI_HEIGHT 5
-#define INVITE_CONTACT_BUTTON_HEIGHT 50
+#define RECORDER_HEIGHT 70
+#define PLAYER_UI_HEIGHT 70
 #define NO_MESSAGE_VIEW_HEIGHT 60
 
 @interface DashboardViewController ()
@@ -90,7 +86,7 @@
 @property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
 @property (strong, nonatomic) NSMutableArray *lastMessagesPlayed;
 // Action sheets
-@property (strong, nonatomic) CustomActionSheet *mainMenuActionSheet;
+@property (strong, nonatomic) CustomActionSheet *menuActionSheet;
 @property (strong, nonatomic) ContactView *lastSelectedContactView;
 // Alertview
 @property (strong, nonatomic) UIAlertView *blockAlertView;
@@ -114,6 +110,7 @@
 @property (strong, nonatomic) UIImageView *openingTutoArrow;
 //Invite new contacts
 @property (strong, nonatomic) NSMutableDictionary *indexedContacts;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 
 @end
 
@@ -231,25 +228,25 @@
     self.recorder.meteringEnabled = YES;
     
     // Init recorder container
-    self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - RECORDER_HEIGHT, self.view.bounds.size.width, RECORDER_HEIGHT)];
-    self.recorderContainer.backgroundColor = [UIColor whiteColor];
+    self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, RECORDER_HEIGHT)];
+    self.recorderContainer.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
     [self.view addSubview:self.recorderContainer];
     self.recorderContainer.hidden = YES;
     
     // Recoder line
     self.recorderLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, RECORDER_HEIGHT)];
-    self.recorderLine.backgroundColor = [ImageUtils red];
+    self.recorderLine.backgroundColor = [ImageUtils transparentRed];
     [self.recorderContainer addSubview:self.recorderLine];
     
     // Init player container
-    self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - PLAYER_UI_HEIGHT, self.view.bounds.size.width, PLAYER_UI_HEIGHT)];
-    self.playerContainer.backgroundColor = [UIColor clearColor];
+    self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, PLAYER_UI_HEIGHT)];
+    self.playerContainer.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
     [self.view addSubview:self.playerContainer];
     self.playerContainer.hidden = YES;
     
     // player line
     self.playerLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, PLAYER_UI_HEIGHT)];
-    self.playerLine.backgroundColor = [ImageUtils green];
+    self.playerLine.backgroundColor = [ImageUtils transparentGreen];
     [self.playerContainer addSubview:self.playerLine];
     
     // Go to access view controller if acces has not yet been granted
@@ -831,12 +828,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     } else if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
         [GeneralUtils showMessage:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment") withTitle:nil];
     } else {
-        self.mainMenuActionSheet = [[CustomActionSheet alloc] initWithTitle:nil
-                                                               delegate:self
-                                                      cancelButtonTitle:ACTION_SHEET_CANCEL
-                                                 destructiveButtonTitle:nil
-                                                      otherButtonTitles:ACTION_MAIN_MENU_OPTION_1, ACTION_MAIN_MENU_OPTION_2, ACTION_MAIN_MENU_OPTION_3, nil];
-        [self.mainMenuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+        self.menuActionSheet = [[CustomActionSheet alloc]
+                                    initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
+                                    delegate:self
+                                    cancelButtonTitle:ACTION_SHEET_CANCEL
+                                    destructiveButtonTitle:nil
+                                    otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, ACTION_OTHER_MENU_OPTION_6, nil];
+        [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
 }
 
@@ -847,6 +845,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)disableAllContactViews
 {
+    //Hide menu and title
+    self.menuButton.hidden = YES;
+    self.titleLabel.hidden = YES;
+    self.contactScrollView.clipsToBounds = NO;
+    
     for (ContactView *view in self.contactViews) {
         view.userInteractionEnabled = NO;
     }
@@ -854,6 +857,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)enableAllContactViews
 {
+    //Show menu and title
+    self.menuButton.hidden = NO;
+    self.titleLabel.hidden = NO;
+    self.contactScrollView.clipsToBounds = YES;
+    
     for (ContactView *view in self.contactViews) {
         view.userInteractionEnabled = YES;
     }
@@ -963,7 +971,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     float rowHeight = kContactMargin + kContactSize + kContactNameHeight;
     view.frame = CGRectMake(kContactMargin + (horizontalPosition - 1) * (kContactSize + kContactMargin), kContactMargin + (row - 1)* rowHeight, kContactSize, kContactSize);
     
-    // Update frame of Name Label too
+    // Update frame of Name Label tool
     view.nameLabel.frame = CGRectMake(view.frame.origin.x - kContactMargin/4, view.frame.origin.y + kContactSize, view.frame.size.width + kContactMargin/2, kContactNameHeight);
 }
 
@@ -1107,6 +1115,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.disableProximityObserver = NO;
     [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
     
+    //Hide menu and title
+    self.menuButton.hidden = YES;
+    self.titleLabel.hidden = YES;
+    self.contactScrollView.clipsToBounds = NO;
+    
     self.playerContainer.hidden = NO;
     self.playerContainer.alpha = 1;
     [self setPlayerLineWidth:0];
@@ -1146,6 +1159,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // End contact player UI
     [self endPlayerUIForAllContactViews];
+    
+    //Show menu and title
+    self.menuButton.hidden = NO;
+    self.titleLabel.hidden = NO;
+    self.contactScrollView.clipsToBounds = YES;
     
     // End central player UI
     [self.mainPlayer stop];
@@ -1197,29 +1215,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         return;
     }
     
-    /* -------------------------------------------------------------------------
-     MAIN MENU
-    ---------------------------------------------------------------------------*/
-    
-    // Invite contact
-    if ([buttonTitle isEqualToString:ACTION_MAIN_MENU_OPTION_1]) {
-        [self performSegueWithIdentifier:@"Invite Contacts Segue" sender:nil];
-        
-    // Add New Contact
-    } else if ([buttonTitle isEqualToString:ACTION_MAIN_MENU_OPTION_2]) {
-        [self performSegueWithIdentifier:@"Add Contact Segue" sender:nil];
-    }
-    
-    // Other
-    else if ([buttonTitle isEqualToString:ACTION_MAIN_MENU_OPTION_3]) {
-        CustomActionSheet *newActionSheet = [[CustomActionSheet alloc]
-                                             initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
-                                             delegate:self
-                                             cancelButtonTitle:ACTION_SHEET_CANCEL
-                                             destructiveButtonTitle:nil
-                                             otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, ACTION_OTHER_MENU_OPTION_6, nil];
-        [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
-    }
 
     /* -------------------------------------------------------------------------
      OTHER MENU
