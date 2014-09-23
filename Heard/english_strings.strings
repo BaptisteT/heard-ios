@@ -52,11 +52,11 @@
 "audio_too_short_error" = "Hold longer to record.";
 
 // Micro access
-"micro_access_error_title" = "Waved does not have access to your micro";
+"micro_access_error_title" = "Telepath does not have access to your micro";
 "micro_access_error_message" = "To activate it, go to Settings > Privacy > Micro"; // todo BT ios8
 
 // Contact access
-"contact_access_error_message" = "Waved uses your address book to find your contacts. Please allow access in Settings > Privacy > Contacts."; // todo BT ios 8
+"contact_access_error_message" = "Telepath uses your address book to find your contacts. Please allow access in Settings > Privacy > Contacts."; // todo BT ios 8
 
 // Auth
 "authentification_error_title" = "Authentification error";
@@ -88,22 +88,22 @@
 
 // Invite & share
 "invite_label_text" = "Send now";
-"invite_text_message_one" = "Hey, I just left you a message on Waved. Go to";
+"invite_text_message_one" = "Hey, I just left you a message on Telepath. Go to";
 "invite_text_message_two" = "to hear it!";
-"invite_with_message_text" = "Hey, let's start chatting on Waved! It's a free app which lets you send voice messages in one tap. Download it at";  // twitter constraint
-"personal_invite_text_message" = "Hey TRUCHOV, let's start chatting on Waved! It's a free app which lets you send short voice messages in one tap. Download it at:";
+"invite_with_message_text" = "Hey, let's start chatting on Telepath! It's a free app which lets you send voice messages in one tap. Download it at";  // twitter constraint
+"personal_invite_text_message" = "Hey TRUCHOV, let's start chatting on Telepath! It's a free app which lets you send short voice messages in one tap. Download it at:";
 "text_access_error_message" = "Your device is not properly configured to send messages";
 "personal_invite_text_success_message" = "TRUCHOV successfully invited.";
 "share_mail_object_message" = "Let your friends hear your voice!";
 "invite_messages_success_title" = "Message successfully sent.";
-"invite_messages_success_message" = "Recipients are not yet on Waved, let's tell them you left them a message!";
+"invite_messages_success_message" = "Recipients are not yet on Telepath, let's tell them you left them a message!";
 "invite_contact_name" = "Add people";
 
 // Add
 "add_contact_missing_name_message" = "Please provide a first name or a last name.";
-"add_contact_success_message" = "TRUCHOV has been successfully added to your phone and Waved contacts!";
+"add_contact_success_message" = "TRUCHOV has been successfully added to your phone and Telepath contacts!";
 "add_contact_failure_message" = "Failed to add TRUCHOV. Please try again.";
-"add_contact_not_waved_user_message" = "Successfully added to your phone contacts. But TRUCHOV is not yet on Waved and will not be visible in your contacts. You should invite TRUCHOV!";
+"add_contact_not_telepath_user_message" = "Successfully added to your phone contacts. But TRUCHOV is not yet on Telepath and will not be visible in your contacts. You should invite TRUCHOV!";
 
 // Block
 "block_failure_error_message" = "Failed to block contact, please try again.";
@@ -123,10 +123,10 @@
 "notify_me_button_title" = "NOTIFY ME";
 
 // Contact request
-"contact_permission_message" = "Waved automatically syncs with your Address Book.";
+"contact_permission_message" = "Telepath automatically syncs with your Address Book.";
 "contact_permission_note" = "No contact information will be uploaded anywhere.";
 "contact_access_button_title" = "Find friends";
-"contact_pre_request_title" = "Let Waved access your contacts?";
+"contact_pre_request_title" = "Let Telepath access your contacts?";
 "contact_pre_request_message" = "This will allow to find your friends";
 "skip_button_title" = "Skip";
 "contact_access_button_title" = "ALLOW CONTACT ACCESS";

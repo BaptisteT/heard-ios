@@ -37,11 +37,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSContactsUsageDescription</key>
-	<string>Waved needs it to find your friends</string>
+	<string>Telepath needs it to find your friends</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Waved needs it to record your voice messages</string>
+	<string>Telepath needs it to record your voice messages</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Waved will only use an image of your choice as profile picture</string>
+	<string>Telepath will only use an image of your choice as profile picture</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>

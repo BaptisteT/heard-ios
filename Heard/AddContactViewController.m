@@ -123,17 +123,17 @@
     [ApiUtils checkUserPresenceByPhoneNumber:formattedPhoneNumber success:^(BOOL present){
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
-        //Already on Waved
+        //Already on Telepath
         if (present) {
             [self dismissViewControllerAnimated:YES completion:^{
                 [self.delegate didFinishedAddingContact:contactName];
             }];
             
             [TrackingUtils trackAddContactSuccessful:YES Present:YES Pending:NO];
-        //Not on Waved
+        //Not on Telepath
         } else {
             [[[UIAlertView alloc] initWithTitle:@""
-                                        message: [NSLocalizedStringFromTable(@"add_contact_not_waved_user_message",kStringFile,@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:contactName]
+                                        message: [NSLocalizedStringFromTable(@"add_contact_not_telepath_user_message",kStringFile,@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:contactName]
                                        delegate:self
                               cancelButtonTitle:nil
                               otherButtonTitles:ALERT_VIEW_DONE_BUTTON, ALERT_VIEW_INVITE_BUTTON, nil] show];
