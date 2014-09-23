@@ -87,7 +87,7 @@
 "picture_edit_error_message" = "Nous n'avons pu mettre à jour votre photo. Réessayez svp.";
 
 // Invite & share
-"invite_label_text" = "Envoyer message";
+"invite_label_text" = "Send now";
 "invite_text_message_one" = "Hey, I just left you a message on Waved. Go to";
 "invite_text_message_two" = "to hear it!";
 "personal_invite_text_message" = "Hé TRUCHOV, viens discuter avec moi sur Waved! C'est une appli gratuite qui te permet d'envoyer des messages vocaux en un clic. Télécharge la sur";
