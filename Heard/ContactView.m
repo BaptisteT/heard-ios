@@ -392,6 +392,7 @@
         if ([self.delegate displayOpeningTuto]) {
             [self.delegate displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"tap_tuto_action_label", kStringFile, @"comment") forOrigin:self.frame.origin.x + self.frame.size.width/2];
         }
+        [self.delegate resetApplicationBadgeNumber];
     } else {
         self.sendingMessageCount ++;
         [self resetDiscussionStateAnimated:NO];
@@ -401,7 +402,7 @@
         
         if (self.contact.isFutureContact) {
             // todo BT
-            [TrackingUtils trackRecord];
+            // tracking
         } else {
             [TrackingUtils trackRecord];
         }
@@ -513,12 +514,12 @@
     // Mark as unread in DB
     if (![GeneralUtils isCurrentUser:self.contact]) {
         [ApiUtils markMessageAsOpened:message.identifier success:nil failure:nil];
-        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] - 1];
     }
     
     // Delete & update counter
     [self.unreadMessages removeObject:message];
     [self setUnreadMessagesCount:self.unreadMessagesCount-1];
+    [self.delegate resetApplicationBadgeNumber];
 }
 
 - (void)handlePlayingTapGesture {
@@ -574,9 +575,18 @@
 
 - (void)addUnreadMessage:(Message *)message
 {
-    [self downloadAudio:message];
-    [self.unreadMessages addObject:message];
-    [self setUnreadMessagesCount:self.unreadMessagesCount+1];
+    BOOL addMessage = YES;
+    for (Message *unreadMessage in self.unreadMessages) {
+        if (unreadMessage.identifier == message.identifier) {
+            addMessage = NO;
+            break;
+        }
+    }
+    if (addMessage) {
+        [self downloadAudio:message];
+        [self.unreadMessages addObject:message];
+        [self setUnreadMessagesCount:self.unreadMessagesCount+1];
+    }
 }
 
 - (void)resetUnreadMessages

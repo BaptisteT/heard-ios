@@ -90,4 +90,6 @@
 
 - (ABAddressBookRef) addressBook;
 
+- (void)resetApplicationBadgeNumber;
+
 @end
