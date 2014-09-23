@@ -712,7 +712,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                     break;
                 }
             }
-            if (idFound || contactView.contact.isFutureContact) {
+            if (idFound || (contactView.contact.isFutureContact && contactView.contact.lastMessageDate > 0)) {
                 contactView.messageNotReadByContact = YES;
             } else {
                 contactView.messageNotReadByContact = NO;
