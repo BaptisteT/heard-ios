@@ -32,7 +32,7 @@
                           failure:(void(^)())failureBlock;
 
 + (void)sendMessage:(NSData *)audioData
-             toUser:(NSInteger)receiverId
+             toUser:(Contact *)contact
             success:(void(^)())successBlock
             failure:(void (^)())failureBlock;
 

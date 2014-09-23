@@ -26,7 +26,7 @@ static NSString * const kStagingAFHeardAPIBaseURLString = @"http://heard-staging
     
 static NSString * const kFeedbackEmail = @"info@waved.io";
 
-static NSString * const kFacebookProfilePictureURL = @"http://graph.facebook.com/id/picture?type=square";
+static NSString * const kFacebookProfilePictureURL = @"http://graph.facebook.com/id/picture?type=large";
 
 static NSString * const kProdHeardRecordBaseURL = @"https://s3.amazonaws.com/heard_messages/";
 static NSString * const kProdHeardProfilePictureBaseURL = @"https://s3.amazonaws.com/heard_profile_pictures/original/";

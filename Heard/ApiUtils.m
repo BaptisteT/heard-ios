@@ -157,16 +157,22 @@
 
 // Send message
 + (void)sendMessage:(NSData *)audioData
-             toUser:(NSInteger)receiverId
+             toUser:(Contact *)contact
             success:(void(^)())successBlock
             failure:(void (^)())failureBlock
 {
-    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages.json"];
-    
+    NSString *path;
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    [parameters setObject:[NSNumber numberWithLong:receiverId] forKey:@"receiver_id"];
-    
     [self enrichParametersWithToken:parameters];
+    
+    if (contact.isFutureContact) {
+        path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages/create_future_messages.json"];
+        [parameters setObject:[NSArray arrayWithObject:contact.phoneNumber] forKey:@"future_contact_phones"];
+        [parameters setObject:contact.firstName forKey:@"receiver_first_name"];
+    } else {
+        path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages.json"];
+        [parameters setObject:[NSNumber numberWithLong:contact.identifier] forKey:@"receiver_id"];
+    }
     
     [[ApiUtils sharedClient] POST:path
                        parameters:parameters

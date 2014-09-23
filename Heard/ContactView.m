@@ -381,9 +381,7 @@
     // Update last message date
     self.contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
     
-    if (self.contact.isFutureContact) {
-        // todo bt
-    } else if ([GeneralUtils isCurrentUser:self.contact]) {
+    if ([GeneralUtils isCurrentUser:self.contact]) {
         Message *message = [Message new];
         message.senderId = self.contact.identifier;
         message.audioData = [self.delegate getLastRecordedData];
@@ -400,7 +398,12 @@
         
         // Send
         [self.delegate sendMessageToContact:self];
-        [TrackingUtils trackRecord];
+        
+        if (self.contact.isFutureContact) {
+            [TrackingUtils trackRecord];
+        } else {
+            [TrackingUtils trackRecord];
+        }
     }
 }
 
@@ -434,7 +437,7 @@
     // Resend Messages
     for (NSData *audioData in self.failedMessages) {
         self.sendingMessageCount ++;
-        [ApiUtils sendMessage:audioData toUser:self.contact.identifier success:^{
+        [ApiUtils sendMessage:audioData toUser:self.contact success:^{
             [self message:nil sentWithError:NO];
         } failure:^{
             [self message:audioData sentWithError:YES];
