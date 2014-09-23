@@ -19,6 +19,10 @@
 		0B02D37B19D0CFD50010C58D /* invite-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B02D37819D0CFD50010C58D /* invite-button.png */; };
 		0B02D37C19D0CFD50010C58D /* invite-button@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B02D37919D0CFD50010C58D /* invite-button@2x~iphone.png */; };
 		0B02D37D19D0CFD50010C58D /* invite-button@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B02D37919D0CFD50010C58D /* invite-button@2x~iphone.png */; };
+		0B05062919D22D5B00CBFA59 /* welcome-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B05062719D22D5B00CBFA59 /* welcome-logo.png */; };
+		0B05062A19D22D5B00CBFA59 /* welcome-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B05062719D22D5B00CBFA59 /* welcome-logo.png */; };
+		0B05062B19D22D5B00CBFA59 /* welcome-logo@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B05062819D22D5B00CBFA59 /* welcome-logo@2x~iphone.png */; };
+		0B05062C19D22D5B00CBFA59 /* welcome-logo@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B05062819D22D5B00CBFA59 /* welcome-logo@2x~iphone.png */; };
 		0B22CD021978439D00E1C7AF /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B22CD011978439D00E1C7AF /* AddContactViewController.m */; };
 		0B22CD031978439D00E1C7AF /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B22CD011978439D00E1C7AF /* AddContactViewController.m */; };
 		0B37D42E19CCFCE900A2D074 /* InviteContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B37D42D19CCFCE900A2D074 /* InviteContactView.m */; };
@@ -112,14 +116,10 @@
 		0B72EEF6196C672F00AC5A01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0BD758D11950F91B00CF0D85 /* Main.storyboard */; };
 		0B72EEF7196C672F00AC5A01 /* MPCloseBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8D2195B449A00C94AC0 /* MPCloseBtn.png */; };
 		0B72EEF8196C672F00AC5A01 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8CF195B449A00C94AC0 /* Media.xcassets */; };
-		0B72EEF9196C672F00AC5A01 /* welcome-logo@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */; };
 		0B72EEFA196C672F00AC5A01 /* MPNotification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0BB0E8D6195B449A00C94AC0 /* MPNotification.storyboard */; };
 		0B72EEFB196C672F00AC5A01 /* NBPhoneNumberMetadataForTesting.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64BA19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist */; };
-		0B72EEFC196C672F00AC5A01 /* welcome-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A481954E4FF00476BFE /* welcome-logo.png */; };
 		0B87247A19799684007219AF /* AddressbookUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B87247919799684007219AF /* AddressbookUtils.m */; };
 		0B87247B19799684007219AF /* AddressbookUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B87247919799684007219AF /* AddressbookUtils.m */; };
-		0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */; };
-		0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B893A481954E4FF00476BFE /* welcome-logo.png */; };
 		0B893A4D19550FF000476BFE /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B893A4C19550FF000476BFE /* Contact.m */; };
 		0B9051A41975D72A001E2ED5 /* RMPhoneFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B9051A31975D72A001E2ED5 /* RMPhoneFormat.m */; };
 		0B9051A51975D72A001E2ED5 /* RMPhoneFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B9051A31975D72A001E2ED5 /* RMPhoneFormat.m */; };
@@ -284,6 +284,8 @@
 		0B02D37519D0CB6E0010C58D /* menu-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu-button.png"; sourceTree = "<group>"; };
 		0B02D37819D0CFD50010C58D /* invite-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invite-button.png"; sourceTree = "<group>"; };
 		0B02D37919D0CFD50010C58D /* invite-button@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invite-button@2x~iphone.png"; sourceTree = "<group>"; };
+		0B05062719D22D5B00CBFA59 /* welcome-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome-logo.png"; sourceTree = "<group>"; };
+		0B05062819D22D5B00CBFA59 /* welcome-logo@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome-logo@2x~iphone.png"; sourceTree = "<group>"; };
 		0B22CD001978439D00E1C7AF /* AddContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddContactViewController.h; sourceTree = "<group>"; };
 		0B22CD011978439D00E1C7AF /* AddContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContactViewController.m; sourceTree = "<group>"; };
 		0B37D42C19CCFCE900A2D074 /* InviteContactView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteContactView.h; sourceTree = "<group>"; };
@@ -300,8 +302,6 @@
 		0B72EF01196C672F00AC5A01 /* WavedStaging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WavedStaging.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B87247819799684007219AF /* AddressbookUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressbookUtils.h; sourceTree = "<group>"; };
 		0B87247919799684007219AF /* AddressbookUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressbookUtils.m; sourceTree = "<group>"; };
-		0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome-logo@2x~iphone.png"; sourceTree = "<group>"; };
-		0B893A481954E4FF00476BFE /* welcome-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome-logo.png"; sourceTree = "<group>"; };
 		0B893A4B19550FF000476BFE /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		0B893A4C19550FF000476BFE /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 		0B9051A21975D72A001E2ED5 /* RMPhoneFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMPhoneFormat.h; sourceTree = "<group>"; };
@@ -610,6 +610,8 @@
 		0BA1455E199786A30031716F /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0B05062719D22D5B00CBFA59 /* welcome-logo.png */,
+				0B05062819D22D5B00CBFA59 /* welcome-logo@2x~iphone.png */,
 				0B02D37819D0CFD50010C58D /* invite-button.png */,
 				0B02D37919D0CFD50010C58D /* invite-button@2x~iphone.png */,
 				0B02D37519D0CB6E0010C58D /* menu-button.png */,
@@ -632,8 +634,6 @@
 				0BE55476195A4ADC00CE4669 /* record@2x~iphone.png */,
 				0BE55470195A340500CE4669 /* unknown-user@2x~iphone.png */,
 				0BE55471195A340500CE4669 /* unknown-user.png */,
-				0B893A471954E4FF00476BFE /* welcome-logo@2x~iphone.png */,
-				0B893A481954E4FF00476BFE /* welcome-logo.png */,
 				0BADABC91993000D007B4538 /* contact-blue-eye.png */,
 				0BADABCA1993000D007B4538 /* contact-eye.png */,
 				0BADABC319930005007B4538 /* contact-sent.png */,
@@ -1033,6 +1033,7 @@
 				0BA145821997A4A60031716F /* typing-sound.aif in Resources */,
 				0B72EEE8196C672F00AC5A01 /* record@2x~iphone.png in Resources */,
 				0B72EEEB196C672F00AC5A01 /* NBPhoneNumberMetadata.plist in Resources */,
+				0B05062C19D22D5B00CBFA59 /* welcome-logo@2x~iphone.png in Resources */,
 				0B72EEEC196C672F00AC5A01 /* MPCloseBtn@2x.png in Resources */,
 				3C95862919927E9400FF54B0 /* play@2x~iphone.png in Resources */,
 				0B9051A81975DE8C001E2ED5 /* PhoneFormats.dat in Resources */,
@@ -1055,15 +1056,14 @@
 				0B72EEF8196C672F00AC5A01 /* Media.xcassets in Resources */,
 				0B9EC33219C8F5EB00F520B8 /* tuto-arrow@2x~iphone.png in Resources */,
 				0B9051BD19771B96001E2ED5 /* checkbox@iphone.png in Resources */,
-				0B72EEF9196C672F00AC5A01 /* welcome-logo@2x~iphone.png in Resources */,
 				0B72EEFA196C672F00AC5A01 /* MPNotification.storyboard in Resources */,
 				0B72EEFB196C672F00AC5A01 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
 				0B02D37D19D0CFD50010C58D /* invite-button@2x~iphone.png in Resources */,
 				0B9051B919771B96001E2ED5 /* checkbox-selected@2x~iphone.png in Resources */,
 				0BA145801997A4A60031716F /* start-record-sound.aif in Resources */,
-				0B72EEFC196C672F00AC5A01 /* welcome-logo.png in Resources */,
 				0B9EC33019C8F5EB00F520B8 /* tuto-arrow.png in Resources */,
 				0BA145781997A4A60031716F /* end-record-sound.aif in Resources */,
+				0B05062A19D22D5B00CBFA59 /* welcome-logo.png in Resources */,
 				0B90E67719C7822E004A8F16 /* notif-perm@2x~iphone.png in Resources */,
 				0BA1457A1997A4A60031716F /* received-sound.aif in Resources */,
 				0B02D37719D0CB6E0010C58D /* menu-button.png in Resources */,
@@ -1091,6 +1091,7 @@
 				0BA145811997A4A60031716F /* typing-sound.aif in Resources */,
 				0BE5547A195A4ADC00CE4669 /* record@2x~iphone.png in Resources */,
 				0BDB64CC19521A7C00223093 /* NBPhoneNumberMetadata.plist in Resources */,
+				0B05062B19D22D5B00CBFA59 /* welcome-logo@2x~iphone.png in Resources */,
 				0BB0E8EF195B449A00C94AC0 /* MPCloseBtn@2x.png in Resources */,
 				3C95862819927E9400FF54B0 /* play@2x~iphone.png in Resources */,
 				0B9051A71975DE8C001E2ED5 /* PhoneFormats.dat in Resources */,
@@ -1113,15 +1114,14 @@
 				0BB0E8EC195B449A00C94AC0 /* Media.xcassets in Resources */,
 				0B9EC33119C8F5EB00F520B8 /* tuto-arrow@2x~iphone.png in Resources */,
 				0B9051BC19771B96001E2ED5 /* checkbox@iphone.png in Resources */,
-				0B893A491954E4FF00476BFE /* welcome-logo@2x~iphone.png in Resources */,
 				0BB0E8F1195B449A00C94AC0 /* MPNotification.storyboard in Resources */,
 				0BDB64CD19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
 				0B02D37C19D0CFD50010C58D /* invite-button@2x~iphone.png in Resources */,
 				0B9051B819771B96001E2ED5 /* checkbox-selected@2x~iphone.png in Resources */,
 				0BA1457F1997A4A60031716F /* start-record-sound.aif in Resources */,
-				0B893A4A1954E4FF00476BFE /* welcome-logo.png in Resources */,
 				0B9EC32F19C8F5EB00F520B8 /* tuto-arrow.png in Resources */,
 				0BA145771997A4A60031716F /* end-record-sound.aif in Resources */,
+				0B05062919D22D5B00CBFA59 /* welcome-logo.png in Resources */,
 				0B90E67619C7822E004A8F16 /* notif-perm@2x~iphone.png in Resources */,
 				0BA145791997A4A60031716F /* received-sound.aif in Resources */,
 				0B02D37619D0CB6E0010C58D /* menu-button.png in Resources */,

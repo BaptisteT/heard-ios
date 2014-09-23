@@ -17,13 +17,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Waved" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yMe-3M-kKz">
-                                <rect key="frame" x="107" y="260" width="107" height="48"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Telepath" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yMe-3M-kKz">
+                                <rect key="frame" x="8" y="260" width="304" height="48"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="107" id="M44-54-eph"/>
+                                    <constraint firstAttribute="width" constant="304" id="M44-54-eph"/>
                                     <constraint firstAttribute="height" constant="48" id="zja-So-q28"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="35"/>
+                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="32"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -33,7 +33,7 @@
                                     <constraint firstAttribute="width" constant="320" id="IK8-dU-TLz"/>
                                     <constraint firstAttribute="height" constant="25" id="ay6-Ct-s2u"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="22"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -52,22 +52,22 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="welcome-logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="dwm-Cy-B4c">
-                                <rect key="frame" x="0.0" y="100" width="320" height="120"/>
+                                <rect key="frame" x="60" y="40" width="200" height="200"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="120" id="ETk-1a-5CE"/>
+                                    <constraint firstAttribute="height" constant="200" id="ETk-1a-5CE"/>
+                                    <constraint firstAttribute="width" constant="200" id="PmS-IQ-jNn"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="yMe-3M-kKz" secondAttribute="centerX" id="2Pk-xC-NFM"/>
+                            <constraint firstAttribute="centerX" secondItem="dwm-Cy-B4c" secondAttribute="centerX" id="5vg-MI-050"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="J5D-hb-dnh" secondAttribute="bottom" constant="20" id="B56-zo-VKY"/>
-                            <constraint firstItem="dwm-Cy-B4c" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="H9d-1r-6es"/>
                             <constraint firstAttribute="trailing" secondItem="J5D-hb-dnh" secondAttribute="trailing" id="Mtj-Ph-QEc"/>
                             <constraint firstItem="LYj-fg-v2e" firstAttribute="top" secondItem="yMe-3M-kKz" secondAttribute="bottom" id="ZEe-6o-Op8"/>
-                            <constraint firstItem="yMe-3M-kKz" firstAttribute="top" secondItem="dwm-Cy-B4c" secondAttribute="bottom" constant="40" id="cxj-ig-e2I"/>
+                            <constraint firstItem="yMe-3M-kKz" firstAttribute="top" secondItem="dwm-Cy-B4c" secondAttribute="bottom" constant="20" id="cxj-ig-e2I"/>
                             <constraint firstItem="J5D-hb-dnh" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="lvd-rQ-MCH"/>
-                            <constraint firstAttribute="trailing" secondItem="dwm-Cy-B4c" secondAttribute="trailing" id="q9V-Vz-EhE"/>
                             <constraint firstAttribute="centerX" secondItem="LYj-fg-v2e" secondAttribute="centerX" id="tNt-i9-5RT"/>
                             <constraint firstAttribute="centerY" secondItem="yMe-3M-kKz" secondAttribute="centerY" id="yPI-R1-n49"/>
                         </constraints>
@@ -1498,7 +1498,7 @@
         <image name="checkbox.png" width="242" height="242"/>
         <image name="contact-perm.png" width="247" height="247"/>
         <image name="menu-button.png" width="292" height="292"/>
-        <image name="welcome-logo.png" width="640" height="165"/>
+        <image name="welcome-logo.png" width="246" height="246"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
