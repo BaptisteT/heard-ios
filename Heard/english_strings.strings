@@ -132,9 +132,9 @@
 "contact_access_button_title" = "ALLOW CONTACT ACCESS";
 
 // tuto
-"hold_tuto_action_label" = "Hold contact to record.";
-"tap_tuto_action_label" = "Tap contact to play.";
-"menu_tuto_action_label" = "Invite new friends!";
+"hold_tuto_action_label" = "Hold & Speak";
+"tap_tuto_action_label" = "Tap & Listen";
+"menu_tuto_action_label" = "Reach other friends!";
 
 //Alerts
 "shake_to_cancel_tuto" = "Shake your phone to cancel.";
