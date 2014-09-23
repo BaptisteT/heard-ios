@@ -65,6 +65,7 @@
 @property (weak, nonatomic) UIScrollView *contactScrollView;
 @property (nonatomic) BOOL retrieveNewContact;
 @property (nonatomic, strong) Contact *contactToAdd;
+@property (nonatomic, strong) ContactView *inviteContactView;
 // Record
 @property (strong, nonatomic) UIView *recorderContainer;
 @property (nonatomic,strong) UIView *recorderLine;
@@ -171,10 +172,10 @@
     }
     
     //Create invite contact view
-    ContactView *inviteContactView = [[InviteContactView alloc] init];
-    inviteContactView.delegate = self;
-    [self.contactScrollView addSubview:inviteContactView];
-    [self addNameLabelForView:inviteContactView];
+    self.inviteContactView = [[InviteContactView alloc] init];
+    self.inviteContactView.delegate = self;
+    [self.contactScrollView addSubview:self.inviteContactView];
+    [self addNameLabelForView:self.inviteContactView];
     
     // Create contact views
     [self displayContactViews];
@@ -1562,6 +1563,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             for (ContactView *contactView in self.contactViews) {
                 [contactView cancelRecording];
             }
+            [self.inviteContactView cancelRecording];
             
             [self tutoMessage:NSLocalizedStringFromTable(@"cancel_success_message",kStringFile, @"comment") withDuration:3 priority:NO];
             
