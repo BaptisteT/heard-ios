@@ -387,23 +387,20 @@
     self.addressBookFormattedContacts = adressBookWithFormattedKey;
     
     // Get contacts and compare with contact in memory
-    [ApiUtils getMyContacts:contactsInfo atSignUp:self.isSignUp success:^(NSArray *contacts) {
+    [ApiUtils getMyContacts:contactsInfo atSignUp:self.isSignUp success:^(NSArray *contacts, NSArray *futureContacts) {
         [self hideLoadingIndicator];
         
         for (Contact *contact in contacts) {
             Contact *existingContact = [ContactUtils findContact:contact.identifier inContactsArray:self.contacts];
             if (!existingContact) {
                 [self.contacts addObject:contact];
-                
+    
                 //Use server name if blank in address book
                 NSString *firstName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
-                
                 if (firstName && [firstName length] > 0) {
                     contact.firstName = firstName;
                 }
-                
                 contact.lastName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
-                
                 contact.lastMessageDate = 0;
                 [self displayAdditionnalContact:contact];
             }
@@ -413,13 +410,25 @@
                 
                 //Use server name if blank in address book
                 NSString *firstName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
-                
                 if (firstName && [firstName length] > 0) {
                     contact.firstName = firstName;
                 }
                 contact.lastName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
                 existingContact.phoneNumber = contact.phoneNumber;
             }
+        }
+        for (NSDictionary *futureContact in futureContacts) {
+            // todo BT
+            // accept on certain conditions (no contact with same first and last name / no contact with the same number as other contacts )
+            NSString *phoneNumber = (NSString *)[futureContact objectForKey:@"phone_number"];
+            Contact *contact = [Contact createContactWithId:0 phoneNumber:phoneNumber
+                                                  firstName:((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).firstName
+                                                   lastName:((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).lastName];
+            contact.facebookId = (NSString *)[futureContact objectForKey:@"facebook_id"];
+            contact.isFutureContact = YES;
+            contact.recordId = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).recordId;
+            [self.contacts addObject:contact];
+            [self displayAdditionnalContact:contact];
         }
         self.addressBookFormattedContacts = nil;
         

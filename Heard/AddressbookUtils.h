@@ -25,4 +25,6 @@
 
 + (ABRecordRef)findContactForNumber:(NSString *)formattedNumber;
 
++ (UIImage *)getPictureFromRecordId:(ABRecordID)recordId andAddressBook:(ABAddressBookRef)addressBook;
+
 @end

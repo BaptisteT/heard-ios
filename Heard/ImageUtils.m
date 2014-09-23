@@ -58,6 +58,9 @@
 {
     // Get size of current image
     CGSize size = [image size];
+    if (side == 0) {
+        side = MIN(size.width, size.height);
+    }
     if( size.width == size.height && size.width == side){
         return image;
     }

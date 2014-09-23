@@ -15,6 +15,7 @@
 #import "ImageUtils.h"
 #import "TrackingUtils.h"
 #import "DashboardViewController.h"
+#import "AddressbookUtils.h"
 
 #define ACTION_CIRCLE_BORDER 2.5
 #define CONTACT_BORDER 0.5
@@ -380,7 +381,9 @@
     // Update last message date
     self.contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
     
-    if ([GeneralUtils isCurrentUser:self.contact]) {
+    if (self.contact.isFutureContact) {
+        // todo bt
+    } else if ([GeneralUtils isCurrentUser:self.contact]) {
         Message *message = [Message new];
         message.senderId = self.contact.identifier;
         message.audioData = [self.delegate getLastRecordedData];
@@ -722,21 +725,38 @@
 
 - (void)setContactPicture
 {
-    NSURLRequest *imageRequest = [NSURLRequest requestWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:self.contact.identifier]];
-    __weak __typeof(self)weakSelf = self;
-    
-    //Fade in profile picture
-    [self.imageView setImageWithURLRequest:imageRequest placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-        [UIView transitionWithView:weakSelf.imageView
-                          duration:1.0f
-                           options:UIViewAnimationOptionTransitionCrossDissolve
-                        animations:^{[weakSelf.imageView setImage:image];}
-                        completion:nil];
-        weakSelf.pictureIsLoaded = YES;
-    } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-        weakSelf.pictureIsLoaded = NO;
-    }];
-    
+    if (self.contact.isFutureContact && self.contact.facebookId.length == 0) {
+        UIImage *picture = [AddressbookUtils getPictureFromRecordId:self.contact.recordId andAddressBook:[self.delegate addressBook]];
+        if (picture) {
+            [UIView transitionWithView:self.imageView
+                              duration:1.0f
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{[self.imageView setImage:picture];}
+                            completion:nil];
+            self.pictureIsLoaded = YES;
+        }
+    } else {
+        NSURL *url;
+        if (self.contact.isFutureContact) {
+            url = [GeneralUtils getUserProfilePictureURLFromFacebookId:self.contact.facebookId];
+        } else {
+            url = [GeneralUtils getUserProfilePictureURLFromUserId:self.contact.identifier];
+        }
+        NSURLRequest *imageRequest = [NSURLRequest requestWithURL:url];
+        __weak __typeof(self)weakSelf = self;
+
+        //Fade in profile picture
+        [self.imageView setImageWithURLRequest:imageRequest placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+            [UIView transitionWithView:weakSelf.imageView
+                              duration:1.0f
+                               options:UIViewAnimationOptionTransitionCrossDissolve
+                            animations:^{[weakSelf.imageView setImage:image];}
+                            completion:nil];
+            weakSelf.pictureIsLoaded = YES;
+        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+            weakSelf.pictureIsLoaded = NO;
+        }];
+    }
 }
 
 - (void)initPendingContactOverlay {

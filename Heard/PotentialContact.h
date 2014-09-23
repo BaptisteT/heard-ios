@@ -13,6 +13,7 @@
 
 @interface PotentialContact : NSObject
 
+@property (nonatomic) ABRecordID recordId;
 @property (strong, nonatomic) NSString *phoneNumber;
 @property (strong, nonatomic) NSString *firstName;
 @property (strong, nonatomic) NSString *lastName;

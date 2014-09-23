@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AddressBook/AddressBook.h>
 
 @interface Contact : NSObject
 
@@ -19,6 +20,9 @@
 @property (nonatomic) BOOL isHidden;
 @property (nonatomic) NSUInteger lastPlayedMessageId;
 @property (nonatomic) BOOL currentUserDidNotAnswerLastMessage;
+@property (nonatomic) BOOL isFutureContact;
+@property (nonatomic) NSString *facebookId;
+@property (nonatomic) ABRecordID recordId;
 
 
 + (Contact *)createContactWithId:(NSUInteger)identifier
