@@ -424,6 +424,12 @@
             contact.facebookId = (NSString *)[futureContact objectForKey:@"facebook_id"];
             contact.isFutureContact = YES;
             contact.recordId = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).recordId;
+            // Security check
+            for (Contact *normalContact in self.contacts) {
+                if ([normalContact.phoneNumber isEqualToString:phoneNumber] || ([normalContact.firstName isEqualToString:contact.firstName] && [normalContact.lastName isEqualToString:contact.lastName])) {
+                    continue;
+                }
+            }
             [self.contacts addObject:contact];
             [self displayAdditionnalContact:contact];
         }
@@ -880,7 +886,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)sendMessageToContact:(ContactView *)contactView
 {
     NSData *audioData = [self getLastRecordedData];
-    [ApiUtils sendMessage:audioData toUser:contactView.contact.identifier success:^{
+    [ApiUtils sendMessage:audioData toUser:contactView.contact success:^{
         [contactView message:nil sentWithError:NO]; // no need to pass the message here
     } failure:^{
         [contactView message:audioData sentWithError:YES];
@@ -895,7 +901,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)inviteContactsWithMessage:(Message *)message
 {
     if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
-        //BB TODO show contact permission
+        [self displayContactAuthView];
         return;
     }
     

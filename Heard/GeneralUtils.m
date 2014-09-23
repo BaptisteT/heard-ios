@@ -15,6 +15,7 @@
 #import "SessionUtils.h"
 #import "AddressbookUtils.h"
 #import "UIImageView+AFNetworking.h"
+#import "ImageUtils.h"
 
 @implementation GeneralUtils
 
@@ -80,6 +81,8 @@
             url = [GeneralUtils getUserProfilePictureURLFromUserId:contact.identifier];
         }
         [imageView setImageWithURL:url];
+        // Square it
+        imageView.image = [ImageUtils cropBiggestCenteredSquareImageFromImage:imageView.image withSide:0];
     }
 }
 
