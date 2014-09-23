@@ -11,6 +11,7 @@
 #import "NBPhoneNumber.h"
 #import "Contact.h"
 #import "PotentialContact.h"
+#import "ImageUtils.h"
 
 @implementation AddressbookUtils
 
@@ -316,7 +317,20 @@
 }
 
 
-
++ (UIImage *)getPictureFromRecordId:(ABRecordID)recordId andAddressBook:(ABAddressBookRef)addressBook
+{
+    if (!recordId) {
+        return nil;
+    }
+    ABRecordRef person = ABAddressBookGetPersonWithRecordID (addressBook,recordId);
+    if (!person || !ABPersonHasImageData(person)) {
+        return nil;
+    }
+    CFDataRef imageData = ABPersonCopyImageData(person);
+    UIImage *image = [ImageUtils cropBiggestCenteredSquareImageFromImage:[UIImage imageWithData:(__bridge NSData *)(imageData)] withSide:0];
+    CFRelease(imageData);
+    return image;
+}
 
 
 @end

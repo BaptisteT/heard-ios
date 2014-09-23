@@ -23,6 +23,10 @@
 
 + (NSURL *)getUserProfilePictureURLFromUserId:(NSInteger)userId;
 
++ (NSURL *)getUserProfilePictureURLFromFacebookId:(NSString *)facebookId;
+
++ (void)setProfilePicture:(UIImageView *)imageView fromContact:(Contact *)contact andAddressBook:(ABAddressBookRef)addressBook;
+
 + (BOOL)isFirstOpening;
 
 + (NSURL *)getPlayedAudioURL;

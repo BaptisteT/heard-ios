@@ -18,6 +18,9 @@
 #define CONTACTS_HIDDEN_PREF @"Contact Hidden Preference"
 #define CONTACTS_LAST_MESSAGE_DATE_PREF @"Contact Last Message Date Preference"
 #define CONTACTS_LAST_MESSAGE_NOT_ANSWERED @"Contact Last Message Has Been Answered Preference"
+#define CONTACTS_FUTURE_PREF @"Contact is Future Preference"
+#define CONTACTS_FACEBOOK_ID_PREF @"Contact Facebook Id Preference"
+#define CONTACTS_ABRECORD_ID_PREF @"Contact ABRecord Id Preference"
 
 @implementation ContactUtils
 
@@ -31,6 +34,9 @@
     NSArray *hiddenArray = [[NSUserDefaults standardUserDefaults] arrayForKey:CONTACTS_HIDDEN_PREF];
     NSArray *lastMessageDateArray = [[NSUserDefaults standardUserDefaults] arrayForKey:CONTACTS_LAST_MESSAGE_DATE_PREF];
     NSArray *lastMessageNotAnsweredArray = [[NSUserDefaults standardUserDefaults] arrayForKey:CONTACTS_LAST_MESSAGE_NOT_ANSWERED];
+    NSArray *isFutureArray = [[NSUserDefaults standardUserDefaults] arrayForKey:CONTACTS_FUTURE_PREF];
+    NSArray *facebookIdArray = [[NSUserDefaults standardUserDefaults] arrayForKey:CONTACTS_FACEBOOK_ID_PREF];
+    NSArray *abRecordIdArray = [[NSUserDefaults standardUserDefaults] arrayForKey:CONTACTS_ABRECORD_ID_PREF];
     
     NSInteger contactCount = [idArray count];
     NSMutableArray *contacts = [[NSMutableArray alloc] initWithCapacity:contactCount];
@@ -40,6 +46,12 @@
         contact.isPending = [pendingArray[i] boolValue];
         contact.isHidden = hiddenArray ? [hiddenArray[i] boolValue] : NO;
         contact.currentUserDidNotAnswerLastMessage = lastMessageNotAnsweredArray ? [lastMessageNotAnsweredArray[i] boolValue] : NO;
+        contact.isFutureContact = isFutureArray ? [isFutureArray[i] boolValue] : NO;
+        
+        if (contact.isFutureContact) {
+            contact.facebookId = facebookIdArray[i];
+            contact.recordId = (ABRecordID)[abRecordIdArray[i] intValue];
+        }
         [contacts addObject:contact];
     }
     return contacts;
@@ -56,7 +68,10 @@
     NSMutableArray *pendingArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
     NSMutableArray *hiddenArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
     NSMutableArray *lastMessageDateArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
-     NSMutableArray *lastMessageNotAnsweredArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
+    NSMutableArray *lastMessageNotAnsweredArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
+    NSMutableArray *isFutureArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
+    NSMutableArray *facebookIdArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
+    NSMutableArray *abRecordIdArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
     for (Contact * contact in contacts) {
         [idArray addObject:[NSNumber numberWithInteger:contact.identifier]];
         [phoneArray addObject:contact.phoneNumber ? contact.phoneNumber : @""];
@@ -66,6 +81,9 @@
         [hiddenArray addObject:[NSNumber numberWithInteger:contact.isHidden]];
         [lastMessageDateArray addObject:[NSNumber numberWithInteger:contact.lastMessageDate]];
         [lastMessageNotAnsweredArray addObject:[NSNumber numberWithInteger:contact.currentUserDidNotAnswerLastMessage]];
+        [isFutureArray addObject:[NSNumber numberWithBool:contact.isFutureContact]];
+        [facebookIdArray addObject:contact.facebookId];
+        [abRecordIdArray addObject:[NSNumber numberWithInteger:contact.recordId]];
     }
     [prefs setObject:idArray forKey:CONTACTS_ID_PREF];
     [prefs setObject:phoneArray forKey:CONTACTS_PHONE_PREF];
@@ -75,6 +93,9 @@
     [prefs setObject:hiddenArray forKey:CONTACTS_HIDDEN_PREF];
     [prefs setObject:lastMessageDateArray forKey:CONTACTS_LAST_MESSAGE_DATE_PREF];
     [prefs setObject:lastMessageNotAnsweredArray forKey:CONTACTS_LAST_MESSAGE_NOT_ANSWERED];
+    [prefs setObject:isFutureArray forKey:CONTACTS_FUTURE_PREF];
+    [prefs setObject:facebookIdArray forKey:CONTACTS_FACEBOOK_ID_PREF];
+    [prefs setObject:abRecordIdArray forKey:CONTACTS_ABRECORD_ID_PREF];
     [prefs synchronize];
 }
 

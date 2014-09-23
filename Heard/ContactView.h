@@ -88,4 +88,6 @@
 
 - (void)endTutoMode;
 
+- (ABAddressBookRef) addressBook;
+
 @end

@@ -18,6 +18,8 @@
 #import "GeneralUtils.h"
 #import "Constants.h"
 #import "SessionUtils.h"
+#import "AddressbookUtils.h"
+#import "UIImageView+AFNetworking.h"
 
 @implementation GeneralUtils
 
@@ -71,6 +73,21 @@
     return [name length] > 0 && [name length] <= kMaxNameLength;
 }
 
++ (void)setProfilePicture:(UIImageView *)imageView fromContact:(Contact *)contact andAddressBook:(ABAddressBookRef)addressBook
+{
+    if (contact.isFutureContact && contact.facebookId.length == 0) {
+        imageView.image = [AddressbookUtils getPictureFromRecordId:contact.recordId andAddressBook:addressBook];
+    } else {
+        NSURL *url;
+        if (contact.isFutureContact) {
+            url = [GeneralUtils getUserProfilePictureURLFromFacebookId:contact.facebookId];
+        } else {
+            url = [GeneralUtils getUserProfilePictureURLFromUserId:contact.identifier];
+        }
+        [imageView setImageWithURL:url];
+    }
+}
+
 + (NSURL *)getUserProfilePictureURLFromUserId:(NSInteger)userId
 {
     NSString *baseURL;
@@ -80,8 +97,13 @@
     } else {
         baseURL = kStagingHeardProfilePictureBaseURL;
     }
-    
     return [NSURL URLWithString:[baseURL stringByAppendingFormat:@"%lu%@",(unsigned long)userId,@"_profile_picture"]];
+}
+
++ (NSURL *)getUserProfilePictureURLFromFacebookId:(NSString *)facebookId
+{
+    NSString *baseURL = kFacebookProfilePictureURL;
+    return [NSURL URLWithString:[baseURL stringByReplacingOccurrencesOfString:@"id" withString:facebookId]];
 }
 
 + (BOOL)isFirstOpening

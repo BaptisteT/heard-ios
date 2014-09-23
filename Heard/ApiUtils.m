@@ -287,7 +287,7 @@
     }];
 }
 
-+ (void)getMyContacts:(NSMutableDictionary *)contactsInfo atSignUp:(BOOL)isSignUp success:(void(^)(NSArray *contacts))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock
++ (void)getMyContacts:(NSMutableDictionary *)contactsInfo atSignUp:(BOOL)isSignUp success:(void(^)(NSArray *contacts, NSArray *futureContacts))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/get_contacts_and_futures.json"];
     
@@ -302,8 +302,9 @@
         NSDictionary *result = [JSON valueForKeyPath:@"result"];
         NSArray *rawContacts = [result valueForKeyPath:@"contacts"];
         NSArray *contacts = [Contact rawContactsToInstances:rawContacts];
+        NSArray *futureContacts = [result valueForKeyPath:@"future_contacts"];
         if (successBlock) {
-            successBlock(contacts);
+            successBlock(contacts, futureContacts);
         }
     }failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"ERROR: %@, %@", task.description, error);

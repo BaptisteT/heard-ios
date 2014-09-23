@@ -11,13 +11,15 @@
 
 @implementation PotentialContact
 
-+ (PotentialContact *)createContactPhoneNumber:(NSString *)phoneNumber
-                                     firstName:(NSString *)firstName
-                                      lastName:(NSString *)lastName
-                                    facebookId:(NSString *)facebookId
++ (PotentialContact *)createPotentialContactWithRecordId:(ABRecordID)recordId
+                                             PhoneNumber:(NSString *)phoneNumber
+                                               firstName:(NSString *)firstName
+                                                lastName:(NSString *)lastName
+                                              facebookId:(NSString *)facebookId
 {
     PotentialContact *contact = [[PotentialContact alloc] init];
     
+    contact.recordId = recordId;
     contact.phoneNumber = phoneNumber;
     contact.firstName = firstName;
     contact.lastName = lastName;
@@ -34,6 +36,7 @@
     if (!firstName && !lastName) {
         return nil;
     }
+    ABRecordID recordID = ABRecordGetRecordID(person);
     NSString *phoneNumber = [NSString stringWithFormat:@"+%@%@", nbPhoneNumber.countryCode, nbPhoneNumber.nationalNumber];
     NSString *facebookUsername = @"";
     ABMultiValueRef socialProfiles = ABRecordCopyValue(person, kABPersonInstantMessageProperty);
@@ -44,10 +47,11 @@
             facebookUsername = ([socialItem objectForKey:(NSString *)kABPersonInstantMessageUsernameKey]);
         }
     }
-    PotentialContact *contact = [PotentialContact createContactPhoneNumber:phoneNumber
-                                                                 firstName:firstName
-                                                                  lastName:lastName
-                                                                facebookId:facebookUsername];
+    PotentialContact *contact = [PotentialContact createPotentialContactWithRecordId:recordID
+                                                                         PhoneNumber:phoneNumber
+                                                                           firstName:firstName
+                                                                            lastName:lastName
+                                                                          facebookId:facebookUsername];
     
     if ([phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeMOBILE) {
         contact.hasPhoto = ABPersonHasImageData(person);

@@ -25,5 +25,6 @@
 - (void)removeViewOfContact:(Contact *)contact;
 - (void)displayViewOfContact:(Contact *)contact;
 - (ContactView *)getViewOfContact:(Contact *)contact;
+- (ABAddressBookRef)addressBook;
 
 @end
