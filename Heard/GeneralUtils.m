@@ -10,6 +10,11 @@
 #define PUSH_NOTIF_SEEN_PREF @"Push Notif Seen"
 #define MICRO_REQUEST_SEEN_PREF @"Micro Request Seen"
 
+#define ONE_MINUTE 60
+#define ONE_HOUR (60 * ONE_MINUTE)
+#define ONE_DAY (24 * ONE_HOUR)
+#define ONE_WEEK (7 * ONE_DAY)
+
 #import "GeneralUtils.h"
 #import "Constants.h"
 #import "SessionUtils.h"
@@ -154,6 +159,53 @@
     if (canOpenSettings) {
         NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
         [[UIApplication sharedApplication] openURL:url];
+    }
+}
+
++ (NSString *)dateToAgeString:(NSInteger)intDate
+{
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:intDate];
+    NSTimeInterval age = -[date timeIntervalSinceNow];
+    
+    if (age > 0) {
+        NSInteger weeks = age / ONE_WEEK;
+        NSInteger days = age / ONE_DAY;
+        NSInteger hours = age / ONE_HOUR;
+        NSInteger minutes = age / ONE_MINUTE;
+        
+        if (weeks >= 1) {
+            if (weeks > 1) {
+                return [[NSString stringWithFormat:@"%ld", weeks] stringByAppendingString:@" weeks ago"];
+            } else {
+                return [[NSString stringWithFormat:@"%ld", weeks] stringByAppendingString:@" week ago"];
+            }
+        } else if (days >= 1) {
+            if (days > 1) {
+                return [[NSString stringWithFormat:@"%ld", days] stringByAppendingString:@" days ago"];
+            } else {
+                return [[NSString stringWithFormat:@"%ld", days] stringByAppendingString:@" day ago"];
+            }
+        } else if (hours >= 1) {
+            if (hours > 1) {
+                return [[NSString stringWithFormat:@"%ld", hours] stringByAppendingString:@" hours ago"];
+            } else {
+                return [[NSString stringWithFormat:@"%ld", hours] stringByAppendingString:@" hour ago"];
+            }
+        } else if (minutes >= 1) {
+            if (hours > 1) {
+                return [[NSString stringWithFormat:@"%ld", minutes] stringByAppendingString:@" minutes ago"];
+            } else {
+                return [[NSString stringWithFormat:@"%ld", minutes] stringByAppendingString:@" minute ago"];
+            }
+        } else {
+            if (age > 1) {
+                return [[NSString stringWithFormat:@"%ld", (long) age] stringByAppendingString:@" seconds ago"];
+            } else {
+                return [[NSString stringWithFormat:@"%ld", (long) age] stringByAppendingString:@" second ago"];
+            }
+        }
+    } else {
+        return @"now";
     }
 }
 

@@ -43,4 +43,6 @@
 
 + (void)openSettings;
 
++ (NSString *)dateToAgeString:(NSInteger)intDate;
+
 @end

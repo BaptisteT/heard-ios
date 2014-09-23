@@ -372,7 +372,7 @@
 		0BB0E8EB195B449A00C94AC0 /* UIView+MPSnapshotImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MPSnapshotImage.m"; sourceTree = "<group>"; };
 		0BB0E8FD195B44C900C94AC0 /* TrackingUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackingUtils.h; sourceTree = "<group>"; };
 		0BB0E8FE195B44C900C94AC0 /* TrackingUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackingUtils.m; sourceTree = "<group>"; };
-		0BD758BC1950F91B00CF0D85 /* Waved.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Waved.app; path = Telepath.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0BD758BC1950F91B00CF0D85 /* Telepath.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Telepath.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BD758BF1950F91B00CF0D85 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0BD758C11950F91B00CF0D85 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		0BD758C31950F91B00CF0D85 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -703,7 +703,7 @@
 		0BD758BD1950F91B00CF0D85 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0BD758BC1950F91B00CF0D85 /* Waved.app */,
+				0BD758BC1950F91B00CF0D85 /* Telepath.app */,
 				0B72EF01196C672F00AC5A01 /* WavedStaging.app */,
 			);
 			name = Products;
@@ -980,7 +980,7 @@
 			);
 			name = Telepath;
 			productName = Heard;
-			productReference = 0BD758BC1950F91B00CF0D85 /* Waved.app */;
+			productReference = 0BD758BC1950F91B00CF0D85 /* Telepath.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
