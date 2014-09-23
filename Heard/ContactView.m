@@ -477,7 +477,7 @@
 
 - (void)playNextMessage
 {
-    if (!self.unreadMessages || self.unreadMessages.count == 0)
+    if (![self hasUnreadMessages])
         return;
     if (self.contact.lastMessageDate <= ((Message *)self.unreadMessages[0]).createdAt) {
         self.contact.currentUserDidNotAnswerLastMessage = YES;
@@ -593,7 +593,7 @@
 
 - (void)addPlayedMessages:(NSMutableArray *)messages
 {
-    if (!self.unreadMessages) {
+    if (![self hasUnreadMessages]) {
         self.unreadMessages = messages;
     } else {
         // Case where message was not finished playing (do not add it again)
