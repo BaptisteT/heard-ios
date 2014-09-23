@@ -174,6 +174,7 @@
     ContactView *inviteContactView = [[InviteContactView alloc] init];
     inviteContactView.delegate = self;
     [self.contactScrollView addSubview:inviteContactView];
+    [self addNameLabelForView:inviteContactView];
     
     // Create contact views
     [self displayContactViews];
@@ -596,6 +597,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if ([GeneralUtils isAdminContact:contact]) {
         nameLabel.text = @"Waved";
         nameLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:14.0];
+    //Invite contact
     } else {
         if (contact.firstName) {
             nameLabel.text = [NSString stringWithFormat:@"%@", contact.firstName ? contact.firstName : @""];
