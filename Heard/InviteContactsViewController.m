@@ -36,6 +36,8 @@
 @property (nonatomic) BOOL disableProximityObserver;
 @property (nonatomic) BOOL isUsingHeadSet;
 
+@property (nonatomic, strong) UIAlertView *inviteSuccessAlertView;
+
 @end
 
 @implementation InviteContactsViewController
@@ -186,13 +188,13 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
         if ([MFMessageComposeViewController canSendText]) {
-            //Redirect to sms
-            MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
-            viewController.body = [NSString stringWithFormat:@"%@ %@ %@",NSLocalizedStringFromTable(@"invite_text_message_one",kStringFile,@"comment"),kProdAFHeardWebsite,NSLocalizedStringFromTable(@"invite_text_message_two",kStringFile,@"comment")];
-            viewController.recipients = self.selectedContacts;
-            viewController.messageComposeDelegate = self;
+            self.inviteSuccessAlertView = [[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"invite_messages_success_title",kStringFile,@"comment")
+                                                                     message:NSLocalizedStringFromTable(@"invite_messages_success_message",kStringFile,@"comment")
+                                                                    delegate:self
+                                                           cancelButtonTitle:@"OK"
+                                                           otherButtonTitles:nil];
             
-            [self presentViewController:viewController animated:YES completion:nil];
+            [self.inviteSuccessAlertView show];
         } else {
             [GeneralUtils showMessage:NSLocalizedStringFromTable(@"text_access_error_message",kStringFile,@"comment") withTitle:nil];
         }
@@ -203,6 +205,21 @@
     }];
 }
 
+- (void)alertView:(UIAlertView *)alertView
+clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+    if (alertView == self.inviteSuccessAlertView) {
+        //Redirect to sms
+        MFMessageComposeViewController *viewController = [[MFMessageComposeViewController alloc] init];
+        viewController.body = [NSString stringWithFormat:@"%@ %@ %@",NSLocalizedStringFromTable(@"invite_text_message_one",kStringFile,@"comment"),kProdAFHeardWebsite,NSLocalizedStringFromTable(@"invite_text_message_two",kStringFile,@"comment")];
+        viewController.recipients = self.selectedContacts;
+        viewController.messageComposeDelegate = self;
+        
+        [self presentViewController:viewController animated:YES completion:nil];
+
+    }
+}
 
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result
 {

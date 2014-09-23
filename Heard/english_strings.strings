@@ -95,8 +95,8 @@
 "text_access_error_message" = "Your device is not properly configured to send messages";
 "personal_invite_text_success_message" = "TRUCHOV successfully invited.";
 "share_mail_object_message" = "Let your friends hear your voice!";
-"send_invite_message_error_message" = "Message not sent, please try again.";
-"invite_contact_name" = "Add people";
+"invite_messages_success_title" = "Message successfully sent.";
+"invite_messages_success_message" = "Recipients are not yet on Waved, let's tell them you left them a message!";
 
 // Add
 "add_contact_missing_name_message" = "Please provide a first name or a last name.";
