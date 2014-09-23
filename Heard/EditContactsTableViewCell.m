@@ -17,9 +17,9 @@
 
 - (IBAction)hideButtonSwitched:(id)sender {
     if (self.switchButton.on) {
-        [self.delegate showContact:self.contact];
-    } else {
         [self.delegate hideContact:self.contact];
+    } else {
+        [self.delegate showContact:self.contact];
     }
 }
 

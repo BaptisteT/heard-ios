@@ -87,8 +87,9 @@
         }
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
         [request addValue:@"image/*" forHTTPHeaderField:@"Accept"];
-        [[UIImageView alloc] setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image){
-            imageView.image = [ImageUtils cropBiggestCenteredSquareImageFromImage:image withSide:0];
+        __weak __typeof(imageView)weakSelf = imageView;
+        [imageView setImageWithURLRequest:request placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image){
+            weakSelf.image = [ImageUtils cropBiggestCenteredSquareImageFromImage:image withSide:0];
         }failure:nil];
     }
 }
