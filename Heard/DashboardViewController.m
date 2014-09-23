@@ -1304,7 +1304,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Rate us
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_5]) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kAppStoreLink]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kProdAFHeardWebsite]];
     }
     
     // Log out
