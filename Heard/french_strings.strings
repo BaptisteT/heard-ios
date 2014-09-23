@@ -94,9 +94,7 @@
 "text_access_error_message" = "Votre téléphone ne semble pas configurer pour envoyer des messages.";
 "personal_invite_text_success_message" = "TRUCHOV a été invité avec succès.";
 "share_mail_object_message" = "Let your friends hear your voice !";
-"send_invite_message_error_message" = "We failed to send your message, please try again.";
-"invite_messages_success_title" = "Message successfully sent.";
-"invite_messages_success_message" = "You sent a message to friends that are not yet on Waved, let's tell them!";
+"send_invite_message_error_message" = "Message not sent, please try again.";
 
 // Add
 "add_contact_missing_name_message" = "Ajoutez svp un nom ou un prénom.";
