@@ -385,6 +385,7 @@
         Message *message = [Message new];
         message.senderId = self.contact.identifier;
         message.audioData = [self.delegate getLastRecordedData];
+        message.createdAt = [[NSDate date] timeIntervalSince1970];
         [self addUnreadMessage:message];
         [self resetDiscussionStateAnimated:NO];
         

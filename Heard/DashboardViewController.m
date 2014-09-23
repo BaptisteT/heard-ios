@@ -76,6 +76,7 @@
 @property (nonatomic) BOOL disableProximityObserver;
 @property (nonatomic) BOOL isUsingHeadSet;
 @property (nonatomic, strong) AVAudioPlayer *soundPlayer;
+@property (strong, nonatomic) UILabel *messageDateLabel;
 // Current user
 @property (strong, nonatomic) UIImagePickerController *imagePickerController;
 @property (strong, nonatomic) UIImageView *profilePicture;
@@ -229,7 +230,7 @@
     
     // Init recorder container
     self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, RECORDER_HEIGHT)];
-    self.recorderContainer.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+    self.recorderContainer.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.recorderContainer];
     self.recorderContainer.hidden = YES;
     
@@ -240,7 +241,7 @@
     
     // Init player container
     self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, PLAYER_UI_HEIGHT)];
-    self.playerContainer.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+    self.playerContainer.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.playerContainer];
     self.playerContainer.hidden = YES;
     
@@ -248,6 +249,18 @@
     self.playerLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, PLAYER_UI_HEIGHT)];
     self.playerLine.backgroundColor = [ImageUtils transparentGreen];
     [self.playerContainer addSubview:self.playerLine];
+    
+    //player date label
+    self.messageDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 25, 120, 25)];
+    self.messageDateLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:15.0];
+    self.messageDateLabel.textAlignment = NSTextAlignmentCenter;
+    self.messageDateLabel.textColor = [UIColor grayColor];
+    self.messageDateLabel.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.8];
+    self.messageDateLabel.hidden = YES;
+    self.messageDateLabel.text = @"";
+    self.messageDateLabel.clipsToBounds = YES;
+    self.messageDateLabel.layer.cornerRadius = 5;
+    [self.playerContainer addSubview:self.messageDateLabel];
     
     // Go to access view controller if acces has not yet been granted
     if (!self.contactAuthViewSeen && ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
@@ -1056,6 +1069,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.audioData error:nil];
     [self addMessagesToLastMessagesPlayed:message];
     
+    //Show message date
+    self.messageDateLabel.hidden = NO;
+    self.messageDateLabel.text = [GeneralUtils dateToAgeString:message.createdAt];
+    
     // Player UI
     NSTimeInterval duration = self.mainPlayer.duration;
     [self playerUI:duration ByContactView:contactView];
@@ -1070,6 +1087,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (BOOL)isRecording {
     return self.recorder.isRecording;
 }
+
 
 - (void)pendingContactClicked:(Contact *)contact
 {
@@ -1170,6 +1188,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.menuButton.hidden = NO;
     self.titleLabel.hidden = NO;
     self.contactScrollView.clipsToBounds = YES;
+    
+    self.messageDateLabel.hidden = YES;
     
     // End central player UI
     [self.mainPlayer stop];
