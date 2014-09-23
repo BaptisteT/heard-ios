@@ -627,10 +627,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self.contacts removeObject:contactView.contact];
         [contactView.nameLabel removeFromSuperview];
         
-        if (contactView.unreadMessages) {
-            [[UIApplication sharedApplication] setApplicationIconBadgeNumber:[[UIApplication sharedApplication] applicationIconBadgeNumber] - contactView.unreadMessages.count];
-        }
         [self.contactViews removeObject:contactView];
+        if (contactView.unreadMessages) {
+            [self resetApplicationBadgeNumber];
+        }
         
         // Change position of other bubbles
         [self reorderContactViews];
@@ -693,15 +693,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.contactScrollView setContentOffset:CGPointMake(0, -self.contactScrollView.contentInset.top) animated:YES];
     
     void (^successBlock)(NSArray*,BOOL,NSArray*) = ^void(NSArray *messages, BOOL newContactOnServer, NSArray *unreadMessageContacts) {
-        //Reset unread messages
-        [self resetUnreadMessages];
-        
         // Attribute messages and reorder view
         BOOL areAttributed = YES;
         for (Message *message in messages) {
             areAttributed &= [self attributeMessageToExistingContacts:message];
         }
-        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:messages.count];
+        [self resetApplicationBadgeNumber];
         [self reorderContactViews];
         
         // Clean / robust / somewhere else
@@ -1584,6 +1581,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                 if (contactView.contact.identifier == contactId) {
                     [contactView addPlayedMessages:self.lastMessagesPlayed];
                     [self resetLastMessagesPlayed];
+                    [self resetApplicationBadgeNumber];
                     [contactView playNextMessage];
                     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
                     [prefs setObject:@"dummy" forKey:kUserReplayedPref];
@@ -1754,5 +1752,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.openingTutoView.hidden = YES;
 }
 
+- (void)resetApplicationBadgeNumber {
+    NSInteger sum = 0;
+    for (ContactView *contactView in self.contactViews) {
+        if (contactView.unreadMessages) {
+            sum += [contactView.unreadMessages count];
+        }
+    }
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:sum];
+}
 
 @end
