@@ -54,8 +54,8 @@
 // Navigation
 // ----------------------------------------------------------
 - (IBAction)doneButtonClicked:(id)sender {
-    [self.delegate reorderContactViews];
     [self dismissViewControllerAnimated:NO completion:nil];
+    [self.delegate reorderContactViews];
 }
 
 
