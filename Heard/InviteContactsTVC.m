@@ -16,7 +16,6 @@
 @property (strong, nonatomic) NSArray *sectionTitles;
 @property (strong, nonatomic) NSMutableArray *filteredContacts;
 
-@property (nonatomic) BOOL allSelected;
 @property (weak, nonatomic) IBOutlet UISearchBar *tableSearchBar;
 
 @end
@@ -26,8 +25,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.allSelected = NO;
     
     self.edgesForExtendedLayout = UIRectEdgeNone;
     
@@ -80,14 +77,17 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"Invite Contact Cell" forIndexPath:indexPath];
-    
+    UITableViewCell *cell;
     NSMutableArray *contact;
     
     if (tableView == self.searchDisplayController.searchResultsTableView) {
-        contact = self.filteredContacts[indexPath.row];
+        cell = [self.tableView dequeueReusableCellWithIdentifier:@"Invite Contact Cell"];
+        NSString *key = self.filteredContacts[indexPath.row][0];
+        NSInteger i = [self.filteredContacts[indexPath.row][1] integerValue];
+        contact = [self.delegate.indexedContacts objectForKey:key][i];
     } else {
         // Configure the cell...
+        cell = [self.tableView dequeueReusableCellWithIdentifier:@"Invite Contact Cell" forIndexPath:indexPath];
         NSString *sectionTitle = [self.sectionTitles objectAtIndex:indexPath.section];
         NSArray *sectionContacts = [self.delegate.indexedContacts objectForKey:sectionTitle];
         contact = [sectionContacts objectAtIndex:indexPath.row];
@@ -125,9 +125,18 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *sectionTitle = [self.sectionTitles objectAtIndex:indexPath.section];
-    NSArray *sectionContacts = [self.delegate.indexedContacts objectForKey:sectionTitle];
-    NSMutableArray *contact = [sectionContacts objectAtIndex:indexPath.row];
+    NSMutableArray *contact;
+    
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        NSString *key = self.filteredContacts[indexPath.row][0];
+        NSInteger i = [self.filteredContacts[indexPath.row][1] integerValue];
+        contact = [self.delegate.indexedContacts objectForKey:key][i];
+    } else {
+        NSString *sectionTitle = [self.sectionTitles objectAtIndex:indexPath.section];
+        NSArray *sectionContacts = [self.delegate.indexedContacts objectForKey:sectionTitle];
+        contact = [sectionContacts objectAtIndex:indexPath.row];
+    }
+    
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
@@ -136,7 +145,6 @@
         cell.imageView.image = [UIImage imageNamed:@"checkbox.png"];
         [self.delegate deselectContactWithPhoneNumber:contact[2]];
         
-        self.allSelected = NO;
     } else {
         contact[3] = @"selected";
         cell.imageView.image = [UIImage imageNamed:@"checkbox-selected.png"];
@@ -144,14 +152,28 @@
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+
 }
 
-- (void)selectAll {
-    if (self.allSelected) {
-        [self deselectAll];
-    } else {
-        self.allSelected = YES;
+- (void)deselectAll {
+    if (self.tableView == self.searchDisplayController.searchResultsTableView) {
+        NSInteger count = [self.filteredContacts count];
         
+        for (int i = 0; i < count; i++) {
+            NSUInteger ints[2] = {0,i};
+            NSIndexPath *indexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
+            
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            
+            NSString *key = self.filteredContacts[i][0];
+            NSInteger j = [self.filteredContacts[i][1] integerValue];
+            NSMutableArray *contact = [self.delegate.indexedContacts objectForKey:key][j];
+            
+            contact[3] = @"not selected";
+            cell.imageView.image = [UIImage imageNamed:@"checkbox.png"];
+            [self.delegate deselectContactWithPhoneNumber:contact[2]];
+        }
+    } else {
         for (int i = 0; i < [self.tableView numberOfSections]; i++) {
             for (int j = 0; j < [self.tableView numberOfRowsInSection:i]; j++) {
                 NSUInteger ints[2] = {i,j};
@@ -162,30 +184,10 @@
                 NSArray *sectionContacts = [self.delegate.indexedContacts objectForKey:sectionTitle];
                 NSMutableArray *contact = [sectionContacts objectAtIndex:indexPath.row];
                 
-                contact[3] = @"selected";
-                cell.imageView.image = [UIImage imageNamed:@"checkbox-selected.png"];
-                [self.delegate selectContactWithPhoneNumber:contact[2]];
+                contact[3] = @"not selected";
+                cell.imageView.image = [UIImage imageNamed:@"checkbox.png"];
+                [self.delegate deselectContactWithPhoneNumber:contact[2]];
             }
-        }
-    }
-}
-
-- (void)deselectAll {
-    self.allSelected = NO;
-        
-    for (int i = 0; i < [self.tableView numberOfSections]; i++) {
-        for (int j = 0; j < [self.tableView numberOfRowsInSection:i]; j++) {
-            NSUInteger ints[2] = {i,j};
-            NSIndexPath *indexPath = [NSIndexPath indexPathWithIndexes:ints length:2];
-            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-                
-            NSString *sectionTitle = [self.sectionTitles objectAtIndex:indexPath.section];
-            NSArray *sectionContacts = [self.delegate.indexedContacts objectForKey:sectionTitle];
-            NSMutableArray *contact = [sectionContacts objectAtIndex:indexPath.row];
-                
-            contact[3] = @"not selected";
-            cell.imageView.image = [UIImage imageNamed:@"checkbox.png"];
-            [self.delegate deselectContactWithPhoneNumber:contact[2]];
         }
     }
 }
@@ -195,13 +197,16 @@
 - (NSMutableArray *)filterContentForSearchText:(NSString *)searchText {
     self.filteredContacts = [NSMutableArray new];
 
-    for (NSString *key in self.delegate.indexedContacts) {
-        for (NSArray *contact in [self.delegate.indexedContacts objectForKey:key]) {
+    for (NSString *sectionTitle in self.sectionTitles) {
+        
+        long length = [[self.delegate.indexedContacts objectForKey:sectionTitle] count];
+        
+        for (NSInteger i = 0; i < length; i++) {
+            NSMutableArray *contact = [self.delegate.indexedContacts objectForKey:sectionTitle][i];
+            
             if ([[[contact[0] stringByAppendingString:contact[1]] lowercaseString] rangeOfString:[searchText lowercaseString]].location != NSNotFound ||
                 [[[contact[1] stringByAppendingString:contact[2]] lowercaseString] rangeOfString:[searchText lowercaseString]].location != NSNotFound) {
-                [self.filteredContacts addObject:contact];
-                
-                
+                [self.filteredContacts addObject:[[NSArray alloc] initWithObjects:sectionTitle,[NSNumber numberWithLong:i], nil]];
             }
         }
     }
@@ -221,6 +226,11 @@ shouldReloadTableForSearchScope:(NSInteger)searchOption
 {
     [self filterContentForSearchText:self.searchDisplayController.searchBar.text];
     return true;
+}
+
+- (void)dismissSearch
+{
+    [self.searchDisplayController setActive:NO];
 }
 
 @end
