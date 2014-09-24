@@ -37,6 +37,8 @@
 
 + (void)registerForRemoteNotif;
 
++ (BOOL)isRegisteredForRemoteNotification;
+
 + (BOOL)pushNotifRequestSeen;
 
 + (BOOL)systemVersionIsEqualTo:(NSString *)v;

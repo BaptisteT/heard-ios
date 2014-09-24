@@ -157,6 +157,15 @@
     }
 }
 
++ (BOOL)isRegisteredForRemoteNotification
+{
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) { // ios 8
+        return ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications] && [[UIApplication sharedApplication] currentUserNotificationSettings] > 0);
+    } else { // ios 7
+        return [[UIApplication sharedApplication] enabledRemoteNotificationTypes] > 0;
+    }
+}
+
 + (BOOL)pushNotifRequestSeen
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];

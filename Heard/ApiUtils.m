@@ -11,6 +11,7 @@
 #import "SessionUtils.h"
 #import "Message.h"
 #import "Contact.h"
+#import "GeneralUtils.h"
 
 @implementation ApiUtils
 
@@ -186,7 +187,7 @@
                          }failure:^(NSURLSessionDataTask *task, NSError *error) {
                               NSLog(@"ERROR: %@, %@", task.description, error);
                               if (failureBlock) {
-                                  failureBlock();
+                                  failureBlock();   
                               }
                           }];
 }
@@ -552,6 +553,7 @@
     [parameters setObject:appVersion forKey:@"app_version"];
     [parameters setObject:kApiVersion forKey:@"api_version"];
     [parameters setObject:[[UIDevice currentDevice] systemVersion] forKey:@"os_version"];
+    [parameters setObject:[NSNumber numberWithBool:[GeneralUtils isRegisteredForRemoteNotification]] forKey:@"push_auth"];
     
     [self enrichParametersWithToken:parameters];
     
