@@ -21,6 +21,6 @@
 @property (nonatomic) BOOL hasPhoto;
 @property (nonatomic) BOOL isFavorite;
 
-+ (PotentialContact *)createContactFromABRecord:(ABRecordRef)person andPhoneNumber:(NBPhoneNumber *)nbPhoneNumber;
++ (PotentialContact *)createContactFromABRecord:(ABRecordRef)person andPhoneNumber:(NBPhoneNumber *)nbPhoneNumber andSaveStats:(NSMutableDictionary *)stats;
 
 @end

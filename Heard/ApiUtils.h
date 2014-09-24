@@ -67,6 +67,6 @@
 
 + (void)updateMicroAuth:(BOOL)microAuth success:(void(^)())successBlock failure:(void(^)())failureBlock;
 
-
++ (void)updateAddressBookStats:(NSMutableDictionary *)stats success:(void(^)())successBlock failure:(void(^)())failureBlock;
 
 @end

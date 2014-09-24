@@ -379,7 +379,7 @@
 
 - (void)matchPhoneContactsWithHeardUsers
 {
-    self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
+    self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook andSendStats:self.isSignUp];
     
     NSMutableDictionary *contactsInfo = [[NSMutableDictionary alloc] init];
     NSMutableDictionary * adressBookWithFormattedKey = [NSMutableDictionary new];

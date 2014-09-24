@@ -74,3 +74,13 @@ static NSString * const kProdFlurryToken = @"QMNY7MKKJTHS3YT7VTMP";
 static NSString * const kUserCanceledPref = @"User Canceled Telepath";
 static NSString * const kUserReplayedPref = @"User Replayed Telepath";
 static NSString * const kUserPhoneToEarPref = @"User Put Phone To Ear";
+
+// Stats dico
+static NSString * const kNbContactKey = @"nb_contacts";
+static NSString * const kNbContactPhotoKey = @"nb_contacts_photos";
+static NSString * const kNbContactFavoriteKey = @"nb_contacts_favorites";
+static NSString * const kNbContactFbKey = @"nb_contacts_facebook";
+static NSString * const kNbContactPhotoOnlyKey = @"nb_contacts_photo_only";
+static NSString * const kNbContactFamilyKey = @"nb_contacts_family";
+static NSString * const kNbContactRelatedKey = @"nb_contacts_related";
+static NSString * const kNbContactLinkedKey = @"nb_contacts_linked";

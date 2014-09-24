@@ -8,6 +8,9 @@
 
 #import "PotentialContact.h"
 #import "SessionUtils.h"
+#import "Constants.h"
+#import "GeneralUtils.h"
+#import "SessionUtils.h"
 
 @implementation PotentialContact
 
@@ -29,7 +32,7 @@
     return contact;
 }
 
-+ (PotentialContact *)createContactFromABRecord:(ABRecordRef)person andPhoneNumber:(NBPhoneNumber *)nbPhoneNumber {
++ (PotentialContact *)createContactFromABRecord:(ABRecordRef)person andPhoneNumber:(NBPhoneNumber *)nbPhoneNumber andSaveStats:(NSMutableDictionary *)stats {
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
     NSString *firstName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
     NSString *lastName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
@@ -54,25 +57,32 @@
                                                                           facebookId:facebookUsername];
     if ([phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeMOBILE) {
         contact.hasPhoto = ABPersonHasImageData(person);
-        [contact checkIfFavoriteContact:person];
+        [contact checkIfFavoriteContact:person andSaveStats:stats];
     }
+
+    if (stats) {
+        [GeneralUtils incrementOf:1 objectOfDictionnary:stats forKey:kNbContactKey];
+        if (contact.hasPhoto) [GeneralUtils incrementOf:1 objectOfDictionnary:stats forKey:kNbContactPhotoKey];
+        if (facebookUsername.length > 0) [GeneralUtils incrementOf:1 objectOfDictionnary:stats forKey:kNbContactFbKey];
+        if (contact.hasPhoto && facebookUsername.length == 0) [GeneralUtils incrementOf:1 objectOfDictionnary:stats forKey:kNbContactPhotoOnlyKey];
+        if (contact.isFavorite) [GeneralUtils incrementOf:1 objectOfDictionnary:stats forKey:kNbContactFavoriteKey];
     
-//    if (CFArrayGetCount(ABPersonCopyArrayOfAllLinkedPeople(person))>1) {
-//        for (CFIndex i = 0 ; i < CFArrayGetCount(ABPersonCopyArrayOfAllLinkedPeople(person)); i++) {
-//            ABRecordRef friend = CFArrayGetValueAtIndex(ABPersonCopyArrayOfAllLinkedPeople(person), i);
-//            NSString *firstNamef = (__bridge NSString *)ABRecordCopyValue(friend, kABPersonFirstNameProperty);
-//            NSString *lastNamef = (__bridge NSString *)ABRecordCopyValue(friend, kABPersonLastNameProperty);
-//            NSLog(@"%@ %@ - %@ %@", firstName, lastName, firstNamef, lastNamef);
-//        }
-//    }
-    ABMultiValueRef relatedNames = ABRecordCopyValue(person, kABPersonRelatedNamesProperty);
-    if (ABMultiValueGetCount(relatedNames) > 0) {
-        NSLog(@"aa");
+        if ([contact.phoneNumber isEqualToString:[SessionUtils getCurrentUserPhoneNumber]]) {
+            for (CFIndex i = 0 ; i < CFArrayGetCount(ABPersonCopyArrayOfAllLinkedPeople(person)); i++) {
+                ABRecordRef friend = CFArrayGetValueAtIndex(ABPersonCopyArrayOfAllLinkedPeople(person), i);
+                NSString *firstNameFriend = (__bridge NSString *)ABRecordCopyValue(friend, kABPersonFirstNameProperty);
+                NSString *lastNameFriend = (__bridge NSString *)ABRecordCopyValue(friend, kABPersonLastNameProperty);
+                if (![firstName isEqualToString:firstNameFriend] || ![lastName isEqualToString:lastNameFriend]) {
+                    if (contact.isFavorite) [GeneralUtils incrementOf:1 objectOfDictionnary:stats forKey:kNbContactLinkedKey];
+                }
+            }
+            [GeneralUtils incrementOf:ABMultiValueGetCount(ABRecordCopyValue(person, kABPersonRelatedNamesProperty)) objectOfDictionnary:stats forKey:kNbContactRelatedKey];
+        }
     }
     return contact;
 }
 
-- (void)checkIfFavoriteContact:(ABRecordRef)person
+- (void)checkIfFavoriteContact:(ABRecordRef)person andSaveStats:(NSMutableDictionary *)stats
 {
     if (self.hasPhoto && (!self.facebookId || self.facebookId.length == 0)) {
         self.isFavorite = YES;
@@ -82,6 +92,7 @@
             self.isFavorite = NO;
         } else {
             self.isFavorite = YES;
+            if (stats) [GeneralUtils incrementOf:1 objectOfDictionnary:stats forKey:kNbContactFamilyKey];
         }
     }
 }
