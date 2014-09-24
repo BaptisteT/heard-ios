@@ -237,5 +237,11 @@
     }
 }
 
++ (void)incrementOf:(NSInteger)increment objectOfDictionnary:(NSMutableDictionary *)dico forKey:(NSString *)key
+{
+    NSInteger newValue = [[dico objectForKey:key] integerValue] + increment;
+    [dico setObject:[NSNumber numberWithInteger:newValue] forKey:key];
+}
+
 
 @end

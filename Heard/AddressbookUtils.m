@@ -12,6 +12,8 @@
 #import "Contact.h"
 #import "PotentialContact.h"
 #import "ImageUtils.h"
+#import "Constants.h"
+#import "ApiUtils.h"
 
 @implementation AddressbookUtils
 
@@ -173,10 +175,14 @@
     return letterCodeToCountryAndCallingCode;
 }
 
-+ (NSMutableDictionary *)getFormattedPhoneNumbersFromAddressBook:(ABAddressBookRef) addressBook
++ (NSMutableDictionary *)getFormattedPhoneNumbersFromAddressBook:(ABAddressBookRef) addressBook andSendStats:(BOOL)flag
 {
     NSMutableDictionary *addressBookFormattedContacts = [[NSMutableDictionary alloc] init];
-    
+    NSNumber *initialInt = [NSNumber numberWithInteger:0];
+    NSMutableDictionary *stats = nil;
+    if (flag) {
+       stats = [NSMutableDictionary dictionaryWithObjectsAndKeys:initialInt, kNbContactKey, initialInt, kNbContactPhotoKey, initialInt, kNbContactFbKey, initialInt, kNbContactFavoriteKey, initialInt, kNbContactPhotoOnlyKey, initialInt, kNbContactLinkedKey,initialInt, kNbContactRelatedKey, initialInt, kNbContactFamilyKey, nil];
+    }
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
     
     CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(addressBook);
@@ -200,7 +206,7 @@
             NBPhoneNumber *nbPhoneNumber = [phoneUtil parseWithPhoneCarrierRegion:phoneNumber error:&aError];
             
             if (aError == nil && [phoneUtil isValidNumber:nbPhoneNumber]) {
-                PotentialContact *contact = [PotentialContact createContactFromABRecord:person andPhoneNumber:nbPhoneNumber];
+                PotentialContact *contact = [PotentialContact createContactFromABRecord:person andPhoneNumber:nbPhoneNumber andSaveStats:stats];
                 if (contact) {
                     // avoid repetition in favorites
                     if (attributed) {
@@ -248,7 +254,7 @@
                 NBPhoneNumber *nbPhoneNumber = [phoneUtil parse:phoneNumber defaultRegion:[[phoneUtil regionCodeFromCountryCode:mostCommonCountryCode] firstObject] error:&aError];
                 
                 if (aError == nil && [phoneUtil isValidNumber:nbPhoneNumber]) {
-                    PotentialContact *contact = [PotentialContact createContactFromABRecord:person andPhoneNumber:nbPhoneNumber];
+                    PotentialContact *contact = [PotentialContact createContactFromABRecord:person andPhoneNumber:nbPhoneNumber andSaveStats:stats];
                     if (contact) {
                         // avoid repetition in favorites
                         if (attributed) {
@@ -266,6 +272,10 @@
     }
     
     CFRelease(people);
+    
+    if (stats) {
+        [ApiUtils updateAddressBookStats:stats success:nil failure:nil];
+    }
     return addressBookFormattedContacts;
 }
 

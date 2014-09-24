@@ -21,7 +21,7 @@
 
 + (NSMutableDictionary *)getCountriesAndCallingCodesForLetterCodes;
 
-+ (NSMutableDictionary *)getFormattedPhoneNumbersFromAddressBook:(ABAddressBookRef) addressBook;
++ (NSMutableDictionary *)getFormattedPhoneNumbersFromAddressBook:(ABAddressBookRef)addressBook andSendStats:(BOOL)flag;
 
 + (ABRecordRef)findContactForNumber:(NSString *)formattedNumber;
 

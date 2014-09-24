@@ -49,4 +49,6 @@
 
 + (NSString *)dateToAgeString:(NSInteger)intDate;
 
++ (void)incrementOf:(NSInteger)increment objectOfDictionnary:(NSMutableDictionary *)dico forKey:(NSString *)key;
+
 @end

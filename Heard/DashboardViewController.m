@@ -379,7 +379,7 @@
 
 - (void)matchPhoneContactsWithHeardUsers
 {
-    self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
+    self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook andSendStats:self.isSignUp];
     
     NSMutableDictionary *contactsInfo = [[NSMutableDictionary alloc] init];
     NSMutableDictionary * adressBookWithFormattedKey = [NSMutableDictionary new];
@@ -999,11 +999,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)startedLongPressOnContactView:(ContactView *)contactView
 {
     [self hideOpeningTuto];
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    if (![prefs objectForKey:kUserCanceledPref]) {
-        [self tutoMessage:NSLocalizedStringFromTable(@"shake_to_cancel_tuto",kStringFile, @"comment")  withDuration:0 priority:NO];
-    }
     
     if ([self.mainPlayer isPlaying]) {
         [self endPlayerAtCompletion:NO];
@@ -1558,18 +1553,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event {
     if (motion == UIEventSubtypeMotionShake)
     {
-        // cancel recording
         if ([self isRecording]) {
-            [self endedLongPressRecording];
-            for (ContactView *contactView in self.contactViews) {
-                [contactView cancelRecording];
-            }
-            [self.inviteContactView cancelRecording];
-            
-            [self tutoMessage:NSLocalizedStringFromTable(@"cancel_success_message",kStringFile, @"comment") withDuration:3 priority:NO];
-            
-            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-            [prefs setObject:@"dummy" forKey:kUserCanceledPref];
+            // do nothing
         } else if (self.lastMessagesPlayed && self.lastMessagesPlayed.count > 0){
             if ([self.mainPlayer isPlaying]) {
                 [self.mainPlayer stop];

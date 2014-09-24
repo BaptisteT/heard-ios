@@ -570,4 +570,26 @@
     }];
 }
 
+// Update Stats
++ (void)updateAddressBookStats:(NSMutableDictionary *)stats success:(void(^)())successBlock failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/update_address_book_stats"];
+    
+    [self enrichParametersWithToken:stats];
+    
+    [[ApiUtils sharedClient] PATCH:path parameters:stats success:^(NSURLSessionDataTask *task, id JSON) {
+        NSDictionary *result = [JSON valueForKeyPath:@"result"];
+        Contact *contact = [Contact rawContactToInstance:[result objectForKey:@"user"]];
+        [SessionUtils saveUserInfo:contact];
+        if (successBlock) {
+            successBlock();
+        }
+    }failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"ERROR: %@, %@", task.description, error);
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
 @end
