@@ -38,6 +38,8 @@
 
 @property (nonatomic, strong) UIAlertView *inviteSuccessAlertView;
 
+@property (nonatomic) BOOL firstOpening;
+
 @end
 
 @implementation InviteContactsViewController
@@ -45,6 +47,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.firstOpening = YES;
     
     if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -80,7 +84,10 @@
 {
     [super viewDidAppear:animated];
     
-    [self playerButtonClicked:nil];
+    if (self.firstOpening) {
+        self.firstOpening = NO;
+        [self playerButtonClicked:nil];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -131,20 +138,7 @@
     self.inviteButtonLabel.text = [NSString stringWithFormat:@"%@ (%ld)",NSLocalizedStringFromTable(@"invite_label_text",kStringFile,@"comment"), [self.selectedContacts count]];
     
     if ([self.selectedContacts count] == 1) {
-        [self.inviteButtonContainer.layer removeAllAnimations];
-        
-        self.inviteButtonContainer.frame = CGRectMake(self.inviteButtonContainer.frame.origin.x,
-                                                      self.view.frame.size.height,
-                                                      self.inviteButtonContainer.frame.size.width,
-                                                      self.inviteButtonContainer.frame.size.height);
-        self.inviteButtonContainer.hidden = NO;
-        
-        [UIView animateWithDuration:0.5 animations:^{
-            self.inviteButtonContainer.frame = CGRectMake(self.inviteButtonContainer.frame.origin.x,
-                                                          self.view.frame.size.height - self.inviteButtonContainer.frame.size.height,
-                                                          self.inviteButtonContainer.frame.size.width,
-                                                          self.inviteButtonContainer.frame.size.height);
-        }];
+        [self showInviteButton];
     }
 }
 
@@ -155,15 +149,38 @@
     self.inviteButtonLabel.text = [NSString stringWithFormat:@"%@ (%ld)",NSLocalizedStringFromTable(@"invite_label_text",kStringFile,@"comment"), [self.selectedContacts count]];
     
     if ([self.selectedContacts count] == 0) {
-        [self.inviteButtonContainer.layer removeAllAnimations];
-        
-        [UIView animateWithDuration:0.5 animations:^{
-            self.inviteButtonContainer.frame = CGRectMake(self.inviteButtonContainer.frame.origin.x,
-                                                          self.view.frame.size.height,
-                                                          self.inviteButtonContainer.frame.size.width,
-                                                          self.inviteButtonContainer.frame.size.height);
-        }];
+        [self hideInviteButton];
     }
+}
+
+- (void)showInviteButton
+{
+    [self.inviteButtonContainer.layer removeAllAnimations];
+    
+    self.inviteButtonContainer.frame = CGRectMake(self.inviteButtonContainer.frame.origin.x,
+                                                  self.view.frame.size.height,
+                                                  self.inviteButtonContainer.frame.size.width,
+                                                  self.inviteButtonContainer.frame.size.height);
+    self.inviteButtonContainer.hidden = NO;
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.inviteButtonContainer.frame = CGRectMake(self.inviteButtonContainer.frame.origin.x,
+                                                      self.view.frame.size.height - self.inviteButtonContainer.frame.size.height,
+                                                      self.inviteButtonContainer.frame.size.width,
+                                                      self.inviteButtonContainer.frame.size.height);
+    }];
+}
+
+- (void)hideInviteButton
+{
+    [self.inviteButtonContainer.layer removeAllAnimations];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.inviteButtonContainer.frame = CGRectMake(self.inviteButtonContainer.frame.origin.x,
+                                                      self.view.frame.size.height,
+                                                      self.inviteButtonContainer.frame.size.width,
+                                                      self.inviteButtonContainer.frame.size.height);
+    }];
 }
 
 - (void)inviteButtonClicked
@@ -224,7 +241,10 @@ clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     [self dismissViewControllerAnimated:YES completion:nil];
     
+    [self.inviteConctactsTVC dismissSearch];
     [self.inviteConctactsTVC deselectAll];
+    
+    self.inviteButtonContainer.hidden = YES;
     
     if (result == MessageComposeResultSent) {
         [TrackingUtils trackInviteContacts:[self.selectedContacts count] successful:YES justAdded:NO];

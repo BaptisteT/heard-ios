@@ -13,8 +13,8 @@
 @interface InviteContactsTVC : UITableViewController <UISearchBarDelegate, UISearchDisplayDelegate>
 
 @property (weak, nonatomic) id <InviteContactsTVCDelegate> delegate;
-- (void)selectAll;
 - (void)deselectAll;
+- (void)dismissSearch;
 
 @end
 
