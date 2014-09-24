@@ -205,7 +205,8 @@
             NSError *aError = nil;
             NBPhoneNumber *nbPhoneNumber = [phoneUtil parseWithPhoneCarrierRegion:phoneNumber error:&aError];
             
-            if (aError == nil && [phoneUtil isValidNumber:nbPhoneNumber]) {
+            if (aError == nil && [phoneUtil isValidNumber:nbPhoneNumber] && ([phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeMOBILE
+                                                                             || [phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeFIXED_LINE_OR_MOBILE) ) {
                 PotentialContact *contact = [PotentialContact createContactFromABRecord:person andPhoneNumber:nbPhoneNumber andSaveStats:stats];
                 if (contact) {
                     // avoid repetition in favorites

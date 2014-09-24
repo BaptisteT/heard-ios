@@ -344,7 +344,11 @@
             return;
         }
         if (!granted) {
-            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"micro_access_error_message",kStringFile,@"comment") withTitle:NSLocalizedStringFromTable(@"micro_access_error_title",kStringFile,@"comment")];
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"micro_access_error_title",kStringFile,@"comment")
+                                        message:NSLocalizedStringFromTable(@"micro_access_error_message",kStringFile,@"comment")
+                                       delegate:self
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil] show];
             return;
         } else {
             self.isRecording = YES;
@@ -892,6 +896,16 @@
 - (void)initLoadingCircleShape
 {
     self.loadingCircleShape = [ImageUtils createGradientCircleLayerWithFrame:self.frame borderWidth:ACTION_CIRCLE_BORDER Color:[ImageUtils blue] subDivisions:100];
+}
+
+// ----------------------------------------------------------
+#pragma mark Alert view delegate
+// ----------------------------------------------------------
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if ([alertView.title isEqualToString:NSLocalizedStringFromTable(@"micro_access_error_title",kStringFile, @"comment")]) {
+        [GeneralUtils openSettings];
+    }
 }
 
 @end

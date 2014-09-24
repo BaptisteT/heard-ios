@@ -50,13 +50,14 @@
 // Record
 "tuto_message" = "Tap to listen.";
 "audio_too_short_error" = "Hold longer to record.";
+"recorder_label" = "Recording...";
 
 // Micro access
-"micro_access_error_title" = "Telepath does not have access to your micro";
-"micro_access_error_message" = "To activate it, go to Settings > Privacy > Micro"; // todo BT ios8
+"micro_access_error_title" = "Telepath does not have access to your micro.";
+"micro_access_error_message" = "Please allow micro access in you settings.";
 
 // Contact access
-"contact_access_error_message" = "Telepath uses your address book to find your contacts. Please allow access in Settings > Privacy > Contacts."; // todo BT ios 8
+"contact_access_error_message" = "Telepath uses your address book to sync your contacts. Please allow contact access in your settings.";
 
 // Auth
 "authentification_error_title" = "Authentification error";

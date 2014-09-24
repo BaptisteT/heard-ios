@@ -13,7 +13,7 @@
 
 @protocol ContactBubbleViewDelegate;
 
-@interface ContactView : UIView <UIGestureRecognizerDelegate>
+@interface ContactView : UIView <UIGestureRecognizerDelegate, UIAlertViewDelegate>
 
 - (id)initWithContact:(Contact *)contact andFrame:(CGRect)frame;
 - (id)initWithContact:(Contact *)contact;

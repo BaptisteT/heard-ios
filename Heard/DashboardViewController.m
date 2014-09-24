@@ -70,6 +70,7 @@
 @property (strong, nonatomic) UIView *recorderContainer;
 @property (nonatomic,strong) UIView *recorderLine;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
+@property (strong, nonatomic) UILabel *recorderLabel;
 // Player
 @property (strong, nonatomic) UIView *playerContainer;
 @property (nonatomic,strong) UIView *playerLine;
@@ -77,7 +78,7 @@
 @property (nonatomic) BOOL disableProximityObserver;
 @property (nonatomic) BOOL isUsingHeadSet;
 @property (nonatomic, strong) AVAudioPlayer *soundPlayer;
-@property (strong, nonatomic) UILabel *messageDateLabel;
+@property (strong, nonatomic) UILabel *playerLabel;
 // Current user
 @property (strong, nonatomic) UIImagePickerController *imagePickerController;
 @property (strong, nonatomic) UIImageView *profilePicture;
@@ -132,11 +133,9 @@
     self.openingTutoView.hidden = YES;
     self.displayOpeningTuto = [GeneralUtils isFirstOpening];
     
-    self.openingTutoDescView.layer.cornerRadius = 5;
+    self.indexedContacts = [[NSMutableDictionary alloc] init];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self retrieveFriendsFromAddressBook];
-    });
+    self.openingTutoDescView.layer.cornerRadius = 5;
     
     //Perms
     self.authRequestAllowButton.clipsToBounds = YES;
@@ -233,6 +232,19 @@
     self.recorderLine.backgroundColor = [ImageUtils transparentRed];
     [self.recorderContainer addSubview:self.recorderLine];
     
+    //Recorder label
+    self.recorderLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 25, 120, 25)];
+    self.recorderLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:15.0];
+    self.recorderLabel.textAlignment = NSTextAlignmentCenter;
+    self.recorderLabel.textColor = [UIColor grayColor];
+    self.recorderLabel.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.8];
+    self.recorderLabel.hidden = YES;
+    self.recorderLabel.text = @"";
+    self.recorderLabel.clipsToBounds = YES;
+    self.recorderLabel.layer.cornerRadius = 5;
+    self.recorderLabel.text = NSLocalizedStringFromTable(@"recorder_label",kStringFile, @"comment");
+    [self.recorderContainer addSubview:self.recorderLabel];
+    
     // Init player container
     self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, PLAYER_UI_HEIGHT)];
     self.playerContainer.backgroundColor = [UIColor clearColor];
@@ -245,16 +257,16 @@
     [self.playerContainer addSubview:self.playerLine];
     
     //player date label
-    self.messageDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 25, 120, 25)];
-    self.messageDateLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:15.0];
-    self.messageDateLabel.textAlignment = NSTextAlignmentCenter;
-    self.messageDateLabel.textColor = [UIColor grayColor];
-    self.messageDateLabel.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.8];
-    self.messageDateLabel.hidden = YES;
-    self.messageDateLabel.text = @"";
-    self.messageDateLabel.clipsToBounds = YES;
-    self.messageDateLabel.layer.cornerRadius = 5;
-    [self.playerContainer addSubview:self.messageDateLabel];
+    self.playerLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 25, 120, 25)];
+    self.playerLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:15.0];
+    self.playerLabel.textAlignment = NSTextAlignmentCenter;
+    self.playerLabel.textColor = [UIColor grayColor];
+    self.playerLabel.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.8];
+    self.playerLabel.hidden = YES;
+    self.playerLabel.text = @"";
+    self.playerLabel.clipsToBounds = YES;
+    self.playerLabel.layer.cornerRadius = 5;
+    [self.playerContainer addSubview:self.playerLabel];
     
     // Go to access view controller if acces has not yet been granted
     if (!self.contactAuthViewSeen && ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
@@ -365,12 +377,52 @@
         [self matchPhoneContactsWithHeardUsers];
     }
     else {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment") withTitle:nil];
+        [[[UIAlertView alloc] initWithTitle:@""
+                                    message:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment")
+                                   delegate:self
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil] show];
     }
+}
+
+- (void)initIndexedContacts
+{
+    //Structure: @{ "A": @[ @[@"Artois", @"Jonathan", @"(415)-509-9382", @"not selected], @["Azta", "Lorainne", @"06 92 83 48 58", @"selected"]], "B": etc.
+    self.indexedContacts = [[NSMutableDictionary alloc] init];
+    
+    for (NSString *phoneNumber in self.addressBookFormattedContacts) {
+        Contact *contact = [self.addressBookFormattedContacts objectForKey:phoneNumber];
+        
+        NSMutableArray *contactArray = [[NSMutableArray alloc] initWithObjects:contact.lastName && [contact.lastName length] > 0 ? contact.lastName : contact.firstName,
+                                   contact.firstName && contact.lastName && [contact.lastName length] > 0 ? contact.firstName : @"",
+                                   contact.phoneNumber,
+                                   @"not selected", nil];
+        
+        NSString *key = [[contactArray[0] substringToIndex:1] uppercaseString];
+        
+        if ([self.indexedContacts objectForKey:key]) {
+            [[self.indexedContacts objectForKey:key] addObject:contactArray];
+        } else {
+            [self.indexedContacts setValue:[[NSMutableArray alloc] initWithObjects:contactArray, nil]
+                                        forKey:key];
+        }
+    }
+        
+    //Order contacts alphabetically
+    for (NSString *key in [self.indexedContacts allKeys]) {
+        [self.indexedContacts setObject:[[self.indexedContacts objectForKey:key]
+                                                sortedArrayUsingComparator:^NSComparisonResult(NSArray *contact1, NSArray *contact2) {
+                                                    return [contact1[0] localizedCaseInsensitiveCompare:contact2[0]];
+                                                }]
+                                        forKey:key];
+    }
+    
+    self.addressBookFormattedContacts = nil;
 }
 
 - (void)matchPhoneContactsWithHeardUsers
 {
+    
     self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook andSendStats:self.isSignUp];
     
     NSMutableDictionary *contactsInfo = [[NSMutableDictionary alloc] init];
@@ -418,6 +470,9 @@
                 contact.lastName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
                 existingContact.phoneNumber = contact.phoneNumber;
             }
+            
+            //Remove users to create indexedContacts for the InviteContactsViewController
+            [self.addressBookFormattedContacts removeObjectForKey:contact.phoneNumber];
         }
         for (NSDictionary *futureContact in futureContacts) {
             NSString *phoneNumber = (NSString *)[futureContact objectForKey:@"phone_number"];
@@ -438,8 +493,12 @@
                 [self.contacts addObject:contact];
                 [self displayAdditionnalContact:contact];
             }
+            
+            //Remove future users to create indexedContacts for the InviteContactsViewController
+            [self.addressBookFormattedContacts removeObjectForKey:phoneNumber];
         }
-        self.addressBookFormattedContacts = nil;
+        
+        [self initIndexedContacts];
         
         // Distribute non attributed messages
         [self distributeNonAttributedMessages];
@@ -830,19 +889,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ------------------------------
 
 - (IBAction)menuButtonClicked:(id)sender {
-    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
-        [self displayContactAuthView];
-    } else if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment") withTitle:nil];
-    } else {
-        self.menuActionSheet = [[CustomActionSheet alloc]
-                                    initWithTitle:[NSString  stringWithFormat:@"Telepath v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
-                                    delegate:self
-                                    cancelButtonTitle:ACTION_SHEET_CANCEL
-                                    destructiveButtonTitle:nil
-                                    otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, ACTION_OTHER_MENU_OPTION_6, nil];
-        [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
-    }
+    self.menuActionSheet = [[CustomActionSheet alloc]
+                            initWithTitle:[NSString  stringWithFormat:@"Telepath v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
+                            delegate:self
+                            cancelButtonTitle:ACTION_SHEET_CANCEL
+                            destructiveButtonTitle:nil
+                            otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, ACTION_OTHER_MENU_OPTION_6, nil];
+    [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+
 }
 
 
@@ -907,70 +961,21 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         self.displayOpeningTuto = NO;
     }
     
-    if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         [self displayContactAuthView];
         return;
     }
     
+    if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
+        [[[UIAlertView alloc] initWithTitle:@""
+                                    message:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment")
+                                   delegate:self
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil] show];
+        return;
+    }
+    
     [self performSegueWithIdentifier:@"Invite Contacts Segue" sender:message];
-}
-
-- (void)retrieveFriendsFromAddressBook
-{
-    ABAddressBookRef addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
-    CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(addressBook);
-    CFIndex peopleCount = CFArrayGetCount(people);
-    
-    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
-    
-    //Structure: @{ "A": @[ @[@"Artois", @"Jonathan", @"(415)-509-9382", @"not selected], @["Azta", "Lorainne", @"06 92 83 48 58", @"selected"]], "B": etc.
-    self.indexedContacts = [[NSMutableDictionary alloc] init];
-    
-    for (CFIndex i = 0 ; i < peopleCount; i++) {
-        ABRecordRef person = CFArrayGetValueAtIndex(people, i);
-        ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
-        NSString *firstName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
-        NSString *lastName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
-        
-        if ((firstName && [firstName length] > 0) || (lastName && [lastName length] > 0)) {
-            for (int i=0; i<ABMultiValueGetCount(phoneNumbers);i++) {
-                NSString *number = (__bridge NSString *) ABMultiValueCopyValueAtIndex(phoneNumbers, i);
-                NSError *aError = nil;
-                NBPhoneNumber *nbPhoneNumber = [phoneUtil parseWithPhoneCarrierRegion:number error:&aError];
-                
-                if (aError == nil && ([phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeMOBILE
-                                      || [phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeFIXED_LINE_OR_MOBILE) ) {
-                    NSMutableArray *contact = [[NSMutableArray alloc] initWithObjects:lastName && [lastName length] > 0 ? lastName : firstName,
-                                               firstName && lastName && [lastName length] > 0 ? firstName : @"",
-                                               number,
-                                               @"not selected", nil];
-                    
-                    NSString *key = [[contact[0] substringToIndex:1] uppercaseString];
-                    
-                    if ([self.indexedContacts objectForKey:key]) {
-                        [[self.indexedContacts objectForKey:key] addObject:contact];
-                    } else {
-                        [self.indexedContacts setValue:[[NSMutableArray alloc] initWithObjects:contact, nil]
-                                                forKey:key];
-                    }
-                }
-            }
-        }
-        
-        CFRelease(person);
-        CFRelease(phoneNumbers);
-    }
-    
-    CFRelease(people);
-    
-    //Order contacts alphabetically
-    for (NSString *key in [self.indexedContacts allKeys]) {
-        [self.indexedContacts setObject:[[self.indexedContacts objectForKey:key]
-                                         sortedArrayUsingComparator:^NSComparisonResult(NSArray *contact1, NSArray *contact2) {
-                                             return [contact1[0] localizedCaseInsensitiveCompare:contact2[0]];
-                                         }]
-                                 forKey:key];
-    }
 }
 
 // ----------------------------------------------------------
@@ -992,6 +997,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)startedLongPressOnContactView:(ContactView *)contactView
 {
     [self hideOpeningTuto];
+    
+    //Show recorder label
+    self.recorderLabel.hidden = NO;
     
     if ([self.mainPlayer isPlaying]) {
         [self endPlayerAtCompletion:NO];
@@ -1023,6 +1031,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)endedLongPressRecording
 {
     [self endTutoMode];
+    
+    //Hide recorder label
+    self.recorderLabel.hidden = YES;
     
     // Remove UI
     self.recorderLine.frame = [[self.recorderLine.layer presentationLayer] frame];
@@ -1059,8 +1070,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self addMessagesToLastMessagesPlayed:message];
     
     //Show message date
-    self.messageDateLabel.hidden = NO;
-    self.messageDateLabel.text = [GeneralUtils dateToAgeString:message.createdAt];
+    self.playerLabel.hidden = NO;
+    self.playerLabel.text = [GeneralUtils dateToAgeString:message.createdAt];
     
     // Player UI
     NSTimeInterval duration = self.mainPlayer.duration;
@@ -1181,7 +1192,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.titleLabel.hidden = NO;
     self.contactScrollView.clipsToBounds = YES;
     
-    self.messageDateLabel.hidden = YES;
+    self.playerLabel.hidden = YES;
     
     // End central player UI
     [self.mainPlayer stop];
@@ -1388,6 +1399,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if ([alertView.message isEqualToString:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment")]) {
+        [GeneralUtils openSettings];
+    }
+    
     // First name
     if ([alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2]) {
         UITextField *textField = [alertView textFieldAtIndex:0];
