@@ -382,9 +382,6 @@
 
 - (void)sendRecording
 {
-    // Update last message date
-    self.contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
-    
     if ([GeneralUtils isCurrentUser:self.contact]) {
         Message *message = [Message new];
         message.senderId = self.contact.identifier;
@@ -421,6 +418,9 @@
         // Stock failed message
         [self.failedMessages addObject:audioData];
     } else {
+        // Update last message date
+        self.contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
+        
         if (!self.isRecording && !self.isPlaying) {
             [self sentAnimation];
             [self.delegate playSound:kSentSound];
