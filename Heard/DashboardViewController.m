@@ -219,8 +219,6 @@
     
     // Initiate and prepare the recorder
     self.recorder = [[AVAudioRecorder alloc] initWithURL:outputFileURL settings:recordSetting error:nil];
-    self.recorder.delegate = self;
-    self.recorder.meteringEnabled = YES;
     
     // Init recorder container
     self.recorderContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, RECORDER_HEIGHT)];
@@ -275,7 +273,6 @@
     [ApiUtils updateAppInfoAndExecuteSuccess:nil failure:nil];
 }
 
-
 // Make sure scroll view has been resized (necessary because layout constraints change scroll view size)
 - (void)viewDidLayoutSubviews
 {
@@ -289,11 +286,6 @@
     
     // Retrieve messages & contacts
     [self retrieveUnreadMessagesAndNewContacts];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [self becomeFirstResponder];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -602,7 +594,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;
     float rowHeight = kContactMargin + kContactSize + kContactNameHeight;
-    self.contactScrollView.contentSize = CGSizeMake(screenWidth, MAX(screenHeight - 20, rows * rowHeight + 3 * kContactMargin));
+    self.contactScrollView.contentSize = CGSizeMake(screenWidth, MAX(screenHeight - self.contactScrollView.frame.origin.y, rows * rowHeight + 3 * kContactMargin)) ;
 }
 
 // Create contact view
@@ -940,6 +932,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     } failure:^{
         [contactView message:audioData sentWithError:YES];
     }];
+    [self.recorder prepareToRecord];
 }
 
 - (NSData *)getLastRecordedData
@@ -1022,9 +1015,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     [self endTutoMode];
     
-    // Stop recording
-    [self.recorder stop];
-    
     // Remove UI
     self.recorderLine.frame = [[self.recorderLine.layer presentationLayer] frame];
     [self.recorderLine.layer removeAllAnimations];
@@ -1033,7 +1023,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     [self enableAllContactViews];
     
-    // stop sound
+    // Stop recording
+    [self.recorder stop];
     [self playSound:kEndRecordSound];
 }
 
