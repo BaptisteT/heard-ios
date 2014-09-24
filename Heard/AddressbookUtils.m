@@ -181,7 +181,7 @@
     NSNumber *initialInt = [NSNumber numberWithInteger:0];
     NSMutableDictionary *stats = nil;
     if (flag) {
-       stats = [NSMutableDictionary dictionaryWithObjectsAndKeys:kNbContactKey, initialInt, kNbContactPhotoKey, initialInt, kNbContactFbKey, initialInt, kNbContactFavoriteKey, initialInt, kNbContactPhotoOnlyKey, initialInt, kNbContactLinkedKey,initialInt, kNbContactRelatedKey, initialInt, kNbContactFamilyKey ,initialInt, nil];
+       stats = [NSMutableDictionary dictionaryWithObjectsAndKeys:initialInt, kNbContactKey, initialInt, kNbContactPhotoKey, initialInt, kNbContactFbKey, initialInt, kNbContactFavoriteKey, initialInt, kNbContactPhotoOnlyKey, initialInt, kNbContactLinkedKey,initialInt, kNbContactRelatedKey, initialInt, kNbContactFamilyKey, nil];
     }
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
     
