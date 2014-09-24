@@ -70,6 +70,7 @@
 @property (strong, nonatomic) UIView *recorderContainer;
 @property (nonatomic,strong) UIView *recorderLine;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
+@property (strong, nonatomic) UILabel *recorderLabel;
 // Player
 @property (strong, nonatomic) UIView *playerContainer;
 @property (nonatomic,strong) UIView *playerLine;
@@ -77,7 +78,7 @@
 @property (nonatomic) BOOL disableProximityObserver;
 @property (nonatomic) BOOL isUsingHeadSet;
 @property (nonatomic, strong) AVAudioPlayer *soundPlayer;
-@property (strong, nonatomic) UILabel *messageDateLabel;
+@property (strong, nonatomic) UILabel *playerLabel;
 // Current user
 @property (strong, nonatomic) UIImagePickerController *imagePickerController;
 @property (strong, nonatomic) UIImageView *profilePicture;
@@ -231,6 +232,19 @@
     self.recorderLine.backgroundColor = [ImageUtils transparentRed];
     [self.recorderContainer addSubview:self.recorderLine];
     
+    //Recorder label
+    self.recorderLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 25, 120, 25)];
+    self.recorderLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:15.0];
+    self.recorderLabel.textAlignment = NSTextAlignmentCenter;
+    self.recorderLabel.textColor = [UIColor grayColor];
+    self.recorderLabel.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.8];
+    self.recorderLabel.hidden = YES;
+    self.recorderLabel.text = @"";
+    self.recorderLabel.clipsToBounds = YES;
+    self.recorderLabel.layer.cornerRadius = 5;
+    self.recorderLabel.text = NSLocalizedStringFromTable(@"recorder_label",kStringFile, @"comment");
+    [self.recorderContainer addSubview:self.recorderLabel];
+    
     // Init player container
     self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, PLAYER_UI_HEIGHT)];
     self.playerContainer.backgroundColor = [UIColor clearColor];
@@ -243,16 +257,16 @@
     [self.playerContainer addSubview:self.playerLine];
     
     //player date label
-    self.messageDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 25, 120, 25)];
-    self.messageDateLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:15.0];
-    self.messageDateLabel.textAlignment = NSTextAlignmentCenter;
-    self.messageDateLabel.textColor = [UIColor grayColor];
-    self.messageDateLabel.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.8];
-    self.messageDateLabel.hidden = YES;
-    self.messageDateLabel.text = @"";
-    self.messageDateLabel.clipsToBounds = YES;
-    self.messageDateLabel.layer.cornerRadius = 5;
-    [self.playerContainer addSubview:self.messageDateLabel];
+    self.playerLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 25, 120, 25)];
+    self.playerLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:15.0];
+    self.playerLabel.textAlignment = NSTextAlignmentCenter;
+    self.playerLabel.textColor = [UIColor grayColor];
+    self.playerLabel.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.8];
+    self.playerLabel.hidden = YES;
+    self.playerLabel.text = @"";
+    self.playerLabel.clipsToBounds = YES;
+    self.playerLabel.layer.cornerRadius = 5;
+    [self.playerContainer addSubview:self.playerLabel];
     
     // Go to access view controller if acces has not yet been granted
     if (!self.contactAuthViewSeen && ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
@@ -984,6 +998,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     [self hideOpeningTuto];
     
+    //Show recorder label
+    self.recorderLabel.hidden = NO;
+    
     if ([self.mainPlayer isPlaying]) {
         [self endPlayerAtCompletion:NO];
     }
@@ -1014,6 +1031,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)endedLongPressRecording
 {
     [self endTutoMode];
+    
+    //Hide recorder label
+    self.recorderLabel.hidden = YES;
     
     // Remove UI
     self.recorderLine.frame = [[self.recorderLine.layer presentationLayer] frame];
@@ -1050,8 +1070,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self addMessagesToLastMessagesPlayed:message];
     
     //Show message date
-    self.messageDateLabel.hidden = NO;
-    self.messageDateLabel.text = [GeneralUtils dateToAgeString:message.createdAt];
+    self.playerLabel.hidden = NO;
+    self.playerLabel.text = [GeneralUtils dateToAgeString:message.createdAt];
     
     // Player UI
     NSTimeInterval duration = self.mainPlayer.duration;
@@ -1172,7 +1192,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.titleLabel.hidden = NO;
     self.contactScrollView.clipsToBounds = YES;
     
-    self.messageDateLabel.hidden = YES;
+    self.playerLabel.hidden = YES;
     
     // End central player UI
     [self.mainPlayer stop];
