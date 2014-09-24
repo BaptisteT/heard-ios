@@ -10,7 +10,7 @@
 
 @protocol InviteContactsTVCDelegate;
 
-@interface InviteContactsTVC : UITableViewController
+@interface InviteContactsTVC : UITableViewController <UISearchBarDelegate, UISearchDisplayDelegate>
 
 @property (weak, nonatomic) id <InviteContactsTVCDelegate> delegate;
 - (void)selectAll;

@@ -9,12 +9,15 @@
 #import "InviteContactsTVC.h"
 #import <AddressBook/AddressBook.h>
 #import "NBPhoneNumberUtil.h"
+#import "NoCancelSearchBar.h"
 
 @interface InviteContactsTVC ()
 
 @property (strong, nonatomic) NSArray *sectionTitles;
+@property (strong, nonatomic) NSMutableArray *filteredContacts;
 
 @property (nonatomic) BOOL allSelected;
+@property (weak, nonatomic) IBOutlet UISearchBar *tableSearchBar;
 
 @end
 
@@ -26,39 +29,71 @@
     
     self.allSelected = NO;
     
+    self.edgesForExtendedLayout = UIRectEdgeNone;
+    
     self.sectionTitles = [[self.delegate.indexedContacts allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    
+    //change button in table search bar
+    for(UIView *subView in [self.tableSearchBar subviews]) {
+        if([subView conformsToProtocol:@protocol(UITextInputTraits)]) {
+            [(UITextField *)subView setReturnKeyType: UIReturnKeyDone];
+        } else {
+            for(UIView *subSubView in [subView subviews]) {
+                if([subSubView conformsToProtocol:@protocol(UITextInputTraits)]) {
+                    [(UITextField *)subSubView setReturnKeyType: UIReturnKeyDone];
+                }
+            }      
+        }
+    }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
-    return [self.sectionTitles count];
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        return 1;
+    } else {
+        // Return the number of sections.
+        return [self.sectionTitles count];
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    NSString *sectionTitle = [self.sectionTitles objectAtIndex:section];
-    NSArray *sectionContacts = [self.delegate.indexedContacts objectForKey:sectionTitle];
-    return [sectionContacts count];
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        return self.filteredContacts.count;
+    } else {
+        // Return the number of rows in the section.
+        NSString *sectionTitle = [self.sectionTitles objectAtIndex:section];
+        NSArray *sectionContacts = [self.delegate.indexedContacts objectForKey:sectionTitle];
+        return [sectionContacts count];
+    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [self.sectionTitles objectAtIndex:section];
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        return nil;
+    } else {
+        return [self.sectionTitles objectAtIndex:section];
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Invite Contact Cell" forIndexPath:indexPath];
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"Invite Contact Cell" forIndexPath:indexPath];
     
-    // Configure the cell...
-    NSString *sectionTitle = [self.sectionTitles objectAtIndex:indexPath.section];
-    NSArray *sectionContacts = [self.delegate.indexedContacts objectForKey:sectionTitle];
-    NSMutableArray *contact = [sectionContacts objectAtIndex:indexPath.row];
+    NSMutableArray *contact;
+    
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        contact = self.filteredContacts[indexPath.row];
+    } else {
+        // Configure the cell...
+        NSString *sectionTitle = [self.sectionTitles objectAtIndex:indexPath.section];
+        NSArray *sectionContacts = [self.delegate.indexedContacts objectForKey:sectionTitle];
+        contact = [sectionContacts objectAtIndex:indexPath.row];
+    }
     
     cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", contact[0], contact[1]];
-    NSLog(@"%@",cell.textLabel.text);
     cell.detailTextLabel.text = contact[2];
     
     if ([contact[3] isEqualToString:@"selected"]) {
@@ -72,13 +107,20 @@
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
-    //  return animalSectionTitles;
-    return self.sectionTitles;
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        return nil;
+    } else {
+        return self.sectionTitles;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
-    return [self.sectionTitles indexOfObject:title];
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        return 0;
+    } else {
+        return [self.sectionTitles indexOfObject:title];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -148,6 +190,37 @@
     }
 }
 
+//UI Search bar
 
+- (NSMutableArray *)filterContentForSearchText:(NSString *)searchText {
+    self.filteredContacts = [NSMutableArray new];
+
+    for (NSString *key in self.delegate.indexedContacts) {
+        for (NSArray *contact in [self.delegate.indexedContacts objectForKey:key]) {
+            if ([[[contact[0] stringByAppendingString:contact[1]] lowercaseString] rangeOfString:[searchText lowercaseString]].location != NSNotFound ||
+                [[[contact[1] stringByAppendingString:contact[2]] lowercaseString] rangeOfString:[searchText lowercaseString]].location != NSNotFound) {
+                [self.filteredContacts addObject:contact];
+                
+                
+            }
+        }
+    }
+    
+    return self.filteredContacts;
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller
+shouldReloadTableForSearchString:(NSString *)searchString
+{
+    [self filterContentForSearchText:searchString];
+    return true;
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller
+shouldReloadTableForSearchScope:(NSInteger)searchOption
+{
+    [self filterContentForSearchText:self.searchDisplayController.searchBar.text];
+    return true;
+}
 
 @end
