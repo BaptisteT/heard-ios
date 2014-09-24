@@ -162,6 +162,7 @@
                                                   self.inviteButtonContainer.frame.size.width,
                                                   self.inviteButtonContainer.frame.size.height);
     self.inviteButtonContainer.hidden = NO;
+    self.inviteButtonContainer.alpha = 1;
     
     [UIView animateWithDuration:0.5 animations:^{
         self.inviteButtonContainer.frame = CGRectMake(self.inviteButtonContainer.frame.origin.x,
@@ -175,11 +176,17 @@
 {
     [self.inviteButtonContainer.layer removeAllAnimations];
     
+    self.inviteButtonContainer.frame = CGRectMake(self.inviteButtonContainer.frame.origin.x,
+                                                  self.view.frame.size.height - self.inviteButtonContainer.frame.size.height,
+                                                  self.inviteButtonContainer.frame.size.width,
+                                                  self.inviteButtonContainer.frame.size.height);
+    
     [UIView animateWithDuration:0.5 animations:^{
-        self.inviteButtonContainer.frame = CGRectMake(self.inviteButtonContainer.frame.origin.x,
-                                                      self.view.frame.size.height,
-                                                      self.inviteButtonContainer.frame.size.width,
-                                                      self.inviteButtonContainer.frame.size.height);
+        self.inviteButtonContainer.alpha = 0;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            self.inviteButtonContainer.hidden = YES;
+        }
     }];
 }
 

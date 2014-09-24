@@ -947,7 +947,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         self.displayOpeningTuto = NO;
     }
     
-    if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusNotDetermined) {
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         [self displayContactAuthView];
         return;
     }
