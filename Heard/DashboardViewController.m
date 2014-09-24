@@ -1753,9 +1753,4 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:sum];
 }
 
-- (BOOL)prefersStatusBarHidden
-{
-    return NO;
-}
-
 @end
