@@ -956,11 +956,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)inviteContactsWithMessage:(Message *)message
 {
-    if (self.displayOpeningTuto) {
-        [self hideOpeningTuto];
-        self.displayOpeningTuto = NO;
-    }
-    
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         [self displayContactAuthView];
         return;
@@ -1165,9 +1160,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)endPlayerAtCompletion:(BOOL)completed
 {
     if (self.displayOpeningTuto) {
-        [self.contactScrollView bringSubviewToFront:self.openingTutoView];
-        [self.contactScrollView bringSubviewToFront:self.inviteContactView];
-        [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"menu_tuto_action_label", kStringFile, @"comment") forOrigin:self.inviteContactView.frame.origin.x + self.inviteContactView.frame.size.width/2];
+        [self hideOpeningTuto];
+        self.displayOpeningTuto = NO;
     }
     
     // Check that audio is playing or completed
