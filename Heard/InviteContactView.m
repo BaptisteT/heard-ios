@@ -64,4 +64,13 @@
     [self.delegate inviteContactsWithMessage:message];
 }
 
+- (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer
+{
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
+        [self.delegate displayContactAuthView];
+    } else {
+        [super handleLongPressGesture:recognizer];
+    }
+}
+
 @end

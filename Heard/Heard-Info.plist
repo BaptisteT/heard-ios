@@ -39,7 +39,7 @@
 	<key>NSContactsUsageDescription</key>
 	<string>Waved needs it to find your friends</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>It will allow you to send voice messages</string>
+	<string>You will need it to send voice messages</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Waved will only use an image of your choice as profile picture</string>
 	<key>UIMainStoryboardFile</key>

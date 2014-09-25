@@ -34,6 +34,7 @@
 @property (nonatomic) NSInteger sendingMessageCount;
 @property (nonatomic) NSInteger loadingMessageCount;
 
+- (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer;
 - (void)addUnreadMessage:(Message *)message;
 - (void)resetUnreadMessages;
 - (void)message:(NSData *)audioData sentWithError:(BOOL)error;
@@ -91,5 +92,7 @@
 - (ABAddressBookRef) addressBook;
 
 - (void)resetApplicationBadgeNumber;
+
+- (void)displayContactAuthView;
 
 @end

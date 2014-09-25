@@ -99,7 +99,6 @@
 @property (weak, nonatomic) IBOutlet UITextView *permissionNote;
 @property (strong, nonatomic) IBOutlet UIButton *authRequestAllowButton;
 @property (strong, nonatomic) IBOutlet UIButton *authRequestSkipButton;
-@property (nonatomic) BOOL contactAuthViewSeen;
 // Tuto
 @property (nonatomic) BOOL displayOpeningTuto;
 @property (nonatomic, strong) UIView *bottomTutoView;
@@ -125,7 +124,6 @@
     [super viewDidLoad];
     
     self.retrieveNewContact = YES;
-    self.contactAuthViewSeen = NO;
     self.authRequestView.hidden = YES;
     self.openingTutoView.hidden = YES;
     self.displayOpeningTuto = [GeneralUtils isFirstOpening];
@@ -139,6 +137,9 @@
     // Init address book
     self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
+        [self initIndexedContacts];
+    }
     
     //Init no message view
     self.bottomTutoView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
@@ -264,12 +265,8 @@
     [self.playerContainer addSubview:self.playerLabel];
     
     // Go to access view controller if acces has not yet been granted
-    if (!self.contactAuthViewSeen && ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
-        self.contactAuthViewSeen = YES;
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         [self displayContactAuthView];
-    }
-    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
-        [self initIndexedContacts];
     }
     if (self.displayOpeningTuto) {
         [self prepareAndDisplayTuto];
@@ -415,9 +412,9 @@
 
 - (void)matchPhoneContactsWithHeardUsers
 {
-    
-    self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook andSendStats:self.isSignUp];
-    
+    if (!self.addressBookFormattedContacts) {
+        self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook andSendStats:self.isSignUp];
+    }
     NSMutableDictionary *contactsInfo = [[NSMutableDictionary alloc] init];
     NSMutableDictionary * adressBookWithFormattedKey = [NSMutableDictionary new];
     for (NSString* phoneNumber in self.addressBookFormattedContacts) {
@@ -949,11 +946,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)inviteContactsWithMessage:(Message *)message
 {
-    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
-        [self displayContactAuthView];
-        return;
-    }
-    
     if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
         [[[UIAlertView alloc] initWithTitle:@""
                                     message:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment")
