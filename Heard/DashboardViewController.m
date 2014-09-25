@@ -894,7 +894,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                             delegate:self
                             cancelButtonTitle:ACTION_SHEET_CANCEL
                             destructiveButtonTitle:nil
-                            otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, ACTION_OTHER_MENU_OPTION_6, nil];
+                            otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
     [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 
 }
