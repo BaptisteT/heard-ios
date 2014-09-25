@@ -646,7 +646,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - kContactMargin/4, contactView.frame.origin.y + kContactSize, contactView.frame.size.width + kContactMargin/2, kContactNameHeight)];
     
     if ([GeneralUtils isAdminContact:contact]) {
-        nameLabel.text = @"Telepath";
+        nameLabel.text = @"Waved";
         nameLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:14.0];
     //Invite contact
     } else {
@@ -890,7 +890,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (IBAction)menuButtonClicked:(id)sender {
     self.menuActionSheet = [[CustomActionSheet alloc]
-                            initWithTitle:[NSString  stringWithFormat:@"Telepath v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
+                            initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
                             delegate:self
                             cancelButtonTitle:ACTION_SHEET_CANCEL
                             destructiveButtonTitle:nil
@@ -1293,7 +1293,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     //Send feedback
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_4]) {
-        NSString *email = [NSString stringWithFormat:@"mailto:%@?subject=Feedback for Telepath on iOS (v%@)", kFeedbackEmail,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+        NSString *email = [NSString stringWithFormat:@"mailto:%@?subject=Feedback for Waved on iOS (v%@)", kFeedbackEmail,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
         
         email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         

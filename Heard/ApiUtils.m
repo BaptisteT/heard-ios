@@ -492,7 +492,7 @@
     }];
 }
 
-// Check if user is on Telepath
+// Check if user is on Waved
 + (void)checkUserPresenceByPhoneNumber:(NSString *)phoneNumber success:(void(^)(BOOL present))successBlock failure:(void(^)())failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/user_presence.json"];

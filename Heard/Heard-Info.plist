@@ -21,7 +21,7 @@
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.streetshout.Waved</string>
+	<string>com.heard.HeardInHouse</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -37,11 +37,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSContactsUsageDescription</key>
-	<string>Telepath needs it to find your friends</string>
+	<string>Waved needs it to find your friends</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Telepath needs it to record your voice messages</string>
+	<string>Waved needs it to record your voice messages</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Telepath will only use an image of your choice as profile picture</string>
+	<string>Waved will only use an image of your choice as profile picture</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
