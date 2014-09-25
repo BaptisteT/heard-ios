@@ -997,6 +997,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)startedLongPressOnContactView:(ContactView *)contactView
 {
     [self hideOpeningTuto];
+    [self endTutoMode];
     
     //Show recorder label
     self.recorderLabel.hidden = NO;
