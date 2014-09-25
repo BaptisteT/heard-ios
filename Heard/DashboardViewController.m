@@ -1668,6 +1668,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         self.pushAuthViewSeen = YES;
         [self displayPushAuthView];
     } else {
+        [GeneralUtils registerForRemoteNotif];
         [self hideAuthRequestView];
     }
 }

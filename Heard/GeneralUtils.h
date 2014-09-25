@@ -37,6 +37,8 @@
 
 + (void)registerForRemoteNotif;
 
++ (void)registerForSilentRemoteNotif;
+
 + (BOOL)isRegisteredForRemoteNotification;
 
 + (BOOL)pushNotifRequestSeen;
