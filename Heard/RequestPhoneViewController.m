@@ -16,6 +16,8 @@
 #import "NBPhoneNumberUtil.h"
 #import "NBPhoneNumber.h"
 #import "Constants.h"
+#import <AudioToolbox/AudioToolbox.h>
+#import <AVFoundation/AVFoundation.h>
 
 #define BORDER_SIZE 0.5
 #define DEFAULT_COUNTRY @"USA"
@@ -60,6 +62,11 @@
     
     //Autoresize bug
     [self.tutoLabel sizeToFit];
+    
+    if([[AVAudioSession sharedInstance] respondsToSelector:@selector(requestRecordPermission:)])
+    {
+        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {}];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
