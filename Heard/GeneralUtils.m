@@ -157,6 +157,13 @@
     }
 }
 
++ (void)registerForSilentRemoteNotif
+{
+    if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) { // ios 8
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    }
+}
+
 + (BOOL)isRegisteredForRemoteNotification
 {
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) { // ios 8
