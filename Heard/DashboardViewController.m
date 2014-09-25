@@ -23,7 +23,6 @@
 #import "HeardAppDelegate.h"
 #import "ContactUtils.h"
 #import <MediaPlayer/MPMusicPlayerController.h>
-#import "AddContactViewController.h"
 #import "AddressbookUtils.h"
 #import "MBProgressHUD.h"
 #import "EditContactsViewController.h"
@@ -306,9 +305,7 @@
 {
     NSString * segueName = segue.identifier;
     
-    if ([segueName isEqualToString: @"Add Contact Segue"]) {
-        ((AddContactViewController *) [segue destinationViewController]).delegate = self;
-    } else if ([segueName isEqualToString: @"Edit Contacts Segue"]) {
+    if ([segueName isEqualToString: @"Edit Contacts Segue"]) {
         ((EditContactsViewController *) [segue destinationViewController]).delegate = self;
         ((EditContactsViewController *) [segue destinationViewController]).contacts = self.contacts;
     } else if ([segueName isEqualToString:@"Invite Contacts Segue"]) {

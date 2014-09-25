@@ -11,11 +11,10 @@
 #import <MessageUI/MessageUI.h>
 #import "Message.h"
 #import "ContactView.h"
-#import "AddContactViewController.h"
 #import <AddressBookUI/AddressBookUI.h>
 #import "EditContactsViewController.h"
 
-@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, AddContactViewControllerDelegate, ABPersonViewControllerDelegate, EditContactsVCDelegate>
+@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, ABPersonViewControllerDelegate, EditContactsVCDelegate>
 
 - (BOOL)attributeMessageToExistingContacts:(Message *)message;
 - (void)retrieveUnreadMessagesAndNewContacts;
