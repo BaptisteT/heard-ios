@@ -100,7 +100,6 @@
 @property (strong, nonatomic) IBOutlet UIButton *authRequestAllowButton;
 @property (strong, nonatomic) IBOutlet UIButton *authRequestSkipButton;
 @property (nonatomic) BOOL contactAuthViewSeen;
-@property (nonatomic) BOOL pushAuthViewSeen;
 // Tuto
 @property (nonatomic) BOOL displayOpeningTuto;
 @property (nonatomic, strong) UIView *bottomTutoView;
@@ -126,7 +125,6 @@
     [super viewDidLoad];
     
     self.retrieveNewContact = YES;
-    self.pushAuthViewSeen = NO;
     self.contactAuthViewSeen = NO;
     self.authRequestView.hidden = YES;
     self.openingTutoView.hidden = YES;
@@ -269,17 +267,14 @@
     if (!self.contactAuthViewSeen && ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         self.contactAuthViewSeen = YES;
         [self displayContactAuthView];
-    } else if (!self.pushAuthViewSeen && ![GeneralUtils pushNotifRequestSeen]) {
-        self.pushAuthViewSeen = YES;
-        [self displayPushAuthView];
-    } else {
-        [GeneralUtils registerForRemoteNotif];
     }
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
         [self initIndexedContacts];
     }
     if (self.displayOpeningTuto) {
         [self prepareAndDisplayTuto];
+    } else {
+        [GeneralUtils registerForRemoteNotif];
     }
     
     // Update app info
@@ -1160,6 +1155,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (self.displayOpeningTuto) {
         [self hideOpeningTuto];
         self.displayOpeningTuto = NO;
+        [GeneralUtils registerForRemoteNotif];
     }
     
     // Check that audio is playing or completed
@@ -1178,10 +1174,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self endPlayerUIForAllContactViews];
     
     //Show menu and title
-    if (!self.displayOpeningTuto) {
-        self.menuButton.hidden = NO;
-    }
-    
+    self.menuButton.hidden = NO;
     self.titleLabel.hidden = NO;
     self.contactScrollView.clipsToBounds = YES;
     
@@ -1633,42 +1626,16 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.authRequestView.hidden = NO;
 }
 
-- (void)displayPushAuthView
-{
-    self.permissionMessage.text = NSLocalizedStringFromTable(@"notif_permission_message", kStringFile, @"comment");
-    self.permissionNote.text = NSLocalizedStringFromTable(@"notif_permission_note", kStringFile, @"comment");
-    
-    self.permissionImage.image = [UIImage imageNamed:@"notif-perm"];
-
-    [self.authRequestSkipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
-    [self.authRequestAllowButton setTitle:NSLocalizedStringFromTable(@"notify_me_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
-    self.authRequestView.hidden = NO;
-}
-
 - (IBAction)authRequestAllowButtonClicked:(id)sender
 {
     if ([self.authRequestAllowButton.titleLabel.text isEqualToString:NSLocalizedStringFromTable(@"contact_access_button_title", kStringFile, @"comment")]) {
         [self requestContactAuth];
-        [self closeContactRequest];
-    } else if ([self.authRequestAllowButton.titleLabel.text isEqualToString:NSLocalizedStringFromTable(@"notify_me_button_title", kStringFile, @"comment")]) {
-        [GeneralUtils registerForRemoteNotif];
         [self hideAuthRequestView];
     }
 }
 
 - (IBAction)authRequestSkipButtonClicked:(id)sender {
-    [self closeContactRequest];
-}
-
-- (void)closeContactRequest
-{
-    if (!self.pushAuthViewSeen && ![GeneralUtils pushNotifRequestSeen]) {
-        self.pushAuthViewSeen = YES;
-        [self displayPushAuthView];
-    } else {
-        [GeneralUtils registerForRemoteNotif];
-        [self hideAuthRequestView];
-    }
+    [self hideAuthRequestView];
 }
 
 - (void)hideAuthRequestView
@@ -1710,6 +1677,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (IBAction)openingTutoSkipButtonClicked:(id)sender {
     [self hideOpeningTuto];
     self.displayOpeningTuto = NO;
+    [GeneralUtils registerForRemoteNotif];
 }
 
 - (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel forOrigin:(float)x
@@ -1733,7 +1701,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)hideOpeningTuto
 {
     self.menuButton.hidden = NO;
-    
     self.openingTutoView.hidden = YES;
 }
 

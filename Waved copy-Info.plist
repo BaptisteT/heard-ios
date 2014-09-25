@@ -23,7 +23,7 @@
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.streetshout.HeardStaging.102</string>
+	<string>com.streetshout.HeardStaging.107</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -41,7 +41,7 @@
 	<key>NSContactsUsageDescription</key>
 	<string>Waved needs it to find your friends</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Waved needs it to record your voice messages</string>
+	<string>It will allow you to send voice messages</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Waved will only use an image of your choice as profile picture</string>
 	<key>UIMainStoryboardFile</key>

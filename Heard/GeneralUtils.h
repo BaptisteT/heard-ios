@@ -41,8 +41,6 @@
 
 + (BOOL)isRegisteredForRemoteNotification;
 
-+ (BOOL)pushNotifRequestSeen;
-
 + (BOOL)systemVersionIsEqualTo:(NSString *)v;
 
 + (BOOL)systemVersionIsGreaterThan:(NSString *)v;

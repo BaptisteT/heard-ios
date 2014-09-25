@@ -65,8 +65,6 @@
 
 + (void)checkUserPresenceByPhoneNumber:(NSString *)phoneNumber success:(void(^)(BOOL present))successBlock failure:(void(^)())failureBlock;
 
-+ (void)updateMicroAuth:(BOOL)microAuth success:(void(^)())successBlock failure:(void(^)())failureBlock;
-
 + (void)updateAddressBookStats:(NSMutableDictionary *)stats success:(void(^)())successBlock failure:(void(^)())failureBlock;
 
 @end
