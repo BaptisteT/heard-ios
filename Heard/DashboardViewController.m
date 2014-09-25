@@ -133,8 +133,6 @@
     self.openingTutoView.hidden = YES;
     self.displayOpeningTuto = [GeneralUtils isFirstOpening];
     
-    self.indexedContacts = [[NSMutableDictionary alloc] init];
-    
     self.openingTutoDescView.layer.cornerRadius = 5;
     
     //Perms
@@ -278,7 +276,9 @@
     } else {
         [GeneralUtils registerForRemoteNotif];
     }
-    
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
+        [self initIndexedContacts];
+    }
     if (self.displayOpeningTuto) {
         [self prepareAndDisplayTuto];
     }
@@ -390,6 +390,9 @@
     //Structure: @{ "A": @[ @[@"Artois", @"Jonathan", @"(415)-509-9382", @"not selected], @["Azta", "Lorainne", @"06 92 83 48 58", @"selected"]], "B": etc.
     self.indexedContacts = [[NSMutableDictionary alloc] init];
     
+    if (!self.addressBookFormattedContacts) {
+        self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook andSendStats:self.isSignUp];
+    }
     for (NSString *phoneNumber in self.addressBookFormattedContacts) {
         Contact *contact = [self.addressBookFormattedContacts objectForKey:phoneNumber];
         
@@ -416,8 +419,6 @@
                                                 }]
                                         forKey:key];
     }
-    
-    self.addressBookFormattedContacts = nil;
 }
 
 - (void)matchPhoneContactsWithHeardUsers
@@ -969,7 +970,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                           otherButtonTitles:nil] show];
         return;
     }
-    
+
     [self performSegueWithIdentifier:@"Invite Contacts Segue" sender:message];
 }
 
