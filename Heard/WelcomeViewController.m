@@ -63,5 +63,8 @@
         }];
     }];
 }
+- (IBAction)startButtonClicked:(id)sender {
+    [self performSegueWithIdentifier:@"Phone Push Segue" sender:nil];
+}
 
 @end

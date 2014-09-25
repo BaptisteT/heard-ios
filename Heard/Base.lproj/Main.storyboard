@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="OIk-2W-hgJ">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
@@ -48,7 +47,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="UQD-ua-4i0" kind="push" identifier="Phone Push Segue" id="YmY-jJ-NfV"/>
+                                    <action selector="startButtonClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="gCB-Bh-frR"/>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="welcome-logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="dwm-Cy-B4c">
@@ -75,10 +74,11 @@
                     <navigationItem key="navigationItem" id="FRa-6e-sLJ"/>
                     <connections>
                         <outlet property="logoImage" destination="dwm-Cy-B4c" id="tyV-pV-YAA"/>
-                        <outlet property="startButton" destination="J5D-hb-dnh" id="iXF-cU-5sp"/>
+                        <outlet property="startButton" destination="J5D-hb-dnh" id="1wv-28-6Rh"/>
                         <outlet property="subTitleLabel" destination="LYj-fg-v2e" id="YgK-fa-4pM"/>
                         <outlet property="titleLabel" destination="yMe-3M-kKz" id="RHj-0f-0uf"/>
                         <segue destination="2uU-ai-Tsy" kind="custom" identifier="Dashboard Push Segue From Welcome" customClass="PushNoAnimationSegue" id="xdp-at-Nje"/>
+                        <segue destination="UQD-ua-4i0" kind="push" identifier="Phone Push Segue" id="0cO-oe-vcd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
