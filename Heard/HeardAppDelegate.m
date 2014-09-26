@@ -62,6 +62,9 @@
     
     // Contacts list
     self.contacts = [ContactUtils retrieveContactsInMemory];
+    
+    // ios8 silent Notif
+    [GeneralUtils registerForSilentRemoteNotif];
 
     // Check API related message
     [ApiUtils checkAppVersionAndExecuteSucess:^(NSDictionary *result){

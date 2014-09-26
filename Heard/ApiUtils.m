@@ -12,6 +12,7 @@
 #import "Message.h"
 #import "Contact.h"
 #import "GeneralUtils.h"
+#import <AVFoundation/AVFoundation.h>
 
 @implementation ApiUtils
 
@@ -518,31 +519,6 @@
     }];
 }
 
-// Update Micro Auth
-+ (void)updateMicroAuth:(BOOL)microAuth success:(void(^)())successBlock failure:(void(^)())failureBlock
-{
-    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/update_micro_auth.json"];
-    
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    [parameters setObject:[NSNumber numberWithBool:microAuth] forKey:@"micro_auth"];
-    
-    [self enrichParametersWithToken:parameters];
-    
-    [[ApiUtils sharedClient] PATCH:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
-        NSDictionary *result = [JSON valueForKeyPath:@"result"];
-        Contact *contact = [Contact rawContactToInstance:[result objectForKey:@"user"]];
-        [SessionUtils saveUserInfo:contact];
-        if (successBlock) {
-            successBlock();
-        }
-    }failure:^(NSURLSessionDataTask *task, NSError *error) {
-        NSLog(@"ERROR: %@, %@", task.description, error);
-        if (failureBlock) {
-            failureBlock();
-        }
-    }];
-}
-
 // Update App info
 + (void)updateAppInfoAndExecuteSuccess:(void(^)())successBlock failure:(void(^)())failureBlock
 {
@@ -555,20 +531,23 @@
     [parameters setObject:[[UIDevice currentDevice] systemVersion] forKey:@"os_version"];
     [parameters setObject:[NSNumber numberWithBool:[GeneralUtils isRegisteredForRemoteNotification]] forKey:@"push_auth"];
     
-    [self enrichParametersWithToken:parameters];
-    
-    [[ApiUtils sharedClient] PATCH:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
-        NSDictionary *result = [JSON valueForKeyPath:@"result"];
-        Contact *contact = [Contact rawContactToInstance:[result objectForKey:@"user"]];
-        [SessionUtils saveUserInfo:contact];
-        if (successBlock) {
-            successBlock();
-        }
-    }failure:^(NSURLSessionDataTask *task, NSError *error) {
-        NSLog(@"ERROR: %@, %@", task.description, error);
-        if (failureBlock) {
-            failureBlock();
-        }
+    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+        [parameters setObject:[NSNumber numberWithBool:granted] forKey:@"micro_auth"];
+        [self enrichParametersWithToken:parameters];
+        
+        [[ApiUtils sharedClient] PATCH:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+            NSDictionary *result = [JSON valueForKeyPath:@"result"];
+            Contact *contact = [Contact rawContactToInstance:[result objectForKey:@"user"]];
+            [SessionUtils saveUserInfo:contact];
+            if (successBlock) {
+                successBlock();
+            }
+        }failure:^(NSURLSessionDataTask *task, NSError *error) {
+            NSLog(@"ERROR: %@, %@", task.description, error);
+            if (failureBlock) {
+                failureBlock();
+            }
+        }];
     }];
 }
 

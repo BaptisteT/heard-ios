@@ -7,8 +7,6 @@
 //
 
 #define FIRST_OPENING_PREF @"First Opening"
-#define PUSH_NOTIF_SEEN_PREF @"Push Notif Seen"
-#define MICRO_REQUEST_SEEN_PREF @"Micro Request Seen"
 
 #define ONE_MINUTE 60
 #define ONE_HOUR (60 * ONE_MINUTE)
@@ -144,8 +142,6 @@
 
 + (void)registerForRemoteNotif
 {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setObject:[NSNumber numberWithBool:YES] forKey:PUSH_NOTIF_SEEN_PREF];
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) { // ios 8
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge
                                                                                              |UIRemoteNotificationTypeSound
@@ -170,16 +166,6 @@
         return ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications] && [[UIApplication sharedApplication] currentUserNotificationSettings] > 0);
     } else { // ios 7
         return [[UIApplication sharedApplication] enabledRemoteNotificationTypes] > 0;
-    }
-}
-
-+ (BOOL)pushNotifRequestSeen
-{
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if([[prefs objectForKey:PUSH_NOTIF_SEEN_PREF] boolValue]) {
-        return YES;
-    } else {
-        return NO;
     }
 }
 

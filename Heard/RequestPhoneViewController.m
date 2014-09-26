@@ -63,10 +63,8 @@
     //Autoresize bug
     [self.tutoLabel sizeToFit];
     
-    if([[AVAudioSession sharedInstance] respondsToSelector:@selector(requestRecordPermission:)])
-    {
-        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {}];
-    }
+    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated

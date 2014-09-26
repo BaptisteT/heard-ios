@@ -287,7 +287,11 @@
                 [self.maxDurationTimer invalidate];
                 [self stopRecording];
                 if ([self.minDurationTimer isValid]) {
-                    [self.delegate tutoMessage:NSLocalizedStringFromTable(@"audio_too_short_error",kStringFile, @"comment") withDuration:1 priority:YES];
+                    if ([self.delegate displayOpeningTuto]) {
+                        [self.delegate displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"hold_longer_tuto_action_label", kStringFile, @"comment") forOrigin:self.frame.origin.x + self.frame.size.width/2];
+                    } else {
+                        [self.delegate tutoMessage:NSLocalizedStringFromTable(@"audio_too_short_error",kStringFile, @"comment") withDuration:1 priority:YES];
+                    }
                 } else {
                     [self sendRecording];
                 }
@@ -335,14 +339,7 @@
 {
     // Set session
     AVAudioSession *session = [AVAudioSession sharedInstance];
-    int preRequestTime = [[NSDate date] timeIntervalSince1970];
     [session requestRecordPermission:^(BOOL granted) {
-        int postRequestTime = [[NSDate date] timeIntervalSince1970];
-        // todo BT (later) : ios8
-        if (postRequestTime - preRequestTime > 0.1) { // First record case
-            [ApiUtils updateMicroAuth:granted success:nil failure:nil];
-            return;
-        }
         if (!granted) {
             [[[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"micro_access_error_title",kStringFile,@"comment")
                                         message:NSLocalizedStringFromTable(@"micro_access_error_message",kStringFile,@"comment")

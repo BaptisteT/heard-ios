@@ -15,8 +15,6 @@
 		0B02D37D19D0CFD50010C58D /* invite-button@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B02D37919D0CFD50010C58D /* invite-button@2x~iphone.png */; };
 		0B05062F19D257D300CBFA59 /* NoCancelSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B05062E19D257D300CBFA59 /* NoCancelSearchBar.m */; };
 		0B05063019D257D300CBFA59 /* NoCancelSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B05062E19D257D300CBFA59 /* NoCancelSearchBar.m */; };
-		0B22CD021978439D00E1C7AF /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B22CD011978439D00E1C7AF /* AddContactViewController.m */; };
-		0B22CD031978439D00E1C7AF /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B22CD011978439D00E1C7AF /* AddContactViewController.m */; };
 		0B37D42E19CCFCE900A2D074 /* InviteContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B37D42D19CCFCE900A2D074 /* InviteContactView.m */; };
 		0B37D42F19CCFCE900A2D074 /* InviteContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B37D42D19CCFCE900A2D074 /* InviteContactView.m */; };
 		0B56F64A19757D5300DB6FF1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B56F64919757D5300DB6FF1 /* QuartzCore.framework */; };
@@ -289,8 +287,6 @@
 		0B02D37919D0CFD50010C58D /* invite-button@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invite-button@2x~iphone.png"; sourceTree = "<group>"; };
 		0B05062D19D257D300CBFA59 /* NoCancelSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoCancelSearchBar.h; sourceTree = "<group>"; };
 		0B05062E19D257D300CBFA59 /* NoCancelSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoCancelSearchBar.m; sourceTree = "<group>"; };
-		0B22CD001978439D00E1C7AF /* AddContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddContactViewController.h; sourceTree = "<group>"; };
-		0B22CD011978439D00E1C7AF /* AddContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContactViewController.m; sourceTree = "<group>"; };
 		0B37D42C19CCFCE900A2D074 /* InviteContactView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteContactView.h; sourceTree = "<group>"; };
 		0B37D42D19CCFCE900A2D074 /* InviteContactView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteContactView.m; sourceTree = "<group>"; };
 		0B56F64919757D5300DB6FF1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -382,7 +378,7 @@
 		0BB0E8EB195B449A00C94AC0 /* UIView+MPSnapshotImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MPSnapshotImage.m"; sourceTree = "<group>"; };
 		0BB0E8FD195B44C900C94AC0 /* TrackingUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackingUtils.h; sourceTree = "<group>"; };
 		0BB0E8FE195B44C900C94AC0 /* TrackingUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackingUtils.m; sourceTree = "<group>"; };
-		0BD758BC1950F91B00CF0D85 /* Telepath.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Telepath.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0BD758BC1950F91B00CF0D85 /* Telepath.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Telepath.app; path = Waved.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BD758BF1950F91B00CF0D85 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		0BD758C11950F91B00CF0D85 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		0BD758C31950F91B00CF0D85 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -602,8 +598,6 @@
 				0B9051AD1976F618001E2ED5 /* InviteContactsViewController.m */,
 				0B9051B01976F62F001E2ED5 /* InviteContactsTVC.h */,
 				0B9051B11976F62F001E2ED5 /* InviteContactsTVC.m */,
-				0B22CD001978439D00E1C7AF /* AddContactViewController.h */,
-				0B22CD011978439D00E1C7AF /* AddContactViewController.m */,
 			);
 			name = Contacts;
 			sourceTree = "<group>";
@@ -1185,7 +1179,6 @@
 				0B72EEB4196C672F00AC5A01 /* main.m in Sources */,
 				0B9051AF1976F618001E2ED5 /* InviteContactsViewController.m in Sources */,
 				3CB753D519B8909A00E4C75F /* CameraUtils.m in Sources */,
-				0B22CD031978439D00E1C7AF /* AddContactViewController.m in Sources */,
 				0B72EEB5196C672F00AC5A01 /* ContactView.m in Sources */,
 				0B969126198997620048E4BB /* EditContactsViewController.m in Sources */,
 				0B72EEB6196C672F00AC5A01 /* AFNetworkActivityIndicatorManager.m in Sources */,
@@ -1263,7 +1256,6 @@
 				0BDB65501953B5FD00223093 /* main.m in Sources */,
 				0B9051AE1976F618001E2ED5 /* InviteContactsViewController.m in Sources */,
 				3CB753D419B8908F00E4C75F /* CameraUtils.m in Sources */,
-				0B22CD021978439D00E1C7AF /* AddContactViewController.m in Sources */,
 				3CB8B7F5195453E50090D657 /* ContactView.m in Sources */,
 				0B969125198997620048E4BB /* EditContactsViewController.m in Sources */,
 				0BDB65341953B5EA00223093 /* AFNetworkActivityIndicatorManager.m in Sources */,

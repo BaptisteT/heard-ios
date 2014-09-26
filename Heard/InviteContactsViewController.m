@@ -311,5 +311,9 @@ clickedButtonAtIndex:(NSInteger)buttonIndex
     [self.playerButton setTitle:NSLocalizedStringFromTable(@"invite_play_button_title",kStringFile,@"comment") forState:UIControlStateNormal];
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
 
 @end
