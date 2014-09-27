@@ -30,6 +30,7 @@
 @property (nonatomic) BOOL isPlaying;
 @property (nonatomic) BOOL isRecording;
 @property (nonatomic) BOOL messageNotReadByContact;
+@property (nonatomic) BOOL contactIsRecording;
 @property (nonatomic) NSInteger unreadMessagesCount;
 @property (nonatomic) NSInteger sendingMessageCount;
 @property (nonatomic) NSInteger loadingMessageCount;

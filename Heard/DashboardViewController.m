@@ -184,6 +184,7 @@
         NSLog(@"AVAudioSession error setting category:%@",error);
     [session setActive:YES error:nil];
     
+    
     // Add observers
     [[NSNotificationCenter defaultCenter] addObserver: self
                                              selector: @selector(routeChangeCallback:)
@@ -412,9 +413,7 @@
 
 - (void)matchPhoneContactsWithHeardUsers
 {
-    if (!self.addressBookFormattedContacts) {
-        self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook andSendStats:self.isSignUp];
-    }
+    self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook andSendStats:self.isSignUp];
     NSMutableDictionary *contactsInfo = [[NSMutableDictionary alloc] init];
     NSMutableDictionary * adressBookWithFormattedKey = [NSMutableDictionary new];
     for (NSString* phoneNumber in self.addressBookFormattedContacts) {
@@ -851,6 +850,17 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             //TODO BB: Check that message from server matches last message sent
             contactView.messageNotReadByContact = NO;
             
+            [contactView resetDiscussionStateAnimated:YES];
+            break;
+        }
+    }
+}
+
+- (void)contact:(NSUInteger)contactId isRecording:(BOOL)flag
+{
+    for (ContactView *contactView in self.contactViews) {
+        if (contactId == contactView.contact.identifier) {
+            contactView.contactIsRecording = flag;
             [contactView resetDiscussionStateAnimated:YES];
             break;
         }

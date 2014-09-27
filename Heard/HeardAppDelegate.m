@@ -170,7 +170,7 @@
                 AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
             }
         }
-    //Read message read
+    //Read message push
     } else if ([userInfo valueForKey:@"receiver_id"] && [userInfo valueForKey:@"message_id"]) {
         if (state == UIApplicationStateActive) {
             UIViewController *visibleController = [self getVisibleController];
@@ -179,6 +179,17 @@
                 NSUInteger messageId = [[userInfo valueForKey:@"message_id"] unsignedIntegerValue];
                 
                 [(DashboardViewController *)visibleController message:messageId listenedByContact:contactId];
+            }
+        }
+    //Is Recording push
+    } else if ([userInfo valueForKey:@"recorder_id"] && [userInfo valueForKey:@"is_recording"]) {
+        if (state == UIApplicationStateActive) {
+            UIViewController *visibleController = [self getVisibleController];
+            if ([visibleController isKindOfClass:[DashboardViewController class]]) {
+                NSUInteger contactId = [[userInfo valueForKey:@"recorder_id"] unsignedIntegerValue];
+                BOOL isRecording = [[userInfo valueForKey:@"is_recording"] boolValue];
+                
+                [(DashboardViewController *)visibleController contact:contactId isRecording:isRecording];
             }
         }
     }

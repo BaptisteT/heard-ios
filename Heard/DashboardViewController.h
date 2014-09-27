@@ -22,6 +22,8 @@
 - (void)removeViewOfHiddenContacts;
 - (void)playSound:(NSString *)sound;
 - (void)message:(NSUInteger)messageId listenedByContact:(NSUInteger)contactId;
+- (void)contact:(NSUInteger)contactId isRecording:(BOOL)flag;
+
 
 @property (nonatomic) BOOL isSignUp;
 

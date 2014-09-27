@@ -573,4 +573,25 @@
     }];
 }
 
+// Is Typing
++ (void)currentUserIsRecording:(BOOL)flag toUser:(NSInteger)receivedId success:(void(^)())successBlock failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages/is_recording"];
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [self enrichParametersWithToken:parameters];
+    [parameters setObject:[NSNumber numberWithInteger:receivedId] forKey:@"receiver_id"];
+    [parameters setObject:[NSNumber numberWithBool:flag] forKey:@"is_recording"];
+    
+    [[ApiUtils sharedClient] GET:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        if (successBlock) {
+            successBlock();
+        }
+    }failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"ERROR: %@, %@", task.description, error);
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
 @end

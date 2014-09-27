@@ -33,6 +33,8 @@
 #define LAST_MESSAGE_NOT_READ_BY_CONTACT_STATE 8
 #define LAST_MESSAGE_READ_BY_CONTACT_STATE 9
 #define CURRENT_USER_DID_NOT_ANSWER_STATE 10
+#define CONTACT_RECORDING_STATE 11
+
 
 @interface ContactView()
 
@@ -40,6 +42,7 @@
 @property (nonatomic, strong) UITapGestureRecognizer *singleTapRecognizer;
 @property (nonatomic, strong) NSTimer *maxDurationTimer;
 @property (nonatomic, strong) NSTimer *minDurationTimer;
+@property (nonatomic, strong) NSTimer *contactIsRecordingAnimationTimer;
 
 @property (nonatomic, strong) UIImageView *recordOverlay;
 @property (nonatomic, strong) UIImageView *playOverlay;
@@ -51,8 +54,9 @@
 @property (nonatomic, strong) CAShapeLayer *unreadCircleShape;
 @property (nonatomic, strong) CAShapeLayer *failedCircleShape;
 
-@property (nonatomic) UILabel *unreadMessagesLabel;
+@property (nonatomic, strong) UILabel *unreadMessagesLabel;
 @property (nonatomic, strong) UILabel *failedMessageLabel;
+@property (nonatomic, strong) UILabel *contactRecordingLabel;
 
 @property (nonatomic, strong) UIImageView *readStateIcon;
 @property (nonatomic, strong) UIImageView *readAnimationIcon;
@@ -85,7 +89,7 @@
     self.failedMessages = [NSMutableArray new];
     self.unreadMessages = [NSMutableArray new];
     self.unreadMessagesCount = 0;
-    self.isRecording = NO; self.isPlaying = NO; self.messageNotReadByContact = NO;
+    self.isRecording = NO; self.isPlaying = NO; self.messageNotReadByContact = NO; self.contactIsRecording = NO;
     self.sendingMessageCount = 0; self.loadingMessageCount = 0;
     
     // Image view
@@ -109,6 +113,7 @@
     // Init labels
     self.unreadMessagesLabel = [self allocAndInitCornerLabelWithText:@"0" andColor:[ImageUtils blue]];
     self.failedMessageLabel = [self allocAndInitCornerLabelWithText:@"!" andColor:[ImageUtils red]];
+    self.contactRecordingLabel = [self allocAndInitCornerLabelWithText:@"..." andColor:[UIColor lightGrayColor]];
 
     // Discussion state
     [self resetDiscussionStateAnimated:NO];
@@ -149,6 +154,8 @@
         [self setDiscussionState:LOADING_STATE animated:animated];
     } else if ([self isSendingMessage]) {
         [self setDiscussionState:SENDING_STATE animated:animated];
+    } else if ([self contactIsRecording]) {
+        [self setDiscussionState:CONTACT_RECORDING_STATE animated:animated];
     } else if ([self currentUserDidNotAnswerLastMessage]) {
         [self setDiscussionState:CURRENT_USER_DID_NOT_ANSWER_STATE animated:animated];
     } else if ([self lastMessageSentReadByContact]) {
@@ -203,7 +210,12 @@
         [self startLoadingAnimation];
     }
     
+    else if (discussionState == CONTACT_RECORDING_STATE) {
+        [self startContactIsRecordingAnimation];
+    }
+    
     else if (discussionState == CURRENT_USER_DID_NOT_ANSWER_STATE) {
+        // do nothing
     }
     
     else if (discussionState == LAST_MESSAGE_READ_BY_CONTACT_STATE) {
@@ -261,6 +273,9 @@
     self.readStateIcon.hidden = YES;
     self.readAnimationIcon.hidden = YES;
     self.unreadStateIcon.hidden = YES;
+    
+    // contact is recording
+    [self endContactIsRecordingAnimation];
 }
 
 
@@ -348,6 +363,7 @@
                               otherButtonTitles:nil] show];
             return;
         } else {
+            [ApiUtils currentUserIsRecording:YES toUser:self.contact.identifier success:nil failure:nil];
             self.isRecording = YES;
             // Create Timers
             self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
@@ -372,6 +388,7 @@
 
 - (void)stopRecording
 {
+    [ApiUtils currentUserIsRecording:NO toUser:self.contact.identifier success:nil failure:nil];
     self.isRecording = NO;
     [self resetDiscussionStateAnimated:NO];
     [self.delegate endedLongPressRecording];
@@ -664,6 +681,10 @@
     return _messageNotReadByContact ;
 }
 
+- (BOOL)contactIsRecording {
+    return _contactIsRecording;
+}
+
 
 // ----------------------------------------------------------
 #pragma mark Design utility
@@ -722,6 +743,26 @@
     [self.loadingCircleShape addAnimation:rotationAnimation forKey:@"indeterminateAnimation"];
 }
 
+- (void)startContactIsRecordingAnimation {
+    self.contactRecordingLabel.hidden = NO;
+    [self.contactRecordingLabel setText:@"."];
+    self.contactIsRecordingAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:0.5f target:self selector:@selector(updateContactRecordingLabel) userInfo:nil repeats:YES];
+}
+
+- (void)updateContactRecordingLabel {
+    NSString *ellipses = @"...";
+    if ([self.contactRecordingLabel.text rangeOfString:ellipses].location == NSNotFound) {
+        [self.contactRecordingLabel setText:[NSString stringWithFormat:@"%@.",self.contactRecordingLabel.text]];
+    } else {
+        [self.contactRecordingLabel setText:@""];
+    }
+}
+
+- (void)endContactIsRecordingAnimation {
+    [self.contactIsRecordingAnimationTimer invalidate];
+    self.contactIsRecordingAnimationTimer = nil;
+    [self.contactRecordingLabel setHidden:YES];
+}
 
 // ----------------------------------------------------------
 #pragma mark Init utility
