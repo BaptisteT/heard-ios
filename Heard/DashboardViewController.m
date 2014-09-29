@@ -861,7 +861,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     for (ContactView *contactView in self.contactViews) {
         if (contactId == contactView.contact.identifier) {
             contactView.contactIsRecording = flag;
-            [contactView resetDiscussionStateAnimated:YES];
+            [contactView resetDiscussionStateAnimated:NO];
             break;
         }
     }

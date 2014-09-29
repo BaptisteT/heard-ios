@@ -111,9 +111,9 @@
     [self initUnreadStateImageView];
     
     // Init labels
-    self.unreadMessagesLabel = [self allocAndInitCornerLabelWithText:@"0" andColor:[ImageUtils blue]];
-    self.failedMessageLabel = [self allocAndInitCornerLabelWithText:@"!" andColor:[ImageUtils red]];
-    self.contactRecordingLabel = [self allocAndInitCornerLabelWithText:@"..." andColor:[UIColor lightGrayColor]];
+    self.unreadMessagesLabel = [self allocAndInitCornerLabelWithText:@"0" fontSize:18 andColor:[ImageUtils blue]];
+    self.failedMessageLabel = [self allocAndInitCornerLabelWithText:@"!" fontSize:18 andColor:[ImageUtils red]];
+    self.contactRecordingLabel = [self allocAndInitCornerLabelWithText:@"..." fontSize:20 andColor:[ImageUtils blue]];
 
     // Discussion state
     [self resetDiscussionStateAnimated:NO];
@@ -833,12 +833,12 @@
     [self.sentOverlay setBackgroundColor:[ImageUtils blue]];
 }
 
-- (UILabel *)allocAndInitCornerLabelWithText:(NSString *)text andColor:(UIColor *)color
+- (UILabel *)allocAndInitCornerLabelWithText:(NSString *)text fontSize:(CGFloat)fontSize andColor:(UIColor *)color
 {
     UILabel *label = [[UILabel alloc] init];
     [label setFrame:CGRectMake(kContactSize - kUnreadMessageSize/2 + 5, -20, kUnreadMessageSize, kUnreadMessageSize)];
     label.textColor = color;
-    label.font = [UIFont fontWithName:@"Avenir-Heavy" size:18];
+    label.font = [UIFont fontWithName:@"Avenir-Heavy" size:fontSize];
     label.adjustsFontSizeToFitWidth = YES;
     label.minimumScaleFactor = 0.2;
     label.text = text;
