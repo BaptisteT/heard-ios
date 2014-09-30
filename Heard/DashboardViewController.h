@@ -13,15 +13,18 @@
 #import "ContactView.h"
 #import <AddressBookUI/AddressBookUI.h>
 #import "EditContactsViewController.h"
+#import "EmojiView.h"
 
-@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, ABPersonViewControllerDelegate, EditContactsVCDelegate>
+@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, ABPersonViewControllerDelegate, EditContactsVCDelegate, EmojiViewDelegateProtocol>
 
 - (BOOL)attributeMessageToExistingContacts:(Message *)message;
 - (void)retrieveUnreadMessagesAndNewContacts;
 - (void)endPlayerAtCompletion:(BOOL)completed;
 - (void)removeViewOfHiddenContacts;
-- (void)playSound:(NSString *)sound;
+- (void)playSound:(NSString *)sound ofType:(NSString *)type;
 - (void)message:(NSUInteger)messageId listenedByContact:(NSUInteger)contactId;
+- (void)contact:(NSUInteger)contactId isRecording:(BOOL)flag;
+
 
 @property (nonatomic) BOOL isSignUp;
 
