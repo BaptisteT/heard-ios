@@ -1060,7 +1060,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)startedPlayingAudioMessagesOfView:(ContactView *)contactView
 {
     [self hideOpeningTuto];
-    self.emojiContainer.hidden = YES;
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     if (![prefs objectForKey:kUserPhoneToEarPref] && !self.isUsingHeadSet) {
@@ -1173,7 +1172,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)endPlayerAtCompletion:(BOOL)completed
 {
-    self.emojiContainer.hidden = NO;
     if (self.displayOpeningTuto) {
         [self hideOpeningTuto];
         self.displayOpeningTuto = NO;
