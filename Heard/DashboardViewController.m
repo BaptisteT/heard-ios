@@ -114,7 +114,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 // Emoji View
 @property (weak, nonatomic) IBOutlet UIScrollView *emojiContainer;
+@property (nonatomic) BOOL emojiContainerOn;
 @property (strong, nonatomic) NSData *emojiData;
+@property (weak, nonatomic) IBOutlet UIButton *emojiButton;
 
 @end
 
@@ -127,10 +129,10 @@
 {
     [super viewDidLoad];
     
+    self.emojiContainerOn = NO;
     self.retrieveNewContact = YES;
     self.authRequestView.hidden = YES;
     self.openingTutoView.hidden = YES;
-    self.emojiContainer.hidden = YES;
     self.displayOpeningTuto = [GeneralUtils isFirstOpening];
     
     self.openingTutoDescView.layer.cornerRadius = 5;
@@ -917,6 +919,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     //Hide menu and title
     self.menuButton.hidden = YES;
     self.titleLabel.hidden = YES;
+    self.emojiButton.hidden = YES;
     self.contactScrollView.clipsToBounds = NO;
     
     for (ContactView *view in self.contactViews) {
@@ -929,6 +932,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     //Show menu and title
     self.menuButton.hidden = NO;
     self.titleLabel.hidden = NO;
+    self.emojiButton.hidden = NO;
     self.contactScrollView.clipsToBounds = YES;
     
     for (ContactView *view in self.contactViews) {
@@ -1037,7 +1041,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)endedLongPressRecording
 {
     [self endTutoMode];
-    
+    self.emojiContainer.hidden = NO;
     //Hide recorder label
     self.recorderLabel.hidden = YES;
     
@@ -1148,6 +1152,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     //Hide menu and title
     self.menuButton.hidden = YES;
     self.titleLabel.hidden = YES;
+    self.emojiButton.hidden = YES;
     self.contactScrollView.clipsToBounds = NO;
     
     self.playerContainer.hidden = NO;
@@ -1169,6 +1174,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)endPlayerAtCompletion:(BOOL)completed
 {
+    self.emojiContainer.hidden = NO;
     if (self.displayOpeningTuto) {
         [self hideOpeningTuto];
         self.displayOpeningTuto = NO;
@@ -1193,6 +1199,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     //Show menu and title
     self.menuButton.hidden = NO;
     self.titleLabel.hidden = NO;
+    self.emojiButton.hidden = NO;
     self.contactScrollView.clipsToBounds = YES;
     
     self.playerLabel.hidden = YES;
@@ -1457,7 +1464,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Observer callback
 // ----------------------------------------------------------
 -(void)willResignActiveCallback {
-    self.emojiContainer.hidden = YES;
     // Dismiss modal
     [self dismissViewControllerAnimated:NO completion:nil];
 }
@@ -1738,7 +1744,33 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ----------------------------------------------------------
 
 - (IBAction)emojiButtonClicked:(id)sender {
-    self.emojiContainer.hidden = ! self.emojiContainer.isHidden;
+    if (self.emojiContainerOn) {
+        self.emojiContainerOn = NO;
+        [self.emojiContainer.layer removeAllAnimations];
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
+                                                   self.view.frame.size.height,
+                                                   self.emojiContainer.frame.size.width,
+                                                   self.emojiContainer.frame.size.height);
+        }];
+    } else {
+        self.emojiContainerOn = YES;
+        [self.emojiContainer.layer removeAllAnimations];
+        
+        //Emoji container
+        self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
+                                               self.view.frame.size.height,
+                                               self.emojiContainer.frame.size.width,
+                                               self.emojiContainer.frame.size.height);
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
+                                                   self.view.frame.size.height - self.emojiContainer.frame.size.height,
+                                                   self.emojiContainer.frame.size.width,
+                                                   self.emojiContainer.frame.size.height);
+        }];
+    }
 }
 
 - (void)addEmojiViewsToContainer

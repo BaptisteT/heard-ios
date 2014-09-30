@@ -70,7 +70,6 @@
             CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];
             [self.delegate updateEmojiLocation:mainViewCoordinate];
         }
-        
         else if (recognizer.state == UIGestureRecognizerStateEnded) {
             recognizer.view.center = initialCenter;
             CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];

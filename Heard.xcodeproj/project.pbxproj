@@ -309,8 +309,20 @@
 		3CEF9EE819DA2F140045D78D /* EmojiView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE619DA2F140045D78D /* EmojiView.m */; };
 		3CEF9EEA19DA40380045D78D /* emoji-image-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE919DA40380045D78D /* emoji-image-1.png */; };
 		3CEF9EEB19DA40380045D78D /* emoji-image-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE919DA40380045D78D /* emoji-image-1.png */; };
-		3CEF9EF019DA61010045D78D /* emoji-sound-1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EEF19DA61010045D78D /* emoji-sound-1.m4a */; };
-		3CEF9EF119DA61010045D78D /* emoji-sound-1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EEF19DA61010045D78D /* emoji-sound-1.m4a */; };
+		3CEF9EF619DB1BD30045D78D /* emoji-sound-2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EF219DB1BD30045D78D /* emoji-sound-2.m4a */; };
+		3CEF9EF719DB1BD30045D78D /* emoji-sound-2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EF219DB1BD30045D78D /* emoji-sound-2.m4a */; };
+		3CEF9EF819DB1BD30045D78D /* emoji-sound-6.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EF319DB1BD30045D78D /* emoji-sound-6.m4a */; };
+		3CEF9EF919DB1BD30045D78D /* emoji-sound-6.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EF319DB1BD30045D78D /* emoji-sound-6.m4a */; };
+		3CEF9EFA19DB1BD30045D78D /* emoji-sound-1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EF419DB1BD30045D78D /* emoji-sound-1.m4a */; };
+		3CEF9EFB19DB1BD30045D78D /* emoji-sound-1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EF419DB1BD30045D78D /* emoji-sound-1.m4a */; };
+		3CEF9EFC19DB1BD30045D78D /* emoji-sound-7.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EF519DB1BD30045D78D /* emoji-sound-7.m4a */; };
+		3CEF9EFD19DB1BD30045D78D /* emoji-sound-7.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EF519DB1BD30045D78D /* emoji-sound-7.m4a */; };
+		3CEF9EFF19DB4F000045D78D /* emoji-sound-3.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EFE19DB4F000045D78D /* emoji-sound-3.m4a */; };
+		3CEF9F0019DB4F000045D78D /* emoji-sound-3.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EFE19DB4F000045D78D /* emoji-sound-3.m4a */; };
+		3CEF9F0319DB4F0F0045D78D /* emoji-sound-5.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9F0219DB4F0F0045D78D /* emoji-sound-5.m4a */; };
+		3CEF9F0419DB4F0F0045D78D /* emoji-sound-5.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9F0219DB4F0F0045D78D /* emoji-sound-5.m4a */; };
+		3CEF9F0519DB4F150045D78D /* emoji-sound-4.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9F0119DB4F070045D78D /* emoji-sound-4.m4a */; };
+		3CEF9F0619DB4F150045D78D /* emoji-sound-4.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9F0119DB4F070045D78D /* emoji-sound-4.m4a */; };
 		3CF2E981198E76110098087B /* CustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF2E980198E76110098087B /* CustomActionSheet.m */; };
 		3CF2E982198E76110098087B /* CustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF2E980198E76110098087B /* CustomActionSheet.m */; };
 /* End PBXBuildFile section */
@@ -545,7 +557,13 @@
 		3CEF9EE519DA2F140045D78D /* EmojiView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmojiView.h; sourceTree = "<group>"; };
 		3CEF9EE619DA2F140045D78D /* EmojiView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmojiView.m; sourceTree = "<group>"; };
 		3CEF9EE919DA40380045D78D /* emoji-image-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji-image-1.png"; sourceTree = "<group>"; };
-		3CEF9EEF19DA61010045D78D /* emoji-sound-1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-1.m4a"; sourceTree = "<group>"; };
+		3CEF9EF219DB1BD30045D78D /* emoji-sound-2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-2.m4a"; sourceTree = "<group>"; };
+		3CEF9EF319DB1BD30045D78D /* emoji-sound-6.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-6.m4a"; sourceTree = "<group>"; };
+		3CEF9EF419DB1BD30045D78D /* emoji-sound-1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-1.m4a"; sourceTree = "<group>"; };
+		3CEF9EF519DB1BD30045D78D /* emoji-sound-7.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-7.m4a"; sourceTree = "<group>"; };
+		3CEF9EFE19DB4F000045D78D /* emoji-sound-3.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-3.m4a"; sourceTree = "<group>"; };
+		3CEF9F0119DB4F070045D78D /* emoji-sound-4.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-4.m4a"; sourceTree = "<group>"; };
+		3CEF9F0219DB4F0F0045D78D /* emoji-sound-5.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-5.m4a"; sourceTree = "<group>"; };
 		3CF2E97F198E76110098087B /* CustomActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomActionSheet.h; sourceTree = "<group>"; };
 		3CF2E980198E76110098087B /* CustomActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomActionSheet.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -756,8 +774,14 @@
 				0BA145831997A5620031716F /* agogo.aif */,
 				0BA145711997A4A60031716F /* end-record-sound.aif */,
 				0BA145721997A4A60031716F /* received-sound.aif */,
-				3CEF9EEF19DA61010045D78D /* emoji-sound-1.m4a */,
 				0BA145731997A4A60031716F /* sent-sound.aif */,
+				3CEF9EF219DB1BD30045D78D /* emoji-sound-2.m4a */,
+				3CEF9EF319DB1BD30045D78D /* emoji-sound-6.m4a */,
+				3CEF9F0119DB4F070045D78D /* emoji-sound-4.m4a */,
+				3CEF9EFE19DB4F000045D78D /* emoji-sound-3.m4a */,
+				3CEF9F0219DB4F0F0045D78D /* emoji-sound-5.m4a */,
+				3CEF9EF419DB1BD30045D78D /* emoji-sound-1.m4a */,
+				3CEF9EF519DB1BD30045D78D /* emoji-sound-7.m4a */,
 				0BA145741997A4A60031716F /* failed-sound.aif */,
 				0BA145751997A4A60031716F /* start-record-sound.aif */,
 				0BA145761997A4A60031716F /* typing-sound.aif */,
@@ -1105,8 +1129,10 @@
 			files = (
 				0B02D37B19D0CFD50010C58D /* invite-button.png in Resources */,
 				0B39AB0319DA64D0009955B3 /* emoji-image-7@2x~iphone.png in Resources */,
+				3CEF9EFB19DB1BD30045D78D /* emoji-sound-1.m4a in Resources */,
 				3CA16D2A19AE407200C1F2A5 /* english_strings.strings in Resources */,
 				0BA1545A19D48B5300246962 /* heard-logo-transparent.png in Resources */,
+				3CEF9F0419DB4F0F0045D78D /* emoji-sound-5.m4a in Resources */,
 				0BA1457C1997A4A60031716F /* sent-sound.aif in Resources */,
 				0B72EEE5196C672F00AC5A01 /* Images.xcassets in Resources */,
 				0B72EEE7196C672F00AC5A01 /* unknown-user@2x~iphone.png in Resources */,
@@ -1129,17 +1155,20 @@
 				0BA1545C19D48B5300246962 /* heard-logo-transparent@2x~iphone.png in Resources */,
 				0B39AAF519DA64D0009955B3 /* emoji-image-4.png in Resources */,
 				3CA16D2D19AE42CE00C1F2A5 /* french_strings.strings in Resources */,
+				3CEF9EF919DB1BD30045D78D /* emoji-sound-6.m4a in Resources */,
 				0B39AAF319DA64D0009955B3 /* emoji-image-3@2x~iphone.png in Resources */,
 				0B90E67519C7822E004A8F16 /* contact-perm@2x~iphone.png in Resources */,
 				0B9051BB19771B96001E2ED5 /* checkbox-selected.png in Resources */,
 				0B39AAED19DA64D0009955B3 /* emoji-image-2.png in Resources */,
 				0B39AAFB19DA64D0009955B3 /* emoji-image-5@2x~iphone.png in Resources */,
 				0B9051BF19771B96001E2ED5 /* checkbox.png in Resources */,
+				3CEF9F0619DB4F150045D78D /* emoji-sound-4.m4a in Resources */,
+				3CEF9EF719DB1BD30045D78D /* emoji-sound-2.m4a in Resources */,
 				0BA1457E1997A4A60031716F /* failed-sound.aif in Resources */,
 				0BA1545619D48A9F00246962 /* heard-logo-120.png in Resources */,
-				3CEF9EF119DA61010045D78D /* emoji-sound-1.m4a in Resources */,
 				3CEF9EEB19DA40380045D78D /* emoji-image-1.png in Resources */,
 				0B72EEF6196C672F00AC5A01 /* Main.storyboard in Resources */,
+				3CEF9F0019DB4F000045D78D /* emoji-sound-3.m4a in Resources */,
 				0B72EEF7196C672F00AC5A01 /* MPCloseBtn.png in Resources */,
 				0B39AAEB19DA64D0009955B3 /* emoji-image-1@2x~iphone.png in Resources */,
 				3C95862719927E9400FF54B0 /* play.png in Resources */,
@@ -1172,6 +1201,7 @@
 				0BADABCC1993000D007B4538 /* contact-blue-eye.png in Resources */,
 				0BA145851997A5620031716F /* agogo.aif in Resources */,
 				0BA1545419D48A9F00246962 /* heard-logo-80.png in Resources */,
+				3CEF9EFD19DB1BD30045D78D /* emoji-sound-7.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1181,8 +1211,10 @@
 			files = (
 				0B02D37A19D0CFD50010C58D /* invite-button.png in Resources */,
 				0B39AB0219DA64D0009955B3 /* emoji-image-7@2x~iphone.png in Resources */,
+				3CEF9EFA19DB1BD30045D78D /* emoji-sound-1.m4a in Resources */,
 				3CA16D2919AE407200C1F2A5 /* english_strings.strings in Resources */,
 				0BA1545919D48B5300246962 /* heard-logo-transparent.png in Resources */,
+				3CEF9F0319DB4F0F0045D78D /* emoji-sound-5.m4a in Resources */,
 				0BA1457B1997A4A60031716F /* sent-sound.aif in Resources */,
 				0BD758D81950F91B00CF0D85 /* Images.xcassets in Resources */,
 				0BE55472195A340500CE4669 /* unknown-user@2x~iphone.png in Resources */,
@@ -1205,17 +1237,20 @@
 				0BA1545B19D48B5300246962 /* heard-logo-transparent@2x~iphone.png in Resources */,
 				0B39AAF419DA64D0009955B3 /* emoji-image-4.png in Resources */,
 				3CA16D2C19AE42CE00C1F2A5 /* french_strings.strings in Resources */,
+				3CEF9EF819DB1BD30045D78D /* emoji-sound-6.m4a in Resources */,
 				0B39AAF219DA64D0009955B3 /* emoji-image-3@2x~iphone.png in Resources */,
 				0B90E67419C7822E004A8F16 /* contact-perm@2x~iphone.png in Resources */,
 				0B9051BA19771B96001E2ED5 /* checkbox-selected.png in Resources */,
 				0B39AAEC19DA64D0009955B3 /* emoji-image-2.png in Resources */,
 				0B39AAFA19DA64D0009955B3 /* emoji-image-5@2x~iphone.png in Resources */,
 				0B9051BE19771B96001E2ED5 /* checkbox.png in Resources */,
+				3CEF9F0519DB4F150045D78D /* emoji-sound-4.m4a in Resources */,
+				3CEF9EF619DB1BD30045D78D /* emoji-sound-2.m4a in Resources */,
 				0BA1457D1997A4A60031716F /* failed-sound.aif in Resources */,
 				0BA1545519D48A9F00246962 /* heard-logo-120.png in Resources */,
-				3CEF9EF019DA61010045D78D /* emoji-sound-1.m4a in Resources */,
 				3CEF9EEA19DA40380045D78D /* emoji-image-1.png in Resources */,
 				0BD758D31950F91B00CF0D85 /* Main.storyboard in Resources */,
+				3CEF9EFF19DB4F000045D78D /* emoji-sound-3.m4a in Resources */,
 				0BB0E8EE195B449A00C94AC0 /* MPCloseBtn.png in Resources */,
 				0B39AAEA19DA64D0009955B3 /* emoji-image-1@2x~iphone.png in Resources */,
 				3C95862619927E9400FF54B0 /* play.png in Resources */,
@@ -1248,6 +1283,7 @@
 				0BADABCB1993000D007B4538 /* contact-blue-eye.png in Resources */,
 				0BA145841997A5620031716F /* agogo.aif in Resources */,
 				0BA1545319D48A9F00246962 /* heard-logo-80.png in Resources */,
+				3CEF9EFC19DB1BD30045D78D /* emoji-sound-7.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
