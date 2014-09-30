@@ -277,6 +277,12 @@
 		3CB753D419B8908F00E4C75F /* CameraUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB753D319B8908F00E4C75F /* CameraUtils.m */; };
 		3CB753D519B8909A00E4C75F /* CameraUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB753D319B8908F00E4C75F /* CameraUtils.m */; };
 		3CB8B7F5195453E50090D657 /* ContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactView.m */; };
+		3CEF9EE719DA2F140045D78D /* EmojiView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE619DA2F140045D78D /* EmojiView.m */; };
+		3CEF9EE819DA2F140045D78D /* EmojiView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE619DA2F140045D78D /* EmojiView.m */; };
+		3CEF9EEA19DA40380045D78D /* emoji-image-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE919DA40380045D78D /* emoji-image-1.png */; };
+		3CEF9EEB19DA40380045D78D /* emoji-image-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE919DA40380045D78D /* emoji-image-1.png */; };
+		3CEF9EF019DA61010045D78D /* emoji-sound-1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EEF19DA61010045D78D /* emoji-sound-1.m4a */; };
+		3CEF9EF119DA61010045D78D /* emoji-sound-1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EEF19DA61010045D78D /* emoji-sound-1.m4a */; };
 		3CF2E981198E76110098087B /* CustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF2E980198E76110098087B /* CustomActionSheet.m */; };
 		3CF2E982198E76110098087B /* CustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF2E980198E76110098087B /* CustomActionSheet.m */; };
 /* End PBXBuildFile section */
@@ -494,6 +500,10 @@
 		3CB8B7EB195346620090D657 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		3CB8B7F3195453E50090D657 /* ContactView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactView.h; sourceTree = "<group>"; };
 		3CB8B7F4195453E50090D657 /* ContactView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactView.m; sourceTree = "<group>"; };
+		3CEF9EE519DA2F140045D78D /* EmojiView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmojiView.h; sourceTree = "<group>"; };
+		3CEF9EE619DA2F140045D78D /* EmojiView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmojiView.m; sourceTree = "<group>"; };
+		3CEF9EE919DA40380045D78D /* emoji-image-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji-image-1.png"; sourceTree = "<group>"; };
+		3CEF9EEF19DA61010045D78D /* emoji-sound-1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-1.m4a"; sourceTree = "<group>"; };
 		3CF2E97F198E76110098087B /* CustomActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomActionSheet.h; sourceTree = "<group>"; };
 		3CF2E980198E76110098087B /* CustomActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomActionSheet.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -631,6 +641,7 @@
 				0B9051B419771B96001E2ED5 /* checkbox-selected@2x~iphone.png */,
 				0B9051B519771B96001E2ED5 /* checkbox-selected.png */,
 				0B9051B619771B96001E2ED5 /* checkbox@iphone.png */,
+				3CEF9EE919DA40380045D78D /* emoji-image-1.png */,
 				0B9051B719771B96001E2ED5 /* checkbox.png */,
 				3C95862419927E9400FF54B0 /* play.png */,
 				3C95862519927E9400FF54B0 /* play@2x~iphone.png */,
@@ -689,6 +700,7 @@
 				0BA145831997A5620031716F /* agogo.aif */,
 				0BA145711997A4A60031716F /* end-record-sound.aif */,
 				0BA145721997A4A60031716F /* received-sound.aif */,
+				3CEF9EEF19DA61010045D78D /* emoji-sound-1.m4a */,
 				0BA145731997A4A60031716F /* sent-sound.aif */,
 				0BA145741997A4A60031716F /* failed-sound.aif */,
 				0BA145751997A4A60031716F /* start-record-sound.aif */,
@@ -950,6 +962,8 @@
 				0B37D42D19CCFCE900A2D074 /* InviteContactView.m */,
 				0B05062D19D257D300CBFA59 /* NoCancelSearchBar.h */,
 				0B05062E19D257D300CBFA59 /* NoCancelSearchBar.m */,
+				3CEF9EE519DA2F140045D78D /* EmojiView.h */,
+				3CEF9EE619DA2F140045D78D /* EmojiView.m */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -1059,6 +1073,8 @@
 				0B9051BF19771B96001E2ED5 /* checkbox.png in Resources */,
 				0BA1457E1997A4A60031716F /* failed-sound.aif in Resources */,
 				0BA1545619D48A9F00246962 /* heard-logo-120.png in Resources */,
+				3CEF9EF119DA61010045D78D /* emoji-sound-1.m4a in Resources */,
+				3CEF9EEB19DA40380045D78D /* emoji-image-1.png in Resources */,
 				0B72EEF6196C672F00AC5A01 /* Main.storyboard in Resources */,
 				0B72EEF7196C672F00AC5A01 /* MPCloseBtn.png in Resources */,
 				3C95862719927E9400FF54B0 /* play.png in Resources */,
@@ -1119,6 +1135,8 @@
 				0B9051BE19771B96001E2ED5 /* checkbox.png in Resources */,
 				0BA1457D1997A4A60031716F /* failed-sound.aif in Resources */,
 				0BA1545519D48A9F00246962 /* heard-logo-120.png in Resources */,
+				3CEF9EF019DA61010045D78D /* emoji-sound-1.m4a in Resources */,
+				3CEF9EEA19DA40380045D78D /* emoji-image-1.png in Resources */,
 				0BD758D31950F91B00CF0D85 /* Main.storyboard in Resources */,
 				0BB0E8EE195B449A00C94AC0 /* MPCloseBtn.png in Resources */,
 				3C95862619927E9400FF54B0 /* play.png in Resources */,
@@ -1195,6 +1213,7 @@
 				0B72EEC0196C672F00AC5A01 /* AFHTTPRequestOperation.m in Sources */,
 				0B72EEC1196C672F00AC5A01 /* AFHTTPRequestOperationManager.m in Sources */,
 				0B72EEC2196C672F00AC5A01 /* UIView+MPSnapshotImage.m in Sources */,
+				3CEF9EE819DA2F140045D78D /* EmojiView.m in Sources */,
 				0B72EEC3196C672F00AC5A01 /* AFHTTPSessionManager.m in Sources */,
 				0B72EEC4196C672F00AC5A01 /* Mixpanel.m in Sources */,
 				0B72EEC5196C672F00AC5A01 /* CrashReportUtils.m in Sources */,
@@ -1272,6 +1291,7 @@
 				0BDB653D1953B5EA00223093 /* AFHTTPRequestOperation.m in Sources */,
 				0BDB653E1953B5EA00223093 /* AFHTTPRequestOperationManager.m in Sources */,
 				0BB0E8FC195B449A00C94AC0 /* UIView+MPSnapshotImage.m in Sources */,
+				3CEF9EE719DA2F140045D78D /* EmojiView.m in Sources */,
 				0BDB653F1953B5EA00223093 /* AFHTTPSessionManager.m in Sources */,
 				0BB0E8ED195B449A00C94AC0 /* Mixpanel.m in Sources */,
 				3C55FD701966B11C00E818D9 /* CrashReportUtils.m in Sources */,

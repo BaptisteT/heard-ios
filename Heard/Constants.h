@@ -84,3 +84,8 @@ static NSString * const kNbContactPhotoOnlyKey = @"nb_contacts_photo_only";
 static NSString * const kNbContactFamilyKey = @"nb_contacts_family";
 static NSString * const kNbContactRelatedKey = @"nb_contacts_related";
 static NSString * const kNbContactLinkedKey = @"nb_contacts_linked";
+
+// Emoji
+static const NSUInteger kNbEmojis = 1;
+static const NSUInteger kEmojiSize = 60;
+static const NSUInteger kEmojiMargin = 10;

@@ -32,6 +32,7 @@
 #import "PotentialContact.h"
 #import "InviteContactView.h"
 #import "InviteContactsViewController.h"
+#import "EmojiView.h"
 
 #define ACTION_OTHER_MENU_OPTION_1 NSLocalizedStringFromTable(@"hide_contacts_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"edit_profile_button_title",kStringFile,@"comment")
@@ -108,9 +109,12 @@
 @property (strong, nonatomic) IBOutlet UIButton *openingTutoSkipButton;
 @property (weak, nonatomic) IBOutlet UIView *openingTutoDescView;
 @property (strong, nonatomic) UIImageView *openingTutoArrow;
-//Invite new contacts
+// Invite new contacts
 @property (strong, nonatomic) NSMutableDictionary *indexedContacts;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+// Emoji View
+@property (weak, nonatomic) IBOutlet UIScrollView *emojiContainer;
+@property (strong, nonatomic) NSData *emojiData;
 
 @end
 
@@ -126,6 +130,7 @@
     self.retrieveNewContact = YES;
     self.authRequestView.hidden = YES;
     self.openingTutoView.hidden = YES;
+    self.emojiContainer.hidden = YES;
     self.displayOpeningTuto = [GeneralUtils isFirstOpening];
     
     self.openingTutoDescView.layer.cornerRadius = 5;
@@ -275,6 +280,9 @@
         [GeneralUtils registerForRemoteNotif];
     }
     
+    // Emoji views
+    [self addEmojiViewsToContainer];
+    
     // Update app info
     [ApiUtils updateAppInfoAndExecuteSuccess:nil failure:nil];
 }
@@ -314,7 +322,7 @@
 - (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration priority:(BOOL)prority
 {
     [self endTutoMode];
-    if (self.displayOpeningTuto && !prority) {
+    if ((self.displayOpeningTuto && !prority) || !self.emojiContainer.isHidden) {
         return;
     }
     self.bottomTutoViewLabel.text = message;
@@ -951,7 +959,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (NSData *)getLastRecordedData
 {
-    return [[NSData alloc] initWithContentsOfURL:self.recorder.url];
+    if (self.emojiData) {
+        NSData *lastRecordedData = self.emojiData;
+        self.emojiData = nil;
+        return lastRecordedData;
+    } else {
+        return [[NSData alloc] initWithContentsOfURL:self.recorder.url];
+    }
 }
 
 - (void)inviteContactsWithMessage:(Message *)message
@@ -988,6 +1002,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     [self hideOpeningTuto];
     [self endTutoMode];
+    self.emojiContainer.hidden = YES;
     
     //Show recorder label
     self.recorderLabel.hidden = NO;
@@ -996,7 +1011,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self endPlayerAtCompletion:NO];
     }
     
-    [self playSound:kStartRecordSound];
+    [self playSound:kStartRecordSound ofType:@""];
     [self disableAllContactViews];
     
     // Case where we had a pending message
@@ -1036,13 +1051,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Stop recording
     [self.recorder stop];
-    [self playSound:kEndRecordSound];
+    [self playSound:kEndRecordSound ofType:@""];
 }
 
 - (void)startedPlayingAudioMessagesOfView:(ContactView *)contactView
 {
     [self hideOpeningTuto];
-    
+    self.emojiContainer.hidden = YES;
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     if (![prefs objectForKey:kUserPhoneToEarPref] && !self.isUsingHeadSet) {
@@ -1477,7 +1492,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 
 // --------------------------
-// Profile picture change
+#pragma mark Profile picture change
 // --------------------------
 
 - (void)showImagePickerForSourceType:(UIImagePickerControllerSourceType)sourceType
@@ -1577,7 +1592,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Sounds
 // ----------------------------------------------------------
 
-- (void)playSound:(NSString *)sound
+- (void)playSound:(NSString *)sound ofType:(NSString *)type
 {
     if ([self.soundPlayer isPlaying]) {
         [self.soundPlayer stop];
@@ -1588,7 +1603,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     } else if ([sound isEqualToString:kEndRecordSound]) {
         self.soundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:@"/System/Library/Audio/UISounds/Tock.caf"] error:&error];
     } else  {
-        NSString *soundPath = [[NSBundle mainBundle] pathForResource:sound ofType:@"aif"];
+        NSString *soundPath = [[NSBundle mainBundle] pathForResource:sound ofType:type];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
         self.soundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:&error];
     }
@@ -1714,6 +1729,67 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         }
     }
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:sum];
+}
+
+
+// ----------------------------------------------------------
+#pragma mark Emoji init and delegate
+// ----------------------------------------------------------
+
+- (IBAction)emojiButtonClicked:(id)sender {
+    self.emojiContainer.hidden = ! self.emojiContainer.isHidden;
+}
+
+- (void)addEmojiViewsToContainer
+{
+    self.emojiContainer.contentSize = CGSizeMake(kEmojiSize * (kNbEmojis - 1) + kEmojiMargin * kNbEmojis, kEmojiSize + 2*kEmojiMargin);
+    for(int i=1;i<=kNbEmojis;i++) {
+        EmojiView *emojiView = [[EmojiView alloc] initWithIdentifier:i];
+        emojiView.delegate = self;
+        [self.emojiContainer addSubview:emojiView];
+    }
+}
+
+- (void)updateEmojiLocation:(CGPoint)location
+{
+    // clean
+    [self removeEmojiOverlayOnContactViews];
+    
+    // Animation on contact view
+    ContactView *contactView = [self findContactViewAtLocation:location];
+    if (contactView && !CGRectContainsPoint(self.emojiContainer.frame, location)) {
+        [contactView addEmojiOverlay];
+    }
+}
+
+- (void)emojiDropped:(NSInteger)emojiId atLocation:(CGPoint)location
+{
+    ContactView *contactView = [self findContactViewAtLocation:location];
+    if (contactView && !CGRectContainsPoint(self.emojiContainer.frame, location)) {
+        [contactView removeEmojiOverlay];
+        NSString *soundName = [NSString stringWithFormat:@"%@%lu",@"emoji-sound-",emojiId];
+        NSString *soundPath = [[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"];
+        NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+        self.emojiData = [NSData dataWithContentsOfURL:soundURL];
+        [contactView sendRecording];
+    }
+}
+
+- (void)removeEmojiOverlayOnContactViews
+{
+    for (ContactView *contactView in self.contactViews) {
+        [contactView removeEmojiOverlay];
+    }
+}
+
+- (ContactView *)findContactViewAtLocation:(CGPoint)location
+{
+    for (ContactView *contactView in self.contactViews) {
+        if (CGRectContainsPoint([self.view convertRect:contactView.frame fromView:self.contactScrollView],location)) {
+            return contactView;
+        }
+    }
+    return nil;
 }
 
 - (BOOL)prefersStatusBarHidden

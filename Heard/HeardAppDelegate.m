@@ -146,12 +146,34 @@
 - (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forRemoteNotification:(NSDictionary *)userInfo completionHandler:(void(^)())completionHandler
 {
     //handle the actions
-    if ([identifier isEqualToString:@"declineAction"]){
+    if ([identifier isEqualToString:@"ACCEPT_IDENTIFIER"]){
+//        Message *newMessage = [Message rawMessageToInstance:[userInfo valueForKey:@"message"]];
+//        AudioServicesPlaySystemSound(1001);
+        [[AVAudioSession sharedInstance] setActive:YES error:nil];
+        AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:@"/System/Library/Audio/UISounds/Tink.caf"] error:nil];
+        [player play];
+        [self performSelector:@selector(completeNotif:) withObject:completionHandler afterDelay:10];
         
+//        [ApiUtils downloadAudioFileAtURL:[newMessage getMessageURL] success:^void(NSData *data) {
+//            AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithData:data error:nil];
+//            AVAudioPlayer *player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:@"/System/Library/Audio/UISounds/Tink.caf"] error:nil];
+//            [player setVolume:2];
+//            [player play];
+//            NSLog(@"%f",[player duration]);
+//            [self performSelector:@selector(completeNotif:) withObject:completionHandler afterDelay:[player duration]];
+//        } failure:^(){
+//            completionHandler();
+//        }];
     }
     else if ([identifier isEqualToString:@"answerAction"]){
-        
+        completionHandler();
     }
+}
+
+- (void)completeNotif:(void(^)())completionHandler
+{
+    NSLog(@"end");
+    completionHandler();
 }
 
 
@@ -166,7 +188,7 @@
             UIViewController *visibleController = [self getVisibleController];
             if ([visibleController isKindOfClass:[DashboardViewController class]]) {
                 [(DashboardViewController *)visibleController retrieveUnreadMessagesAndNewContacts];
-                [(DashboardViewController *)visibleController playSound:kReceivedSound];
+                [(DashboardViewController *)visibleController playSound:kReceivedSound ofType:@"aif"];
                 AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
             }
         }

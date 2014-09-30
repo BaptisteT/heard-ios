@@ -50,6 +50,9 @@
 - (void) initImageView;
 - (void)initTapAndLongPressGestureRecognisers;
 - (void)initRecordOverlay;
+- (void)addEmojiOverlay;
+- (void)removeEmojiOverlay;
+- (void)sendRecording;
 
 
 @end
@@ -76,7 +79,7 @@
 
 - (void)endPlayerAtCompletion:(BOOL)completed;
 
-- (void)playSound:(NSString *)sound;
+- (void)playSound:(NSString *)sound ofType:(NSString *)type;
 
 - (void)resetLastMessagesPlayed;
 

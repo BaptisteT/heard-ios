@@ -220,7 +220,7 @@
     
     else if (discussionState == LAST_MESSAGE_READ_BY_CONTACT_STATE) {
         if (animated) {
-            [self.delegate playSound:kListenedSound];
+            [self.delegate playSound:kListenedSound ofType:@"aif"];
             self.readAnimationIcon.hidden = NO;
             self.readAnimationIcon.alpha = 1;
             self.readStateIcon.hidden = NO;
@@ -429,7 +429,7 @@
     self.sendingMessageCount --;
     
     if (error) {
-        [self.delegate playSound:kFailedSound];
+        [self.delegate playSound:kFailedSound ofType:@"aif"];
         // Stock failed message
         [self.failedMessages addObject:audioData];
     } else {
@@ -438,7 +438,7 @@
         
         if (!self.isRecording && !self.isPlaying) {
             [self sentAnimation];
-            [self.delegate playSound:kSentSound];
+            [self.delegate playSound:kSentSound ofType:@"aif"];
         }
         
         self.contact.currentUserDidNotAnswerLastMessage = NO;
@@ -763,6 +763,15 @@
     [self.contactIsRecordingAnimationTimer invalidate];
     self.contactIsRecordingAnimationTimer = nil;
     [self.contactRecordingLabel setHidden:YES];
+}
+
+- (void)addEmojiOverlay {
+    [self addSubview:self.sentOverlay];
+    self.sentOverlay.alpha = 1;
+}
+
+- (void)removeEmojiOverlay {
+    self.sentOverlay.alpha = 0;
 }
 
 // ----------------------------------------------------------
