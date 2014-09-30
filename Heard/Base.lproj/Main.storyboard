@@ -951,15 +951,15 @@
                             </button>
                             <scrollView hidden="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBT-dz-oUj">
                                 <rect key="frame" x="0.0" y="488" width="320" height="80"/>
-                                <color key="backgroundColor" red="0.054901960780000002" green="0.30588235289999999" blue="0.67843137249999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.054901960780000002" green="0.30588235289999999" blue="0.67843137249999996" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
                             </scrollView>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Egb-Gc-QPL">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Egb-Gc-QPL">
                                 <rect key="frame" x="263" y="15" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="rg5-th-ZYf"/>
                                     <constraint firstAttribute="height" constant="40" id="u7q-6D-WSS"/>
                                 </constraints>
-                                <state key="normal" image="unknown-user.png">
+                                <state key="normal" image="emoji-image-1.png">
                                     <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -973,6 +973,7 @@
                             <constraint firstItem="rAY-VR-0Tm" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="1ie-zI-A1e"/>
                             <constraint firstItem="rAY-VR-0Tm" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" id="2JE-NK-o0C"/>
                             <constraint firstItem="3eZ-vS-6nf" firstAttribute="centerY" secondItem="wyC-fx-Tu0" secondAttribute="centerY" constant="-2" id="71M-F4-G9F"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Egb-Gc-QPL" secondAttribute="trailing" constant="1" id="A0E-5D-Ga3"/>
                             <constraint firstAttribute="trailing" secondItem="rAY-VR-0Tm" secondAttribute="trailing" id="DQg-t5-vJE"/>
                             <constraint firstItem="Egb-Gc-QPL" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="topMargin" constant="15" id="F26-Kj-BKH"/>
                             <constraint firstItem="8bw-fU-Wrq" firstAttribute="top" secondItem="a0u-JM-gz3" secondAttribute="bottom" id="Kb4-YK-pux"/>
@@ -1281,8 +1282,8 @@
     <resources>
         <image name="checkbox.png" width="242" height="242"/>
         <image name="contact-perm.png" width="247" height="247"/>
+        <image name="emoji-image-1.png" width="194" height="194"/>
         <image name="menu-button.png" width="292" height="292"/>
-        <image name="unknown-user.png" width="124" height="124"/>
         <image name="welcome-logo.png" width="640" height="165"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

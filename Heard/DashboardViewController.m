@@ -1457,6 +1457,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Observer callback
 // ----------------------------------------------------------
 -(void)willResignActiveCallback {
+    self.emojiContainer.hidden = YES;
     // Dismiss modal
     [self dismissViewControllerAnimated:NO completion:nil];
 }
@@ -1742,7 +1743,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)addEmojiViewsToContainer
 {
-    self.emojiContainer.contentSize = CGSizeMake(kEmojiSize * (kNbEmojis - 1) + kEmojiMargin * kNbEmojis, kEmojiSize + 2*kEmojiMargin);
+    self.emojiContainer.contentSize = CGSizeMake(kEmojiSize * kNbEmojis + kEmojiMargin * (kNbEmojis+1), kEmojiSize + 2*kEmojiMargin);
     for(int i=1;i<=kNbEmojis;i++) {
         EmojiView *emojiView = [[EmojiView alloc] initWithIdentifier:i];
         emojiView.delegate = self;

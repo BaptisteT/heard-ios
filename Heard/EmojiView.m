@@ -20,7 +20,7 @@
 
 - (id)initWithIdentifier:(NSInteger)identifier
 {
-    CGRect frame = CGRectMake(kEmojiMargin, kEmojiSize * (identifier-1)+ kEmojiMargin * identifier, kEmojiSize, kEmojiSize);
+    CGRect frame = CGRectMake(kEmojiSize * (identifier-1)+ kEmojiMargin * identifier, kEmojiMargin, kEmojiSize, kEmojiSize);
     self = [super initWithFrame:frame];
     self.identifier = identifier;
     [self addEmojiImage];
@@ -39,28 +39,43 @@
 - (void)handlePanningGesture:(UIPanGestureRecognizer *)recognizer
 {
     static CGPoint initialCenter;
+    static BOOL isSlide = FALSE;
+    CGPoint velocity; CGFloat newCenter = 0;
     if (recognizer.state == UIGestureRecognizerStateBegan) {
-        initialCenter = recognizer.view.center;
-        
-        // play sound
-        NSString *soundName = [NSString stringWithFormat:@"%@%lu",@"emoji-sound-",self.identifier];
-        [self.delegate playSound:soundName ofType:@"m4a"];
+        velocity = [recognizer velocityInView:self];
+        if (- velocity.y < fabs(velocity.x) / 2 ) {
+            isSlide = TRUE;
+            initialCenter = ((UIScrollView *)self.superview).contentOffset;
+        } else {
+            isSlide = FALSE;
+            initialCenter = self.center;
+            initialCenter = recognizer.view.center;
+            
+            // play sound
+            NSString *soundName = [NSString stringWithFormat:@"%@%lu",@"emoji-sound-",self.identifier];
+            [self.delegate playSound:soundName ofType:@"m4a"];
+        }
     }
-    
-    else if (recognizer.state == UIGestureRecognizerStateChanged) {
+    if (isSlide) {
         CGPoint translation = [recognizer translationInView:recognizer.view.superview];
-        recognizer.view.center = CGPointMake(initialCenter.x + translation.x,
-                                             initialCenter.y + translation.y);
+        newCenter = MIN( MAX(((UIScrollView *)self.superview).contentSize.width - self.window.frame.size.width,0),MAX(initialCenter.x - translation.x, 0));
+        ((UIScrollView *)self.superview).contentOffset = CGPointMake(newCenter,0);
+    } else {
+        if (recognizer.state == UIGestureRecognizerStateChanged) {
+            CGPoint translation = [recognizer translationInView:recognizer.view.superview];
+            recognizer.view.center = CGPointMake(initialCenter.x + translation.x,
+                                                 initialCenter.y + translation.y);
+            
+            // Update contact views animations
+            CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];
+            [self.delegate updateEmojiLocation:mainViewCoordinate];
+        }
         
-        // Update contact views animations
-        CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];
-        [self.delegate updateEmojiLocation:mainViewCoordinate];
-    }
-    
-    else if (recognizer.state == UIGestureRecognizerStateEnded) {
-        recognizer.view.center = initialCenter;
-        CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];
-        [self.delegate emojiDropped:self.identifier atLocation:mainViewCoordinate];
+        else if (recognizer.state == UIGestureRecognizerStateEnded) {
+            recognizer.view.center = initialCenter;
+            CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];
+            [self.delegate emojiDropped:self.identifier atLocation:mainViewCoordinate];
+        }
     }
 }
 
