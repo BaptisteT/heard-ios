@@ -42,7 +42,10 @@
 @property (nonatomic, strong) UITapGestureRecognizer *singleTapRecognizer;
 @property (nonatomic, strong) NSTimer *maxDurationTimer;
 @property (nonatomic, strong) NSTimer *minDurationTimer;
+
+@property (nonatomic) BOOL contactIsRecording;
 @property (nonatomic, strong) NSTimer *contactIsRecordingAnimationTimer;
+@property (nonatomic, strong) NSTimer *contactIsRecordingMaxDelayTimer;
 
 @property (nonatomic, strong) UIImageView *recordOverlay;
 @property (nonatomic, strong) UIImageView *playOverlay;
@@ -363,7 +366,9 @@
                               otherButtonTitles:nil] show];
             return;
         } else {
-            [ApiUtils currentUserIsRecording:YES toUser:self.contact.identifier success:nil failure:nil];
+            if (![GeneralUtils isCurrentUser:self.contact]) {
+                [ApiUtils currentUserIsRecording:YES toUser:self.contact.identifier success:nil failure:nil];
+            }
             self.isRecording = YES;
             // Create Timers
             self.maxDurationTimer = [NSTimer scheduledTimerWithTimeInterval:kMaxAudioDuration target:self selector:@selector(maxRecordingDurationReached) userInfo:nil repeats:NO];
@@ -388,7 +393,9 @@
 
 - (void)stopRecording
 {
-    [ApiUtils currentUserIsRecording:NO toUser:self.contact.identifier success:nil failure:nil];
+    if (![GeneralUtils isCurrentUser:self.contact]) {
+        [ApiUtils currentUserIsRecording:NO toUser:self.contact.identifier success:nil failure:nil];
+    }
     self.isRecording = NO;
     [self resetDiscussionStateAnimated:NO];
     [self.delegate endedLongPressRecording];
@@ -684,6 +691,23 @@
 
 - (BOOL)contactIsRecording {
     return _contactIsRecording;
+}
+
+- (void)setContactIsRecordingProperty:(BOOL)flag {
+    if (self.contactIsRecordingMaxDelayTimer) {
+        [self.contactIsRecordingMaxDelayTimer invalidate];
+    }
+    self.contactIsRecording = flag;
+    // security : avoid infinite is typing anim
+    if (flag) {
+        self.contactIsRecordingAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:60.f target:self selector:@selector(endDelayContactIsRecordingTimer) userInfo:nil repeats:NO];
+    }
+    [self resetDiscussionStateAnimated:NO];
+}
+
+- (void)endDelayContactIsRecordingTimer {
+    self.contactIsRecording = NO;
+    [self resetDiscussionStateAnimated:NO];
 }
 
 
