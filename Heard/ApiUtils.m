@@ -536,9 +536,6 @@
         [self enrichParametersWithToken:parameters];
         
         [[ApiUtils sharedClient] PATCH:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
-            NSDictionary *result = [JSON valueForKeyPath:@"result"];
-            Contact *contact = [Contact rawContactToInstance:[result objectForKey:@"user"]];
-            [SessionUtils saveUserInfo:contact];
             if (successBlock) {
                 successBlock();
             }
@@ -559,9 +556,6 @@
     [self enrichParametersWithToken:stats];
     
     [[ApiUtils sharedClient] PATCH:path parameters:stats success:^(NSURLSessionDataTask *task, id JSON) {
-        NSDictionary *result = [JSON valueForKeyPath:@"result"];
-        Contact *contact = [Contact rawContactToInstance:[result objectForKey:@"user"]];
-        [SessionUtils saveUserInfo:contact];
         if (successBlock) {
             successBlock();
         }

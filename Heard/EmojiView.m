@@ -82,8 +82,8 @@
     else if (recognizer.state == UIGestureRecognizerStateEnded) {
         if (isSlide) {
             velocity = [recognizer velocityInView:self];
-            CGFloat finalCenter = MIN( MAX(((UIScrollView *)self.superview).contentSize.width - self.window.frame.size.width,0),MAX(newCenter - velocity.x / 5, 0));
-            NSTimeInterval duration = MIN(1,abs(velocity.x/500));
+            CGFloat finalCenter = MIN( MAX(((UIScrollView *)self.superview).contentSize.width - self.window.frame.size.width,0),MAX(newCenter - velocity.x, 0));
+            NSTimeInterval duration = 1;
             [UIView animateWithDuration:duration delay:0
                                 options:(UIViewAnimationOptionCurveEaseOut|UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionBeginFromCurrentState)
                              animations:^ {
