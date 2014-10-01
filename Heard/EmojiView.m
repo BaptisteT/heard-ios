@@ -12,7 +12,7 @@
 @interface EmojiView()
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panningRecognizer;
-@property (nonatomic) NSInteger identifier;
+
 
 @end
 
@@ -20,8 +20,8 @@
 
 - (id)initWithIdentifier:(NSInteger)identifier
 {
-    CGRect frame = CGRectMake(kEmojiSize * (identifier-1)+ kEmojiMargin * identifier, kEmojiMargin, kEmojiSize, kEmojiSize);
-    self = [super initWithFrame:frame];
+    self.identifier = identifier;
+    self = [super initWithFrame:[self getInitialFrame]];
     self.identifier = identifier;
     [self addEmojiImage];
     self.panningRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanningGesture:)];
@@ -64,13 +64,6 @@
             ((UIScrollView *)self.superview).contentOffset = CGPointMake(newCenter,0);
         } else {
             CGPoint translation = [recognizer translationInView:recognizer.view.superview];
-
-    //            if (initialCenter.y + translation.y > 0) {
-    //                self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, kEmojiSize,kEmojiSize);
-    //            } else {
-    //                self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, 2 * kEmojiSize,2 * kEmojiSize);
-    //            }
-            
             recognizer.view.center = CGPointMake(initialCenter.x + translation.x,
                                                  initialCenter.y + translation.y);
             
@@ -91,9 +84,8 @@
                              }
                              completion:NULL];
         } else {
-            recognizer.view.center = initialCenter;
             CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];
-            [self.delegate emojiDropped:self.identifier atLocation:mainViewCoordinate];
+            [self.delegate emojiDropped:self atLocation:mainViewCoordinate];
         }
     }
 }
@@ -101,6 +93,10 @@
 - (void)addEmojiImage
 {
     self.image = [UIImage imageNamed:[@"emoji-image-" stringByAppendingFormat:@"%lu",self.identifier]];
+}
+
+- (CGRect)getInitialFrame {
+    return CGRectMake(kEmojiSize * (self.identifier-1)+ kEmojiMargin * self.identifier, kEmojiMargin, kEmojiSize, kEmojiSize);
 }
 
 @end

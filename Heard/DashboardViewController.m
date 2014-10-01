@@ -1793,16 +1793,26 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
 }
 
-- (void)emojiDropped:(NSInteger)emojiId atLocation:(CGPoint)location
+- (void)emojiDropped:(EmojiView *)emojiView atLocation:(CGPoint)location
 {
     ContactView *contactView = [self findContactViewAtLocation:location];
     if (contactView && !CGRectContainsPoint(self.emojiContainer.frame, location)) {
         [contactView removeEmojiOverlay];
-        NSString *soundName = [NSString stringWithFormat:@"%@%lu",@"emoji-sound-",emojiId];
+        NSString *soundName = [NSString stringWithFormat:@"%@%lu",@"emoji-sound-",emojiView.identifier];
         NSString *soundPath = [[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
         self.emojiData = [NSData dataWithContentsOfURL:soundURL];
-        [contactView sendRecording];
+        
+        [UIView transitionWithView:emojiView
+                          duration:0.5f
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^{[emojiView setFrame:CGRectMake(emojiView.center.x,emojiView.center.y,0,0)];}
+                        completion:^(BOOL completed) {
+                            [contactView sendRecording];
+                            [emojiView setFrame:[emojiView getInitialFrame]];
+                        }];
+    } else {
+        emojiView.frame = [emojiView getInitialFrame];
     }
 }
 

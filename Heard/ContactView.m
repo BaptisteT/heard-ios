@@ -792,7 +792,7 @@
 
 - (void)addEmojiOverlay {
     [self addSubview:self.sentOverlay];
-    self.sentOverlay.alpha = 1;
+    self.sentOverlay.alpha = 0.8;
 }
 
 - (void)removeEmojiOverlay {

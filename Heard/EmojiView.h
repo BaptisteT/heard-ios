@@ -13,14 +13,17 @@
 @interface EmojiView : UIImageView <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) id<EmojiViewDelegateProtocol> delegate;
+@property (nonatomic) NSInteger identifier;
+
 - (id)initWithIdentifier:(NSInteger)identifier;
+- (CGRect)getInitialFrame;
 
 @end
 
 @protocol EmojiViewDelegateProtocol
 
 - (void)updateEmojiLocation:(CGPoint)location;
-- (void)emojiDropped:(NSInteger)emojiId atLocation:(CGPoint)location;
+- (void)emojiDropped:(EmojiView *)emojiView atLocation:(CGPoint)location;
 - (void)playSound:(NSString *)sound ofType:(NSString *)type;
 
 @end
