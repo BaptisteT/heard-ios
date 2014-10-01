@@ -56,13 +56,21 @@
             [self.delegate playSound:soundName ofType:@"m4a"];
         }
     }
-    if (isSlide) {
-        CGPoint translation = [recognizer translationInView:recognizer.view.superview];
-        newCenter = MIN( MAX(((UIScrollView *)self.superview).contentSize.width - self.window.frame.size.width,0),MAX(initialCenter.x - translation.x, 0));
-        ((UIScrollView *)self.superview).contentOffset = CGPointMake(newCenter,0);
-    } else {
-        if (recognizer.state == UIGestureRecognizerStateChanged) {
+    
+    if (recognizer.state == UIGestureRecognizerStateChanged) {
+        if (isSlide) {
             CGPoint translation = [recognizer translationInView:recognizer.view.superview];
+            newCenter = MIN( MAX(((UIScrollView *)self.superview).contentSize.width - self.window.frame.size.width,0),MAX(initialCenter.x - translation.x, 0));
+            ((UIScrollView *)self.superview).contentOffset = CGPointMake(newCenter,0);
+        } else {
+            CGPoint translation = [recognizer translationInView:recognizer.view.superview];
+
+    //            if (initialCenter.y + translation.y > 0) {
+    //                self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, kEmojiSize,kEmojiSize);
+    //            } else {
+    //                self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, 2 * kEmojiSize,2 * kEmojiSize);
+    //            }
+            
             recognizer.view.center = CGPointMake(initialCenter.x + translation.x,
                                                  initialCenter.y + translation.y);
             
@@ -70,7 +78,19 @@
             CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];
             [self.delegate updateEmojiLocation:mainViewCoordinate];
         }
-        else if (recognizer.state == UIGestureRecognizerStateEnded) {
+    }
+    else if (recognizer.state == UIGestureRecognizerStateEnded) {
+        if (isSlide) {
+            velocity = [recognizer velocityInView:self];
+            CGFloat finalCenter = MIN( MAX(((UIScrollView *)self.superview).contentSize.width - self.window.frame.size.width,0),MAX(newCenter - velocity.x / 5, 0));
+            NSTimeInterval duration = MIN(1,abs(velocity.x/500));
+            [UIView animateWithDuration:duration delay:0
+                                options:(UIViewAnimationOptionCurveEaseOut|UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionBeginFromCurrentState)
+                             animations:^ {
+                                 ((UIScrollView *)self.superview).contentOffset = CGPointMake(finalCenter,0);
+                             }
+                             completion:NULL];
+        } else {
             recognizer.view.center = initialCenter;
             CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];
             [self.delegate emojiDropped:self.identifier atLocation:mainViewCoordinate];
