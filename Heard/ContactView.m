@@ -701,7 +701,7 @@
     self.contactIsRecording = flag;
     // security : avoid infinite is typing anim
     if (flag) {
-        self.contactIsRecordingAnimationTimer = [NSTimer scheduledTimerWithTimeInterval:60.f target:self selector:@selector(endDelayContactIsRecordingTimer) userInfo:nil repeats:NO];
+        self.contactIsRecordingMaxDelayTimer = [NSTimer scheduledTimerWithTimeInterval:35.f target:self selector:@selector(endDelayContactIsRecordingTimer) userInfo:nil repeats:NO];
     }
     [self resetDiscussionStateAnimated:NO];
 }
