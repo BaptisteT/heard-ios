@@ -78,14 +78,25 @@
     else if (recognizer.state == UIGestureRecognizerStateEnded) {
         if (isSlide) {
             velocity = [recognizer velocityInView:self];
-            CGFloat finalCenter = MIN( MAX(((UIScrollView *)self.superview).contentSize.width - self.window.frame.size.width,0),MAX(newCenter - velocity.x, 0));
-            NSTimeInterval duration = 1;
-            [UIView animateWithDuration:duration delay:0
-                                options:(UIViewAnimationOptionCurveEaseOut|UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionBeginFromCurrentState)
-                             animations:^ {
-                                 ((UIScrollView *)self.superview).contentOffset = CGPointMake(finalCenter,0);
-                             }
-                             completion:NULL];
+            NSLog(@"%f",velocity.x);
+            if (fabs(velocity.x) > 100) {
+                CGFloat finalCenter;
+                int decelerationFactor = 3;
+                
+                if (velocity.x > 0) {
+                    finalCenter = MAX(0, initialCenter.x - velocity.x /decelerationFactor);
+                } else {
+                    finalCenter = MIN(((UIScrollView *)self.superview).contentSize.width - self.window.frame.size.width, initialCenter.x - velocity.x /decelerationFactor);
+                }
+
+                NSTimeInterval duration = 0.5;
+                [UIView animateWithDuration:duration delay:0
+                                    options:(UIViewAnimationOptionCurveEaseOut|UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionBeginFromCurrentState)
+                                 animations:^ {
+                                     ((UIScrollView *)self.superview).contentOffset = CGPointMake(finalCenter,0);
+                                 }
+                                 completion:NULL];
+            }
         } else {
             CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];
             [self.delegate emojiDropped:self atLocation:mainViewCoordinate];
