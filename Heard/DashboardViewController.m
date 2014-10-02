@@ -294,6 +294,9 @@
 {
     [super viewDidLayoutSubviews];
     [self setScrollViewSizeForContactCount:(int)MAX([self.contactViews count],[ContactUtils numberOfNonHiddenContacts:self.contacts])];
+    if (self.emojiContainerOn) {
+        [self emojiButtonClicked:nil];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -1453,8 +1456,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Observer callback
 // ----------------------------------------------------------
 -(void)willResignActiveCallback {
+    if (self.emojiContainerOn) {
+        [self emojiButtonClicked:nil];
+    }
     // Dismiss modal
     [self dismissViewControllerAnimated:NO completion:nil];
+    
 }
 
 -(void)routeChangeCallback:(NSNotification*)notification {
@@ -1696,6 +1703,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel forOrigin:(float)x
 {
     [self hideStatusBarComponents:YES];
+    self.titleLabel.hidden = NO;
     
     if (self.openingTutoArrow) {
         [self.openingTutoArrow removeFromSuperview];
