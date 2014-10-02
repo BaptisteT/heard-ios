@@ -328,6 +328,9 @@
 {
     [self endTutoMode];
     self.emojiContainer.hidden = YES;
+    if (self.emojiContainerOn) {
+        [self emojiButtonClicked:nil];
+    }
     if ((self.displayOpeningTuto && !prority)) {
         return;
     }
