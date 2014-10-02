@@ -63,6 +63,9 @@
             newCenter = MIN( MAX(((UIScrollView *)self.superview).contentSize.width - self.window.frame.size.width,0),MAX(initialCenter.x - translation.x, 0));
             ((UIScrollView *)self.superview).contentOffset = CGPointMake(newCenter,0);
         } else {
+            self.frame = CGRectMake(kEmojiSize * (self.identifier-1)+ kEmojiMargin * self.identifier, kEmojiMargin, kEmojiSize * 2, kEmojiSize * 2);
+
+            
             CGPoint translation = [recognizer translationInView:recognizer.view.superview];
             recognizer.view.center = CGPointMake(initialCenter.x + translation.x,
                                                  initialCenter.y + translation.y);
