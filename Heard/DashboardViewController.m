@@ -1796,7 +1796,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         
         [UIView transitionWithView:emojiView
                           duration:0.5f
-                           options:UIViewAnimationOptionTransitionCrossDissolve
+                           options:UIViewAnimationOptionTransitionNone
                         animations:^{[emojiView setFrame:CGRectMake(emojiView.center.x,emojiView.center.y,0,0)];}
                         completion:^(BOOL completed) {
                             [contactView sendRecording];
