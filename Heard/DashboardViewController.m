@@ -916,10 +916,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)disableAllContactViews
 {
-    //Hide menu and title
-    self.menuButton.hidden = YES;
-    self.titleLabel.hidden = YES;
-    self.emojiButton.hidden = YES;
+    [self hideStatusBarComponents:YES];
     self.contactScrollView.clipsToBounds = NO;
     
     for (ContactView *view in self.contactViews) {
@@ -930,9 +927,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)enableAllContactViews
 {
     //Show menu and title
-    self.menuButton.hidden = NO;
-    self.titleLabel.hidden = NO;
-    self.emojiButton.hidden = NO;
+    [self hideStatusBarComponents:NO];
     self.contactScrollView.clipsToBounds = YES;
     
     for (ContactView *view in self.contactViews) {
@@ -1149,9 +1144,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
     
     //Hide menu and title
-    self.menuButton.hidden = YES;
-    self.titleLabel.hidden = YES;
-    self.emojiButton.hidden = YES;
+    [self hideStatusBarComponents:YES];
     self.contactScrollView.clipsToBounds = NO;
     
     self.playerContainer.hidden = NO;
@@ -1195,9 +1188,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self endPlayerUIForAllContactViews];
     
     //Show menu and title
-    self.menuButton.hidden = NO;
-    self.titleLabel.hidden = NO;
-    self.emojiButton.hidden = NO;
+    [self hideStatusBarComponents:NO];
     self.contactScrollView.clipsToBounds = YES;
     
     self.playerLabel.hidden = YES;
@@ -1704,7 +1695,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel forOrigin:(float)x
 {
-    self.menuButton.hidden = YES;
+    [self hideStatusBarComponents:YES];
     
     if (self.openingTutoArrow) {
         [self.openingTutoArrow removeFromSuperview];
@@ -1722,7 +1713,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)hideOpeningTuto
 {
-    self.menuButton.hidden = NO;
+    [self hideStatusBarComponents:NO];
     self.openingTutoView.hidden = YES;
 }
 
@@ -1831,6 +1822,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         }
     }
     return nil;
+}
+
+- (void)hideStatusBarComponents:(BOOL)flag {
+    self.titleLabel.hidden = flag;
+    self.menuButton.hidden = flag;
+    self.emojiButton.hidden = flag;
 }
 
 - (BOOL)prefersStatusBarHidden
