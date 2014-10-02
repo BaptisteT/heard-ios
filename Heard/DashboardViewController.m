@@ -324,7 +324,8 @@
 - (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration priority:(BOOL)prority
 {
     [self endTutoMode];
-    if ((self.displayOpeningTuto && !prority) || !self.emojiContainer.isHidden) {
+    self.emojiContainer.hidden = YES;
+    if ((self.displayOpeningTuto && !prority)) {
         return;
     }
     self.bottomTutoViewLabel.text = message;
@@ -1751,7 +1752,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                                                    self.emojiContainer.frame.size.width,
                                                    self.emojiContainer.frame.size.height);
         }];
-        self.emojiContainer.hidden = YES;
     } else {
         self.emojiContainerOn = YES;
         [self.emojiContainer.layer removeAllAnimations];
