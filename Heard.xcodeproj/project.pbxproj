@@ -17,8 +17,6 @@
 		0B05063019D257D300CBFA59 /* NoCancelSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B05062E19D257D300CBFA59 /* NoCancelSearchBar.m */; };
 		0B37D42E19CCFCE900A2D074 /* InviteContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B37D42D19CCFCE900A2D074 /* InviteContactView.m */; };
 		0B37D42F19CCFCE900A2D074 /* InviteContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B37D42D19CCFCE900A2D074 /* InviteContactView.m */; };
-		0B39AAE819DA64D0009955B3 /* emoji-image-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B39AADA19DA64D0009955B3 /* emoji-image-1.png */; };
-		0B39AAE919DA64D0009955B3 /* emoji-image-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B39AADA19DA64D0009955B3 /* emoji-image-1.png */; };
 		0B39AAEA19DA64D0009955B3 /* emoji-image-1@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B39AADB19DA64D0009955B3 /* emoji-image-1@2x~iphone.png */; };
 		0B39AAEB19DA64D0009955B3 /* emoji-image-1@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B39AADB19DA64D0009955B3 /* emoji-image-1@2x~iphone.png */; };
 		0B39AAEC19DA64D0009955B3 /* emoji-image-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B39AADC19DA64D0009955B3 /* emoji-image-2.png */; };
@@ -1096,7 +1094,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = Heard;
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = streetshout;
 				TargetAttributes = {
 					0B72EEA0196C672F00AC5A01 = {
@@ -1177,7 +1175,6 @@
 				0B39AAEB19DA64D0009955B3 /* emoji-image-1@2x~iphone.png in Resources */,
 				3C95862719927E9400FF54B0 /* play.png in Resources */,
 				0B72EEF8196C672F00AC5A01 /* Media.xcassets in Resources */,
-				0B39AAE919DA64D0009955B3 /* emoji-image-1.png in Resources */,
 				0B39AAFF19DA64D0009955B3 /* emoji-image-6@2x~iphone.png in Resources */,
 				0B9EC33219C8F5EB00F520B8 /* tuto-arrow@2x~iphone.png in Resources */,
 				0B9051BD19771B96001E2ED5 /* checkbox@iphone.png in Resources */,
@@ -1260,7 +1257,6 @@
 				0B39AAEA19DA64D0009955B3 /* emoji-image-1@2x~iphone.png in Resources */,
 				3C95862619927E9400FF54B0 /* play.png in Resources */,
 				0BB0E8EC195B449A00C94AC0 /* Media.xcassets in Resources */,
-				0B39AAE819DA64D0009955B3 /* emoji-image-1.png in Resources */,
 				0B39AAFE19DA64D0009955B3 /* emoji-image-6@2x~iphone.png in Resources */,
 				0B9EC33119C8F5EB00F520B8 /* tuto-arrow@2x~iphone.png in Resources */,
 				0B9051BC19771B96001E2ED5 /* checkbox@iphone.png in Resources */,

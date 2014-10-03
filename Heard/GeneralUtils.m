@@ -143,20 +143,20 @@
 + (void)registerForRemoteNotif
 {
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) { // ios 8
-        UIMutableUserNotificationAction *acceptAction = [[UIMutableUserNotificationAction alloc] init];
-        acceptAction.identifier = @"ACCEPT_IDENTIFIER";
-        acceptAction.title = @"Listen";
-        acceptAction.activationMode= UIUserNotificationActivationModeBackground;
-        acceptAction.destructive = NO;
-        acceptAction.authenticationRequired = NO;
-        UIMutableUserNotificationCategory *readCategory = [UIMutableUserNotificationCategory new];
-        readCategory.identifier = @"READ_CATEGORY";
-        [readCategory setActions:@[acceptAction] forContext:UIUserNotificationActionContextDefault];
-        [readCategory setActions:@[acceptAction] forContext:UIUserNotificationActionContextMinimal];
-        NSSet *categories = [NSSet setWithObject:readCategory];
+//        UIMutableUserNotificationAction *acceptAction = [[UIMutableUserNotificationAction alloc] init];
+//        acceptAction.identifier = @"ACCEPT_IDENTIFIER";
+//        acceptAction.title = @"Listen";
+//        acceptAction.activationMode= UIUserNotificationActivationModeBackground;
+//        acceptAction.destructive = NO;
+//        acceptAction.authenticationRequired = NO;
+//        UIMutableUserNotificationCategory *readCategory = [UIMutableUserNotificationCategory new];
+//        readCategory.identifier = @"READ_CATEGORY";
+//        [readCategory setActions:@[acceptAction] forContext:UIUserNotificationActionContextDefault];
+//        [readCategory setActions:@[acceptAction] forContext:UIUserNotificationActionContextMinimal];
+//        NSSet *categories = [NSSet setWithObject:readCategory];
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:(UIRemoteNotificationTypeBadge
                                                                                              |UIRemoteNotificationTypeSound
-                                                                                             |UIRemoteNotificationTypeAlert) categories:categories];
+                                                                                             |UIRemoteNotificationTypeAlert) categories:nil];
         [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
     } else { // ios7

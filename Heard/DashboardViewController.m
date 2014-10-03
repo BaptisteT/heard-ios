@@ -114,7 +114,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 // Emoji View
 @property (weak, nonatomic) IBOutlet UIScrollView *emojiContainer;
-@property (nonatomic) BOOL emojiContainerOn;
 @property (strong, nonatomic) NSData *emojiData;
 @property (weak, nonatomic) IBOutlet UIButton *emojiButton;
 
@@ -128,8 +127,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.emojiContainerOn = NO;
+
     self.retrieveNewContact = YES;
     self.authRequestView.hidden = YES;
     self.openingTutoView.hidden = YES;
@@ -294,9 +292,6 @@
 {
     [super viewDidLayoutSubviews];
     [self setScrollViewSizeForContactCount:(int)MAX([self.contactViews count],[ContactUtils numberOfNonHiddenContacts:self.contacts])];
-    if (self.emojiContainerOn) {
-        [self emojiButtonClicked:nil];
-    }
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -328,9 +323,6 @@
 {
     [self endTutoMode];
     self.emojiContainer.hidden = YES;
-    if (self.emojiContainerOn) {
-        [self emojiButtonClicked:nil];
-    }
     if ((self.displayOpeningTuto && !prority)) {
         return;
     }
@@ -1007,7 +999,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     [self hideOpeningTuto];
     [self endTutoMode];
-    self.emojiContainer.hidden = YES;
+    if (self.emojiContainer.hidden) {
+        self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
+                                               self.view.frame.size.height,
+                                               self.emojiContainer.frame.size.width,
+                                               self.emojiContainer.frame.size.height);
+    } else {
+        self.emojiContainer.hidden = YES;
+    }
     
     //Show recorder label
     self.recorderLabel.hidden = NO;
@@ -1459,9 +1458,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Observer callback
 // ----------------------------------------------------------
 -(void)willResignActiveCallback {
-    if (self.emojiContainerOn) {
-        [self emojiButtonClicked:nil];
-    }
+    self.emojiContainer.hidden = YES;
     // Dismiss modal
     [self dismissViewControllerAnimated:NO completion:nil];
     
@@ -1744,10 +1741,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ----------------------------------------------------------
 
 - (IBAction)emojiButtonClicked:(id)sender {
-    if (self.emojiContainerOn) {
-        self.emojiContainerOn = NO;
+    if (!self.emojiContainer.hidden && self.emojiContainer.frame.origin.y == self.view.frame.size.height - self.emojiContainer.frame.size.height) {
         [self.emojiContainer.layer removeAllAnimations];
-        
         [UIView animateWithDuration:0.3 animations:^{
             self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
                                                    self.view.frame.size.height,
@@ -1755,7 +1750,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                                                    self.emojiContainer.frame.size.height);
         }];
     } else {
-        self.emojiContainerOn = YES;
         [self.emojiContainer.layer removeAllAnimations];
         
         //Emoji container
