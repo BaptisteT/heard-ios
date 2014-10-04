@@ -26,7 +26,6 @@
 #import "AddressbookUtils.h"
 #import "MBProgressHUD.h"
 #import "EditContactsViewController.h"
-#import "CustomActionSheet.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "CameraUtils.h"
 #import "PotentialContact.h"
@@ -89,7 +88,7 @@
 @property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
 @property (strong, nonatomic) NSMutableArray *lastMessagesPlayed;
 // Action sheets
-@property (strong, nonatomic) CustomActionSheet *menuActionSheet;
+@property (strong, nonatomic) UIActionSheet *menuActionSheet;
 @property (strong, nonatomic) ContactView *lastSelectedContactView;
 // Alertview
 @property (strong, nonatomic) UIAlertView *blockAlertView;
@@ -897,15 +896,15 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ------------------------------
 
 - (IBAction)menuButtonClicked:(id)sender {
-    self.menuActionSheet = [[CustomActionSheet alloc]
+    self.menuActionSheet = [[UIActionSheet alloc]
                             initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
                             delegate:self
                             cancelButtonTitle:ACTION_SHEET_CANCEL
                             destructiveButtonTitle:nil
                             otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
     [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
-
 }
+
 
 
 // ----------------------------------------------------------
@@ -1076,6 +1075,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     // Init player
     Message *message = (Message *)contactView.unreadMessages[0];
     self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.audioData error:nil];
+    [self.mainPlayer prepareToPlay];
     [self addMessagesToLastMessagesPlayed:message];
     
     //Show message date
@@ -1101,7 +1101,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)pendingContactClicked:(Contact *)contact
 {
     self.contactToAdd = contact;
-    CustomActionSheet *pendingActionSheet = [[CustomActionSheet alloc] initWithTitle:nil
+    UIActionSheet *pendingActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                                     delegate:self
                                                            cancelButtonTitle:ACTION_SHEET_CANCEL
                                                       destructiveButtonTitle:nil
@@ -1114,12 +1114,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.lastSelectedContactView = contactView;
     NSString *partial_message = contactView.failedMessages.count > 1 ? NSLocalizedStringFromTable(@"multiple_messages_send_failure_error_message",kStringFile, @"comment") : NSLocalizedStringFromTable(@"one_message_send_failure_error_message",kStringFile, @"comment");
     NSString *title = [NSString stringWithFormat:@"%lu %@",contactView.failedMessages.count,partial_message];
-    CustomActionSheet *pendingActionSheet = [[CustomActionSheet alloc] initWithTitle:title
+    UIActionSheet *failedActionSheet = [[UIActionSheet alloc] initWithTitle:title
                                                                     delegate:self
                                                            cancelButtonTitle:ACTION_SHEET_CANCEL
                                                       destructiveButtonTitle:nil
                                                            otherButtonTitles:ACTION_FAILED_MESSAGES_OPTION_1, ACTION_FAILED_MESSAGES_OPTION_2, nil];
-    [pendingActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+    [failedActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
 
@@ -1261,7 +1261,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     // Profile
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_2]) {
         [actionSheet dismissWithClickedButtonIndex:2 animated:NO];
-        CustomActionSheet *newActionSheet = [[CustomActionSheet alloc] initWithTitle:nil
+        UIActionSheet *newActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                                             delegate:self
                                                                    cancelButtonTitle:ACTION_SHEET_CANCEL
                                                               destructiveButtonTitle:nil
@@ -1352,7 +1352,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Picture
     else if ([buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_1]) {
-        CustomActionSheet *actionSheet = [[CustomActionSheet alloc] initWithTitle:nil
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                            delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
                                              destructiveButtonTitle:nil
                                                   otherButtonTitles:ACTION_SHEET_PICTURE_OPTION_1, ACTION_SHEET_PICTURE_OPTION_2, nil];
@@ -1363,14 +1363,64 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // First Name
     else if ([buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] || [buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_3]) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:buttonTitle message:@"" delegate:self cancelButtonTitle:NSLocalizedStringFromTable(@"cancel_button_title",kStringFile, @"comment") otherButtonTitles:NSLocalizedStringFromTable(@"ok_button_title",kStringFile, @"comment"), nil];
-        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-        UITextField *textField = [alert textFieldAtIndex:0];
-        textField.textAlignment = NSTextAlignmentCenter;
-        textField.text = [buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] ? [SessionUtils getCurrentUserFirstName] : [SessionUtils getCurrentUserLastName];
-        [textField becomeFirstResponder];
-        [alert addSubview:textField];
-        [alert show];
+        NSString *preFillText =  [buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] ? [SessionUtils getCurrentUserFirstName] : [SessionUtils getCurrentUserLastName];
+        [actionSheet dismissWithClickedButtonIndex:0 animated:NO];
+        if ([GeneralUtils systemVersionIsGreaterThanOrEqualTo:@"8.0"]) {
+            UIAlertController * alertController = [UIAlertController alertControllerWithTitle:buttonTitle message:@"" preferredStyle:UIAlertControllerStyleAlert];
+            [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField)
+             {
+                 textField.text = preFillText;
+                 textField.textAlignment = NSTextAlignmentCenter;
+             }];
+            UIAlertAction *cancelAction = [UIAlertAction
+                                           actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel action")
+                                           style:UIAlertActionStyleCancel
+                                           handler:^(UIAlertAction *action) {
+                                               NSLog(@"Cancel action");
+                                           }];
+            UIAlertAction *okAction = [UIAlertAction
+                                       actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+                                       style:UIAlertActionStyleDefault
+                                       handler:^(UIAlertAction *action) {
+                                           [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                                           NSString *newText = ((UITextField *)alertController.textFields[0]).text;
+                                           
+                                           if ([buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_2]) {
+                                               [ApiUtils updateFirstName:newText success:^{
+                                                   [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                                                   [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_edit_success_message",kStringFile, @"comment") withTitle:nil];
+                                                   // change first name me contact
+                                                   self.currentUserContactView.contact.firstName = newText;
+                                                   self.currentUserContactView.nameLabel.text = newText;
+                                               } failure:^{
+                                                   [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                                                   [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_edit_error_message",kStringFile, @"comment") withTitle:nil];
+                                               }];
+                                           } else {
+                                               [ApiUtils updateLastName:newText success:^{
+                                                   [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                                                   [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_edit_success_message",kStringFile, @"comment") withTitle:nil];
+                                                   // change first name me contact
+                                                   self.currentUserContactView.contact.lastName = newText;
+                                               } failure:^{
+                                                   [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                                                   [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_edit_error_message",kStringFile, @"comment") withTitle:nil];
+                                               }];
+                                           }
+                                       }];
+            [alertController addAction:cancelAction];
+            [alertController addAction:okAction];
+            [self presentViewController:alertController animated:YES completion:nil];
+        } else {
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:buttonTitle message:@"" delegate:self cancelButtonTitle:NSLocalizedStringFromTable(@"cancel_button_title",kStringFile, @"comment") otherButtonTitles:NSLocalizedStringFromTable(@"ok_button_title",kStringFile, @"comment"), nil];
+            alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+            UITextField *textField = [alert textFieldAtIndex:0];
+            textField.textAlignment = NSTextAlignmentCenter;
+            textField.text = preFillText;
+            [textField becomeFirstResponder];
+            [alert addSubview:textField];
+            [alert show];
+        }
     }
     
     /* -------------------------------------------------------------------------
@@ -1408,7 +1458,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     
     // First name
-    if ([alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2]) {
+    else if ([alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2]) {
         UITextField *textField = [alertView textFieldAtIndex:0];
         if (buttonIndex == 0) // cancel
             return;

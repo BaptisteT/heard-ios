@@ -323,8 +323,6 @@
 		3CEF9F0F19DC8D950045D78D /* emoji-sound-3.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9F0B19DC8D950045D78D /* emoji-sound-3.m4a */; };
 		3CEF9F1119DC8EC70045D78D /* emoji-sound-5.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9F1019DC8EC70045D78D /* emoji-sound-5.m4a */; };
 		3CEF9F1219DC8EC70045D78D /* emoji-sound-5.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9F1019DC8EC70045D78D /* emoji-sound-5.m4a */; };
-		3CF2E981198E76110098087B /* CustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF2E980198E76110098087B /* CustomActionSheet.m */; };
-		3CF2E982198E76110098087B /* CustomActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CF2E980198E76110098087B /* CustomActionSheet.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -565,8 +563,6 @@
 		3CEF9F0A19DC8D950045D78D /* emoji-sound-4.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-4.m4a"; sourceTree = "<group>"; };
 		3CEF9F0B19DC8D950045D78D /* emoji-sound-3.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-3.m4a"; sourceTree = "<group>"; };
 		3CEF9F1019DC8EC70045D78D /* emoji-sound-5.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-5.m4a"; sourceTree = "<group>"; };
-		3CF2E97F198E76110098087B /* CustomActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomActionSheet.h; sourceTree = "<group>"; };
-		3CF2E980198E76110098087B /* CustomActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomActionSheet.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1034,8 +1030,6 @@
 		3CB8B7F2195453B10090D657 /* Custom Views */ = {
 			isa = PBXGroup;
 			children = (
-				3CF2E97F198E76110098087B /* CustomActionSheet.h */,
-				3CF2E980198E76110098087B /* CustomActionSheet.m */,
 				0B96912A1989977C0048E4BB /* EditContactsTableViewCell.h */,
 				0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */,
 				3CB8B7F3195453E50090D657 /* ContactView.h */,
@@ -1353,7 +1347,6 @@
 				0B72EECE196C672F00AC5A01 /* MPSurveyNavigationController.m in Sources */,
 				0B72EECF196C672F00AC5A01 /* Contact.m in Sources */,
 				0B72EED0196C672F00AC5A01 /* AFURLResponseSerialization.m in Sources */,
-				3CF2E982198E76110098087B /* CustomActionSheet.m in Sources */,
 				0B72EED1196C672F00AC5A01 /* AFURLSessionManager.m in Sources */,
 				0B72EED2196C672F00AC5A01 /* HeardAppDelegate.m in Sources */,
 				0B9051B31976F62F001E2ED5 /* InviteContactsTVC.m in Sources */,
@@ -1431,7 +1424,6 @@
 				0BB0E8F5195B449A00C94AC0 /* MPSurveyNavigationController.m in Sources */,
 				0B893A4D19550FF000476BFE /* Contact.m in Sources */,
 				0BDB65441953B5EA00223093 /* AFURLResponseSerialization.m in Sources */,
-				3CF2E981198E76110098087B /* CustomActionSheet.m in Sources */,
 				0BDB65451953B5EA00223093 /* AFURLSessionManager.m in Sources */,
 				0BDB65461953B5EA00223093 /* HeardAppDelegate.m in Sources */,
 				0B9051B21976F62F001E2ED5 /* InviteContactsTVC.m in Sources */,
