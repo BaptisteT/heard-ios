@@ -84,7 +84,6 @@
 @property (weak, nonatomic) ContactView *currentUserContactView;
 // Others
 @property (weak, nonatomic) UIButton *menuButton;
-@property (nonatomic, strong) UIActivityIndicatorView *activityView;
 @property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
 @property (strong, nonatomic) NSMutableArray *lastMessagesPlayed;
 // Action sheets
@@ -435,8 +434,6 @@
     
     // Get contacts and compare with contact in memory
     [ApiUtils getMyContacts:contactsInfo atSignUp:self.isSignUp success:^(NSArray *contacts, NSArray *futureContacts) {
-        [self hideLoadingIndicator];
-        
         for (Contact *contact in contacts) {
             Contact *existingContact = [ContactUtils findContact:contact inContactsArray:self.contacts];
             if (!existingContact) {
@@ -501,7 +498,6 @@
         [self distributeNonAttributedMessages];
         
     } failure: ^void(NSURLSessionDataTask *task){
-        [self hideLoadingIndicator];
         //In this case, 401 means that the auth token is no valid.
         if ([SessionUtils invalidTokenResponse:task]) {
             [GeneralUtils showMessage:NSLocalizedStringFromTable(@"authentification_error_message",kStringFile,@"comment") withTitle:NSLocalizedStringFromTable(@"authentification_error_title",kStringFile,@"comment")];
@@ -771,13 +767,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         if (self.retrieveNewContact || !areAttributed || newContactOnServer) {
             [self requestAddressBookAccessAndRetrieveFriends];
             self.retrieveNewContact = NO;
-        } else {
-            [self hideLoadingIndicator];
         }
     };
     
     void (^failureBlock)(NSURLSessionDataTask *) = ^void(NSURLSessionDataTask *task){
-        [self hideLoadingIndicator];
         //In this case, 401 means that the auth token is no valid.
         if ([SessionUtils invalidTokenResponse:task]) {
             [GeneralUtils showMessage:NSLocalizedStringFromTable(@"authentification_error_message",kStringFile,@"comment") withTitle:NSLocalizedStringFromTable(@"authentification_error_title",kStringFile,@"comment")];
@@ -1216,26 +1209,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.playerLine.frame = frame;
 }
 
-- (void)showLoadingIndicator
-{
-    self.contactScrollView.hidden = YES;
-    if (!self.activityView) {
-        self.activityView=[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        self.activityView.center = self.view.center;
-    }
-    
-    [self.activityView startAnimating];
-    [self.view addSubview:self.activityView];
-}
-
-- (void)hideLoadingIndicator
-{
-    self.contactScrollView.hidden = NO;
-    if (self.activityView) {
-        [self.activityView stopAnimating];
-        [self.activityView removeFromSuperview];
-    }
-}
 
 // ----------------------------------------------------------
 #pragma mark ActionSheetProtocol
@@ -1410,7 +1383,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                                        }];
             [alertController addAction:cancelAction];
             [alertController addAction:okAction];
-            [self presentViewController:alertController animated:YES completion:nil];
+            [self presentViewController:alertController animated:NO completion:nil];
         } else {
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:buttonTitle message:@"" delegate:self cancelButtonTitle:NSLocalizedStringFromTable(@"cancel_button_title",kStringFile, @"comment") otherButtonTitles:NSLocalizedStringFromTable(@"ok_button_title",kStringFile, @"comment"), nil];
             alert.alertViewStyle = UIAlertViewStylePlainTextInput;
