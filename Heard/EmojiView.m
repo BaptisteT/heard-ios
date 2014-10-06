@@ -78,7 +78,6 @@
     else if (recognizer.state == UIGestureRecognizerStateEnded) {
         if (isSlide) {
             velocity = [recognizer velocityInView:self];
-            NSLog(@"%f",velocity.x);
             if (fabs(velocity.x) > 100) {
                 CGFloat finalCenter;
                 int decelerationFactor = 3;

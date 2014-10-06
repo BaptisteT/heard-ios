@@ -1775,6 +1775,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                                                self.emojiContainer.frame.size.height);
         self.emojiContainer.hidden = NO;
         [UIView animateWithDuration:0.3 animations:^{
+            [self.emojiContainer setContentOffset:CGPointMake(0,0)];
             self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
                                                    self.view.frame.size.height - self.emojiContainer.frame.size.height,
                                                    self.emojiContainer.frame.size.width,
