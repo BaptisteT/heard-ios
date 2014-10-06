@@ -991,14 +991,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     [self hideOpeningTuto];
     [self endTutoMode];
-    if (self.emojiContainer.hidden) {
-        self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
-                                               self.view.frame.size.height,
-                                               self.emojiContainer.frame.size.width,
-                                               self.emojiContainer.frame.size.height);
-    } else {
-        self.emojiContainer.hidden = YES;
-    }
+    self.emojiContainer.alpha = 0;
     
     //Show recorder label
     self.recorderLabel.hidden = NO;
@@ -1033,7 +1026,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)endedLongPressRecording
 {
     [self endTutoMode];
-    self.emojiContainer.hidden = NO;
+    self.emojiContainer.alpha = 1;
     //Hide recorder label
     self.recorderLabel.hidden = YES;
     
