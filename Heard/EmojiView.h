@@ -14,6 +14,7 @@
 
 @property (weak, nonatomic) id<EmojiViewDelegateProtocol> delegate;
 @property (nonatomic) NSInteger identifier;
+@property (nonatomic) NSInteger soundIndex;
 
 - (id)initWithIdentifier:(NSInteger)identifier;
 - (CGRect)getInitialFrame;

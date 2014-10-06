@@ -21,6 +21,7 @@
 - (id)initWithIdentifier:(NSInteger)identifier
 {
     self.identifier = identifier;
+    self.soundIndex = 0;
     self = [super initWithFrame:[self getInitialFrame]];
     self.identifier = identifier;
     [self addEmojiImage];
@@ -52,7 +53,14 @@
             initialCenter = recognizer.view.center;
             
             // play sound
-            NSString *soundName = [NSString stringWithFormat:@"%@%lu",@"emoji-sound-",self.identifier];
+            self.soundIndex ++;
+            NSString *soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",self.identifier,self.soundIndex];
+            
+            if(![[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"]) {
+                self.soundIndex = 1;
+                soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",self.identifier,self.soundIndex];
+            }
+            
             [self.delegate playSound:soundName ofType:@"m4a"];
         }
     }

@@ -86,6 +86,6 @@ static NSString * const kNbContactRelatedKey = @"nb_contacts_related";
 static NSString * const kNbContactLinkedKey = @"nb_contacts_linked";
 
 // Emoji
-static const NSUInteger kNbEmojis = 7;
+static const NSUInteger kNbEmojis = 11;
 static const NSUInteger kEmojiSize = 60;
 static const NSUInteger kEmojiMargin = 10;
