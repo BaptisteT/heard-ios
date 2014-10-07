@@ -322,12 +322,6 @@
 		3CA4925319E329AE00110DEF /* emoji-sound-3.1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4925119E329AE00110DEF /* emoji-sound-3.1.m4a */; };
 		3CA4925519E32AB200110DEF /* emoji-sound-6.2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4925419E32AB200110DEF /* emoji-sound-6.2.m4a */; };
 		3CA4925619E32AB200110DEF /* emoji-sound-6.2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4925419E32AB200110DEF /* emoji-sound-6.2.m4a */; };
-		3CA4925E19E3353D00110DEF /* emoji-image-10.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4925D19E3353D00110DEF /* emoji-image-10.png */; };
-		3CA4925F19E3353D00110DEF /* emoji-image-10.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4925D19E3353D00110DEF /* emoji-image-10.png */; };
-		3CA4926719E337B600110DEF /* emoji-image-11.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4926619E337B600110DEF /* emoji-image-11.png */; };
-		3CA4926819E337B600110DEF /* emoji-image-11.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4926619E337B600110DEF /* emoji-image-11.png */; };
-		3CA4926D19E33E3400110DEF /* emoji-image-8.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4926C19E33E3400110DEF /* emoji-image-8.png */; };
-		3CA4926E19E33E3400110DEF /* emoji-image-8.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4926C19E33E3400110DEF /* emoji-image-8.png */; };
 		3CA4927019E33F4200110DEF /* emoji-sound-8.2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4926F19E33F4200110DEF /* emoji-sound-8.2.m4a */; };
 		3CA4927119E33F4200110DEF /* emoji-sound-8.2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4926F19E33F4200110DEF /* emoji-sound-8.2.m4a */; };
 		3CA4927319E33F7500110DEF /* emoji-sound-8.3.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4927219E33F7500110DEF /* emoji-sound-8.3.m4a */; };
@@ -342,16 +336,22 @@
 		3CA4928019E3409700110DEF /* emoji-sound-11.1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4927E19E3409700110DEF /* emoji-sound-11.1.m4a */; };
 		3CA4928219E340E700110DEF /* emoji-sound-8.1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4928119E340E700110DEF /* emoji-sound-8.1.m4a */; };
 		3CA4928319E340E700110DEF /* emoji-sound-8.1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4928119E340E700110DEF /* emoji-sound-8.1.m4a */; };
-		3CA4928519E341EE00110DEF /* emoji-image-9.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4928419E341EE00110DEF /* emoji-image-9.png */; };
-		3CA4928619E341EE00110DEF /* emoji-image-9.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4928419E341EE00110DEF /* emoji-image-9.png */; };
 		3CA4928919E342F200110DEF /* emoji-sound-9.3.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4928719E342F200110DEF /* emoji-sound-9.3.m4a */; };
 		3CA4928A19E342F200110DEF /* emoji-sound-9.3.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4928719E342F200110DEF /* emoji-sound-9.3.m4a */; };
 		3CA4928E19E3441700110DEF /* emoji-sound-9.2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4928D19E3441700110DEF /* emoji-sound-9.2.m4a */; };
 		3CA4928F19E3441700110DEF /* emoji-sound-9.2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4928D19E3441700110DEF /* emoji-sound-9.2.m4a */; };
 		3CA4929119E3442A00110DEF /* emoji-sound-9.1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4929019E3442A00110DEF /* emoji-sound-9.1.m4a */; };
 		3CA4929219E3442A00110DEF /* emoji-sound-9.1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4929019E3442A00110DEF /* emoji-sound-9.1.m4a */; };
-		3CA4929419E34DAB00110DEF /* emoji-image-5.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4929319E34DAB00110DEF /* emoji-image-5.png */; };
-		3CA4929519E34DAB00110DEF /* emoji-image-5.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CA4929319E34DAB00110DEF /* emoji-image-5.png */; };
+		3CB58BEF19E3EC56007B6B9C /* emoji-image-5.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CB58BEE19E3EC56007B6B9C /* emoji-image-5.png */; };
+		3CB58BF019E3EC56007B6B9C /* emoji-image-5.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CB58BEE19E3EC56007B6B9C /* emoji-image-5.png */; };
+		3CB58BF519E3ED65007B6B9C /* emoji-image-11.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CB58BF119E3ED65007B6B9C /* emoji-image-11.png */; };
+		3CB58BF619E3ED65007B6B9C /* emoji-image-11.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CB58BF119E3ED65007B6B9C /* emoji-image-11.png */; };
+		3CB58BF719E3ED65007B6B9C /* emoji-image-10.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CB58BF219E3ED65007B6B9C /* emoji-image-10.png */; };
+		3CB58BF819E3ED65007B6B9C /* emoji-image-10.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CB58BF219E3ED65007B6B9C /* emoji-image-10.png */; };
+		3CB58BF919E3ED65007B6B9C /* emoji-image-8.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CB58BF319E3ED65007B6B9C /* emoji-image-8.png */; };
+		3CB58BFA19E3ED65007B6B9C /* emoji-image-8.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CB58BF319E3ED65007B6B9C /* emoji-image-8.png */; };
+		3CB58BFB19E3ED65007B6B9C /* emoji-image-9.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CB58BF419E3ED65007B6B9C /* emoji-image-9.png */; };
+		3CB58BFC19E3ED65007B6B9C /* emoji-image-9.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CB58BF419E3ED65007B6B9C /* emoji-image-9.png */; };
 		3CB753D419B8908F00E4C75F /* CameraUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB753D319B8908F00E4C75F /* CameraUtils.m */; };
 		3CB753D519B8909A00E4C75F /* CameraUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB753D319B8908F00E4C75F /* CameraUtils.m */; };
 		3CB8B7F5195453E50090D657 /* ContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactView.m */; };
@@ -605,9 +605,6 @@
 		3CA4924C19E3294200110DEF /* emoji-sound-5.1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-5.1.m4a"; sourceTree = "<group>"; };
 		3CA4925119E329AE00110DEF /* emoji-sound-3.1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-3.1.m4a"; sourceTree = "<group>"; };
 		3CA4925419E32AB200110DEF /* emoji-sound-6.2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-6.2.m4a"; sourceTree = "<group>"; };
-		3CA4925D19E3353D00110DEF /* emoji-image-10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji-image-10.png"; sourceTree = "<group>"; };
-		3CA4926619E337B600110DEF /* emoji-image-11.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji-image-11.png"; sourceTree = "<group>"; };
-		3CA4926C19E33E3400110DEF /* emoji-image-8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji-image-8.png"; sourceTree = "<group>"; };
 		3CA4926F19E33F4200110DEF /* emoji-sound-8.2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-8.2.m4a"; sourceTree = "<group>"; };
 		3CA4927219E33F7500110DEF /* emoji-sound-8.3.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-8.3.m4a"; sourceTree = "<group>"; };
 		3CA4927519E33FC800110DEF /* emoji-sound-10.3.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-10.3.m4a"; sourceTree = "<group>"; };
@@ -615,11 +612,14 @@
 		3CA4927B19E3400500110DEF /* emoji-sound-10.1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-10.1.m4a"; sourceTree = "<group>"; };
 		3CA4927E19E3409700110DEF /* emoji-sound-11.1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-11.1.m4a"; sourceTree = "<group>"; };
 		3CA4928119E340E700110DEF /* emoji-sound-8.1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-8.1.m4a"; sourceTree = "<group>"; };
-		3CA4928419E341EE00110DEF /* emoji-image-9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji-image-9.png"; sourceTree = "<group>"; };
 		3CA4928719E342F200110DEF /* emoji-sound-9.3.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-9.3.m4a"; sourceTree = "<group>"; };
 		3CA4928D19E3441700110DEF /* emoji-sound-9.2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-9.2.m4a"; sourceTree = "<group>"; };
 		3CA4929019E3442A00110DEF /* emoji-sound-9.1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-9.1.m4a"; sourceTree = "<group>"; };
-		3CA4929319E34DAB00110DEF /* emoji-image-5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji-image-5.png"; sourceTree = "<group>"; };
+		3CB58BEE19E3EC56007B6B9C /* emoji-image-5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji-image-5.png"; sourceTree = "<group>"; };
+		3CB58BF119E3ED65007B6B9C /* emoji-image-11.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji-image-11.png"; sourceTree = "<group>"; };
+		3CB58BF219E3ED65007B6B9C /* emoji-image-10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji-image-10.png"; sourceTree = "<group>"; };
+		3CB58BF319E3ED65007B6B9C /* emoji-image-8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji-image-8.png"; sourceTree = "<group>"; };
+		3CB58BF419E3ED65007B6B9C /* emoji-image-9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji-image-9.png"; sourceTree = "<group>"; };
 		3CB753D219B8908F00E4C75F /* CameraUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraUtils.h; sourceTree = "<group>"; };
 		3CB753D319B8908F00E4C75F /* CameraUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraUtils.m; sourceTree = "<group>"; };
 		3CB8B7EA195346620090D657 /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
@@ -753,11 +753,11 @@
 		0BA1455E199786A30031716F /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				3CA4926C19E33E3400110DEF /* emoji-image-8.png */,
-				3CA4929319E34DAB00110DEF /* emoji-image-5.png */,
-				3CA4926619E337B600110DEF /* emoji-image-11.png */,
-				3CA4925D19E3353D00110DEF /* emoji-image-10.png */,
-				3CA4928419E341EE00110DEF /* emoji-image-9.png */,
+				3CB58BF119E3ED65007B6B9C /* emoji-image-11.png */,
+				3CB58BF219E3ED65007B6B9C /* emoji-image-10.png */,
+				3CB58BF319E3ED65007B6B9C /* emoji-image-8.png */,
+				3CB58BF419E3ED65007B6B9C /* emoji-image-9.png */,
+				3CB58BEE19E3EC56007B6B9C /* emoji-image-5.png */,
 				0B39AADA19DA64D0009955B3 /* emoji-image-1.png */,
 				0B39AADB19DA64D0009955B3 /* emoji-image-1@2x~iphone.png */,
 				0B39AADC19DA64D0009955B3 /* emoji-image-2.png */,
@@ -1219,10 +1219,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CB58BF019E3EC56007B6B9C /* emoji-image-5.png in Resources */,
 				3CA4922C19E312E000110DEF /* emoji-sound-1.2.m4a in Resources */,
 				3CA4927A19E33FFB00110DEF /* emoji-sound-10.2.m4a in Resources */,
 				0B02D37B19D0CFD50010C58D /* invite-button.png in Resources */,
-				3CA4928619E341EE00110DEF /* emoji-image-9.png in Resources */,
 				3CA4924E19E3294200110DEF /* emoji-sound-5.2.m4a in Resources */,
 				0B39AB0319DA64D0009955B3 /* emoji-image-7@2x~iphone.png in Resources */,
 				3CEF9EFB19DB1BD30045D78D /* emoji-sound-1.1.m4a in Resources */,
@@ -1232,11 +1232,11 @@
 				0BA1457C1997A4A60031716F /* sent-sound.aif in Resources */,
 				3CA4929219E3442A00110DEF /* emoji-sound-9.1.m4a in Resources */,
 				0B72EEE5196C672F00AC5A01 /* Images.xcassets in Resources */,
+				3CB58BFA19E3ED65007B6B9C /* emoji-image-8.png in Resources */,
 				0B72EEE7196C672F00AC5A01 /* unknown-user@2x~iphone.png in Resources */,
 				0B39AAF719DA64D0009955B3 /* emoji-image-4@2x~iphone.png in Resources */,
 				0BA145821997A4A60031716F /* typing-sound.aif in Resources */,
 				0B72EEE8196C672F00AC5A01 /* record@2x~iphone.png in Resources */,
-				3CA4926819E337B600110DEF /* emoji-image-11.png in Resources */,
 				0B72EEEB196C672F00AC5A01 /* NBPhoneNumberMetadata.plist in Resources */,
 				0B72EEEC196C672F00AC5A01 /* MPCloseBtn@2x.png in Resources */,
 				3C95862919927E9400FF54B0 /* play@2x~iphone.png in Resources */,
@@ -1251,14 +1251,12 @@
 				3CA4928019E3409700110DEF /* emoji-sound-11.1.m4a in Resources */,
 				0B72EEF2196C672F00AC5A01 /* InfoPlist.strings in Resources */,
 				0B72EEF3196C672F00AC5A01 /* PhoneNumberMetaDataForTesting.json in Resources */,
-				3CA4926E19E33E3400110DEF /* emoji-image-8.png in Resources */,
 				0B39AAF119DA64D0009955B3 /* emoji-image-3.png in Resources */,
 				0B72EEF4196C672F00AC5A01 /* unknown-user.png in Resources */,
 				0BA1545C19D48B5300246962 /* heard-logo-transparent@2x~iphone.png in Resources */,
 				3CA4925319E329AE00110DEF /* emoji-sound-3.1.m4a in Resources */,
 				0B39AAF519DA64D0009955B3 /* emoji-image-4.png in Resources */,
 				3CA16D2D19AE42CE00C1F2A5 /* french_strings.strings in Resources */,
-				3CA4929519E34DAB00110DEF /* emoji-image-5.png in Resources */,
 				3CA4923519E3136F00110DEF /* emoji-sound-2.2.m4a in Resources */,
 				3CEF9EF919DB1BD30045D78D /* emoji-sound-6.1.m4a in Resources */,
 				0B39AAF319DA64D0009955B3 /* emoji-image-3@2x~iphone.png in Resources */,
@@ -1270,7 +1268,6 @@
 				3CA4925019E3294200110DEF /* emoji-sound-5.1.m4a in Resources */,
 				3CEF9F0D19DC8D950045D78D /* emoji-sound-4.2.m4a in Resources */,
 				0B9051BF19771B96001E2ED5 /* checkbox.png in Resources */,
-				3CA4925F19E3353D00110DEF /* emoji-image-10.png in Resources */,
 				3CA4928319E340E700110DEF /* emoji-sound-8.1.m4a in Resources */,
 				3CEF9EF719DB1BD30045D78D /* emoji-sound-2.3.m4a in Resources */,
 				0BA1457E1997A4A60031716F /* failed-sound.aif in Resources */,
@@ -1284,6 +1281,7 @@
 				3C95862719927E9400FF54B0 /* play.png in Resources */,
 				0B72EEF8196C672F00AC5A01 /* Media.xcassets in Resources */,
 				0B39AAFF19DA64D0009955B3 /* emoji-image-6@2x~iphone.png in Resources */,
+				3CB58BF819E3ED65007B6B9C /* emoji-image-10.png in Resources */,
 				3CA4927D19E3400500110DEF /* emoji-sound-10.1.m4a in Resources */,
 				0B9EC33219C8F5EB00F520B8 /* tuto-arrow@2x~iphone.png in Resources */,
 				3CA4923219E3132E00110DEF /* emoji-sound-2.1.m4a in Resources */,
@@ -1311,11 +1309,13 @@
 				0B56F657197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
 				0B90E67319C7822E004A8F16 /* contact-perm.png in Resources */,
 				0B969129198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
+				3CB58BF619E3ED65007B6B9C /* emoji-image-11.png in Resources */,
 				0B39AAEF19DA64D0009955B3 /* emoji-image-2@2x~iphone.png in Resources */,
 				0BADABC619930005007B4538 /* contact-sent.png in Resources */,
 				0BADABCC1993000D007B4538 /* contact-blue-eye.png in Resources */,
 				0BA145851997A5620031716F /* agogo.aif in Resources */,
 				3CA4928A19E342F200110DEF /* emoji-sound-9.3.m4a in Resources */,
+				3CB58BFC19E3ED65007B6B9C /* emoji-image-9.png in Resources */,
 				0BA1545419D48A9F00246962 /* heard-logo-80.png in Resources */,
 				3CEF9EFD19DB1BD30045D78D /* emoji-sound-7.1.m4a in Resources */,
 			);
@@ -1325,10 +1325,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CB58BEF19E3EC56007B6B9C /* emoji-image-5.png in Resources */,
 				3CA4922B19E312E000110DEF /* emoji-sound-1.2.m4a in Resources */,
 				3CA4927919E33FFB00110DEF /* emoji-sound-10.2.m4a in Resources */,
 				0B02D37A19D0CFD50010C58D /* invite-button.png in Resources */,
-				3CA4928519E341EE00110DEF /* emoji-image-9.png in Resources */,
 				3CA4924D19E3294200110DEF /* emoji-sound-5.2.m4a in Resources */,
 				0B39AB0219DA64D0009955B3 /* emoji-image-7@2x~iphone.png in Resources */,
 				3CEF9EFA19DB1BD30045D78D /* emoji-sound-1.1.m4a in Resources */,
@@ -1338,11 +1338,11 @@
 				0BA1457B1997A4A60031716F /* sent-sound.aif in Resources */,
 				3CA4929119E3442A00110DEF /* emoji-sound-9.1.m4a in Resources */,
 				0BD758D81950F91B00CF0D85 /* Images.xcassets in Resources */,
+				3CB58BF919E3ED65007B6B9C /* emoji-image-8.png in Resources */,
 				0BE55472195A340500CE4669 /* unknown-user@2x~iphone.png in Resources */,
 				0B39AAF619DA64D0009955B3 /* emoji-image-4@2x~iphone.png in Resources */,
 				0BA145811997A4A60031716F /* typing-sound.aif in Resources */,
 				0BE5547A195A4ADC00CE4669 /* record@2x~iphone.png in Resources */,
-				3CA4926719E337B600110DEF /* emoji-image-11.png in Resources */,
 				0BDB64CC19521A7C00223093 /* NBPhoneNumberMetadata.plist in Resources */,
 				0BB0E8EF195B449A00C94AC0 /* MPCloseBtn@2x.png in Resources */,
 				3C95862819927E9400FF54B0 /* play@2x~iphone.png in Resources */,
@@ -1357,14 +1357,12 @@
 				3CA4927F19E3409700110DEF /* emoji-sound-11.1.m4a in Resources */,
 				0BD758CA1950F91B00CF0D85 /* InfoPlist.strings in Resources */,
 				0BDB64CF19521A7C00223093 /* PhoneNumberMetaDataForTesting.json in Resources */,
-				3CA4926D19E33E3400110DEF /* emoji-image-8.png in Resources */,
 				0B39AAF019DA64D0009955B3 /* emoji-image-3.png in Resources */,
 				0BE55473195A340500CE4669 /* unknown-user.png in Resources */,
 				0BA1545B19D48B5300246962 /* heard-logo-transparent@2x~iphone.png in Resources */,
 				3CA4925219E329AE00110DEF /* emoji-sound-3.1.m4a in Resources */,
 				0B39AAF419DA64D0009955B3 /* emoji-image-4.png in Resources */,
 				3CA16D2C19AE42CE00C1F2A5 /* french_strings.strings in Resources */,
-				3CA4929419E34DAB00110DEF /* emoji-image-5.png in Resources */,
 				3CA4923419E3136F00110DEF /* emoji-sound-2.2.m4a in Resources */,
 				3CEF9EF819DB1BD30045D78D /* emoji-sound-6.1.m4a in Resources */,
 				0B39AAF219DA64D0009955B3 /* emoji-image-3@2x~iphone.png in Resources */,
@@ -1376,7 +1374,6 @@
 				3CA4924F19E3294200110DEF /* emoji-sound-5.1.m4a in Resources */,
 				3CEF9F0C19DC8D950045D78D /* emoji-sound-4.2.m4a in Resources */,
 				0B9051BE19771B96001E2ED5 /* checkbox.png in Resources */,
-				3CA4925E19E3353D00110DEF /* emoji-image-10.png in Resources */,
 				3CA4928219E340E700110DEF /* emoji-sound-8.1.m4a in Resources */,
 				3CEF9EF619DB1BD30045D78D /* emoji-sound-2.3.m4a in Resources */,
 				0BA1457D1997A4A60031716F /* failed-sound.aif in Resources */,
@@ -1390,6 +1387,7 @@
 				3C95862619927E9400FF54B0 /* play.png in Resources */,
 				0BB0E8EC195B449A00C94AC0 /* Media.xcassets in Resources */,
 				0B39AAFE19DA64D0009955B3 /* emoji-image-6@2x~iphone.png in Resources */,
+				3CB58BF719E3ED65007B6B9C /* emoji-image-10.png in Resources */,
 				3CA4927C19E3400500110DEF /* emoji-sound-10.1.m4a in Resources */,
 				0B9EC33119C8F5EB00F520B8 /* tuto-arrow@2x~iphone.png in Resources */,
 				3CA4923119E3132E00110DEF /* emoji-sound-2.1.m4a in Resources */,
@@ -1417,11 +1415,13 @@
 				0B56F656197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
 				0B90E67219C7822E004A8F16 /* contact-perm.png in Resources */,
 				0B969128198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
+				3CB58BF519E3ED65007B6B9C /* emoji-image-11.png in Resources */,
 				0B39AAEE19DA64D0009955B3 /* emoji-image-2@2x~iphone.png in Resources */,
 				0BADABC519930005007B4538 /* contact-sent.png in Resources */,
 				0BADABCB1993000D007B4538 /* contact-blue-eye.png in Resources */,
 				0BA145841997A5620031716F /* agogo.aif in Resources */,
 				3CA4928919E342F200110DEF /* emoji-sound-9.3.m4a in Resources */,
+				3CB58BFB19E3ED65007B6B9C /* emoji-image-9.png in Resources */,
 				0BA1545319D48A9F00246962 /* heard-logo-80.png in Resources */,
 				3CEF9EFC19DB1BD30045D78D /* emoji-sound-7.1.m4a in Resources */,
 			);
