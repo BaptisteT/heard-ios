@@ -1474,7 +1474,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Observer callback
 // ----------------------------------------------------------
 -(void)willResignActiveCallback {
-    self.emojiContainer.hidden = YES;
+    if (self.openingTutoView.hidden) {
+        self.emojiContainer.hidden = YES;
+    }
     // Dismiss modal
     [self dismissViewControllerAnimated:NO completion:nil];
     
@@ -1693,21 +1695,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // -------------------------------------------
 - (void)prepareAndDisplayTuto
 {
-    ContactView *firstContactView = ((ContactView *)[self.contactViews firstObject]);
+    [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"hold_tuto_action_label", kStringFile, @"comment") forOrigin:self.currentUserContactView.frame.origin.x + self.currentUserContactView.frame.size.width/2];
     
-    [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"hold_tuto_action_label", kStringFile, @"comment") forOrigin:firstContactView.frame.origin.x + firstContactView.frame.size.width/2];
     [self.contactScrollView bringSubviewToFront:self.openingTutoView];
-    // only me visible + 1st contact
-    for (ContactView *contactView in self.contactViews) {
-        if ([GeneralUtils isCurrentUser:contactView.contact]) {
-            if (contactView.orderPosition != 1) {
-                NSLog(@"me should be first");
-            }
-            [self.contactScrollView bringSubviewToFront:contactView];
-            [self.contactScrollView bringSubviewToFront:contactView.nameLabel];
-            break;
-        }
-    }
+    [self.contactScrollView bringSubviewToFront:self.currentUserContactView];
+    [self.contactScrollView bringSubviewToFront:self.currentUserContactView.nameLabel];
 }
 
 - (IBAction)openingTutoSkipButtonClicked:(id)sender {
@@ -1766,6 +1758,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                                                    self.emojiContainer.frame.size.height);
         }];
     } else {
+        if ([GeneralUtils isFirstClickOnEmojiButton]) {
+            [self.contactScrollView bringSubviewToFront:self.openingTutoView];
+            [self.contactScrollView bringSubviewToFront:self.emojiContainer];
+            [self displayOpeningTutoWithActionLabel:@"Drag to send" forOrigin:-100];
+        }
         [self.emojiContainer.layer removeAllAnimations];
         
         //Emoji container

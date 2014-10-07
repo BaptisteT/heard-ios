@@ -417,6 +417,7 @@
             successBlock(result);
         }
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"ERROR: %@, %@", task.description, error);
         NSLog(@"checkBuildVersion: We should not pass in this block!!!!");
     }];
 }

@@ -60,7 +60,7 @@
                 self.soundIndex = 1;
                 soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",self.identifier,self.soundIndex];
             }
-            
+            [self.delegate hideOpeningTuto];
             [self.delegate playSound:soundName ofType:@"m4a"];
         }
     }

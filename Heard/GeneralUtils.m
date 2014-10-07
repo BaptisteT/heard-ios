@@ -7,6 +7,7 @@
 //
 
 #define FIRST_OPENING_PREF @"First Opening"
+#define FIRST_EMOJI_BUTTON_PREF @"First Time Emoji Button Clicked"
 
 #define ONE_MINUTE 60
 #define ONE_HOUR (60 * ONE_MINUTE)
@@ -255,6 +256,18 @@
 {
     NSInteger newValue = [[dico objectForKey:key] integerValue] + increment;
     [dico setObject:[NSNumber numberWithInteger:newValue] forKey:key];
+}
+
++ (BOOL)isFirstClickOnEmojiButton
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    if([[prefs objectForKey:FIRST_EMOJI_BUTTON_PREF] boolValue]) {
+        return NO;
+    } else {
+        [prefs setObject:[NSNumber numberWithBool:YES] forKey:FIRST_EMOJI_BUTTON_PREF];
+        return YES;
+    }
 }
 
 

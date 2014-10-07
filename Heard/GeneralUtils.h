@@ -53,4 +53,6 @@
 
 + (void)incrementOf:(NSInteger)increment objectOfDictionnary:(NSMutableDictionary *)dico forKey:(NSString *)key;
 
++ (BOOL)isFirstClickOnEmojiButton;
+
 @end
