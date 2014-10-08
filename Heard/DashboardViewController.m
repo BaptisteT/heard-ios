@@ -83,7 +83,7 @@
 @property (strong, nonatomic) UIImageView *profilePicture;
 @property (weak, nonatomic) ContactView *currentUserContactView;
 // Others
-@property (weak, nonatomic) UIButton *menuButton;
+@property (weak, nonatomic) IBOutlet UIButton *menuButton;
 @property (strong, nonatomic) NSMutableArray *nonAttributedUnreadMessages;
 @property (strong, nonatomic) NSMutableArray *lastMessagesPlayed;
 // Action sheets
@@ -321,7 +321,7 @@
 {
     [self endTutoMode];
     self.emojiContainer.hidden = YES;
-    if ((self.displayOpeningTuto && !prority)) {
+    if ((self.displayOpeningTuto && !prority) || self.isSignUp) {
         return;
     }
     self.bottomTutoViewLabel.text = message;
@@ -1499,6 +1499,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         if ([UIDevice currentDevice].proximityState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             [prefs setObject:@"dummy" forKey:kUserPhoneToEarPref];
+            [self endTutoMode];
         }
     } else {
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
@@ -1758,6 +1759,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                                                    self.emojiContainer.frame.size.height);
         }];
     } else {
+        [self endTutoMode];
         if ([GeneralUtils isFirstClickOnEmojiButton]) {
             [self.contactScrollView bringSubviewToFront:self.openingTutoView];
             [self.contactScrollView bringSubviewToFront:self.emojiContainer];

@@ -83,7 +83,7 @@
             [self.delegate updateEmojiLocation:mainViewCoordinate];
         }
     }
-    else if (recognizer.state == UIGestureRecognizerStateEnded) {
+    else if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled) {
         if (isSlide) {
             velocity = [recognizer velocityInView:self];
             if (fabs(velocity.x) > 100) {
