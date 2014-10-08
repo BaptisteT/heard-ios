@@ -19,7 +19,7 @@
 @interface EditContactsViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *contactsTableView;
-@property (weak, nonatomic) IBOutlet UILabel *navBar;
+@property (weak, nonatomic) IBOutlet UIView *navBar;
 
 @end
 
@@ -55,7 +55,7 @@
 // ----------------------------------------------------------
 - (IBAction)doneButtonClicked:(id)sender {
     [self.delegate reorderContactViews];
-    [self dismissViewControllerAnimated:NO completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 

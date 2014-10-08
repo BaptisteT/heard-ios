@@ -27,6 +27,10 @@
 		0B16B63A19E4BD32009C8D90 /* white-menu-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B16B63819E4BD32009C8D90 /* white-menu-button.png */; };
 		0B16B63C19E4BD37009C8D90 /* emoji-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B16B63B19E4BD37009C8D90 /* emoji-button.png */; };
 		0B16B63D19E4BD37009C8D90 /* emoji-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B16B63B19E4BD37009C8D90 /* emoji-button.png */; };
+		0B16B64019E4CC1E009C8D90 /* invite-pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B16B63E19E4CC1E009C8D90 /* invite-pause.png */; };
+		0B16B64119E4CC1E009C8D90 /* invite-pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B16B63E19E4CC1E009C8D90 /* invite-pause.png */; };
+		0B16B64219E4CC1E009C8D90 /* invite-play.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B16B63F19E4CC1E009C8D90 /* invite-play.png */; };
+		0B16B64319E4CC1E009C8D90 /* invite-play.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B16B63F19E4CC1E009C8D90 /* invite-play.png */; };
 		0B37D42E19CCFCE900A2D074 /* InviteContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B37D42D19CCFCE900A2D074 /* InviteContactView.m */; };
 		0B37D42F19CCFCE900A2D074 /* InviteContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B37D42D19CCFCE900A2D074 /* InviteContactView.m */; };
 		0B39AAEA19DA64D0009955B3 /* emoji-image-1@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B39AADB19DA64D0009955B3 /* emoji-image-1@2x~iphone.png */; };
@@ -399,6 +403,8 @@
 		0B16B61119E4B0CF009C8D90 /* invite-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invite-button.png"; sourceTree = "<group>"; };
 		0B16B63819E4BD32009C8D90 /* white-menu-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white-menu-button.png"; sourceTree = "<group>"; };
 		0B16B63B19E4BD37009C8D90 /* emoji-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji-button.png"; sourceTree = "<group>"; };
+		0B16B63E19E4CC1E009C8D90 /* invite-pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invite-pause.png"; sourceTree = "<group>"; };
+		0B16B63F19E4CC1E009C8D90 /* invite-play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "invite-play.png"; sourceTree = "<group>"; };
 		0B37D42C19CCFCE900A2D074 /* InviteContactView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteContactView.h; sourceTree = "<group>"; };
 		0B37D42D19CCFCE900A2D074 /* InviteContactView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteContactView.m; sourceTree = "<group>"; };
 		0B39AADA19DA64D0009955B3 /* emoji-image-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji-image-1.png"; sourceTree = "<group>"; };
@@ -774,6 +780,8 @@
 		0BA1455E199786A30031716F /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0B16B63E19E4CC1E009C8D90 /* invite-pause.png */,
+				0B16B63F19E4CC1E009C8D90 /* invite-play.png */,
 				0B16B63B19E4BD37009C8D90 /* emoji-button.png */,
 				0B16B63819E4BD32009C8D90 /* white-menu-button.png */,
 				0B16B61119E4B0CF009C8D90 /* invite-button.png */,
@@ -1323,6 +1331,7 @@
 				3CA4923219E3132E00110DEF /* emoji-sound-2.1.m4a in Resources */,
 				0B9051BD19771B96001E2ED5 /* checkbox@iphone.png in Resources */,
 				3CA4927419E33F7500110DEF /* emoji-sound-8.3.m4a in Resources */,
+				0B16B64319E4CC1E009C8D90 /* invite-play.png in Resources */,
 				0B72EEFA196C672F00AC5A01 /* MPNotification.storyboard in Resources */,
 				0B39AAFD19DA64D0009955B3 /* emoji-image-6.png in Resources */,
 				0B72EEFB196C672F00AC5A01 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
@@ -1349,6 +1358,7 @@
 				0BADABC619930005007B4538 /* contact-sent.png in Resources */,
 				0BADABCC1993000D007B4538 /* contact-blue-eye.png in Resources */,
 				0BA145851997A5620031716F /* agogo.aif in Resources */,
+				0B16B64119E4CC1E009C8D90 /* invite-pause.png in Resources */,
 				0B6BAB1119E46EE200677F46 /* heard-logo-120.png in Resources */,
 				3CA4928A19E342F200110DEF /* emoji-sound-9.3.m4a in Resources */,
 				0B16B60719E48C0C009C8D90 /* blue-back-button.png in Resources */,
@@ -1436,6 +1446,7 @@
 				3CA4923119E3132E00110DEF /* emoji-sound-2.1.m4a in Resources */,
 				0B9051BC19771B96001E2ED5 /* checkbox@iphone.png in Resources */,
 				3CA4927319E33F7500110DEF /* emoji-sound-8.3.m4a in Resources */,
+				0B16B64219E4CC1E009C8D90 /* invite-play.png in Resources */,
 				0BB0E8F1195B449A00C94AC0 /* MPNotification.storyboard in Resources */,
 				0B39AAFC19DA64D0009955B3 /* emoji-image-6.png in Resources */,
 				0BDB64CD19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
@@ -1462,6 +1473,7 @@
 				0BADABC519930005007B4538 /* contact-sent.png in Resources */,
 				0BADABCB1993000D007B4538 /* contact-blue-eye.png in Resources */,
 				0BA145841997A5620031716F /* agogo.aif in Resources */,
+				0B16B64019E4CC1E009C8D90 /* invite-pause.png in Resources */,
 				0B6BAB1019E46EE200677F46 /* heard-logo-120.png in Resources */,
 				3CA4928919E342F200110DEF /* emoji-sound-9.3.m4a in Resources */,
 				0B16B60619E48C0C009C8D90 /* blue-back-button.png in Resources */,

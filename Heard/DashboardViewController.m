@@ -138,6 +138,8 @@
     self.authRequestAllowButton.clipsToBounds = YES;
     self.authRequestAllowButton.layer.cornerRadius = 5;
     
+    [GeneralUtils addBottomBorder:self.topBarBackground borderSize:0.5];
+    
     // Init address book
     self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
