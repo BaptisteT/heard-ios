@@ -29,24 +29,32 @@
     [mixpanel.people set:@{@"First name": contact.firstName, @"Last name": contact.lastName}];
 }
 
-+ (void)trackRecord
++ (void)trackRecord:(BOOL)isEmoji
 {
     if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    [mixpanel track:@"Record"];
+    if (isEmoji) {
+        [mixpanel track:@"Record" properties:@{@"Emoji": @"True"}];
+    } else {
+        [mixpanel track:@"Record" properties:@{@"Emoji": @"False"}];
+    }
     
     [mixpanel.people increment:@"Records" by:[NSNumber numberWithInt:1]];
 }
 
-+ (void)trackFutureRecord
++ (void)trackFutureRecord:(BOOL)isEmoji
 {
     if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    [mixpanel track:@"Future record"];
+    if (isEmoji) {
+        [mixpanel track:@"Future record" properties:@{@"Emoji": @"True"}];
+    } else {
+        [mixpanel track:@"Future record" properties:@{@"Emoji": @"False"}];
+    }
     
     [mixpanel.people increment:@"Future records" by:[NSNumber numberWithInt:1]];
 }

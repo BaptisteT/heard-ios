@@ -13,9 +13,9 @@
 
 + (void)identifyWithMixpanel:(Contact *)contact signup:(BOOL)isSigningUp;
 
-+ (void)trackRecord;
++ (void)trackRecord:(BOOL)isEmoji;
 
-+ (void)trackFutureRecord;
++ (void)trackFutureRecord:(BOOL)isEmoji;
 
 + (void)trackPlayWithDuration:(NSTimeInterval)duration;
 

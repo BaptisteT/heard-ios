@@ -403,6 +403,7 @@
 
 - (void)sendRecording
 {
+    BOOL isEmoji = self.delegate.emojiData ? true : false;
     if ([GeneralUtils isCurrentUser:self.contact]) {
         Message *message = [Message new];
         message.senderId = self.contact.identifier;
@@ -423,12 +424,11 @@
         
         // Send
         [self.delegate sendMessageToContact:self];
-        
-        if (self.contact.isFutureContact) {
-            [TrackingUtils trackFutureRecord];
-        } else {
-            [TrackingUtils trackRecord];
-        }
+    }
+    if (self.contact.isFutureContact) {
+        [TrackingUtils trackFutureRecord:isEmoji];
+    } else {
+        [TrackingUtils trackRecord:isEmoji];
     }
 }
 

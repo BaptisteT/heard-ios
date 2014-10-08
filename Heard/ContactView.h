@@ -99,4 +99,6 @@
 
 - (void)displayContactAuthView;
 
+- (NSData *)emojiData;
+
 @end
