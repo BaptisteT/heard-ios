@@ -234,7 +234,7 @@
                 return [[NSString stringWithFormat:@"%ld", hours] stringByAppendingString:@" hour ago"];
             }
         } else if (minutes >= 1) {
-            if (hours > 1) {
+            if (minutes > 1) {
                 return [[NSString stringWithFormat:@"%ld", minutes] stringByAppendingString:@" minutes ago"];
             } else {
                 return [[NSString stringWithFormat:@"%ld", minutes] stringByAppendingString:@" minute ago"];

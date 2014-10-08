@@ -110,6 +110,7 @@
 // Invite new contacts
 @property (strong, nonatomic) NSMutableDictionary *indexedContacts;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *topBarBackground;
 // Emoji View
 @property (weak, nonatomic) IBOutlet UIScrollView *emojiContainer;
 @property (strong, nonatomic) NSData *emojiData;
@@ -146,10 +147,13 @@
     
     //Init no message view
     self.bottomTutoView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
-    self.bottomTutoView.backgroundColor = [ImageUtils blue];
+    
+    UIImageView *backgroundTutoView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
+    backgroundTutoView.image = [UIImage imageNamed:@"light-blue-bar.png"];
+    [self.bottomTutoView addSubview:backgroundTutoView];
     
     self.bottomTutoViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
-    self.bottomTutoViewLabel.font = [UIFont fontWithName:@"Avenir-Light" size:20.0];
+    self.bottomTutoViewLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
     self.bottomTutoViewLabel.textAlignment = NSTextAlignmentCenter;
     self.bottomTutoViewLabel.textColor = [UIColor whiteColor];
     self.bottomTutoViewLabel.backgroundColor = [UIColor clearColor];
@@ -234,7 +238,7 @@
     
     //Recorder label
     self.recorderLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 25, 120, 25)];
-    self.recorderLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:15.0];
+    self.recorderLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15.0];
     self.recorderLabel.textAlignment = NSTextAlignmentCenter;
     self.recorderLabel.textColor = [UIColor grayColor];
     self.recorderLabel.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.8];
@@ -258,7 +262,7 @@
     
     //player date label
     self.playerLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 25, 120, 25)];
-    self.playerLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:15.0];
+    self.playerLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15.0];
     self.playerLabel.textAlignment = NSTextAlignmentCenter;
     self.playerLabel.textColor = [UIColor grayColor];
     self.playerLabel.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.8];
@@ -280,6 +284,7 @@
     
     // Emoji views
     [self addEmojiViewsToContainer];
+
     
     // Update app info
     [ApiUtils updateAppInfoAndExecuteSuccess:nil failure:nil];
@@ -640,7 +645,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     if ([GeneralUtils isAdminContact:contact]) {
         nameLabel.text = @"Waved";
-        nameLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:14.0];
+        nameLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:14.0];
     //Invite contact
     } else {
         if (contact.firstName) {
@@ -649,7 +654,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             nameLabel.text = [NSString stringWithFormat:@"%@", contact.lastName ? contact.lastName : @""];
         }
         
-        nameLabel.font = [UIFont fontWithName:@"Avenir-Light" size:14.0];
+        nameLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
     }
     
     nameLabel.textAlignment = NSTextAlignmentCenter;
@@ -1720,6 +1725,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     [self hideStatusBarComponents:YES];
     self.titleLabel.hidden = NO;
+    self.topBarBackground.hidden = NO;
     
     if (self.openingTutoArrow) {
         [self.openingTutoArrow removeFromSuperview];
@@ -1848,6 +1854,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)hideStatusBarComponents:(BOOL)flag {
     self.titleLabel.hidden = flag;
+    self.topBarBackground.hidden = flag;
     self.menuButton.hidden = flag;
     self.emojiButton.hidden = flag;
 }

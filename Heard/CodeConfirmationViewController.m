@@ -22,8 +22,6 @@
 
 @interface CodeConfirmationViewController ()
 
-@property (weak, nonatomic) IBOutlet UIView *navigationContainer;
-@property (weak, nonatomic) IBOutlet UIView *textFieldContainer;
 @property (weak, nonatomic) IBOutlet UITextField *codeTextField;
 @property (weak, nonatomic) IBOutlet UILabel *phoneNumberLabel;
 @property (nonatomic) BOOL existingUser;
@@ -31,6 +29,16 @@
 @property (nonatomic) NSTimeInterval countdownStart;
 @property (weak, nonatomic) IBOutlet UILabel *resendLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeRemainLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *firstImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *secondImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *thirdImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *fourthImageView;
+@property (weak, nonatomic) IBOutlet UILabel *firstLabel;
+@property (weak, nonatomic) IBOutlet UILabel *secondLabel;
+@property (weak, nonatomic) IBOutlet UILabel *thirdLabel;
+@property (weak, nonatomic) IBOutlet UILabel *fourthLabel;
+@property (strong, nonatomic) NSArray *labels;
+@property (strong, nonatomic) NSArray *imageViews;
 
 @end
 
@@ -44,11 +52,25 @@
     
     self.codeTextField.delegate = self;
     
-    //Weird bug on 3.5 screen screen
-    if ([[UIScreen mainScreen] bounds].size.height>480.0f) {
-        [GeneralUtils addBottomBorder:self.navigationContainer borderSize:BORDER_SIZE];
-    }
-    [GeneralUtils addBottomBorder:self.textFieldContainer borderSize:BORDER_SIZE];
+    self.firstImageView.clipsToBounds = YES;
+    self.secondImageView.clipsToBounds = YES;
+    self.thirdImageView.clipsToBounds = YES;
+    self.fourthImageView.clipsToBounds = YES;
+    
+    self.firstImageView.layer.cornerRadius = self.firstImageView.bounds.size.height/2;
+    self.secondImageView.layer.cornerRadius = self.firstImageView.bounds.size.height/2;
+    self.thirdImageView.layer.cornerRadius = self.firstImageView.bounds.size.height/2;
+    self.fourthImageView.layer.cornerRadius = self.firstImageView.bounds.size.height/2;
+    
+    self.codeTextField.hidden = YES;
+    
+    self.labels = @[self.firstLabel, self.secondLabel, self.thirdLabel, self.fourthLabel];
+    self.imageViews = @[self.firstImageView, self.secondImageView, self.thirdImageView, self.fourthImageView];
+    
+    self.firstLabel.text = @"";
+    self.secondLabel.text = @"";
+    self.thirdLabel.text = @"";
+    self.fourthLabel.text = @"";
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -90,6 +112,29 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    NSInteger nbrOfChar = 0;
+    
+    if (string.length < 1) {
+        nbrOfChar = MAX(0, textField.text.length - 1);
+    } else {
+         nbrOfChar = textField.text.length + string.length;
+    }
+    
+    for (NSInteger i = 0; i < CONFIMATION_CODE_DIGITS; i++) {
+        if (i > nbrOfChar - 1) {
+            ((UIImageView *)[self.imageViews objectAtIndex:i]).image = [UIImage imageNamed:@"light-blue-square.png"];
+            ((UILabel *)[self.labels objectAtIndex:i]).text = @"";
+        } else {
+            ((UIImageView *)[self.imageViews objectAtIndex:i]).image = [UIImage imageNamed:@"dark-blue-square.png"];
+            
+            NSRange range;
+            range.location = i;
+            range.length = 1;
+            
+            ((UILabel *)[self.labels objectAtIndex:i]).text = [[textField.text stringByAppendingString:string] substringWithRange:range];
+        }
+    }
+    
     if (textField.text.length + string.length == CONFIMATION_CODE_DIGITS && string.length > 0) {
         [self validateCode:[textField.text stringByAppendingString:string]];
     }
@@ -122,11 +167,12 @@
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [GeneralUtils showMessage:NSLocalizedStringFromTable(@"invalid_code_error_message",kStringFile,@"comment") withTitle:nil];
         self.codeTextField.text = @"";
+        
+        for (NSInteger i = 0; i < CONFIMATION_CODE_DIGITS; i++) {
+            ((UIImageView *)[self.imageViews objectAtIndex:i]).image = [UIImage imageNamed:@"light-blue-square.png"];
+            ((UILabel *)[self.labels objectAtIndex:i]).text = @"";
+        }
     }];
-}
-
-- (IBAction)nextButtonClicked:(id)sender {
-    [self validateCode:self.codeTextField.text];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
