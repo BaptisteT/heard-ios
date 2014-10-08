@@ -101,4 +101,6 @@
 
 - (NSData *)emojiData;
 
+- (BOOL) isSignUp;
+
 @end

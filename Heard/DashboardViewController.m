@@ -321,7 +321,7 @@
 {
     [self endTutoMode];
     self.emojiContainer.hidden = YES;
-    if ((self.displayOpeningTuto && !prority) || self.isSignUp) {
+    if ((self.displayOpeningTuto && !prority)) {
         return;
     }
     self.bottomTutoViewLabel.text = message;
@@ -1048,7 +1048,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self hideOpeningTuto];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    if (![prefs objectForKey:kUserPhoneToEarPref] && !self.isUsingHeadSet) {
+    if (![prefs objectForKey:kUserPhoneToEarPref] && !self.isUsingHeadSet && !self.isSignUp) {
         [self tutoMessage:NSLocalizedStringFromTable(@"phone_to_ear_tuto",kStringFile, @"comment") withDuration:0 priority:NO];
     }
     

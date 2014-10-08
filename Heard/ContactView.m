@@ -529,7 +529,7 @@
         
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         
-        if (![prefs objectForKey:kUserReplayedPref]) {
+        if (![prefs objectForKey:kUserReplayedPref] && ![self.delegate isSignUp]) {
             [self.delegate tutoMessage:NSLocalizedStringFromTable(@"shake_to_replay_tuto",kStringFile, @"comment")  withDuration:3 priority:NO];
         }
     }
