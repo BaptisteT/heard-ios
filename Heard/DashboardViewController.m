@@ -32,6 +32,7 @@
 #import "InviteContactView.h"
 #import "InviteContactsViewController.h"
 #import "EmojiView.h"
+#import <MediaPlayer/MPVolumeView.h>
 
 #define ACTION_OTHER_MENU_OPTION_1 NSLocalizedStringFromTable(@"hide_contacts_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"edit_profile_button_title",kStringFile,@"comment")
@@ -1125,10 +1126,17 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)playerUI:(NSTimeInterval)duration ByContactView:(ContactView *)contactView
 {
     // Min volume (legal / deprecated ?)
-    MPMusicPlayerController *appPlayer = [MPMusicPlayerController applicationMusicPlayer];
-    if (appPlayer.volume < 0.5) {
-        [appPlayer setVolume:0.5];
+    MPVolumeView* volumeView = [[MPVolumeView alloc] init];
+    //find the volumeSlider
+    UISlider* volumeViewSlider = nil;
+    for (UIView *view in [volumeView subviews]){
+        if ([view.class.description isEqualToString:@"MPVolumeSlider"]){
+            volumeViewSlider = (UISlider*)view;
+            break;
+        }
     }
+    if (volumeViewSlider.value < 0.5f)
+        [volumeViewSlider setValue:0.5f animated:YES];
     
     // Set loud speaker and proximity check
     self.disableProximityObserver = NO;
@@ -1632,10 +1640,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (error || ![self.soundPlayer prepareToPlay]) {
         NSLog(@"%@",error);
     } else {
-        float appPlayerVolume = [MPMusicPlayerController applicationMusicPlayer].volume;
-        if (appPlayerVolume > 0.25) {
-            [self.soundPlayer setVolume:1/(4*appPlayerVolume)];
-        }
         [self.soundPlayer play];
     }
 }

@@ -262,12 +262,6 @@ clickedButtonAtIndex:(NSInteger)buttonIndex
 
 - (void)play
 {
-    // Min volume (legal / deprecated ?)
-    MPMusicPlayerController *appPlayer = [MPMusicPlayerController applicationMusicPlayer];
-    if (appPlayer.volume < 0.5) {
-        [appPlayer setVolume:0.5];
-    }
-    
     // Set loud speaker and proximity check
     self.disableProximityObserver = NO;
     [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
