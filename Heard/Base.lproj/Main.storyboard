@@ -19,22 +19,12 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Waved" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yMe-3M-kKz">
-                                <rect key="frame" x="107" y="260" width="107" height="48"/>
+                                <rect key="frame" x="107" y="160" width="107" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="107" id="M44-54-eph"/>
                                     <constraint firstAttribute="height" constant="48" id="zja-So-q28"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="35"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Voice Messaging" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LYj-fg-v2e">
-                                <rect key="frame" x="0.0" y="308" width="320" height="25"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="320" id="IK8-dU-TLz"/>
-                                    <constraint firstAttribute="height" constant="25" id="ay6-Ct-s2u"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="26"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -53,11 +43,18 @@
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="welcome-logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="dwm-Cy-B4c">
-                                <rect key="frame" x="0.0" y="100" width="320" height="120"/>
+                                <rect key="frame" x="0.0" y="50" width="320" height="120"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="120" id="ETk-1a-5CE"/>
                                 </constraints>
                             </imageView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="The simplest and funniest way to have real conversations with your friends!" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="RjZ-ES-aOa">
+                                <rect key="frame" x="24" y="220" width="280" height="64"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="textColor" red="0.3921568627" green="0.78823529410000004" blue="0.95294117649999999" alpha="1" colorSpace="deviceRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -65,19 +62,16 @@
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="J5D-hb-dnh" secondAttribute="bottom" constant="20" id="B56-zo-VKY"/>
                             <constraint firstItem="dwm-Cy-B4c" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="H9d-1r-6es"/>
                             <constraint firstAttribute="trailing" secondItem="J5D-hb-dnh" secondAttribute="trailing" id="Mtj-Ph-QEc"/>
-                            <constraint firstItem="LYj-fg-v2e" firstAttribute="top" secondItem="yMe-3M-kKz" secondAttribute="bottom" id="ZEe-6o-Op8"/>
-                            <constraint firstItem="yMe-3M-kKz" firstAttribute="top" secondItem="dwm-Cy-B4c" secondAttribute="bottom" constant="40" id="cxj-ig-e2I"/>
+                            <constraint firstItem="yMe-3M-kKz" firstAttribute="top" secondItem="dwm-Cy-B4c" secondAttribute="bottom" constant="-10" id="cxj-ig-e2I"/>
                             <constraint firstItem="J5D-hb-dnh" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="lvd-rQ-MCH"/>
                             <constraint firstAttribute="trailing" secondItem="dwm-Cy-B4c" secondAttribute="trailing" id="q9V-Vz-EhE"/>
-                            <constraint firstAttribute="centerX" secondItem="LYj-fg-v2e" secondAttribute="centerX" id="tNt-i9-5RT"/>
-                            <constraint firstAttribute="centerY" secondItem="yMe-3M-kKz" secondAttribute="centerY" id="yPI-R1-n49"/>
+                            <constraint firstItem="dwm-Cy-B4c" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="30" id="uK4-Pz-BEZ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="FRa-6e-sLJ"/>
                     <connections>
                         <outlet property="logoImage" destination="dwm-Cy-B4c" id="tyV-pV-YAA"/>
                         <outlet property="startButton" destination="J5D-hb-dnh" id="1wv-28-6Rh"/>
-                        <outlet property="subTitleLabel" destination="LYj-fg-v2e" id="YgK-fa-4pM"/>
                         <outlet property="titleLabel" destination="yMe-3M-kKz" id="RHj-0f-0uf"/>
                         <segue destination="2uU-ai-Tsy" kind="custom" identifier="Dashboard Push Segue From Welcome" customClass="PushNoAnimationSegue" id="xdp-at-Nje"/>
                         <segue destination="UQD-ua-4i0" kind="push" identifier="Phone Push Segue" id="0cO-oe-vcd"/>
@@ -1316,6 +1310,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="lrb-7Z-tIJ"/>
+        <segue reference="xdp-at-Nje"/>
     </inferredMetricsTieBreakers>
 </document>
