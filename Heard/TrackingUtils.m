@@ -162,4 +162,11 @@
     [mixpanel track:@"Failed Open Contact" properties:@{@"Phone number":formattedNumber}];
 }
 
++ (void)trackFirstOpenApp
+{
+    if (!PRODUCTION || DEBUG)return;
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel.people increment:@"First Open App" by:[NSNumber numberWithInt:1]];
+}
+
 @end

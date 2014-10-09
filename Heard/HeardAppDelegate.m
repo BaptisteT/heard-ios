@@ -79,6 +79,12 @@
         }
     }];
     
+    // Track open app
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if(![[prefs objectForKey:kFirstOpeningPref] boolValue]) {
+        [TrackingUtils trackFirstOpenApp];
+    }
+    
     if ([SessionUtils isSignedIn]) {
         WelcomeViewController* welcomeViewController = (WelcomeViewController *)  self.window.rootViewController.childViewControllers[0];
         [welcomeViewController performSegueWithIdentifier:@"Dashboard Push Segue From Welcome" sender:nil];

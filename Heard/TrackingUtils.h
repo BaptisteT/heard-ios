@@ -33,4 +33,6 @@
 
 + (void)trackFailedToOpenContact:(NSString *)formattedNumber;
 
++ (void)trackFirstOpenApp;
+
 @end

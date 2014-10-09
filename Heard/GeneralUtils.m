@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 streetshout. All rights reserved.
 //
 
-#define FIRST_OPENING_PREF @"First Opening"
 #define FIRST_EMOJI_BUTTON_PREF @"First Time Emoji Button Clicked"
 
 #define ONE_MINUTE 60
@@ -115,10 +114,10 @@
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    if([[prefs objectForKey:FIRST_OPENING_PREF] boolValue]) {
+    if([[prefs objectForKey:kFirstOpeningPref] boolValue]) {
         return NO;
     } else {
-        [prefs setObject:[NSNumber numberWithBool:YES] forKey:FIRST_OPENING_PREF];
+        [prefs setObject:[NSNumber numberWithBool:YES] forKey:kFirstOpeningPref];
         return YES;
     }
 }
