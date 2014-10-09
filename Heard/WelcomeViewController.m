@@ -23,8 +23,6 @@
 {
     [super viewDidLoad];
     
-    [self performSegueWithIdentifier:@"Phone Push Segue" sender:nil];
-    
     self.subTitleLabel.text = NSLocalizedStringFromTable(@"subtitle_label",kStringFile, @"comment");
     [self.startButton.titleLabel sizeToFit];
     self.startButton.titleLabel.text = NSLocalizedStringFromTable(@"start_button_text",kStringFile, @"comment");
