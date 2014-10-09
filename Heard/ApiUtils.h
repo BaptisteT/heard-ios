@@ -31,6 +31,16 @@
                           success:(void(^)(NSString *authToken, Contact *contact))successBlock
                           failure:(void(^)())failureBlock;
 
++ (void)createUserWithFBInfoPhoneNumber:(NSString *)phoneNumber
+                                   fbId:(NSString *)fbId
+                              firstName:(NSString *)firstName
+                               lastName:(NSString *)lastName
+                                 gender:(NSString *)gender
+                                 locale:(NSString *)locale
+                                   code:(NSString *)code
+                                success:(void(^)(NSString *authToken, Contact *contact))successBlock
+                                failure:(void(^)())failureBlock;
+
 + (void)sendMessage:(NSData *)audioData
              toUser:(Contact *)contact
             success:(void(^)())successBlock

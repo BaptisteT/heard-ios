@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RequestUserInfoViewController : UIViewController <UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
+@interface RequestUserInfoViewController : UIViewController <UITextFieldDelegate>
 
 @property (strong, nonatomic) NSString *phoneNumber;
 @property (strong, nonatomic) NSString *smsCode;
+@property (strong, nonatomic) UIImage *profilePicture;
 
 @end

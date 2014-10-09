@@ -78,6 +78,8 @@
 "profile_picture_error_message" = "Sorry, we need a picture for your contacts to see you!";
 "camera_and_library_access_error_message" = "Your camera and photo library are not available";
 "sign_up_error_message" = "We failed to sign you up, please try again.";
+"facebook_error" = "Something went wrong.";
+"picture_error" = "Something went wrong.";
 
 // Edit
 "first_name_edit_success_message" = "First name successfully updated.";

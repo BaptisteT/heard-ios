@@ -14,7 +14,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *subTitleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *startButton;
 @property (weak, nonatomic) IBOutlet UIImageView *logoImage;
-@property (strong, nonatomic) UIView *hiddingView;
 
 @end
 
@@ -31,13 +30,6 @@
     self.titleLabel.alpha = 0;
     self.subTitleLabel.alpha = 0;
     self.startButton.alpha = 0;
-    
-    self.hiddingView = [[UIView alloc] initWithFrame:CGRectMake(0,
-                                                                0,
-                                                                self.logoImage.bounds.size.width,
-                                                                self.logoImage.bounds.size.height)];
-    self.hiddingView.backgroundColor = [UIColor whiteColor];
-    [self.logoImage addSubview:self.hiddingView];
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -48,19 +40,11 @@
 {
     [super viewDidAppear:animated];
     
-    [UIView animateWithDuration:3.0 animations:^{
+    [UIView animateWithDuration:1.0 animations:^{
         
-        self.hiddingView.frame = CGRectMake(self.logoImage.bounds.size.width,
-                                            0,
-                                            self.logoImage.bounds.size.width,
-                                            self.logoImage.bounds.size.height);
-    } completion:^(BOOL dummy){
-        [UIView animateWithDuration:1.0 animations:^{
-            
-            self.titleLabel.alpha = 1;
-            self.subTitleLabel.alpha = 1;
-            self.startButton.alpha = 1;
-        }];
+        self.titleLabel.alpha = 1;
+        self.subTitleLabel.alpha = 1;
+        self.startButton.alpha = 1;
     }];
 }
 - (IBAction)startButtonClicked:(id)sender {

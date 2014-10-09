@@ -26,7 +26,7 @@
         
     [mixpanel identify:[NSString stringWithFormat:@"%lu", (unsigned long)contact.identifier]];
     
-    [mixpanel.people set:@{@"First name": contact.firstName, @"Last name": contact.lastName}];
+    [mixpanel.people set:@{@"First name": contact.firstName, @"Last name": contact.lastName, @"FB Connected": @"Yes"}];
 }
 
 + (void)trackRecord:(BOOL)isEmoji

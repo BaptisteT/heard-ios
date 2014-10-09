@@ -873,7 +873,7 @@
     UILabel *label = [[UILabel alloc] init];
     [label setFrame:CGRectMake(kContactSize - kUnreadMessageSize/2 + 5, -20, kUnreadMessageSize, kUnreadMessageSize)];
     label.textColor = color;
-    label.font = [UIFont fontWithName:@"Avenir-Heavy" size:fontSize];
+    label.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:fontSize];
     label.adjustsFontSizeToFitWidth = YES;
     label.minimumScaleFactor = 0.2;
     label.text = text;

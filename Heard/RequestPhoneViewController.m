@@ -27,7 +27,6 @@
 
 @interface RequestPhoneViewController ()
 
-@property (weak, nonatomic) IBOutlet UIView *navigationContainer;
 @property (weak, nonatomic) IBOutlet UIView *textFieldContainer;
 @property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
 @property (weak, nonatomic) IBOutlet UIButton *countryCodeButton;
@@ -35,8 +34,8 @@
 @property (nonatomic, strong) RMPhoneFormat *phoneFormat;
 @property (weak, nonatomic) IBOutlet UILabel *countryNameLabel;
 @property (weak, nonatomic) IBOutlet UITextView *tutoLabel;
-@property (weak, nonatomic) IBOutlet UIView *countryNameContainer;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIView *validationButton;
 
 @end
 
@@ -52,16 +51,15 @@
     
     self.phoneTextField.delegate = self;
     
-    //Weird bug on 3.5 screen screen
-    if ([[UIScreen mainScreen] bounds].size.height>480.0f) {
-        [GeneralUtils addBottomBorder:self.navigationContainer borderSize:BORDER_SIZE];
-    }
-    [GeneralUtils addBottomBorder:self.textFieldContainer borderSize:BORDER_SIZE];
-    [GeneralUtils addTopBorder:self.textFieldContainer borderSize:BORDER_SIZE];
-    [GeneralUtils addRightBorder:self.countryCodeButton borderSize:BORDER_SIZE];
+    self.validationButton.hidden = YES;
     
     //Autoresize bug
     [self.tutoLabel sizeToFit];
+    
+    if ([self.phoneTextField respondsToSelector:@selector(setAttributedPlaceholder:)]) {
+        UIColor *color = [UIColor lightTextColor];
+        self.phoneTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.phoneTextField.placeholder attributes:@{NSForegroundColorAttributeName: color}];
+    }
     
     [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
     }];
@@ -91,11 +89,7 @@
     }
 }
 
-- (IBAction)backButtonPressed:(id)sender {
-    [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
-- (IBAction)nextButtonPressed:(id)sender {
+- (IBAction)validationButtonClicked:(id)sender {
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
     NSError *aError = nil;
     NSString *internationalPhoneNumber = [NSString stringWithFormat:@"+%@%@", [self.countryCodeButton.titleLabel.text substringFromIndex:1], self.decimalPhoneNumber];
@@ -105,16 +99,14 @@
     if (aError || ![phoneUtil isValidNumber:myNumber]) {
         [GeneralUtils showMessage:NSLocalizedStringFromTable(@"phone_number_error_message",kStringFile,@"comment") withTitle:nil];
         return;
+    } else {
+        NSString *formattedPhoneNumber = [phoneUtil format:myNumber
+                                              numberFormat:NBEPhoneNumberFormatE164
+                                                     error:&aError];
+        
+        [self sendCodeRequest:formattedPhoneNumber];
+
     }
-    NSString *formattedPhoneNumber = [phoneUtil format:myNumber
-                                          numberFormat:NBEPhoneNumberFormatE164
-                                                 error:&aError];
-    if (aError) {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"phone_number_error_message",kStringFile,@"comment") withTitle:nil];
-        return;
-    }
-    
-    [self sendCodeRequest:formattedPhoneNumber];
 }
 
 - (IBAction)countryCodeButtonClicked:(id)sender {
@@ -122,21 +114,8 @@
 }
 
 
-- (IBAction)countryNameButtonPressed:(UILongPressGestureRecognizer *)sender {
-    switch (sender.state) {
-        case 1: // object pressed
-        case 2:
-            [self.countryNameContainer.layer setBackgroundColor:[UIColor lightGrayColor].CGColor];
-            [self.countryNameContainer.layer setOpacity:0.4];
-            break;
-        case 3: // object released
-            [self.countryNameContainer.layer setBackgroundColor:[UIColor clearColor].CGColor];
-            [self.countryNameContainer.layer setOpacity:1];
-            [self performSegueWithIdentifier:@"Country Code Segue" sender:nil];
-            break;
-        default:
-            break;
-    }
+- (IBAction)countryNameBluttonClicked:(id)sender {
+    [self performSegueWithIdentifier:@"Country Code Segue" sender:nil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -185,6 +164,19 @@
     
     textField.text = [self.phoneFormat format:self.decimalPhoneNumber];
     
+    NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
+    NSError *aError = nil;
+    NSString *internationalPhoneNumber = [NSString stringWithFormat:@"+%@%@", [self.countryCodeButton.titleLabel.text substringFromIndex:1], self.decimalPhoneNumber];
+    NBPhoneNumber *myNumber = [phoneUtil parse:internationalPhoneNumber
+                                 defaultRegion:nil error:&aError];
+    
+    if (aError || ![phoneUtil isValidNumber:myNumber]) {
+        self.validationButton.hidden = YES;
+    } else {
+        self.validationButton.hidden = NO;
+        
+    }
+    
     return NO;
 }
 
@@ -195,7 +187,7 @@
     [self.countryCodeButton setTitle:[NSString stringWithFormat:@"+%@", code] forState: UIControlStateNormal];
     self.phoneTextField.text = [self.phoneFormat format:self.decimalPhoneNumber];
     
-    self.countryNameLabel.text = countryName;
+    self.countryNameLabel.text = [letterCode uppercaseString];
 }
 
 @end
