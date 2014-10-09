@@ -157,6 +157,46 @@
     }];
 }
 
++ (void)createUserWithFBInfoPhoneNumber:(NSString *)phoneNumber
+                                   fbId:(NSString *)fbId
+                              firstName:(NSString *)firstName
+                               lastName:(NSString *)lastName
+                                 gender:(NSString *)gender
+                                 locale:(NSString *)locale
+                                   code:(NSString *)code
+                                success:(void(^)(NSString *authToken, Contact *contact))successBlock
+                                failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/fb_create.json"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    
+    [parameters setObject:phoneNumber forKey:@"phone_number"];
+    [parameters setObject:firstName forKey:@"fb_first_name"];
+    [parameters setObject:lastName forKey:@"fb_last_name"];
+    [parameters setObject:fbId forKey:@"fb_id"];
+    [parameters setObject:gender forKey:@"fb_gender"];
+    [parameters setObject:locale forKey:@"fb_locale"];
+    
+    [parameters setObject:code forKey:@"code"];
+    
+    [[ApiUtils sharedClient] POST:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        
+        NSDictionary *result = [JSON valueForKeyPath:@"result"];
+        
+        NSString *authToken = [result objectForKey:@"auth_token"];
+        Contact *contact = [Contact rawContactToInstance:[result objectForKey:@"user"]];
+        
+        if (successBlock) {
+            successBlock(authToken, contact);
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
 // Send message
 + (void)sendMessage:(NSData *)audioData
              toUser:(Contact *)contact

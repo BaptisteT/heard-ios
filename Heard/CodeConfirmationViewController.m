@@ -11,7 +11,7 @@
 #import "GeneralUtils.h"
 #import "MBProgressHUD.h"
 #import "RMPhoneFormat.h"
-#import "RequestUserInfoViewController.h"
+#import "ProfilePicViewController.h"
 #import "SessionUtils.h"
 #import "TrackingUtils.h"
 #import "Constants.h"
@@ -161,7 +161,7 @@
             
             [self performSegueWithIdentifier:@"Dashboard Push Segue From Code Confirmation" sender:nil];
         } else {
-            [self performSegueWithIdentifier:@"Request User Info Push Segue" sender:nil];
+            [self performSegueWithIdentifier:@"Profile Picture Push Segue" sender:nil];
         }
     } failure:^{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -179,9 +179,9 @@
 {
     NSString * segueName = segue.identifier;
     
-    if ([segueName isEqualToString: @"Request User Info Push Segue"]) {
-        ((RequestUserInfoViewController *) [segue destinationViewController]).phoneNumber = self.phoneNumber;
-        ((RequestUserInfoViewController *) [segue destinationViewController]).smsCode = self.codeTextField.text;
+    if ([segueName isEqualToString: @"Profile Picture Push Segue"]) {
+        ((ProfilePicViewController *) [segue destinationViewController]).phoneNumber = self.phoneNumber;
+        ((ProfilePicViewController *) [segue destinationViewController]).smsCode = self.codeTextField.text;
     }
 }
 

@@ -14,8 +14,6 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>logo-heard-80</string>
-				<string>logo-heard-120</string>
 				<string>heard-logo-58</string>
 				<string>heard-logo-80</string>
 				<string>heard-logo-120</string>
@@ -23,7 +21,7 @@
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.streetshout.HeardStaging.115</string>
+	<string>com.streetshout.WavedStaging</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -34,8 +32,21 @@
 	<string>1.1.6</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb1548299158734966</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>8</string>
+	<key>FacebookAppID</key>
+	<string>1548351335396415</string>
+	<key>FacebookDisplayName</key>
+	<string>WavedStaging</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSContactsUsageDescription</key>
@@ -44,6 +55,8 @@
 	<string>You will need it to send voice messages</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Waved will only use an image of your choice as profile picture</string>
+	<key>UIBackgroundModes</key>
+	<array/>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
