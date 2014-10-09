@@ -269,5 +269,17 @@
     }
 }
 
++ (BOOL)hasNeverSentStats
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    if([[prefs objectForKey:kStatSentPref] boolValue]) {
+        return NO;
+    } else {
+        [prefs setObject:[NSNumber numberWithBool:YES] forKey:kStatSentPref];
+        return YES;
+    }
+}
+
 
 @end

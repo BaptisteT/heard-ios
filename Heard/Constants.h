@@ -75,6 +75,7 @@ static NSString * const kUserCanceledPref = @"User Canceled Waved";
 static NSString * const kUserReplayedPref = @"User Replayed Waved";
 static NSString * const kUserPhoneToEarPref = @"User Put Phone To Ear";
 static NSString * const kFirstOpeningPref = @"First Opening";
+static NSString * const kStatSentPref = @"Stats sent";
 
 // Stats dico
 static NSString * const kNbContactKey = @"nb_contacts";

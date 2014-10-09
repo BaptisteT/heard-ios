@@ -388,7 +388,7 @@
     self.indexedContacts = [[NSMutableDictionary alloc] init];
     
     if (!self.addressBookFormattedContacts) {
-        self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook andSendStats:self.isSignUp];
+        self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
     }
     for (NSString *phoneNumber in self.addressBookFormattedContacts) {
         Contact *contact = [self.addressBookFormattedContacts objectForKey:phoneNumber];
@@ -420,7 +420,7 @@
 
 - (void)matchPhoneContactsWithHeardUsers
 {
-    self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook andSendStats:self.isSignUp];
+    self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
     NSMutableDictionary *contactsInfo = [[NSMutableDictionary alloc] init];
     NSMutableDictionary * adressBookWithFormattedKey = [NSMutableDictionary new];
     for (NSString* phoneNumber in self.addressBookFormattedContacts) {

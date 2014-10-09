@@ -14,6 +14,7 @@
 #import "ImageUtils.h"
 #import "Constants.h"
 #import "ApiUtils.h"
+#import "GeneralUtils.h"
 
 @implementation AddressbookUtils
 
@@ -175,14 +176,14 @@
     return letterCodeToCountryAndCallingCode;
 }
 
-+ (NSMutableDictionary *)getFormattedPhoneNumbersFromAddressBook:(ABAddressBookRef) addressBook andSendStats:(BOOL)flag
++ (NSMutableDictionary *)getFormattedPhoneNumbersFromAddressBook:(ABAddressBookRef) addressBook
 {
     NSMutableDictionary *addressBookFormattedContacts = [[NSMutableDictionary alloc] init];
     NSNumber *initialInt = [NSNumber numberWithInteger:0];
     NSMutableDictionary *stats = nil;
-    if (flag) {
-       stats = [NSMutableDictionary dictionaryWithObjectsAndKeys:initialInt, kNbContactKey, initialInt, kNbContactPhotoKey, initialInt, kNbContactFbKey, initialInt, kNbContactFavoriteKey, initialInt, kNbContactPhotoOnlyKey, initialInt, kNbContactLinkedKey,initialInt, kNbContactRelatedKey, initialInt, kNbContactFamilyKey, nil];
-    }
+
+    stats = [NSMutableDictionary dictionaryWithObjectsAndKeys:initialInt, kNbContactKey, initialInt, kNbContactPhotoKey, initialInt, kNbContactFbKey, initialInt, kNbContactFavoriteKey, initialInt, kNbContactPhotoOnlyKey, initialInt, kNbContactLinkedKey,initialInt, kNbContactRelatedKey, initialInt, kNbContactFamilyKey, nil];
+    
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
     
     CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(addressBook);
@@ -274,7 +275,7 @@
     
     CFRelease(people);
     
-    if (stats) {
+    if ([GeneralUtils hasNeverSentStats]) {
         [ApiUtils updateAddressBookStats:stats success:nil failure:nil];
     }
     return addressBookFormattedContacts;

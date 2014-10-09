@@ -55,4 +55,6 @@
 
 + (BOOL)isFirstClickOnEmojiButton;
 
++ (BOOL)hasNeverSentStats;
+
 @end
