@@ -55,8 +55,8 @@
                                                                            firstName:firstName
                                                                             lastName:lastName
                                                                           facebookId:facebookUsername];
-    if ([phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeMOBILE) {
-        contact.hasPhoto = ABPersonHasImageData(person);
+    contact.hasPhoto = ABPersonHasImageData(person);
+    if ([phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeMOBILE) { // Make sure favorites are mobile
         [contact checkIfFavoriteContact:person andSaveStats:stats];
     }
 
