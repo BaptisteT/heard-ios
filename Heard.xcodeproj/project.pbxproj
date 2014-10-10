@@ -238,10 +238,6 @@
 		0BC6B6F219E624150098D922 /* ProfilePicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC6B6F019E624150098D922 /* ProfilePicViewController.m */; };
 		0BC6B6F419E628A30098D922 /* facebook-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6F319E628A30098D922 /* facebook-logo.png */; };
 		0BC6B6F519E628A30098D922 /* facebook-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6F319E628A30098D922 /* facebook-logo.png */; };
-		0BC6B6FA19E6F9980098D922 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BC6B6F919E6F9980098D922 /* FacebookSDK.framework */; };
-		0BC6B6FB19E6F9980098D922 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BC6B6F919E6F9980098D922 /* FacebookSDK.framework */; };
-		0BC6B6FD19E722100098D922 /* HeardStaging-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6FC19E722100098D922 /* HeardStaging-Info.plist */; };
-		0BC6B6FE19E722100098D922 /* HeardStaging-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6FC19E722100098D922 /* HeardStaging-Info.plist */; };
 		0BC6B70019E73FEF0098D922 /* blue-next-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6FF19E73FEF0098D922 /* blue-next-button.png */; };
 		0BC6B70119E73FEF0098D922 /* blue-next-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6FF19E73FEF0098D922 /* blue-next-button.png */; };
 		0BD758C01950F91B00CF0D85 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD758BF1950F91B00CF0D85 /* Foundation.framework */; };
@@ -301,6 +297,8 @@
 		3C06C3A019659C2400B8D70C /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C06C39F19659C2400B8D70C /* MediaPlayer.framework */; };
 		3C0D0061195C5E500058A0E0 /* AudioUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D0060195C5E500058A0E0 /* AudioUtils.m */; };
 		3C0D0064196330E40058A0E0 /* ContactUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D0063196330E40058A0E0 /* ContactUtils.m */; };
+		3C1D54AF19E8564E00B3AE8B /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C1D54AE19E8564E00B3AE8B /* FacebookSDK.framework */; };
+		3C1D54B019E8564E00B3AE8B /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C1D54AE19E8564E00B3AE8B /* FacebookSDK.framework */; };
 		3C55FD6D1966AA3500E818D9 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */; };
 		3C55FD701966B11C00E818D9 /* CrashReportUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */; };
 		3C91A80D19CD00AC00DCA8BC /* PotentialContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C91A80C19CD00AC00DCA8BC /* PotentialContact.m */; };
@@ -507,7 +505,6 @@
 		0BC6B6EF19E624150098D922 /* ProfilePicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfilePicViewController.h; sourceTree = "<group>"; };
 		0BC6B6F019E624150098D922 /* ProfilePicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfilePicViewController.m; sourceTree = "<group>"; };
 		0BC6B6F319E628A30098D922 /* facebook-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-logo.png"; sourceTree = "<group>"; };
-		0BC6B6F919E6F9980098D922 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		0BC6B6FC19E722100098D922 /* HeardStaging-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "HeardStaging-Info.plist"; sourceTree = SOURCE_ROOT; };
 		0BC6B6FF19E73FEF0098D922 /* blue-next-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blue-next-button.png"; sourceTree = "<group>"; };
 		0BD758BC1950F91B00CF0D85 /* Waved.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Waved.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -593,6 +590,7 @@
 		3C0D0060195C5E500058A0E0 /* AudioUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioUtils.m; sourceTree = "<group>"; };
 		3C0D0062196330E40058A0E0 /* ContactUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactUtils.h; sourceTree = "<group>"; };
 		3C0D0063196330E40058A0E0 /* ContactUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactUtils.m; sourceTree = "<group>"; };
+		3C1D54AE19E8564E00B3AE8B /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
 		3C55FD6E1966B11C00E818D9 /* CrashReportUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashReportUtils.h; sourceTree = "<group>"; };
 		3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashReportUtils.m; sourceTree = "<group>"; };
@@ -681,7 +679,7 @@
 				0B72EEDE196C672F00AC5A01 /* MessageUI.framework in Frameworks */,
 				0B72EEDF196C672F00AC5A01 /* AddressBook.framework in Frameworks */,
 				0B72EEE0196C672F00AC5A01 /* AddressBookUI.framework in Frameworks */,
-				0BC6B6FB19E6F9980098D922 /* FacebookSDK.framework in Frameworks */,
+				3C1D54B019E8564E00B3AE8B /* FacebookSDK.framework in Frameworks */,
 				0B72EEE1196C672F00AC5A01 /* CoreGraphics.framework in Frameworks */,
 				0B72EEE2196C672F00AC5A01 /* UIKit.framework in Frameworks */,
 				0B72EEE3196C672F00AC5A01 /* Foundation.framework in Frameworks */,
@@ -700,7 +698,7 @@
 				3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */,
 				0BAF4FE219560AEE00838D7D /* MessageUI.framework in Frameworks */,
 				0B58BAFD1954B47700E9FF70 /* AddressBook.framework in Frameworks */,
-				0BC6B6FA19E6F9980098D922 /* FacebookSDK.framework in Frameworks */,
+				3C1D54AF19E8564E00B3AE8B /* FacebookSDK.framework in Frameworks */,
 				0B58BAFE1954B47700E9FF70 /* AddressBookUI.framework in Frameworks */,
 				0BD758C21950F91B00CF0D85 /* CoreGraphics.framework in Frameworks */,
 				0BD758C41950F91B00CF0D85 /* UIKit.framework in Frameworks */,
@@ -942,7 +940,7 @@
 		0BD758BE1950F91B00CF0D85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0BC6B6F919E6F9980098D922 /* FacebookSDK.framework */,
+				3C1D54AE19E8564E00B3AE8B /* FacebookSDK.framework */,
 				0B9EC33C19C9254D00F520B8 /* Security.framework */,
 				0B9EC33919C9253400F520B8 /* SystemConfiguration.framework */,
 				0B56F64B19757D5900DB6FF1 /* CoreData.framework */,
@@ -1231,7 +1229,7 @@
 						DevelopmentTeam = 9688VHJV6U;
 					};
 					0BD758BB1950F91B00CF0D85 = {
-						DevelopmentTeam = 9688VHJV6U;
+						DevelopmentTeam = Y7RQR83KUE;
 					};
 				};
 			};
@@ -1242,6 +1240,7 @@
 			knownRegions = (
 				en,
 				Base,
+				he,
 			);
 			mainGroup = 0BD758B31950F91B00CF0D85;
 			productRefGroup = 0BD758BD1950F91B00CF0D85 /* Products */;
@@ -1351,7 +1350,6 @@
 				0BA1457A1997A4A60031716F /* received-sound.aif in Resources */,
 				0BADABCE1993000D007B4538 /* contact-eye.png in Resources */,
 				0B56F657197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
-				0BC6B6FE19E722100098D922 /* HeardStaging-Info.plist in Resources */,
 				0B969129198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
 				3CB58BF619E3ED65007B6B9C /* emoji-image-11.png in Resources */,
 				0B39AAEF19DA64D0009955B3 /* emoji-image-2@2x~iphone.png in Resources */,
@@ -1464,7 +1462,6 @@
 				0BA145791997A4A60031716F /* received-sound.aif in Resources */,
 				0BADABCD1993000D007B4538 /* contact-eye.png in Resources */,
 				0B56F656197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
-				0BC6B6FD19E722100098D922 /* HeardStaging-Info.plist in Resources */,
 				0B969128198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
 				3CB58BF519E3ED65007B6B9C /* emoji-image-11.png in Resources */,
 				0B39AAEE19DA64D0009955B3 /* emoji-image-2@2x~iphone.png in Resources */,
@@ -1671,7 +1668,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					/Users/bastien/Developer/iOS/FacebookSDK,
+					"$(PROJECT_DIR)/FacebookSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
@@ -1701,7 +1698,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					/Users/bastien/Developer/iOS/FacebookSDK,
+					"$(PROJECT_DIR)/FacebookSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
@@ -1798,12 +1795,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: LINCS";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					/Users/bastien/Developer/iOS/FacebookSDK,
+					"$(PROJECT_DIR)/FacebookSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
@@ -1815,6 +1812,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Heard/Flurry",
+					"$(PROJECT_DIR)/FacebookSDK.framework/Versions/A",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1827,12 +1825,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: LINCS";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					/Users/bastien/Developer/iOS/FacebookSDK,
+					"$(PROJECT_DIR)/FacebookSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
@@ -1844,6 +1842,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Heard/Flurry",
+					"$(PROJECT_DIR)/FacebookSDK.framework/Versions/A",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -100,6 +100,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *authRequestAllowButton;
 @property (strong, nonatomic) IBOutlet UIButton *authRequestSkipButton;
 // Tuto
+@property (nonatomic) BOOL isFirstOpening;
 @property (nonatomic) BOOL displayOpeningTuto;
 @property (nonatomic, strong) UIView *bottomTutoView;
 @property (nonatomic, strong) UILabel *bottomTutoViewLabel;
@@ -132,7 +133,8 @@
     self.retrieveNewContact = YES;
     self.authRequestView.hidden = YES;
     self.openingTutoView.hidden = YES;
-    self.displayOpeningTuto = [GeneralUtils isFirstOpening];
+    self.isFirstOpening = [GeneralUtils isFirstOpening];
+    self.displayOpeningTuto = self.isFirstOpening;
     
     self.openingTutoDescView.layer.cornerRadius = 5;
     
@@ -400,20 +402,20 @@
         self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
     }
     for (NSString *phoneNumber in self.addressBookFormattedContacts) {
-        Contact *contact = [self.addressBookFormattedContacts objectForKey:phoneNumber];
+        Contact *contact = (Contact *)[self.addressBookFormattedContacts objectForKey:phoneNumber];
         
         NSMutableArray *contactArray = [[NSMutableArray alloc] initWithObjects:contact.lastName && [contact.lastName length] > 0 ? contact.lastName : contact.firstName,
                                    contact.firstName && contact.lastName && [contact.lastName length] > 0 ? contact.firstName : @"",
                                    contact.phoneNumber,
                                    @"not selected", nil];
-        
-        NSString *key = [[contactArray[0] substringToIndex:1] uppercaseString];
-        
-        if ([self.indexedContacts objectForKey:key]) {
-            [[self.indexedContacts objectForKey:key] addObject:contactArray];
-        } else {
-            [self.indexedContacts setValue:[[NSMutableArray alloc] initWithObjects:contactArray, nil]
-                                        forKey:key];
+        if (((NSString *)contactArray[0]).length > 0) {
+            NSString *key = [(NSString *)[contactArray[0] substringToIndex:1] uppercaseString];
+            if ([self.indexedContacts objectForKey:key]) {
+                [[self.indexedContacts objectForKey:key] addObject:contactArray];
+            } else {
+                [self.indexedContacts setValue:[[NSMutableArray alloc] initWithObjects:contactArray, nil]
+                                            forKey:key];
+            }
         }
     }
         
@@ -1055,11 +1057,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)startedPlayingAudioMessagesOfView:(ContactView *)contactView
 {
     [self hideOpeningTuto];
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    if (![prefs objectForKey:kUserPhoneToEarPref] && !self.isUsingHeadSet && !self.isSignUp) {
-        [self tutoMessage:NSLocalizedStringFromTable(@"phone_to_ear_tuto",kStringFile, @"comment") withDuration:0 priority:NO];
-    }
     
     if ([self.mainPlayer isPlaying]) {
         [self endPlayerAtCompletion:NO];
@@ -1072,6 +1069,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.audioData error:nil];
     [self.mainPlayer prepareToPlay];
     [self addMessagesToLastMessagesPlayed:message];
+    
+    // tuto
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if (![prefs objectForKey:kUserPhoneToEarPref] && !self.isUsingHeadSet && !self.isFirstOpening && self.mainPlayer.duration > 2) {
+        [self tutoMessage:NSLocalizedStringFromTable(@"phone_to_ear_tuto",kStringFile, @"comment") withDuration:0 priority:NO];
+    }
     
     //Show message date
     self.playerLabel.hidden = NO;
@@ -1824,7 +1827,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)emojiDropped:(EmojiView *)emojiView atLocation:(CGPoint)location
 {
     ContactView *contactView = [self findContactViewAtLocation:location];
-    if (contactView && !CGRectContainsPoint(self.emojiScrollview.frame, location)) {
+    if (contactView && !CGRectContainsPoint(self.emojiContainer.frame, location)) {
         [contactView removeEmojiOverlay];
         NSString *soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",emojiView.identifier,emojiView.soundIndex];
         NSString *soundPath = [[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"];

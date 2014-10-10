@@ -180,6 +180,7 @@
             [FBSession.activeSession closeAndClearTokenInformation];
         }];
     } else {
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"facebook_error",kStringFile,@"comment") withTitle:@""];
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         [FBSession.activeSession closeAndClearTokenInformation];
     }

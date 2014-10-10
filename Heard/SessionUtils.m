@@ -52,7 +52,10 @@
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    return [[prefs objectForKey:USER_ID_PREF] integerValue];
+    if ([prefs objectForKey:USER_ID_PREF])
+        return [[prefs objectForKey:USER_ID_PREF] integerValue];
+    else
+        return 0;
 }
 
 // Get user phone number

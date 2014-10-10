@@ -36,7 +36,7 @@
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
     NSString *firstName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
     NSString *lastName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
-    if (!firstName && !lastName) {
+    if ((!firstName || firstName.length == 0) && (!lastName || lastName.length == 0) ) {
         return nil;
     }
     ABRecordID recordID = ABRecordGetRecordID(person);

@@ -194,7 +194,6 @@
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
     
-    addressBookFormattedContacts = [[NSMutableDictionary alloc] init];
     NSNumber *defaultCountryCode = [phoneUtil getCountryCodeForRegion:[phoneUtil countryCodeByCarrier]];
     
     for (CFIndex i = 0 ; i < peopleCount; i++) {
@@ -219,7 +218,7 @@
                     }
                     // Stock potential contact
                     [addressBookFormattedContacts setObject:contact forKey:phoneNumber];
-                }
+                } 
                 
                 //Store country codes found in international numbers
                 if (nbPhoneNumber.countryCode != defaultCountryCode) {
