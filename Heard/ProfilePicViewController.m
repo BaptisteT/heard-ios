@@ -18,6 +18,7 @@
 #import "SessionUtils.h"
 #import "TrackingUtils.h"
 #import "RequestUserInfoViewController.h"
+#import "DashboardViewController.h"
 
 #define ACTION_SHEET_OPTION_1 NSLocalizedStringFromTable(@"camera_button_title",kStringFile,@"comment")
 #define ACTION_SHEET_OPTION_2 NSLocalizedStringFromTable(@"library_button_title",kStringFile,@"comment")
@@ -229,6 +230,10 @@
         ((RequestUserInfoViewController *) [segue destinationViewController]).phoneNumber = self.phoneNumber;
         ((RequestUserInfoViewController *) [segue destinationViewController]).smsCode = self.smsCode;
         ((RequestUserInfoViewController *) [segue destinationViewController]).profilePicture = self.profilePictureImageView.image;
+    }
+    
+    if ([segueName isEqualToString: @"Dashboard Push Segue From Profile Picture"]) {
+        ((DashboardViewController *) [segue destinationViewController]).isSignUp = YES;
     }
 }
 
