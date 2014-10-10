@@ -1827,7 +1827,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)emojiDropped:(EmojiView *)emojiView atLocation:(CGPoint)location
 {
     ContactView *contactView = [self findContactViewAtLocation:location];
-    if (contactView && !CGRectContainsPoint(self.emojiScrollview.frame, location)) {
+    if (contactView && !CGRectContainsPoint(self.emojiContainer.frame, location)) {
         [contactView removeEmojiOverlay];
         NSString *soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",emojiView.identifier,emojiView.soundIndex];
         NSString *soundPath = [[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"];
