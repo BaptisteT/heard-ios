@@ -238,8 +238,6 @@
 		0BC6B6F219E624150098D922 /* ProfilePicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC6B6F019E624150098D922 /* ProfilePicViewController.m */; };
 		0BC6B6F419E628A30098D922 /* facebook-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6F319E628A30098D922 /* facebook-logo.png */; };
 		0BC6B6F519E628A30098D922 /* facebook-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6F319E628A30098D922 /* facebook-logo.png */; };
-		0BC6B6FD19E722100098D922 /* HeardStaging-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6FC19E722100098D922 /* HeardStaging-Info.plist */; };
-		0BC6B6FE19E722100098D922 /* HeardStaging-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6FC19E722100098D922 /* HeardStaging-Info.plist */; };
 		0BC6B70019E73FEF0098D922 /* blue-next-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6FF19E73FEF0098D922 /* blue-next-button.png */; };
 		0BC6B70119E73FEF0098D922 /* blue-next-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6FF19E73FEF0098D922 /* blue-next-button.png */; };
 		0BD758C01950F91B00CF0D85 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BD758BF1950F91B00CF0D85 /* Foundation.framework */; };
@@ -371,8 +369,8 @@
 		3CB753D419B8908F00E4C75F /* CameraUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB753D319B8908F00E4C75F /* CameraUtils.m */; };
 		3CB753D519B8909A00E4C75F /* CameraUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB753D319B8908F00E4C75F /* CameraUtils.m */; };
 		3CB8B7F5195453E50090D657 /* ContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactView.m */; };
-		3CDC760A19E7DE0E0041E6E4 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CDC760919E7DE0E0041E6E4 /* FacebookSDK.framework */; };
-		3CDC760B19E7DE0E0041E6E4 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CDC760919E7DE0E0041E6E4 /* FacebookSDK.framework */; };
+		3CDC78A519E842940041E6E4 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CDC78A419E842940041E6E4 /* FacebookSDK.framework */; };
+		3CDC78A619E842940041E6E4 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CDC78A419E842940041E6E4 /* FacebookSDK.framework */; };
 		3CEF9EE719DA2F140045D78D /* EmojiView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE619DA2F140045D78D /* EmojiView.m */; };
 		3CEF9EE819DA2F140045D78D /* EmojiView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE619DA2F140045D78D /* EmojiView.m */; };
 		3CEF9EEA19DA40380045D78D /* emoji-image-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE919DA40380045D78D /* emoji-image-1.png */; };
@@ -653,7 +651,7 @@
 		3CB8B7EB195346620090D657 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		3CB8B7F3195453E50090D657 /* ContactView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactView.h; sourceTree = "<group>"; };
 		3CB8B7F4195453E50090D657 /* ContactView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactView.m; sourceTree = "<group>"; };
-		3CDC760919E7DE0E0041E6E4 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		3CDC78A419E842940041E6E4 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		3CEF9EE519DA2F140045D78D /* EmojiView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmojiView.h; sourceTree = "<group>"; };
 		3CEF9EE619DA2F140045D78D /* EmojiView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmojiView.m; sourceTree = "<group>"; };
 		3CEF9EE919DA40380045D78D /* emoji-image-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji-image-1.png"; sourceTree = "<group>"; };
@@ -681,8 +679,8 @@
 				0B72EEDE196C672F00AC5A01 /* MessageUI.framework in Frameworks */,
 				0B72EEDF196C672F00AC5A01 /* AddressBook.framework in Frameworks */,
 				0B72EEE0196C672F00AC5A01 /* AddressBookUI.framework in Frameworks */,
+				3CDC78A619E842940041E6E4 /* FacebookSDK.framework in Frameworks */,
 				0B72EEE1196C672F00AC5A01 /* CoreGraphics.framework in Frameworks */,
-				3CDC760B19E7DE0E0041E6E4 /* FacebookSDK.framework in Frameworks */,
 				0B72EEE2196C672F00AC5A01 /* UIKit.framework in Frameworks */,
 				0B72EEE3196C672F00AC5A01 /* Foundation.framework in Frameworks */,
 			);
@@ -700,11 +698,11 @@
 				3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */,
 				0BAF4FE219560AEE00838D7D /* MessageUI.framework in Frameworks */,
 				0B58BAFD1954B47700E9FF70 /* AddressBook.framework in Frameworks */,
+				3CDC78A519E842940041E6E4 /* FacebookSDK.framework in Frameworks */,
 				0B58BAFE1954B47700E9FF70 /* AddressBookUI.framework in Frameworks */,
 				0BD758C21950F91B00CF0D85 /* CoreGraphics.framework in Frameworks */,
 				0BD758C41950F91B00CF0D85 /* UIKit.framework in Frameworks */,
 				0BD758C01950F91B00CF0D85 /* Foundation.framework in Frameworks */,
-				3CDC760A19E7DE0E0041E6E4 /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -942,7 +940,7 @@
 		0BD758BE1950F91B00CF0D85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3CDC760919E7DE0E0041E6E4 /* FacebookSDK.framework */,
+				3CDC78A419E842940041E6E4 /* FacebookSDK.framework */,
 				0B9EC33C19C9254D00F520B8 /* Security.framework */,
 				0B9EC33919C9253400F520B8 /* SystemConfiguration.framework */,
 				0B56F64B19757D5900DB6FF1 /* CoreData.framework */,
@@ -1242,6 +1240,7 @@
 			knownRegions = (
 				en,
 				Base,
+				he,
 			);
 			mainGroup = 0BD758B31950F91B00CF0D85;
 			productRefGroup = 0BD758BD1950F91B00CF0D85 /* Products */;
@@ -1351,7 +1350,6 @@
 				0BA1457A1997A4A60031716F /* received-sound.aif in Resources */,
 				0BADABCE1993000D007B4538 /* contact-eye.png in Resources */,
 				0B56F657197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
-				0BC6B6FE19E722100098D922 /* HeardStaging-Info.plist in Resources */,
 				0B969129198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
 				3CB58BF619E3ED65007B6B9C /* emoji-image-11.png in Resources */,
 				0B39AAEF19DA64D0009955B3 /* emoji-image-2@2x~iphone.png in Resources */,
@@ -1464,7 +1462,6 @@
 				0BA145791997A4A60031716F /* received-sound.aif in Resources */,
 				0BADABCD1993000D007B4538 /* contact-eye.png in Resources */,
 				0B56F656197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
-				0BC6B6FD19E722100098D922 /* HeardStaging-Info.plist in Resources */,
 				0B969128198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
 				3CB58BF519E3ED65007B6B9C /* emoji-image-11.png in Resources */,
 				0B39AAEE19DA64D0009955B3 /* emoji-image-2@2x~iphone.png in Resources */,
@@ -1672,6 +1669,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					/Users/bastien/Developer/iOS/FacebookSDK,
+					"$(PROJECT_DIR)/FacebookSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
@@ -1702,6 +1700,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					/Users/bastien/Developer/iOS/FacebookSDK,
+					"$(PROJECT_DIR)/FacebookSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
@@ -1804,6 +1803,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					/Users/bastien/Developer/iOS/FacebookSDK,
+					"$(PROJECT_DIR)/FacebookSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
@@ -1815,6 +1815,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Heard/Flurry",
+					"$(PROJECT_DIR)/FacebookSDK.framework/Versions/A",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1833,6 +1834,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					/Users/bastien/Developer/iOS/FacebookSDK,
+					"$(PROJECT_DIR)/FacebookSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Heard/Heard-Prefix.pch";
@@ -1844,6 +1846,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Heard/Flurry",
+					"$(PROJECT_DIR)/FacebookSDK.framework/Versions/A",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
