@@ -87,8 +87,6 @@
     }
     
     // Display loading
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    
     [FBSession openActiveSessionWithReadPermissions:@[@"public_profile"]
                                        allowLoginUI:YES
                                   completionHandler:
@@ -168,20 +166,16 @@
         // Request information about the user
         [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
             if (!error) {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                
                 //Get info
                 [self signupUserWithFistName:[result objectForKey:@"first_name"] lastName:[result objectForKey:@"last_name"] fbId:[result objectForKey:@"id"] gender:[result objectForKey:@"gender"] locale:[result objectForKey:@"locale"]];
             } else {
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
                 [GeneralUtils showMessage:NSLocalizedStringFromTable(@"facebook_error",kStringFile,@"comment") withTitle:@""];
             }
             
             [FBSession.activeSession closeAndClearTokenInformation];
         }];
     } else {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"facebook_error",kStringFile,@"comment") withTitle:@""];
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        //BB: do not add alert, success flow goes through here.
         [FBSession.activeSession closeAndClearTokenInformation];
     }
 }
