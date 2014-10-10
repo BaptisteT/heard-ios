@@ -238,8 +238,6 @@
 		0BC6B6F219E624150098D922 /* ProfilePicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC6B6F019E624150098D922 /* ProfilePicViewController.m */; };
 		0BC6B6F419E628A30098D922 /* facebook-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6F319E628A30098D922 /* facebook-logo.png */; };
 		0BC6B6F519E628A30098D922 /* facebook-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6F319E628A30098D922 /* facebook-logo.png */; };
-		0BC6B6FA19E6F9980098D922 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BC6B6F919E6F9980098D922 /* FacebookSDK.framework */; };
-		0BC6B6FB19E6F9980098D922 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BC6B6F919E6F9980098D922 /* FacebookSDK.framework */; };
 		0BC6B6FD19E722100098D922 /* HeardStaging-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6FC19E722100098D922 /* HeardStaging-Info.plist */; };
 		0BC6B6FE19E722100098D922 /* HeardStaging-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6FC19E722100098D922 /* HeardStaging-Info.plist */; };
 		0BC6B70019E73FEF0098D922 /* blue-next-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6FF19E73FEF0098D922 /* blue-next-button.png */; };
@@ -509,7 +507,6 @@
 		0BC6B6EF19E624150098D922 /* ProfilePicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfilePicViewController.h; sourceTree = "<group>"; };
 		0BC6B6F019E624150098D922 /* ProfilePicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfilePicViewController.m; sourceTree = "<group>"; };
 		0BC6B6F319E628A30098D922 /* facebook-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-logo.png"; sourceTree = "<group>"; };
-		0BC6B6F919E6F9980098D922 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		0BC6B6FC19E722100098D922 /* HeardStaging-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "HeardStaging-Info.plist"; sourceTree = SOURCE_ROOT; };
 		0BC6B6FF19E73FEF0098D922 /* blue-next-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blue-next-button.png"; sourceTree = "<group>"; };
 		0BD758BC1950F91B00CF0D85 /* Waved.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Waved.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -684,7 +681,6 @@
 				0B72EEDE196C672F00AC5A01 /* MessageUI.framework in Frameworks */,
 				0B72EEDF196C672F00AC5A01 /* AddressBook.framework in Frameworks */,
 				0B72EEE0196C672F00AC5A01 /* AddressBookUI.framework in Frameworks */,
-				0BC6B6FB19E6F9980098D922 /* FacebookSDK.framework in Frameworks */,
 				0B72EEE1196C672F00AC5A01 /* CoreGraphics.framework in Frameworks */,
 				3CDC760B19E7DE0E0041E6E4 /* FacebookSDK.framework in Frameworks */,
 				0B72EEE2196C672F00AC5A01 /* UIKit.framework in Frameworks */,
@@ -704,7 +700,6 @@
 				3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */,
 				0BAF4FE219560AEE00838D7D /* MessageUI.framework in Frameworks */,
 				0B58BAFD1954B47700E9FF70 /* AddressBook.framework in Frameworks */,
-				0BC6B6FA19E6F9980098D922 /* FacebookSDK.framework in Frameworks */,
 				0B58BAFE1954B47700E9FF70 /* AddressBookUI.framework in Frameworks */,
 				0BD758C21950F91B00CF0D85 /* CoreGraphics.framework in Frameworks */,
 				0BD758C41950F91B00CF0D85 /* UIKit.framework in Frameworks */,
@@ -947,7 +942,6 @@
 		0BD758BE1950F91B00CF0D85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0BC6B6F919E6F9980098D922 /* FacebookSDK.framework */,
 				3CDC760919E7DE0E0041E6E4 /* FacebookSDK.framework */,
 				0B9EC33C19C9254D00F520B8 /* Security.framework */,
 				0B9EC33919C9253400F520B8 /* SystemConfiguration.framework */,
@@ -1237,7 +1231,7 @@
 						DevelopmentTeam = 9688VHJV6U;
 					};
 					0BD758BB1950F91B00CF0D85 = {
-						DevelopmentTeam = 9688VHJV6U;
+						DevelopmentTeam = Y7RQR83KUE;
 					};
 				};
 			};
@@ -1804,8 +1798,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: LINCS";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1833,8 +1827,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: LINCS";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

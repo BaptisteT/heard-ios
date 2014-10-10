@@ -402,20 +402,20 @@
         self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
     }
     for (NSString *phoneNumber in self.addressBookFormattedContacts) {
-        Contact *contact = [self.addressBookFormattedContacts objectForKey:phoneNumber];
+        Contact *contact = (Contact *)[self.addressBookFormattedContacts objectForKey:phoneNumber];
         
         NSMutableArray *contactArray = [[NSMutableArray alloc] initWithObjects:contact.lastName && [contact.lastName length] > 0 ? contact.lastName : contact.firstName,
                                    contact.firstName && contact.lastName && [contact.lastName length] > 0 ? contact.firstName : @"",
                                    contact.phoneNumber,
                                    @"not selected", nil];
-        
-        NSString *key = [[contactArray[0] substringToIndex:1] uppercaseString];
-        
-        if ([self.indexedContacts objectForKey:key]) {
-            [[self.indexedContacts objectForKey:key] addObject:contactArray];
-        } else {
-            [self.indexedContacts setValue:[[NSMutableArray alloc] initWithObjects:contactArray, nil]
-                                        forKey:key];
+        if (((NSString *)contactArray[0]).length > 0) {
+            NSString *key = [(NSString *)[contactArray[0] substringToIndex:1] uppercaseString];
+            if ([self.indexedContacts objectForKey:key]) {
+                [[self.indexedContacts objectForKey:key] addObject:contactArray];
+            } else {
+                [self.indexedContacts setValue:[[NSMutableArray alloc] initWithObjects:contactArray, nil]
+                                            forKey:key];
+            }
         }
     }
         
