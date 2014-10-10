@@ -16,8 +16,6 @@
 #import "NBPhoneNumberUtil.h"
 #import "NBPhoneNumber.h"
 #import "Constants.h"
-#import <AudioToolbox/AudioToolbox.h>
-#import <AVFoundation/AVFoundation.h>
 
 #define BORDER_SIZE 0.5
 #define DEFAULT_COUNTRY @"USA"
@@ -60,9 +58,6 @@
         UIColor *color = [UIColor lightTextColor];
         self.phoneTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.phoneTextField.placeholder attributes:@{NSForegroundColorAttributeName: color}];
     }
-    
-    [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated

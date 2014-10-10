@@ -138,7 +138,7 @@
     
     //Perms
     self.authRequestAllowButton.clipsToBounds = YES;
-    self.authRequestAllowButton.layer.cornerRadius = 5;
+    self.authRequestAllowButton.layer.cornerRadius = self.authRequestAllowButton.bounds.size.height/2;
     
     [GeneralUtils addBottomBorder:self.topBarBackground borderSize:0.5];
     
@@ -1674,14 +1674,17 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     [self.authRequestSkipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
     [self.authRequestAllowButton setTitle:NSLocalizedStringFromTable(@"contact_access_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
+    
+    [self.view bringSubviewToFront:self.authRequestView];
     self.authRequestView.hidden = NO;
 }
 
 - (IBAction)authRequestAllowButtonClicked:(id)sender
 {
     if ([self.authRequestAllowButton.titleLabel.text isEqualToString:NSLocalizedStringFromTable(@"contact_access_button_title", kStringFile, @"comment")]) {
-        [self requestContactAuth];
-        [self hideAuthRequestView];
+        ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
+            [self performSelectorOnMainThread:@selector(contactAuthRequested:) withObject:[NSNumber numberWithBool:granted] waitUntilDone:YES];
+        });
     }
 }
 
@@ -1694,13 +1697,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.authRequestView.hidden = YES;
 }
 
-// Display address book access request
-- (void)requestContactAuth {
-    ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
-        if (granted) {
-            [self matchPhoneContactsWithHeardUsers];
-        }
-    });
+- (void)contactAuthRequested:(NSNumber *)granted
+{
+    [self hideAuthRequestView];
+    
+    if ([granted boolValue]) {
+        [self matchPhoneContactsWithHeardUsers];
+    }
 }
 
 // -------------------------------------------
@@ -1776,7 +1779,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         if ([GeneralUtils isFirstClickOnEmojiButton]) {
             [self.contactScrollView bringSubviewToFront:self.openingTutoView];
             [self.contactScrollView bringSubviewToFront:self.emojiContainer];
-            [self displayOpeningTutoWithActionLabel:@"Drag to send" forOrigin:-100];
+            [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"emoji_tutorial",kStringFile,@"comment") forOrigin:-100];
         }
         [self.emojiContainer.layer removeAllAnimations];
         

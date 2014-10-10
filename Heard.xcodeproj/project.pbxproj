@@ -177,14 +177,6 @@
 		0B9051BD19771B96001E2ED5 /* checkbox@iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9051B619771B96001E2ED5 /* checkbox@iphone.png */; };
 		0B9051BE19771B96001E2ED5 /* checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9051B719771B96001E2ED5 /* checkbox.png */; };
 		0B9051BF19771B96001E2ED5 /* checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B9051B719771B96001E2ED5 /* checkbox.png */; };
-		0B90E67019C7822E004A8F16 /* notif-perm.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B90E66C19C7822E004A8F16 /* notif-perm.png */; };
-		0B90E67119C7822E004A8F16 /* notif-perm.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B90E66C19C7822E004A8F16 /* notif-perm.png */; };
-		0B90E67219C7822E004A8F16 /* contact-perm.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B90E66D19C7822E004A8F16 /* contact-perm.png */; };
-		0B90E67319C7822E004A8F16 /* contact-perm.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B90E66D19C7822E004A8F16 /* contact-perm.png */; };
-		0B90E67419C7822E004A8F16 /* contact-perm@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B90E66E19C7822E004A8F16 /* contact-perm@2x~iphone.png */; };
-		0B90E67519C7822E004A8F16 /* contact-perm@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B90E66E19C7822E004A8F16 /* contact-perm@2x~iphone.png */; };
-		0B90E67619C7822E004A8F16 /* notif-perm@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B90E66F19C7822E004A8F16 /* notif-perm@2x~iphone.png */; };
-		0B90E67719C7822E004A8F16 /* notif-perm@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B90E66F19C7822E004A8F16 /* notif-perm@2x~iphone.png */; };
 		0B969125198997620048E4BB /* EditContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B969124198997620048E4BB /* EditContactsViewController.m */; };
 		0B969126198997620048E4BB /* EditContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B969124198997620048E4BB /* EditContactsViewController.m */; };
 		0B969128198997700048E4BB /* EditContactsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0B969127198997700048E4BB /* EditContactsTableViewCell.xib */; };
@@ -215,10 +207,6 @@
 		0BA145821997A4A60031716F /* typing-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145761997A4A60031716F /* typing-sound.aif */; };
 		0BA145841997A5620031716F /* agogo.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145831997A5620031716F /* agogo.aif */; };
 		0BA145851997A5620031716F /* agogo.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145831997A5620031716F /* agogo.aif */; };
-		0BA1545919D48B5300246962 /* heard-logo-transparent.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BA1545719D48B5300246962 /* heard-logo-transparent.png */; };
-		0BA1545A19D48B5300246962 /* heard-logo-transparent.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BA1545719D48B5300246962 /* heard-logo-transparent.png */; };
-		0BA1545B19D48B5300246962 /* heard-logo-transparent@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BA1545819D48B5300246962 /* heard-logo-transparent@2x~iphone.png */; };
-		0BA1545C19D48B5300246962 /* heard-logo-transparent@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BA1545819D48B5300246962 /* heard-logo-transparent@2x~iphone.png */; };
 		0BADABC519930005007B4538 /* contact-sent.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BADABC319930005007B4538 /* contact-sent.png */; };
 		0BADABC619930005007B4538 /* contact-sent.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BADABC319930005007B4538 /* contact-sent.png */; };
 		0BADABCB1993000D007B4538 /* contact-blue-eye.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BADABC91993000D007B4538 /* contact-blue-eye.png */; };
@@ -244,6 +232,8 @@
 		0BB0E8FB195B449A00C94AC0 /* UIImage+MPImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8E9195B449A00C94AC0 /* UIImage+MPImageEffects.m */; };
 		0BB0E8FC195B449A00C94AC0 /* UIView+MPSnapshotImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8EB195B449A00C94AC0 /* UIView+MPSnapshotImage.m */; };
 		0BB0E8FF195B44C900C94AC0 /* TrackingUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB0E8FE195B44C900C94AC0 /* TrackingUtils.m */; };
+		0BB26AB019E78293008552C9 /* contact-perm.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BB26AAF19E78293008552C9 /* contact-perm.png */; };
+		0BB26AB119E78293008552C9 /* contact-perm.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BB26AAF19E78293008552C9 /* contact-perm.png */; };
 		0BC6B6F119E624150098D922 /* ProfilePicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC6B6F019E624150098D922 /* ProfilePicViewController.m */; };
 		0BC6B6F219E624150098D922 /* ProfilePicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC6B6F019E624150098D922 /* ProfilePicViewController.m */; };
 		0BC6B6F419E628A30098D922 /* facebook-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 0BC6B6F319E628A30098D922 /* facebook-logo.png */; };
@@ -460,10 +450,6 @@
 		0B9051B519771B96001E2ED5 /* checkbox-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox-selected.png"; sourceTree = "<group>"; };
 		0B9051B619771B96001E2ED5 /* checkbox@iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox@iphone.png"; sourceTree = "<group>"; };
 		0B9051B719771B96001E2ED5 /* checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkbox.png; sourceTree = "<group>"; };
-		0B90E66C19C7822E004A8F16 /* notif-perm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notif-perm.png"; sourceTree = "<group>"; };
-		0B90E66D19C7822E004A8F16 /* contact-perm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-perm.png"; sourceTree = "<group>"; };
-		0B90E66E19C7822E004A8F16 /* contact-perm@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-perm@2x~iphone.png"; sourceTree = "<group>"; };
-		0B90E66F19C7822E004A8F16 /* notif-perm@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notif-perm@2x~iphone.png"; sourceTree = "<group>"; };
 		0B969123198997620048E4BB /* EditContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditContactsViewController.h; sourceTree = "<group>"; };
 		0B969124198997620048E4BB /* EditContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditContactsViewController.m; sourceTree = "<group>"; };
 		0B969127198997700048E4BB /* EditContactsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditContactsTableViewCell.xib; sourceTree = "<group>"; };
@@ -482,8 +468,6 @@
 		0BA145751997A4A60031716F /* start-record-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "start-record-sound.aif"; sourceTree = "<group>"; };
 		0BA145761997A4A60031716F /* typing-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "typing-sound.aif"; sourceTree = "<group>"; };
 		0BA145831997A5620031716F /* agogo.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = agogo.aif; sourceTree = "<group>"; };
-		0BA1545719D48B5300246962 /* heard-logo-transparent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-transparent.png"; sourceTree = "<group>"; };
-		0BA1545819D48B5300246962 /* heard-logo-transparent@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heard-logo-transparent@2x~iphone.png"; sourceTree = "<group>"; };
 		0BADABC319930005007B4538 /* contact-sent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-sent.png"; sourceTree = "<group>"; };
 		0BADABC91993000D007B4538 /* contact-blue-eye.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-blue-eye.png"; sourceTree = "<group>"; };
 		0BADABCA1993000D007B4538 /* contact-eye.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-eye.png"; sourceTree = "<group>"; };
@@ -519,6 +503,7 @@
 		0BB0E8EB195B449A00C94AC0 /* UIView+MPSnapshotImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MPSnapshotImage.m"; sourceTree = "<group>"; };
 		0BB0E8FD195B44C900C94AC0 /* TrackingUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackingUtils.h; sourceTree = "<group>"; };
 		0BB0E8FE195B44C900C94AC0 /* TrackingUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackingUtils.m; sourceTree = "<group>"; };
+		0BB26AAF19E78293008552C9 /* contact-perm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contact-perm.png"; sourceTree = "<group>"; };
 		0BC6B6EF19E624150098D922 /* ProfilePicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfilePicViewController.h; sourceTree = "<group>"; };
 		0BC6B6F019E624150098D922 /* ProfilePicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfilePicViewController.m; sourceTree = "<group>"; };
 		0BC6B6F319E628A30098D922 /* facebook-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook-logo.png"; sourceTree = "<group>"; };
@@ -800,6 +785,7 @@
 		0BA1455E199786A30031716F /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				0BB26AAF19E78293008552C9 /* contact-perm.png */,
 				3CB58BF119E3ED65007B6B9C /* emoji-image-11.png */,
 				3CB58BF219E3ED65007B6B9C /* emoji-image-10.png */,
 				3CB58BF319E3ED65007B6B9C /* emoji-image-8.png */,
@@ -836,14 +822,8 @@
 				0B39AAE519DA64D0009955B3 /* emoji-image-6@2x~iphone.png */,
 				0B39AAE619DA64D0009955B3 /* emoji-image-7.png */,
 				0B39AAE719DA64D0009955B3 /* emoji-image-7@2x~iphone.png */,
-				0BA1545719D48B5300246962 /* heard-logo-transparent.png */,
-				0BA1545819D48B5300246962 /* heard-logo-transparent@2x~iphone.png */,
 				0B9EC32D19C8F5EB00F520B8 /* tuto-arrow.png */,
 				0B9EC32E19C8F5EB00F520B8 /* tuto-arrow@2x~iphone.png */,
-				0B90E66C19C7822E004A8F16 /* notif-perm.png */,
-				0B90E66D19C7822E004A8F16 /* contact-perm.png */,
-				0B90E66E19C7822E004A8F16 /* contact-perm@2x~iphone.png */,
-				0B90E66F19C7822E004A8F16 /* notif-perm@2x~iphone.png */,
 				0B9051B419771B96001E2ED5 /* checkbox-selected@2x~iphone.png */,
 				0B9051B519771B96001E2ED5 /* checkbox-selected.png */,
 				0B9051B619771B96001E2ED5 /* checkbox@iphone.png */,
@@ -1282,15 +1262,12 @@
 				3CB58BF019E3EC56007B6B9C /* emoji-image-5.png in Resources */,
 				3CA4922C19E312E000110DEF /* emoji-sound-1.2.m4a in Resources */,
 				3CA4927A19E33FFB00110DEF /* emoji-sound-10.2.m4a in Resources */,
-				0B02D37B19D0CFD50010C58D /* invite-button.png in Resources */,
-				3CA4928619E341EE00110DEF /* emoji-image-9.png in Resources */,
 				3CA4924E19E3294200110DEF /* emoji-sound-5.2.m4a in Resources */,
 				0B39AB0319DA64D0009955B3 /* emoji-image-7@2x~iphone.png in Resources */,
 				3CEF9EFB19DB1BD30045D78D /* emoji-sound-1.1.m4a in Resources */,
 				3CA16D2A19AE407200C1F2A5 /* english_strings.strings in Resources */,
 				0B6BAB1519E4736000677F46 /* light-blue-bar.png in Resources */,
 				3CA4924419E316BF00110DEF /* emoji-sound-4.3.m4a in Resources */,
-				0BA1545A19D48B5300246962 /* heard-logo-transparent.png in Resources */,
 				0BA1457C1997A4A60031716F /* sent-sound.aif in Resources */,
 				3CA4929219E3442A00110DEF /* emoji-sound-9.1.m4a in Resources */,
 				0B72EEE5196C672F00AC5A01 /* Images.xcassets in Resources */,
@@ -1313,23 +1290,19 @@
 				0B72EEF2196C672F00AC5A01 /* InfoPlist.strings in Resources */,
 				0B72EEF3196C672F00AC5A01 /* PhoneNumberMetaDataForTesting.json in Resources */,
 				0B16B5FE19E47F24009C8D90 /* next-button.png in Resources */,
-				3CA4926E19E33E3400110DEF /* emoji-image-8.png in Resources */,
 				0B39AAF119DA64D0009955B3 /* emoji-image-3.png in Resources */,
 				0B72EEF4196C672F00AC5A01 /* unknown-user.png in Resources */,
-				0BA1545C19D48B5300246962 /* heard-logo-transparent@2x~iphone.png in Resources */,
 				3CA4925319E329AE00110DEF /* emoji-sound-3.1.m4a in Resources */,
 				0B39AAF519DA64D0009955B3 /* emoji-image-4.png in Resources */,
 				0BC6B6F519E628A30098D922 /* facebook-logo.png in Resources */,
 				0B16B60A19E4A336009C8D90 /* title-logo.png in Resources */,
 				3CA16D2D19AE42CE00C1F2A5 /* french_strings.strings in Resources */,
-				3CA4929519E34DAB00110DEF /* emoji-image-5.png in Resources */,
 				0BC6B70119E73FEF0098D922 /* blue-next-button.png in Resources */,
 				0B16B60419E48B5E009C8D90 /* back-button.png in Resources */,
 				0B16B63D19E4BD37009C8D90 /* emoji-button.png in Resources */,
 				3CA4923519E3136F00110DEF /* emoji-sound-2.2.m4a in Resources */,
 				3CEF9EF919DB1BD30045D78D /* emoji-sound-6.1.m4a in Resources */,
 				0B39AAF319DA64D0009955B3 /* emoji-image-3@2x~iphone.png in Resources */,
-				0B90E67519C7822E004A8F16 /* contact-perm@2x~iphone.png in Resources */,
 				3CA4924719E3171D00110DEF /* emoji-sound-3.3.m4a in Resources */,
 				0B9051BB19771B96001E2ED5 /* checkbox-selected.png in Resources */,
 				0B16B60119E48172009C8D90 /* cancel-button.png in Resources */,
@@ -1375,12 +1348,9 @@
 				0BA145801997A4A60031716F /* start-record-sound.aif in Resources */,
 				0B9EC33019C8F5EB00F520B8 /* tuto-arrow.png in Resources */,
 				0BA145781997A4A60031716F /* end-record-sound.aif in Resources */,
-				0B90E67719C7822E004A8F16 /* notif-perm@2x~iphone.png in Resources */,
 				0BA1457A1997A4A60031716F /* received-sound.aif in Resources */,
-				0B90E67119C7822E004A8F16 /* notif-perm.png in Resources */,
 				0BADABCE1993000D007B4538 /* contact-eye.png in Resources */,
 				0B56F657197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
-				0B90E67319C7822E004A8F16 /* contact-perm.png in Resources */,
 				0BC6B6FE19E722100098D922 /* HeardStaging-Info.plist in Resources */,
 				0B969129198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
 				3CB58BF619E3ED65007B6B9C /* emoji-image-11.png in Resources */,
@@ -1391,8 +1361,8 @@
 				0B16B64119E4CC1E009C8D90 /* invite-pause.png in Resources */,
 				0B6BAB1119E46EE200677F46 /* heard-logo-120.png in Resources */,
 				3CA4928A19E342F200110DEF /* emoji-sound-9.3.m4a in Resources */,
+				0BB26AB119E78293008552C9 /* contact-perm.png in Resources */,
 				3CB58BFC19E3ED65007B6B9C /* emoji-image-9.png in Resources */,
-				0BA1545419D48A9F00246962 /* heard-logo-80.png in Resources */,
 				0B16B60719E48C0C009C8D90 /* blue-back-button.png in Resources */,
 				3CEF9EFD19DB1BD30045D78D /* emoji-sound-7.1.m4a in Resources */,
 			);
@@ -1405,15 +1375,12 @@
 				3CB58BEF19E3EC56007B6B9C /* emoji-image-5.png in Resources */,
 				3CA4922B19E312E000110DEF /* emoji-sound-1.2.m4a in Resources */,
 				3CA4927919E33FFB00110DEF /* emoji-sound-10.2.m4a in Resources */,
-				0B02D37A19D0CFD50010C58D /* invite-button.png in Resources */,
-				3CA4928519E341EE00110DEF /* emoji-image-9.png in Resources */,
 				3CA4924D19E3294200110DEF /* emoji-sound-5.2.m4a in Resources */,
 				0B39AB0219DA64D0009955B3 /* emoji-image-7@2x~iphone.png in Resources */,
 				3CEF9EFA19DB1BD30045D78D /* emoji-sound-1.1.m4a in Resources */,
 				3CA16D2919AE407200C1F2A5 /* english_strings.strings in Resources */,
 				0B6BAB1419E4736000677F46 /* light-blue-bar.png in Resources */,
 				3CA4924319E316BF00110DEF /* emoji-sound-4.3.m4a in Resources */,
-				0BA1545919D48B5300246962 /* heard-logo-transparent.png in Resources */,
 				0BA1457B1997A4A60031716F /* sent-sound.aif in Resources */,
 				3CA4929119E3442A00110DEF /* emoji-sound-9.1.m4a in Resources */,
 				0BD758D81950F91B00CF0D85 /* Images.xcassets in Resources */,
@@ -1436,23 +1403,19 @@
 				0BD758CA1950F91B00CF0D85 /* InfoPlist.strings in Resources */,
 				0BDB64CF19521A7C00223093 /* PhoneNumberMetaDataForTesting.json in Resources */,
 				0B16B5FD19E47F24009C8D90 /* next-button.png in Resources */,
-				3CA4926D19E33E3400110DEF /* emoji-image-8.png in Resources */,
 				0B39AAF019DA64D0009955B3 /* emoji-image-3.png in Resources */,
 				0BE55473195A340500CE4669 /* unknown-user.png in Resources */,
-				0BA1545B19D48B5300246962 /* heard-logo-transparent@2x~iphone.png in Resources */,
 				3CA4925219E329AE00110DEF /* emoji-sound-3.1.m4a in Resources */,
 				0B39AAF419DA64D0009955B3 /* emoji-image-4.png in Resources */,
 				0BC6B6F419E628A30098D922 /* facebook-logo.png in Resources */,
 				0B16B60919E4A336009C8D90 /* title-logo.png in Resources */,
 				3CA16D2C19AE42CE00C1F2A5 /* french_strings.strings in Resources */,
-				3CA4929419E34DAB00110DEF /* emoji-image-5.png in Resources */,
 				0BC6B70019E73FEF0098D922 /* blue-next-button.png in Resources */,
 				0B16B60319E48B5E009C8D90 /* back-button.png in Resources */,
 				0B16B63C19E4BD37009C8D90 /* emoji-button.png in Resources */,
 				3CA4923419E3136F00110DEF /* emoji-sound-2.2.m4a in Resources */,
 				3CEF9EF819DB1BD30045D78D /* emoji-sound-6.1.m4a in Resources */,
 				0B39AAF219DA64D0009955B3 /* emoji-image-3@2x~iphone.png in Resources */,
-				0B90E67419C7822E004A8F16 /* contact-perm@2x~iphone.png in Resources */,
 				3CA4924619E3171D00110DEF /* emoji-sound-3.3.m4a in Resources */,
 				0B9051BA19771B96001E2ED5 /* checkbox-selected.png in Resources */,
 				0B16B60019E48172009C8D90 /* cancel-button.png in Resources */,
@@ -1498,12 +1461,9 @@
 				0BA1457F1997A4A60031716F /* start-record-sound.aif in Resources */,
 				0B9EC32F19C8F5EB00F520B8 /* tuto-arrow.png in Resources */,
 				0BA145771997A4A60031716F /* end-record-sound.aif in Resources */,
-				0B90E67619C7822E004A8F16 /* notif-perm@2x~iphone.png in Resources */,
 				0BA145791997A4A60031716F /* received-sound.aif in Resources */,
-				0B90E67019C7822E004A8F16 /* notif-perm.png in Resources */,
 				0BADABCD1993000D007B4538 /* contact-eye.png in Resources */,
 				0B56F656197592FE00DB6FF1 /* PhoneCountries.txt in Resources */,
-				0B90E67219C7822E004A8F16 /* contact-perm.png in Resources */,
 				0BC6B6FD19E722100098D922 /* HeardStaging-Info.plist in Resources */,
 				0B969128198997700048E4BB /* EditContactsTableViewCell.xib in Resources */,
 				3CB58BF519E3ED65007B6B9C /* emoji-image-11.png in Resources */,
@@ -1514,8 +1474,8 @@
 				0B16B64019E4CC1E009C8D90 /* invite-pause.png in Resources */,
 				0B6BAB1019E46EE200677F46 /* heard-logo-120.png in Resources */,
 				3CA4928919E342F200110DEF /* emoji-sound-9.3.m4a in Resources */,
+				0BB26AB019E78293008552C9 /* contact-perm.png in Resources */,
 				3CB58BFB19E3ED65007B6B9C /* emoji-image-9.png in Resources */,
-				0BA1545319D48A9F00246962 /* heard-logo-80.png in Resources */,
 				0B16B60619E48C0C009C8D90 /* blue-back-button.png in Resources */,
 				3CEF9EFC19DB1BD30045D78D /* emoji-sound-7.1.m4a in Resources */,
 			);

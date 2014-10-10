@@ -53,8 +53,8 @@
 "recorder_label" = "Recording...";
 
 // Micro access
-"micro_access_error_title" = "Waved does not have access to your micro.";
-"micro_access_error_message" = "Please allow micro access in you settings.";
+"micro_access_error_title" = "No micro access.";
+"micro_access_error_message" = "Please allow micro access in settings.";
 
 // Contact access
 "contact_access_error_message" = "Waved uses your address book to sync your contacts. Please allow contact access in your settings.";
@@ -126,18 +126,19 @@
 "notify_me_button_title" = "NOTIFY ME";
 
 // Contact request
-"contact_permission_message" = "Waved automatically syncs with your Address Book.";
-"contact_permission_note" = "No contact information will be uploaded anywhere.";
+"contact_permission_message" = "Address Book Access";
+"contact_permission_note" = "We use it to find your friends and nothing else!";
 "contact_access_button_title" = "Find friends";
 "contact_pre_request_title" = "Let Waved access your contacts?";
 "contact_pre_request_message" = "This will allow to find your friends";
 "skip_button_title" = "Skip";
-"contact_access_button_title" = "ALLOW CONTACT ACCESS";
+"contact_access_button_title" = "Ok";
 
 // tuto
 "hold_tuto_action_label" = "Hold & Speak";
 "tap_tuto_action_label" = "Tap & Listen";
 "hold_longer_tuto_action_label" = "Hold longer to record";
+"emoji_tutorial" = "Drag Emojis & Send";
 
 //Alerts
 "shake_to_replay_tuto" = "Shake your phone to replay";
