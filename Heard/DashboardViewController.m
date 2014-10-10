@@ -113,7 +113,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *topBarBackground;
 // Emoji View
-@property (weak, nonatomic) IBOutlet UIScrollView *emojiContainer;
+@property (weak, nonatomic) IBOutlet UIView *emojiContainer;
+@property (weak, nonatomic) IBOutlet UIScrollView *emojiScrollview;
 @property (strong, nonatomic) NSData *emojiData;
 @property (weak, nonatomic) IBOutlet UIButton *emojiButton;
 
@@ -1786,7 +1787,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                                                self.emojiContainer.frame.size.height);
         self.emojiContainer.hidden = NO;
         [UIView animateWithDuration:0.3 animations:^{
-            [self.emojiContainer setContentOffset:CGPointMake(0,0)];
+            [self.emojiScrollview setContentOffset:CGPointMake(0,0)];
             self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
                                                    self.view.frame.size.height - self.emojiContainer.frame.size.height,
                                                    self.emojiContainer.frame.size.width,
@@ -1797,11 +1798,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)addEmojiViewsToContainer
 {
-    self.emojiContainer.contentSize = CGSizeMake(kEmojiSize * kNbEmojis + kEmojiMargin * (kNbEmojis+1), kEmojiSize + 2*kEmojiMargin);
+    self.emojiScrollview.contentSize = CGSizeMake(kEmojiSize * kNbEmojis + kEmojiMargin * (kNbEmojis+1), kEmojiSize + 2*kEmojiMargin);
     for(int i=1;i<=kNbEmojis;i++) {
         EmojiView *emojiView = [[EmojiView alloc] initWithIdentifier:i];
         emojiView.delegate = self;
-        [self.emojiContainer addSubview:emojiView];
+        [self.emojiScrollview addSubview:emojiView];
     }
 }
 
@@ -1820,7 +1821,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)emojiDropped:(EmojiView *)emojiView atLocation:(CGPoint)location
 {
     ContactView *contactView = [self findContactViewAtLocation:location];
-    if (contactView && !CGRectContainsPoint(self.emojiContainer.frame, location)) {
+    if (contactView && !CGRectContainsPoint(self.emojiScrollview.frame, location)) {
         [contactView removeEmojiOverlay];
         NSString *soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",emojiView.identifier,emojiView.soundIndex];
         NSString *soundPath = [[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"];

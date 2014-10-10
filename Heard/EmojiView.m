@@ -79,7 +79,7 @@
                                                  initialCenter.y + translation.y);
             
             // Update contact views animations
-            CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];
+            CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview.superview];
             [self.delegate updateEmojiLocation:mainViewCoordinate];
         }
     }
@@ -105,7 +105,7 @@
                                  completion:NULL];
             }
         } else {
-            CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];
+            CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview.superview];
             [self.delegate emojiDropped:self atLocation:mainViewCoordinate];
         }
     }

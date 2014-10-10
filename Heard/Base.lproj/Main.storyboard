@@ -1028,10 +1028,17 @@
                                     <action selector="menuButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="4ge-39-XlM"/>
                                 </connections>
                             </button>
-                            <scrollView hidden="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBT-dz-oUj">
+                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9c7-Db-Duq">
                                 <rect key="frame" x="0.0" y="488" width="320" height="80"/>
-                                <color key="backgroundColor" red="0.3921568627" green="0.78823529410000004" blue="0.95294117649999999" alpha="0.80000000000000004" colorSpace="deviceRGB"/>
-                            </scrollView>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="light-blue-bar.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ej0-rM-jvW">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+                                    </imageView>
+                                    <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBT-dz-oUj">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+                                    </scrollView>
+                                </subviews>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Egb-Gc-QPL">
                                 <rect key="frame" x="258" y="10" width="50" height="50"/>
                                 <constraints>
@@ -1076,7 +1083,8 @@
                         <outlet property="authRequestView" destination="rAY-VR-0Tm" id="KNt-GX-wkw"/>
                         <outlet property="contactScrollView" destination="a0u-JM-gz3" id="7ew-mq-LGy"/>
                         <outlet property="emojiButton" destination="Egb-Gc-QPL" id="rfW-Z9-bDq"/>
-                        <outlet property="emojiContainer" destination="dBT-dz-oUj" id="jdf-Ae-vn9"/>
+                        <outlet property="emojiContainer" destination="9c7-Db-Duq" id="eAA-lN-xCw"/>
+                        <outlet property="emojiScrollview" destination="dBT-dz-oUj" id="Lzh-Ht-8gh"/>
                         <outlet property="menuButton" destination="3eZ-vS-6nf" id="DVk-PZ-hkG"/>
                         <outlet property="openingTutoDescLabel" destination="ket-1Q-dAU" id="SV5-8Z-9bv"/>
                         <outlet property="openingTutoDescView" destination="Eiv-UN-wGe" id="Mw3-1P-14q"/>
