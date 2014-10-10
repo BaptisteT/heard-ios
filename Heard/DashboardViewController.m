@@ -178,6 +178,9 @@
         meContact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
         [self.contacts addObject:meContact];
     }
+    if (self.contacts.count == 1) {
+        self.isSignUp = YES;
+    }
     
     //Create invite contact view
     self.inviteContactView = [[InviteContactView alloc] init];
