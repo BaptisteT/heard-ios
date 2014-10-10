@@ -179,7 +179,34 @@
             [FBSession.activeSession closeAndClearTokenInformation];
         }];
     } else {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"facebook_error",kStringFile,@"comment") withTitle:@""];
+        NSString *alertText, *alertTitle;
+        // If the error requires people using an app to make an action outside of the app in order to recover
+        if ([FBErrorUtility shouldNotifyUserForError:error] == YES) {
+            alertText = [FBErrorUtility userMessageForError:error];
+            [GeneralUtils showMessage:alertText withTitle:NSLocalizedStringFromTable(@"facebook_error",kStringFile,@"comment")];
+        } else {
+            // If the user cancelled login, do nothing
+            if ([FBErrorUtility errorCategoryForError:error] == FBErrorCategoryUserCancelled) {
+                //The user refused to log in into your app, either ignore or...
+                alertTitle = @"Login cancelled";
+                alertText = @"You need to login to access this part of the app";
+                [GeneralUtils showMessage:alertText withTitle:alertTitle];
+                
+            } else if ([FBErrorUtility errorCategoryForError:error] == FBErrorCategoryAuthenticationReopenSession) {
+                alertTitle = @"Session Error";
+                alertText = @"Your current session is no longer valid. Please log in again.";
+                [GeneralUtils showMessage:alertText withTitle:alertTitle];
+                
+            } else {
+                //Get more error information from the error
+                NSDictionary *errorInformation = [[[error.userInfo objectForKey:@"com.facebook.sdk:ParsedJSONResponseKey"] objectForKey:@"body"] objectForKey:@"error"];
+                
+                // Show the user an error message
+                alertTitle = @"Something went wrong";
+                alertText = [NSString stringWithFormat:@"Please retry. \n\n If the problem persists contact us and mention this error code: %@", [errorInformation objectForKey:@"message"]];
+                [GeneralUtils showMessage:alertText withTitle:alertTitle];
+            }
+        }
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         [FBSession.activeSession closeAndClearTokenInformation];
     }
