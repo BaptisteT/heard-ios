@@ -122,10 +122,10 @@
     
     for (NSInteger i = 0; i < CONFIMATION_CODE_DIGITS; i++) {
         if (i > nbrOfChar - 1) {
-            ((UIImageView *)[self.imageViews objectAtIndex:i]).image = [UIImage imageNamed:@"light-blue-square.png"];
+            ((UIImageView *)[self.imageViews objectAtIndex:i]).image = [UIImage imageNamed:@"light-blue-square"];
             ((UILabel *)[self.labels objectAtIndex:i]).text = @"";
         } else {
-            ((UIImageView *)[self.imageViews objectAtIndex:i]).image = [UIImage imageNamed:@"dark-blue-square.png"];
+            ((UIImageView *)[self.imageViews objectAtIndex:i]).image = [UIImage imageNamed:@"dark-blue-square"];
             
             NSRange range;
             range.location = i;
@@ -169,7 +169,7 @@
         self.codeTextField.text = @"";
         
         for (NSInteger i = 0; i < CONFIMATION_CODE_DIGITS; i++) {
-            ((UIImageView *)[self.imageViews objectAtIndex:i]).image = [UIImage imageNamed:@"light-blue-square.png"];
+            ((UIImageView *)[self.imageViews objectAtIndex:i]).image = [UIImage imageNamed:@"light-blue-square"];
             ((UILabel *)[self.labels objectAtIndex:i]).text = @"";
         }
     }];

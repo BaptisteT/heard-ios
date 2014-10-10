@@ -42,7 +42,7 @@
                                     <action selector="startButtonClicked:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="gCB-Bh-frR"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="welcome-logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="dwm-Cy-B4c">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="welcome-logo" translatesAutoresizingMaskIntoConstraints="NO" id="dwm-Cy-B4c">
                                 <rect key="frame" x="0.0" y="70" width="320" height="120"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="120" id="ETk-1a-5CE"/>
@@ -118,7 +118,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tA4-ef-24M">
                                 <rect key="frame" x="0.0" y="150" width="320" height="70"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dark-blue-bar.png" translatesAutoresizingMaskIntoConstraints="NO" id="eFm-7r-7GL">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dark-blue-bar" translatesAutoresizingMaskIntoConstraints="NO" id="eFm-7r-7GL">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
                                     </imageView>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Phone Number" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bBX-6A-nTD">
@@ -134,7 +134,7 @@
                                             <constraint firstAttribute="width" constant="70" id="qbm-Xg-j3r"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="22"/>
-                                        <state key="normal" title="+1" backgroundImage="light-blue-square.png">
+                                        <state key="normal" title="+1" backgroundImage="light-blue-square">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -156,10 +156,10 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kGE-SY-eIr">
                                         <rect key="frame" x="250" y="0.0" width="70" height="70"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light-blue-square.png" translatesAutoresizingMaskIntoConstraints="NO" id="Mwc-m0-aQR">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light-blue-square" translatesAutoresizingMaskIntoConstraints="NO" id="Mwc-m0-aQR">
                                                 <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
                                             </imageView>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="next-button.png" translatesAutoresizingMaskIntoConstraints="NO" id="vwS-UV-6kA">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="next-button" translatesAutoresizingMaskIntoConstraints="NO" id="vwS-UV-6kA">
                                                 <rect key="frame" x="10" y="10" width="50" height="50"/>
                                             </imageView>
                                         </subviews>
@@ -316,7 +316,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QNo-Bj-fGx">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light-blue-bar.png" translatesAutoresizingMaskIntoConstraints="NO" id="Cg3-th-bBb">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light-blue-bar" translatesAutoresizingMaskIntoConstraints="NO" id="Cg3-th-bBb">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
                                     </imageView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Country" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gym-3V-yVV">
@@ -334,7 +334,7 @@
                                             <constraint firstAttribute="width" constant="60" id="97M-d3-uD0"/>
                                             <constraint firstAttribute="height" constant="60" id="EHk-2Z-LPd"/>
                                         </constraints>
-                                        <state key="normal" image="cancel-button.png">
+                                        <state key="normal" image="cancel-button">
                                             <color key="titleColor" red="0.054901960780000002" green="0.30588235289999999" blue="0.67843137249999996" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -443,7 +443,7 @@
                                     <constraint firstAttribute="height" constant="60" id="Elk-UH-nV2"/>
                                     <constraint firstAttribute="width" constant="60" id="Hqp-s5-IpH"/>
                                 </constraints>
-                                <state key="normal" image="blue-back-button.png">
+                                <state key="normal" image="blue-back-button">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -465,7 +465,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gfd-ij-g23">
                                         <rect key="frame" x="0.0" y="0.0" width="65" height="65"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="light-blue-square.png" translatesAutoresizingMaskIntoConstraints="NO" id="GgU-mj-zgR">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="light-blue-square" translatesAutoresizingMaskIntoConstraints="NO" id="GgU-mj-zgR">
                                                 <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="9" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dsp-ot-Zqw">
@@ -484,7 +484,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zBk-9r-fxu">
                                         <rect key="frame" x="70" y="0.0" width="65" height="65"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="light-blue-square.png" translatesAutoresizingMaskIntoConstraints="NO" id="yNZ-n2-i4R">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="light-blue-square" translatesAutoresizingMaskIntoConstraints="NO" id="yNZ-n2-i4R">
                                                 <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="9" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ngC-W7-1qG">
@@ -503,7 +503,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s6r-du-fHE">
                                         <rect key="frame" x="140" y="0.0" width="65" height="65"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="light-blue-square.png" translatesAutoresizingMaskIntoConstraints="NO" id="9eI-bw-sJW">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="light-blue-square" translatesAutoresizingMaskIntoConstraints="NO" id="9eI-bw-sJW">
                                                 <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="9" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bIS-wB-5xX">
@@ -522,7 +522,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tXP-mu-WXR">
                                         <rect key="frame" x="210" y="0.0" width="65" height="65"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="light-blue-square.png" translatesAutoresizingMaskIntoConstraints="NO" id="zTN-zg-VRS">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="light-blue-square" translatesAutoresizingMaskIntoConstraints="NO" id="zTN-zg-VRS">
                                                 <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="9" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7b8-AL-kqs">
@@ -670,7 +670,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8YP-bH-td5">
                                 <rect key="frame" x="35" y="344" width="250" height="50"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="facebook-logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="c7S-1N-koN">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="facebook-logo" translatesAutoresizingMaskIntoConstraints="NO" id="c7S-1N-koN">
                                         <rect key="frame" x="12" y="12" width="26" height="26"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="26" id="5cb-WL-XTA"/>
@@ -787,7 +787,7 @@
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9KC-X6-aR6">
                                 <rect key="frame" x="258" y="10" width="60" height="60"/>
-                                <state key="normal" image="blue-next-button.png">
+                                <state key="normal" image="blue-next-button">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -844,7 +844,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light-blue-bar.png" translatesAutoresizingMaskIntoConstraints="NO" id="yFI-qo-N0l">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light-blue-bar" translatesAutoresizingMaskIntoConstraints="NO" id="yFI-qo-N0l">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="CCJ-Xk-PKS"/>
@@ -941,7 +941,7 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rAY-VR-0Tm">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="contact-perm.png" translatesAutoresizingMaskIntoConstraints="NO" id="3jI-7E-FHp">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="contact-perm" translatesAutoresizingMaskIntoConstraints="NO" id="3jI-7E-FHp">
                                         <rect key="frame" x="85" y="90" width="150" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="150" id="a22-qx-fKe"/>
@@ -1020,7 +1020,7 @@
                                     <constraint firstAttribute="width" constant="60" id="8EV-bp-hjR"/>
                                     <constraint firstAttribute="height" constant="60" id="UWR-QP-P7u"/>
                                 </constraints>
-                                <state key="normal" image="white-menu-button.png">
+                                <state key="normal" image="white-menu-button">
                                     <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -1031,7 +1031,7 @@
                             <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9c7-Db-Duq">
                                 <rect key="frame" x="0.0" y="488" width="320" height="80"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="light-blue-bar.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ej0-rM-jvW">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="light-blue-bar" translatesAutoresizingMaskIntoConstraints="NO" id="Ej0-rM-jvW">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
                                     </imageView>
                                     <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBT-dz-oUj">
@@ -1046,7 +1046,7 @@
                                     <constraint firstAttribute="height" constant="50" id="u7q-6D-WSS"/>
                                 </constraints>
                                 <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                                <state key="normal" image="emoji-button.png">
+                                <state key="normal" image="emoji-button">
                                     <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -1118,7 +1118,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cIF-7u-vdn">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light-blue-bar.png" translatesAutoresizingMaskIntoConstraints="NO" id="2Rw-nW-hJU">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light-blue-bar" translatesAutoresizingMaskIntoConstraints="NO" id="2Rw-nW-hJU">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="70" id="EMr-2t-p7F"/>
@@ -1139,7 +1139,7 @@
                                             <constraint firstAttribute="height" constant="60" id="FED-bh-t0q"/>
                                             <constraint firstAttribute="width" constant="60" id="icT-Hv-v0L"/>
                                         </constraints>
-                                        <state key="normal" image="back-button.png">
+                                        <state key="normal" image="back-button">
                                             <color key="titleColor" red="0.054901960780000002" green="0.30588235289999999" blue="0.67843137249999996" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -1245,7 +1245,7 @@
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="checkbox.png" id="NTA-u7-rdo">
+                                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="checkbox" id="NTA-u7-rdo">
                                             <rect key="frame" x="15" y="0.0" width="43" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </imageView>
@@ -1298,7 +1298,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nSC-nt-ya9">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light-blue-bar.png" translatesAutoresizingMaskIntoConstraints="NO" id="HWc-bz-CzA">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light-blue-bar" translatesAutoresizingMaskIntoConstraints="NO" id="HWc-bz-CzA">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="70" id="D76-Kz-QTg"/>
@@ -1316,7 +1316,7 @@
                                             <constraint firstAttribute="height" constant="60" id="h0X-Br-Tot"/>
                                             <constraint firstAttribute="width" constant="60" id="uAE-Rj-RtC"/>
                                         </constraints>
-                                        <state key="normal" image="back-button.png">
+                                        <state key="normal" image="back-button">
                                             <color key="titleColor" red="0.054901960780000002" green="0.30588235289999999" blue="0.67843137249999996" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -1332,7 +1332,7 @@
                                             <constraint firstAttribute="height" constant="50" id="rdL-zE-0Bj"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" image="invite-play.png">
+                                        <state key="normal" image="invite-play">
                                             <color key="titleColor" red="0.054901960780000002" green="0.30588235289999999" blue="0.67843137249999996" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -1361,7 +1361,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kbg-bh-YP9">
                                 <rect key="frame" x="0.0" y="508" width="320" height="60"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light-blue-bar.png" translatesAutoresizingMaskIntoConstraints="NO" id="PeY-EE-7ZR">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light-blue-bar" translatesAutoresizingMaskIntoConstraints="NO" id="PeY-EE-7ZR">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                                     </imageView>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send now (0)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cwj-fN-yDZ">
@@ -1413,21 +1413,21 @@
         </scene>
     </scenes>
     <resources>
-        <image name="back-button.png" width="246" height="246"/>
-        <image name="blue-back-button.png" width="246" height="246"/>
-        <image name="blue-next-button.png" width="246" height="246"/>
-        <image name="cancel-button.png" width="245" height="245"/>
-        <image name="checkbox.png" width="242" height="242"/>
-        <image name="contact-perm.png" width="400" height="204"/>
-        <image name="dark-blue-bar.png" width="1360" height="300"/>
-        <image name="emoji-button.png" width="246" height="246"/>
-        <image name="facebook-logo.png" width="150" height="150"/>
-        <image name="invite-play.png" width="246" height="246"/>
-        <image name="light-blue-bar.png" width="1354" height="300"/>
-        <image name="light-blue-square.png" width="300" height="300"/>
-        <image name="next-button.png" width="246" height="246"/>
-        <image name="welcome-logo.png" width="400" height="400"/>
-        <image name="white-menu-button.png" width="246" height="246"/>
+        <image name="back-button" width="60" height="60"/>
+        <image name="blue-back-button" width="60" height="60"/>
+        <image name="blue-next-button" width="60" height="60"/>
+        <image name="cancel-button" width="60" height="60"/>
+        <image name="checkbox" width="50" height="50"/>
+        <image name="contact-perm" width="118" height="60"/>
+        <image name="dark-blue-bar" width="318" height="70"/>
+        <image name="emoji-button" width="50" height="50"/>
+        <image name="facebook-logo" width="30" height="30"/>
+        <image name="invite-play" width="50" height="50"/>
+        <image name="light-blue-bar" width="321" height="70"/>
+        <image name="light-blue-square" width="70" height="70"/>
+        <image name="next-button" width="246" height="246"/>
+        <image name="welcome-logo" width="120" height="120"/>
+        <image name="white-menu-button" width="400" height="400"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -1435,6 +1435,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="xdp-at-Nje"/>
+        <segue reference="3sm-GS-nuK"/>
     </inferredMetricsTieBreakers>
 </document>

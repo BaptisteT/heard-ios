@@ -155,7 +155,7 @@
     self.bottomTutoView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
     
     UIImageView *backgroundTutoView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
-    backgroundTutoView.image = [UIImage imageNamed:@"light-blue-bar.png"];
+    backgroundTutoView.image = [UIImage imageNamed:@"light-blue-bar"];
     [self.bottomTutoView addSubview:backgroundTutoView];
     
     self.bottomTutoViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
@@ -1738,7 +1738,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     
     self.openingTutoArrow = [[UIImageView alloc] initWithFrame:CGRectMake(x - 100/2,110,100,100)];
-    self.openingTutoArrow.image = [UIImage imageNamed:@"tuto-arrow.png"];
+    self.openingTutoArrow.image = [UIImage imageNamed:@"tuto-arrow"];
     [self.openingTutoView addSubview:self.openingTutoArrow];
     
     [self.openingTutoDescLabel setText:actionLabel];

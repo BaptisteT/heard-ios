@@ -56,7 +56,7 @@
     
     self.backButton.titleLabel.text = NSLocalizedStringFromTable(@"back_button_title",kStringFile,@"comment");
     
-    [self.playerButton setImage:[UIImage imageNamed:@"invite-play.png"] forState:UIControlStateNormal];
+    [self.playerButton setImage:[UIImage imageNamed:@"invite-play"] forState:UIControlStateNormal];
     
     [GeneralUtils addBottomBorder:self.navigationContainer borderSize:0.5];
     
@@ -108,13 +108,13 @@
 
 - (IBAction)playerButtonClicked:(id)sender {
     if (self.mainPlayer && [self.mainPlayer isPlaying]) {
-        [self.playerButton setImage:[UIImage imageNamed:@"invite-play.png"] forState:UIControlStateNormal];
+        [self.playerButton setImage:[UIImage imageNamed:@"invite-play"] forState:UIControlStateNormal];
         [self.mainPlayer pause];
     } else if (self.mainPlayer) {
-        [self.playerButton setImage:[UIImage imageNamed:@"invite-pause.png"] forState:UIControlStateNormal];
+        [self.playerButton setImage:[UIImage imageNamed:@"invite-pause"] forState:UIControlStateNormal];
         [self.mainPlayer play];
     } else {
-        [self.playerButton setImage:[UIImage imageNamed:@"invite-pause.png"] forState:UIControlStateNormal];
+        [self.playerButton setImage:[UIImage imageNamed:@"invite-pause"] forState:UIControlStateNormal];
         [self play];
     }
 }
@@ -302,7 +302,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player
                        successfully:(BOOL)flag
 {
-    [self.playerButton setImage:[UIImage imageNamed:@"invite-play.png"] forState:UIControlStateNormal];
+    [self.playerButton setImage:[UIImage imageNamed:@"invite-play"] forState:UIControlStateNormal];
 }
 
 - (BOOL)prefersStatusBarHidden

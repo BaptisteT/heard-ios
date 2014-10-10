@@ -43,7 +43,7 @@
 
 - (void)setContactPicture
 {
-    self.imageView.image = [UIImage imageNamed:@"invite-button.png"];
+    self.imageView.image = [UIImage imageNamed:@"invite-button"];
 }
 
 - (void) initImageView {

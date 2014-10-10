@@ -857,7 +857,7 @@
     self.pendingContactOverlay.clipsToBounds = YES;
     self.pendingContactOverlay.layer.cornerRadius = self.bounds.size.height/2;
     [self.pendingContactOverlay setBackgroundColor:[UIColor clearColor]];
-    [self.pendingContactOverlay setImage:[UIImage imageNamed:@"unknown-user.png"]];
+    [self.pendingContactOverlay setImage:[UIImage imageNamed:@"unknown-user"]];
 }
 
 - (void)initSentOverlay

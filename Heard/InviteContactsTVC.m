@@ -97,9 +97,9 @@
     cell.detailTextLabel.text = contact[2];
     
     if ([contact[3] isEqualToString:@"selected"]) {
-        cell.imageView.image = [UIImage imageNamed:@"checkbox-selected.png"];
+        cell.imageView.image = [UIImage imageNamed:@"checkbox-selected"];
     } else {
-        cell.imageView.image = [UIImage imageNamed:@"checkbox.png"];
+        cell.imageView.image = [UIImage imageNamed:@"checkbox"];
     }
     
     return cell;
@@ -142,12 +142,12 @@
     
     if ([contact[3] isEqualToString:@"selected"]) {
         contact[3] = @"not selected";
-        cell.imageView.image = [UIImage imageNamed:@"checkbox.png"];
+        cell.imageView.image = [UIImage imageNamed:@"checkbox"];
         [self.delegate deselectContactWithPhoneNumber:contact[2]];
         
     } else {
         contact[3] = @"selected";
-        cell.imageView.image = [UIImage imageNamed:@"checkbox-selected.png"];
+        cell.imageView.image = [UIImage imageNamed:@"checkbox-selected"];
         [self.delegate selectContactWithPhoneNumber:contact[2]];
     }
     
@@ -170,7 +170,7 @@
             NSMutableArray *contact = [self.delegate.indexedContacts objectForKey:key][j];
             
             contact[3] = @"not selected";
-            cell.imageView.image = [UIImage imageNamed:@"checkbox.png"];
+            cell.imageView.image = [UIImage imageNamed:@"checkbox"];
             [self.delegate deselectContactWithPhoneNumber:contact[2]];
         }
     } else {
@@ -185,7 +185,7 @@
                 NSMutableArray *contact = [sectionContacts objectAtIndex:indexPath.row];
                 
                 contact[3] = @"not selected";
-                cell.imageView.image = [UIImage imageNamed:@"checkbox.png"];
+                cell.imageView.image = [UIImage imageNamed:@"checkbox"];
                 [self.delegate deselectContactWithPhoneNumber:contact[2]];
             }
         }
