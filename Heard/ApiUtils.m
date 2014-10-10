@@ -450,7 +450,14 @@
 {
     NSString *path = [[ApiUtils getBasePath] stringByAppendingString:@"obsolete_api.json"];
     NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSDictionary *parameters = @{@"app_version": appVersion};
+
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setObject:appVersion forKey:@"app_version"];
+    NSInteger currentUserId = [SessionUtils getCurrentUserId];
+    if (currentUserId) {
+        [parameters setObject:[NSNumber numberWithInteger:currentUserId] forKey:@"user_id"];
+    }
+    
     [[ApiUtils sharedClient] GET:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
         NSDictionary *result = [JSON valueForKeyPath:@"result"];
         if (successBlock) {

@@ -76,11 +76,20 @@
             if (messageURL && [messageURL length] > 0) {
                 self.redirectURL = [NSURL URLWithString:messageURL];
             }
-            [self createObsoleteAPIAlertView];
+            if ([self.messageType isEqualToString:@"Beta request"]) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+                                           message:self.messageContent
+                                          delegate:self
+                                 cancelButtonTitle:@"NO"
+                                 otherButtonTitles:@"YES",nil];
+                [alert show];
+            } else {
+                [self createObsoleteAPIAlertView];
+            }
         }
     }];
     
-    // Track open app
+    // Track 1st open app
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     if(![[prefs objectForKey:kFirstOpeningPref] boolValue]) {
         [TrackingUtils trackFirstOpenApp];
@@ -259,6 +268,12 @@ NSString* stringFromDeviceTokenData(NSData *deviceToken)
         }
         if ([self.messageType isEqualToString:@"Blocking alert"]) {
             [self createObsoleteAPIAlertView];
+        }
+    } else {
+        if (buttonIndex == 1) {
+            if (self.redirectURL) {
+                [[UIApplication sharedApplication] openURL:self.redirectURL];
+            }
         }
     }
 }
