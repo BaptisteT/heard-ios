@@ -297,6 +297,8 @@
 		3C06C3A019659C2400B8D70C /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C06C39F19659C2400B8D70C /* MediaPlayer.framework */; };
 		3C0D0061195C5E500058A0E0 /* AudioUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D0060195C5E500058A0E0 /* AudioUtils.m */; };
 		3C0D0064196330E40058A0E0 /* ContactUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D0063196330E40058A0E0 /* ContactUtils.m */; };
+		3C1D54AF19E8564E00B3AE8B /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C1D54AE19E8564E00B3AE8B /* FacebookSDK.framework */; };
+		3C1D54B019E8564E00B3AE8B /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C1D54AE19E8564E00B3AE8B /* FacebookSDK.framework */; };
 		3C55FD6D1966AA3500E818D9 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */; };
 		3C55FD701966B11C00E818D9 /* CrashReportUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */; };
 		3C91A80D19CD00AC00DCA8BC /* PotentialContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C91A80C19CD00AC00DCA8BC /* PotentialContact.m */; };
@@ -369,8 +371,6 @@
 		3CB753D419B8908F00E4C75F /* CameraUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB753D319B8908F00E4C75F /* CameraUtils.m */; };
 		3CB753D519B8909A00E4C75F /* CameraUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB753D319B8908F00E4C75F /* CameraUtils.m */; };
 		3CB8B7F5195453E50090D657 /* ContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactView.m */; };
-		3CDC78A519E842940041E6E4 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CDC78A419E842940041E6E4 /* FacebookSDK.framework */; };
-		3CDC78A619E842940041E6E4 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CDC78A419E842940041E6E4 /* FacebookSDK.framework */; };
 		3CEF9EE719DA2F140045D78D /* EmojiView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE619DA2F140045D78D /* EmojiView.m */; };
 		3CEF9EE819DA2F140045D78D /* EmojiView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE619DA2F140045D78D /* EmojiView.m */; };
 		3CEF9EEA19DA40380045D78D /* emoji-image-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE919DA40380045D78D /* emoji-image-1.png */; };
@@ -590,6 +590,7 @@
 		3C0D0060195C5E500058A0E0 /* AudioUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioUtils.m; sourceTree = "<group>"; };
 		3C0D0062196330E40058A0E0 /* ContactUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactUtils.h; sourceTree = "<group>"; };
 		3C0D0063196330E40058A0E0 /* ContactUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactUtils.m; sourceTree = "<group>"; };
+		3C1D54AE19E8564E00B3AE8B /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
 		3C55FD6E1966B11C00E818D9 /* CrashReportUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashReportUtils.h; sourceTree = "<group>"; };
 		3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashReportUtils.m; sourceTree = "<group>"; };
@@ -651,7 +652,6 @@
 		3CB8B7EB195346620090D657 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		3CB8B7F3195453E50090D657 /* ContactView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactView.h; sourceTree = "<group>"; };
 		3CB8B7F4195453E50090D657 /* ContactView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactView.m; sourceTree = "<group>"; };
-		3CDC78A419E842940041E6E4 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		3CEF9EE519DA2F140045D78D /* EmojiView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmojiView.h; sourceTree = "<group>"; };
 		3CEF9EE619DA2F140045D78D /* EmojiView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmojiView.m; sourceTree = "<group>"; };
 		3CEF9EE919DA40380045D78D /* emoji-image-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emoji-image-1.png"; sourceTree = "<group>"; };
@@ -679,7 +679,7 @@
 				0B72EEDE196C672F00AC5A01 /* MessageUI.framework in Frameworks */,
 				0B72EEDF196C672F00AC5A01 /* AddressBook.framework in Frameworks */,
 				0B72EEE0196C672F00AC5A01 /* AddressBookUI.framework in Frameworks */,
-				3CDC78A619E842940041E6E4 /* FacebookSDK.framework in Frameworks */,
+				3C1D54B019E8564E00B3AE8B /* FacebookSDK.framework in Frameworks */,
 				0B72EEE1196C672F00AC5A01 /* CoreGraphics.framework in Frameworks */,
 				0B72EEE2196C672F00AC5A01 /* UIKit.framework in Frameworks */,
 				0B72EEE3196C672F00AC5A01 /* Foundation.framework in Frameworks */,
@@ -698,7 +698,7 @@
 				3CA177EA1958B74000096266 /* AudioToolbox.framework in Frameworks */,
 				0BAF4FE219560AEE00838D7D /* MessageUI.framework in Frameworks */,
 				0B58BAFD1954B47700E9FF70 /* AddressBook.framework in Frameworks */,
-				3CDC78A519E842940041E6E4 /* FacebookSDK.framework in Frameworks */,
+				3C1D54AF19E8564E00B3AE8B /* FacebookSDK.framework in Frameworks */,
 				0B58BAFE1954B47700E9FF70 /* AddressBookUI.framework in Frameworks */,
 				0BD758C21950F91B00CF0D85 /* CoreGraphics.framework in Frameworks */,
 				0BD758C41950F91B00CF0D85 /* UIKit.framework in Frameworks */,
@@ -940,7 +940,7 @@
 		0BD758BE1950F91B00CF0D85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3CDC78A419E842940041E6E4 /* FacebookSDK.framework */,
+				3C1D54AE19E8564E00B3AE8B /* FacebookSDK.framework */,
 				0B9EC33C19C9254D00F520B8 /* Security.framework */,
 				0B9EC33919C9253400F520B8 /* SystemConfiguration.framework */,
 				0B56F64B19757D5900DB6FF1 /* CoreData.framework */,
