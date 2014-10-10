@@ -100,6 +100,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *authRequestAllowButton;
 @property (strong, nonatomic) IBOutlet UIButton *authRequestSkipButton;
 // Tuto
+@property (nonatomic) BOOL isFirstOpening;
 @property (nonatomic) BOOL displayOpeningTuto;
 @property (nonatomic, strong) UIView *bottomTutoView;
 @property (nonatomic, strong) UILabel *bottomTutoViewLabel;
@@ -132,7 +133,8 @@
     self.retrieveNewContact = YES;
     self.authRequestView.hidden = YES;
     self.openingTutoView.hidden = YES;
-    self.displayOpeningTuto = [GeneralUtils isFirstOpening];
+    self.isFirstOpening = [GeneralUtils isFirstOpening];
+    self.isSignUp = self.isFirstOpening;
     
     self.openingTutoDescView.layer.cornerRadius = 5;
     
@@ -1057,7 +1059,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self hideOpeningTuto];
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    if (![prefs objectForKey:kUserPhoneToEarPref] && !self.isUsingHeadSet && !self.isSignUp) {
+    if (![prefs objectForKey:kUserPhoneToEarPref] && !self.isUsingHeadSet && !self.isFirstOpening) {
         [self tutoMessage:NSLocalizedStringFromTable(@"phone_to_ear_tuto",kStringFile, @"comment") withDuration:0 priority:NO];
     }
     
