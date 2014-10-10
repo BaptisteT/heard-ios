@@ -1057,11 +1057,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)startedPlayingAudioMessagesOfView:(ContactView *)contactView
 {
     [self hideOpeningTuto];
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
-    if (![prefs objectForKey:kUserPhoneToEarPref] && !self.isUsingHeadSet && !self.isFirstOpening) {
-        [self tutoMessage:NSLocalizedStringFromTable(@"phone_to_ear_tuto",kStringFile, @"comment") withDuration:0 priority:NO];
-    }
     
     if ([self.mainPlayer isPlaying]) {
         [self endPlayerAtCompletion:NO];
@@ -1074,6 +1069,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.audioData error:nil];
     [self.mainPlayer prepareToPlay];
     [self addMessagesToLastMessagesPlayed:message];
+    
+    // tuto
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if (![prefs objectForKey:kUserPhoneToEarPref] && !self.isUsingHeadSet && !self.isFirstOpening && self.mainPlayer.duration > 2) {
+        [self tutoMessage:NSLocalizedStringFromTable(@"phone_to_ear_tuto",kStringFile, @"comment") withDuration:0 priority:NO];
+    }
     
     //Show message date
     self.playerLabel.hidden = NO;
