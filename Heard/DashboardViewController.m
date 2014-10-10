@@ -134,7 +134,7 @@
     self.authRequestView.hidden = YES;
     self.openingTutoView.hidden = YES;
     self.isFirstOpening = [GeneralUtils isFirstOpening];
-    self.isSignUp = self.isFirstOpening;
+    self.displayOpeningTuto = self.isFirstOpening;
     
     self.openingTutoDescView.layer.cornerRadius = 5;
     
