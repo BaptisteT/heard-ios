@@ -859,7 +859,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0u-JM-gz3">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0u-JM-gz3">
                                 <rect key="frame" x="0.0" y="70" width="320" height="498"/>
                                 <subviews>
                                     <view hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OPI-LG-GQA">
@@ -930,7 +930,7 @@
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="OPI-LG-GQA" secondAttribute="trailing" id="2G8-Wb-2aO"/>
                                     <constraint firstAttribute="bottom" secondItem="Kjk-yL-lun" secondAttribute="bottom" id="4CF-xf-chH"/>
-                                    <constraint firstAttribute="trailing" secondItem="Kjk-yL-lun" secondAttribute="trailing" constant="310" id="4P2-oh-UZh"/>
+                                    <constraint firstAttribute="trailing" secondItem="Kjk-yL-lun" secondAttribute="trailing" constant="310" id="7ld-be-kdh"/>
                                     <constraint firstItem="OPI-LG-GQA" firstAttribute="leading" secondItem="a0u-JM-gz3" secondAttribute="leading" id="95g-VZ-Dpx"/>
                                     <constraint firstItem="OPI-LG-GQA" firstAttribute="top" secondItem="a0u-JM-gz3" secondAttribute="top" id="Fxf-3B-FtW"/>
                                     <constraint firstItem="Kjk-yL-lun" firstAttribute="top" secondItem="a0u-JM-gz3" secondAttribute="top" id="Lcf-0S-vXb"/>
@@ -1028,16 +1028,27 @@
                                     <action selector="menuButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="4ge-39-XlM"/>
                                 </connections>
                             </button>
-                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9c7-Db-Duq">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9c7-Db-Duq">
                                 <rect key="frame" x="0.0" y="488" width="320" height="80"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="light-blue-bar" translatesAutoresizingMaskIntoConstraints="NO" id="Ej0-rM-jvW">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light-blue-bar" translatesAutoresizingMaskIntoConstraints="NO" id="Ej0-rM-jvW">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
                                     </imageView>
-                                    <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBT-dz-oUj">
+                                    <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBT-dz-oUj">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
                                     </scrollView>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="Ej0-rM-jvW" firstAttribute="leading" secondItem="9c7-Db-Duq" secondAttribute="leading" id="0dY-cU-bUc"/>
+                                    <constraint firstAttribute="trailing" secondItem="Ej0-rM-jvW" secondAttribute="trailing" id="9ex-5C-hKw"/>
+                                    <constraint firstItem="dBT-dz-oUj" firstAttribute="leading" secondItem="9c7-Db-Duq" secondAttribute="leading" id="Ith-op-vnm"/>
+                                    <constraint firstItem="Ej0-rM-jvW" firstAttribute="top" secondItem="9c7-Db-Duq" secondAttribute="top" id="XCp-cW-HDW"/>
+                                    <constraint firstAttribute="height" constant="80" id="h9X-Df-CbU"/>
+                                    <constraint firstItem="dBT-dz-oUj" firstAttribute="top" secondItem="9c7-Db-Duq" secondAttribute="top" id="pyL-zG-EKn"/>
+                                    <constraint firstAttribute="bottom" secondItem="dBT-dz-oUj" secondAttribute="bottom" id="rXG-hk-8uE"/>
+                                    <constraint firstAttribute="bottom" secondItem="Ej0-rM-jvW" secondAttribute="bottom" id="urF-03-l4O"/>
+                                    <constraint firstAttribute="trailing" secondItem="dBT-dz-oUj" secondAttribute="trailing" id="zYD-Os-z2d"/>
+                                </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Egb-Gc-QPL">
                                 <rect key="frame" x="258" y="10" width="50" height="50"/>
@@ -1071,7 +1082,10 @@
                             <constraint firstAttribute="trailingMargin" secondItem="Egb-Gc-QPL" secondAttribute="trailing" constant="-4" id="bz7-2Z-vPC"/>
                             <constraint firstItem="8bw-fU-Wrq" firstAttribute="top" secondItem="rAY-VR-0Tm" secondAttribute="bottom" id="eOb-ap-uQu"/>
                             <constraint firstItem="yFI-qo-N0l" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="egm-9r-NqD"/>
+                            <constraint firstItem="8bw-fU-Wrq" firstAttribute="top" secondItem="9c7-Db-Duq" secondAttribute="bottom" id="gPz-XV-1Sw"/>
                             <constraint firstAttribute="centerX" secondItem="wyC-fx-Tu0" secondAttribute="centerX" id="ge6-mf-7mS"/>
+                            <constraint firstAttribute="trailing" secondItem="9c7-Db-Duq" secondAttribute="trailing" id="gkO-q5-zI7"/>
+                            <constraint firstItem="9c7-Db-Duq" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="kSp-eQ-CuV"/>
                             <constraint firstItem="3eZ-vS-6nf" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" constant="5" id="lDt-3R-qOx"/>
                             <constraint firstItem="3eZ-vS-6nf" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" constant="5" id="rqK-o1-8Ag"/>
                         </constraints>
