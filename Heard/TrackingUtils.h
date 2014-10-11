@@ -35,4 +35,6 @@
 
 + (void)trackFirstOpenApp;
 
++ (void)trackSendingFailed;
+
 @end

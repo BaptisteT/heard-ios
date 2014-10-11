@@ -169,4 +169,13 @@
     [mixpanel.people increment:@"First Open App" by:[NSNumber numberWithInt:1]];
 }
 
++ (void)trackSendingFailed
+{
+    if (!PRODUCTION || DEBUG)return;
+    
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    
+    [mixpanel track:@"Sending Failed"];
+}
+
 @end

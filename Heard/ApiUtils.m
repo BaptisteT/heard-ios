@@ -12,6 +12,7 @@
 #import "Message.h"
 #import "Contact.h"
 #import "GeneralUtils.h"
+#import "TrackingUtils.h"
 #import <AVFoundation/AVFoundation.h>
 
 @implementation ApiUtils
@@ -226,6 +227,7 @@
                                   successBlock();
                               }
                          }failure:^(NSURLSessionDataTask *task, NSError *error) {
+                             [TrackingUtils trackSendingFailed];
                               NSLog(@"ERROR: %@, %@", task.description, error);
                               if (failureBlock) {
                                   failureBlock();   
