@@ -575,8 +575,8 @@
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="MZZ-KQ-tyA" secondAttribute="trailing" constant="20" id="doh-JD-hXe"/>
                             <constraint firstItem="CN6-Oi-pl2" firstAttribute="leading" secondItem="zGk-BO-1uZ" secondAttribute="leading" id="npd-MB-nh7"/>
                             <constraint firstAttribute="trailing" secondItem="eZl-CA-8nI" secondAttribute="trailing" id="qLE-5O-DYL"/>
+                            <constraint firstItem="MZZ-KQ-tyA" firstAttribute="top" secondItem="vf7-hX-GIC" secondAttribute="bottom" constant="13" id="qfR-Dk-WtP"/>
                             <constraint firstAttribute="trailing" secondItem="RrX-Vx-7gH" secondAttribute="trailing" constant="20" id="u1Z-f1-L8S"/>
-                            <constraint firstItem="aII-uD-Eyl" firstAttribute="top" secondItem="CN6-Oi-pl2" secondAttribute="bottom" constant="260" id="wSh-Yy-Usf"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="XMM-Jd-ms7"/>
@@ -1020,7 +1020,7 @@
                                     <constraint firstAttribute="width" constant="60" id="8EV-bp-hjR"/>
                                     <constraint firstAttribute="height" constant="60" id="UWR-QP-P7u"/>
                                 </constraints>
-                                <state key="normal" image="white-menu-button">
+                                <state key="normal" image="menu-button">
                                     <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -1155,7 +1155,6 @@
                                     <constraint firstItem="2Rw-nW-hJU" firstAttribute="top" secondItem="cIF-7u-vdn" secondAttribute="top" id="G8w-e5-W2A"/>
                                     <constraint firstItem="vhf-NS-Cg3" firstAttribute="leading" secondItem="cIF-7u-vdn" secondAttribute="leading" id="GIf-sA-kCv"/>
                                     <constraint firstAttribute="trailing" secondItem="vhf-NS-Cg3" secondAttribute="trailing" id="HeS-TF-cZg"/>
-                                    <constraint firstAttribute="width" constant="320" id="PnP-z1-jnp"/>
                                     <constraint firstItem="ZHN-r3-gZR" firstAttribute="centerY" secondItem="vhf-NS-Cg3" secondAttribute="centerY" id="Umh-xM-26l"/>
                                     <constraint firstAttribute="trailing" secondItem="2Rw-nW-hJU" secondAttribute="trailing" id="irw-4r-zfD"/>
                                     <constraint firstItem="ZHN-r3-gZR" firstAttribute="top" secondItem="cIF-7u-vdn" secondAttribute="top" constant="5" id="qex-5U-e7X"/>
@@ -1191,6 +1190,7 @@
                             <constraint firstItem="P7d-fS-GkQ" firstAttribute="top" secondItem="fGa-P4-Vlg" secondAttribute="bottom" id="H2s-9O-qwb"/>
                             <constraint firstItem="cIF-7u-vdn" firstAttribute="top" secondItem="zA3-ag-0PB" secondAttribute="top" id="IyY-YS-cWN"/>
                             <constraint firstItem="fGa-P4-Vlg" firstAttribute="leading" secondItem="zA3-ag-0PB" secondAttribute="leading" id="QRJ-ur-VTU"/>
+                            <constraint firstAttribute="trailing" secondItem="cIF-7u-vdn" secondAttribute="trailing" id="aiM-4f-gkf"/>
                             <constraint firstItem="cIF-7u-vdn" firstAttribute="leading" secondItem="zA3-ag-0PB" secondAttribute="leading" id="qhM-ad-FMA"/>
                             <constraint firstAttribute="trailing" secondItem="fGa-P4-Vlg" secondAttribute="trailing" id="saU-ad-hGZ"/>
                         </constraints>
@@ -1425,9 +1425,9 @@
         <image name="invite-play" width="50" height="50"/>
         <image name="light-blue-bar" width="321" height="70"/>
         <image name="light-blue-square" width="70" height="70"/>
+        <image name="menu-button" width="246" height="246"/>
         <image name="next-button" width="246" height="246"/>
         <image name="welcome-logo" width="120" height="120"/>
-        <image name="white-menu-button" width="400" height="400"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -1435,6 +1435,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="3sm-GS-nuK"/>
+        <segue reference="xdp-at-Nje"/>
     </inferredMetricsTieBreakers>
 </document>
