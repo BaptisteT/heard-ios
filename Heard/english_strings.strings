@@ -48,8 +48,7 @@
 "tuto_label" = "Please select your country code and enter your phone number.";
 
 // Record
-"tuto_message" = "Tap to listen.";
-"audio_too_short_error" = "Hold longer to record.";
+"audio_too_short_error" = "Hold longer to record";
 "recorder_label" = "Recording...";
 
 // Micro access

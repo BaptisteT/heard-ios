@@ -284,16 +284,14 @@
     }
     if (self.displayOpeningTuto) {
         [self prepareAndDisplayTuto];
+        // Update app info
+        [ApiUtils updateAppInfoAndExecuteSuccess:nil failure:nil];
     } else {
         [GeneralUtils registerForRemoteNotif];
     }
     
     // Emoji views
     [self addEmojiViewsToContainer];
-
-    
-    // Update app info
-    [ApiUtils updateAppInfoAndExecuteSuccess:nil failure:nil];
 }
 
 // Make sure scroll view has been resized (necessary because layout constraints change scroll view size)

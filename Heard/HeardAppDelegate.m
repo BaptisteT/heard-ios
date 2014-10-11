@@ -154,11 +154,16 @@
     
     // Send push token
     [ApiUtils updatePushToken:deviceTokenAsString success:nil failure:nil];
+    
+    // Update stats
+    [ApiUtils updateAppInfoAndExecuteSuccess:nil failure:nil];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
-    // Handle this case to ask the user to change his mind
-    NSLog(@"Error in registration. Error: %@", err);
+    // Handle this case to ask the user to change his mind ??
+    
+    // Update stats
+    [ApiUtils updateAppInfoAndExecuteSuccess:nil failure:nil];
 }
 
 
