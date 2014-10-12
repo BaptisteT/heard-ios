@@ -312,10 +312,7 @@
 {
     [super viewDidLayoutSubviews];
     
-    if (!self.didLayoutSubviews) {
-        self.didLayoutSubviews = YES;
-        [self setScrollViewSizeForContactCount:(int)MAX([self.contactViews count],[ContactUtils numberOfNonHiddenContacts:self.contacts])];
-    }
+    [self setScrollViewSizeForContactCount:(int)MAX([self.contactViews count],[ContactUtils numberOfNonHiddenContacts:self.contacts])];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
