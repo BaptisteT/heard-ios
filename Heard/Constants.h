@@ -59,7 +59,7 @@ static const NSUInteger kAdminId = 1;
 
 // UI size
 static const NSUInteger kUnreadMessageSize = 30;
-static const NSUInteger kContactMargin = 20;
+static const NSUInteger kContactMinimumMargin = 20;
 static const NSUInteger kContactSize = 80;
 static const NSUInteger kContactNameHeight = 30;
 static const NSUInteger kProfilePictureSize = 200;

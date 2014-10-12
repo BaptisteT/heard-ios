@@ -11,4 +11,6 @@
 
 @interface InviteContactView : ContactView
 
+- (id)initWithContactMargin:(CGFloat)contactMargin;
+
 @end

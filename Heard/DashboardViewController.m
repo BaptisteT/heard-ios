@@ -66,6 +66,10 @@
 @property (nonatomic) BOOL retrieveNewContact;
 @property (nonatomic, strong) Contact *contactToAdd;
 @property (nonatomic, strong) ContactView *inviteContactView;
+@property (nonatomic) CGFloat screenWidth;
+@property (nonatomic) CGFloat screenHeight;
+@property (nonatomic) NSInteger contactsPerRow;
+@property (nonatomic) CGFloat contactMargin;
 // Record
 @property (strong, nonatomic) UIView *recorderContainer;
 @property (nonatomic,strong) UIView *recorderLine;
@@ -129,7 +133,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     self.retrieveNewContact = YES;
     self.authRequestView.hidden = YES;
     self.openingTutoView.hidden = YES;
@@ -137,6 +141,14 @@
     self.displayOpeningTuto = self.isFirstOpening;
     
     self.openingTutoDescView.layer.cornerRadius = 5;
+    
+    //Contact scrollview variables
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    self.screenWidth = screenRect.size.width;
+    self.screenHeight = screenRect.size.height;
+    
+    self.contactsPerRow = self.screenWidth / (kContactSize + kContactMinimumMargin);
+    self.contactMargin = (self.screenWidth - (self.contactsPerRow * kContactSize))/(self.contactsPerRow + 1);
     
     //Perms
     self.authRequestAllowButton.clipsToBounds = YES;
@@ -180,7 +192,7 @@
     }
     
     //Create invite contact view
-    self.inviteContactView = [[InviteContactView alloc] init];
+    self.inviteContactView = [[InviteContactView alloc] initWithContactMargin:self.contactMargin];
     self.inviteContactView.delegate = self;
     [self.contactScrollView addSubview:self.inviteContactView];
     [self addNameLabelForView:self.inviteContactView];
@@ -243,7 +255,7 @@
     [self.recorderContainer addSubview:self.recorderLine];
     
     //Recorder label
-    self.recorderLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 25, 120, 25)];
+    self.recorderLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 120/2, 25, 120, 25)];
     self.recorderLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15.0];
     self.recorderLabel.textAlignment = NSTextAlignmentCenter;
     self.recorderLabel.textColor = [UIColor grayColor];
@@ -267,7 +279,7 @@
     [self.playerContainer addSubview:self.playerLine];
     
     //player date label
-    self.playerLabel = [[UILabel alloc] initWithFrame:CGRectMake(100, 25, 120, 25)];
+    self.playerLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 120/2, 25, 120, 25)];
     self.playerLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15.0];
     self.playerLabel.textAlignment = NSTextAlignmentCenter;
     self.playerLabel.textColor = [UIColor grayColor];
@@ -282,7 +294,8 @@
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         [self displayContactAuthView];
     }
-    if (self.displayOpeningTuto) {
+//    if (self.displayOpeningTuto) {
+    if (YES) {
         [self prepareAndDisplayTuto];
         // Update app info
         [ApiUtils updateAppInfoAndExecuteSuccess:nil failure:nil];
@@ -305,12 +318,15 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
+    
     [self setScrollViewSizeForContactCount:(int)MAX([self.contactViews count],[ContactUtils numberOfNonHiddenContacts:self.contacts])];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES];   //it hides
+    
+    [self.openingTutoView setFrame:CGRectMake(0,0,self.contactScrollView.contentSize.width,self.screenHeight - 70)];
     
     // Retrieve messages & contacts
     [self retrieveUnreadMessagesAndNewContacts];
@@ -612,12 +628,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // Set Scroll View size from the number of contacts
 - (void)setScrollViewSizeForContactCount:(int)count
 {
-    NSUInteger rows = count / 3 + 1;
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenRect.size.width;
-    CGFloat screenHeight = screenRect.size.height;
-    float rowHeight = kContactMargin + kContactSize + kContactNameHeight;
-    self.contactScrollView.contentSize = CGSizeMake(screenWidth, MAX(screenHeight - self.contactScrollView.frame.origin.y, rows * rowHeight + 3 * kContactMargin)) ;
+    NSUInteger rows = count / self.contactsPerRow + 1;
+    
+    float rowHeight = self.contactMargin + kContactSize + kContactNameHeight;
+    self.contactScrollView.contentSize = CGSizeMake(self.screenWidth, MAX(self.screenHeight - self.contactScrollView.frame.origin.y, rows * rowHeight + self.contactsPerRow * self.contactMargin)) ;
 }
 
 // Create contact view
@@ -652,7 +666,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)addNameLabelForView:(ContactView *)contactView
 {
     Contact *contact = contactView.contact;
-    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - kContactMargin/4, contactView.frame.origin.y + kContactSize, contactView.frame.size.width + kContactMargin/2, kContactNameHeight)];
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - self.contactMargin/4, contactView.frame.origin.y + kContactSize, contactView.frame.size.width + self.contactMargin/2, kContactNameHeight)];
     
     if ([GeneralUtils isAdminContact:contact]) {
         nameLabel.text = @"Waved";
@@ -993,13 +1007,16 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)updateFrameOfContactView:(ContactView *)view
 {
-    NSInteger row = view.orderPosition / 3 + 1;
-    NSInteger horizontalPosition = 3 - (3*(view.orderPosition/3) + 2 - view.orderPosition);
-    float rowHeight = kContactMargin + kContactSize + kContactNameHeight;
-    view.frame = CGRectMake(kContactMargin + (horizontalPosition - 1) * (kContactSize + kContactMargin), kContactMargin + (row - 1)* rowHeight, kContactSize, kContactSize);
+    NSInteger row = view.orderPosition / self.contactsPerRow + 1;
+    NSInteger horizontalPosition = 1 + view.orderPosition - (view.orderPosition/self.contactsPerRow) * self.contactsPerRow;
+    if (horizontalPosition > self.contactsPerRow) {
+        horizontalPosition = 1;
+    }
+    float rowHeight = self.contactMargin + kContactSize + kContactNameHeight;
+    view.frame = CGRectMake(self.contactMargin + (horizontalPosition - 1) * (kContactSize + self.contactMargin), self.contactMargin + (row - 1)* rowHeight, kContactSize, kContactSize);
     
     // Update frame of Name Label tool
-    view.nameLabel.frame = CGRectMake(view.frame.origin.x - kContactMargin/4, view.frame.origin.y + kContactSize, view.frame.size.width + kContactMargin/2, kContactNameHeight);
+    view.nameLabel.frame = CGRectMake(view.frame.origin.x - self.contactMargin/4, view.frame.origin.y + kContactSize, view.frame.size.width + self.contactMargin/2, kContactNameHeight);
 }
 
 //Create recording mode screen

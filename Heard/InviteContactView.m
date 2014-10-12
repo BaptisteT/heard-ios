@@ -12,9 +12,9 @@
 
 @implementation InviteContactView
 
-- (id)init
+- (id)initWithContactMargin:(CGFloat)contactMargin
 {
-    self = [super initWithFrame:CGRectMake(kContactMargin, kContactMargin, kContactSize, kContactSize)];
+    self = [super initWithFrame:CGRectMake(contactMargin, contactMargin, kContactSize, kContactSize)];
     self.clipsToBounds = NO;
     [self setMultipleTouchEnabled:NO];
     self.userInteractionEnabled = YES;
