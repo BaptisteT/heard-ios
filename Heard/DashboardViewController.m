@@ -294,8 +294,7 @@
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         [self displayContactAuthView];
     }
-//    if (self.displayOpeningTuto) {
-    if (YES) {
+    if (self.displayOpeningTuto) {
         [self prepareAndDisplayTuto];
         // Update app info
         [ApiUtils updateAppInfoAndExecuteSuccess:nil failure:nil];
