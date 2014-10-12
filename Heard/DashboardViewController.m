@@ -288,6 +288,13 @@
         [ApiUtils updateAppInfoAndExecuteSuccess:nil failure:nil];
     } else {
         [GeneralUtils registerForRemoteNotif];
+        if (![GeneralUtils isRegisteredForRemoteNotification]) {
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"notification_error_title",kStringFile,@"comment")
+                                        message:NSLocalizedStringFromTable(@"notification_error_message",kStringFile, @"comment")
+                                       delegate:self
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil] show];
+        }
     }
     
     // Emoji views
@@ -1436,7 +1443,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if ([alertView.message isEqualToString:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment")]) {
+    if ([alertView.message isEqualToString:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment")] || [alertView.message isEqualToString:NSLocalizedStringFromTable(@"notification_error_message",kStringFile, @"comment")]) {
         [GeneralUtils openSettings];
     }
     

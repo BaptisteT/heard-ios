@@ -55,6 +55,10 @@
 "micro_access_error_title" = "No micro access.";
 "micro_access_error_message" = "Please allow micro access in settings.";
 
+// Notification
+"notification_error_title" = "Notification";
+"notification_error_message" = "To be alerted when a friend sends you a message, please allow notifications in your settings.";
+
 // Contact access
 "contact_access_error_message" = "Waved uses your address book to sync your contacts. Please allow contact access in your settings.";
 

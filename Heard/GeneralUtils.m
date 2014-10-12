@@ -173,6 +173,8 @@
 
 + (BOOL)isRegisteredForRemoteNotification
 {
+     if (!PRODUCTION || DEBUG)return YES;
+    
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) { // ios 8
         return ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications] && [[UIApplication sharedApplication] currentUserNotificationSettings] > 0);
     } else { // ios 7
