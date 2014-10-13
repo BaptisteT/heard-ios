@@ -157,10 +157,6 @@
     
     [GeneralUtils addBottomBorder:self.topBarBackground borderSize:0.5];
     
-    // Init address book
-    self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
-    ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
-    
     //Init no message view
     self.bottomTutoView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
     
@@ -312,7 +308,6 @@
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         [self displayContactAuthView];
     } else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
-        self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
         [self initIndexedContacts];
     }
 }
@@ -455,6 +450,11 @@
 
 - (void)matchPhoneContactsWithHeardUsers
 {
+    if (!self.addressBook) {
+        // Init address book
+        self.addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
+        ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
+    }
     if (!self.addressBookFormattedContacts) {
         self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
     }
