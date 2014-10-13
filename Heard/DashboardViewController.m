@@ -157,13 +157,6 @@
     
     [GeneralUtils addBottomBorder:self.topBarBackground borderSize:0.5];
     
-    // Init address book
-    self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
-    ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
-    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
-        [self initIndexedContacts];
-    }
-    
     //Init no message view
     self.bottomTutoView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
     
@@ -314,6 +307,8 @@
     // Go to access view controller if acces has not yet been granted
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         [self displayContactAuthView];
+    } else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
+        [self initIndexedContacts];
     }
 }
 
@@ -421,7 +416,11 @@
 {
     //Structure: @{ "A": @[ @[@"Artois", @"Jonathan", @"(415)-509-9382", @"not selected], @["Azta", "Lorainne", @"06 92 83 48 58", @"selected"]], "B": etc.
     self.indexedContacts = [[NSMutableDictionary alloc] init];
-    
+    if (!self.addressBook) {
+        // Init address book
+        self.addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
+        ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
+    }
     if (!self.addressBookFormattedContacts) {
         self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
     }
@@ -455,7 +454,14 @@
 
 - (void)matchPhoneContactsWithHeardUsers
 {
-    self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
+    if (!self.addressBook) {
+        // Init address book
+        self.addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
+        ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
+    }
+    if (!self.addressBookFormattedContacts) {
+        self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
+    }
     NSMutableDictionary *contactsInfo = [[NSMutableDictionary alloc] init];
     NSMutableDictionary * adressBookWithFormattedKey = [NSMutableDictionary new];
     for (NSString* phoneNumber in self.addressBookFormattedContacts) {
@@ -547,7 +553,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     DashboardViewController * dashboardController = (__bridge DashboardViewController *)context;
     dashboardController.retrieveNewContact = YES;
-
+    dashboardController.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:dashboardController.addressBook];
     ABAddressBookRevert(notificationAddressBook);
 }
 
@@ -1330,20 +1336,21 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Add contact
     else if ([buttonTitle isEqualToString:ACTION_PENDING_OPTION_1]) {
-        [TrackingUtils trackAddContactSuccessful:YES Present:YES Pending:YES];
+        NSString *decimalNumber = [AddressbookUtils getDecimalNumber:self.contactToAdd.phoneNumber];
+        if (!decimalNumber) {
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"add_contact_failure_message", kStringFile, "comment") withTitle:nil];
+            return;
+        }
         
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        
-        NSString *decimalNumber = [AddressbookUtils getDecimalNumber:self.contactToAdd.phoneNumber];
-        
         [AddressbookUtils createOrEditContactWithDecimalNumber:decimalNumber
                                                formattedNumber:self.contactToAdd.phoneNumber
                                                      firstName:self.contactToAdd.firstName
                                                       lastName:self.contactToAdd.lastName];
         
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        
         [self didFinishedAddingContact:self.contactToAdd.firstName];
+        [TrackingUtils trackAddContactSuccessful:YES Present:YES Pending:YES];
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     }
     
     // Block user
