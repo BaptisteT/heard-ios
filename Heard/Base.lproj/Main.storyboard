@@ -1371,7 +1371,7 @@
         <image name="light-blue-square" width="70" height="70"/>
         <image name="menu-button" width="246" height="246"/>
         <image name="next-button" width="246" height="246"/>
-        <image name="welcome-waves" width="320" height="104"/>
+        <image name="welcome-waves" width="320" height="107"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
