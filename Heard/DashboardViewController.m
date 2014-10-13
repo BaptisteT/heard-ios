@@ -160,9 +160,6 @@
     // Init address book
     self.addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
     ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
-    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
-        [self initIndexedContacts];
-    }
     
     //Init no message view
     self.bottomTutoView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
@@ -314,6 +311,9 @@
     // Go to access view controller if acces has not yet been granted
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         [self displayContactAuthView];
+    } else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
+        self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
+        [self initIndexedContacts];
     }
 }
 
@@ -455,7 +455,9 @@
 
 - (void)matchPhoneContactsWithHeardUsers
 {
-    self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
+    if (!self.addressBookFormattedContacts) {
+        self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
+    }
     NSMutableDictionary *contactsInfo = [[NSMutableDictionary alloc] init];
     NSMutableDictionary * adressBookWithFormattedKey = [NSMutableDictionary new];
     for (NSString* phoneNumber in self.addressBookFormattedContacts) {
@@ -547,7 +549,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     DashboardViewController * dashboardController = (__bridge DashboardViewController *)context;
     dashboardController.retrieveNewContact = YES;
-
+    dashboardController.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:dashboardController.addressBook];
     ABAddressBookRevert(notificationAddressBook);
 }
 
