@@ -860,82 +860,6 @@
                             </label>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0u-JM-gz3">
                                 <rect key="frame" x="0.0" y="70" width="320" height="498"/>
-                                <subviews>
-                                    <view hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OPI-LG-GQA">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="498"/>
-                                        <subviews>
-                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Eiv-UN-wGe">
-                                                <rect key="frame" x="30" y="210" width="260" height="50"/>
-                                                <subviews>
-                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="action_label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ket-1Q-dAU">
-                                                        <rect key="frame" x="0.0" y="0.0" width="209" height="50"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                        <color key="textColor" red="0.3921568627" green="0.78823529410000004" blue="0.95294117649999999" alpha="1" colorSpace="deviceRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="suE-Vj-l4m">
-                                                        <rect key="frame" x="210" y="0.0" width="50" height="50"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="50" id="mSl-gH-jFI"/>
-                                                        </constraints>
-                                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                        <state key="normal" title="Skip">
-                                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                        </state>
-                                                        <connections>
-                                                            <action selector="openingTutoSkipButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="Qb5-7b-yAc"/>
-                                                        </connections>
-                                                    </button>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KYD-Pb-nPl">
-                                                        <rect key="frame" x="209" y="0.0" width="1" height="50"/>
-                                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="1" id="1r2-Y8-2fm"/>
-                                                        </constraints>
-                                                    </view>
-                                                </subviews>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="50" id="3xy-hc-oQX"/>
-                                                    <constraint firstItem="KYD-Pb-nPl" firstAttribute="top" secondItem="Eiv-UN-wGe" secondAttribute="top" id="58l-cm-yyw"/>
-                                                    <constraint firstItem="ket-1Q-dAU" firstAttribute="top" secondItem="Eiv-UN-wGe" secondAttribute="top" id="6Dy-HN-MYW"/>
-                                                    <constraint firstAttribute="trailing" secondItem="suE-Vj-l4m" secondAttribute="trailing" id="CP7-dw-p5g"/>
-                                                    <constraint firstItem="suE-Vj-l4m" firstAttribute="leading" secondItem="KYD-Pb-nPl" secondAttribute="trailing" id="TGa-Ad-9O6"/>
-                                                    <constraint firstItem="ket-1Q-dAU" firstAttribute="leading" secondItem="Eiv-UN-wGe" secondAttribute="leading" id="foG-4J-BTH"/>
-                                                    <constraint firstAttribute="bottom" secondItem="suE-Vj-l4m" secondAttribute="bottom" id="k5i-az-jLt"/>
-                                                    <constraint firstAttribute="width" constant="260" id="kAB-G4-ebf"/>
-                                                    <constraint firstItem="suE-Vj-l4m" firstAttribute="top" secondItem="Eiv-UN-wGe" secondAttribute="top" id="nYu-OE-XFo"/>
-                                                    <constraint firstAttribute="bottom" secondItem="KYD-Pb-nPl" secondAttribute="bottom" id="r5W-Y6-xwF"/>
-                                                    <constraint firstAttribute="bottom" secondItem="ket-1Q-dAU" secondAttribute="bottom" id="wdE-PU-C9s"/>
-                                                    <constraint firstItem="KYD-Pb-nPl" firstAttribute="leading" secondItem="ket-1Q-dAU" secondAttribute="trailing" id="yjA-4N-PLm"/>
-                                                </constraints>
-                                            </view>
-                                        </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.80000000000000004" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="centerX" secondItem="Eiv-UN-wGe" secondAttribute="centerX" id="Xlx-KA-Kp6"/>
-                                            <constraint firstItem="Eiv-UN-wGe" firstAttribute="top" secondItem="OPI-LG-GQA" secondAttribute="top" constant="210" id="dir-Da-Wph"/>
-                                        </constraints>
-                                    </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kjk-yL-lun">
-                                        <rect key="frame" x="0.0" y="0.0" width="10" height="498"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="10" id="1gb-JE-1mt"/>
-                                            <constraint firstAttribute="height" constant="498" id="yy8-6F-NUy"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="OPI-LG-GQA" secondAttribute="trailing" id="2G8-Wb-2aO"/>
-                                    <constraint firstAttribute="bottom" secondItem="Kjk-yL-lun" secondAttribute="bottom" id="4CF-xf-chH"/>
-                                    <constraint firstAttribute="trailing" secondItem="Kjk-yL-lun" secondAttribute="trailing" constant="310" id="7ld-be-kdh"/>
-                                    <constraint firstItem="OPI-LG-GQA" firstAttribute="leading" secondItem="a0u-JM-gz3" secondAttribute="leading" id="95g-VZ-Dpx"/>
-                                    <constraint firstItem="OPI-LG-GQA" firstAttribute="top" secondItem="a0u-JM-gz3" secondAttribute="top" id="Fxf-3B-FtW"/>
-                                    <constraint firstItem="Kjk-yL-lun" firstAttribute="top" secondItem="a0u-JM-gz3" secondAttribute="top" id="Lcf-0S-vXb"/>
-                                    <constraint firstAttribute="bottom" secondItem="OPI-LG-GQA" secondAttribute="bottom" id="Nh1-DO-upN"/>
-                                    <constraint firstItem="Kjk-yL-lun" firstAttribute="leading" secondItem="a0u-JM-gz3" secondAttribute="leading" id="jcw-wD-BIi"/>
-                                </constraints>
                             </scrollView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rAY-VR-0Tm">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -1099,10 +1023,6 @@
                         <outlet property="emojiContainer" destination="9c7-Db-Duq" id="eAA-lN-xCw"/>
                         <outlet property="emojiScrollview" destination="dBT-dz-oUj" id="Lzh-Ht-8gh"/>
                         <outlet property="menuButton" destination="3eZ-vS-6nf" id="DVk-PZ-hkG"/>
-                        <outlet property="openingTutoDescLabel" destination="ket-1Q-dAU" id="SV5-8Z-9bv"/>
-                        <outlet property="openingTutoDescView" destination="Eiv-UN-wGe" id="Mw3-1P-14q"/>
-                        <outlet property="openingTutoSkipButton" destination="suE-Vj-l4m" id="T1U-yb-znf"/>
-                        <outlet property="openingTutoView" destination="OPI-LG-GQA" id="0u8-5O-ci5"/>
                         <outlet property="permissionImage" destination="3jI-7E-FHp" id="Wh5-Ui-FQe"/>
                         <outlet property="permissionMessage" destination="U0W-zC-Eju" id="2DM-cl-L54"/>
                         <outlet property="permissionNote" destination="BhI-VI-ylP" id="81O-Xs-Ocg"/>

@@ -108,10 +108,11 @@
 @property (nonatomic) BOOL displayOpeningTuto;
 @property (nonatomic, strong) UIView *bottomTutoView;
 @property (nonatomic, strong) UILabel *bottomTutoViewLabel;
-@property (strong, nonatomic) IBOutlet UIView *openingTutoView;
-@property (strong, nonatomic) IBOutlet UILabel *openingTutoDescLabel;
-@property (strong, nonatomic) IBOutlet UIButton *openingTutoSkipButton;
-@property (weak, nonatomic) IBOutlet UIView *openingTutoDescView;
+@property (strong, nonatomic) UIView *openingTutoView;
+@property (strong, nonatomic) UIView *openingTutoBarView;
+@property (strong, nonatomic) UILabel *openingTutoDescLabel;
+@property (strong, nonatomic) UIButton *openingTutoSkipButton;
+@property (strong, nonatomic) UIView *openingTutoDescView;
 @property (strong, nonatomic) UIImageView *openingTutoArrow;
 // Invite new contacts
 @property (strong, nonatomic) NSMutableDictionary *indexedContacts;
@@ -290,11 +291,9 @@
     self.playerLabel.layer.cornerRadius = 5;
     [self.playerContainer addSubview:self.playerLabel];
     
-    // Go to access view controller if acces has not yet been granted
-    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
-        [self displayContactAuthView];
-    }
     if (self.displayOpeningTuto) {
+        [self initOpeningTutoView];
+        
         [self prepareAndDisplayTuto];
         // Update app info
         [ApiUtils updateAppInfoAndExecuteSuccess:nil failure:nil];
@@ -311,6 +310,11 @@
     
     // Emoji views
     [self addEmojiViewsToContainer];
+    
+    // Go to access view controller if acces has not yet been granted
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
+        [self displayContactAuthView];
+    }
 }
 
 // Make sure scroll view has been resized (necessary because layout constraints change scroll view size)
@@ -629,8 +633,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     NSUInteger rows = count / self.contactsPerRow + 1;
     
-    float rowHeight = self.contactMargin + kContactSize + kContactNameHeight;
-    self.contactScrollView.contentSize = CGSizeMake(self.screenWidth, MAX(self.screenHeight - self.contactScrollView.frame.origin.y, rows * rowHeight + self.contactsPerRow * self.contactMargin)) ;
+    float rowHeight = kContactMinimumMargin + kContactSize + kContactNameHeight;
+    self.contactScrollView.contentSize = CGSizeMake(self.screenWidth, MAX(self.screenHeight - self.contactScrollView.frame.origin.y, rows * rowHeight + self.contactsPerRow * kContactMinimumMargin)) ;
 }
 
 // Create contact view
@@ -1011,8 +1015,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (horizontalPosition > self.contactsPerRow) {
         horizontalPosition = 1;
     }
-    float rowHeight = self.contactMargin + kContactSize + kContactNameHeight;
-    view.frame = CGRectMake(self.contactMargin + (horizontalPosition - 1) * (kContactSize + self.contactMargin), self.contactMargin + (row - 1)* rowHeight, kContactSize, kContactSize);
+    float rowHeight = kContactMinimumMargin + kContactSize + kContactNameHeight;
+    view.frame = CGRectMake(self.contactMargin + (horizontalPosition - 1) * (kContactSize + self.contactMargin), kContactMinimumMargin + (row - 1)* rowHeight, kContactSize, kContactSize);
     
     // Update frame of Name Label tool
     view.nameLabel.frame = CGRectMake(view.frame.origin.x - self.contactMargin/4, view.frame.origin.y + kContactSize, view.frame.size.width + self.contactMargin/2, kContactNameHeight);
@@ -1742,10 +1746,63 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.contactScrollView bringSubviewToFront:self.currentUserContactView.nameLabel];
 }
 
-- (IBAction)openingTutoSkipButtonClicked:(id)sender {
+- (void)openingTutoSkipButtonClicked
+{
     [self hideOpeningTuto];
     self.displayOpeningTuto = NO;
     [GeneralUtils registerForRemoteNotif];
+}
+
+- (void)initOpeningTutoView
+{
+    float boxWidth = 260;
+    float boxHeight = 50;
+    float boxY = 210;
+    float separatorWidth = 1;
+    
+    self.openingTutoView = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.screenWidth, self.screenHeight - 70)];
+    self.openingTutoView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
+    self.openingTutoDescView = [[UIView alloc] initWithFrame:CGRectMake(self.openingTutoView.frame.size.width/2 - boxWidth/2,
+                                                                        boxY,
+                                                                        boxWidth, boxHeight)];
+    self.openingTutoDescView.backgroundColor = [UIColor whiteColor];
+    self.openingTutoDescView.clipsToBounds = YES;
+    self.openingTutoDescView.layer.cornerRadius = 5;
+    
+    [self.openingTutoView addSubview:self.openingTutoDescView];
+    
+    self.openingTutoDescLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,0,boxWidth - boxHeight - separatorWidth, boxHeight)];
+    self.openingTutoDescLabel.textAlignment = NSTextAlignmentCenter;
+    self.openingTutoDescLabel.textColor = [ImageUtils blue];
+    self.openingTutoDescLabel.font = [self.openingTutoDescLabel.font fontWithSize:18.0];
+    
+    [self.openingTutoDescView addSubview:self.openingTutoDescLabel];
+    
+    self.openingTutoSkipButton = [[UIButton alloc] initWithFrame:CGRectMake(boxWidth - boxHeight, 0, boxHeight, boxHeight)];
+    [self.openingTutoSkipButton setTitle:@"Skip" forState:UIControlStateNormal];
+    self.openingTutoSkipButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.0];
+    [self.openingTutoSkipButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.openingTutoSkipButton addTarget:self
+                 action:@selector(openingTutoSkipButtonClicked)
+       forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.openingTutoDescView addSubview:self.openingTutoSkipButton];
+    
+    UIView *separatingBar = [[UIView alloc] initWithFrame:CGRectMake(boxWidth - boxHeight - separatorWidth, 0, separatorWidth, boxHeight)];
+    separatingBar.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    
+    [self.openingTutoDescView addSubview:separatingBar];
+    
+    self.openingTutoView.hidden = YES;
+    
+    [self.contactScrollView addSubview:self.openingTutoView];
+    
+    self.openingTutoBarView = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.screenWidth, 70)];
+    self.openingTutoBarView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
+    
+    self.openingTutoBarView.hidden = YES;
+    
+    [self.view addSubview:self.openingTutoBarView];
 }
 
 - (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel forOrigin:(float)x
@@ -1766,12 +1823,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.openingTutoSkipButton setTitle:NSLocalizedStringFromTable(@"skip_button_title", kStringFile, @"comment") forState:UIControlStateNormal];
     
     self.openingTutoView.hidden = NO;
+    self.openingTutoBarView.hidden = NO;
 }
 
 - (void)hideOpeningTuto
 {
     [self hideStatusBarComponents:NO];
     self.openingTutoView.hidden = YES;
+    self.openingTutoBarView.hidden = YES;
 }
 
 - (void)resetApplicationBadgeNumber {

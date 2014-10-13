@@ -14,7 +14,7 @@
 
 - (id)initWithContactMargin:(CGFloat)contactMargin
 {
-    self = [super initWithFrame:CGRectMake(contactMargin, contactMargin, kContactSize, kContactSize)];
+    self = [super initWithFrame:CGRectMake(contactMargin, kContactMinimumMargin, kContactSize, kContactSize)];
     self.clipsToBounds = NO;
     [self setMultipleTouchEnabled:NO];
     self.userInteractionEnabled = YES;
