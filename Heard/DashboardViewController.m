@@ -416,7 +416,11 @@
 {
     //Structure: @{ "A": @[ @[@"Artois", @"Jonathan", @"(415)-509-9382", @"not selected], @["Azta", "Lorainne", @"06 92 83 48 58", @"selected"]], "B": etc.
     self.indexedContacts = [[NSMutableDictionary alloc] init];
-    
+    if (!self.addressBook) {
+        // Init address book
+        self.addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
+        ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
+    }
     if (!self.addressBookFormattedContacts) {
         self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
     }
