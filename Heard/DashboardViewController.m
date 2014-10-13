@@ -1330,20 +1330,21 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Add contact
     else if ([buttonTitle isEqualToString:ACTION_PENDING_OPTION_1]) {
-        [TrackingUtils trackAddContactSuccessful:YES Present:YES Pending:YES];
+        NSString *decimalNumber = [AddressbookUtils getDecimalNumber:self.contactToAdd.phoneNumber];
+        if (!decimalNumber) {
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"add_contact_failure_message", kStringFile, "comment") withTitle:nil];
+            return;
+        }
         
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        
-        NSString *decimalNumber = [AddressbookUtils getDecimalNumber:self.contactToAdd.phoneNumber];
-        
         [AddressbookUtils createOrEditContactWithDecimalNumber:decimalNumber
                                                formattedNumber:self.contactToAdd.phoneNumber
                                                      firstName:self.contactToAdd.firstName
                                                       lastName:self.contactToAdd.lastName];
         
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        
         [self didFinishedAddingContact:self.contactToAdd.firstName];
+        [TrackingUtils trackAddContactSuccessful:YES Present:YES Pending:YES];
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     }
     
     // Block user

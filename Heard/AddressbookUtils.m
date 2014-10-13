@@ -50,7 +50,7 @@
                                                        [[NSCharacterSet decimalDigitCharacterSet] invertedSet]]
                                                       componentsJoinedByString:@""];
                 
-                if ([personDecimalPhoneNumber rangeOfString:decimalNumber].location != NSNotFound) {
+                if (decimalNumber && [personDecimalPhoneNumber rangeOfString:decimalNumber].location != NSNotFound) {
                     match = YES;
                 }
                 
