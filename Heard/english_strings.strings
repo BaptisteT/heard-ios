@@ -73,6 +73,7 @@
 "confirmation_code_error_message" = "We failed to send your confirmation code, the provided phone number might be invalid.";
 "code_resent_label_text" = "We sent a second SMS.";
 "invalid_code_error_message" = "Invalid code, please try again.";
+"sms_instruction_label" = "We have sent you an SMS";
 
 // Sign up
 "back_to_phone_verification_confirmation_message" = "Are you sure you want to go back to phone verification?";

@@ -17,12 +17,15 @@
 #import "Constants.h"
 #import "HeardAppDelegate.h"
 
+#define IS_IPHONE_4 ([UIScreen mainScreen].bounds.size.height < 568?YES:NO)
+
 #define CONFIMATION_CODE_DIGITS 4
 #define BORDER_SIZE 0.5
 
 @interface CodeConfirmationViewController ()
 
 @property (weak, nonatomic) IBOutlet UITextField *codeTextField;
+@property (weak, nonatomic) IBOutlet UITextView *smsInstructionLabel;
 @property (weak, nonatomic) IBOutlet UILabel *phoneNumberLabel;
 @property (nonatomic) BOOL existingUser;
 @property (nonatomic, strong) NSTimer *countdownTimer;
@@ -71,6 +74,12 @@
     self.secondLabel.text = @"";
     self.thirdLabel.text = @"";
     self.fourthLabel.text = @"";
+    
+    if (IS_IPHONE_4) {
+        self.phoneNumberLabel.hidden = YES;
+        self.resendLabel.hidden = YES;
+        self.timeRemainLabel.hidden = YES;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="OIk-2W-hgJ">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -400,7 +401,7 @@
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="23"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="numberPad"/>
                             </textField>
-                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="We have sent you an SMS to" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MZZ-KQ-tyA">
+                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="We have sent you an SMS" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MZZ-KQ-tyA">
                                 <rect key="frame" x="20" y="208" width="280" height="40"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -589,6 +590,7 @@
                         <outlet property="resendLabel" destination="CN6-Oi-pl2" id="rEg-z7-Fv3"/>
                         <outlet property="secondImageView" destination="yNZ-n2-i4R" id="2yA-Nb-8ie"/>
                         <outlet property="secondLabel" destination="ngC-W7-1qG" id="qiQ-t1-FJN"/>
+                        <outlet property="smsInstructionLabel" destination="MZZ-KQ-tyA" id="ZOc-Ad-xgg"/>
                         <outlet property="thirdImageView" destination="9eI-bw-sJW" id="O8q-38-5zf"/>
                         <outlet property="thirdLabel" destination="bIS-wB-5xX" id="IUe-0X-8Uy"/>
                         <outlet property="timeRemainLabel" destination="e4a-5J-6DL" id="Lsh-fC-9L4"/>
@@ -1368,6 +1370,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="xdp-at-Nje"/>
+        <segue reference="lrb-7Z-tIJ"/>
     </inferredMetricsTieBreakers>
 </document>

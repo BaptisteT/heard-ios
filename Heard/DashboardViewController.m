@@ -301,7 +301,7 @@
         [GeneralUtils registerForRemoteNotif];
         if (![GeneralUtils isRegisteredForRemoteNotification]) {
             [[[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"notification_error_title",kStringFile,@"comment")
-                                        message:NSLocalizedStringFromTable(@"notification_error_message",kStringFile, @"comment")
+                                        message:NSLocalizedStringFromTable(@"notification_error_message",kStringFile,  @"comment")
                                        delegate:self
                               cancelButtonTitle:@"OK"
                               otherButtonTitles:nil] show];
