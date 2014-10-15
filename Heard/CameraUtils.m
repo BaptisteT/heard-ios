@@ -27,24 +27,20 @@
 + (void)addCircleOverlayToEditView:(UIViewController *)viewController
 {
     CGFloat screenHeight = [[UIScreen mainScreen] bounds].size.height;
+    CGFloat screenWidth = [[UIScreen mainScreen] bounds].size.width;
     UIView *plCropOverlay = [[[viewController.view.subviews objectAtIndex:1]subviews] objectAtIndex:0];
     plCropOverlay.hidden = YES;
-    int position = 0;
-    if (screenHeight == 568) {
-        position = 124;
-    } else {
-        position = 80;
-    }
+    int position = (screenHeight - screenWidth + 10)/2;
     
     CAShapeLayer *circleLayer = [CAShapeLayer layer];
     UIBezierPath *path2 = [UIBezierPath bezierPathWithOvalInRect:
-                           CGRectMake(0.0f, position, 320.0f, 320.0f)];
+                           CGRectMake(0.0f, position, screenWidth, screenWidth)];
     [path2 setUsesEvenOddFillRule:YES];
     
     [circleLayer setPath:[path2 CGPath]];
     
     [circleLayer setFillColor:[[UIColor clearColor] CGColor]];
-    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 320, screenHeight-72) cornerRadius:0];
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, screenWidth, screenHeight-72) cornerRadius:0];
     
     [path appendPath:path2];
     [path setUsesEvenOddFillRule:YES];
@@ -56,7 +52,7 @@
     fillLayer.opacity = 0.8;
     [viewController.view.layer addSublayer:fillLayer];
     
-    UILabel *moveLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 10, 320, 50)];
+    UILabel *moveLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 10, screenWidth, 50)];
     [moveLabel setText:@"Move and Scale"];
     [moveLabel setTextAlignment:NSTextAlignmentCenter];
     [moveLabel setTextColor:[UIColor whiteColor]];
