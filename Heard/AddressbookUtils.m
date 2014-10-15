@@ -181,20 +181,21 @@
     NSMutableDictionary *addressBookFormattedContacts = [[NSMutableDictionary alloc] init];
     NSNumber *initialInt = [NSNumber numberWithInteger:0];
     NSMutableDictionary *stats = nil;
-
-    stats = [NSMutableDictionary dictionaryWithObjectsAndKeys:initialInt, kNbContactKey, initialInt, kNbContactPhotoKey, initialInt, kNbContactFbKey, initialInt, kNbContactFavoriteKey, initialInt, kNbContactPhotoOnlyKey, initialInt, kNbContactLinkedKey,initialInt, kNbContactRelatedKey, initialInt, kNbContactFamilyKey, nil];
-    
+    if ([GeneralUtils hasNeverSentStats]) {
+        stats = [NSMutableDictionary dictionaryWithObjectsAndKeys:initialInt, kNbContactKey, initialInt, kNbContactPhotoKey, initialInt, kNbContactFbKey, initialInt, kNbContactFavoriteKey, initialInt, kNbContactPhotoOnlyKey, initialInt, kNbContactLinkedKey,initialInt, kNbContactRelatedKey, initialInt, kNbContactFamilyKey, nil];
+    }
     NBPhoneNumberUtil *phoneUtil = [NBPhoneNumberUtil sharedInstance];
     
     CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(addressBook);
     CFIndex peopleCount = CFArrayGetCount(people);
+    NSString *defaultCountry = [phoneUtil countryCodeByCarrier];
     
     NSMutableDictionary *countryCodes = [[NSMutableDictionary alloc] init];
     
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
     
-    NSNumber *defaultCountryCode = [phoneUtil getCountryCodeForRegion:[phoneUtil countryCodeByCarrier]];
+    NSNumber *defaultCountryCode = [phoneUtil getCountryCodeForRegion:defaultCountry];
     
     for (CFIndex i = 0 ; i < peopleCount; i++) {
         ABRecordRef person = CFArrayGetValueAtIndex(people, i);
@@ -203,7 +204,7 @@
         for (CFIndex j = 0; j < ABMultiValueGetCount(phoneNumbers); j++) {
             NSString* phoneNumber = (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, j);
             NSError *aError = nil;
-            NBPhoneNumber *nbPhoneNumber = [phoneUtil parseWithPhoneCarrierRegion:phoneNumber error:&aError];
+            NBPhoneNumber *nbPhoneNumber = [phoneUtil parse:phoneNumber defaultRegion:defaultCountry error:&aError];
             
             if (aError == nil && [phoneUtil isValidNumber:nbPhoneNumber] && ([phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeMOBILE
                                                                              || [phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeFIXED_LINE_OR_MOBILE) ) {
@@ -274,7 +275,7 @@
     
     CFRelease(people);
     
-    if ([GeneralUtils hasNeverSentStats]) {
+    if (stats) {
         [ApiUtils updateAddressBookStats:stats success:nil failure:nil];
     }
     return addressBookFormattedContacts;

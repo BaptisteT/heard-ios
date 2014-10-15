@@ -366,7 +366,7 @@
                               otherButtonTitles:nil] show];
             return;
         } else {
-            if (![GeneralUtils isCurrentUser:self.contact] && !self.contact.isFutureContact) {
+            if (![GeneralUtils isCurrentUser:self.contact] && !self.contact.isFutureContact && self.contact.identifier != 0) {
                 [ApiUtils currentUserIsRecording:YES toUser:self.contact.identifier success:nil failure:nil];
             }
             self.isRecording = YES;
@@ -393,7 +393,7 @@
 
 - (void)stopRecording
 {
-    if (![GeneralUtils isCurrentUser:self.contact] && !self.contact.isFutureContact) {
+    if (![GeneralUtils isCurrentUser:self.contact] && !self.contact.isFutureContact && self.contact.identifier != 0) {
         [ApiUtils currentUserIsRecording:NO toUser:self.contact.identifier success:nil failure:nil];
     }
     self.isRecording = NO;

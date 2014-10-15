@@ -308,7 +308,7 @@
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         [self displayContactAuthView];
     } else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
-        [self initIndexedContacts];
+        [self initAddressBookFormattedContacts];
     }
 }
 
@@ -416,14 +416,7 @@
 {
     //Structure: @{ "A": @[ @[@"Artois", @"Jonathan", @"(415)-509-9382", @"not selected], @["Azta", "Lorainne", @"06 92 83 48 58", @"selected"]], "B": etc.
     self.indexedContacts = [[NSMutableDictionary alloc] init];
-    if (!self.addressBook) {
-        // Init address book
-        self.addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
-        ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
-    }
-    if (!self.addressBookFormattedContacts) {
-        self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
-    }
+    [self initAddressBookFormattedContacts];
     for (NSString *phoneNumber in self.addressBookFormattedContacts) {
         Contact *contact = (Contact *)[self.addressBookFormattedContacts objectForKey:phoneNumber];
         
@@ -452,7 +445,7 @@
     }
 }
 
-- (void)matchPhoneContactsWithHeardUsers
+- (void)initAddressBookFormattedContacts
 {
     if (!self.addressBook) {
         // Init address book
@@ -462,6 +455,11 @@
     if (!self.addressBookFormattedContacts) {
         self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
     }
+}
+
+- (void)matchPhoneContactsWithHeardUsers
+{
+    [self initAddressBookFormattedContacts];
     NSMutableDictionary *contactsInfo = [[NSMutableDictionary alloc] init];
     NSMutableDictionary * adressBookWithFormattedKey = [NSMutableDictionary new];
     for (NSString* phoneNumber in self.addressBookFormattedContacts) {
@@ -1005,6 +1003,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                           cancelButtonTitle:@"OK"
                           otherButtonTitles:nil] show];
         return;
+    }
+    if (!self.indexedContacts) {
+        [self initIndexedContacts];
     }
 
     [self performSegueWithIdentifier:@"Invite Contacts Segue" sender:message];
