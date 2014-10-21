@@ -65,11 +65,11 @@
                                   group.lastMessageDate = [[NSDate date] timeIntervalSince1970];
                                   [self.delegate addNewGroup:group];
                                   [GeneralUtils showMessage:NSLocalizedStringFromTable(@"group_successfully_created_message", kStringFile, nil) withTitle:nil];
-                                  [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                                  [MBProgressHUD hideHUDForView:self.view animated:YES];
                                   [self dismissViewControllerAnimated:YES completion:nil];
                               }
                               failure:^void() {
-                                  [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                                  [MBProgressHUD hideHUDForView:self.view animated:YES];
                                   [GeneralUtils showMessage:NSLocalizedStringFromTable(@"group_creation_failed_message", kStringFile, nil) withTitle:nil];
                               }];
     }
@@ -119,7 +119,7 @@
         cell.imageView.image = [UIImage imageNamed:@"checkbox"];
         self.membersLabel.text = [NSString stringWithFormat:@"Selected Members (%lu)",self.selectedContacts.count];
     } else {
-        if ([self.selectedContacts count] > kMaxGroupMembers) {
+        if ([self.selectedContacts count] > kMaxGroupMembers - 2) {
             [GeneralUtils showMessage:nil withTitle:NSLocalizedStringFromTable(@"max_group_members_title", kStringFile, nil)];
         } else {
             [self.selectedContacts addObject:contact];
