@@ -34,6 +34,8 @@
     self.contactsTableView.delegate = self;
     self.contactsTableView.dataSource = self;
     
+    self.contactsTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    
 }
 
 // ----------------------------------------------------------
@@ -97,10 +99,6 @@
         cell.profilePicture.layer.cornerRadius = PROFILE_PIC_SIZE/2;
         
         cell.delegate = self;
-        
-        UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(0, cell.contentView.frame.size.height-0.3, cell.contentView.frame.size.width, 0.3)];
-        seperator.backgroundColor = [UIColor colorWithRed:220/255.0 green:220/255.0 blue:220/255.0 alpha:1];
-        [cell.contentView addSubview:seperator];
         
         return cell;
     }
