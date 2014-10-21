@@ -668,7 +668,7 @@
 // Get new contact info
 + (void)getNewGroupInfo:(NSInteger)groupId AndExecuteSuccess:(void(^)(Group *group))successBlock failure:(void(^)())failureBlock
 {
-    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"group/get_group_info.json"];
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"groups/get_group_info.json"];
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     [parameters setObject:[NSNumber numberWithInteger:groupId] forKey:@"group_id"];

@@ -54,9 +54,9 @@
 
 - (NSInteger)getSenderOrGroupIdentifier {
     if ([self isGroupMessage]) {
-        return self.senderId;
-    } else {
         return self.groupId;
+    } else {
+        return self.senderId;
     }
 }
 
