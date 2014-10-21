@@ -53,7 +53,11 @@
 - (void)removeEmojiOverlay;
 - (void)sendRecording;
 - (void)setContactIsRecordingProperty:(BOOL)flag;
-
+- (NSInteger)getLastMessageExchangedDate;
+- (void)updateLastMessageDate:(NSInteger)date;
+- (BOOL)isGroupContactView;
+- (BOOL)isFutureContact ;
+- (NSInteger)contactIdentifier;
 
 @end
 

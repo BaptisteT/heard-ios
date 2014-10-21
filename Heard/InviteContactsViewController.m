@@ -135,7 +135,7 @@
         [self.selectedContacts addObject:phoneNumber];
     }
     
-    self.inviteButtonLabel.text = [NSString stringWithFormat:@"%@ (%ld)",NSLocalizedStringFromTable(@"invite_label_text",kStringFile,@"comment"), [self.selectedContacts count]];
+    self.inviteButtonLabel.text = [NSString stringWithFormat:@"%@ (%ld)",NSLocalizedStringFromTable(@"invite_label_text",kStringFile,@"comment"), (unsigned long)[self.selectedContacts count]];
     
     if ([self.selectedContacts count] == 1) {
         [self showInviteButton];
@@ -146,7 +146,7 @@
 {
     [self.selectedContacts removeObject:phoneNumber];
     
-    self.inviteButtonLabel.text = [NSString stringWithFormat:@"%@ (%ld)",NSLocalizedStringFromTable(@"invite_label_text",kStringFile,@"comment"), [self.selectedContacts count]];
+    self.inviteButtonLabel.text = [NSString stringWithFormat:@"%@ (%ld)",NSLocalizedStringFromTable(@"invite_label_text",kStringFile,@"comment"), (unsigned long)[self.selectedContacts count]];
     
     if ([self.selectedContacts count] == 0) {
         [self hideInviteButton];

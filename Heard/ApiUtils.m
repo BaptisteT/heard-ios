@@ -14,6 +14,8 @@
 #import "GeneralUtils.h"
 #import "TrackingUtils.h"
 #import <AVFoundation/AVFoundation.h>
+#import "Group.h"
+#import "ContactView.h"
 
 @implementation ApiUtils
 
@@ -75,9 +77,7 @@
                failure:(void(^)())failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"sessions.json"];
-    
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-    
     [parameters setObject:phoneNumber forKey:@"phone_number"];
     
     if (retry) {
@@ -200,7 +200,7 @@
 
 // Send message
 + (void)sendMessage:(NSData *)audioData
-             toUser:(Contact *)contact
+      toContactView:(ContactView *)contactView
             success:(void(^)())successBlock
             failure:(void (^)())failureBlock
 {
@@ -208,13 +208,16 @@
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     [self enrichParametersWithToken:parameters];
     
-    if (contact.isFutureContact) {
+    if ([contactView isFutureContact]) {
         path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages/create_future_messages.json"];
-        [parameters setObject:[NSArray arrayWithObject:contact.phoneNumber] forKey:@"future_contact_phones"];
-        [parameters setObject:contact.firstName forKey:@"receiver_first_name"];
+        [parameters setObject:[NSArray arrayWithObject:contactView.contact.phoneNumber] forKey:@"future_contact_phones"];
+        [parameters setObject:contactView.contact.firstName forKey:@"receiver_first_name"];
     } else {
         path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages.json"];
-        [parameters setObject:[NSNumber numberWithLong:contact.identifier] forKey:@"receiver_id"];
+        [parameters setObject:[NSNumber numberWithLong:[contactView contactIdentifier]] forKey:@"receiver_id"];
+        if ([contactView isGroupContactView]) {
+            [parameters setObject:@"1" forKey:@"is_group"];
+        }
     }
     
     [[ApiUtils sharedClient] POST:path
@@ -396,7 +399,6 @@
     
     [[ApiUtils sharedClient] GET:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
         NSDictionary *result = [JSON valueForKeyPath:@"result"];
-        
         NSDictionary *rawContact = [result objectForKey:@"contact"];
         
         if (successBlock) {
@@ -632,6 +634,54 @@
         }
     }failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"ERROR: %@, %@", task.description, error);
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
+// Create groups
++ (void)createGroupWithName:(NSString *)groupName
+                    members:(NSArray *)membersId
+                    success:(void(^)(NSInteger groupId))successBlock
+                    failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"groups.json"];
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [self enrichParametersWithToken:parameters];
+    [parameters setObject:groupName forKey:@"group_name"];
+    [parameters setObject:membersId forKey:@"members"];
+    
+    [[ApiUtils sharedClient] POST:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        NSDictionary *result = [JSON valueForKeyPath:@"result"];
+        NSInteger groupId = [[result valueForKeyPath:@"group_id"] integerValue];
+       if (successBlock) {
+            successBlock(groupId);
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
+// Get new contact info
++ (void)getNewGroupInfo:(NSInteger)groupId AndExecuteSuccess:(void(^)(Group *group))successBlock failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"group/get_group_info.json"];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setObject:[NSNumber numberWithInteger:groupId] forKey:@"group_id"];
+    [self enrichParametersWithToken:parameters];
+    
+    [[ApiUtils sharedClient] GET:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        NSDictionary *result = [JSON valueForKeyPath:@"result"];
+        NSDictionary *rawGroup = [result objectForKey:@"group"];
+        
+        if (successBlock) {
+            successBlock([Group rawGroupToInstance:rawGroup]);
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (failureBlock) {
             failureBlock();
         }

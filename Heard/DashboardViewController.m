@@ -33,6 +33,10 @@
 #import "InviteContactsViewController.h"
 #import "EmojiView.h"
 #import <MediaPlayer/MPVolumeView.h>
+#import "CreateGroupsViewController.h"
+#import "Group.h"
+#import "GroupView.h"
+#import "GroupUtils.h"
 
 #define ACTION_OTHER_MENU_OPTION_1 NSLocalizedStringFromTable(@"hide_contacts_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"edit_profile_button_title",kStringFile,@"comment")
@@ -40,6 +44,7 @@
 #define ACTION_OTHER_MENU_OPTION_4 NSLocalizedStringFromTable(@"feedback_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_5 NSLocalizedStringFromTable(@"rate_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_6 NSLocalizedStringFromTable(@"log_out_button_title",kStringFile,@"comment")
+#define ACTION_OTHER_MENU_OPTION_7 NSLocalizedStringFromTable(@"manage_groups_button_title",kStringFile,@"comment")
 #define ACTION_PENDING_OPTION_1 NSLocalizedStringFromTable(@"add_to_contact_button_title",kStringFile,@"comment")
 #define ACTION_PENDING_OPTION_2 NSLocalizedStringFromTable(@"block_button_title",kStringFile,@"comment")
 #define ACTION_SHEET_PROFILE_OPTION_1 NSLocalizedStringFromTable(@"edit_picture_button_title",kStringFile,@"comment")
@@ -57,6 +62,8 @@
 
 @interface DashboardViewController ()
 
+// Groups
+@property (strong, nonatomic) NSMutableArray *groups;
 // Contacts
 @property (nonatomic) ABAddressBookRef addressBook;
 @property (strong, nonatomic) NSMutableDictionary *addressBookFormattedContacts;
@@ -185,11 +192,14 @@
         [self.contacts addObject:meContact];
     }
     
+    // Create Groups
+    self.groups = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).groups;
+    
     //Create invite contact view
     self.inviteContactView = [[InviteContactView alloc] initWithContactMargin:self.contactMargin];
     self.inviteContactView.delegate = self;
     [self.contactScrollView addSubview:self.inviteContactView];
-    [self addNameLabelForView:self.inviteContactView];
+    [self addNameLabelToView:self.inviteContactView];
     
     // Create contact views
     [self displayContactViews];
@@ -340,6 +350,9 @@
     } else if ([segueName isEqualToString:@"Invite Contacts Segue"]) {
         ((InviteContactsViewController *) [segue destinationViewController]).message = sender;
          ((InviteContactsViewController *) [segue destinationViewController]).indexedContacts = self.indexedContacts;
+    } else if ([segueName isEqualToString: @"Create Group From Dashboard"]) {
+        ((CreateGroupsViewController *) [segue destinationViewController]).delegate = self;
+        ((CreateGroupsViewController *) [segue destinationViewController]).contacts = self.contacts;
     }
 }
 
@@ -520,6 +533,7 @@
             for (Contact *normalContact in self.contacts) {
                 if ([normalContact.phoneNumber isEqualToString:phoneNumber] || ([normalContact.firstName isEqualToString:contact.firstName] && [normalContact.lastName isEqualToString:contact.lastName])) {
                     remove = YES;
+                    break;
                 }
             }
             if (!remove) {
@@ -560,6 +574,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     [GeneralUtils showMessage: [NSLocalizedStringFromTable(@"add_contact_success_message",kStringFile,@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:contactName]
                     withTitle:nil];
+    // todo BT
+    // make non pending immediately
     [self requestAddressBookAccessAndRetrieveFriends];
 }
 
@@ -569,10 +585,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)displayContactViews
 {
-    [TrackingUtils trackNumberOfContacts:[self.contacts count]];
+    [TrackingUtils trackNumberOfContacts:self.contacts.count];
     
     NSUInteger nonHiddenContactsCount = [ContactUtils numberOfNonHiddenContacts:self.contacts];
-    if (nonHiddenContactsCount == 0) {
+    NSUInteger numberOfGroups = self.groups.count;
+    if (nonHiddenContactsCount + numberOfGroups == 0) {
         return;
     }
     self.contactViews = [[NSMutableArray alloc] initWithCapacity:nonHiddenContactsCount];
@@ -583,8 +600,43 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [self createContactViewWithContact:contact andPosition:1];
         }
     }
+    for (Group *group in self.groups) {
+        [self createContactViewWithGroup:group andPosition:1];
+    }
     [self reorderContactViews];
 }
+
+- (void)createContactViewWithGroup:(Group *)group andPosition:(NSInteger)position
+{
+    // Check that view does not exist
+    if ([self getViewOfGroup:group])
+        return;
+    
+    GroupView *groupView = [[GroupView alloc] initWithGroup:group];
+    if (!group || group.groupName.length == 0) { // ie. info are missing
+        void(^successBlock)(Group *) = ^void(Group *serverGroup) {
+            group.groupName = serverGroup.groupName;
+            group.memberIds = serverGroup.memberIds;
+            [self addNameLabelToView:groupView withText:group.groupName];
+            [groupView setContactPicture];
+        };
+        [ApiUtils getNewGroupInfo:group.identifier AndExecuteSuccess:successBlock failure:nil];
+    } else {
+        [self addNameLabelToView:groupView withText:group.groupName];
+    }
+    groupView.delegate = self;
+    groupView.orderPosition = position;
+    [self.contactViews addObject:groupView];
+    [self.contactScrollView insertSubview:groupView atIndex:0];
+}
+
+- (void)addNewGroup:(Group *)group
+{
+    [self.groups addObject:group];
+    [self createContactViewWithGroup:group andPosition:1];
+    [self reorderContactViews];
+}
+
 
 - (void)reorderContactViews
 {
@@ -594,7 +646,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Sort contact
     [self.contactViews sortUsingComparator:^(ContactView *contactView1, ContactView * contactView2) {
-        if (contactView1.contact.lastMessageDate < contactView2.contact.lastMessageDate) {
+        if ([contactView1 getLastMessageExchangedDate] < [contactView2 getLastMessageExchangedDate]) {
             return (NSComparisonResult)NSOrderedDescending;
         } else {
             return (NSComparisonResult)NSOrderedAscending;
@@ -625,7 +677,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (!self.contactViews) {
         self.contactViews = [[NSMutableArray alloc] initWithCapacity:[ContactUtils numberOfNonHiddenContacts:self.contacts]];
     }
-    // Check that contact does not exist
+    // Check that view does not exist
     if ([self getViewOfContact:contact])
         return;
     
@@ -656,11 +708,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             contact.phoneNumber = serverContact.phoneNumber;
             contact.firstName = serverContact.firstName;
             contact.lastName = serverContact.lastName;
-            [self addNameLabelForView:contactView];
+            [self addNameLabelToView:contactView];
         };
         [ApiUtils getNewContactInfo:contact.identifier AndExecuteSuccess:successBlock failure:nil];
     } else {
-        [self addNameLabelForView:contactView];
+        [self addNameLabelToView:contactView];
     }
     
     contactView.delegate = self;
@@ -670,25 +722,25 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 // Add name below contact
-- (void)addNameLabelForView:(ContactView *)contactView
+- (void)addNameLabelToView:(ContactView *)contactView
 {
     Contact *contact = contactView.contact;
-    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - self.contactMargin/4, contactView.frame.origin.y + kContactSize, contactView.frame.size.width + self.contactMargin/2, kContactNameHeight)];
-    
+    NSString *text;
     if ([GeneralUtils isAdminContact:contact]) {
-        nameLabel.text = @"Waved";
-        nameLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:14.0];
-    //Invite contact
+        text = @"Waved";
+    } else if (contact.firstName) {
+        text = [NSString stringWithFormat:@"%@", contact.firstName ? contact.firstName : @""];
     } else {
-        if (contact.firstName) {
-            nameLabel.text = [NSString stringWithFormat:@"%@", contact.firstName ? contact.firstName : @""];
-        } else {
-            nameLabel.text = [NSString stringWithFormat:@"%@", contact.lastName ? contact.lastName : @""];
-        }
-        
-        nameLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
+        text = [NSString stringWithFormat:@"%@", contact.lastName ? contact.lastName : @""];
     }
-    
+    [self addNameLabelToView:contactView withText:text];
+}
+
+- (void)addNameLabelToView:(ContactView *)contactView withText:(NSString *)text
+{
+    UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - self.contactMargin/4, contactView.frame.origin.y + kContactSize, contactView.frame.size.width + self.contactMargin/2, kContactNameHeight)];
+    nameLabel.text = text;
+    nameLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
     nameLabel.textAlignment = NSTextAlignmentCenter;
     nameLabel.adjustsFontSizeToFitWidth = YES;
     nameLabel.minimumScaleFactor = 0.7;
@@ -743,7 +795,17 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (ContactView *)getViewOfContact:(Contact *)contact
 {
     for (ContactView *contactView in self.contactViews) {
-        if (contactView.contact == contact) {
+        if (![contactView isGroupContactView] && contactView.contact == contact) {
+            return contactView;
+        }
+    }
+    return nil;
+}
+
+- (ContactView *)getViewOfGroup:(Group *)group
+{
+    for (ContactView *contactView in self.contactViews) {
+        if ([contactView isGroupContactView] && [contactView contactIdentifier] == group.identifier) {
             return contactView;
         }
     }
@@ -782,16 +844,17 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self resetApplicationBadgeNumber];
         [self reorderContactViews];
         
+        // Check contact with unread state
         // Clean / robust / somewhere else
         for (ContactView *contactView in self.contactViews) {
             BOOL idFound = NO;
             for (NSString *id in unreadMessageContacts) {
-                if (contactView.contact.identifier == [id intValue]) {
+                if (![contactView isGroupContactView] && [contactView contactIdentifier] == [id intValue]) {
                     idFound = YES;
                     break;
                 }
             }
-            if (idFound || (contactView.contact.isFutureContact && contactView.contact.lastMessageDate > 0)) {
+            if (idFound || (contactView.contact.isFutureContact && [contactView getLastMessageExchangedDate] > 0)) {
                 contactView.messageNotReadByContact = YES;
             } else {
                 contactView.messageNotReadByContact = NO;
@@ -829,11 +892,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (BOOL)attributeMessageToExistingContacts:(Message *)message
 {
     for (ContactView *contactView in self.contactViews) {
-        if (message.senderId == contactView.contact.identifier) {
+        if ([contactView contactIdentifier] == [message getSenderOrGroupIdentifier]) {
             [contactView addUnreadMessage:message];
             
             // Update last message date to sort contacts even if no push
-            contactView.contact.lastMessageDate = MAX(contactView.contact.lastMessageDate,message.createdAt);
+            [contactView updateLastMessageDate:MAX([contactView getLastMessageExchangedDate],message.createdAt)];
             return YES;
         }
     }
@@ -852,27 +915,41 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     for (Message *message in self.nonAttributedUnreadMessages) {
         isAttributed = NO;
         for (ContactView *contactView in self.contactViews) {
-            if (message.senderId == contactView.contact.identifier) {
+            if ([contactView contactIdentifier] == [message getSenderOrGroupIdentifier]) {
                 [contactView addUnreadMessage:message];
                 isAttributed = YES;
                 // Update last message date to sort contacts even if no push
-                contactView.contact.lastMessageDate = MAX(contactView.contact.lastMessageDate,message.createdAt);
+                [contactView updateLastMessageDate:MAX([contactView getLastMessageExchangedDate],message.createdAt)];
                 break;
             }
         }
         
         if (!isAttributed) {
-            // create contact if does not exists
-            Contact *contact = [ContactUtils findContactFromId:message.senderId inContactsArray:self.contacts];
-            if (!contact) {
-                contact = [Contact createContactWithId:message.senderId phoneNumber:nil firstName:nil lastName:nil];
-                contact.lastMessageDate = message.createdAt;
-                contact.isPending = YES;
-                [self.contacts addObject:contact];
+            if ([message isGroupMessage]) {
+                // Create group if needed
+                Group *group = [GroupUtils findGroupFromId:[message getSenderOrGroupIdentifier] inGroupsArray:self.groups];
+                if (!group) {
+                    group = [Group createGroupWithId:[message getSenderOrGroupIdentifier] groupName:nil memberIds:nil];
+                    group.lastMessageDate = message.createdAt;
+                    [self.groups addObject:group];
+                }
+                // create view (if needed) and add message
+                [self createContactViewWithGroup:group andPosition:[self.contactViews count]+1];
+                [[self getViewOfGroup:group] addUnreadMessage:message];
+            } else {
+                // create contact if does not exists
+                Contact *contact = [ContactUtils findContactFromId:message.senderId inContactsArray:self.contacts];
+                if (!contact) {
+                    contact = [Contact createContactWithId:message.senderId phoneNumber:nil firstName:nil lastName:nil];
+                    contact.lastMessageDate = message.createdAt;
+                    if (![GeneralUtils isAdminContact:contact])
+                        contact.isPending = YES;
+                    [self.contacts addObject:contact];
+                }
+                // create view and add message
+                [self displayAdditionnalContact:contact];
+                [[self getViewOfContact:contact] addUnreadMessage:message];
             }
-            // create bubble
-            [self displayAdditionnalContact:contact];
-            [[self.contactViews lastObject] addUnreadMessage:message];
         }
     }
     
@@ -931,7 +1008,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                             delegate:self
                             cancelButtonTitle:ACTION_SHEET_CANCEL
                             destructiveButtonTitle:nil
-                            otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
+                            otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_7, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
     [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
@@ -975,13 +1052,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)sendMessageToContact:(ContactView *)contactView
 {
     NSData *audioData = [self getLastRecordedData];
-    [ApiUtils sendMessage:audioData toUser:contactView.contact success:^{
+    [ApiUtils sendMessage:audioData toContactView:contactView success:^{
         [contactView message:nil sentWithError:NO]; // no need to pass the message here
     } failure:^{
         [contactView message:audioData sentWithError:YES];
     }];
     [self.recorder prepareToRecord];
 }
+
 
 - (NSData *)getLastRecordedData
 {
@@ -1143,7 +1221,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     self.lastSelectedContactView = contactView;
     NSString *partial_message = contactView.failedMessages.count > 1 ? NSLocalizedStringFromTable(@"multiple_messages_send_failure_error_message",kStringFile, @"comment") : NSLocalizedStringFromTable(@"one_message_send_failure_error_message",kStringFile, @"comment");
-    NSString *title = [NSString stringWithFormat:@"%lu %@",contactView.failedMessages.count,partial_message];
+    NSString *title = [NSString stringWithFormat:@"%lu %@",(unsigned long)contactView.failedMessages.count,partial_message];
     UIActionSheet *failedActionSheet = [[UIActionSheet alloc] initWithTitle:title
                                                                     delegate:self
                                                            cancelButtonTitle:ACTION_SHEET_CANCEL
@@ -1273,6 +1351,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     // Edit contacts
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_1]) {
         [self performSegueWithIdentifier:@"Edit Contacts Segue" sender:nil];
+    }
+    
+    // Create Groups
+    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_7]) {
+        [self performSegueWithIdentifier:@"Create Group From Dashboard" sender:nil];
     }
     
     // Profile
@@ -1917,7 +2000,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     ContactView *contactView = [self findContactViewAtLocation:location];
     if (contactView && !CGRectContainsPoint(self.emojiContainer.frame, location)) {
         [contactView removeEmojiOverlay];
-        NSString *soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",emojiView.identifier,emojiView.soundIndex];
+        NSString *soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",(long)emojiView.identifier,(long)emojiView.soundIndex];
         NSString *soundPath = [[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
         self.emojiData = [NSData dataWithContentsOfURL:soundURL];

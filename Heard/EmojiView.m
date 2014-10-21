@@ -54,11 +54,11 @@
             
             // play sound
             self.soundIndex ++;
-            NSString *soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",self.identifier,self.soundIndex];
+            NSString *soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",(long)self.identifier,(long)self.soundIndex];
             
             if(![[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"]) {
                 self.soundIndex = 1;
-                soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",self.identifier,self.soundIndex];
+                soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",(long)self.identifier,(long)self.soundIndex];
             }
             [self.delegate hideOpeningTuto];
             [self.delegate playSound:soundName ofType:@"m4a"];

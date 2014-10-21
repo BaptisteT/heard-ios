@@ -219,27 +219,27 @@
         
         if (weeks >= 1) {
             if (weeks > 1) {
-                return [[NSString stringWithFormat:@"%ld", weeks] stringByAppendingString:@" weeks ago"];
+                return [[NSString stringWithFormat:@"%ld", (long)weeks] stringByAppendingString:@" weeks ago"];
             } else {
-                return [[NSString stringWithFormat:@"%ld", weeks] stringByAppendingString:@" week ago"];
+                return [[NSString stringWithFormat:@"%ld", (long)weeks] stringByAppendingString:@" week ago"];
             }
         } else if (days >= 1) {
             if (days > 1) {
-                return [[NSString stringWithFormat:@"%ld", days] stringByAppendingString:@" days ago"];
+                return [[NSString stringWithFormat:@"%ld", (long)days] stringByAppendingString:@" days ago"];
             } else {
-                return [[NSString stringWithFormat:@"%ld", days] stringByAppendingString:@" day ago"];
+                return [[NSString stringWithFormat:@"%ld", (long)days] stringByAppendingString:@" day ago"];
             }
         } else if (hours >= 1) {
             if (hours > 1) {
-                return [[NSString stringWithFormat:@"%ld", hours] stringByAppendingString:@" hours ago"];
+                return [[NSString stringWithFormat:@"%ld", (long)hours] stringByAppendingString:@" hours ago"];
             } else {
-                return [[NSString stringWithFormat:@"%ld", hours] stringByAppendingString:@" hour ago"];
+                return [[NSString stringWithFormat:@"%ld", (long)hours] stringByAppendingString:@" hour ago"];
             }
         } else if (minutes >= 1) {
             if (minutes > 1) {
-                return [[NSString stringWithFormat:@"%ld", minutes] stringByAppendingString:@" minutes ago"];
+                return [[NSString stringWithFormat:@"%ld", (long)minutes] stringByAppendingString:@" minutes ago"];
             } else {
-                return [[NSString stringWithFormat:@"%ld", minutes] stringByAppendingString:@" minute ago"];
+                return [[NSString stringWithFormat:@"%ld", (long)minutes] stringByAppendingString:@" minute ago"];
             }
         } else {
             if (age > 1) {

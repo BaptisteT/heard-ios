@@ -119,7 +119,7 @@
                                                                     error:&aError];
     
     if (aError == nil && [phoneUtil isValidNumber:nbPhoneNumber]) {
-        NSUInteger countryCodeLength = [[NSString stringWithFormat:@"%ld", [nbPhoneNumber.countryCode integerValue]] length];
+        NSUInteger countryCodeLength = [[NSString stringWithFormat:@"%ld", (long)[nbPhoneNumber.countryCode integerValue]] length];
         return [formattedNumber substringFromIndex:countryCodeLength + 1];
     } else {
         return nil;

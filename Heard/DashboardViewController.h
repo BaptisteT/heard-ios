@@ -14,8 +14,9 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "EditContactsViewController.h"
 #import "EmojiView.h"
+#import "CreateGroupsViewController.h"
 
-@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, ABPersonViewControllerDelegate, EditContactsVCDelegate, EmojiViewDelegateProtocol>
+@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, ABPersonViewControllerDelegate, EditContactsVCDelegate, EmojiViewDelegateProtocol, CreateGroupsVCDelegate>
 
 - (BOOL)attributeMessageToExistingContacts:(Message *)message;
 - (void)retrieveUnreadMessagesAndNewContacts;

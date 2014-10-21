@@ -110,7 +110,7 @@
         
         [ApiUtils requestSmsCode:self.phoneNumber retry:YES success:nil failure:nil];
     } else {
-        self.timeRemainLabel.text = [NSString stringWithFormat:@"%ld:%02ld", (NSInteger) floor(remainingTime/60), (NSInteger)remainingTime - (NSInteger) floor(remainingTime/60)*60];
+        self.timeRemainLabel.text = [NSString stringWithFormat:@"%ld:%02ld", (long) floor(remainingTime/60), (NSInteger)remainingTime - (NSInteger) floor(remainingTime/60)*60];
     }
 }
 

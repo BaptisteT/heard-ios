@@ -7,7 +7,8 @@
 //
 
 #import "AFHTTPSessionManager.h"
-#import "Contact.h"
+#import "ContactView.h"
+#import "Group.h"
 
 @interface ApiUtils : AFHTTPSessionManager
 
@@ -42,7 +43,7 @@
                                 failure:(void(^)())failureBlock;
 
 + (void)sendMessage:(NSData *)audioData
-             toUser:(Contact *)contact
+      toContactView:(ContactView *)contactView
             success:(void(^)())successBlock
             failure:(void (^)())failureBlock;
 
@@ -79,4 +80,6 @@
 
 + (void)currentUserIsRecording:(BOOL)flag toUser:(NSInteger)receivedId success:(void(^)())successBlock failure:(void(^)())failureBlock;
 
++ (void)createGroupWithName:(NSString *)groupName members:(NSArray *)membersId success:(void(^)(NSInteger groupId))successBlock failure:(void(^)())failureBlock;
++ (void)getNewGroupInfo:(NSInteger)groupId AndExecuteSuccess:(void(^)(Group *group))successBlock failure:(void(^)())failureBlock;
 @end

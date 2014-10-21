@@ -12,6 +12,7 @@
 #define MESSAGE_ID @"id"
 #define SENDER_ID @"sender_id"
 #define RECEIVER_ID @"receiver_id"
+#define GROUP_ID @"group_id"
 #define CREATED_AT @"date"
 
 @implementation Message
@@ -32,6 +33,11 @@
     message.identifier = [[rawMessage objectForKey:MESSAGE_ID] integerValue];
     message.senderId = [[rawMessage objectForKey:SENDER_ID] integerValue];
     message.receiverId = [[rawMessage objectForKey:RECEIVER_ID] integerValue];
+    if ([rawMessage objectForKey:GROUP_ID] != [NSNull null]) {
+        message.groupId = [[rawMessage objectForKey:GROUP_ID] integerValue];
+    } else {
+        message.groupId = 0;
+    }
     message.createdAt = [[rawMessage objectForKey:CREATED_AT] integerValue];
     message.audioData = nil;
     return message;
@@ -46,12 +52,25 @@
     }
 }
 
+- (NSInteger)getSenderOrGroupIdentifier {
+    if ([self isGroupMessage]) {
+        return self.senderId;
+    } else {
+        return self.groupId;
+    }
+}
+
+- (BOOL)isGroupMessage
+{
+    return self.groupId != 0;
+}
+
 + (NSURL *)getMessageURL:(NSUInteger)messageId
 {
     if (PRODUCTION) {
-        return [NSURL URLWithString:[kProdHeardRecordBaseURL stringByAppendingFormat:@"%lu%@",messageId,@"_record"]];
+        return [NSURL URLWithString:[kProdHeardRecordBaseURL stringByAppendingFormat:@"%lu%@",(unsigned long)messageId,@"_record"]];
     } else {
-        return [NSURL URLWithString:[kStagingHeardRecordBaseURL stringByAppendingFormat:@"%lu%@",messageId,@"_record"]];
+        return [NSURL URLWithString:[kStagingHeardRecordBaseURL stringByAppendingFormat:@"%lu%@",(unsigned long)messageId,@"_record"]];
     }
 }
 

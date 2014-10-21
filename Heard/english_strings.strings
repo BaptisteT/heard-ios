@@ -25,6 +25,7 @@
 "feedback_button_title" = "Feedback";
 "log_out_button_title" = "Log Out";
 "rate_button_title" = "Rate Us";
+"manage_groups_button_title" = "Create Groups";
 "add_to_contact_button_title" = "Add Contact";
 "block_button_title" = "Block User";
 "edit_picture_button_title" = "Picture";
@@ -146,6 +147,14 @@
 //Alerts
 "shake_to_replay_tuto" = "Shake your phone to replay";
 "phone_to_ear_tuto" = "Phone to ear for private mode";
+
+// Group
+"max_group_members_title" = "Maximum number of members reached";
+"insufficient_members_number_message" = "Please select at least two members";
+"empty_group_name_message" = "Please, add a name for the group";
+"group_successfully_created_message" = "Group successfully created";
+"group_creation_failed_message" = "The group could not be created. Please try again";
+
 
 
 
