@@ -485,7 +485,7 @@
     self.addressBookFormattedContacts = adressBookWithFormattedKey;
     
     // Get contacts and compare with contact in memory
-    [ApiUtils getMyContacts:contactsInfo atSignUp:self.isSignUp success:^(NSArray *contacts, NSArray *futureContacts) {
+    [ApiUtils getMyContacts:contactsInfo atSignUp:self.isSignUp success:^(NSArray *contacts, NSArray *futureContacts, NSArray *groups) {
         for (Contact *contact in contacts) {
             Contact *existingContact = [ContactUtils findContact:contact inContactsArray:self.contacts];
             if (!existingContact) {
@@ -544,7 +544,16 @@
             //Remove future users to create indexedContacts for the InviteContactsViewController
             [self.addressBookFormattedContacts removeObjectForKey:phoneNumber];
         }
-        
+        for (Group *group in groups) {
+            if (![GroupUtils findGroupFromId:group.identifier inGroupsArray:self.groups]) {
+                [self.groups addObject:group];
+                [self createContactViewWithGroup:group andPosition:0];
+            } else {
+                // todo BT
+                // adapt number of users
+                // delete group if 1 user
+            }
+        }
         [self initIndexedContacts];
         
         // Distribute non attributed messages
@@ -639,7 +648,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Sort contact
     [self.contactViews sortUsingComparator:^(ContactView *contactView1, ContactView * contactView2) {
-        if ([contactView1 getLastMessageExchangedDate] < [contactView2 getLastMessageExchangedDate]) {
+        if (self.displayOpeningTuto && contactView1 == self.currentUserContactView) {
+            return (NSComparisonResult)NSOrderedAscending;
+        } else if (self.displayOpeningTuto && contactView2 == self.currentUserContactView) {
+            return (NSComparisonResult)NSOrderedDescending;
+        } else if ([contactView1 getLastMessageExchangedDate] < [contactView2 getLastMessageExchangedDate]) {
             return (NSComparisonResult)NSOrderedDescending;
         } else {
             return (NSComparisonResult)NSOrderedAscending;

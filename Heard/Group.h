@@ -17,4 +17,5 @@
 
 + (Group *)createGroupWithId:(NSUInteger)identifier groupName:(NSString *)groupName memberIds:(NSMutableArray *)memberIds;
 + (Group *)rawGroupToInstance:(NSDictionary *)rawGroup;
++ (NSArray *)rawGroupsToInstances:(NSArray *)rawGroups;
 @end
