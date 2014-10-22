@@ -40,7 +40,9 @@
         
     // Send
     [self.delegate sendMessageToContact:self];
-    [TrackingUtils trackRecord:isEmoji];
+    for (int i=0;i<self.group.memberIds.count -1;i++) {
+        [TrackingUtils trackRecord:isEmoji];
+    }
 }
 
 - (void)setContactPicture
