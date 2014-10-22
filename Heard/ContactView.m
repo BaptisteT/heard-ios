@@ -576,7 +576,7 @@
 // ----------------------------------------------------------
 
 - (void)handlePendingTapGesture {
-    [self.delegate pendingContactClicked:self.contact];
+    [self.delegate pendingContactClicked:self];
 }
 
 - (void)handleFailedMessagesModeTapGesture

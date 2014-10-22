@@ -19,8 +19,19 @@
     group.identifier = identifier;
     group.groupName = groupName;
     group.memberIds= memberIds;
-    group.lastMessageDate = 0;
+    group.lastMessageDate = [[NSDate date] timeIntervalSince1970];
     return group;
+}
+
++ (NSArray *)rawGroupsToInstances:(NSArray *)rawGroups
+{
+    NSMutableArray *groups = [[NSMutableArray alloc] init];
+    
+    for (NSDictionary *rawGroup in rawGroups) {
+        [groups addObject:[Group rawGroupToInstance:rawGroup]];
+    }
+    
+    return groups;
 }
 
 + (Group *)rawGroupToInstance:(NSDictionary *)rawGroup

@@ -34,6 +34,7 @@
     self.contactsTableView.delegate = self;
     self.contactsTableView.dataSource = self;
     self.groupNameTextField.delegate = self;
+    self.contactsTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
 
@@ -41,12 +42,12 @@
 // Navigation
 // ----------------------------------------------------------
 - (IBAction)backButtonClicked:(id)sender {
+    // todo BT
+    // CHange if we come directly from dashboard
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)createButtonClicked:(id)sender {
-    // Todo BT
-    // handle future
     if (self.groupNameTextField.text.length == 0) {
         [GeneralUtils showMessage:NSLocalizedStringFromTable(@"empty_group_name_message", kStringFile, nil) withTitle:nil];
     } else if (self.selectedContacts.count == 1) {
@@ -112,8 +113,7 @@
     Contact *contact = (Contact *)self.contacts[indexPath.row];
 
     if ([GeneralUtils isCurrentUser:contact] || contact.isFutureContact) {
-        // Todo BT
-        // handle future
+        // should not happen
     } else if ([self.selectedContacts containsObject:contact]) {
         [self.selectedContacts removeObject:contact];
         cell.imageView.image = [UIImage imageNamed:@"checkbox"];

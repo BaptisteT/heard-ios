@@ -71,7 +71,7 @@
 
 - (void)startedPlayingAudioMessagesOfView:(ContactView *)view;
 
-- (void)pendingContactClicked:(Contact *)contact;
+- (void)pendingContactClicked:(ContactView *)contactView;
 
 - (void)updateFrameOfContactView:(ContactView *)view;
 

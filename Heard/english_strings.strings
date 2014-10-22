@@ -25,7 +25,7 @@
 "feedback_button_title" = "Feedback";
 "log_out_button_title" = "Log Out";
 "rate_button_title" = "Rate Us";
-"manage_groups_button_title" = "Create Groups";
+"manage_groups_button_title" = "Manage Groups";
 "add_to_contact_button_title" = "Add Contact";
 "block_button_title" = "Block User";
 "edit_picture_button_title" = "Picture";
@@ -154,6 +154,7 @@
 "empty_group_name_message" = "Please, add a name for the group";
 "group_successfully_created_message" = "Group successfully created";
 "group_creation_failed_message" = "The group could not be created. Please try again";
+"insufficient_contacts_for_group_message" = "You don't have enough contacts to create groups";
 
 
 

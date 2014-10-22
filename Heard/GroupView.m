@@ -40,7 +40,9 @@
         
     // Send
     [self.delegate sendMessageToContact:self];
-    [TrackingUtils trackRecord:isEmoji];
+    for (int i=0;i<self.group.memberIds.count -1;i++) {
+        [TrackingUtils trackRecord:isEmoji];
+    }
 }
 
 - (void)setContactPicture
@@ -57,7 +59,9 @@
                 continue;
             }
             CGRect frame; CAShapeLayer * shapeLayer = nil; UIBezierPath *path = nil;
-            if (membersCount == 2) {
+            if (membersCount == 1) {
+                frame = self.frame;
+            } else if (membersCount == 2) {
                 frame = CGRectMake(kkk * kContactSize/2, 0, kContactSize/2, kContactSize);
             } else if (membersCount == 3) {
                 shapeLayer = [CAShapeLayer layer]; path = [UIBezierPath bezierPath];

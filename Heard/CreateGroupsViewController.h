@@ -15,7 +15,7 @@
 @interface CreateGroupsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, weak) id <CreateGroupsVCDelegate> delegate;
-@property (nonatomic, weak) NSArray *contacts;
+@property (nonatomic, strong) NSArray *contacts;
 
 @end
 
