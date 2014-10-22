@@ -1728,9 +1728,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                 [self endPlayerUIForAllContactViews];
             }
             // Add last messages played to contact view
-            NSInteger contactId = ((Message *)self.lastMessagesPlayed[0]).senderId;
+            NSInteger senderId = [((Message *)self.lastMessagesPlayed[0]) getSenderOrGroupIdentifier];
             for (ContactView *contactView in self.contactViews) {
-                if (contactView.contact.identifier == contactId) {
+                if ([contactView contactIdentifier] == senderId) {
                     [contactView addPlayedMessages:self.lastMessagesPlayed];
                     [self resetLastMessagesPlayed];
                     [self resetApplicationBadgeNumber];
