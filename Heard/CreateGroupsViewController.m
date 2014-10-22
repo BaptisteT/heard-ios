@@ -34,6 +34,7 @@
     self.contactsTableView.delegate = self;
     self.contactsTableView.dataSource = self;
     self.groupNameTextField.delegate = self;
+    self.contactsTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
 
