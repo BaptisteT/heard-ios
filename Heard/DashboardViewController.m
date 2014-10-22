@@ -71,7 +71,7 @@
 @property (strong, nonatomic) NSMutableArray *contactViews;
 @property (weak, nonatomic) UIScrollView *contactScrollView;
 @property (nonatomic) BOOL retrieveNewContact;
-@property (nonatomic, strong) Contact *contactToAdd;
+@property (nonatomic, strong) ContactView *clickedPendingView;
 @property (nonatomic, strong) ContactView *inviteContactView;
 @property (nonatomic) CGFloat screenWidth;
 @property (nonatomic) CGFloat screenHeight;
@@ -570,13 +570,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 //After adding a contact with AddContactViewController (delegate method) or after adding pending contact
-- (void)didFinishedAddingContact:(NSString *)contactName
+- (void)didFinishedAddingContact
 {
-    [GeneralUtils showMessage: [NSLocalizedStringFromTable(@"add_contact_success_message",kStringFile,@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:contactName]
+    [GeneralUtils showMessage: [NSLocalizedStringFromTable(@"add_contact_success_message",kStringFile,@"comment") stringByReplacingOccurrencesOfString:@"TRUCHOV" withString:self.clickedPendingView.contact.firstName]
                     withTitle:nil];
-    // todo BT
-    // make non pending immediately
-    [self requestAddressBookAccessAndRetrieveFriends];
+    // make non pending
+    self.clickedPendingView.contact.isPending = NO;
+    [self.clickedPendingView resetDiscussionStateAnimated:NO];
+    self.clickedPendingView = nil;
 }
 
 // ----------------------------------
@@ -1206,9 +1207,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 
-- (void)pendingContactClicked:(Contact *)contact
+- (void)pendingContactClicked:(ContactView *)contactView
 {
-    self.contactToAdd = contact;
+    self.clickedPendingView = contactView;
     UIActionSheet *pendingActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                                     delegate:self
                                                            cancelButtonTitle:ACTION_SHEET_CANCEL
@@ -1420,27 +1421,27 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Add contact
     else if ([buttonTitle isEqualToString:ACTION_PENDING_OPTION_1]) {
-        NSString *decimalNumber = [AddressbookUtils getDecimalNumber:self.contactToAdd.phoneNumber];
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        NSString *decimalNumber = [AddressbookUtils getDecimalNumber:self.clickedPendingView.contact.phoneNumber];
         if (!decimalNumber) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             [GeneralUtils showMessage:NSLocalizedStringFromTable(@"add_contact_failure_message", kStringFile, "comment") withTitle:nil];
             return;
         }
-        
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [AddressbookUtils createOrEditContactWithDecimalNumber:decimalNumber
-                                               formattedNumber:self.contactToAdd.phoneNumber
-                                                     firstName:self.contactToAdd.firstName
-                                                      lastName:self.contactToAdd.lastName];
+                                               formattedNumber:self.clickedPendingView.contact.phoneNumber
+                                                     firstName:self.clickedPendingView.contact.firstName
+                                                      lastName:self.clickedPendingView.contact.lastName];
         
-        [self didFinishedAddingContact:self.contactToAdd.firstName];
-        [TrackingUtils trackAddContactSuccessful:YES Present:YES Pending:YES];
+        [self didFinishedAddingContact];
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [TrackingUtils trackAddContactSuccessful:YES Present:YES Pending:YES];
     }
     
     // Block user
     else if ([buttonTitle isEqualToString:ACTION_PENDING_OPTION_2]) {
         for (ContactView * bubbleView in self.contactViews) {
-            if (bubbleView.contact.identifier == self.contactToAdd.identifier) {
+            if (bubbleView.contact.identifier == self.clickedPendingView.contact.identifier) {
                 [self blockContact:bubbleView];
                 break;
             }
