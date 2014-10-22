@@ -37,6 +37,7 @@
 #import "Group.h"
 #import "GroupView.h"
 #import "GroupUtils.h"
+#import "ManageGroupsViewController.h"
 
 #define ACTION_OTHER_MENU_OPTION_1 NSLocalizedStringFromTable(@"hide_contacts_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"edit_profile_button_title",kStringFile,@"comment")
@@ -353,6 +354,10 @@
     } else if ([segueName isEqualToString: @"Create Group From Dashboard"]) {
         ((CreateGroupsViewController *) [segue destinationViewController]).delegate = self;
         ((CreateGroupsViewController *) [segue destinationViewController]).contacts = [self getGroupPermittedContacts];
+    } else if ([segueName isEqualToString:@"Manage Groups From Dashboard"]) {
+        // todo bt
+        ((ManageGroupsViewController *) [segue destinationViewController]).contacts = [self getGroupPermittedContacts];
+        ((ManageGroupsViewController *) [segue destinationViewController]).groups = self.groups;
     }
 }
 
@@ -1029,7 +1034,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         self.lastMessagesPlayed = [NSMutableArray new];
     }
     // Check that it's the same sender
-    if (self.lastMessagesPlayed.count>0 && ((Message *)[self.lastMessagesPlayed lastObject]).senderId != message.senderId) {
+    if (self.lastMessagesPlayed.count>0 && [((Message *)[self.lastMessagesPlayed lastObject]) getSenderOrGroupIdentifier] != [message identifier]) {
         self.lastMessagesPlayed = [NSMutableArray new];
     }
     [self.lastMessagesPlayed addObject:message];
@@ -1395,7 +1400,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         if ([self getGroupPermittedContacts].count < 2) {
             [GeneralUtils showMessage:NSLocalizedStringFromTable(@"insufficient_contacts_for_group_message", kStringFile, "comment") withTitle:nil];
         } else {
-            [self performSegueWithIdentifier:@"Create Group From Dashboard" sender:nil];
+            [self performSegueWithIdentifier:@"Manage Groups From Dashboard" sender:nil];
         }
     }
     

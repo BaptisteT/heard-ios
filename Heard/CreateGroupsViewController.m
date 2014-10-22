@@ -42,6 +42,8 @@
 // Navigation
 // ----------------------------------------------------------
 - (IBAction)backButtonClicked:(id)sender {
+    // todo BT
+    // CHange if we come directly from dashboard
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
