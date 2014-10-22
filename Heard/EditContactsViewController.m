@@ -78,7 +78,6 @@
         static NSString *cellIdentifier = CONTACT_TAG;
         
         EditContactsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        
         if (cell == nil) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:cellIdentifier owner:self options:nil];
             cell = [nib objectAtIndex:0];

@@ -155,6 +155,8 @@
 "group_successfully_created_message" = "Group successfully created";
 "group_creation_failed_message" = "The group could not be created. Please try again";
 "insufficient_contacts_for_group_message" = "You don't have enough contacts to create groups";
+"leave_group_button_title" = "Leave group";
+"add_person_button_title" = "Add new member";
 
 
 

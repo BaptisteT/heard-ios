@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ManageGroupsTableViewCell.h"
 
-@interface ManageGroupsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface ManageGroupsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ManageGroupsCellProtocol, UIActionSheetDelegate>
 
 @property (nonatomic, strong) NSArray *contacts;
 @property (nonatomic, strong) NSArray *groups;
