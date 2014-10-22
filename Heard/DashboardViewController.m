@@ -833,6 +833,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [permittedContactsArray addObject:contact];
         }
     }
+    // Sort contact
+    [permittedContactsArray sortUsingComparator:^(Contact *contact1, Contact * contact2) {
+        if ([contact1.firstName compare:contact2.firstName] == NSOrderedAscending) {
+            return (NSComparisonResult)NSOrderedAscending;
+        } else {
+            return (NSComparisonResult)NSOrderedDescending;
+        }
+    }];
     return permittedContactsArray;
 }
 
