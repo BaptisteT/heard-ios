@@ -352,7 +352,7 @@
          ((InviteContactsViewController *) [segue destinationViewController]).indexedContacts = self.indexedContacts;
     } else if ([segueName isEqualToString: @"Create Group From Dashboard"]) {
         ((CreateGroupsViewController *) [segue destinationViewController]).delegate = self;
-        ((CreateGroupsViewController *) [segue destinationViewController]).contacts = self.contacts;
+        ((CreateGroupsViewController *) [segue destinationViewController]).contacts = [self getGroupPermittedContacts];
     }
 }
 
@@ -631,14 +631,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.contactScrollView insertSubview:groupView atIndex:0];
 }
 
-- (void)addNewGroup:(Group *)group
-{
-    [self.groups addObject:group];
-    [self createContactViewWithGroup:group andPosition:1];
-    [self reorderContactViews];
-}
-
-
 - (void)reorderContactViews
 {
     if ([self isRecording] || [self.mainPlayer isPlaying]) {
@@ -803,16 +795,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     return nil;
 }
 
-- (ContactView *)getViewOfGroup:(Group *)group
-{
-    for (ContactView *contactView in self.contactViews) {
-        if ([contactView isGroupContactView] && [contactView contactIdentifier] == group.identifier) {
-            return contactView;
-        }
-    }
-    return nil;
-}
-
 - (void)removeViewOfHiddenContacts
 {
     NSMutableArray *viewsToRemove = [NSMutableArray new];
@@ -825,6 +807,39 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self removeContactView:contactView];
     }
 }
+
+
+// ----------------------------------
+#pragma mark Groups
+// ----------------------------------
+
+- (NSMutableArray *)getGroupPermittedContacts {
+    NSMutableArray *permittedContactsArray = [NSMutableArray new];
+    for (Contact *contact in self.contacts) {
+        if (![GeneralUtils isCurrentUser:contact] && !contact.isFutureContact) {
+            [permittedContactsArray addObject:contact];
+        }
+    }
+    return permittedContactsArray;
+}
+
+- (void)addNewGroup:(Group *)group
+{
+    [self.groups addObject:group];
+    [self createContactViewWithGroup:group andPosition:1];
+    [self reorderContactViews];
+}
+
+- (ContactView *)getViewOfGroup:(Group *)group
+{
+    for (ContactView *contactView in self.contactViews) {
+        if ([contactView isGroupContactView] && [contactView contactIdentifier] == group.identifier) {
+            return contactView;
+        }
+    }
+    return nil;
+}
+
 
 // ----------------------------------
 #pragma mark Messages
@@ -1356,7 +1371,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Create Groups
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_7]) {
-        [self performSegueWithIdentifier:@"Create Group From Dashboard" sender:nil];
+        if ([self getGroupPermittedContacts].count < 2) {
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"insufficient_contacts_for_group_message", kStringFile, "comment") withTitle:nil];
+        } else {
+            [self performSegueWithIdentifier:@"Create Group From Dashboard" sender:nil];
+        }
     }
     
     // Profile

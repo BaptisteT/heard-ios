@@ -154,6 +154,7 @@
 "empty_group_name_message" = "Please, add a name for the group";
 "group_successfully_created_message" = "Group successfully created";
 "group_creation_failed_message" = "The group could not be created. Please try again";
+"insufficient_contacts_for_group_message" = "You don't have enough contacts to create groups";
 
 
 
