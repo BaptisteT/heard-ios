@@ -42,8 +42,6 @@
 // Navigation
 // ----------------------------------------------------------
 - (IBAction)backButtonClicked:(id)sender {
-    // todo BT
-    // CHange if we come directly from dashboard
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -55,14 +53,24 @@
     } else {
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         NSMutableArray *contactIds = [NSMutableArray new];
+        NSMutableArray *contactFirstNames = [NSMutableArray new];
+        NSMutableArray *contactLastNames = [NSMutableArray new];
         [contactIds addObject:[NSNumber numberWithInteger:[SessionUtils getCurrentUserId]]];
+        [contactFirstNames addObject:[SessionUtils getCurrentUserFirstName]];
+        [contactLastNames addObject:[SessionUtils getCurrentUserLastName]];
         for (Contact *contact in self.selectedContacts) {
             [contactIds addObject:[NSNumber numberWithInteger:contact.identifier]];
+            [contactFirstNames addObject:contact.firstName];
+            [contactLastNames addObject:contact.lastName];
         }
         [ApiUtils createGroupWithName:self.groupNameTextField.text
                               members:contactIds
                               success:^void(NSInteger groupId) {
-                                  Group *group = [Group createGroupWithId:groupId groupName:self.groupNameTextField.text memberIds:contactIds];
+                                  Group *group = [Group createGroupWithId:groupId
+                                                                groupName:self.groupNameTextField.text
+                                                                memberIds:contactIds
+                                                         memberFirstNames:contactFirstNames
+                                                          memberLastNames:contactLastNames];
                                   group.lastMessageDate = [[NSDate date] timeIntervalSince1970];
                                   [self.delegate addNewGroup:group];
                                   [GeneralUtils showMessage:NSLocalizedStringFromTable(@"group_successfully_created_message", kStringFile, nil) withTitle:nil];

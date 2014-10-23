@@ -630,10 +630,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         return;
     
     GroupView *groupView = [[GroupView alloc] initWithGroup:group];
-    if (!group || group.groupName.length == 0) { // ie. info are missing
+    if (group.groupName.length == 0) { // ie. info are missing
         void(^successBlock)(Group *) = ^void(Group *serverGroup) {
             group.groupName = serverGroup.groupName;
             group.memberIds = serverGroup.memberIds;
+            group.memberFirstName = serverGroup.memberFirstName;
+            group.memberLastName = serverGroup.memberLastName;
             [self addNameLabelToView:groupView withText:group.groupName];
             [groupView setContactPicture];
         };
@@ -892,6 +894,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     for (Group *existingGroup in self.groups) {
         if (existingGroup.identifier == group.identifier) {
             existingGroup.memberIds = group.memberIds;
+            existingGroup.memberFirstName = group.memberFirstName;
+            existingGroup.memberLastName = group.memberLastName;
             break;
         }
     }
@@ -1006,7 +1010,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                 // Create group if needed
                 Group *group = [GroupUtils findGroupFromId:[message getSenderOrGroupIdentifier] inGroupsArray:self.groups];
                 if (!group) {
-                    group = [Group createGroupWithId:[message getSenderOrGroupIdentifier] groupName:nil memberIds:nil];
+                    group = [Group createGroupWithId:[message getSenderOrGroupIdentifier] groupName:nil memberIds:nil memberFirstNames:nil memberLastNames:nil];
                     group.lastMessageDate = message.createdAt;
                     [self.groups addObject:group];
                 }

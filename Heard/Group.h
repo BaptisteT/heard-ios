@@ -13,10 +13,12 @@
 @property (nonatomic) NSUInteger identifier;
 @property (strong, nonatomic) NSString *groupName;
 @property (strong, nonatomic) NSMutableArray *memberIds;
+@property (strong, nonatomic) NSMutableArray *memberFirstName;
+@property (strong, nonatomic) NSMutableArray *memberLastName;
 @property (nonatomic) NSInteger lastMessageDate;
 @property (nonatomic) BOOL isHidden;
 
-+ (Group *)createGroupWithId:(NSUInteger)identifier groupName:(NSString *)groupName memberIds:(NSMutableArray *)memberIds;
++ (Group *)createGroupWithId:(NSUInteger)identifier groupName:(NSString *)groupName memberIds:(NSMutableArray *)memberIds memberFirstNames:(NSMutableArray *)memberFirstNames memberLastNames:(NSMutableArray *)memberLastNames;
 + (Group *)rawGroupToInstance:(NSDictionary *)rawGroup;
 + (NSArray *)rawGroupsToInstances:(NSArray *)rawGroups;
 @end

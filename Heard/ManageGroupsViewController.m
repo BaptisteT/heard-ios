@@ -106,6 +106,8 @@
               toGroup:group.identifier
     AndExecuteSuccess:^void(BOOL isFull, Group *group) {
         self.selectedGroup.memberIds = group.memberIds;
+        self.selectedGroup.memberFirstName = group.memberFirstName;
+        self.selectedGroup.memberLastName = group.memberLastName;
         self.selectedIndexPath = nil;
         [self.groupTableView reloadData];
         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -196,7 +198,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(self.selectedIndexPath && [indexPath isEqual:self.selectedIndexPath]) {
-        return 100.0;
+        return ((Group *)self.groups[indexPath.row]).memberIds.count * 20 + 40;
     } else {
         return 60;
     }

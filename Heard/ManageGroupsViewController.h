@@ -10,10 +10,11 @@
 #import "ManageGroupsTableViewCell.h"
 #import "Group.h"
 #import "AddMemberViewController.h"
+#import "CreateGroupsViewController.h"
 
 @protocol ManageGroupsVCDelegateProtocol;
 
-@interface ManageGroupsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ManageGroupsCellProtocol, UIActionSheetDelegate, AddMemberVCDelegateProtocol>
+@interface ManageGroupsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ManageGroupsCellProtocol, UIActionSheetDelegate, AddMemberVCDelegateProtocol, CreateGroupsVCDelegate>
 
 @property (nonatomic, strong) NSArray *contacts;
 @property (nonatomic, strong) NSMutableArray *groups;
