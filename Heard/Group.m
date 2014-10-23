@@ -20,6 +20,7 @@
     group.groupName = groupName;
     group.memberIds= memberIds;
     group.lastMessageDate = [[NSDate date] timeIntervalSince1970];
+    group.isHidden = NO;
     return group;
 }
 

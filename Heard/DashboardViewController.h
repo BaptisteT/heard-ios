@@ -15,8 +15,9 @@
 #import "EditContactsViewController.h"
 #import "EmojiView.h"
 #import "CreateGroupsViewController.h"
+#import "ManageGroupsViewController.h"
 
-@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, ABPersonViewControllerDelegate, EditContactsVCDelegate, EmojiViewDelegateProtocol, CreateGroupsVCDelegate>
+@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, ABPersonViewControllerDelegate, EditContactsVCDelegate, EmojiViewDelegateProtocol, CreateGroupsVCDelegate, ManageGroupsVCDelegateProtocol>
 
 - (BOOL)attributeMessageToExistingContacts:(Message *)message;
 - (void)retrieveUnreadMessagesAndNewContacts;

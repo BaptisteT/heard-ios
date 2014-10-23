@@ -8,6 +8,10 @@
 
 /* Below, TRUCHOV is replaced by the right name at run time */
 
+// General
+"unexpected_error_title" = "Unexpected error";
+"unexpected_error_message" = "Please, try again.";
+
 // Button
 "cancel_button_title" = "Cancel";
 "ok_button_title" = "Ok";
@@ -155,8 +159,11 @@
 "group_successfully_created_message" = "Group successfully created";
 "group_creation_failed_message" = "The group could not be created. Please try again";
 "insufficient_contacts_for_group_message" = "You don't have enough contacts to create groups";
-"leave_group_button_title" = "Leave group";
-"add_person_button_title" = "Add new member";
+"leave_group_button_title" = "Leave Group";
+"add_person_button_title" = "Add New Member";
+"add_member_success_message" = "Member successfully added!";
+"group_full_title" = "We could not add a new member";
+"group_full_message" = "The group is already full";
 
 
 

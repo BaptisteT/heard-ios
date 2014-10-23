@@ -355,9 +355,9 @@
         ((CreateGroupsViewController *) [segue destinationViewController]).delegate = self;
         ((CreateGroupsViewController *) [segue destinationViewController]).contacts = [self getGroupPermittedContacts];
     } else if ([segueName isEqualToString:@"Manage Groups From Dashboard"]) {
-        // todo bt
         ((ManageGroupsViewController *) [segue destinationViewController]).contacts = [self getGroupPermittedContacts];
         ((ManageGroupsViewController *) [segue destinationViewController]).groups = self.groups;
+        ((ManageGroupsViewController *) [segue destinationViewController]).delegate = self;
     }
 }
 
@@ -550,6 +550,8 @@
             [self.addressBookFormattedContacts removeObjectForKey:phoneNumber];
         }
         for (Group *group in groups) {
+            // todo BT
+            // update anyway (for number of people & co..)
             if (![GroupUtils findGroupFromId:group.identifier inGroupsArray:self.groups]) {
                 [self.groups addObject:group];
                 [self createContactViewWithGroup:group andPosition:0];
@@ -852,15 +854,16 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)addNewGroup:(Group *)group
 {
     [self.groups addObject:group];
+    [GroupUtils saveGroupsInMemory:self.groups];
     [self createContactViewWithGroup:group andPosition:1];
     [self reorderContactViews];
 }
 
-- (ContactView *)getViewOfGroup:(Group *)group
+- (GroupView *)getViewOfGroup:(Group *)group
 {
     for (ContactView *contactView in self.contactViews) {
         if ([contactView isGroupContactView] && [contactView contactIdentifier] == group.identifier) {
-            return contactView;
+            return (GroupView *)contactView;
         }
     }
     return nil;
@@ -871,6 +874,33 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     return [message getSenderOrGroupIdentifier] == [contactView contactIdentifier] && ([message isGroupMessage] == [contactView isGroupContactView]);
 }
 
+- (void)deleteGroupAndAssociatedView:(Group *)group
+{
+    GroupView * contactView = [self getViewOfGroup:group];
+    if (contactView) {
+        [self.contactViews removeObject:contactView];
+        [contactView removeFromSuperview];
+        [contactView.nameLabel removeFromSuperview];
+    }
+    [self.groups removeObject:group];
+    [GroupUtils saveGroupsInMemory:self.groups];
+    [self reorderContactViews];
+}
+
+- (void)updateGroupAndAssociatedView:(Group *)group
+{
+    for (Group *existingGroup in self.groups) {
+        if (existingGroup.identifier == group.identifier) {
+            existingGroup.memberIds = group.memberIds;
+            break;
+        }
+    }
+    [GroupUtils saveGroupsInMemory:self.groups];
+    GroupView * contactView = [self getViewOfGroup:group];
+    if (contactView) {
+        [contactView setContactPicture];
+    }
+}
 
 // ----------------------------------
 #pragma mark Messages

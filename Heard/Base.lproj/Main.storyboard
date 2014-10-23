@@ -1107,7 +1107,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Group Cell" textLabel="1XR-qb-eEl" detailTextLabel="CTl-ai-EI0" style="IBUITableViewCellStyleSubtitle" id="1FD-lX-TYj">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Group Cell" textLabel="1XR-qb-eEl" detailTextLabel="CTl-ai-EI0" style="IBUITableViewCellStyleSubtitle" id="1FD-lX-TYj">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1FD-lX-TYj" id="CvQ-AP-f45">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -1134,7 +1134,7 @@
                                     <constraint firstAttribute="height" constant="60" id="6QW-pi-Ixj"/>
                                     <constraint firstAttribute="width" constant="60" id="6mF-N5-Fqz"/>
                                 </constraints>
-                                <inset key="contentEdgeInsets" minX="7" minY="7" maxX="7" maxY="7"/>
+                                <inset key="contentEdgeInsets" minX="9" minY="9" maxX="9" maxY="9"/>
                                 <state key="normal" image="create-button">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -1166,6 +1166,7 @@
                     <connections>
                         <outlet property="groupTableView" destination="oUc-Uc-csq" id="elh-jf-zCZ"/>
                         <segue destination="XOa-fb-gen" kind="modal" identifier="Create Group From Manage Groups" id="F0S-J9-DD3"/>
+                        <segue destination="KBA-gM-cWo" kind="modal" identifier="Add Member From Create Group" id="9gq-uZ-OgZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cxo-6v-PDf" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1329,6 +1330,107 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n8m-qi-ly8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3299" y="816"/>
+        </scene>
+        <!--Add Member View Controller-->
+        <scene sceneID="HcD-sO-iFM">
+            <objects>
+                <viewController id="KBA-gM-cWo" customClass="AddMemberViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Nbx-Em-w8k"/>
+                        <viewControllerLayoutGuide type="bottom" id="iYZ-ks-gac"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ALJ-vk-e9X">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light-blue-bar" translatesAutoresizingMaskIntoConstraints="NO" id="BgL-W6-ajc">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="tB6-Cc-zeC"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add New Member" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P2t-EY-cmw">
+                                <rect key="frame" x="0.0" y="10" width="320" height="50"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="22"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HxR-WD-4uo">
+                                <rect key="frame" x="0.0" y="5" width="60" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="lbq-sa-0jK"/>
+                                    <constraint firstAttribute="height" constant="60" id="ykQ-nP-Abc"/>
+                                </constraints>
+                                <state key="normal" image="back-button">
+                                    <color key="titleColor" red="0.054901960780000002" green="0.30588235289999999" blue="0.67843137249999996" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="backButtonClicked:" destination="XOa-fb-gen" eventType="touchUpInside" id="CJe-sp-lSK"/>
+                                    <action selector="backButtonClicked:" destination="KBA-gM-cWo" eventType="touchUpInside" id="eui-yM-Nqs"/>
+                                </connections>
+                            </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="qMB-yW-p5x">
+                                <rect key="frame" x="0.0" y="70" width="320" height="498"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="No Contacts" textLabel="Af2-gT-QhU" style="IBUITableViewCellStyleDefault" id="S8v-zh-S9a">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="S8v-zh-S9a" id="YnX-7G-ke7">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="No Contacts" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Af2-gT-QhU">
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Contact Cell" textLabel="xJc-Z6-oXK" style="IBUITableViewCellStyleDefault" id="PYs-xG-EuH">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PYs-xG-EuH" id="uKV-A4-AxK">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Contact" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xJc-Z6-oXK">
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="P2t-EY-cmw" firstAttribute="top" secondItem="ALJ-vk-e9X" secondAttribute="topMargin" constant="10" id="0bX-ge-Yg7"/>
+                            <constraint firstAttribute="width" secondItem="BgL-W6-ajc" secondAttribute="width" id="4If-sO-nYd"/>
+                            <constraint firstItem="BgL-W6-ajc" firstAttribute="leading" secondItem="qMB-yW-p5x" secondAttribute="leading" id="FaP-I9-jCQ"/>
+                            <constraint firstItem="P2t-EY-cmw" firstAttribute="leading" secondItem="BgL-W6-ajc" secondAttribute="leading" id="WtU-Wm-ltp"/>
+                            <constraint firstAttribute="width" secondItem="qMB-yW-p5x" secondAttribute="width" id="Wxq-KF-nIz"/>
+                            <constraint firstItem="iYZ-ks-gac" firstAttribute="top" secondItem="qMB-yW-p5x" secondAttribute="bottom" id="aaN-9y-l7m"/>
+                            <constraint firstItem="qMB-yW-p5x" firstAttribute="top" secondItem="BgL-W6-ajc" secondAttribute="bottom" id="b8e-2U-GDb"/>
+                            <constraint firstItem="BgL-W6-ajc" firstAttribute="leading" secondItem="ALJ-vk-e9X" secondAttribute="leadingMargin" constant="-16" id="d83-sy-sJd"/>
+                            <constraint firstItem="P2t-EY-cmw" firstAttribute="width" secondItem="BgL-W6-ajc" secondAttribute="width" id="gct-XI-g1l"/>
+                            <constraint firstItem="P2t-EY-cmw" firstAttribute="centerY" secondItem="BgL-W6-ajc" secondAttribute="centerY" id="gvA-Tb-BG0"/>
+                            <constraint firstItem="BgL-W6-ajc" firstAttribute="top" secondItem="ALJ-vk-e9X" secondAttribute="topMargin" id="jd7-Pv-S18"/>
+                            <constraint firstItem="HxR-WD-4uo" firstAttribute="top" secondItem="ALJ-vk-e9X" secondAttribute="topMargin" constant="5" id="myz-Zi-Rd4"/>
+                            <constraint firstItem="P2t-EY-cmw" firstAttribute="leading" secondItem="HxR-WD-4uo" secondAttribute="leading" id="uQv-f3-vDy"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="contactTableView" destination="qMB-yW-p5x" id="j9Y-9k-dDV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7Nt-QV-Brj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3299" y="1532"/>
         </scene>
         <!--Edit Contacts View Controller-->
         <scene sceneID="IVJ-Qm-XO6">

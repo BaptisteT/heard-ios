@@ -690,4 +690,47 @@
     }];
 }
 
+// Leave group
++ (void)leaveGroup:(NSInteger)groupId AndExecuteSuccess:(void(^)())successBlock failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"groups/leave_group.json"];
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setObject:[NSNumber numberWithInteger:groupId] forKey:@"group_id"];
+    [self enrichParametersWithToken:parameters];
+    
+    [[ApiUtils sharedClient] POST:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        if (successBlock) {
+            successBlock();
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
+// Add member
++ (void)addUser:(NSInteger)userId toGroup:(NSInteger)groupId AndExecuteSuccess:(void(^)(BOOL isFull, Group *group))successBlock failure:(void(^)())failureBlock
+{
+    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"groups/add_member.json"];
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    [parameters setObject:[NSNumber numberWithInteger:groupId] forKey:@"group_id"];
+    [parameters setObject:[NSNumber numberWithInteger:userId] forKey:@"new_member_id"];
+    [self enrichParametersWithToken:parameters];
+    
+    [[ApiUtils sharedClient] POST:path parameters:parameters success:^(NSURLSessionDataTask *task, id JSON) {
+        NSDictionary *result = [JSON valueForKeyPath:@"result"];
+        NSDictionary *rawGroup = [result objectForKey:@"group"];
+        Group *group = [Group rawGroupToInstance:rawGroup];
+        BOOL isFull = [[result objectForKey:@"is_full"] boolValue];
+        if (successBlock) {
+            successBlock(isFull,group);
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if (failureBlock) {
+            failureBlock();
+        }
+    }];
+}
+
 @end

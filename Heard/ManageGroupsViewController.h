@@ -8,10 +8,23 @@
 
 #import <UIKit/UIKit.h>
 #import "ManageGroupsTableViewCell.h"
+#import "Group.h"
+#import "AddMemberViewController.h"
 
-@interface ManageGroupsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ManageGroupsCellProtocol, UIActionSheetDelegate>
+@protocol ManageGroupsVCDelegateProtocol;
+
+@interface ManageGroupsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ManageGroupsCellProtocol, UIActionSheetDelegate, AddMemberVCDelegateProtocol>
 
 @property (nonatomic, strong) NSArray *contacts;
-@property (nonatomic, strong) NSArray *groups;
+@property (nonatomic, strong) NSMutableArray *groups;
+@property (nonatomic) id<ManageGroupsVCDelegateProtocol> delegate;
+
+@end
+
+@protocol ManageGroupsVCDelegateProtocol
+
+- (void)deleteGroupAndAssociatedView:(Group *)group;
+- (void)updateGroupAndAssociatedView:(Group *)group;
+- (void)addNewGroup:(Group *)group;
 
 @end

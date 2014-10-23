@@ -10,6 +10,10 @@
 #import "CreateGroupsViewController.h"
 #import "ManageGroupsTableViewCell.h"
 #import "Constants.h"
+#import "ApiUtils.h"
+#import "GeneralUtils.h"
+#import "MBProgressHUD.h"
+#import "AddMemberViewController.h"
 
 #define NO_GROUPS_TAG @"No Groups"
 #define GROUP_TAG @"Group Cell"
@@ -22,6 +26,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *groupTableView;
 @property (nonatomic, strong) NSIndexPath *selectedIndexPath;
+@property (nonatomic, strong) Group *selectedGroup;
 
 @end
 
@@ -40,11 +45,7 @@
 // ----------------------------------------------------------
 
 - (void)optionButtonClicked:(Group *)group {
-    // todo BT
-    // show alert view
-    // Title = name
-    // Leave group
-    // if less than 5, add people
+    self.selectedGroup = group;
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:group.groupName
                                                              delegate:self
                                                     cancelButtonTitle:ACTION_SHEET_CANCEL
@@ -59,15 +60,67 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSString *buttonTitle = [actionSheet buttonTitleAtIndex:buttonIndex];
-    
+    if (!self.selectedGroup) {
+        return;
+    }
     if ([buttonTitle isEqualToString:ACTION_SHEET_CANCEL]) {
         return;
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_1]) {
-        // todo BT
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [ApiUtils leaveGroup:self.selectedGroup.identifier
+           AndExecuteSuccess:^void() {
+               // Delete group, group view, group cell
+               [self.groups removeObject:self.selectedGroup];
+               [self.delegate deleteGroupAndAssociatedView:self.selectedGroup];
+               self.selectedIndexPath = nil;
+               [self.groupTableView reloadData];
+               [MBProgressHUD hideHUDForView:self.view animated:YES];
+           }
+                     failure:^void() {
+                         [GeneralUtils showMessage:NSLocalizedStringFromTable(@"unexpected_error_message", kStringFile, nil) withTitle:NSLocalizedStringFromTable(@"unexpected_error_title", kStringFile, nil)];
+                         [MBProgressHUD hideHUDForView:self.view animated:YES];
+                     }
+         ];
     } else if ([buttonTitle isEqualToString:ACTION_SHEET_OPTION_2]) {
-        // todo BT
+        [self performSegueWithIdentifier:@"Add Member From Create Group" sender:nil];
     }
 }
+
+// ----------------------------------------------------------
+// Create protocol
+// ----------------------------------------------------------
+- (void)addNewGroup:(Group *)group
+{
+    [self.delegate addNewGroup:group];
+    self.selectedIndexPath = nil;
+    [self.groupTableView reloadData];
+}
+
+// ----------------------------------------------------------
+// Add Member protocol
+// ----------------------------------------------------------
+- (void)addMember:(NSInteger)userId toGroup:(Group *)group
+{
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [ApiUtils addUser:userId
+              toGroup:group.identifier
+    AndExecuteSuccess:^void(BOOL isFull, Group *group) {
+        self.selectedGroup.memberIds = group.memberIds;
+        self.selectedIndexPath = nil;
+        [self.groupTableView reloadData];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        if (isFull) {
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"group_full_message", kStringFile, nil) withTitle:NSLocalizedStringFromTable(@"group_full_title", kStringFile, nil)];
+        } else {
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"add_member_success_message", kStringFile, nil) withTitle:nil];
+        }
+    }
+              failure:^void() {
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"unexpected_error_message", kStringFile, nil) withTitle:NSLocalizedStringFromTable(@"unexpected_error_title", kStringFile, nil)];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
+}
+
 
 // ----------------------------------------------------------
 // Navigation
@@ -86,6 +139,11 @@
     NSString * segueName = segue.identifier;
     if ([segueName isEqualToString:@"Create Group From Manage Groups"]) {
         ((CreateGroupsViewController *) [segue destinationViewController]).contacts = self.contacts;
+        ((CreateGroupsViewController *) [segue destinationViewController]).delegate = self;
+    } else if ([segueName isEqualToString:@"Add Member From Create Group"]) {
+        ((AddMemberViewController *) [segue destinationViewController]).contacts = [self contactsNotBelongingToGroup:self.selectedGroup];
+        ((AddMemberViewController *) [segue destinationViewController]).selectedGroup = self.selectedGroup;
+        ((AddMemberViewController *) [segue destinationViewController]).delegate = self;
     }
 }
 
@@ -102,8 +160,7 @@
          cellIdentifier = NO_GROUPS_TAG;
          UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
         return cell;
-    } else if([indexPath isEqual:self.selectedIndexPath] && ![[tableView cellForRowAtIndexPath:indexPath].reuseIdentifier  isEqualToString: SELECTED_TAG]) {
-        NSLog([tableView cellForRowAtIndexPath:indexPath].reuseIdentifier);
+    } else if(self.selectedIndexPath && [indexPath isEqual:self.selectedIndexPath] && ![[tableView cellForRowAtIndexPath:indexPath].reuseIdentifier  isEqualToString: SELECTED_TAG]) {
         cellIdentifier = SELECTED_TAG;
         ManageGroupsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         if (!cell) {
@@ -114,6 +171,8 @@
         cell.delegate = self;
         return cell;
     } else {
+        if ([indexPath isEqual:self.selectedIndexPath])
+            self.selectedIndexPath = nil;
         cellIdentifier = GROUP_TAG;
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
         Group *group = (Group *)self.groups[indexPath.row];
@@ -127,28 +186,17 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//    Group *group = (Group *)self.groups[indexPath.row];
-//    
-//    if ([tableView cellForRowAtIndexPath:indexPath].frame.size.height == 100) {
-//        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//        
-//        EditContactsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:"EditContactsTableViewCell"];
-//        [tableView deselectRowAtIndexPath:indexPath animated:NO];
-//    } else {
-//        cell.accessoryType = UITableViewCellAccessoryNone;
-//    }
-//    [tableView beginUpdates];
-//    [tableView endUpdates];
+    NSIndexPath *previousIndexPath = self.selectedIndexPath;
     self.selectedIndexPath = indexPath;
-    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation: UITableViewRowAnimationNone];
+    NSArray *reloadPaths = previousIndexPath && previousIndexPath != indexPath ? @[previousIndexPath,indexPath] : @[indexPath];
+    [tableView reloadRowsAtIndexPaths:reloadPaths withRowAnimation: UITableViewRowAnimationNone];
 }
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if([indexPath isEqual:[tableView indexPathForSelectedRow]]) {
-        return 60.0;
+    if(self.selectedIndexPath && [indexPath isEqual:self.selectedIndexPath]) {
+        return 100.0;
     } else {
         return 60;
     }
@@ -159,6 +207,23 @@
     return YES;
 }
 
+- (NSArray *)contactsNotBelongingToGroup:(Group *)group
+{
+    NSMutableArray *contactArray = [NSMutableArray new];
+    for (Contact *contact in self.contacts) {
+        BOOL isInGroup = NO;
+        for (NSNumber *memberId in group.memberIds) {
+            if ([memberId integerValue] == contact.identifier) {
+                isInGroup = YES;
+                break;
+            }
+        }
+        if (!isInGroup) {
+            [contactArray addObject:contact];
+        }
+    }
+    return contactArray;
+}
 
 
 @end

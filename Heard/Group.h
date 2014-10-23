@@ -14,6 +14,7 @@
 @property (strong, nonatomic) NSString *groupName;
 @property (strong, nonatomic) NSMutableArray *memberIds;
 @property (nonatomic) NSInteger lastMessageDate;
+@property (nonatomic) BOOL isHidden;
 
 + (Group *)createGroupWithId:(NSUInteger)identifier groupName:(NSString *)groupName memberIds:(NSMutableArray *)memberIds;
 + (Group *)rawGroupToInstance:(NSDictionary *)rawGroup;

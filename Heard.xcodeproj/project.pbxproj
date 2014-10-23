@@ -283,6 +283,8 @@
 		3CC2438119F81E87006973C0 /* ManageGroupsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2437E19F81E87006973C0 /* ManageGroupsTableViewCell.m */; };
 		3CC2438219F81E87006973C0 /* ManageGroupsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CC2437F19F81E87006973C0 /* ManageGroupsTableViewCell.xib */; };
 		3CC2438319F81E87006973C0 /* ManageGroupsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CC2437F19F81E87006973C0 /* ManageGroupsTableViewCell.xib */; };
+		3CC2438619F9315F006973C0 /* AddMemberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2438519F9315F006973C0 /* AddMemberViewController.m */; };
+		3CC2438719F9315F006973C0 /* AddMemberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2438519F9315F006973C0 /* AddMemberViewController.m */; };
 		3CEF9EE719DA2F140045D78D /* EmojiView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE619DA2F140045D78D /* EmojiView.m */; };
 		3CEF9EE819DA2F140045D78D /* EmojiView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE619DA2F140045D78D /* EmojiView.m */; };
 		3CEF9EF619DB1BD30045D78D /* emoji-sound-2.3.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EF219DB1BD30045D78D /* emoji-sound-2.3.m4a */; };
@@ -523,6 +525,8 @@
 		3CC2437D19F81E87006973C0 /* ManageGroupsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManageGroupsTableViewCell.h; sourceTree = "<group>"; };
 		3CC2437E19F81E87006973C0 /* ManageGroupsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManageGroupsTableViewCell.m; sourceTree = "<group>"; };
 		3CC2437F19F81E87006973C0 /* ManageGroupsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ManageGroupsTableViewCell.xib; sourceTree = "<group>"; };
+		3CC2438419F9315F006973C0 /* AddMemberViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMemberViewController.h; sourceTree = "<group>"; };
+		3CC2438519F9315F006973C0 /* AddMemberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMemberViewController.m; sourceTree = "<group>"; };
 		3CEF9EE519DA2F140045D78D /* EmojiView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmojiView.h; sourceTree = "<group>"; };
 		3CEF9EE619DA2F140045D78D /* EmojiView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmojiView.m; sourceTree = "<group>"; };
 		3CEF9EF219DB1BD30045D78D /* emoji-sound-2.3.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-2.3.m4a"; sourceTree = "<group>"; };
@@ -813,6 +817,7 @@
 			isa = PBXGroup;
 			children = (
 				0B969127198997700048E4BB /* EditContactsTableViewCell.xib */,
+				3CC2437F19F81E87006973C0 /* ManageGroupsTableViewCell.xib */,
 				0BD758D11950F91B00CF0D85 /* Main.storyboard */,
 				0BF97B1E19CA6A4E00FFA338 /* PushNoAnimationSegue.h */,
 				0BF97B1F19CA6A4E00FFA338 /* PushNoAnimationSegue.m */,
@@ -992,7 +997,6 @@
 				3CC2436D19F55457006973C0 /* GroupView.m */,
 				3CC2437D19F81E87006973C0 /* ManageGroupsTableViewCell.h */,
 				3CC2437E19F81E87006973C0 /* ManageGroupsTableViewCell.m */,
-				3CC2437F19F81E87006973C0 /* ManageGroupsTableViewCell.xib */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -1004,6 +1008,8 @@
 				3CC2436219F51635006973C0 /* CreateGroupsViewController.m */,
 				3CC2437919F7F251006973C0 /* ManageGroupsViewController.h */,
 				3CC2437A19F7F251006973C0 /* ManageGroupsViewController.m */,
+				3CC2438419F9315F006973C0 /* AddMemberViewController.h */,
+				3CC2438519F9315F006973C0 /* AddMemberViewController.m */,
 			);
 			name = Groups;
 			sourceTree = "<group>";
@@ -1219,6 +1225,7 @@
 				0B72EEA5196C672F00AC5A01 /* RequestPhoneViewController.m in Sources */,
 				0B72EEA6196C672F00AC5A01 /* MPNotification.m in Sources */,
 				0B72EEA7196C672F00AC5A01 /* NBAsYouTypeFormatter.m in Sources */,
+				3CC2438719F9315F006973C0 /* AddMemberViewController.m in Sources */,
 				0B72EEA8196C672F00AC5A01 /* NSData+MPBase64.m in Sources */,
 				0B72EEA9196C672F00AC5A01 /* NBNumberFormat.m in Sources */,
 				0BC6B6F219E624150098D922 /* ProfilePicViewController.m in Sources */,
@@ -1303,6 +1310,7 @@
 				0BDB65581953B6A000223093 /* RequestPhoneViewController.m in Sources */,
 				0BB0E8F0195B449A00C94AC0 /* MPNotification.m in Sources */,
 				0BDB65511953B60D00223093 /* NBAsYouTypeFormatter.m in Sources */,
+				3CC2438619F9315F006973C0 /* AddMemberViewController.m in Sources */,
 				0BB0E8F8195B449A00C94AC0 /* NSData+MPBase64.m in Sources */,
 				0BDB65521953B60D00223093 /* NBNumberFormat.m in Sources */,
 				0BC6B6F119E624150098D922 /* ProfilePicViewController.m in Sources */,
