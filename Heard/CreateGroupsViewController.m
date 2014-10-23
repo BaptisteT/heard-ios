@@ -50,7 +50,7 @@
 - (IBAction)createButtonClicked:(id)sender {
     if (self.groupNameTextField.text.length == 0) {
         [GeneralUtils showMessage:NSLocalizedStringFromTable(@"empty_group_name_message", kStringFile, nil) withTitle:nil];
-    } else if (self.selectedContacts.count == 1) {
+    } else if (self.selectedContacts.count <= 1) {
         [GeneralUtils showMessage:NSLocalizedStringFromTable(@"insufficient_members_number_message", kStringFile, nil) withTitle:nil];
     } else {
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
