@@ -866,6 +866,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     return nil;
 }
 
+- (BOOL)message:(Message *)message belongsToContactView:(ContactView *)contactView
+{
+    return [message getSenderOrGroupIdentifier] == [contactView contactIdentifier] && ([message isGroupMessage] == [contactView isGroupContactView]);
+}
+
 
 // ----------------------------------
 #pragma mark Messages
@@ -934,7 +939,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (BOOL)attributeMessageToExistingContacts:(Message *)message
 {
     for (ContactView *contactView in self.contactViews) {
-        if ([contactView contactIdentifier] == [message getSenderOrGroupIdentifier]) {
+        if ([self message:message belongsToContactView:contactView]) {
             [contactView addUnreadMessage:message];
             
             // Update last message date to sort contacts even if no push
@@ -957,7 +962,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     for (Message *message in self.nonAttributedUnreadMessages) {
         isAttributed = NO;
         for (ContactView *contactView in self.contactViews) {
-            if ([contactView contactIdentifier] == [message getSenderOrGroupIdentifier]) {
+            if ([self message:message belongsToContactView:contactView]) {
                 [contactView addUnreadMessage:message];
                 isAttributed = YES;
                 // Update last message date to sort contacts even if no push
@@ -980,9 +985,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                 [[self getViewOfGroup:group] addUnreadMessage:message];
             } else {
                 // create contact if does not exists
-                Contact *contact = [ContactUtils findContactFromId:message.senderId inContactsArray:self.contacts];
+                Contact *contact = [ContactUtils findContactFromId:[message getSenderOrGroupIdentifier] inContactsArray:self.contacts];
                 if (!contact) {
-                    contact = [Contact createContactWithId:message.senderId phoneNumber:nil firstName:nil lastName:nil];
+                    contact = [Contact createContactWithId:[message getSenderOrGroupIdentifier] phoneNumber:nil firstName:nil lastName:nil];
                     contact.lastMessageDate = message.createdAt;
                     if (![GeneralUtils isAdminContact:contact])
                         contact.isPending = YES;
@@ -1033,8 +1038,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (!self.lastMessagesPlayed) {
         self.lastMessagesPlayed = [NSMutableArray new];
     }
-    // Check that it's the same sender
-    if (self.lastMessagesPlayed.count>0 && [((Message *)[self.lastMessagesPlayed lastObject]) getSenderOrGroupIdentifier] != [message identifier]) {
+    // If not the same sender, start again
+    if (self.lastMessagesPlayed.count>0 && [((Message *)[self.lastMessagesPlayed lastObject]) getSenderOrGroupIdentifier] != [message getSenderOrGroupIdentifier]) {
         self.lastMessagesPlayed = [NSMutableArray new];
     }
     [self.lastMessagesPlayed addObject:message];
@@ -1773,9 +1778,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                 [self endPlayerUIForAllContactViews];
             }
             // Add last messages played to contact view
-            NSInteger senderId = [((Message *)self.lastMessagesPlayed[0]) getSenderOrGroupIdentifier];
             for (ContactView *contactView in self.contactViews) {
-                if ([contactView contactIdentifier] == senderId) {
+                if ([self message:(Message *)self.lastMessagesPlayed[0] belongsToContactView:contactView]) {
                     [contactView addPlayedMessages:self.lastMessagesPlayed];
                     [self resetLastMessagesPlayed];
                     [self resetApplicationBadgeNumber];
