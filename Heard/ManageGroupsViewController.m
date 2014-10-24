@@ -48,12 +48,15 @@
     self.selectedGroup = group;
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:group.groupName
                                                              delegate:self
-                                                    cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                    cancelButtonTitle:nil
                                                destructiveButtonTitle:nil
-                                                    otherButtonTitles:ACTION_SHEET_OPTION_1, nil];
+                                                    otherButtonTitles:nil];
     if (group.memberIds.count < 5) {
         [actionSheet addButtonWithTitle:ACTION_SHEET_OPTION_2];
     }
+    [actionSheet addButtonWithTitle:ACTION_SHEET_OPTION_1];
+    [actionSheet addButtonWithTitle:ACTION_SHEET_CANCEL];
+    actionSheet.cancelButtonIndex = actionSheet.numberOfButtons - 1;
     [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 

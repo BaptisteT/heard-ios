@@ -22,12 +22,6 @@
 @implementation ManageGroupsTableViewCell
 
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
 - (void)setGroup:(Group *)group {
     _group = group;
     self.groupName.text = group.groupName;
