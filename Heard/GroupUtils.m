@@ -38,7 +38,7 @@
                                       memberIds:membersIdArray[i]
                                memberFirstNames:membersFirstNameArray[i]
                                 memberLastNames:membersLastNameArray[i]];
-        group.lastMessageDate = [lastMessageDateArray[i] integerValue];
+        group.lastMessageDate = MAX([lastMessageDateArray[i] integerValue],group.lastMessageDate);
         [groups addObject:group];
     }
     return groups;
@@ -67,7 +67,7 @@
     [prefs setObject:nameArray forKey:GROUP_NAME_PREF];
     [prefs setObject:membersIdArray forKey:GROUP_MEMBERS_ID_PREF];
     [prefs setObject:membersFirstNameArray forKey:GROUP_MEMBERS_FIRST_NAME_PREF];
-    [prefs setObject:membersLastNameArray forKey:GROUP_LAST_MESSAGE_DATE_PREF];
+    [prefs setObject:membersLastNameArray forKey:GROUP_MEMBERS_LAST_NAME_PREF];
     [prefs setObject:lastMessageDateArray forKey:GROUP_LAST_MESSAGE_DATE_PREF];
     [prefs synchronize];
 }

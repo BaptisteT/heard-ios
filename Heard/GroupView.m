@@ -51,9 +51,13 @@
         return;
     } else {
         self.imageView.image = nil;
+        for (UIView *subview in self.imageView.subviews) {
+            [subview removeFromSuperview];
+        }
         NSInteger membersCount = self.group.memberIds.count -1;
         self.imageViews = [[NSMutableArray alloc] initWithCapacity:membersCount];
         int kkk = 0;
+        self.pictureIsLoaded = YES;
         for (NSNumber *memberId in self.group.memberIds) {
             if ([SessionUtils getCurrentUserId] == [memberId integerValue]) {
                 continue;
@@ -106,6 +110,7 @@
             NSURL *url = [GeneralUtils getUserProfilePictureURLFromUserId:[memberId integerValue]];
             NSURLRequest *imageRequest = [NSURLRequest requestWithURL:url];
             __weak __typeof(imageView)weakImageView = imageView;
+            __weak __typeof(self)weakSelf = self;
             
             //Fade in profile picture
             [imageView setImageWithURLRequest:imageRequest placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
@@ -114,14 +119,31 @@
                                    options:UIViewAnimationOptionTransitionCrossDissolve
                                 animations:^{[weakImageView setImage:image];}
                                 completion:nil];
-//                weakSelf.pictureIsLoaded = YES;
+                weakSelf.pictureIsLoaded &= YES;
             } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-//                weakSelf.pictureIsLoaded = NO;
+                weakSelf.pictureIsLoaded &= NO;
             }];
         }
     }
 }
 
+- (void)playNextMessage {
+    NSInteger senderId = ((Message *)self.unreadMessages[0]).senderId;
+    int i = 0;
+    for (NSNumber *ids in self.group.memberIds) {
+        if ([ids integerValue] == senderId) {
+            self.nameLabel.text = self.group.memberFirstName[i];
+            break;
+        }
+        i++;
+    }
+    [super playNextMessage];
+}
+
+- (void)messageFinishPlaying:(BOOL)completed {
+    self.nameLabel.text = self.group.groupName;
+    [super messageFinishPlaying:completed];
+}
 
 // No state symbol for groups
 - (BOOL)lastMessageSentReadByContact {

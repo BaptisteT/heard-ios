@@ -22,5 +22,6 @@
 @protocol CreateGroupsVCDelegate
 
 - (void)addNewGroup:(Group *)group;
+- (void)reorderContactViews;
 
 @end

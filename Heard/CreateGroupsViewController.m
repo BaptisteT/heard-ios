@@ -73,6 +73,7 @@
                                                           memberLastNames:contactLastNames];
                                   group.lastMessageDate = [[NSDate date] timeIntervalSince1970];
                                   [self.delegate addNewGroup:group];
+                                  [self.delegate reorderContactViews];
                                   [GeneralUtils showMessage:NSLocalizedStringFromTable(@"group_successfully_created_message", kStringFile, nil) withTitle:nil];
                                   [MBProgressHUD hideHUDForView:self.view animated:YES];
                                   [self dismissViewControllerAnimated:YES completion:nil];

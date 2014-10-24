@@ -11,6 +11,7 @@
 #import "Group.h"
 #import "AddMemberViewController.h"
 #import "CreateGroupsViewController.h"
+#import "GroupView.h"
 
 @protocol ManageGroupsVCDelegateProtocol;
 
@@ -27,5 +28,7 @@
 - (void)deleteGroupAndAssociatedView:(Group *)group;
 - (void)updateGroupAndAssociatedView:(Group *)group;
 - (void)addNewGroup:(Group *)group;
+- (void)reorderContactViews;
+- (GroupView *)getViewOfGroup:(Group *)group;
 
 @end

@@ -95,8 +95,13 @@
 - (void)addNewGroup:(Group *)group
 {
     [self.delegate addNewGroup:group];
+    [self reorderContactViews];
     self.selectedIndexPath = nil;
     [self.groupTableView reloadData];
+}
+
+- (void)reorderContactViews {
+    [self.delegate reorderContactViews];
 }
 
 // ----------------------------------------------------------
@@ -117,6 +122,7 @@
         if (isFull) {
             [GeneralUtils showMessage:NSLocalizedStringFromTable(@"group_full_message", kStringFile, nil) withTitle:NSLocalizedStringFromTable(@"group_full_title", kStringFile, nil)];
         } else {
+            [[self.delegate getViewOfGroup:self.selectedGroup] setContactPicture];
             [GeneralUtils showMessage:NSLocalizedStringFromTable(@"add_member_success_message", kStringFile, nil) withTitle:nil];
         }
     }
