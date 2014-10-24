@@ -52,6 +52,10 @@
 
 }
 
+- (IBAction)backButtonClicked:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];

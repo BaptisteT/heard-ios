@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NewInviteContactsViewController : UIViewController
+@interface NewInviteContactsViewController : UIViewController <UIGestureRecognizerDelegate>
 
 @end

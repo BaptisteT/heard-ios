@@ -29,8 +29,6 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "CameraUtils.h"
 #import "PotentialContact.h"
-#import "InviteContactView.h"
-#import "InviteContactsViewController.h"
 #import "EmojiView.h"
 #import <MediaPlayer/MPVolumeView.h>
 
@@ -65,7 +63,7 @@
 @property (weak, nonatomic) UIScrollView *contactScrollView;
 @property (nonatomic) BOOL retrieveNewContact;
 @property (nonatomic, strong) Contact *contactToAdd;
-@property (nonatomic, strong) ContactView *inviteContactView;
+@property (nonatomic, strong) UIButton *inviteButton;
 @property (nonatomic) CGFloat screenWidth;
 @property (nonatomic) CGFloat screenHeight;
 @property (nonatomic) NSInteger contactsPerRow;
@@ -186,10 +184,12 @@
     }
     
     //Create invite contact view
-    self.inviteContactView = [[InviteContactView alloc] initWithContactMargin:self.contactMargin];
-    self.inviteContactView.delegate = self;
-    [self.contactScrollView addSubview:self.inviteContactView];
-    [self addNameLabelForView:self.inviteContactView];
+    
+    
+    self.inviteButton = [[UIButton alloc] initWithFrame:CGRectMake(self.contactMargin, kContactMinimumMargin, kContactSize, kContactSize)];
+    [self.inviteButton addTarget:self action:@selector(inviteButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    [self.inviteButton setImage:[UIImage imageNamed:@"invite-button"] forState:UIControlStateNormal];
+    [self.contactScrollView addSubview:self.inviteButton];
     
     // Create contact views
     [self displayContactViews];
@@ -337,9 +337,6 @@
     if ([segueName isEqualToString: @"Edit Contacts Segue"]) {
         ((EditContactsViewController *) [segue destinationViewController]).delegate = self;
         ((EditContactsViewController *) [segue destinationViewController]).contacts = self.contacts;
-    } else if ([segueName isEqualToString:@"Invite Contacts Segue"]) {
-        ((InviteContactsViewController *) [segue destinationViewController]).message = sender;
-         ((InviteContactsViewController *) [segue destinationViewController]).indexedContacts = self.indexedContacts;
     }
 }
 
@@ -761,6 +758,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     for (ContactView *contactView in viewsToRemove) {
         [self removeContactView:contactView];
     }
+}
+
+- (void)inviteButtonClicked
+{
+    [self performSegueWithIdentifier:@"New Invite Contacts Segue" sender:nil];
 }
 
 // ----------------------------------
