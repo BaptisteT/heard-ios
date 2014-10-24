@@ -23,7 +23,7 @@
     group.memberIds = memberIds;
     group.memberFirstName = memberFirstNames;
     group.memberLastName = memberLastNames;
-    group.lastMessageDate = [[NSDate date] timeIntervalSince1970];
+    group.lastMessageDate = 1; // so that by default, they appear before contact
     group.isHidden = NO;
     return group;
 }

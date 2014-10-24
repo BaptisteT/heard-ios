@@ -550,15 +550,19 @@
             [self.addressBookFormattedContacts removeObjectForKey:phoneNumber];
         }
         for (Group *group in groups) {
-            // todo BT
-            // update anyway (for number of people & co..)
-            if (![GroupUtils findGroupFromId:group.identifier inGroupsArray:self.groups]) {
+            Group *existingGroup = [GroupUtils findGroupFromId:group.identifier inGroupsArray:self.groups];
+            if (!existingGroup) {
+                // Check current user belongs to this group
+                if (![self user:[SessionUtils getCurrentUserId] belongsToGroup:group]) {
+                    continue;
+                }
+                // Add group
                 [self.groups addObject:group];
                 [self createContactViewWithGroup:group andPosition:0];
             } else {
-                // todo BT
-                // adapt number of users
-                // delete group if 1 user
+                existingGroup.memberIds = group.memberIds;
+                existingGroup.memberFirstName = group.memberFirstName;
+                existingGroup.memberLastName = group.memberLastName;
             }
         }
         [self initIndexedContacts];
@@ -904,6 +908,16 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (contactView) {
         [contactView setContactPicture];
     }
+}
+
+- (BOOL)user:(NSInteger)userId belongsToGroup:(Group *)group
+{
+    for (NSNumber *memberId in group.memberIds) {
+        if ([memberId integerValue] == userId) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 // ----------------------------------
