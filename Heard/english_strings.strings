@@ -105,6 +105,8 @@
 "invite_messages_success_title" = "Message successfully sent.";
 "invite_messages_success_message" = "Recipients are not yet on Waved, let's tell them you left them a message!";
 "invite_contact_name" = "";
+"invite_mail_subject" = "Invitation for Waved";
+"invite_message" = "I sent you an invitation to chat on Waved. Get my message at";
 
 // Add
 "add_contact_missing_name_message" = "Please provide a first name or a last name.";

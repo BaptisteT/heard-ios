@@ -1326,6 +1326,9 @@
                                 <state key="normal" image="sms-share">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="smsShare:" destination="pFp-bR-Dlq" eventType="touchUpInside" id="4MV-Sa-eCt"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bfr-xb-QyB">
                                 <rect key="frame" x="16" y="321" width="80" height="80"/>
@@ -1336,6 +1339,9 @@
                                 <state key="normal" image="facebook-share">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="facebookShare:" destination="pFp-bR-Dlq" eventType="touchUpInside" id="4ds-18-ceU"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OLf-y1-BdL">
                                 <rect key="frame" x="120" y="321" width="80" height="80"/>
@@ -1346,6 +1352,9 @@
                                 <state key="normal" image="twitter-share">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="twitterShare:" destination="pFp-bR-Dlq" eventType="touchUpInside" id="7h9-89-XcZ"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6ai-0q-ImZ">
                                 <rect key="frame" x="224" y="321" width="80" height="80"/>
@@ -1356,6 +1365,9 @@
                                 <state key="normal" image="whatsapp-share">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="whatsappShare:" destination="pFp-bR-Dlq" eventType="touchUpInside" id="Jm4-Iy-j9H"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pxv-1N-eD0">
                                 <rect key="frame" x="120" y="185" width="80" height="80"/>
@@ -1366,6 +1378,9 @@
                                 <state key="normal" image="mail-share">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="emailShare:" destination="pFp-bR-Dlq" eventType="touchUpInside" id="iQN-ad-nI0"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C9G-JL-KcD">
                                 <rect key="frame" x="224" y="185" width="80" height="80"/>
@@ -1376,6 +1391,9 @@
                                 <state key="normal" image="link-share">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="linkShare:" destination="pFp-bR-Dlq" eventType="touchUpInside" id="sqA-eh-dJ4"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SMS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k79-Qa-aA4">
                                 <rect key="frame" x="16" y="273" width="80" height="21"/>
@@ -1459,7 +1477,7 @@
                                 <color key="textColor" red="0.3921568627" green="0.78823529410000004" blue="0.95294117649999999" alpha="1" colorSpace="deviceRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="Your invitation link is" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fUI-MC-GjK">
+                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="Your message is saved at" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fUI-MC-GjK">
                                 <rect key="frame" x="0.0" y="82" width="320" height="40"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -1470,6 +1488,17 @@
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="19"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Link copied to clipboard." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NXI-Uj-1y9">
+                                <rect key="frame" x="40" y="498" width="240" height="50"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.70000000000000007" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="Meu-8c-hnc"/>
+                                    <constraint firstAttribute="height" constant="50" id="TkO-VO-ZRO"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -1484,6 +1513,7 @@
                             <constraint firstItem="C9G-JL-KcD" firstAttribute="leading" secondItem="pxv-1N-eD0" secondAttribute="trailing" constant="24" id="FFO-VN-pOo"/>
                             <constraint firstItem="YjD-n3-JAu" firstAttribute="top" secondItem="pxv-1N-eD0" secondAttribute="bottom" constant="8" id="HEi-0k-FWR"/>
                             <constraint firstAttribute="trailing" secondItem="fUI-MC-GjK" secondAttribute="trailing" id="HTM-Ze-oK7"/>
+                            <constraint firstAttribute="centerX" secondItem="NXI-Uj-1y9" secondAttribute="centerX" id="Hw1-4L-klm"/>
                             <constraint firstItem="Bfr-xb-QyB" firstAttribute="centerX" secondItem="BIk-7O-Yau" secondAttribute="centerX" id="OAW-Eb-GPF"/>
                             <constraint firstItem="fUI-MC-GjK" firstAttribute="leading" secondItem="5QQ-NQ-nvP" secondAttribute="leading" id="Oef-mv-VOM"/>
                             <constraint firstItem="YjD-n3-JAu" firstAttribute="centerY" secondItem="k79-Qa-aA4" secondAttribute="centerY" id="PTQ-eQ-vmB"/>
@@ -1496,6 +1526,7 @@
                             <constraint firstItem="C9G-JL-KcD" firstAttribute="centerX" secondItem="6ai-0q-ImZ" secondAttribute="centerX" id="dfH-mC-Eb6"/>
                             <constraint firstItem="OLf-y1-BdL" firstAttribute="top" secondItem="YjD-n3-JAu" secondAttribute="bottom" constant="27" id="e6M-UH-EU7"/>
                             <constraint firstAttribute="centerY" secondItem="YjD-n3-JAu" secondAttribute="centerY" id="hII-1d-6ho"/>
+                            <constraint firstItem="A2g-da-TxO" firstAttribute="top" secondItem="NXI-Uj-1y9" secondAttribute="bottom" constant="20" id="hdK-5u-Rh6"/>
                             <constraint firstItem="pxv-1N-eD0" firstAttribute="centerY" secondItem="uKN-tb-ire" secondAttribute="centerY" id="jeI-iB-lYA"/>
                             <constraint firstItem="pxv-1N-eD0" firstAttribute="centerX" secondItem="OLf-y1-BdL" secondAttribute="centerX" id="jz7-OR-KC8"/>
                             <constraint firstItem="psI-QW-8l6" firstAttribute="centerY" secondItem="mID-qF-J4K" secondAttribute="centerY" id="kgQ-zS-Xhf"/>
@@ -1508,6 +1539,9 @@
                             <constraint firstItem="YjD-n3-JAu" firstAttribute="centerY" secondItem="OMx-bY-KMy" secondAttribute="centerY" id="zD7-Xs-9Zx"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="toastLabel" destination="NXI-Uj-1y9" id="lcD-ai-C8N"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z1W-KH-ikp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

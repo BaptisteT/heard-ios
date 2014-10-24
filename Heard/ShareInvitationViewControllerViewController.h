@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
 
-@interface ShareInvitationViewControllerViewController : UIViewController
+@interface ShareInvitationViewControllerViewController : UIViewController <MFMessageComposeViewControllerDelegate>
+
+@property (nonatomic, strong) NSString *invitationLink;
 
 @end

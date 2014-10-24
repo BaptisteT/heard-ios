@@ -63,6 +63,11 @@
     [self.phoneTextField becomeFirstResponder];
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
 
 - (void)setInitialCountryInfo
 {

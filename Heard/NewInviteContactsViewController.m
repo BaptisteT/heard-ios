@@ -62,6 +62,13 @@
     return YES;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.microView.userInteractionEnabled = YES;
+}
+
 - (IBAction)backButtonPressed:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
