@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="OIk-2W-hgJ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="OIk-2W-hgJ">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
@@ -1041,6 +1041,7 @@
                         <outlet property="topBarBackground" destination="yFI-qo-N0l" id="hqF-6B-oS3"/>
                         <segue destination="7tt-yn-mQy" kind="modal" identifier="Invite Contacts Segue" id="FDD-RE-iS8"/>
                         <segue destination="eqq-1x-hnn" kind="modal" identifier="Edit Contacts Segue" id="5hE-YK-o4D"/>
+                        <segue destination="El8-7y-3aB" kind="modal" identifier="New Invite Contacts Segue" id="Qay-kF-lei"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kJk-FM-4rk" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1220,6 +1221,254 @@
             </objects>
             <point key="canvasLocation" x="3839" y="-633.5"/>
         </scene>
+        <!--New Invite Contacts View Controller-->
+        <scene sceneID="lmH-2d-blk">
+            <objects>
+                <viewController id="El8-7y-3aB" customClass="NewInviteContactsViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Sio-IG-d4U"/>
+                        <viewControllerLayoutGuide type="bottom" id="Mfw-Ge-m0a"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="GA3-jk-iqt">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="Record an invitation message." textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GAM-bn-7cq">
+                                <rect key="frame" x="0.0" y="161" width="320" height="40"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="19"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="invite-record-button" translatesAutoresizingMaskIntoConstraints="NO" id="ilc-UE-5Fg">
+                                <rect key="frame" x="85" y="209" width="150" height="150"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="epN-eI-SfB">
+                                <rect key="frame" x="0.0" y="367" width="320" height="60"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xvt-Vm-W4e">
+                                <rect key="frame" x="0.0" y="508" width="320" height="60"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="19"/>
+                                <state key="normal" title="Search for an existing user ➜">
+                                    <color key="titleColor" red="0.3921568627" green="0.78823529410000004" blue="0.95294117649999999" alpha="1" colorSpace="deviceRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aDO-Uf-wWk">
+                                <rect key="frame" x="5" y="5" width="60" height="60"/>
+                                <state key="normal" image="blue-back-button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="addContactButton" destination="Xvt-Vm-W4e" id="RhS-RR-fWc"/>
+                        <outlet property="backButton" destination="aDO-Uf-wWk" id="jf9-Es-dWH"/>
+                        <outlet property="microView" destination="ilc-UE-5Fg" id="eet-Y1-cIZ"/>
+                        <outlet property="tutoLabelView" destination="GAM-bn-7cq" id="NDH-h3-nv9"/>
+                        <segue destination="pFp-bR-Dlq" kind="modal" identifier="Share Invitation Segue" modalTransitionStyle="crossDissolve" id="uwK-lL-Xxu"/>
+                        <segue destination="ydK-48-4v7" kind="modal" identifier="Add Contact Segue" id="cqA-eL-JAU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="n7c-1S-wIf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3299" y="-1298"/>
+        </scene>
+        <!--Share Invitation View Controller View Controller-->
+        <scene sceneID="0gb-NP-8In">
+            <objects>
+                <viewController id="pFp-bR-Dlq" customClass="ShareInvitationViewControllerViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Xgy-Aw-g2z"/>
+                        <viewControllerLayoutGuide type="bottom" id="A2g-da-TxO"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="5QQ-NQ-nvP" customClass="Share">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="Send your invitation!" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gQl-af-gSv">
+                                <rect key="frame" x="0.0" y="93" width="320" height="40"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="19"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uKN-tb-ire">
+                                <rect key="frame" x="16" y="177" width="80" height="80"/>
+                                <state key="normal" image="invite-button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bfr-xb-QyB">
+                                <rect key="frame" x="16" y="321" width="80" height="80"/>
+                                <state key="normal" image="invite-button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OLf-y1-BdL">
+                                <rect key="frame" x="120" y="321" width="80" height="80"/>
+                                <state key="normal" image="invite-button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6ai-0q-ImZ">
+                                <rect key="frame" x="224" y="321" width="80" height="80"/>
+                                <state key="normal" image="invite-button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pxv-1N-eD0">
+                                <rect key="frame" x="120" y="177" width="80" height="80"/>
+                                <state key="normal" image="invite-button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C9G-JL-KcD">
+                                <rect key="frame" x="224" y="177" width="80" height="80"/>
+                                <state key="normal" image="invite-button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Facebook" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k79-Qa-aA4">
+                                <rect key="frame" x="16" y="265" width="80" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Twitter" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YjD-n3-JAu">
+                                <rect key="frame" x="120" y="265" width="80" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Whatsapp" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OMx-bY-KMy">
+                                <rect key="frame" x="224" y="265" width="80" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="SMS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BIk-7O-Yau">
+                                <rect key="frame" x="16" y="409" width="80" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Email" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mID-qF-J4K">
+                                <rect key="frame" x="120" y="409" width="80" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Copy" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="psI-QW-8l6">
+                                <rect key="frame" x="224" y="409" width="80" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AtS-Xy-XBT">
+                                <rect key="frame" x="5" y="5" width="60" height="60"/>
+                                <state key="normal" image="blue-back-button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Z1W-KH-ikp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3723" y="-1298"/>
+        </scene>
+        <!--Add Contact View Controller-->
+        <scene sceneID="zYI-NG-jJo">
+            <objects>
+                <viewController id="ydK-48-4v7" customClass="AddContactViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ZVq-9j-7jb"/>
+                        <viewControllerLayoutGuide type="bottom" id="riz-RE-EJW"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="AS8-AS-wK5">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OX5-4R-C9N">
+                                <rect key="frame" x="0.0" y="150" width="320" height="70"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="dark-blue-bar" translatesAutoresizingMaskIntoConstraints="NO" id="7qh-bK-5ar">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
+                                    </imageView>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Phone Number" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sYh-Dn-Zrx">
+                                        <rect key="frame" x="80" y="0.0" width="170" height="70"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="22"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="numberPad"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="clip" translatesAutoresizingMaskIntoConstraints="NO" id="ASy-0p-txT">
+                                        <rect key="frame" x="0.0" y="0.0" width="70" height="70.5"/>
+                                        <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="22"/>
+                                        <state key="normal" title="+1" backgroundImage="light-blue-square">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="countryCodeButtonClicked:" destination="UQD-ua-4i0" eventType="touchUpInside" id="fY0-mW-Le7"/>
+                                            <action selector="countryNameBluttonClicked:" destination="UQD-ua-4i0" eventType="touchUpInside" id="UFF-by-w4i"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="USA" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Lv-CV-2QV">
+                                        <rect key="frame" x="0.0" y="47" width="70" height="18"/>
+                                        <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="13"/>
+                                        <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6tP-6v-odz">
+                                        <rect key="frame" x="250" y="0.0" width="70" height="70"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="light-blue-square" translatesAutoresizingMaskIntoConstraints="NO" id="Ito-sb-YoI">
+                                                <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
+                                            </imageView>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="next-button" translatesAutoresizingMaskIntoConstraints="NO" id="LAB-3f-fjG">
+                                                <rect key="frame" x="10" y="10" width="50" height="50"/>
+                                            </imageView>
+                                        </subviews>
+                                        <gestureRecognizers/>
+                                    </view>
+                                </subviews>
+                            </view>
+                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="Search user by phone number." textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HEP-7W-rLF">
+                                <rect key="frame" x="0.0" y="92" width="320" height="40"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="19"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UWW-eV-ZEJ">
+                                <rect key="frame" x="5" y="5" width="60" height="60"/>
+                                <state key="normal" image="blue-back-button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="backButton" destination="UWW-eV-ZEJ" id="1QD-Wh-A51"/>
+                        <outlet property="countryCodeButton" destination="ASy-0p-txT" id="zb3-cD-Vtc"/>
+                        <outlet property="countryNameLabel" destination="6Lv-CV-2QV" id="KhB-bd-a00"/>
+                        <outlet property="phoneTextField" destination="sYh-Dn-Zrx" id="t0r-KA-6pp"/>
+                        <outlet property="searchButton" destination="LAB-3f-fjG" id="vmC-zr-IcU"/>
+                        <outlet property="textFieldContainer" destination="OX5-4R-C9N" id="PPB-NJ-byJ"/>
+                        <outlet property="tutoLabel" destination="HEP-7W-rLF" id="OuI-Is-kio"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Hzf-23-cG3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3739" y="-2094"/>
+        </scene>
         <!--Invite Contacts View Controller-->
         <scene sceneID="rmu-Ed-BwY">
             <objects>
@@ -1366,7 +1615,9 @@
         <image name="dark-blue-bar" width="318" height="70"/>
         <image name="emoji-button" width="50" height="50"/>
         <image name="facebook-logo" width="30" height="30"/>
+        <image name="invite-button" width="80" height="80"/>
         <image name="invite-play" width="50" height="50"/>
+        <image name="invite-record-button" width="150" height="150"/>
         <image name="light-blue-bar" width="321" height="70"/>
         <image name="light-blue-square" width="70" height="70"/>
         <image name="menu-button" width="246" height="246"/>
@@ -1379,6 +1630,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="xdp-at-Nje"/>
+        <segue reference="qZZ-1Y-ErH"/>
+        <segue reference="lXU-Fa-FA3"/>
     </inferredMetricsTieBreakers>
 </document>
