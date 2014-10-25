@@ -10,6 +10,7 @@
 #import "Constants.h"
 #import <AVFoundation/AVFoundation.h>
 #import "ImageUtils.h"
+#import "ShareInvitationViewControllerViewController.h"
 
 @interface NewInviteContactsViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *microView;
@@ -24,6 +25,10 @@
 
 @property (nonatomic, strong) AVAudioPlayer *soundPlayer;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
+@property (weak, nonatomic) IBOutlet UILabel *recordTimeLabel;
+
+@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic) NSTimeInterval startingTime;
 
 @end
 
@@ -35,6 +40,8 @@
     [self.microView setMultipleTouchEnabled:NO];
     self.microView.userInteractionEnabled = YES;
     self.microView.exclusiveTouch = YES;
+    
+    self.recordTimeLabel.hidden = YES;
     
     [self initTapAndLongPressGestureRecognisers];
     
@@ -83,6 +90,7 @@
     self.longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
     [self.microView addGestureRecognizer:self.longPressRecognizer];
     self.longPressRecognizer.delegate = self;
+    self.longPressRecognizer.minimumPressDuration = 0;
 }
 
 - (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer
@@ -156,7 +164,16 @@
 
 - (void)goToShareContoller
 {
-    [self performSegueWithIdentifier:@"Share Invitation Segue" sender:nil];
+    [self performSegueWithIdentifier:@"Share Invitation Segue" sender:[[NSData alloc] initWithContentsOfURL:self.recorder.url]];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSString * segueName = segue.identifier;
+    
+    if ([segueName isEqualToString: @"Share Invitation Segue"]) {
+        ((ShareInvitationViewControllerViewController *) [segue destinationViewController]).message = sender;
+    }
 }
 
 - (void)playSound:(NSString *)sound
@@ -179,12 +196,44 @@
     }
 }
 
+- (void)startTimer
+{
+    self.startingTime = CFAbsoluteTimeGetCurrent();
+    
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateCounter) userInfo:nil repeats:YES];
+    
+    [self.timer fire];
+    
+    self.recordTimeLabel.hidden = NO;
+}
+
+- (void)updateCounter
+{
+    NSTimeInterval counter = CFAbsoluteTimeGetCurrent() - self.startingTime;
+    
+    self.recordTimeLabel.text = [NSString stringWithFormat:@"%ld:%02ld", (NSInteger) floor(counter/60), (NSInteger)counter - (NSInteger) floor(counter/60)*60];
+    
+    if (counter > 20) {
+        self.recordTimeLabel.textColor = [ImageUtils red];
+    } else {
+        self.recordTimeLabel.textColor = [UIColor lightGrayColor];
+    }
+}
+
+- (void)endTimer
+{
+    self.recordTimeLabel.hidden = YES;
+    [self.timer invalidate];
+}
+
 // ----------------------------------------------------------
 #pragma mark Animation
 // ----------------------------------------------------------
 
 - (void)startRecordingAnimation
 {
+    [self startTimer];
+    
     self.microView.image = [UIImage imageNamed:@"invite-record-button-pressed"];
     self.backButton.hidden = YES;
     self.tutoLabelView.hidden = YES;
@@ -194,6 +243,8 @@
 
 - (void)endRecordingAnimation
 {
+    [self endTimer];
+    
     self.microView.image = [UIImage imageNamed:@"invite-record-button"];
     self.backButton.hidden = NO;
     self.tutoLabelView.hidden = NO;

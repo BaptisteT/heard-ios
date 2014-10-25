@@ -107,6 +107,10 @@
 "invite_contact_name" = "";
 "invite_mail_subject" = "Invitation for Waved";
 "invite_message" = "I sent you an invitation to chat on Waved. Get my message at";
+"no_fb_messenger" = "You don't seem a have Facebook Messenger installed. Please use another option to send your invitation link.";
+"fb_messenger_error" = "Something went wrong with Facebook Messenger.";
+"no_whatsapp_messenger" = "You don't seem a have Whatsapp installed. Please use another option to send your invitation link.";
+
 
 // Add
 "add_contact_missing_name_message" = "Please provide a first name or a last name.";
