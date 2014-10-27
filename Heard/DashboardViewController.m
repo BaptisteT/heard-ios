@@ -316,8 +316,6 @@
     // Go to access view controller if acces has not yet been granted
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         [self displayContactAuthView];
-    } else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
-        [self initAddressBookFormattedContacts];
     }
 }
 
