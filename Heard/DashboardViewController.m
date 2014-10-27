@@ -559,7 +559,6 @@
                 [[self getViewOfGroup:existingGroup] setContactPicture];
             }
         }
-        [self initIndexedContacts];
         
         // Distribute non attributed messages
         [self distributeNonAttributedMessages];
