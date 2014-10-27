@@ -29,8 +29,6 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "CameraUtils.h"
 #import "PotentialContact.h"
-#import "InviteContactView.h"
-#import "InviteContactsViewController.h"
 #import "EmojiView.h"
 #import <MediaPlayer/MPVolumeView.h>
 #import "CreateGroupsViewController.h"
@@ -73,7 +71,7 @@
 @property (weak, nonatomic) UIScrollView *contactScrollView;
 @property (nonatomic) BOOL retrieveNewContact;
 @property (nonatomic, strong) ContactView *clickedPendingView;
-@property (nonatomic, strong) ContactView *inviteContactView;
+@property (nonatomic, strong) UIButton *inviteButton;
 @property (nonatomic) CGFloat screenWidth;
 @property (nonatomic) CGFloat screenHeight;
 @property (nonatomic) NSInteger contactsPerRow;
@@ -197,10 +195,10 @@
     self.groups = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).groups;
     
     //Create invite contact view
-    self.inviteContactView = [[InviteContactView alloc] initWithContactMargin:self.contactMargin];
-    self.inviteContactView.delegate = self;
-    [self.contactScrollView addSubview:self.inviteContactView];
-    [self addNameLabelToView:self.inviteContactView];
+    self.inviteButton = [[UIButton alloc] initWithFrame:CGRectMake(self.contactMargin, kContactMinimumMargin, kContactSize, kContactSize)];
+    [self.inviteButton addTarget:self action:@selector(inviteButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    [self.inviteButton setImage:[UIImage imageNamed:@"invite-button"] forState:UIControlStateNormal];
+    [self.contactScrollView addSubview:self.inviteButton];
     
     // Create contact views
     [self displayContactViews];
@@ -348,9 +346,6 @@
     if ([segueName isEqualToString: @"Edit Contacts Segue"]) {
         ((EditContactsViewController *) [segue destinationViewController]).delegate = self;
         ((EditContactsViewController *) [segue destinationViewController]).contacts = self.contacts;
-    } else if ([segueName isEqualToString:@"Invite Contacts Segue"]) {
-        ((InviteContactsViewController *) [segue destinationViewController]).message = sender;
-         ((InviteContactsViewController *) [segue destinationViewController]).indexedContacts = self.indexedContacts;
     } else if ([segueName isEqualToString: @"Create Group From Dashboard"]) {
         ((CreateGroupsViewController *) [segue destinationViewController]).delegate = self;
         ((CreateGroupsViewController *) [segue destinationViewController]).contacts = [self getGroupPermittedContacts];
@@ -924,6 +919,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     return NO;
 }
 
+- (void)inviteButtonClicked
+{
+    [self performSegueWithIdentifier:@"New Invite Contacts Segue" sender:nil];
+}
+
 // ----------------------------------
 #pragma mark Messages
 // ----------------------------------
@@ -1107,7 +1107,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                             delegate:self
                             cancelButtonTitle:ACTION_SHEET_CANCEL
                             destructiveButtonTitle:nil
-                            otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_7, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
+                            otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
     [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
