@@ -7,7 +7,8 @@
 //
 
 #import "AFHTTPSessionManager.h"
-#import "Contact.h"
+#import "ContactView.h"
+#import "Group.h"
 
 @interface ApiUtils : AFHTTPSessionManager
 
@@ -42,7 +43,7 @@
                                 failure:(void(^)())failureBlock;
 
 + (void)sendMessage:(NSData *)audioData
-             toUser:(Contact *)contact
+      toContactView:(ContactView *)contactView
             success:(void(^)())successBlock
             failure:(void (^)())failureBlock;
 
@@ -61,7 +62,7 @@
 
 + (void)markMessageAsOpened:(NSInteger)messageId success:(void(^)())successBlock failure:(void(^)())failureBlock;
 
-+ (void)getMyContacts:(NSMutableDictionary *)contactsInfo atSignUp:(BOOL)isSignUp success:(void(^)(NSArray *contacts, NSArray *futureContacts))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock;
++ (void)getMyContacts:(NSMutableDictionary *)contactsInfo atSignUp:(BOOL)isSignUp success:(void(^)(NSArray *contacts, NSArray *futureContacts, NSArray *groups, BOOL destroyFutures))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock;
 
 + (void)downloadAudioFileAtURL:(NSURL *)url success:(void(^)(NSData *audioData))successBlock failure:(void(^)())failureBlock;
 
@@ -78,5 +79,13 @@
 + (void)updateAddressBookStats:(NSMutableDictionary *)stats success:(void(^)())successBlock failure:(void(^)())failureBlock;
 
 + (void)currentUserIsRecording:(BOOL)flag toUser:(NSInteger)receivedId success:(void(^)())successBlock failure:(void(^)())failureBlock;
+
++ (void)createGroupWithName:(NSString *)groupName members:(NSArray *)membersId success:(void(^)(NSInteger groupId))successBlock failure:(void(^)())failureBlock;
+
++ (void)getNewGroupInfo:(NSInteger)groupId AndExecuteSuccess:(void(^)(Group *group))successBlock failure:(void(^)())failureBlock;
+
++ (void)leaveGroup:(NSInteger)groupId AndExecuteSuccess:(void(^)())successBlock failure:(void(^)())failureBlock;
+
++ (void)addUser:(NSInteger)userId toGroup:(NSInteger)groupId AndExecuteSuccess:(void(^)(BOOL isFull, Group *group))successBlock failure:(void(^)())failureBlock;
 
 @end

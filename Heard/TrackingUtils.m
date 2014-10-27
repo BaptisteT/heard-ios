@@ -36,9 +36,24 @@
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
     if (isEmoji) {
-        [mixpanel track:@"Record" properties:@{@"Emoji": @"True"}];
+        [mixpanel track:@"Record" properties:@{@"Emoji": @"True", @"Group": @"False"}];
     } else {
-        [mixpanel track:@"Record" properties:@{@"Emoji": @"False"}];
+        [mixpanel track:@"Record" properties:@{@"Emoji": @"False", @"Group": @"False"}];
+    }
+    
+    [mixpanel.people increment:@"Records" by:[NSNumber numberWithInt:1]];
+}
+
++ (void)trackGroupRecord:(BOOL)isEmoji
+{
+    if (!PRODUCTION || DEBUG)return;
+    
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    
+    if (isEmoji) {
+        [mixpanel track:@"Record" properties:@{@"Emoji": @"True", @"Group": @"True"}];
+    } else {
+        [mixpanel track:@"Record" properties:@{@"Emoji": @"False", @"Group": @"True"}];
     }
     
     [mixpanel.people increment:@"Records" by:[NSNumber numberWithInt:1]];

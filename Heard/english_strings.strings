@@ -8,6 +8,10 @@
 
 /* Below, TRUCHOV is replaced by the right name at run time */
 
+// General
+"unexpected_error_title" = "Unexpected error";
+"unexpected_error_message" = "Please, try again.";
+
 // Button
 "cancel_button_title" = "Cancel";
 "ok_button_title" = "Ok";
@@ -25,6 +29,7 @@
 "feedback_button_title" = "Feedback";
 "log_out_button_title" = "Log Out";
 "rate_button_title" = "Rate Us";
+"manage_groups_button_title" = "Manage Groups";
 "add_to_contact_button_title" = "Add Contact";
 "block_button_title" = "Block User";
 "edit_picture_button_title" = "Picture";
@@ -152,6 +157,20 @@
 //Alerts
 "shake_to_replay_tuto" = "Shake your phone to replay";
 "phone_to_ear_tuto" = "Phone to ear for private mode";
+
+// Group
+"max_group_members_title" = "Maximum number of members reached";
+"insufficient_members_number_message" = "Please select at least two members";
+"empty_group_name_message" = "Please, add a name for the group";
+"group_successfully_created_message" = "Group successfully created";
+"group_creation_failed_message" = "The group could not be created. Please try again";
+"insufficient_contacts_for_group_message" = "You don't have enough contacts to create groups";
+"leave_group_button_title" = "Leave Group";
+"add_person_button_title" = "Add New Member";
+"add_member_success_message" = "Member successfully added!";
+"group_full_title" = "We could not add a new member";
+"group_full_message" = "The group is already full";
+
 
 
 

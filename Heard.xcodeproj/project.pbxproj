@@ -267,6 +267,22 @@
 		3CB753D419B8908F00E4C75F /* CameraUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB753D319B8908F00E4C75F /* CameraUtils.m */; };
 		3CB753D519B8909A00E4C75F /* CameraUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB753D319B8908F00E4C75F /* CameraUtils.m */; };
 		3CB8B7F5195453E50090D657 /* ContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB8B7F4195453E50090D657 /* ContactView.m */; };
+		3CC2436319F51636006973C0 /* CreateGroupsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2436219F51635006973C0 /* CreateGroupsViewController.m */; };
+		3CC2436419F51636006973C0 /* CreateGroupsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2436219F51635006973C0 /* CreateGroupsViewController.m */; };
+		3CC2436E19F55457006973C0 /* GroupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2436D19F55457006973C0 /* GroupView.m */; };
+		3CC2436F19F55457006973C0 /* GroupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2436D19F55457006973C0 /* GroupView.m */; };
+		3CC2437219F5723D006973C0 /* GroupUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2437119F5723D006973C0 /* GroupUtils.m */; };
+		3CC2437319F5723D006973C0 /* GroupUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2437119F5723D006973C0 /* GroupUtils.m */; };
+		3CC2437619F575A0006973C0 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2437519F575A0006973C0 /* Group.m */; };
+		3CC2437719F575A0006973C0 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2437519F575A0006973C0 /* Group.m */; };
+		3CC2437B19F7F251006973C0 /* ManageGroupsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2437A19F7F251006973C0 /* ManageGroupsViewController.m */; };
+		3CC2437C19F7F251006973C0 /* ManageGroupsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2437A19F7F251006973C0 /* ManageGroupsViewController.m */; };
+		3CC2438019F81E87006973C0 /* ManageGroupsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2437E19F81E87006973C0 /* ManageGroupsTableViewCell.m */; };
+		3CC2438119F81E87006973C0 /* ManageGroupsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2437E19F81E87006973C0 /* ManageGroupsTableViewCell.m */; };
+		3CC2438219F81E87006973C0 /* ManageGroupsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CC2437F19F81E87006973C0 /* ManageGroupsTableViewCell.xib */; };
+		3CC2438319F81E87006973C0 /* ManageGroupsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CC2437F19F81E87006973C0 /* ManageGroupsTableViewCell.xib */; };
+		3CC2438619F9315F006973C0 /* AddMemberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2438519F9315F006973C0 /* AddMemberViewController.m */; };
+		3CC2438719F9315F006973C0 /* AddMemberViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CC2438519F9315F006973C0 /* AddMemberViewController.m */; };
 		3CEF9EE719DA2F140045D78D /* EmojiView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE619DA2F140045D78D /* EmojiView.m */; };
 		3CEF9EE819DA2F140045D78D /* EmojiView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE619DA2F140045D78D /* EmojiView.m */; };
 		3CEF9EF619DB1BD30045D78D /* emoji-sound-2.3.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 3CEF9EF219DB1BD30045D78D /* emoji-sound-2.3.m4a */; };
@@ -492,6 +508,21 @@
 		3CB8B7EB195346620090D657 /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
 		3CB8B7F3195453E50090D657 /* ContactView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactView.h; sourceTree = "<group>"; };
 		3CB8B7F4195453E50090D657 /* ContactView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactView.m; sourceTree = "<group>"; };
+		3CC2436119F51635006973C0 /* CreateGroupsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateGroupsViewController.h; sourceTree = "<group>"; };
+		3CC2436219F51635006973C0 /* CreateGroupsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateGroupsViewController.m; sourceTree = "<group>"; };
+		3CC2436C19F55457006973C0 /* GroupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupView.h; sourceTree = "<group>"; };
+		3CC2436D19F55457006973C0 /* GroupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupView.m; sourceTree = "<group>"; };
+		3CC2437019F5723D006973C0 /* GroupUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupUtils.h; sourceTree = "<group>"; };
+		3CC2437119F5723D006973C0 /* GroupUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupUtils.m; sourceTree = "<group>"; };
+		3CC2437419F575A0006973C0 /* Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Group.h; sourceTree = "<group>"; };
+		3CC2437519F575A0006973C0 /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Group.m; sourceTree = "<group>"; };
+		3CC2437919F7F251006973C0 /* ManageGroupsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManageGroupsViewController.h; sourceTree = "<group>"; };
+		3CC2437A19F7F251006973C0 /* ManageGroupsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManageGroupsViewController.m; sourceTree = "<group>"; };
+		3CC2437D19F81E87006973C0 /* ManageGroupsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManageGroupsTableViewCell.h; sourceTree = "<group>"; };
+		3CC2437E19F81E87006973C0 /* ManageGroupsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManageGroupsTableViewCell.m; sourceTree = "<group>"; };
+		3CC2437F19F81E87006973C0 /* ManageGroupsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ManageGroupsTableViewCell.xib; sourceTree = "<group>"; };
+		3CC2438419F9315F006973C0 /* AddMemberViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMemberViewController.h; sourceTree = "<group>"; };
+		3CC2438519F9315F006973C0 /* AddMemberViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMemberViewController.m; sourceTree = "<group>"; };
 		3CEF9EE519DA2F140045D78D /* EmojiView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmojiView.h; sourceTree = "<group>"; };
 		3CEF9EE619DA2F140045D78D /* EmojiView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmojiView.m; sourceTree = "<group>"; };
 		3CEF9EF219DB1BD30045D78D /* emoji-sound-2.3.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "emoji-sound-2.3.m4a"; sourceTree = "<group>"; };
@@ -769,6 +800,7 @@
 		0BD758F419511A1E00CF0D85 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				3CC2437819F7F232006973C0 /* Groups */,
 				0B9051C11977383B001E2ED5 /* Contacts */,
 				0B9051AA1976F1D4001E2ED5 /* Login */,
 				0BDB655F1953C04800223093 /* DashboardViewController.h */,
@@ -781,6 +813,7 @@
 			isa = PBXGroup;
 			children = (
 				0B969127198997700048E4BB /* EditContactsTableViewCell.xib */,
+				3CC2437F19F81E87006973C0 /* ManageGroupsTableViewCell.xib */,
 				0BD758D11950F91B00CF0D85 /* Main.storyboard */,
 				0BF97B1E19CA6A4E00FFA338 /* PushNoAnimationSegue.h */,
 				0BF97B1F19CA6A4E00FFA338 /* PushNoAnimationSegue.m */,
@@ -863,6 +896,8 @@
 				0B87247919799684007219AF /* AddressbookUtils.m */,
 				3CB753D219B8908F00E4C75F /* CameraUtils.h */,
 				3CB753D319B8908F00E4C75F /* CameraUtils.m */,
+				3CC2437019F5723D006973C0 /* GroupUtils.h */,
+				3CC2437119F5723D006973C0 /* GroupUtils.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -935,6 +970,8 @@
 				0B893A4C19550FF000476BFE /* Contact.m */,
 				3C91A80B19CD00AC00DCA8BC /* PotentialContact.h */,
 				3C91A80C19CD00AC00DCA8BC /* PotentialContact.m */,
+				3CC2437419F575A0006973C0 /* Group.h */,
+				3CC2437519F575A0006973C0 /* Group.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -950,8 +987,25 @@
 				0B05062E19D257D300CBFA59 /* NoCancelSearchBar.m */,
 				3CEF9EE519DA2F140045D78D /* EmojiView.h */,
 				3CEF9EE619DA2F140045D78D /* EmojiView.m */,
+				3CC2436C19F55457006973C0 /* GroupView.h */,
+				3CC2436D19F55457006973C0 /* GroupView.m */,
+				3CC2437D19F81E87006973C0 /* ManageGroupsTableViewCell.h */,
+				3CC2437E19F81E87006973C0 /* ManageGroupsTableViewCell.m */,
 			);
 			name = "Custom Views";
+			sourceTree = "<group>";
+		};
+		3CC2437819F7F232006973C0 /* Groups */ = {
+			isa = PBXGroup;
+			children = (
+				3CC2436119F51635006973C0 /* CreateGroupsViewController.h */,
+				3CC2436219F51635006973C0 /* CreateGroupsViewController.m */,
+				3CC2437919F7F251006973C0 /* ManageGroupsViewController.h */,
+				3CC2437A19F7F251006973C0 /* ManageGroupsViewController.m */,
+				3CC2438419F9315F006973C0 /* AddMemberViewController.h */,
+				3CC2438519F9315F006973C0 /* AddMemberViewController.m */,
+			);
+			name = Groups;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1072,6 +1126,7 @@
 				0B72EEF7196C672F00AC5A01 /* MPCloseBtn.png in Resources */,
 				0B72EEF8196C672F00AC5A01 /* Media.xcassets in Resources */,
 				3CA4927D19E3400500110DEF /* emoji-sound-10.1.m4a in Resources */,
+				3CC2438319F81E87006973C0 /* ManageGroupsTableViewCell.xib in Resources */,
 				3CA4923219E3132E00110DEF /* emoji-sound-2.1.m4a in Resources */,
 				3CA4927419E33F7500110DEF /* emoji-sound-8.3.m4a in Resources */,
 				0B72EEFA196C672F00AC5A01 /* MPNotification.storyboard in Resources */,
@@ -1132,6 +1187,7 @@
 				0BB0E8EE195B449A00C94AC0 /* MPCloseBtn.png in Resources */,
 				0BB0E8EC195B449A00C94AC0 /* Media.xcassets in Resources */,
 				3CA4927C19E3400500110DEF /* emoji-sound-10.1.m4a in Resources */,
+				3CC2438219F81E87006973C0 /* ManageGroupsTableViewCell.xib in Resources */,
 				3CA4923119E3132E00110DEF /* emoji-sound-2.1.m4a in Resources */,
 				3CA4927319E33F7500110DEF /* emoji-sound-8.3.m4a in Resources */,
 				0BB0E8F1195B449A00C94AC0 /* MPNotification.storyboard in Resources */,
@@ -1163,6 +1219,7 @@
 				0B72EEA5196C672F00AC5A01 /* RequestPhoneViewController.m in Sources */,
 				0B72EEA6196C672F00AC5A01 /* MPNotification.m in Sources */,
 				0B72EEA7196C672F00AC5A01 /* NBAsYouTypeFormatter.m in Sources */,
+				3CC2438719F9315F006973C0 /* AddMemberViewController.m in Sources */,
 				0B72EEA8196C672F00AC5A01 /* NSData+MPBase64.m in Sources */,
 				0B72EEA9196C672F00AC5A01 /* NBNumberFormat.m in Sources */,
 				0BC6B6F219E624150098D922 /* ProfilePicViewController.m in Sources */,
@@ -1182,6 +1239,7 @@
 				3CB753D519B8909A00E4C75F /* CameraUtils.m in Sources */,
 				0B72EEB5196C672F00AC5A01 /* ContactView.m in Sources */,
 				0B969126198997620048E4BB /* EditContactsViewController.m in Sources */,
+				3CC2436419F51636006973C0 /* CreateGroupsViewController.m in Sources */,
 				0B72EEB6196C672F00AC5A01 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				0BF97B2119CA6A4E00FFA338 /* PushNoAnimationSegue.m in Sources */,
 				0B72EEB7196C672F00AC5A01 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
@@ -1217,7 +1275,11 @@
 				0B72EED1196C672F00AC5A01 /* AFURLSessionManager.m in Sources */,
 				0B72EED2196C672F00AC5A01 /* HeardAppDelegate.m in Sources */,
 				0B72EED3196C672F00AC5A01 /* TrackingUtils.m in Sources */,
+				3CC2438119F81E87006973C0 /* ManageGroupsTableViewCell.m in Sources */,
+				3CC2437C19F7F251006973C0 /* ManageGroupsViewController.m in Sources */,
+				3CC2437319F5723D006973C0 /* GroupUtils.m in Sources */,
 				0B72EED4196C672F00AC5A01 /* ContactUtils.m in Sources */,
+				3CC2436F19F55457006973C0 /* GroupView.m in Sources */,
 				0B72EED5196C672F00AC5A01 /* Constants.m in Sources */,
 				0B87247B19799684007219AF /* AddressbookUtils.m in Sources */,
 				0B72EED6196C672F00AC5A01 /* ApiUtils.m in Sources */,
@@ -1226,6 +1288,7 @@
 				0BA09A2319F9CF05002B5041 /* ShareInvitationViewControllerViewController.m in Sources */,
 				0B05063019D257D300CBFA59 /* NoCancelSearchBar.m in Sources */,
 				0B72EED8196C672F00AC5A01 /* ImageUtils.m in Sources */,
+				3CC2437719F575A0006973C0 /* Group.m in Sources */,
 				0B72EED9196C672F00AC5A01 /* WelcomeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1240,6 +1303,7 @@
 				0BDB65581953B6A000223093 /* RequestPhoneViewController.m in Sources */,
 				0BB0E8F0195B449A00C94AC0 /* MPNotification.m in Sources */,
 				0BDB65511953B60D00223093 /* NBAsYouTypeFormatter.m in Sources */,
+				3CC2438619F9315F006973C0 /* AddMemberViewController.m in Sources */,
 				0BB0E8F8195B449A00C94AC0 /* NSData+MPBase64.m in Sources */,
 				0BDB65521953B60D00223093 /* NBNumberFormat.m in Sources */,
 				0BC6B6F119E624150098D922 /* ProfilePicViewController.m in Sources */,
@@ -1259,6 +1323,7 @@
 				3CB753D419B8908F00E4C75F /* CameraUtils.m in Sources */,
 				3CB8B7F5195453E50090D657 /* ContactView.m in Sources */,
 				0B969125198997620048E4BB /* EditContactsViewController.m in Sources */,
+				3CC2436319F51636006973C0 /* CreateGroupsViewController.m in Sources */,
 				0BDB65341953B5EA00223093 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				0BF97B2019CA6A4E00FFA338 /* PushNoAnimationSegue.m in Sources */,
 				0BDB65351953B5EA00223093 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
@@ -1294,7 +1359,11 @@
 				0BDB65451953B5EA00223093 /* AFURLSessionManager.m in Sources */,
 				0BDB65461953B5EA00223093 /* HeardAppDelegate.m in Sources */,
 				0BB0E8FF195B44C900C94AC0 /* TrackingUtils.m in Sources */,
+				3CC2438019F81E87006973C0 /* ManageGroupsTableViewCell.m in Sources */,
+				3CC2437B19F7F251006973C0 /* ManageGroupsViewController.m in Sources */,
+				3CC2437219F5723D006973C0 /* GroupUtils.m in Sources */,
 				3C0D0064196330E40058A0E0 /* ContactUtils.m in Sources */,
+				3CC2436E19F55457006973C0 /* GroupView.m in Sources */,
 				0BDB65471953B5EA00223093 /* Constants.m in Sources */,
 				0B87247A19799684007219AF /* AddressbookUtils.m in Sources */,
 				0BDB65481953B5EA00223093 /* ApiUtils.m in Sources */,
@@ -1303,6 +1372,7 @@
 				0BA09A2219F9CF05002B5041 /* ShareInvitationViewControllerViewController.m in Sources */,
 				0B05062F19D257D300CBFA59 /* NoCancelSearchBar.m in Sources */,
 				0BDB654A1953B5EA00223093 /* ImageUtils.m in Sources */,
+				3CC2437619F575A0006973C0 /* Group.m in Sources */,
 				0BDB654C1953B5EA00223093 /* WelcomeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1466,8 +1536,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Bastien Beurier (6S2B78G4YC)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: LINCS";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1487,7 +1557,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "61f6bfc2-1493-4c7e-b52c-9ceea81bf91e";
+				PROVISIONING_PROFILE = "9FADCC52-2A13-45FE-967E-06E0B8B26653";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;

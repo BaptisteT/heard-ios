@@ -53,7 +53,11 @@
 - (void)removeEmojiOverlay;
 - (void)sendRecording;
 - (void)setContactIsRecordingProperty:(BOOL)flag;
-
+- (NSInteger)getLastMessageExchangedDate;
+- (void)updateLastMessageDate:(NSInteger)date;
+- (BOOL)isGroupContactView;
+- (BOOL)isFutureContact ;
+- (NSInteger)contactIdentifier;
 
 @end
 
@@ -67,7 +71,7 @@
 
 - (void)startedPlayingAudioMessagesOfView:(ContactView *)view;
 
-- (void)pendingContactClicked:(Contact *)contact;
+- (void)pendingContactClicked:(ContactView *)contactView;
 
 - (void)updateFrameOfContactView:(ContactView *)view;
 

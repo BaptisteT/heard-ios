@@ -133,7 +133,17 @@
     }
 }
 
+- (BOOL)isGroupContactView {
+    return NO;
+}
 
+- (BOOL)isFutureContact {
+    return self.contact && self.contact.isFutureContact;
+}
+
+- (NSInteger)contactIdentifier {
+    return self.contact.identifier;
+}
 
 // ----------------------------------------------------------
 #pragma mark State
@@ -366,8 +376,8 @@
                               otherButtonTitles:nil] show];
             return;
         } else {
-            if (![GeneralUtils isCurrentUser:self.contact] && !self.contact.isFutureContact && self.contact.identifier != 0) {
-                [ApiUtils currentUserIsRecording:YES toUser:self.contact.identifier success:nil failure:nil];
+            if (![self isGroupContactView] && ![GeneralUtils isCurrentUser:self.contact] && !self.contact.isFutureContact && [self contactIdentifier] != 0) {
+                [ApiUtils currentUserIsRecording:YES toUser:[self contactIdentifier] success:nil failure:nil];
             }
             self.isRecording = YES;
             // Create Timers
@@ -393,8 +403,8 @@
 
 - (void)stopRecording
 {
-    if (![GeneralUtils isCurrentUser:self.contact] && !self.contact.isFutureContact && self.contact.identifier != 0) {
-        [ApiUtils currentUserIsRecording:NO toUser:self.contact.identifier success:nil failure:nil];
+    if (![self isGroupContactView] && ![GeneralUtils isCurrentUser:self.contact] && !self.contact.isFutureContact && [self contactIdentifier] != 0) {
+        [ApiUtils currentUserIsRecording:NO toUser:[self contactIdentifier] success:nil failure:nil];
     }
     self.isRecording = NO;
     [self resetDiscussionStateAnimated:NO];
@@ -406,7 +416,7 @@
     BOOL isEmoji = self.delegate.emojiData ? true : false;
     if ([GeneralUtils isCurrentUser:self.contact]) {
         Message *message = [Message new];
-        message.senderId = self.contact.identifier;
+        message.senderId = [self contactIdentifier];
         message.audioData = [self.delegate getLastRecordedData];
         message.createdAt = [[NSDate date] timeIntervalSince1970];
         message.identifier = arc4random_uniform(1000);
@@ -442,7 +452,7 @@
         [self.failedMessages addObject:audioData];
     } else {
         // Update last message date
-        self.contact.lastMessageDate = [[NSDate date] timeIntervalSince1970];
+        [self updateLastMessageDate:[[NSDate date] timeIntervalSince1970]];
         
         if (!self.isRecording && !self.isPlaying) {
             [self sentAnimation];
@@ -455,6 +465,11 @@
     [self resetDiscussionStateAnimated:NO];
 }
 
+- (void)updateLastMessageDate:(NSInteger)date
+{
+    self.contact.lastMessageDate = date;
+}
+
 - (void)deleteFailedMessages {
     self.failedMessages = [NSMutableArray new];
     [self resetDiscussionStateAnimated:NO];
@@ -465,7 +480,7 @@
     // Resend Messages
     for (NSData *audioData in self.failedMessages) {
         self.sendingMessageCount ++;
-        [ApiUtils sendMessage:audioData toUser:self.contact success:^{
+        [ApiUtils sendMessage:audioData toContactView:self success:^{
             [self message:nil sentWithError:NO];
         } failure:^{
             [self message:audioData sentWithError:YES];
@@ -561,7 +576,7 @@
 // ----------------------------------------------------------
 
 - (void)handlePendingTapGesture {
-    [self.delegate pendingContactClicked:self.contact];
+    [self.delegate pendingContactClicked:self];
 }
 
 - (void)handleFailedMessagesModeTapGesture
@@ -641,6 +656,11 @@
         [self.unreadMessages insertObjects:messages atIndexes:indexSet];
     }
     self.unreadMessagesCount = [self.unreadMessages count];
+}
+
+- (NSInteger)getLastMessageExchangedDate
+{
+    return self.contact.lastMessageDate;
 }
 
 
@@ -831,7 +851,7 @@
         if (self.contact.isFutureContact) {
             url = [GeneralUtils getUserProfilePictureURLFromFacebookId:self.contact.facebookId];
         } else {
-            url = [GeneralUtils getUserProfilePictureURLFromUserId:self.contact.identifier];
+            url = [GeneralUtils getUserProfilePictureURLFromUserId:[self contactIdentifier]];
         }
         NSURLRequest *imageRequest = [NSURLRequest requestWithURL:url];
         __weak __typeof(self)weakSelf = self;
