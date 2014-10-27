@@ -483,7 +483,7 @@
     self.addressBookFormattedContacts = adressBookWithFormattedKey;
     
     // Get contacts and compare with contact in memory
-    [ApiUtils getMyContacts:contactsInfo atSignUp:self.isSignUp success:^(NSArray *contacts, NSArray *futureContacts, NSArray *groups) {
+    [ApiUtils getMyContacts:contactsInfo atSignUp:self.isSignUp success:^(NSArray *contacts, NSArray *futureContacts, NSArray *groups, BOOL destroyFutures) {
         for (Contact *contact in contacts) {
             Contact *existingContact = [ContactUtils findContact:contact inContactsArray:self.contacts];
             if (!existingContact) {
@@ -518,29 +518,40 @@
             //Remove users to create indexedContacts for the InviteContactsViewController
             [self.addressBookFormattedContacts removeObjectForKey:contact.phoneNumber];
         }
-        for (NSDictionary *futureContact in futureContacts) {
-            NSString *phoneNumber = (NSString *)[futureContact objectForKey:@"phone_number"];
-            Contact *contact = [Contact createContactWithId:0 phoneNumber:phoneNumber
-                                                  firstName:((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).firstName
-                                                   lastName:((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).lastName];
-            contact.facebookId = (NSString *)[futureContact objectForKey:@"facebook_id"];
-            contact.isFutureContact = YES;
-            contact.recordId = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).recordId;
-            // Security check
-            BOOL remove = NO;
-            for (Contact *normalContact in self.contacts) {
-                if ([normalContact.phoneNumber isEqualToString:phoneNumber] || ([normalContact.firstName isEqualToString:contact.firstName] && [normalContact.lastName isEqualToString:contact.lastName])) {
-                    remove = YES;
-                    break;
+        if (destroyFutures) {
+            NSMutableArray *discardedContacts = [NSMutableArray array];
+            for (Contact *contact in self.contacts) {
+                if (contact.isFutureContact) {
+                    [self removeViewOfContact:contact];
+                    [discardedContacts addObject:contact];
                 }
             }
-            if (!remove) {
-                [self.contacts addObject:contact];
-                [self displayAdditionnalContact:contact];
+            [self.contacts removeObjectsInArray:discardedContacts];
+        } else {
+            for (NSDictionary *futureContact in futureContacts) {
+                NSString *phoneNumber = (NSString *)[futureContact objectForKey:@"phone_number"];
+                Contact *contact = [Contact createContactWithId:0 phoneNumber:phoneNumber
+                                                      firstName:((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).firstName
+                                                       lastName:((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).lastName];
+                contact.facebookId = (NSString *)[futureContact objectForKey:@"facebook_id"];
+                contact.isFutureContact = YES;
+                contact.recordId = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).recordId;
+                // Security check
+                BOOL remove = NO;
+                for (Contact *normalContact in self.contacts) {
+                    if ([normalContact.phoneNumber isEqualToString:phoneNumber] || ([normalContact.firstName isEqualToString:contact.firstName] && [normalContact.lastName isEqualToString:contact.lastName])) {
+                        remove = YES;
+                        break;
+                    }
+                }
+                if (!remove) {
+                    [self.contacts addObject:contact];
+                    [self displayAdditionnalContact:contact];
+                }
+                
+                //Remove future users to create indexedContacts for the InviteContactsViewController
+                [self.addressBookFormattedContacts removeObjectForKey:phoneNumber];
             }
-            
-            //Remove future users to create indexedContacts for the InviteContactsViewController
-            [self.addressBookFormattedContacts removeObjectForKey:phoneNumber];
         }
         for (Group *group in groups) {
             Group *existingGroup = [GroupUtils findGroupFromId:group.identifier inGroupsArray:self.groups];

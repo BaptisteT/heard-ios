@@ -62,7 +62,7 @@
 
 + (void)markMessageAsOpened:(NSInteger)messageId success:(void(^)())successBlock failure:(void(^)())failureBlock;
 
-+ (void)getMyContacts:(NSMutableDictionary *)contactsInfo atSignUp:(BOOL)isSignUp success:(void(^)(NSArray *contacts, NSArray *futureContacts, NSArray *groups))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock;
++ (void)getMyContacts:(NSMutableDictionary *)contactsInfo atSignUp:(BOOL)isSignUp success:(void(^)(NSArray *contacts, NSArray *futureContacts, NSArray *groups, BOOL destroyFutures))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock;
 
 + (void)downloadAudioFileAtURL:(NSURL *)url success:(void(^)(NSData *audioData))successBlock failure:(void(^)())failureBlock;
 

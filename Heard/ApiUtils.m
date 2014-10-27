@@ -340,7 +340,7 @@
     }];
 }
 
-+ (void)getMyContacts:(NSMutableDictionary *)contactsInfo atSignUp:(BOOL)isSignUp success:(void(^)(NSArray *contacts, NSArray *futureContacts, NSArray *groups))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock
++ (void)getMyContacts:(NSMutableDictionary *)contactsInfo atSignUp:(BOOL)isSignUp success:(void(^)(NSArray *contacts, NSArray *futureContacts, NSArray *groups, BOOL destroyFutures))successBlock failure:(void(^)(NSURLSessionDataTask *task))failureBlock
 {
     NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"users/get_contacts_and_futures.json"];
     
@@ -356,10 +356,11 @@
         NSArray *rawContacts = [result valueForKeyPath:@"contacts"];
         NSArray *contacts = [Contact rawContactsToInstances:rawContacts];
         NSArray *futureContacts = [result valueForKeyPath:@"future_contacts"];
+        BOOL destroyFutures = [[result valueForKey:@"destroy_futures"] boolValue];
         NSArray *rawGroups = [result valueForKeyPath:@"groups"];
         NSArray *groups = [Group rawGroupsToInstances:rawGroups];
         if (successBlock) {
-            successBlock(contacts, futureContacts, groups);
+            successBlock(contacts, futureContacts, groups,destroyFutures);
         }
     }failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"ERROR: %@, %@", task.description, error);
