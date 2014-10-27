@@ -89,8 +89,6 @@
 
 - (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel forOrigin:(float)x;
 
-- (void)inviteContactsWithMessage:(Message *)message;
-
 - (void)endTutoMode;
 
 - (ABAddressBookRef) addressBook;

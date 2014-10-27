@@ -105,11 +105,11 @@
 "invite_messages_success_title" = "Message successfully sent.";
 "invite_messages_success_message" = "Recipients are not yet on Waved, let's tell them you left them a message!";
 "invite_contact_name" = "";
-"invite_mail_subject" = "Invitation for Waved";
-"invite_message" = "I sent you an invitation to chat on Waved. Get my message at";
-"no_fb_messenger" = "You don't seem a have Facebook Messenger installed. Please use another option to send your invitation link.";
+"invite_mail_subject" = "A new app that you should try.";
+"invite_message" = "I want to use Waved with you!";
+"no_fb_messenger" = "You don't seem a have Facebook Messenger installed, please use another option.";
 "fb_messenger_error" = "Something went wrong with Facebook Messenger.";
-"no_whatsapp_messenger" = "You don't seem a have Whatsapp installed. Please use another option to send your invitation link.";
+"no_whatsapp_messenger" = "You don't seem a have Whatsapp installed, please use another option.";
 
 
 // Add

@@ -20,7 +20,6 @@
 #import "ContactUtils.h"
 #import <CrashReporter/CrashReporter.h>
 #import "CrashReportUtils.h"
-#import "InviteContactsViewController.h"
 #import "Flurry.h"
 #import <FacebookSDK/FacebookSDK.h>
 

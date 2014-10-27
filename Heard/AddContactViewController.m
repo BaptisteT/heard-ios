@@ -36,6 +36,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.searchButton.hidden = YES;
+    
     self.decimalPhoneNumber = @"";
     
     [self setInitialCountryInfo];
@@ -106,11 +108,6 @@
 }
 
 - (IBAction)countryCodeButtonClicked:(id)sender {
-    [self performSegueWithIdentifier:@"Country Code Segue From Add Contact" sender:nil];
-}
-
-
-- (IBAction)countryNameBluttonClicked:(id)sender {
     [self performSegueWithIdentifier:@"Country Code Segue From Add Contact" sender:nil];
 }
 

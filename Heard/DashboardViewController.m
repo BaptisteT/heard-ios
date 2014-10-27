@@ -762,7 +762,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)inviteButtonClicked
 {
-    [self performSegueWithIdentifier:@"New Invite Contacts Segue" sender:nil];
+    [self performSegueWithIdentifier:@"Invite Modal Segue" sender:nil];
 }
 
 // ----------------------------------
@@ -933,7 +933,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                             delegate:self
                             cancelButtonTitle:ACTION_SHEET_CANCEL
                             destructiveButtonTitle:nil
-                            otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
+                            otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
     [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
@@ -994,23 +994,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     } else {
         return [[NSData alloc] initWithContentsOfURL:self.recorder.url];
     }
-}
-
-- (void)inviteContactsWithMessage:(Message *)message
-{
-    if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
-        [[[UIAlertView alloc] initWithTitle:@""
-                                    message:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment")
-                                   delegate:self
-                          cancelButtonTitle:@"OK"
-                          otherButtonTitles:nil] show];
-        return;
-    }
-    if (!self.indexedContacts) {
-        [self initIndexedContacts];
-    }
-
-    [self performSegueWithIdentifier:@"Invite Contacts Segue" sender:message];
 }
 
 // ----------------------------------------------------------
