@@ -764,7 +764,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(contactView.frame.origin.x - self.contactMargin/4, contactView.frame.origin.y + kContactSize, contactView.frame.size.width + self.contactMargin/2, kContactNameHeight)];
     nameLabel.text = text;
     if ([contactView isGroupContactView]) {
-        nameLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:14.0];
+        nameLabel.font = [UIFont fontWithName:@"HelveticaNeue-Regular" size:14.0];
     } else {
         nameLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
     }
