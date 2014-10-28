@@ -1975,6 +1975,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.openingTutoView.hidden = YES;
     
     [self.contactScrollView addSubview:self.openingTutoView];
+    self.contactScrollView.scrollEnabled = NO;
     
     self.openingTutoBarView = [[UIView alloc] initWithFrame:CGRectMake(0,0, self.screenWidth, 70)];
     self.openingTutoBarView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
@@ -2010,6 +2011,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self hideStatusBarComponents:NO];
     self.openingTutoView.hidden = YES;
     self.openingTutoBarView.hidden = YES;
+    self.contactScrollView.scrollEnabled = YES;
 }
 
 - (void)resetApplicationBadgeNumber {
