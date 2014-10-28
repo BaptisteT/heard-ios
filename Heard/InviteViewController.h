@@ -1,5 +1,5 @@
 //
-//  AddContactViewController.h
+//  ShareInvitationViewControllerViewController.h
 //  Heard
 //
 //  Created by Bastien Beurier on 10/23/14.
@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CountryCodeViewController.h"
+#import <MessageUI/MessageUI.h>
 
-@interface AddContactViewController : UIViewController <UITextFieldDelegate, CountryCodeViewControllerDelegate, UIAlertViewDelegate>
+@interface InviteViewController : UIViewController <MFMessageComposeViewControllerDelegate>
 
 @property (nonatomic, strong) NSArray *contacts;
 

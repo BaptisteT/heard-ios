@@ -12,10 +12,9 @@
 
 @interface AddressbookUtils : NSObject
 
-+ (void)createOrEditContactWithDecimalNumber:(NSString *)decimalNumber
-                             formattedNumber:(NSString *)formattedNumber
-                                   firstName:(NSString *)firstName
-                                    lastName:(NSString *)lastName;
++ (void)createContactWithFormattedNumber:(NSString *)formattedNumber
+                               firstName:(NSString *)firstName
+                                lastName:(NSString *)lastName;
 
 + (NSString *)getDecimalNumber:(NSString *)formattedNumber;
 

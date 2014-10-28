@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		0B05062F19D257D300CBFA59 /* NoCancelSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B05062E19D257D300CBFA59 /* NoCancelSearchBar.m */; };
 		0B05063019D257D300CBFA59 /* NoCancelSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B05062E19D257D300CBFA59 /* NoCancelSearchBar.m */; };
-		0B37D42E19CCFCE900A2D074 /* InviteContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B37D42D19CCFCE900A2D074 /* InviteContactView.m */; };
-		0B37D42F19CCFCE900A2D074 /* InviteContactView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B37D42D19CCFCE900A2D074 /* InviteContactView.m */; };
 		0B56F64A19757D5300DB6FF1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B56F64919757D5300DB6FF1 /* QuartzCore.framework */; };
 		0B56F64C19757D5900DB6FF1 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B56F64B19757D5900DB6FF1 /* CoreData.framework */; };
 		0B56F65219758D9600DB6FF1 /* CountryCodeTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B56F65119758D9600DB6FF1 /* CountryCodeTVC.m */; };
@@ -105,10 +103,6 @@
 		0B9051A51975D72A001E2ED5 /* RMPhoneFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B9051A31975D72A001E2ED5 /* RMPhoneFormat.m */; };
 		0B9051A71975DE8C001E2ED5 /* PhoneFormats.dat in Resources */ = {isa = PBXBuildFile; fileRef = 0B9051A61975DE8C001E2ED5 /* PhoneFormats.dat */; };
 		0B9051A81975DE8C001E2ED5 /* PhoneFormats.dat in Resources */ = {isa = PBXBuildFile; fileRef = 0B9051A61975DE8C001E2ED5 /* PhoneFormats.dat */; };
-		0B9051AE1976F618001E2ED5 /* InviteContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B9051AD1976F618001E2ED5 /* InviteContactsViewController.m */; };
-		0B9051AF1976F618001E2ED5 /* InviteContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B9051AD1976F618001E2ED5 /* InviteContactsViewController.m */; };
-		0B9051B21976F62F001E2ED5 /* InviteContactsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B9051B11976F62F001E2ED5 /* InviteContactsTVC.m */; };
-		0B9051B31976F62F001E2ED5 /* InviteContactsTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B9051B11976F62F001E2ED5 /* InviteContactsTVC.m */; };
 		0B969125198997620048E4BB /* EditContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B969124198997620048E4BB /* EditContactsViewController.m */; };
 		0B969126198997620048E4BB /* EditContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B969124198997620048E4BB /* EditContactsViewController.m */; };
 		0B969128198997700048E4BB /* EditContactsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0B969127198997700048E4BB /* EditContactsTableViewCell.xib */; };
@@ -121,12 +115,10 @@
 		0B9EC33B19C9253B00F520B8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B9EC33919C9253400F520B8 /* SystemConfiguration.framework */; };
 		0B9EC33D19C9254D00F520B8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B9EC33C19C9254D00F520B8 /* Security.framework */; };
 		0B9EC33E19C9255300F520B8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B9EC33C19C9254D00F520B8 /* Security.framework */; };
-		0BA09A1A19F9C637002B5041 /* NewInviteContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BA09A1919F9C637002B5041 /* NewInviteContactsViewController.m */; };
-		0BA09A1B19F9C637002B5041 /* NewInviteContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BA09A1919F9C637002B5041 /* NewInviteContactsViewController.m */; };
 		0BA09A1E19F9CCB5002B5041 /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BA09A1D19F9CCB5002B5041 /* AddContactViewController.m */; };
 		0BA09A1F19F9CCB5002B5041 /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BA09A1D19F9CCB5002B5041 /* AddContactViewController.m */; };
-		0BA09A2219F9CF05002B5041 /* ShareInvitationViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BA09A2119F9CF05002B5041 /* ShareInvitationViewControllerViewController.m */; };
-		0BA09A2319F9CF05002B5041 /* ShareInvitationViewControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BA09A2119F9CF05002B5041 /* ShareInvitationViewControllerViewController.m */; };
+		0BA09A2219F9CF05002B5041 /* InviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BA09A2119F9CF05002B5041 /* InviteViewController.m */; };
+		0BA09A2319F9CF05002B5041 /* InviteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BA09A2119F9CF05002B5041 /* InviteViewController.m */; };
 		0BA145771997A4A60031716F /* end-record-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145711997A4A60031716F /* end-record-sound.aif */; };
 		0BA145781997A4A60031716F /* end-record-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145711997A4A60031716F /* end-record-sound.aif */; };
 		0BA145791997A4A60031716F /* received-sound.aif in Resources */ = {isa = PBXBuildFile; fileRef = 0BA145721997A4A60031716F /* received-sound.aif */; };
@@ -168,6 +160,8 @@
 		0BD758CA1950F91B00CF0D85 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0BD758C81950F91B00CF0D85 /* InfoPlist.strings */; };
 		0BD758D31950F91B00CF0D85 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0BD758D11950F91B00CF0D85 /* Main.storyboard */; };
 		0BD758D81950F91B00CF0D85 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0BD758D71950F91B00CF0D85 /* Images.xcassets */; };
+		0BDB631719FF26DE00C47068 /* UsernameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB631619FF26DE00C47068 /* UsernameViewController.m */; };
+		0BDB631819FF26DE00C47068 /* UsernameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BDB631619FF26DE00C47068 /* UsernameViewController.m */; };
 		0BDB64CC19521A7C00223093 /* NBPhoneNumberMetadata.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64B919521A7C00223093 /* NBPhoneNumberMetadata.plist */; };
 		0BDB64CD19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64BA19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist */; };
 		0BDB64CE19521A7C00223093 /* PhoneNumberMetaData.json in Resources */ = {isa = PBXBuildFile; fileRef = 0BDB64BB19521A7C00223093 /* PhoneNumberMetaData.json */; };
@@ -310,8 +304,6 @@
 /* Begin PBXFileReference section */
 		0B05062D19D257D300CBFA59 /* NoCancelSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoCancelSearchBar.h; sourceTree = "<group>"; };
 		0B05062E19D257D300CBFA59 /* NoCancelSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoCancelSearchBar.m; sourceTree = "<group>"; };
-		0B37D42C19CCFCE900A2D074 /* InviteContactView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteContactView.h; sourceTree = "<group>"; };
-		0B37D42D19CCFCE900A2D074 /* InviteContactView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteContactView.m; sourceTree = "<group>"; };
 		0B56F64919757D5300DB6FF1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		0B56F64B19757D5900DB6FF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		0B56F65019758D9600DB6FF1 /* CountryCodeTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryCodeTVC.h; sourceTree = "<group>"; };
@@ -329,10 +321,6 @@
 		0B9051A21975D72A001E2ED5 /* RMPhoneFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RMPhoneFormat.h; sourceTree = "<group>"; };
 		0B9051A31975D72A001E2ED5 /* RMPhoneFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMPhoneFormat.m; sourceTree = "<group>"; };
 		0B9051A61975DE8C001E2ED5 /* PhoneFormats.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = PhoneFormats.dat; sourceTree = "<group>"; };
-		0B9051AC1976F618001E2ED5 /* InviteContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteContactsViewController.h; sourceTree = "<group>"; };
-		0B9051AD1976F618001E2ED5 /* InviteContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteContactsViewController.m; sourceTree = "<group>"; };
-		0B9051B01976F62F001E2ED5 /* InviteContactsTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteContactsTVC.h; sourceTree = "<group>"; };
-		0B9051B11976F62F001E2ED5 /* InviteContactsTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteContactsTVC.m; sourceTree = "<group>"; };
 		0B969123198997620048E4BB /* EditContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditContactsViewController.h; sourceTree = "<group>"; };
 		0B969124198997620048E4BB /* EditContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditContactsViewController.m; sourceTree = "<group>"; };
 		0B969127198997700048E4BB /* EditContactsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditContactsTableViewCell.xib; sourceTree = "<group>"; };
@@ -342,12 +330,10 @@
 		0B9EC33619C9250A00F520B8 /* libFlurry_5.3.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurry_5.3.0.a; sourceTree = "<group>"; };
 		0B9EC33919C9253400F520B8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		0B9EC33C19C9254D00F520B8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		0BA09A1819F9C637002B5041 /* NewInviteContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewInviteContactsViewController.h; sourceTree = "<group>"; };
-		0BA09A1919F9C637002B5041 /* NewInviteContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewInviteContactsViewController.m; sourceTree = "<group>"; };
 		0BA09A1C19F9CCB5002B5041 /* AddContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddContactViewController.h; sourceTree = "<group>"; };
 		0BA09A1D19F9CCB5002B5041 /* AddContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContactViewController.m; sourceTree = "<group>"; };
-		0BA09A2019F9CF05002B5041 /* ShareInvitationViewControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareInvitationViewControllerViewController.h; sourceTree = "<group>"; };
-		0BA09A2119F9CF05002B5041 /* ShareInvitationViewControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareInvitationViewControllerViewController.m; sourceTree = "<group>"; };
+		0BA09A2019F9CF05002B5041 /* InviteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InviteViewController.h; sourceTree = "<group>"; };
+		0BA09A2119F9CF05002B5041 /* InviteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InviteViewController.m; sourceTree = "<group>"; };
 		0BA145711997A4A60031716F /* end-record-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "end-record-sound.aif"; sourceTree = "<group>"; };
 		0BA145721997A4A60031716F /* received-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "received-sound.aif"; sourceTree = "<group>"; };
 		0BA145731997A4A60031716F /* sent-sound.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "sent-sound.aif"; sourceTree = "<group>"; };
@@ -406,6 +392,8 @@
 		0BD758D71950F91B00CF0D85 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		0BD758F519511A4000CF0D85 /* RequestPhoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestPhoneViewController.h; sourceTree = "<group>"; };
 		0BD758F619511A4000CF0D85 /* RequestPhoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestPhoneViewController.m; sourceTree = "<group>"; };
+		0BDB631519FF26DE00C47068 /* UsernameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UsernameViewController.h; sourceTree = "<group>"; };
+		0BDB631619FF26DE00C47068 /* UsernameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UsernameViewController.m; sourceTree = "<group>"; };
 		0BDB64B919521A7C00223093 /* NBPhoneNumberMetadata.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = NBPhoneNumberMetadata.plist; sourceTree = "<group>"; };
 		0BDB64BA19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = NBPhoneNumberMetadataForTesting.plist; sourceTree = "<group>"; };
 		0BDB64BB19521A7C00223093 /* PhoneNumberMetaData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = PhoneNumberMetaData.json; sourceTree = "<group>"; };
@@ -649,16 +637,12 @@
 			children = (
 				0B969123198997620048E4BB /* EditContactsViewController.h */,
 				0B969124198997620048E4BB /* EditContactsViewController.m */,
-				0B9051AC1976F618001E2ED5 /* InviteContactsViewController.h */,
-				0B9051AD1976F618001E2ED5 /* InviteContactsViewController.m */,
-				0B9051B01976F62F001E2ED5 /* InviteContactsTVC.h */,
-				0B9051B11976F62F001E2ED5 /* InviteContactsTVC.m */,
-				0BA09A1819F9C637002B5041 /* NewInviteContactsViewController.h */,
-				0BA09A1919F9C637002B5041 /* NewInviteContactsViewController.m */,
 				0BA09A1C19F9CCB5002B5041 /* AddContactViewController.h */,
 				0BA09A1D19F9CCB5002B5041 /* AddContactViewController.m */,
-				0BA09A2019F9CF05002B5041 /* ShareInvitationViewControllerViewController.h */,
-				0BA09A2119F9CF05002B5041 /* ShareInvitationViewControllerViewController.m */,
+				0BA09A2019F9CF05002B5041 /* InviteViewController.h */,
+				0BA09A2119F9CF05002B5041 /* InviteViewController.m */,
+				0BDB631519FF26DE00C47068 /* UsernameViewController.h */,
+				0BDB631619FF26DE00C47068 /* UsernameViewController.m */,
 			);
 			name = Contacts;
 			sourceTree = "<group>";
@@ -1005,8 +989,6 @@
 				0B96912B1989977C0048E4BB /* EditContactsTableViewCell.m */,
 				3CB8B7F3195453E50090D657 /* ContactView.h */,
 				3CB8B7F4195453E50090D657 /* ContactView.m */,
-				0B37D42C19CCFCE900A2D074 /* InviteContactView.h */,
-				0B37D42D19CCFCE900A2D074 /* InviteContactView.m */,
 				0B05062D19D257D300CBFA59 /* NoCancelSearchBar.h */,
 				0B05062E19D257D300CBFA59 /* NoCancelSearchBar.m */,
 				3CEF9EE519DA2F140045D78D /* EmojiView.h */,
@@ -1083,7 +1065,7 @@
 						DevelopmentTeam = 9688VHJV6U;
 					};
 					0BD758BB1950F91B00CF0D85 = {
-						DevelopmentTeam = Y7RQR83KUE;
+						DevelopmentTeam = U4TN2H6FNK;
 					};
 				};
 			};
@@ -1260,7 +1242,6 @@
 				0B72EEB2196C672F00AC5A01 /* RequestUserInfoViewController.m in Sources */,
 				0B72EEB3196C672F00AC5A01 /* Message.m in Sources */,
 				0B72EEB4196C672F00AC5A01 /* main.m in Sources */,
-				0B9051AF1976F618001E2ED5 /* InviteContactsViewController.m in Sources */,
 				3CB753D519B8909A00E4C75F /* CameraUtils.m in Sources */,
 				0B72EEB5196C672F00AC5A01 /* ContactView.m in Sources */,
 				0B969126198997620048E4BB /* EditContactsViewController.m in Sources */,
@@ -1293,14 +1274,12 @@
 				0B72EECA196C672F00AC5A01 /* AFSecurityPolicy.m in Sources */,
 				0B72EECB196C672F00AC5A01 /* AFURLConnectionOperation.m in Sources */,
 				0B72EECC196C672F00AC5A01 /* UIImage+MPAverageColor.m in Sources */,
-				0BA09A1B19F9C637002B5041 /* NewInviteContactsViewController.m in Sources */,
 				0B72EECD196C672F00AC5A01 /* AFURLRequestSerialization.m in Sources */,
 				0B72EECE196C672F00AC5A01 /* MPSurveyNavigationController.m in Sources */,
 				0B72EECF196C672F00AC5A01 /* Contact.m in Sources */,
 				0B72EED0196C672F00AC5A01 /* AFURLResponseSerialization.m in Sources */,
 				0B72EED1196C672F00AC5A01 /* AFURLSessionManager.m in Sources */,
 				0B72EED2196C672F00AC5A01 /* HeardAppDelegate.m in Sources */,
-				0B9051B31976F62F001E2ED5 /* InviteContactsTVC.m in Sources */,
 				0B72EED3196C672F00AC5A01 /* TrackingUtils.m in Sources */,
 				3CC2438119F81E87006973C0 /* ManageGroupsTableViewCell.m in Sources */,
 				3CC2437C19F7F251006973C0 /* ManageGroupsViewController.m in Sources */,
@@ -1312,12 +1291,12 @@
 				0B72EED6196C672F00AC5A01 /* ApiUtils.m in Sources */,
 				0BA09A1F19F9CCB5002B5041 /* AddContactViewController.m in Sources */,
 				0B72EED7196C672F00AC5A01 /* GeneralUtils.m in Sources */,
-				0BA09A2319F9CF05002B5041 /* ShareInvitationViewControllerViewController.m in Sources */,
+				0BA09A2319F9CF05002B5041 /* InviteViewController.m in Sources */,
 				0B05063019D257D300CBFA59 /* NoCancelSearchBar.m in Sources */,
 				0B72EED8196C672F00AC5A01 /* ImageUtils.m in Sources */,
 				3CC2437719F575A0006973C0 /* Group.m in Sources */,
+				0BDB631819FF26DE00C47068 /* UsernameViewController.m in Sources */,
 				0B72EED9196C672F00AC5A01 /* WelcomeViewController.m in Sources */,
-				0B37D42F19CCFCE900A2D074 /* InviteContactView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1348,7 +1327,6 @@
 				0BDB654E1953B5FD00223093 /* RequestUserInfoViewController.m in Sources */,
 				0BDB654F1953B5FD00223093 /* Message.m in Sources */,
 				0BDB65501953B5FD00223093 /* main.m in Sources */,
-				0B9051AE1976F618001E2ED5 /* InviteContactsViewController.m in Sources */,
 				3CB753D419B8908F00E4C75F /* CameraUtils.m in Sources */,
 				3CB8B7F5195453E50090D657 /* ContactView.m in Sources */,
 				0B969125198997620048E4BB /* EditContactsViewController.m in Sources */,
@@ -1381,14 +1359,12 @@
 				0BDB65411953B5EA00223093 /* AFSecurityPolicy.m in Sources */,
 				0BDB65421953B5EA00223093 /* AFURLConnectionOperation.m in Sources */,
 				0BB0E8FA195B449A00C94AC0 /* UIImage+MPAverageColor.m in Sources */,
-				0BA09A1A19F9C637002B5041 /* NewInviteContactsViewController.m in Sources */,
 				0BDB65431953B5EA00223093 /* AFURLRequestSerialization.m in Sources */,
 				0BB0E8F5195B449A00C94AC0 /* MPSurveyNavigationController.m in Sources */,
 				0B893A4D19550FF000476BFE /* Contact.m in Sources */,
 				0BDB65441953B5EA00223093 /* AFURLResponseSerialization.m in Sources */,
 				0BDB65451953B5EA00223093 /* AFURLSessionManager.m in Sources */,
 				0BDB65461953B5EA00223093 /* HeardAppDelegate.m in Sources */,
-				0B9051B21976F62F001E2ED5 /* InviteContactsTVC.m in Sources */,
 				0BB0E8FF195B44C900C94AC0 /* TrackingUtils.m in Sources */,
 				3CC2438019F81E87006973C0 /* ManageGroupsTableViewCell.m in Sources */,
 				3CC2437B19F7F251006973C0 /* ManageGroupsViewController.m in Sources */,
@@ -1400,12 +1376,12 @@
 				0BDB65481953B5EA00223093 /* ApiUtils.m in Sources */,
 				0BA09A1E19F9CCB5002B5041 /* AddContactViewController.m in Sources */,
 				0BDB65491953B5EA00223093 /* GeneralUtils.m in Sources */,
-				0BA09A2219F9CF05002B5041 /* ShareInvitationViewControllerViewController.m in Sources */,
+				0BA09A2219F9CF05002B5041 /* InviteViewController.m in Sources */,
 				0B05062F19D257D300CBFA59 /* NoCancelSearchBar.m in Sources */,
 				0BDB654A1953B5EA00223093 /* ImageUtils.m in Sources */,
 				3CC2437619F575A0006973C0 /* Group.m in Sources */,
+				0BDB631719FF26DE00C47068 /* UsernameViewController.m in Sources */,
 				0BDB654C1953B5EA00223093 /* WelcomeViewController.m in Sources */,
-				0B37D42E19CCFCE900A2D074 /* InviteContactView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1568,7 +1544,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: LINCS";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1589,7 +1565,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9FADCC52-2A13-45FE-967E-06E0B8B26653";
+				PROVISIONING_PROFILE = "f2ab2810-35df-486f-a392-2a845e654f97";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1599,8 +1575,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: LINCS";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Waved Inc. (U4TN2H6FNK)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Waved Inc. (U4TN2H6FNK)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1620,7 +1596,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9FADCC52-2A13-45FE-967E-06E0B8B26653";
+				PROVISIONING_PROFILE = "f2ab2810-35df-486f-a392-2a845e654f97";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

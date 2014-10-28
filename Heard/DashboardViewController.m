@@ -36,6 +36,7 @@
 #import "GroupView.h"
 #import "GroupUtils.h"
 #import "ManageGroupsViewController.h"
+#import "InviteViewController.h"
 
 #define ACTION_OTHER_MENU_OPTION_1 NSLocalizedStringFromTable(@"hide_contacts_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"edit_profile_button_title",kStringFile,@"comment")
@@ -351,6 +352,8 @@
         ((ManageGroupsViewController *) [segue destinationViewController]).contacts = [self getGroupPermittedContacts];
         ((ManageGroupsViewController *) [segue destinationViewController]).groups = self.groups;
         ((ManageGroupsViewController *) [segue destinationViewController]).delegate = self;
+    } else if ([segueName isEqualToString:@"Invite Modal Segue"]) {
+        ((InviteViewController *) [segue destinationViewController]).contacts = self.contacts;
     }
 }
 
@@ -929,7 +932,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)inviteButtonClicked
 {
-    [self performSegueWithIdentifier:@"New Invite Contacts Segue" sender:nil];
+    [self performSegueWithIdentifier:@"Invite Modal Segue" sender:nil];
 }
 
 // ----------------------------------
@@ -1115,7 +1118,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                             delegate:self
                             cancelButtonTitle:ACTION_SHEET_CANCEL
                             destructiveButtonTitle:nil
-                            otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_7, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
+                            otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_7, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
     [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
@@ -1177,23 +1180,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     } else {
         return [[NSData alloc] initWithContentsOfURL:self.recorder.url];
     }
-}
-
-- (void)inviteContactsWithMessage:(Message *)message
-{
-    if (ABAddressBookGetAuthorizationStatus() != kABAuthorizationStatusAuthorized) {
-        [[[UIAlertView alloc] initWithTitle:@""
-                                    message:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment")
-                                   delegate:self
-                          cancelButtonTitle:@"OK"
-                          otherButtonTitles:nil] show];
-        return;
-    }
-    if (!self.indexedContacts) {
-        [self initIndexedContacts];
-    }
-
-    [self performSegueWithIdentifier:@"Invite Contacts Segue" sender:message];
 }
 
 // ----------------------------------------------------------
@@ -1532,16 +1518,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     // Add contact
     else if ([buttonTitle isEqualToString:ACTION_PENDING_OPTION_1]) {
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        NSString *decimalNumber = [AddressbookUtils getDecimalNumber:self.clickedPendingView.contact.phoneNumber];
-        if (!decimalNumber) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"add_contact_failure_message", kStringFile, "comment") withTitle:nil];
-            return;
-        }
-        [AddressbookUtils createOrEditContactWithDecimalNumber:decimalNumber
-                                               formattedNumber:self.clickedPendingView.contact.phoneNumber
-                                                     firstName:self.clickedPendingView.contact.firstName
-                                                      lastName:self.clickedPendingView.contact.lastName];
+        
+        [AddressbookUtils createContactWithFormattedNumber:self.clickedPendingView.contact.phoneNumber firstName:self.clickedPendingView.contact.firstName lastName:self.clickedPendingView.contact.lastName];
         
         [self didFinishedAddingContact];
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];

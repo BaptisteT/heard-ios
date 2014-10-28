@@ -18,95 +18,34 @@
 
 @implementation AddressbookUtils
 
-//The decimal phone number is the part of the number without country code that is easier to match in the address book (ex: 665278194 for a FR number)
-+ (void)createOrEditContactWithDecimalNumber:(NSString *)decimalNumber
-                             formattedNumber:(NSString *)formattedNumber
-                                   firstName:(NSString *)firstName
-                                    lastName:(NSString *)lastName
+
++ (void)createContactWithFormattedNumber:(NSString *)formattedNumber
+                               firstName:(NSString *)firstName
+                                lastName:(NSString *)lastName
 {
     ABAddressBookRef addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
+    ABRecordRef person = ABPersonCreate();
+    CFErrorRef error = NULL;
     
-    CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(addressBook);
-    CFIndex peopleCount = CFArrayGetCount(people);
-    
-    //First we try to see if the number matches a contact
-    BOOL match = NO;
-    BOOL duplicate = NO;
-    
-    for (CFIndex i = 0 ; i < peopleCount && !match; i++) {
-        ABRecordRef person = CFArrayGetValueAtIndex(people, i);
-        
-        ABMultiValueRef phoneNumbers = ABRecordCopyValue(person, kABPersonPhoneProperty);
-        
-        NSString *firstName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
-        NSString *lastName = (__bridge NSString *)ABRecordCopyValue(person, kABPersonLastNameProperty);
-        
-        if (ABMultiValueGetCount(phoneNumbers) > 0 &&
-            ((firstName && [firstName length] > 0) || (lastName && [lastName length] > 0))) {
-            
-            for (CFIndex j = 0; j < ABMultiValueGetCount(phoneNumbers); j++) {
-                NSString *rawPhoneNumber = (__bridge_transfer NSString*) ABMultiValueCopyValueAtIndex(phoneNumbers, j);
-                NSString *personDecimalPhoneNumber = [[rawPhoneNumber componentsSeparatedByCharactersInSet:
-                                                       [[NSCharacterSet decimalDigitCharacterSet] invertedSet]]
-                                                      componentsJoinedByString:@""];
-                
-                if (decimalNumber && [personDecimalPhoneNumber rangeOfString:decimalNumber].location != NSNotFound) {
-                    match = YES;
-                }
-                
-                if ([personDecimalPhoneNumber isEqualToString:[formattedNumber substringFromIndex:1]]) {
-                    duplicate = YES;
-                }
-            }
-            
-            //Save formatted phone number but do not duplicate
-            if (match && !duplicate) {
-                ABMutableMultiValueRef multiPhone = ABMultiValueCreateMutableCopy (ABRecordCopyValue(person, kABPersonPhoneProperty));
-                ABMultiValueAddValueAndLabel(multiPhone, (__bridge CFTypeRef)formattedNumber, kABPersonPhoneMobileLabel, NULL);
-                ABRecordSetValue(person, kABPersonPhoneProperty, multiPhone,nil);
-                
-                CFErrorRef* error = NULL;
-                ABAddressBookSave(addressBook, error);
-                
-                if (error) {
-                    NSLog(@"ERROR SAVING!!!");
-                }
-                
-                CFRelease(multiPhone);
-            }
-        }
-        
-        CFRelease(person);
-        CFRelease(phoneNumbers);
+    if (firstName) {
+        ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFTypeRef)firstName, &error);
     }
     
-    CFRelease(people);
-    
-    //Create contact if no match
-    if (!match) {
-        ABAddressBookRef addressBook =  ABAddressBookCreateWithOptions(NULL, NULL);
-        ABRecordRef person = ABPersonCreate();
-        CFErrorRef error = NULL;
-        
-        if (firstName) {
-            ABRecordSetValue(person, kABPersonFirstNameProperty, (__bridge CFTypeRef)firstName, &error);
-        }
-        
-        if (lastName) {
-            ABRecordSetValue(person, kABPersonLastNameProperty, (__bridge CFTypeRef)lastName, &error);
-        }
-        
-        //Set phone number
-        ABMutableMultiValueRef multiPhone = ABMultiValueCreateMutable(kABMultiStringPropertyType);
-        ABMultiValueAddValueAndLabel(multiPhone, (__bridge CFTypeRef)formattedNumber, kABPersonPhoneMobileLabel, NULL);
-        ABRecordSetValue(person, kABPersonPhoneProperty, multiPhone,nil);
-        CFRelease(multiPhone);
-        
-        ABAddressBookAddRecord(addressBook, person, &error);
-        ABAddressBookSave(addressBook, &error);
-        CFRelease(person);
+    if (lastName) {
+        ABRecordSetValue(person, kABPersonLastNameProperty, (__bridge CFTypeRef)lastName, &error);
     }
+    
+    //Set phone number
+    ABMutableMultiValueRef multiPhone = ABMultiValueCreateMutable(kABMultiStringPropertyType);
+    ABMultiValueAddValueAndLabel(multiPhone, (__bridge CFTypeRef)formattedNumber, kABPersonPhoneMobileLabel, NULL);
+    ABRecordSetValue(person, kABPersonPhoneProperty, multiPhone,nil);
+    CFRelease(multiPhone);
+    
+    ABAddressBookAddRecord(addressBook, person, &error);
+    ABAddressBookSave(addressBook, &error);
+    CFRelease(person);
 }
+
 
 //Formatted number(+33681828384) (only decimal characters preceded by a "+")
 //Decimal number (681828384)
