@@ -2039,6 +2039,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     } else {
         [self endTutoMode];
         if ([GeneralUtils isFirstClickOnEmojiButton]) {
+            if (!self.openingTutoView) {
+                [self initOpeningTutoView];
+            }
             [self.contactScrollView bringSubviewToFront:self.openingTutoView];
             [self.contactScrollView bringSubviewToFront:self.emojiContainer];
             [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"emoji_tutorial",kStringFile,@"comment") forOrigin:-100];
