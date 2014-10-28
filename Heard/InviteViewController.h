@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
 
-@interface ShareInvitationViewControllerViewController : UIViewController <MFMessageComposeViewControllerDelegate>
+@interface InviteViewController : UIViewController <MFMessageComposeViewControllerDelegate>
+
+@property (nonatomic, strong) NSArray *contacts;
 
 @end

@@ -6,19 +6,20 @@
 //  Copyright (c) 2014 streetshout. All rights reserved.
 //
 
-#import "ShareInvitationViewControllerViewController.h"
+#import "InviteViewController.h"
 #import "Constants.h"
 #import "GeneralUtils.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import <MediaPlayer/MPMusicPlayerController.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import "AudioUtils.h"
+#import "AddContactViewController.h"
 
-@interface ShareInvitationViewControllerViewController ()
+@interface InviteViewController ()
 
 @end
 
-@implementation ShareInvitationViewControllerViewController
+@implementation InviteViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -62,6 +63,19 @@
         //TODO BB track
     }
 }
+- (IBAction)AddContactButtonClicked:(id)sender {
+    [self performSegueWithIdentifier:@"Add Contact Modal Segue" sender:nil];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSString * segueName = segue.identifier;
+    
+    if ([segueName isEqualToString:@"Add Contact Modal Segue"]) {
+        ((AddContactViewController *) [segue destinationViewController]).contacts = self.contacts;
+    }
+}
+
 
 - (IBAction)emailShare:(id)sender {
     NSString *email = [NSString stringWithFormat:@"mailto:?subject=%@&body=%@ %@.",

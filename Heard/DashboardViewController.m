@@ -36,6 +36,7 @@
 #import "GroupView.h"
 #import "GroupUtils.h"
 #import "ManageGroupsViewController.h"
+#import "InviteViewController.h"
 
 #define ACTION_OTHER_MENU_OPTION_1 NSLocalizedStringFromTable(@"hide_contacts_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"edit_profile_button_title",kStringFile,@"comment")
@@ -351,6 +352,8 @@
         ((ManageGroupsViewController *) [segue destinationViewController]).contacts = [self getGroupPermittedContacts];
         ((ManageGroupsViewController *) [segue destinationViewController]).groups = self.groups;
         ((ManageGroupsViewController *) [segue destinationViewController]).delegate = self;
+    } else if ([segueName isEqualToString:@"Invite Modal Segue"]) {
+        ((InviteViewController *) [segue destinationViewController]).contacts = self.contacts;
     }
 }
 
@@ -1515,16 +1518,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     // Add contact
     else if ([buttonTitle isEqualToString:ACTION_PENDING_OPTION_1]) {
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        NSString *decimalNumber = [AddressbookUtils getDecimalNumber:self.clickedPendingView.contact.phoneNumber];
-        if (!decimalNumber) {
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"add_contact_failure_message", kStringFile, "comment") withTitle:nil];
-            return;
-        }
-        [AddressbookUtils createOrEditContactWithDecimalNumber:decimalNumber
-                                               formattedNumber:self.clickedPendingView.contact.phoneNumber
-                                                     firstName:self.clickedPendingView.contact.firstName
-                                                      lastName:self.clickedPendingView.contact.lastName];
+        
+        [AddressbookUtils createContactWithFormattedNumber:self.clickedPendingView.contact.phoneNumber firstName:self.clickedPendingView.contact.firstName lastName:self.clickedPendingView.contact.lastName];
         
         [self didFinishedAddingContact];
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];

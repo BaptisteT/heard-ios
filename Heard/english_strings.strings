@@ -82,8 +82,9 @@
 
 // Sign up
 "back_to_phone_verification_confirmation_message" = "Are you sure you want to go back to phone verification?";
-"first_name_error_message" = "First name must between 1 and 20 characters.";
-"last_name_error_message" = "Last name must between 1 and 20 characters.";
+"first_name_error_message" = "First name must be between 1 and 20 characters.";
+"last_name_error_message" = "Last name must be between 1 and 20 characters.";
+"full_name_error_message" = "Name must be between 1 and 40 characters.";
 "profile_picture_error_message" = "Sorry, we need a picture for your contacts to see you!";
 "camera_and_library_access_error_message" = "Your camera and photo library are not available";
 "sign_up_error_message" = "We failed to sign you up, please try again.";
@@ -115,12 +116,18 @@
 "no_fb_messenger" = "You don't seem a have Facebook Messenger installed, please use another option.";
 "fb_messenger_error" = "Something went wrong with Facebook Messenger.";
 "no_whatsapp_messenger" = "You don't seem a have Whatsapp installed, please use another option.";
+"add_contact_not_waved_user_title" = "No user found.";
+"add_contact_not_waved_user_message" = "No user on Waved matches this phone number. You should invite him/her by sending a message!";
+"user_already_a_contact" = "This user is already in your contacts";
+"add_contact_user_found_title" = "Matched!";
+"add_contact_user_found_message" = "We found a user on Waved matching this phone number, do you want to add it as a contact?";
+
 
 
 // Add
 "add_contact_missing_name_message" = "Please provide a first name or a last name.";
-"add_contact_success_message" = "TRUCHOV has been successfully added to your phone and Waved contacts!";
-"add_contact_failure_message" = "Failed to add contact. The number is invalid.";
+"add_contact_success_message" = "Contact successfully added!";
+"add_contact_failure_message" = "Connection lost, please try again.";
 
 // Block
 "block_failure_error_message" = "Failed to block contact, please try again.";

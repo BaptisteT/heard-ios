@@ -12,6 +12,10 @@
 #import "AddressbookUtils.h"
 #import "GeneralUtils.h"
 #import "Constants.h"
+#import "MBProgressHUD.h"
+#import "ApiUtils.h"
+#import "Contact.h"
+#import "UsernameViewController.h"
 
 #define DEFAULT_COUNTRY @"USA"
 #define DEFAULT_COUNTRY_CODE 1
@@ -28,6 +32,7 @@
 @property (weak, nonatomic) IBOutlet UITextView *tutoLabel;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIView *searchButton;
+@property (strong, nonatomic) NSString *formattedNumber;
 
 @end
 
@@ -104,6 +109,55 @@
                                                      error:&aError];
         
         //Todo BB: search for user 1. Go back if no user 2. Alert if user (segue to add first name - last name)
+        
+        NSInteger count = [self.contacts count];
+        
+        for (NSInteger i = 0; i < count; i++) {
+            if ([((Contact *)[self.contacts objectAtIndex:i]).phoneNumber isEqualToString:formattedPhoneNumber]) {
+                [GeneralUtils showMessage:[NSString stringWithFormat:@"%@ (%@ %@).",
+                                           NSLocalizedStringFromTable(@"user_already_a_contact",kStringFile,@"comment"),
+                                           ((Contact *)[self.contacts objectAtIndex:i]).firstName,
+                                           ((Contact *)[self.contacts objectAtIndex:i]).lastName]
+                                withTitle:@""];
+                 
+                 return;
+            }
+        }
+        
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        
+        [ApiUtils checkUserPresenceByPhoneNumber:formattedPhoneNumber success:^(BOOL present){
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            //Already on Waved
+            if (present) {
+                
+                self.formattedNumber = formattedPhoneNumber;
+
+                [[[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"add_contact_user_found_title",kStringFile,@"comment")
+                                            message:NSLocalizedStringFromTable(@"add_contact_user_found_message",kStringFile,@"comment")
+                                           delegate:self
+                                  cancelButtonTitle:@"Cancel"
+                                  otherButtonTitles:@"Add Contact", nil] show];
+                
+            } else {
+                [[[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"add_contact_not_waved_user_title",kStringFile,@"comment")
+                                            message:NSLocalizedStringFromTable(@"add_contact_not_waved_user_message",kStringFile,@"comment")
+                                           delegate:self
+                                  cancelButtonTitle:@"OK"
+                                  otherButtonTitles:nil] show];
+            }
+        } failure:^{
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            
+            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"add_contact_failure_message",kStringFile,@"comment")  withTitle:@""];
+        }];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        [self performSegueWithIdentifier:@"Username Modal Segue From Add Contact" sender:nil];
     }
 }
 
@@ -117,6 +171,8 @@
     
     if ([segueName isEqualToString: @"Country Code Segue From Add Contact"]) {
         ((CountryCodeViewController *) [segue destinationViewController]).delegate = self;
+    } else if ([segueName isEqualToString: @"Username Modal Segue From Add Contact"]) {
+        ((UsernameViewController *) [segue destinationViewController]).formattedNumber = self.formattedNumber;
     }
 }
 

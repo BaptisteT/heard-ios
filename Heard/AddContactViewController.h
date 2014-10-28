@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "CountryCodeViewController.h"
 
-@interface AddContactViewController : UIViewController <UITextFieldDelegate, CountryCodeViewControllerDelegate>
+@interface AddContactViewController : UIViewController <UITextFieldDelegate, CountryCodeViewControllerDelegate, UIAlertViewDelegate>
+
+@property (nonatomic, strong) NSArray *contacts;
 
 @end

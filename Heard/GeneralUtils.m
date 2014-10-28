@@ -72,6 +72,11 @@
     return [name length] > 0 && [name length] <= kMaxNameLength;
 }
 
++ (BOOL)validFullname:(NSString *)name
+{
+    return [name length] > 0 && [name length] <= 2 * kMaxNameLength;
+}
+
 + (void)setProfilePicture:(UIImageView *)imageView fromContact:(Contact *)contact andAddressBook:(ABAddressBookRef)addressBook
 {
     if (contact.isFutureContact && contact.facebookId.length == 0) {

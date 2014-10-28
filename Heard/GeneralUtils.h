@@ -21,6 +21,8 @@
 
 + (BOOL)validName:(NSString *)name;
 
++ (BOOL)validFullname:(NSString *)name;
+
 + (NSURL *)getUserProfilePictureURLFromUserId:(NSInteger)userId;
 
 + (NSURL *)getUserProfilePictureURLFromFacebookId:(NSString *)facebookId;

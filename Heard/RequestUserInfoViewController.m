@@ -16,15 +16,9 @@
 #import "DashboardViewController.h"
 #import "Constants.h"
 
-#define BORDER_SIZE 0.5
-
 @interface RequestUserInfoViewController ()
 
-@property (weak, nonatomic) IBOutlet UIView *firstNameTextFieldContainer;
-@property (weak, nonatomic) IBOutlet UIView *lastNameTextFieldContainer;
-@property (weak, nonatomic) IBOutlet UITextField *firstNameTextField;
-@property (weak, nonatomic) IBOutlet UITextField *lastNameTextField;
-@property (strong, nonatomic) UIActionSheet *pictureActionSheet;
+@property (weak, nonatomic) IBOutlet UITextField *fullNameTextField;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 
 @end
@@ -39,46 +33,15 @@
 {
     [super viewDidLoad];
     
-    CALayer *bottomBorder = [CALayer layer];
-    bottomBorder.frame = CGRectMake(0.0f,
-                                    self.firstNameTextFieldContainer.frame.size.height - BORDER_SIZE,
-                                    self.firstNameTextFieldContainer.frame.size.width,
-                                    BORDER_SIZE);
-    
-    bottomBorder.backgroundColor = [ImageUtils blue].CGColor;
-    [self.firstNameTextFieldContainer.layer addSublayer:bottomBorder];
-    
-    bottomBorder = [CALayer layer];
-    bottomBorder.frame = CGRectMake(0.0f,
-                                    self.lastNameTextFieldContainer.frame.size.height - BORDER_SIZE,
-                                    self.lastNameTextFieldContainer.frame.size.width,
-                                    BORDER_SIZE);
-    
-    bottomBorder.backgroundColor = [ImageUtils blue].CGColor;
-    [self.lastNameTextFieldContainer.layer addSublayer:bottomBorder];
-    
-    self.firstNameTextField.delegate = self;
-    self.lastNameTextField.delegate = self;
-    
     // Prefill if possible
     NSString *ownerName = [[UIDevice currentDevice] name];
     ownerName =[ownerName stringByReplacingOccurrencesOfString:@"’" withString:@"'"];
     NSRange t = [ownerName rangeOfString:@"'s"];
     if (t.location != NSNotFound) {
-        ownerName = [ownerName substringToIndex:t.location];
-        NSArray *ownerNames = [ownerName componentsSeparatedByString:@" "];
-        if (ownerNames.count == 1) {
-            self.firstNameTextField.text = ownerNames[0];
-            [self.lastNameTextField becomeFirstResponder];
-        } else if (ownerNames.count == 2) {
-            self.firstNameTextField.text = ownerNames[0];
-            self.lastNameTextField.text = ownerNames[1];
-        } else {
-            [self.firstNameTextField becomeFirstResponder];
-        }
-    } else {
-        [self.firstNameTextField becomeFirstResponder];
+        self.fullNameTextField.text = [ownerName substringToIndex:t.location];
     }
+    
+    [self.fullNameTextField becomeFirstResponder];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -96,11 +59,8 @@
 
 - (IBAction)nextButtonPressed:(id)sender {
     
-    if (![GeneralUtils validName:self.firstNameTextField.text]) {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_error_message",kStringFile,@"comment") withTitle:nil];
-        return;
-    } else if (![GeneralUtils validName:self.lastNameTextField.text]) {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_error_message",kStringFile,@"comment") withTitle:nil];
+    if (![GeneralUtils validFullname:self.fullNameTextField.text]) {
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"full_name_error_message",kStringFile,@"comment") withTitle:nil];
         return;
     }
     
@@ -128,23 +88,33 @@
         [GeneralUtils showMessage:NSLocalizedStringFromTable(@"sign_up_error_message",kStringFile,@"comment") withTitle:nil];
     };
     
+    NSString *firstName;
+    NSString *lastName;
+    
+    NSArray *names = [self.fullNameTextField.text componentsSeparatedByString:@" "];
+    
+    firstName = names[0];
+    
+    lastName = @"";
+    
+    NSInteger i = 1;
+    
+    while (i < names.count) {
+        if (i == 1) {
+            lastName = names[i];
+        } else {
+            lastName = [NSString stringWithFormat:@"%@ %@", lastName, names[i]];
+        }
+        
+        i++;
+    }
+    
     [ApiUtils createUserWithPhoneNumber:self.phoneNumber
-                              firstName:self.firstNameTextField.text
-                               lastName:self.lastNameTextField.text
+                              firstName:firstName
+                               lastName:lastName
                                 picture:[ImageUtils encodeToBase64String:self.profilePicture]
                                    code:self.smsCode
                                 success:successBlock failure:failureBlock];
-}
-
-
-- (BOOL)textFieldShouldReturn:(UITextField *)theTextField {
-    if (theTextField == self.firstNameTextField) {
-        [self.lastNameTextField becomeFirstResponder];
-    } else if (theTextField == self.lastNameTextFieldContainer) {
-        [self.lastNameTextField resignFirstResponder];
-    }
-    
-    return YES;
 }
 
 @end
