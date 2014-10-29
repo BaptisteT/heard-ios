@@ -197,10 +197,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSIndexPath *previousIndexPath = self.selectedIndexPath;
-    self.selectedIndexPath = indexPath;
-    NSArray *reloadPaths = previousIndexPath && previousIndexPath != indexPath ? @[previousIndexPath,indexPath] : @[indexPath];
-    [tableView reloadRowsAtIndexPaths:reloadPaths withRowAnimation: UITableViewRowAnimationNone];
+    if ([[tableView cellForRowAtIndexPath:indexPath].reuseIdentifier isEqualToString: NO_GROUPS_TAG]) {
+        [self performSegueWithIdentifier:@"Create Group From Manage Groups" sender:nil];
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    } else {
+        NSIndexPath *previousIndexPath = self.selectedIndexPath;
+        self.selectedIndexPath = indexPath;
+        NSArray *reloadPaths = previousIndexPath && previousIndexPath != indexPath ? @[previousIndexPath,indexPath] : @[indexPath];
+        [tableView reloadRowsAtIndexPaths:reloadPaths withRowAnimation: UITableViewRowAnimationNone];
+    }
 }
 
 
