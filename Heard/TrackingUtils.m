@@ -91,43 +91,38 @@
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    [mixpanel.people increment:@"Replays" by:[NSNumber numberWithInt:1]];
+    [mixpanel track:@"Replay"];
 }
 
-+ (void)trackShareSuccessful:(BOOL)success
++ (void)trackAddContact
 {
     if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    if (success) {
-        [mixpanel track:@"Share" properties:@{@"Success": @"True"}];
-        
-        [mixpanel.people increment:@"Share" by:[NSNumber numberWithInt:1]];
-    } else {
-        [mixpanel track:@"Share" properties:@{@"Success": @"False"}];
-    }
+    [mixpanel track:@"Add contact"];
+    
+    [mixpanel.people increment:@"Add contact after search" by:[NSNumber numberWithInt:1]];
 }
 
-+ (void)trackAddContactSuccessful:(BOOL)success Present:(BOOL)present Pending:(BOOL)pending
++ (void)trackPendingContact
 {
     if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    NSString *presentStr = present ? @"True" : @"False";
+    [mixpanel track:@"Add pending contact"];
     
-    if (pending) {
-        [mixpanel.people increment:@"Add contact" by:[NSNumber numberWithInt:1]];
-        
-        [mixpanel track:@"Add contact" properties:@{@"Pending": @"True"}];
-    } else if (success) {
-        [mixpanel.people increment:@"Add contact" by:[NSNumber numberWithInt:1]];
-        
-        [mixpanel track:@"Add contact" properties:@{@"Success": @"True", @"Present": presentStr, @"Pending": @"False"}];
-    } else {
-        [mixpanel track:@"Add contact" properties:@{@"Success": @"False", @"Pending": @"False"}];
-    }
+    [mixpanel.people increment:@"Add contact after pending" by:[NSNumber numberWithInt:1]];
+}
+
++ (void)trackSearchUser:(NSString *)result
+{
+    if (!PRODUCTION || DEBUG)return;
+    
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    
+    [mixpanel track:@"Search contact" properties:@{@"Result": result}];
 }
 
 + (void)trackOpenApp
@@ -150,22 +145,15 @@
     [mixpanel.people set:@{@"Contacts": [NSNumber numberWithInt:nbrOfContacts]}];
 }
 
-+ (void)trackInviteContacts:(NSInteger)nbrOfInvites successful:(BOOL)success justAdded:(BOOL)justAdded
++ (void)trackInvite:(NSString *)option
 {
     if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    NSString *justAddedStr = justAdded ? @"True" : @"False";
-    if (success) {
-        [mixpanel.people increment:@"Invite contacts" by:[NSNumber numberWithInt:1]];
-        
-        [mixpanel track:@"Invite contacts" properties:@{@"Success": @"True", @"Number": [NSNumber numberWithLong:nbrOfInvites] , @"Just added": justAddedStr}];
-        
-        [mixpanel.people increment:@"Invites" by:[NSNumber numberWithInt:nbrOfInvites]];
-    } else {
-        [mixpanel track:@"Invite contacts" properties:@{@"Success": @"False", @"Just added": justAddedStr}];
-    }
+    [mixpanel.people increment:@"Invite contacts" by:[NSNumber numberWithInt:1]];
+    
+    [mixpanel track:@"Invite contacts" properties:@{@"Option": option}];
 }
 
 + (void)trackFailedToOpenContact:(NSString *)formattedNumber
@@ -181,12 +169,13 @@
 {
     if (!PRODUCTION || DEBUG)return;
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    [mixpanel.people increment:@"First Open App" by:[NSNumber numberWithInt:1]];
+
+    [mixpanel track:@"First Open App"];
 }
 
 + (void)trackSendingFailed
 {
-    if (!PRODUCTION || DEBUG)return;
+    if (!PRODUCTION || DEBUG) return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     

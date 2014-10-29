@@ -10,6 +10,7 @@
 #import "GeneralUtils.h"
 #import "Constants.h"
 #import "AddressbookUtils.h"
+#import "TrackingUtils.h"
 
 #define BORDER_SIZE 0.5
 
@@ -66,6 +67,8 @@
     [GeneralUtils showMessage:NSLocalizedStringFromTable(@"add_contact_success_message",kStringFile,@"comment") withTitle:@""];
     
     [self dismissViewControllerAnimated:YES completion:nil];
+    
+    [TrackingUtils trackAddContact];
 }
 
 - (BOOL)prefersStatusBarHidden

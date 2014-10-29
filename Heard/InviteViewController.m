@@ -14,6 +14,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "AudioUtils.h"
 #import "AddContactViewController.h"
+#import "TrackingUtils.h"
 
 @interface InviteViewController ()
 
@@ -58,9 +59,9 @@
     [self dismissViewControllerAnimated:YES completion:nil];
     
     if (result == MessageComposeResultSent) {
-        //TODO BB track
+        [TrackingUtils trackInvite:@"SMS" Success:@"True"];
     } else {
-        //TODO BB track
+        [TrackingUtils trackInvite:@"SMS" Success:@"False"];
     }
 }
 - (IBAction)AddContactButtonClicked:(id)sender {
@@ -85,6 +86,8 @@
     email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
+    
+    [TrackingUtils trackInvite:@"Email" Success:nil];
 }
 
 - (IBAction)facebookShare:(id)sender {
@@ -102,6 +105,8 @@
                                                 [GeneralUtils showMessage:NSLocalizedStringFromTable(@"fb_messenger_error",kStringFile,@"comment") withTitle:nil];
                                             }
                                         }];
+        
+        [TrackingUtils trackInvite:@"Facebook" Success:nil];
     }  else {
         [GeneralUtils showMessage:NSLocalizedStringFromTable(@"no_fb_messenger",kStringFile,@"comment") withTitle:nil];
     }
@@ -117,6 +122,8 @@
     NSURL *whatsappURL = [NSURL URLWithString:whatsapp];
     if ([[UIApplication sharedApplication] canOpenURL: whatsappURL]) {
         [[UIApplication sharedApplication] openURL: whatsappURL];
+        
+        [TrackingUtils trackInvite:@"Whatsapp" Success:nil];
     } else {
         [GeneralUtils showMessage:NSLocalizedStringFromTable(@"no_whatsapp_messenger",kStringFile,@"comment") withTitle:nil];
     }

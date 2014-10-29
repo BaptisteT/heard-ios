@@ -16,6 +16,7 @@
 #import "ApiUtils.h"
 #import "Contact.h"
 #import "UsernameViewController.h"
+#import "TrackingUtils.h"
 
 #define DEFAULT_COUNTRY @"USA"
 #define DEFAULT_COUNTRY_CODE 1
@@ -119,6 +120,8 @@
                                            ((Contact *)[self.contacts objectAtIndex:i]).firstName,
                                            ((Contact *)[self.contacts objectAtIndex:i]).lastName]
                                 withTitle:@""];
+                
+                [TrackingUtils trackSearchUser:@"Already in contacts"];
                  
                  return;
             }
@@ -140,12 +143,16 @@
                                   cancelButtonTitle:@"Cancel"
                                   otherButtonTitles:@"Add Contact", nil] show];
                 
+                [TrackingUtils trackSearchUser:@"Matched"];
+                
             } else {
                 [[[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"add_contact_not_waved_user_title",kStringFile,@"comment")
                                             message:NSLocalizedStringFromTable(@"add_contact_not_waved_user_message",kStringFile,@"comment")
                                            delegate:self
                                   cancelButtonTitle:@"OK"
                                   otherButtonTitles:nil] show];
+                
+                [TrackingUtils trackSearchUser:@"Not matched"];
             }
         } failure:^{
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];

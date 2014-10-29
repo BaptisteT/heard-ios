@@ -21,15 +21,19 @@
 
 + (void)trackReplay;
 
-+ (void)trackShareSuccessful:(BOOL)success;
++ (void)trackShare;
 
-+ (void)trackAddContactSuccessful:(BOOL)success Present:(BOOL)present Pending:(BOOL)pending;
++ (void)trackAddContact;
+
++ (void)trackAddPendingContact;
+
++ (void)trackSearchUser:(NSString *)result;
 
 + (void)trackOpenApp;
 
 + (void)trackNumberOfContacts:(NSInteger)nbrOfContacts;
 
-+ (void)trackInviteContacts:(NSInteger)nbrOfInvites successful:(BOOL)success justAdded:(BOOL)justAdded;
++ (void)trackInvite:(NSString *)option Success:(NSString *)success;
 
 + (void)trackFailedToOpenContact:(NSString *)formattedNumber;
 

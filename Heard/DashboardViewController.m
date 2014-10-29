@@ -1467,30 +1467,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
     }
     
-    // Share
-    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_3]) {
-        NSString *shareString = NSLocalizedStringFromTable(@"invite_text_message",kStringFile, @"comment");
-        
-        NSURL *shareUrl = [NSURL URLWithString:kProdAFHeardWebsite];
-        
-        NSArray *activityItems = [NSArray arrayWithObjects:shareString, shareUrl, nil];
-        
-        UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-        [activityViewController setValue:NSLocalizedStringFromTable(@"share_mail_object_message",kStringFile, @"comment") forKey:@"subject"];
-        activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-        activityViewController.excludedActivityTypes = @[UIActivityTypePrint, UIActivityTypeAssignToContact, UIActivityTypeAddToReadingList, UIActivityTypeAirDrop, UIActivityTypeSaveToCameraRoll, UIActivityTypeCopyToPasteboard];
-        
-        [activityViewController setCompletionHandler:^(NSString *activityType, BOOL completed) {
-            if (completed) {
-                [TrackingUtils trackShareSuccessful:YES];
-            } else {
-                [TrackingUtils trackShareSuccessful:NO];
-            }
-        }];
-        
-        [self presentViewController:activityViewController animated:YES completion:nil];
-    }
-    
     //Send feedback
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_4]) {
         NSString *email = [NSString stringWithFormat:@"mailto:%@?subject=Feedback for Waved on iOS (v%@)", kFeedbackEmail,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
@@ -1523,7 +1499,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         
         [self didFinishedAddingContact];
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [TrackingUtils trackAddContactSuccessful:YES Present:YES Pending:YES];
+        [TrackingUtils trackAddPendingContact];
     }
     
     // Block user
@@ -1824,6 +1800,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                     [contactView playNextMessage];
                     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
                     [prefs setObject:@"dummy" forKey:kUserReplayedPref];
+                    [TrackingUtils trackReplay];
                     break;
                 }
             }
