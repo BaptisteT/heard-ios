@@ -395,6 +395,7 @@
     self.userInteractionEnabled = NO;
     [self stopRecording];
     [self sendRecording];
+    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 }
 
 - (void)minRecordingDurationReached {
