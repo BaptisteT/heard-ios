@@ -22,10 +22,12 @@
 
 #define ACTION_SHEET_CANCEL NSLocalizedStringFromTable(@"cancel_button_title",kStringFile,@"comment")
 
-#define ACTION_OTHER_MENU_OPTION_1 NSLocalizedStringFromTable(@"hide_contacts_button_title",kStringFile,@"comment")
-#define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"edit_profile_button_title",kStringFile,@"comment")
-#define ACTION_OTHER_MENU_OPTION_3 NSLocalizedStringFromTable(@"feedback_button_title",kStringFile,@"comment")
-#define ACTION_OTHER_MENU_OPTION_4 NSLocalizedStringFromTable(@"rate_button_title",kStringFile,@"comment")
+#define ACTION_OTHER_MENU_OPTION_1_ON NSLocalizedStringFromTable(@"emoji_mode_on_menu",kStringFile,@"comment")
+#define ACTION_OTHER_MENU_OPTION_1_OFF NSLocalizedStringFromTable(@"emoji_mode_off_menu",kStringFile,@"comment")
+#define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"hide_contacts_button_title",kStringFile,@"comment")
+#define ACTION_OTHER_MENU_OPTION_3 NSLocalizedStringFromTable(@"edit_profile_button_title",kStringFile,@"comment")
+#define ACTION_OTHER_MENU_OPTION_4 NSLocalizedStringFromTable(@"feedback_button_title",kStringFile,@"comment")
+#define ACTION_OTHER_MENU_OPTION_5 NSLocalizedStringFromTable(@"rate_button_title",kStringFile,@"comment")
 
 
 #define ACTION_SHEET_PROFILE_OPTION_1 NSLocalizedStringFromTable(@"edit_picture_button_title",kStringFile,@"comment")
@@ -155,12 +157,22 @@
 }
 
 - (IBAction)settingsButtonClicked:(id)sender {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    NSString *emojiMenuButton;
+    
+    if ([[prefs objectForKey:kEmojiPref] isEqualToString:@"Off"]) {
+        emojiMenuButton = ACTION_OTHER_MENU_OPTION_1_OFF;
+    } else {
+        emojiMenuButton = ACTION_OTHER_MENU_OPTION_1_ON;
+    }
+    
     self.menuActionSheet = [[UIActionSheet alloc]
                             initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
                             delegate:self
                             cancelButtonTitle:ACTION_SHEET_CANCEL
                             destructiveButtonTitle:nil
-                            otherButtonTitles: ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, nil];
+                            otherButtonTitles: emojiMenuButton, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
     [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
@@ -177,13 +189,24 @@
      SETTINGS MENU
      ---------------------------------------------------------------------------*/
     
+    //Emoji Mode
+    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_1_OFF] || [buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_1_ON]) {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        
+        if ([[prefs objectForKey:kEmojiPref] isEqualToString:@"Off"]) {
+            [prefs setObject:@"On" forKey:kEmojiPref];
+        } else {
+            [prefs setObject:@"Off" forKey:kEmojiPref];
+        }
+    }
+    
     // Edit contacts
-    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_1]) {
+    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_2]) {
         [self performSegueWithIdentifier:@"Edit Contacts Segue" sender:nil];
     }
     
     // Profile
-    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_2]) {
+    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_3]) {
         [actionSheet dismissWithClickedButtonIndex:2 animated:NO];
         UIActionSheet *newActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                                     delegate:self
@@ -195,7 +218,7 @@
     }
     
     //Send feedback
-    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_3]) {
+    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_4]) {
         NSString *email = [NSString stringWithFormat:@"mailto:%@?subject=Feedback for Waved on iOS (v%@)", kFeedbackEmail,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
         
         email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -204,7 +227,7 @@
     }
     
     // Rate us
-    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_4]) {
+    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_5]) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kProdAFHeardWebsite]];
     }
 

@@ -46,7 +46,8 @@
 
 #define RECORDER_HEIGHT 70
 #define PLAYER_UI_HEIGHT 70
-#define NO_MESSAGE_VIEW_HEIGHT 60
+#define NO_MESSAGE_VIEW_HEIGHT 40
+#define NO_MESSAGE_VIEW_WIDTH 280
 
 @interface DashboardViewController ()
 
@@ -159,19 +160,21 @@
     [GeneralUtils addBottomBorder:self.topBarBackground borderSize:0.5];
     
     //Init no message view
-    self.bottomTutoView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
+    self.bottomTutoView = [[UIView alloc] initWithFrame:CGRectMake(self.screenWidth/2 - NO_MESSAGE_VIEW_WIDTH/2, self.view.bounds.size.height - 4 * NO_MESSAGE_VIEW_HEIGHT, NO_MESSAGE_VIEW_WIDTH, NO_MESSAGE_VIEW_HEIGHT)];
     
-    UIImageView *backgroundTutoView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
-    backgroundTutoView.image = [UIImage imageNamed:@"light-blue-bar"];
-    [self.bottomTutoView addSubview:backgroundTutoView];
+    self.bottomTutoView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+    self.bottomTutoView.clipsToBounds = YES;
+    self.bottomTutoView.layer.cornerRadius = 5;
     
-    self.bottomTutoViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
-    self.bottomTutoViewLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
+    self.bottomTutoViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, NO_MESSAGE_VIEW_WIDTH, NO_MESSAGE_VIEW_HEIGHT)];
+    self.bottomTutoViewLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:18.0];
     self.bottomTutoViewLabel.textAlignment = NSTextAlignmentCenter;
     self.bottomTutoViewLabel.textColor = [UIColor whiteColor];
     self.bottomTutoViewLabel.backgroundColor = [UIColor clearColor];
     [self.bottomTutoView addSubview:self.bottomTutoViewLabel];
     [self.view addSubview:self.bottomTutoView];
+    
+    self.bottomTutoView.alpha = 0;
     
     // Get contacts
     self.contacts = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).contacts;
@@ -324,6 +327,14 @@
     
     [self.openingTutoView setFrame:CGRectMake(0,0,self.contactScrollView.contentSize.width,self.screenHeight - 70)];
     
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+
+    if ([[prefs objectForKey:kEmojiPref] isEqualToString:@"Off"]) {
+        self.emojiContainer.hidden = YES;
+    } else {
+        self.emojiContainer.hidden = NO;
+    }
+    
     // Retrieve messages & contacts
     [self retrieveUnreadMessagesAndNewContacts];
 }
@@ -351,45 +362,25 @@
 // ------------------------------
 - (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration priority:(BOOL)prority
 {
-    [self endTutoMode];
-    self.emojiContainer.hidden = YES;
     if ((self.displayOpeningTuto && !prority)) {
         return;
     }
     self.bottomTutoViewLabel.text = message;
-    self.bottomTutoView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT);
     
-    [UIView animateWithDuration:0.5 animations:^{
-        self.bottomTutoView.frame = CGRectMake(self.bottomTutoView.frame.origin.x,
-                                             self.bottomTutoView.frame.origin.y - self.bottomTutoView.frame.size.height,
-                                             self.bottomTutoView.frame.size.width,
-                                             self.bottomTutoView.frame.size.height);
+    [self.bottomTutoView.layer removeAllAnimations];
+    self.bottomTutoView.alpha = 0;
+    
+    [UIView animateWithDuration:1 animations:^{
+        self.bottomTutoView.alpha = 1;
     } completion:^(BOOL finished) {
         if (finished && self.bottomTutoView) {
             if (duration > 0) {
-                [UIView animateWithDuration:0.5 delay:duration options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    self.bottomTutoView.frame = CGRectMake(self.bottomTutoView.frame.origin.x,
-                                                         self.bottomTutoView.frame.origin.y + self.bottomTutoView.frame.size.height,
-                                                         self.bottomTutoView.frame.size.width,
-                                                         self.bottomTutoView.frame.size.height);
-                } completion:^(BOOL finished) {
-                    if (finished) {
-                        [self endTutoMode];
-                    }
-                }];
+                [UIView animateWithDuration:1 delay:duration options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                    self.bottomTutoView.alpha = 0;
+                } completion:nil];
             }
         }
     }];
-}
-
-- (void)endTutoMode
-{
-    if (!self.bottomTutoView) {
-        return;
-    }
-    
-    [self.bottomTutoView.layer removeAllAnimations];
-    self.bottomTutoView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT);
 }
 
 
@@ -1231,7 +1222,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)startedLongPressOnContactView:(ContactView *)contactView
 {
     [self hideOpeningTuto];
-    [self endTutoMode];
     self.emojiContainer.alpha = 0;
     
     //Show recorder label
@@ -1266,7 +1256,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 //User stop pressing screen
 - (void)endedLongPressRecording
 {
-    [self endTutoMode];
     self.emojiContainer.alpha = 1;
     //Hide recorder label
     self.recorderLabel.hidden = YES;
@@ -1299,12 +1288,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.audioData error:nil];
     [self.mainPlayer prepareToPlay];
     [self addMessagesToLastMessagesPlayed:message];
-    
-    // tuto
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if (![prefs objectForKey:kUserPhoneToEarPref] && !self.isUsingHeadSet && !self.isFirstOpening && self.mainPlayer.duration > 2) {
-        [self tutoMessage:NSLocalizedStringFromTable(@"phone_to_ear_tuto",kStringFile, @"comment") withDuration:0 priority:NO];
-    }
     
     //Show message date
     self.playerLabel.hidden = NO;
@@ -1533,9 +1516,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Observer callback
 // ----------------------------------------------------------
 -(void)willResignActiveCallback {
-    if (self.openingTutoView.hidden) {
-        self.emojiContainer.hidden = YES;
-    }
     // Dismiss modal
     [self dismissViewControllerAnimated:NO completion:nil];
     
@@ -1558,7 +1538,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         if ([UIDevice currentDevice].proximityState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             [prefs setObject:@"dummy" forKey:kUserPhoneToEarPref];
-            [self endTutoMode];
         }
     } else {
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
@@ -1810,41 +1789,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     } else {
         [self performSegueWithIdentifier:@"Manage Groups From Dashboard" sender:nil];
     }
-//    
-//    if (!self.emojiContainer.hidden && self.emojiContainer.frame.origin.y == self.view.frame.size.height - self.emojiContainer.frame.size.height) {
-//        [self.emojiContainer.layer removeAllAnimations];
-//        [UIView animateWithDuration:0.3 animations:^{
-//            self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
-//                                                   self.view.frame.size.height,
-//                                                   self.emojiContainer.frame.size.width,
-//                                                   self.emojiContainer.frame.size.height);
-//        }];
-//    } else {
-//        [self endTutoMode];
-//        if ([GeneralUtils isFirstClickOnEmojiButton]) {
-//            if (!self.openingTutoView) {
-//                [self initOpeningTutoView];
-//            }
-//            [self.contactScrollView bringSubviewToFront:self.openingTutoView];
-//            [self.contactScrollView bringSubviewToFront:self.emojiContainer];
-//            [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"emoji_tutorial",kStringFile,@"comment") forOrigin:-100];
-//        }
-//        [self.emojiContainer.layer removeAllAnimations];
-//        
-//        //Emoji container
-//        self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
-//                                               self.view.frame.size.height,
-//                                               self.emojiContainer.frame.size.width,
-//                                               self.emojiContainer.frame.size.height);
-//        self.emojiContainer.hidden = NO;
-//        [UIView animateWithDuration:0.3 animations:^{
-//            [self.emojiScrollview setContentOffset:CGPointMake(0,0)];
-//            self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
-//                                                   self.view.frame.size.height - self.emojiContainer.frame.size.height,
-//                                                   self.emojiContainer.frame.size.width,
-//                                                   self.emojiContainer.frame.size.height);
-//        }];
-//    }
+
 }
 
 - (void)addEmojiViewsToContainer

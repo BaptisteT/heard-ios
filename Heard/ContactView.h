@@ -93,8 +93,6 @@
 
 - (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel forOrigin:(float)x;
 
-- (void)endTutoMode;
-
 - (ABAddressBookRef) addressBook;
 
 - (void)resetApplicationBadgeNumber;

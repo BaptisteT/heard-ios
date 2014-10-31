@@ -44,6 +44,8 @@
 "give_access_button_title" = "Give Access";
 "no_thanks_button_title" = "No Thanks";
 "notify_me_button_title" = "Notify Me";
+"emoji_mode_on_menu" = "Emojis Mode: On";
+"emoji_mode_off_menu" = "Emojis Mode: Off";
 
 // Welcome
 "subtitle_label" = "Voice Messenger";
@@ -163,7 +165,6 @@
 
 //Alerts
 "shake_to_replay_tuto" = "Shake your phone to replay";
-"phone_to_ear_tuto" = "Phone to ear for private mode";
 
 // Group
 "max_group_members_title" = "Maximum number of members reached";
