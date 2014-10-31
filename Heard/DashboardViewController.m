@@ -129,12 +129,18 @@
 {
     [super viewDidLoad];
     
-    self.speakerMode = YES;
     self.retrieveNewContact = YES;
     self.authRequestView.hidden = YES;
     self.openingTutoView.hidden = YES;
     self.isFirstOpening = [GeneralUtils isFirstOpening];
     self.displayOpeningTuto = self.isFirstOpening;
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if ([[prefs objectForKey:kSpeakerPref] isEqualToString:@"Off"]) {
+        self.speakerMode = NO;
+    } else {
+        self.speakerMode = YES;
+    }
     
     self.openingTutoDescView.layer.cornerRadius = 5;
     
@@ -1112,20 +1118,35 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.lastMessagesPlayed addObject:message];
 }
 
-// ------------------------------
-#pragma mark Click & navigate
-// ------------------------------
-
 - (IBAction)menuButtonClicked:(id)sender {
     if (self.speakerMode) {
         self.speakerMode = NO;
-        [self.menuButton setImage:[UIImage imageNamed:@"speaker-off"] forState:UIControlStateNormal];
     } else {
         self.speakerMode = YES;
-        [self.menuButton setImage:[UIImage imageNamed:@"speaker-on"] forState:UIControlStateNormal];
-
     }
+    
     //TODO BB speaker toggle + toast
+}
+
+- (void)setSpeakerMode:(BOOL)speakerMode
+{
+    _speakerMode = speakerMode;
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    if (speakerMode) {
+        [self.menuButton setImage:[UIImage imageNamed:@"speaker-on"] forState:UIControlStateNormal];
+        
+        [prefs setObject:@"On" forKey:kSpeakerPref];
+        //show Toast
+    } else {
+        [self.menuButton setImage:[UIImage imageNamed:@"speaker-off"] forState:UIControlStateNormal];
+        
+        [prefs setObject:@"Off" forKey:kSpeakerPref];
+        //show Toast
+    }
+    
+    [self proximityStateDidChangeCallback];
 }
 
 
@@ -1369,8 +1390,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [volumeViewSlider setValue:0.5f animated:YES];
     
     // Set loud speaker and proximity check
-    self.disableProximityObserver = NO;
-    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    if (self.speakerMode) {
+        self.disableProximityObserver = NO;
+        [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    }
     
     //Hide menu and title
     [self hideStatusBarComponents:YES];
@@ -1530,7 +1553,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)proximityStateDidChangeCallback {
     BOOL success; NSError* error;
     AVAudioSession *session = [AVAudioSession sharedInstance];
-    if (self.isUsingHeadSet || [UIDevice currentDevice].proximityState ) {
+    if (self.isUsingHeadSet || [UIDevice currentDevice].proximityState || !self.speakerMode) {
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error];
         if ([UIDevice currentDevice].proximityState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
