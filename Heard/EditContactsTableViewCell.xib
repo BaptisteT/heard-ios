@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -31,32 +30,24 @@
                             <action selector="hideButtonSwitched:" destination="LzK-DP-HZV" eventType="valueChanged" id="Dz0-fa-h90"/>
                         </connections>
                     </switch>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mbI-Js-uAU">
-                        <rect key="frame" x="80" y="8" width="174" height="31"/>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="21"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u9T-XL-snJ">
-                        <rect key="frame" x="80" y="35" width="174" height="21"/>
-                        <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="14"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u9T-XL-snJ">
+                        <rect key="frame" x="80" y="15" width="174" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="YIV-vu-mxt"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="19"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="u9T-XL-snJ" firstAttribute="top" secondItem="yzJ-Bp-fAK" secondAttribute="top" constant="35" id="1GX-EG-YaX"/>
                     <constraint firstItem="6RT-Z1-YMV" firstAttribute="leading" secondItem="yzJ-Bp-fAK" secondAttribute="leading" constant="15" id="9Jc-JC-76n"/>
                     <constraint firstItem="q8x-2s-Hfi" firstAttribute="leading" secondItem="u9T-XL-snJ" secondAttribute="trailing" constant="10" id="LO2-BW-BkB"/>
                     <constraint firstAttribute="bottom" secondItem="q8x-2s-Hfi" secondAttribute="bottom" constant="14.5" id="Oda-k9-XW1"/>
+                    <constraint firstAttribute="centerY" secondItem="u9T-XL-snJ" secondAttribute="centerY" id="R6e-3V-hA5"/>
                     <constraint firstAttribute="trailing" secondItem="q8x-2s-Hfi" secondAttribute="trailing" constant="7" id="S9C-v8-Bj1"/>
                     <constraint firstItem="q8x-2s-Hfi" firstAttribute="top" secondItem="yzJ-Bp-fAK" secondAttribute="top" constant="14" id="SVc-QP-toC"/>
                     <constraint firstItem="u9T-XL-snJ" firstAttribute="leading" secondItem="6RT-Z1-YMV" secondAttribute="trailing" constant="15" id="bDV-qv-b4p"/>
-                    <constraint firstItem="q8x-2s-Hfi" firstAttribute="leading" secondItem="mbI-Js-uAU" secondAttribute="trailing" constant="10" id="g7J-pC-b13"/>
-                    <constraint firstAttribute="bottom" secondItem="u9T-XL-snJ" secondAttribute="bottom" constant="3.5" id="hBG-ht-0TC"/>
-                    <constraint firstItem="mbI-Js-uAU" firstAttribute="leading" secondItem="6RT-Z1-YMV" secondAttribute="trailing" constant="15" id="ouY-S9-l2O"/>
-                    <constraint firstItem="mbI-Js-uAU" firstAttribute="top" secondItem="yzJ-Bp-fAK" secondAttribute="topMargin" id="qCw-Y8-Dpf"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="mbI-Js-uAU" secondAttribute="bottom" constant="12.5" id="qkj-Mv-Plk"/>
                     <constraint firstItem="6RT-Z1-YMV" firstAttribute="top" secondItem="yzJ-Bp-fAK" secondAttribute="top" constant="5" id="wgo-Jg-Evr"/>
                     <constraint firstAttribute="bottom" secondItem="6RT-Z1-YMV" secondAttribute="bottom" constant="4.5" id="xob-tK-fMN"/>
                 </constraints>
@@ -65,7 +56,6 @@
                 <outlet property="phoneNumber" destination="u9T-XL-snJ" id="zOd-8a-nWW"/>
                 <outlet property="profilePicture" destination="6RT-Z1-YMV" id="dpN-Mp-urS"/>
                 <outlet property="switchButton" destination="q8x-2s-Hfi" id="wYH-mc-udG"/>
-                <outlet property="username" destination="mbI-Js-uAU" id="nDT-SU-rvF"/>
             </connections>
         </tableViewCell>
     </objects>

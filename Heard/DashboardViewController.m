@@ -78,6 +78,7 @@
 @property (nonatomic) BOOL isUsingHeadSet;
 @property (nonatomic, strong) AVAudioPlayer *soundPlayer;
 @property (strong, nonatomic) UILabel *playerLabel;
+@property (nonatomic) BOOL speakerMode;
 // Current user
 @property (weak, nonatomic) ContactView *currentUserContactView;
 // Others
@@ -128,6 +129,7 @@
 {
     [super viewDidLoad];
     
+    self.speakerMode = YES;
     self.retrieveNewContact = YES;
     self.authRequestView.hidden = YES;
     self.openingTutoView.hidden = YES;
@@ -1115,6 +1117,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ------------------------------
 
 - (IBAction)menuButtonClicked:(id)sender {
+    if (self.speakerMode) {
+        self.speakerMode = NO;
+        [self.menuButton setImage:[UIImage imageNamed:@"speaker-off"] forState:UIControlStateNormal];
+    } else {
+        self.speakerMode = YES;
+        [self.menuButton setImage:[UIImage imageNamed:@"speaker-on"] forState:UIControlStateNormal];
+
+    }
     //TODO BB speaker toggle + toast
 }
 
