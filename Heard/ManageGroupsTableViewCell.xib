@@ -13,8 +13,12 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tp9-na-ybN">
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tp9-na-ybN">
                         <rect key="frame" x="270" y="0.0" width="50" height="50"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="50" id="WMP-xQ-3k4"/>
+                            <constraint firstAttribute="width" constant="50" id="ZVu-Lz-RDa"/>
+                        </constraints>
                         <inset key="contentEdgeInsets" minX="12" minY="12" maxX="12" maxY="12"/>
                         <state key="normal" image="option-button">
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -60,6 +64,10 @@
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="tp9-na-ybN" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="V4I-v9-vDe"/>
+                    <constraint firstAttribute="trailing" secondItem="tp9-na-ybN" secondAttribute="trailing" id="hjM-cg-2uA"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="groupName" destination="Lsi-fU-8VU" id="Lht-a5-icw"/>

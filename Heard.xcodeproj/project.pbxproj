@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B02A5CE1A042A7B000B1C5D /* EditContactsTableViewCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0B02A5CD1A042A7B000B1C5D /* EditContactsTableViewCell2.xib */; };
+		0B02A5CF1A042A7B000B1C5D /* EditContactsTableViewCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0B02A5CD1A042A7B000B1C5D /* EditContactsTableViewCell2.xib */; };
 		0B05062F19D257D300CBFA59 /* NoCancelSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B05062E19D257D300CBFA59 /* NoCancelSearchBar.m */; };
 		0B05063019D257D300CBFA59 /* NoCancelSearchBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B05062E19D257D300CBFA59 /* NoCancelSearchBar.m */; };
 		0B56F64A19757D5300DB6FF1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B56F64919757D5300DB6FF1 /* QuartzCore.framework */; };
@@ -302,6 +304,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0B02A5CD1A042A7B000B1C5D /* EditContactsTableViewCell2.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditContactsTableViewCell2.xib; sourceTree = "<group>"; };
 		0B05062D19D257D300CBFA59 /* NoCancelSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoCancelSearchBar.h; sourceTree = "<group>"; };
 		0B05062E19D257D300CBFA59 /* NoCancelSearchBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoCancelSearchBar.m; sourceTree = "<group>"; };
 		0B56F64919757D5300DB6FF1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -823,6 +826,7 @@
 				0BD758D11950F91B00CF0D85 /* Main.storyboard */,
 				0BF97B1E19CA6A4E00FFA338 /* PushNoAnimationSegue.h */,
 				0BF97B1F19CA6A4E00FFA338 /* PushNoAnimationSegue.m */,
+				0B02A5CD1A042A7B000B1C5D /* EditContactsTableViewCell2.xib */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -1114,6 +1118,7 @@
 				0B72EEF1196C672F00AC5A01 /* PhoneNumberMetaData.json in Resources */,
 				3CA4928019E3409700110DEF /* emoji-sound-11.1.m4a in Resources */,
 				0B72EEF2196C672F00AC5A01 /* InfoPlist.strings in Resources */,
+				0B02A5CF1A042A7B000B1C5D /* EditContactsTableViewCell2.xib in Resources */,
 				0B72EEF3196C672F00AC5A01 /* PhoneNumberMetaDataForTesting.json in Resources */,
 				3CA4925319E329AE00110DEF /* emoji-sound-3.1.m4a in Resources */,
 				3CA16D2D19AE42CE00C1F2A5 /* french_strings.strings in Resources */,
@@ -1175,6 +1180,7 @@
 				0BDB64CE19521A7C00223093 /* PhoneNumberMetaData.json in Resources */,
 				3CA4927F19E3409700110DEF /* emoji-sound-11.1.m4a in Resources */,
 				0BD758CA1950F91B00CF0D85 /* InfoPlist.strings in Resources */,
+				0B02A5CE1A042A7B000B1C5D /* EditContactsTableViewCell2.xib in Resources */,
 				0BDB64CF19521A7C00223093 /* PhoneNumberMetaDataForTesting.json in Resources */,
 				3CA4925219E329AE00110DEF /* emoji-sound-3.1.m4a in Resources */,
 				3CA16D2C19AE42CE00C1F2A5 /* french_strings.strings in Resources */,

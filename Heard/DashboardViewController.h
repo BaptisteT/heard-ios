@@ -12,12 +12,12 @@
 #import "Message.h"
 #import "ContactView.h"
 #import <AddressBookUI/AddressBookUI.h>
-#import "EditContactsViewController.h"
 #import "EmojiView.h"
 #import "CreateGroupsViewController.h"
+#import "InviteViewController.h"
 #import "ManageGroupsViewController.h"
 
-@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, ABPersonViewControllerDelegate, EditContactsVCDelegate, EmojiViewDelegateProtocol, CreateGroupsVCDelegate, ManageGroupsVCDelegateProtocol>
+@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, UINavigationControllerDelegate, ABPersonViewControllerDelegate, EmojiViewDelegateProtocol, CreateGroupsVCDelegate, ManageGroupsVCDelegateProtocol, InviteViewControllerProtocol>
 
 - (BOOL)attributeMessageToExistingContacts:(Message *)message;
 - (void)retrieveUnreadMessagesAndNewContacts;
@@ -26,7 +26,6 @@
 - (void)playSound:(NSString *)sound ofType:(NSString *)type;
 - (void)message:(NSUInteger)messageId listenedByContact:(NSUInteger)contactId;
 - (void)contact:(NSUInteger)contactId isRecording:(BOOL)flag;
-
 
 @property (nonatomic) BOOL isSignUp;
 
