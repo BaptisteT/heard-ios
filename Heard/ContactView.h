@@ -99,8 +99,6 @@
 
 - (void)resetApplicationBadgeNumber;
 
-- (void)displayContactAuthView;
-
 - (NSData *)emojiData;
 
 - (BOOL) isFirstOpening;

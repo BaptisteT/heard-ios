@@ -932,7 +932,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)inviteButtonClicked
 {
-    [self performSegueWithIdentifier:@"Invite Modal Segue" sender:nil];
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
+        [self displayContactAuthView];
+    } else {
+        [self performSegueWithIdentifier:@"Invite Modal Segue" sender:nil];
+    }
 }
 
 // ----------------------------------
@@ -1113,13 +1117,17 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ------------------------------
 
 - (IBAction)menuButtonClicked:(id)sender {
-    self.menuActionSheet = [[UIActionSheet alloc]
-                            initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
-                            delegate:self
-                            cancelButtonTitle:ACTION_SHEET_CANCEL
-                            destructiveButtonTitle:nil
-                            otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_7, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
-    [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
+        [self displayContactAuthView];
+    } else {
+        self.menuActionSheet = [[UIActionSheet alloc]
+                                initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
+                                delegate:self
+                                cancelButtonTitle:ACTION_SHEET_CANCEL
+                                destructiveButtonTitle:nil
+                                otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_7, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
+        [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+    }
 }
 
 
@@ -1301,13 +1309,23 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)pendingContactClicked:(ContactView *)contactView
 {
-    self.clickedPendingView = contactView;
-    UIActionSheet *pendingActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                                    delegate:self
-                                                           cancelButtonTitle:ACTION_SHEET_CANCEL
-                                                      destructiveButtonTitle:nil
-                                                           otherButtonTitles:ACTION_PENDING_OPTION_1, ACTION_PENDING_OPTION_2, nil];
-    [pendingActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
+        [self displayContactAuthView];
+    } else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusDenied) {
+        [[[UIAlertView alloc] initWithTitle:@""
+                                    message:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment")
+                                   delegate:self
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil] show];
+    } else {
+        self.clickedPendingView = contactView;
+        UIActionSheet *pendingActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                                        delegate:self
+                                                               cancelButtonTitle:ACTION_SHEET_CANCEL
+                                                          destructiveButtonTitle:nil
+                                                               otherButtonTitles:ACTION_PENDING_OPTION_1, ACTION_PENDING_OPTION_2, nil];
+        [pendingActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+    }
 }
 
 - (void)failedMessagesModeTapGestureOnContact:(ContactView *)contactView
