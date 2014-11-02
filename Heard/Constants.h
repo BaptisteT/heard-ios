@@ -91,6 +91,3 @@ static NSString * const kNbContactLinkedKey = @"nb_contacts_linked";
 static const NSUInteger kNbEmojis = 11;
 static const NSUInteger kEmojiSize = 60;
 static const NSUInteger kEmojiMargin = 10;
-
-// Groups
-static const NSUInteger kMaxGroupMembers = 5;

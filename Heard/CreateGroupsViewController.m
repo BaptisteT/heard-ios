@@ -128,13 +128,9 @@
         cell.imageView.image = [UIImage imageNamed:@"checkbox"];
         self.membersLabel.text = [NSString stringWithFormat:@"Selected Members (%lu)",self.selectedContacts.count];
     } else {
-        if ([self.selectedContacts count] > kMaxGroupMembers - 2) {
-            [GeneralUtils showMessage:nil withTitle:NSLocalizedStringFromTable(@"max_group_members_title", kStringFile, nil)];
-        } else {
             [self.selectedContacts addObject:contact];
             cell.imageView.image = [UIImage imageNamed:@"checkbox-selected"];
             self.membersLabel.text = [NSString stringWithFormat:@"Selected Members (%lu)",self.selectedContacts.count];
-        }
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
