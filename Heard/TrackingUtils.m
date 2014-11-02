@@ -105,7 +105,7 @@
     [mixpanel.people increment:@"Add contact after search" by:[NSNumber numberWithInt:1]];
 }
 
-+ (void)trackPendingContact
++ (void)trackAddPendingContact
 {
     if (!PRODUCTION || DEBUG)return;
     
@@ -145,7 +145,7 @@
     [mixpanel.people set:@{@"Contacts": [NSNumber numberWithInt:nbrOfContacts]}];
 }
 
-+ (void)trackInvite:(NSString *)option
++ (void)trackInvite:(NSString *)option Success:(NSString *)success;
 {
     if (!PRODUCTION || DEBUG)return;
     
@@ -153,7 +153,7 @@
     
     [mixpanel.people increment:@"Invite contacts" by:[NSNumber numberWithInt:1]];
     
-    [mixpanel track:@"Invite contacts" properties:@{@"Option": option}];
+    [mixpanel track:@"Invite contacts" properties:@{@"Option": option, @"Success": success}];
 }
 
 + (void)trackFailedToOpenContact:(NSString *)formattedNumber

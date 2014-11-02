@@ -8,9 +8,22 @@
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
+#import "Contact.h"
+#import "ContactView.h"
+#import <AddressBookUI/AddressBookUI.h>
+#import "EditContactsViewController.h"
 
-@interface InviteViewController : UIViewController <MFMessageComposeViewControllerDelegate>
+@protocol InviteViewControllerProtocol;
+
+@interface InviteViewController : UIViewController <MFMessageComposeViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSArray *contacts;
+@property (nonatomic, weak) id <InviteViewControllerProtocol> delegate;
+
+@end
+
+@protocol InviteViewControllerProtocol <EditContactsVCDelegate>
+
+- (void)updateCurrentUserFirstName:(NSString *)firstName lastName:(NSString *)lastName picture:(UIImage *)picture;
 
 @end

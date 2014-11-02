@@ -21,8 +21,6 @@
 
 + (void)trackReplay;
 
-+ (void)trackShare;
-
 + (void)trackAddContact;
 
 + (void)trackAddPendingContact;

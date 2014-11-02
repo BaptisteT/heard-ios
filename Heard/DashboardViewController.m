@@ -25,7 +25,6 @@
 #import <MediaPlayer/MPMusicPlayerController.h>
 #import "AddressbookUtils.h"
 #import "MBProgressHUD.h"
-#import "EditContactsViewController.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "CameraUtils.h"
 #import "PotentialContact.h"
@@ -38,27 +37,17 @@
 #import "ManageGroupsViewController.h"
 #import "InviteViewController.h"
 
-#define ACTION_OTHER_MENU_OPTION_1 NSLocalizedStringFromTable(@"hide_contacts_button_title",kStringFile,@"comment")
-#define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"edit_profile_button_title",kStringFile,@"comment")
-#define ACTION_OTHER_MENU_OPTION_3 NSLocalizedStringFromTable(@"share_button_title",kStringFile,@"comment")
-#define ACTION_OTHER_MENU_OPTION_4 NSLocalizedStringFromTable(@"feedback_button_title",kStringFile,@"comment")
-#define ACTION_OTHER_MENU_OPTION_5 NSLocalizedStringFromTable(@"rate_button_title",kStringFile,@"comment")
-#define ACTION_OTHER_MENU_OPTION_6 NSLocalizedStringFromTable(@"log_out_button_title",kStringFile,@"comment")
-#define ACTION_OTHER_MENU_OPTION_7 NSLocalizedStringFromTable(@"manage_groups_button_title",kStringFile,@"comment")
 #define ACTION_PENDING_OPTION_1 NSLocalizedStringFromTable(@"add_to_contact_button_title",kStringFile,@"comment")
 #define ACTION_PENDING_OPTION_2 NSLocalizedStringFromTable(@"block_button_title",kStringFile,@"comment")
-#define ACTION_SHEET_PROFILE_OPTION_1 NSLocalizedStringFromTable(@"edit_picture_button_title",kStringFile,@"comment")
-#define ACTION_SHEET_PROFILE_OPTION_2 NSLocalizedStringFromTable(@"edit_first_name_button_title",kStringFile,@"comment")
-#define ACTION_SHEET_PROFILE_OPTION_3 NSLocalizedStringFromTable(@"edit_last_name_button_title",kStringFile,@"comment")
-#define ACTION_SHEET_PICTURE_OPTION_1 NSLocalizedStringFromTable(@"camera_button_title",kStringFile,@"comment")
-#define ACTION_SHEET_PICTURE_OPTION_2 NSLocalizedStringFromTable(@"library_button_title",kStringFile,@"comment")
+
 #define ACTION_FAILED_MESSAGES_OPTION_1 NSLocalizedStringFromTable(@"resend_button_title",kStringFile,@"comment")
 #define ACTION_FAILED_MESSAGES_OPTION_2 NSLocalizedStringFromTable(@"delete_button_title",kStringFile,@"comment")
 #define ACTION_SHEET_CANCEL NSLocalizedStringFromTable(@"cancel_button_title",kStringFile,@"comment")
 
 #define RECORDER_HEIGHT 70
 #define PLAYER_UI_HEIGHT 70
-#define NO_MESSAGE_VIEW_HEIGHT 60
+#define NO_MESSAGE_VIEW_HEIGHT 40
+#define NO_MESSAGE_VIEW_WIDTH 280
 
 @interface DashboardViewController ()
 
@@ -90,9 +79,8 @@
 @property (nonatomic) BOOL isUsingHeadSet;
 @property (nonatomic, strong) AVAudioPlayer *soundPlayer;
 @property (strong, nonatomic) UILabel *playerLabel;
+@property (nonatomic) BOOL speakerMode;
 // Current user
-@property (strong, nonatomic) UIImagePickerController *imagePickerController;
-@property (strong, nonatomic) UIImageView *profilePicture;
 @property (weak, nonatomic) ContactView *currentUserContactView;
 // Others
 @property (weak, nonatomic) IBOutlet UIButton *menuButton;
@@ -148,6 +136,13 @@
     self.isFirstOpening = [GeneralUtils isFirstOpening];
     self.displayOpeningTuto = self.isFirstOpening;
     
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if ([[prefs objectForKey:kSpeakerPref] isEqualToString:@"Off"]) {
+        self.speakerMode = NO;
+    } else {
+        self.speakerMode = YES;
+    }
+    
     self.openingTutoDescView.layer.cornerRadius = 5;
     
     //Contact scrollview variables
@@ -165,23 +160,21 @@
     [GeneralUtils addBottomBorder:self.topBarBackground borderSize:0.5];
     
     //Init no message view
-    self.bottomTutoView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
+    self.bottomTutoView = [[UIView alloc] initWithFrame:CGRectMake(self.screenWidth/2 - NO_MESSAGE_VIEW_WIDTH/2, self.view.bounds.size.height - 4 * NO_MESSAGE_VIEW_HEIGHT, NO_MESSAGE_VIEW_WIDTH, NO_MESSAGE_VIEW_HEIGHT)];
     
-    UIImageView *backgroundTutoView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
-    backgroundTutoView.image = [UIImage imageNamed:@"light-blue-bar"];
-    [self.bottomTutoView addSubview:backgroundTutoView];
+    self.bottomTutoView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+    self.bottomTutoView.clipsToBounds = YES;
+    self.bottomTutoView.layer.cornerRadius = 5;
     
-    self.bottomTutoViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT)];
-    self.bottomTutoViewLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20.0];
+    self.bottomTutoViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, NO_MESSAGE_VIEW_WIDTH, NO_MESSAGE_VIEW_HEIGHT)];
+    self.bottomTutoViewLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:18.0];
     self.bottomTutoViewLabel.textAlignment = NSTextAlignmentCenter;
     self.bottomTutoViewLabel.textColor = [UIColor whiteColor];
     self.bottomTutoViewLabel.backgroundColor = [UIColor clearColor];
     [self.bottomTutoView addSubview:self.bottomTutoViewLabel];
     [self.view addSubview:self.bottomTutoView];
     
-    // Preload profile picture
-    self.profilePicture = [UIImageView new];
-    [self.profilePicture setImageWithURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
+    self.bottomTutoView.alpha = 0;
     
     // Get contacts
     self.contacts = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).contacts;
@@ -334,6 +327,14 @@
     
     [self.openingTutoView setFrame:CGRectMake(0,0,self.contactScrollView.contentSize.width,self.screenHeight - 70)];
     
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+
+    if ([[prefs objectForKey:kEmojiPref] isEqualToString:@"Off"]) {
+        self.emojiContainer.hidden = YES;
+    } else {
+        self.emojiContainer.hidden = NO;
+    }
+    
     // Retrieve messages & contacts
     [self retrieveUnreadMessagesAndNewContacts];
 }
@@ -342,10 +343,7 @@
 {
     NSString * segueName = segue.identifier;
     
-    if ([segueName isEqualToString: @"Edit Contacts Segue"]) {
-        ((EditContactsViewController *) [segue destinationViewController]).delegate = self;
-        ((EditContactsViewController *) [segue destinationViewController]).contacts = self.contacts;
-    } else if ([segueName isEqualToString: @"Create Group From Dashboard"]) {
+    if ([segueName isEqualToString: @"Create Group From Dashboard"]) {
         ((CreateGroupsViewController *) [segue destinationViewController]).delegate = self;
         ((CreateGroupsViewController *) [segue destinationViewController]).contacts = [self getGroupPermittedContacts];
     } else if ([segueName isEqualToString:@"Manage Groups From Dashboard"]) {
@@ -354,6 +352,7 @@
         ((ManageGroupsViewController *) [segue destinationViewController]).delegate = self;
     } else if ([segueName isEqualToString:@"Invite Modal Segue"]) {
         ((InviteViewController *) [segue destinationViewController]).contacts = self.contacts;
+        ((InviteViewController *) [segue destinationViewController]).delegate = self;
     }
 }
 
@@ -363,45 +362,25 @@
 // ------------------------------
 - (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration priority:(BOOL)prority
 {
-    [self endTutoMode];
-    self.emojiContainer.hidden = YES;
     if ((self.displayOpeningTuto && !prority)) {
         return;
     }
     self.bottomTutoViewLabel.text = message;
-    self.bottomTutoView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT);
     
-    [UIView animateWithDuration:0.5 animations:^{
-        self.bottomTutoView.frame = CGRectMake(self.bottomTutoView.frame.origin.x,
-                                             self.bottomTutoView.frame.origin.y - self.bottomTutoView.frame.size.height,
-                                             self.bottomTutoView.frame.size.width,
-                                             self.bottomTutoView.frame.size.height);
+    [self.bottomTutoView.layer removeAllAnimations];
+    self.bottomTutoView.alpha = 0;
+    
+    [UIView animateWithDuration:1 animations:^{
+        self.bottomTutoView.alpha = 1;
     } completion:^(BOOL finished) {
         if (finished && self.bottomTutoView) {
             if (duration > 0) {
-                [UIView animateWithDuration:0.5 delay:duration options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    self.bottomTutoView.frame = CGRectMake(self.bottomTutoView.frame.origin.x,
-                                                         self.bottomTutoView.frame.origin.y + self.bottomTutoView.frame.size.height,
-                                                         self.bottomTutoView.frame.size.width,
-                                                         self.bottomTutoView.frame.size.height);
-                } completion:^(BOOL finished) {
-                    if (finished) {
-                        [self endTutoMode];
-                    }
-                }];
+                [UIView animateWithDuration:1 delay:duration options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                    self.bottomTutoView.alpha = 0;
+                } completion:nil];
             }
         }
     }];
-}
-
-- (void)endTutoMode
-{
-    if (!self.bottomTutoView) {
-        return;
-    }
-    
-    [self.bottomTutoView.layer removeAllAnimations];
-    self.bottomTutoView.frame = CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, NO_MESSAGE_VIEW_HEIGHT);
 }
 
 
@@ -845,6 +824,24 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
 }
 
+- (void)updateCurrentUserFirstName:(NSString *)firstName lastName:(NSString *)lastName picture:(UIImage *)picture
+{
+    if (self.currentUserContactView) {
+        if (picture) {
+            self.currentUserContactView.imageView.image = picture;
+        }
+        
+        if (firstName) {
+            self.currentUserContactView.contact.firstName = firstName;
+            self.currentUserContactView.nameLabel.text = firstName;
+        }
+        
+        if (lastName) {
+            self.currentUserContactView.contact.lastName = lastName;
+        }
+    }
+}
+
 
 // ----------------------------------
 #pragma mark Groups
@@ -1112,22 +1109,35 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.lastMessagesPlayed addObject:message];
 }
 
-// ------------------------------
-#pragma mark Click & navigate
-// ------------------------------
-
 - (IBAction)menuButtonClicked:(id)sender {
-    if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
-        [self displayContactAuthView];
+    if (self.speakerMode) {
+        self.speakerMode = NO;
     } else {
-        self.menuActionSheet = [[UIActionSheet alloc]
-                                initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
-                                delegate:self
-                                cancelButtonTitle:ACTION_SHEET_CANCEL
-                                destructiveButtonTitle:nil
-                                otherButtonTitles:ACTION_OTHER_MENU_OPTION_1, ACTION_OTHER_MENU_OPTION_7, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
-        [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
+        self.speakerMode = YES;
     }
+    
+    //TODO BB speaker toggle + toast
+}
+
+- (void)setSpeakerMode:(BOOL)speakerMode
+{
+    _speakerMode = speakerMode;
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    if (speakerMode) {
+        [self.menuButton setImage:[UIImage imageNamed:@"speaker-on"] forState:UIControlStateNormal];
+        
+        [prefs setObject:@"On" forKey:kSpeakerPref];
+        //show Toast
+    } else {
+        [self.menuButton setImage:[UIImage imageNamed:@"speaker-off"] forState:UIControlStateNormal];
+        
+        [prefs setObject:@"Off" forKey:kSpeakerPref];
+        //show Toast
+    }
+    
+    [self proximityStateDidChangeCallback];
 }
 
 
@@ -1212,7 +1222,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)startedLongPressOnContactView:(ContactView *)contactView
 {
     [self hideOpeningTuto];
-    [self endTutoMode];
     self.emojiContainer.alpha = 0;
     
     //Show recorder label
@@ -1247,7 +1256,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 //User stop pressing screen
 - (void)endedLongPressRecording
 {
-    [self endTutoMode];
     self.emojiContainer.alpha = 1;
     //Hide recorder label
     self.recorderLabel.hidden = YES;
@@ -1280,12 +1288,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.audioData error:nil];
     [self.mainPlayer prepareToPlay];
     [self addMessagesToLastMessagesPlayed:message];
-    
-    // tuto
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if (![prefs objectForKey:kUserPhoneToEarPref] && !self.isUsingHeadSet && !self.isFirstOpening && self.mainPlayer.duration > 2) {
-        [self tutoMessage:NSLocalizedStringFromTable(@"phone_to_ear_tuto",kStringFile, @"comment") withDuration:0 priority:NO];
-    }
     
     //Show message date
     self.playerLabel.hidden = NO;
@@ -1371,8 +1373,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [volumeViewSlider setValue:0.5f animated:YES];
     
     // Set loud speaker and proximity check
-    self.disableProximityObserver = NO;
-    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    if (self.speakerMode) {
+        self.disableProximityObserver = NO;
+        [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    }
     
     //Hide menu and title
     [self hideStatusBarComponents:YES];
@@ -1454,57 +1458,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         return;
     }
     
-
-    /* -------------------------------------------------------------------------
-     OTHER MENU
-     ---------------------------------------------------------------------------*/
-    
-    // Edit contacts
-    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_1]) {
-        [self performSegueWithIdentifier:@"Edit Contacts Segue" sender:nil];
-    }
-    
-    // Create Groups
-    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_7]) {
-        if ([self getGroupPermittedContacts].count < 2) {
-            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"insufficient_contacts_for_group_message", kStringFile, "comment") withTitle:nil];
-        } else {
-            [self performSegueWithIdentifier:@"Manage Groups From Dashboard" sender:nil];
-        }
-    }
-    
-    // Profile
-    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_2]) {
-        [actionSheet dismissWithClickedButtonIndex:2 animated:NO];
-        UIActionSheet *newActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                                            delegate:self
-                                                                   cancelButtonTitle:ACTION_SHEET_CANCEL
-                                                              destructiveButtonTitle:nil
-                                                                   otherButtonTitles:ACTION_SHEET_PROFILE_OPTION_1, ACTION_SHEET_PROFILE_OPTION_2, ACTION_SHEET_PROFILE_OPTION_3, nil];
-        
-        [newActionSheet showInView:[UIApplication sharedApplication].keyWindow];
-    }
-    
-    //Send feedback
-    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_4]) {
-        NSString *email = [NSString stringWithFormat:@"mailto:%@?subject=Feedback for Waved on iOS (v%@)", kFeedbackEmail,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
-        
-        email = [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
-    }
-    
-    // Rate us
-    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_5]) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:kProdAFHeardWebsite]];
-    }
-    
-    // Log out
-    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_6]) {
-        [SessionUtils redirectToSignIn:self.navigationController];
-    }
-
-    
     /* -------------------------------------------------------------------------
      PENDING MENU
      ---------------------------------------------------------------------------*/
@@ -1530,96 +1483,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         }
     }
     
-    /* -------------------------------------------------------------------------
-     PROFILE MENU
-     ---------------------------------------------------------------------------*/
-    
-    // Picture
-    else if ([buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_1]) {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                           delegate:self cancelButtonTitle:ACTION_SHEET_CANCEL
-                                             destructiveButtonTitle:nil
-                                                  otherButtonTitles:ACTION_SHEET_PICTURE_OPTION_1, ACTION_SHEET_PICTURE_OPTION_2, nil];
-        
-        [actionSheet showInView:[UIApplication sharedApplication].keyWindow];
-    }
-    
-    
-    // First Name
-    else if ([buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] || [buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_3]) {
-        NSString *preFillText =  [buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_2] ? [SessionUtils getCurrentUserFirstName] : [SessionUtils getCurrentUserLastName];
-        [actionSheet dismissWithClickedButtonIndex:0 animated:NO];
-        if ([GeneralUtils systemVersionIsGreaterThanOrEqualTo:@"8.0"]) {
-            UIAlertController * alertController = [UIAlertController alertControllerWithTitle:buttonTitle message:@"" preferredStyle:UIAlertControllerStyleAlert];
-            [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField)
-             {
-                 textField.text = preFillText;
-                 textField.textAlignment = NSTextAlignmentCenter;
-             }];
-            UIAlertAction *cancelAction = [UIAlertAction
-                                           actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel action")
-                                           style:UIAlertActionStyleCancel
-                                           handler:^(UIAlertAction *action) {
-                                               NSLog(@"Cancel action");
-                                           }];
-            UIAlertAction *okAction = [UIAlertAction
-                                       actionWithTitle:NSLocalizedString(@"OK", @"OK action")
-                                       style:UIAlertActionStyleDefault
-                                       handler:^(UIAlertAction *action) {
-                                           [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                                           NSString *newText = ((UITextField *)alertController.textFields[0]).text;
-                                           
-                                           if ([buttonTitle isEqualToString:ACTION_SHEET_PROFILE_OPTION_2]) {
-                                               [ApiUtils updateFirstName:newText success:^{
-                                                   [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                                                   [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_edit_success_message",kStringFile, @"comment") withTitle:nil];
-                                                   // change first name me contact
-                                                   self.currentUserContactView.contact.firstName = newText;
-                                                   self.currentUserContactView.nameLabel.text = newText;
-                                               } failure:^{
-                                                   [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                                                   [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_edit_error_message",kStringFile, @"comment") withTitle:nil];
-                                               }];
-                                           } else {
-                                               [ApiUtils updateLastName:newText success:^{
-                                                   [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                                                   [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_edit_success_message",kStringFile, @"comment") withTitle:nil];
-                                                   // change first name me contact
-                                                   self.currentUserContactView.contact.lastName = newText;
-                                               } failure:^{
-                                                   [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                                                   [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_edit_error_message",kStringFile, @"comment") withTitle:nil];
-                                               }];
-                                           }
-                                       }];
-            [alertController addAction:cancelAction];
-            [alertController addAction:okAction];
-            [self presentViewController:alertController animated:NO completion:nil];
-        } else {
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:buttonTitle message:@"" delegate:self cancelButtonTitle:NSLocalizedStringFromTable(@"cancel_button_title",kStringFile, @"comment") otherButtonTitles:NSLocalizedStringFromTable(@"ok_button_title",kStringFile, @"comment"), nil];
-            alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-            UITextField *textField = [alert textFieldAtIndex:0];
-            textField.textAlignment = NSTextAlignmentCenter;
-            textField.text = preFillText;
-            [textField becomeFirstResponder];
-            [alert addSubview:textField];
-            [alert show];
-        }
-    }
-    
-    /* -------------------------------------------------------------------------
-     PROFILE PICTURE MENU
-     ---------------------------------------------------------------------------*/
-    
-    // Camera
-    else if ([buttonTitle isEqualToString:ACTION_SHEET_PICTURE_OPTION_1]) {
-        [self showImagePickerForSourceType:UIImagePickerControllerSourceTypeCamera];
-    }
-    
-    // Library
-    else if ([buttonTitle isEqualToString:ACTION_SHEET_PICTURE_OPTION_2]) {
-        [self showImagePickerForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-    }
     
     /* -------------------------------------------------------------------------
      FAILED MESSAGES MENU
@@ -1641,46 +1504,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [GeneralUtils openSettings];
     }
     
-    // First name
-    else if ([alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_2]) {
-        UITextField *textField = [alertView textFieldAtIndex:0];
-        if (buttonIndex == 0) // cancel
-            return;
-        
-        if ([textField.text length] <= 0) {
-            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_error_message",kStringFile, @"comment") withTitle:nil];
-        }
-        if (buttonIndex == 1) {
-            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            [ApiUtils updateFirstName:textField.text success:^{
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_edit_success_message",kStringFile, @"comment") withTitle:nil];
-            } failure:^{
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"first_name_edit_error_message",kStringFile, @"comment") withTitle:nil];
-            }];
-        }
-    }
-    // Last name
-    else if ([alertView.title isEqualToString:ACTION_SHEET_PROFILE_OPTION_3]) {
-        UITextField *textField = [alertView textFieldAtIndex:0];
-        if (buttonIndex == 0) // cancel
-            return;
-        
-        if ([textField.text length] <= 0) {
-            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_error_message",kStringFile, @"comment") withTitle:nil];
-        }
-        if (buttonIndex == 1) {
-            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            [ApiUtils updateLastName:textField.text success:^{
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_edit_success_message",kStringFile, @"comment") withTitle:nil];
-            } failure:^{
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"last_name_edit_error_message",kStringFile, @"comment") withTitle:nil];
-            }];
-        }
-    }
+   
     // block
     else if (alertView == self.blockAlertView && buttonIndex == 1) {
         [self blockContact:self.lastSelectedContactView];
@@ -1692,9 +1516,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Observer callback
 // ----------------------------------------------------------
 -(void)willResignActiveCallback {
-    if (self.openingTutoView.hidden) {
-        self.emojiContainer.hidden = YES;
-    }
     // Dismiss modal
     [self dismissViewControllerAnimated:NO completion:nil];
     
@@ -1712,12 +1533,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)proximityStateDidChangeCallback {
     BOOL success; NSError* error;
     AVAudioSession *session = [AVAudioSession sharedInstance];
-    if (self.isUsingHeadSet || [UIDevice currentDevice].proximityState ) {
+    if (self.isUsingHeadSet || [UIDevice currentDevice].proximityState || !self.speakerMode) {
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error];
         if ([UIDevice currentDevice].proximityState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             [prefs setObject:@"dummy" forKey:kUserPhoneToEarPref];
-            [self endTutoMode];
         }
     } else {
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
@@ -1727,67 +1547,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     if (!success)
         NSLog(@"AVAudioSession error overrideOutputAudioPort:%@",error);
-}
-
-
-
-// --------------------------
-#pragma mark Profile picture change
-// --------------------------
-
-- (void)showImagePickerForSourceType:(UIImagePickerControllerSourceType)sourceType
-{
-    self.imagePickerController = [CameraUtils allocCameraWithSourceType:sourceType delegate:self];
-    [self presentViewController:self.imagePickerController animated:YES completion:nil];
-}
-
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    UIImage *image =  [info objectForKey:UIImagePickerControllerEditedImage] ? [info objectForKey:UIImagePickerControllerEditedImage] : [info objectForKey:UIImagePickerControllerOriginalImage];
-    
-    if (image) {
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        
-        CGSize rescaleSize = {kProfilePictureSize, kProfilePictureSize};
-        image = [ImageUtils imageWithImage:[ImageUtils cropBiggestCenteredSquareImageFromImage:image withSide:image.size.width] scaledToSize:rescaleSize];
-        
-        NSString *encodedImage = [ImageUtils encodeToBase64String:image];
-        [ApiUtils updateProfilePicture:encodedImage success:^{
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            // Update image
-            self.profilePicture.image = image;
-            if (self.currentUserContactView) {
-                self.currentUserContactView.imageView.image = image;
-            }
-            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"picture_edit_success_message",kStringFile, @"comment") withTitle:nil];
-            
-            // Reset the cache
-            [ImageUtils setWithoutCachingImageView:self.profilePicture withURL:[GeneralUtils getUserProfilePictureURLFromUserId:[SessionUtils getCurrentUserId]]];
-        }failure:^{
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        }];
-    } else {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"picture_edit_error_message",kStringFile, @"comment") withTitle:nil];
-    }
-    
-    [self dismissViewControllerAnimated:YES completion:NULL];
-}
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
-    [self dismissViewControllerAnimated:YES completion:NULL];
-}
-
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
-{
-    if ((UINavigationController *)self.imagePickerController != navigationController || self.imagePickerController.sourceType == UIImagePickerControllerSourceTypeCamera ) {
-        return;
-    }
-    if ([navigationController.viewControllers indexOfObject:viewController] == 2)
-    {
-        [CameraUtils addCircleOverlayToEditView:viewController];
-    }
 }
 
 
@@ -2025,40 +1784,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ----------------------------------------------------------
 
 - (IBAction)emojiButtonClicked:(id)sender {
-    if (!self.emojiContainer.hidden && self.emojiContainer.frame.origin.y == self.view.frame.size.height - self.emojiContainer.frame.size.height) {
-        [self.emojiContainer.layer removeAllAnimations];
-        [UIView animateWithDuration:0.3 animations:^{
-            self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
-                                                   self.view.frame.size.height,
-                                                   self.emojiContainer.frame.size.width,
-                                                   self.emojiContainer.frame.size.height);
-        }];
+    if ([self getGroupPermittedContacts].count < 2) {
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"insufficient_contacts_for_group_message", kStringFile, "comment") withTitle:nil];
     } else {
-        [self endTutoMode];
-        if ([GeneralUtils isFirstClickOnEmojiButton]) {
-            if (!self.openingTutoView) {
-                [self initOpeningTutoView];
-            }
-            [self.contactScrollView bringSubviewToFront:self.openingTutoView];
-            [self.contactScrollView bringSubviewToFront:self.emojiContainer];
-            [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"emoji_tutorial",kStringFile,@"comment") forOrigin:-100];
-        }
-        [self.emojiContainer.layer removeAllAnimations];
-        
-        //Emoji container
-        self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
-                                               self.view.frame.size.height,
-                                               self.emojiContainer.frame.size.width,
-                                               self.emojiContainer.frame.size.height);
-        self.emojiContainer.hidden = NO;
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.emojiScrollview setContentOffset:CGPointMake(0,0)];
-            self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
-                                                   self.view.frame.size.height - self.emojiContainer.frame.size.height,
-                                                   self.emojiContainer.frame.size.width,
-                                                   self.emojiContainer.frame.size.height);
-        }];
+        [self performSegueWithIdentifier:@"Manage Groups From Dashboard" sender:nil];
     }
+
 }
 
 - (void)addEmojiViewsToContainer
