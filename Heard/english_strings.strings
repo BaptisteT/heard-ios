@@ -44,8 +44,8 @@
 "give_access_button_title" = "Give Access";
 "no_thanks_button_title" = "No Thanks";
 "notify_me_button_title" = "Notify Me";
-"emoji_mode_on_menu" = "Emojis Mode: On";
-"emoji_mode_off_menu" = "Emojis Mode: Off";
+"speaker_mode_on_menu" = "Loud Speaker: Off";
+"speaker_mode_off_menu" = "Loud Speaker: On";
 
 // Welcome
 "subtitle_label" = "Voice Messenger";
