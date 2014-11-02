@@ -269,16 +269,10 @@
     self.playerLine.backgroundColor = [ImageUtils transparentGreen];
     [self.playerContainer addSubview:self.playerLine];
     
-    // Speaker button / mode
+    // Speaker button
     self.speakerButton = [[UIButton alloc] initWithFrame:CGRectMake(5, 5, 60, 60)];
     [self.speakerButton addTarget:self action:@selector(speakerButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     [self.playerContainer addSubview:self.speakerButton];
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if ([[prefs objectForKey:kSpeakerPref] isEqualToString:@"Off"]) {
-        self.speakerMode = NO;
-    } else {
-        self.speakerMode = YES;
-    }
     
     //player date label
     self.playerLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 120/2, 25, 120, 25)];
@@ -332,6 +326,13 @@
     
     [self.openingTutoView setFrame:CGRectMake(0,0,self.contactScrollView.contentSize.width,self.screenHeight - 70)];
     self.emojiContainer.hidden = YES;
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if ([[prefs objectForKey:kSpeakerPref] isEqualToString:@"Off"]) {
+        self.speakerMode = NO;
+    } else {
+        self.speakerMode = YES;
+    }
     
     // Retrieve messages & contacts
     [self retrieveUnreadMessagesAndNewContacts];

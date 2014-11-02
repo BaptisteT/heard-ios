@@ -190,7 +190,6 @@
     //Emoji Mode
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_1_OFF] || [buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_1_ON]) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        
         if ([[prefs objectForKey:kSpeakerPref] isEqualToString:@"Off"]) {
             [prefs setObject:@"On" forKey:kSpeakerPref];
         } else {
