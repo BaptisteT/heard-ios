@@ -179,6 +179,10 @@
 "group_full_title" = "We could not add a new member";
 "group_full_message" = "The group is already full";
 
+// Speaker
+"speaker_button_off_message" = "Loud speaker mode";
+"speaker_button_on_message" = "Ear speaker mode";
+
 
 
 

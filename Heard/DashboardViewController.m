@@ -80,6 +80,7 @@
 @property (nonatomic, strong) AVAudioPlayer *soundPlayer;
 @property (strong, nonatomic) UILabel *playerLabel;
 @property (nonatomic) BOOL speakerMode;
+@property (strong, nonatomic) UIButton *speakerButton;
 // Current user
 @property (weak, nonatomic) ContactView *currentUserContactView;
 // Others
@@ -135,13 +136,6 @@
     self.openingTutoView.hidden = YES;
     self.isFirstOpening = [GeneralUtils isFirstOpening];
     self.displayOpeningTuto = self.isFirstOpening;
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    if ([[prefs objectForKey:kSpeakerPref] isEqualToString:@"Off"]) {
-        self.speakerMode = NO;
-    } else {
-        self.speakerMode = YES;
-    }
     
     self.openingTutoDescView.layer.cornerRadius = 5;
     
@@ -275,6 +269,17 @@
     self.playerLine.backgroundColor = [ImageUtils transparentGreen];
     [self.playerContainer addSubview:self.playerLine];
     
+    // Speaker button / mode
+    self.speakerButton = [[UIButton alloc] initWithFrame:CGRectMake(5, 5, 60, 60)];
+    [self.speakerButton addTarget:self action:@selector(speakerButtonClicked) forControlEvents:UIControlEventTouchUpInside];
+    [self.playerContainer addSubview:self.speakerButton];
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if ([[prefs objectForKey:kSpeakerPref] isEqualToString:@"Off"]) {
+        self.speakerMode = NO;
+    } else {
+        self.speakerMode = YES;
+    }
+    
     //player date label
     self.playerLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 120/2, 25, 120, 25)];
     self.playerLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15.0];
@@ -326,14 +331,7 @@
     [self.navigationController setNavigationBarHidden:YES];   //it hides
     
     [self.openingTutoView setFrame:CGRectMake(0,0,self.contactScrollView.contentSize.width,self.screenHeight - 70)];
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-
-    if ([[prefs objectForKey:kEmojiPref] isEqualToString:@"Off"]) {
-        self.emojiContainer.hidden = YES;
-    } else {
-        self.emojiContainer.hidden = NO;
-    }
+    self.emojiContainer.hidden = YES;
     
     // Retrieve messages & contacts
     [self retrieveUnreadMessagesAndNewContacts];
@@ -1110,33 +1108,38 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 - (IBAction)menuButtonClicked:(id)sender {
+    if ([self getGroupPermittedContacts].count < 2) {
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"insufficient_contacts_for_group_message", kStringFile, "comment") withTitle:nil];
+    } else {
+        [self performSegueWithIdentifier:@"Manage Groups From Dashboard" sender:nil];
+    }
+}
+
+- (void)speakerButtonClicked {
     if (self.speakerMode) {
+        [self tutoMessage:NSLocalizedStringFromTable(@"speaker_button_on_message", kStringFile, "comment") withDuration:1 priority:NO];
         self.speakerMode = NO;
     } else {
+        [self tutoMessage:NSLocalizedStringFromTable(@"speaker_button_off_message", kStringFile, "comment") withDuration:1 priority:NO];
         self.speakerMode = YES;
     }
-    
     //TODO BB speaker toggle + toast
 }
 
 - (void)setSpeakerMode:(BOOL)speakerMode
 {
     _speakerMode = speakerMode;
-    
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     if (speakerMode) {
-        [self.menuButton setImage:[UIImage imageNamed:@"speaker-on"] forState:UIControlStateNormal];
-        
+        [self.speakerButton setImage:[UIImage imageNamed:@"speaker-on"] forState:UIControlStateNormal];
         [prefs setObject:@"On" forKey:kSpeakerPref];
         //show Toast
     } else {
-        [self.menuButton setImage:[UIImage imageNamed:@"speaker-off"] forState:UIControlStateNormal];
-        
+        [self.speakerButton setImage:[UIImage imageNamed:@"speaker-off"] forState:UIControlStateNormal];
         [prefs setObject:@"Off" forKey:kSpeakerPref];
         //show Toast
     }
-    
     [self proximityStateDidChangeCallback];
 }
 
@@ -1425,7 +1428,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     //Show menu and title
     [self hideStatusBarComponents:NO];
     self.contactScrollView.clipsToBounds = YES;
-    
     self.playerLabel.hidden = YES;
     
     // End central player UI
@@ -1784,12 +1786,39 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ----------------------------------------------------------
 
 - (IBAction)emojiButtonClicked:(id)sender {
-    if ([self getGroupPermittedContacts].count < 2) {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"insufficient_contacts_for_group_message", kStringFile, "comment") withTitle:nil];
+    if (!self.emojiContainer.hidden && self.emojiContainer.frame.origin.y == self.view.frame.size.height - self.emojiContainer.frame.size.height) {
+        [self.emojiContainer.layer removeAllAnimations];
+        [UIView animateWithDuration:0.3 animations:^{
+            self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
+                                                   self.view.frame.size.height,
+                                                   self.emojiContainer.frame.size.width,
+                                                   self.emojiContainer.frame.size.height);
+        }];
     } else {
-        [self performSegueWithIdentifier:@"Manage Groups From Dashboard" sender:nil];
+        if ([GeneralUtils isFirstClickOnEmojiButton]) {
+            if (!self.openingTutoView) {
+                [self initOpeningTutoView];
+            }
+            [self.contactScrollView bringSubviewToFront:self.openingTutoView];
+            [self.contactScrollView bringSubviewToFront:self.emojiContainer];
+            [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"emoji_tutorial",kStringFile,@"comment") forOrigin:-100];
+        }
+        [self.emojiContainer.layer removeAllAnimations];
+        
+        //Emoji container
+        self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
+                                               self.view.frame.size.height,
+                                               self.emojiContainer.frame.size.width,
+                                               self.emojiContainer.frame.size.height);
+        self.emojiContainer.hidden = NO;
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.emojiScrollview setContentOffset:CGPointMake(0,0)];
+            self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
+                                                   self.view.frame.size.height - self.emojiContainer.frame.size.height,
+                                                   self.emojiContainer.frame.size.width,
+                                                   self.emojiContainer.frame.size.height);
+        }];
     }
-
 }
 
 - (void)addEmojiViewsToContainer
