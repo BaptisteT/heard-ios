@@ -62,7 +62,7 @@
             if ([SessionUtils getCurrentUserId] == [memberId integerValue]) {
                 continue;
             }
-            CGRect frame; CAShapeLayer * shapeLayer = nil; UIBezierPath *path = nil;
+            CGRect frame = CGRectNull; CAShapeLayer * shapeLayer = nil; UIBezierPath *path = nil;
             if (membersCount == 1) {
                 frame = self.frame;
             } else if (membersCount == 2) {
@@ -93,36 +93,48 @@
                 shapeLayer.path = path.CGPath;
             } else if (membersCount == 4) {
                 frame = CGRectMake(kkk % 2 ? kContactSize/2 : 0, kkk < 2 ? 0 : kContactSize/2, kContactSize/2, kContactSize/2);
+            } else if (membersCount > 4) {
+                if (kkk < 3) {
+                   frame = CGRectMake(kkk % 2 ? kContactSize/2 : 0, kkk < 2 ? 0 : kContactSize/2, kContactSize/2, kContactSize/2);
+                } else if (kkk == 3) {
+                    // label
+                    UILabel *moreMembersLabel = [[UILabel alloc] initWithFrame:CGRectMake(kContactSize/2+kContactSize/8,kContactSize/2, kContactSize/2, kContactSize/2)];
+                    moreMembersLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
+                    moreMembersLabel.text = [NSString stringWithFormat:@"+%lu",membersCount-3];
+                    [self.imageView addSubview:moreMembersLabel];
+                }
             }
             kkk ++;
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
-            if (shapeLayer) {
-                imageView.layer.masksToBounds = YES;
-                imageView.layer.mask = shapeLayer;
-            } else {
-                imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-                imageView.layer.borderWidth = CONTACT_BORDER;
+            if (!CGRectIsNull(frame)) {
+                UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
+                if (shapeLayer) {
+                    imageView.layer.masksToBounds = YES;
+                    imageView.layer.mask = shapeLayer;
+                } else {
+                    imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+                    imageView.layer.borderWidth = CONTACT_BORDER;
+                }
+                imageView.clipsToBounds = YES;
+                imageView.contentMode = UIViewContentModeScaleAspectFill;
+                [self.imageViews addObject:imageView];
+                [self.imageView addSubview:imageView];
+                NSURL *url = [GeneralUtils getUserProfilePictureURLFromUserId:[memberId integerValue]];
+                NSURLRequest *imageRequest = [NSURLRequest requestWithURL:url];
+                __weak __typeof(imageView)weakImageView = imageView;
+                __weak __typeof(self)weakSelf = self;
+                
+                //Fade in profile picture
+                [imageView setImageWithURLRequest:imageRequest placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                    [UIView transitionWithView:weakImageView
+                                      duration:1.0f
+                                       options:UIViewAnimationOptionTransitionCrossDissolve
+                                    animations:^{[weakImageView setImage:image];}
+                                    completion:nil];
+                    weakSelf.pictureIsLoaded &= YES;
+                } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                    weakSelf.pictureIsLoaded &= NO;
+                }];
             }
-            imageView.clipsToBounds = YES;
-            imageView.contentMode = UIViewContentModeScaleAspectFill;
-            [self.imageViews addObject:imageView];
-            [self.imageView addSubview:imageView];
-            NSURL *url = [GeneralUtils getUserProfilePictureURLFromUserId:[memberId integerValue]];
-            NSURLRequest *imageRequest = [NSURLRequest requestWithURL:url];
-            __weak __typeof(imageView)weakImageView = imageView;
-            __weak __typeof(self)weakSelf = self;
-            
-            //Fade in profile picture
-            [imageView setImageWithURLRequest:imageRequest placeholderImage:nil success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                [UIView transitionWithView:weakImageView
-                                  duration:1.0f
-                                   options:UIViewAnimationOptionTransitionCrossDissolve
-                                animations:^{[weakImageView setImage:image];}
-                                completion:nil];
-                weakSelf.pictureIsLoaded &= YES;
-            } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                weakSelf.pictureIsLoaded &= NO;
-            }];
         }
     }
 }
