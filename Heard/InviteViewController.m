@@ -29,18 +29,21 @@
 #define ACTION_OTHER_MENU_OPTION_4 NSLocalizedStringFromTable(@"feedback_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_5 NSLocalizedStringFromTable(@"rate_button_title",kStringFile,@"comment")
 
-
 #define ACTION_SHEET_PROFILE_OPTION_1 NSLocalizedStringFromTable(@"edit_picture_button_title",kStringFile,@"comment")
 #define ACTION_SHEET_PROFILE_OPTION_2 NSLocalizedStringFromTable(@"edit_first_name_button_title",kStringFile,@"comment")
 #define ACTION_SHEET_PROFILE_OPTION_3 NSLocalizedStringFromTable(@"edit_last_name_button_title",kStringFile,@"comment")
 #define ACTION_SHEET_PICTURE_OPTION_1 NSLocalizedStringFromTable(@"camera_button_title",kStringFile,@"comment")
 #define ACTION_SHEET_PICTURE_OPTION_2 NSLocalizedStringFromTable(@"library_button_title",kStringFile,@"comment")
 
+#define NO_MESSAGE_VIEW_HEIGHT 40
+#define NO_MESSAGE_VIEW_WIDTH 280
 
 @interface InviteViewController () <UIActionSheetDelegate>
 
 @property (strong, nonatomic) UIActionSheet *menuActionSheet;
 @property (strong, nonatomic) UIImagePickerController *imagePickerController;
+@property (nonatomic, strong) UIView *tutoView;
+@property (nonatomic, strong) UILabel *tutoViewLabel;
 
 @end
 
@@ -48,6 +51,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //Init no message view
+    self.tutoView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - NO_MESSAGE_VIEW_WIDTH/2, self.view.bounds.size.height - 4 * NO_MESSAGE_VIEW_HEIGHT, NO_MESSAGE_VIEW_WIDTH, NO_MESSAGE_VIEW_HEIGHT)];
+    
+    self.tutoView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+    self.tutoView.clipsToBounds = YES;
+    self.tutoView.layer.cornerRadius = 5;
+    
+    self.tutoViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, NO_MESSAGE_VIEW_WIDTH, NO_MESSAGE_VIEW_HEIGHT)];
+    self.tutoViewLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:18.0];
+    self.tutoViewLabel.textAlignment = NSTextAlignmentCenter;
+    self.tutoViewLabel.textColor = [UIColor whiteColor];
+    self.tutoViewLabel.backgroundColor = [UIColor clearColor];
+    [self.tutoView addSubview:self.tutoViewLabel];
+    [self.view addSubview:self.tutoView];
+    self.tutoView.alpha = 0;
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -191,8 +209,10 @@
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_1_OFF] || [buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_1_ON]) {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         if ([[prefs objectForKey:kSpeakerPref] isEqualToString:@"Off"]) {
+            [self tutoMessage:NSLocalizedStringFromTable(@"speaker_button_off_message", kStringFile, "comment") withDuration:1];
             [prefs setObject:@"On" forKey:kSpeakerPref];
         } else {
+            [self tutoMessage:NSLocalizedStringFromTable(@"speaker_button_on_message", kStringFile, "comment") withDuration:1];
             [prefs setObject:@"Off" forKey:kSpeakerPref];
         }
     }
@@ -417,6 +437,25 @@
             }];
         }
     }
+}
+
+- (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration
+{
+    self.tutoViewLabel.text = message;
+    [self.tutoView.layer removeAllAnimations];
+    self.tutoView.alpha = 0;
+    
+    [UIView animateWithDuration:1 animations:^{
+        self.tutoView.alpha = 1;
+    } completion:^(BOOL finished) {
+        if (finished && self.tutoView) {
+            if (duration > 0) {
+                [UIView animateWithDuration:1 delay:duration options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                    self.tutoView.alpha = 0;
+                } completion:nil];
+            }
+        }
+    }];
 }
 
 @end
