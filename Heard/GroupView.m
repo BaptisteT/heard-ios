@@ -88,18 +88,18 @@
                     [path addLineToPoint:CGPointMake(kContactSize, kContactSize/2)];
                     [path addLineToPoint:CGPointMake(kContactSize, kContactSize/2 * (3/sqrt(3) -1))];
                     [path addLineToPoint:CGPointMake(kContactSize/2, 0)];
-                    
                 }
                 shapeLayer.path = path.CGPath;
             } else if (membersCount == 4) {
                 frame = CGRectMake(kkk % 2 ? kContactSize/2 : 0, kkk < 2 ? 0 : kContactSize/2, kContactSize/2, kContactSize/2);
             } else if (membersCount > 4) {
+                self.imageView.backgroundColor = [UIColor lightGrayColor];
                 if (kkk < 3) {
                    frame = CGRectMake(kkk % 2 ? kContactSize/2 : 0, kkk < 2 ? 0 : kContactSize/2, kContactSize/2, kContactSize/2);
                 } else if (kkk == 3) {
                     // label
                     UILabel *moreMembersLabel = [[UILabel alloc] initWithFrame:CGRectMake(kContactSize/2+kContactSize/8,kContactSize/2, kContactSize/2, kContactSize/2)];
-                    moreMembersLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14.0];
+                    moreMembersLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12.0];
                     moreMembersLabel.text = [NSString stringWithFormat:@"+%lu",membersCount-3];
                     [self.imageView addSubview:moreMembersLabel];
                 }

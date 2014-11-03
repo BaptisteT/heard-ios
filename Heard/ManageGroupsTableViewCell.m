@@ -11,11 +11,7 @@
 @interface ManageGroupsTableViewCell ()
 
 @property (weak, nonatomic) IBOutlet UILabel *groupName;
-@property (weak, nonatomic) IBOutlet UILabel *member1Name;
-@property (weak, nonatomic) IBOutlet UILabel *member2Name;
-@property (weak, nonatomic) IBOutlet UILabel *member3Name;
-@property (weak, nonatomic) IBOutlet UILabel *member4Name;
-@property (weak, nonatomic) IBOutlet UILabel *member5Name;
+@property (strong, nonatomic) NSMutableArray *membersLabelArray;
 
 @end
 
@@ -24,27 +20,19 @@
 
 - (void)setGroup:(Group *)group {
     _group = group;
+    if (self.membersLabelArray) {
+        for (UILabel *label in self.membersLabelArray) {
+            [label removeFromSuperview];
+        }
+    }
+    self.membersLabelArray = [NSMutableArray new];
     self.groupName.text = group.groupName;
-    
-    // horrible code
-    if (group.memberIds.count > 2) {
-        self.member1Name.text = [NSString stringWithFormat:@"%@ %@",group.memberFirstName[0],group.memberLastName[0]];
-        self.member1Name.hidden = NO;
-        self.member2Name.text = [NSString stringWithFormat:@"%@ %@",group.memberFirstName[1],group.memberLastName[1]];
-        self.member2Name.hidden = NO;
-        self.member3Name.text = [NSString stringWithFormat:@"%@ %@",group.memberFirstName[2],group.memberLastName[2]];
-        self.member3Name.hidden = NO;
-        self.member4Name.hidden = YES;
-        self.member5Name.hidden = YES;
-    }
-    if (group.memberIds.count > 3) {
-        self.member4Name.text = [NSString stringWithFormat:@"%@ %@",group.memberFirstName[3],group.memberLastName[3]];
-        self.member4Name.hidden = NO;
-        self.member5Name.hidden = YES;
-    }
-    if (group.memberIds.count > 4) {
-        self.member5Name.text = [NSString stringWithFormat:@"%@ %@",group.memberFirstName[4],group.memberLastName[4]];
-        self.member5Name.hidden = NO;
+    for (int k=0; k<group.memberIds.count; k++) {
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(45, 35 + k*20, 200, 20)];
+        label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12.0];
+        label.text = [NSString stringWithFormat:@"%@ %@",group.memberFirstName[k],group.memberLastName[k]];
+        [self.membersLabelArray addObject:label];
+        [self addSubview:label];
     }
 }
 
