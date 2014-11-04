@@ -1573,7 +1573,7 @@
                                     <action selector="backButtonClicked:" destination="pFp-bR-Dlq" eventType="touchUpInside" id="hhh-8r-tBp"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="Spread the word!" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fUI-MC-GjK">
+                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" text="Invite your friends!" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fUI-MC-GjK">
                                 <rect key="frame" x="0.0" y="99" width="320" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="JVy-dg-iaY"/>
