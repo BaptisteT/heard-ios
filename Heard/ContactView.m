@@ -541,8 +541,7 @@
     if (completed && [self hasUnreadMessages]) {
         [self playNextMessage];
     } else {
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        if (![prefs objectForKey:kUserReplayedPref] && ![self.delegate isFirstOpening]) {
+        if ([GeneralUtils displayReplayTuTo]) {
             [self.delegate tutoMessage:NSLocalizedStringFromTable(@"shake_to_replay_tuto",kStringFile, @"comment")  withDuration:3 priority:NO];
         }
     }

@@ -31,6 +31,8 @@
 
 + (BOOL)isFirstOpening;
 
++ (BOOL)displayReplayTuTo;
+
 + (NSURL *)getPlayedAudioURL;
 
 + (BOOL)isAdminContact:(Contact *)contact;

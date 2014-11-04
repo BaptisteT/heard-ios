@@ -167,7 +167,7 @@
     self.bottomTutoViewLabel.backgroundColor = [UIColor clearColor];
     [self.bottomTutoView addSubview:self.bottomTutoViewLabel];
     [self.view addSubview:self.bottomTutoView];
-    
+    self.emojiContainer.hidden = YES;
     self.bottomTutoView.alpha = 0;
     
     // Get contacts
@@ -284,7 +284,6 @@
     
     if (self.displayOpeningTuto) {
         [self initOpeningTutoView];
-        
         [self prepareAndDisplayTuto];
         // Update app info
         [ApiUtils updateAppInfoAndExecuteSuccess:nil failure:nil];
@@ -321,7 +320,6 @@
     [self.navigationController setNavigationBarHidden:YES];   //it hides
     
     [self.openingTutoView setFrame:CGRectMake(0,0,self.contactScrollView.contentSize.width,self.screenHeight - 70)];
-    self.emojiContainer.hidden = YES;
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     if ([[prefs objectForKey:kSpeakerPref] isEqualToString:@"Off"]) {
@@ -531,20 +529,24 @@
             }
         }
         for (Group *group in groups) {
+            // Check current user belongs to this group
+            if (![self user:[SessionUtils getCurrentUserId] belongsToGroup:group]) {
+                continue;
+            }
             Group *existingGroup = [GroupUtils findGroupFromId:group.identifier inGroupsArray:self.groups];
-            if (!existingGroup) {
-                // Check current user belongs to this group
-                if (![self user:[SessionUtils getCurrentUserId] belongsToGroup:group]) {
-                    continue;
-                }
+            if (!existingGroup && group.memberIds.count > 1) {
                 // Add group
                 [self.groups addObject:group];
                 [self createContactViewWithGroup:group andPosition:0];
             } else {
-                existingGroup.memberIds = group.memberIds;
-                existingGroup.memberFirstName = group.memberFirstName;
-                existingGroup.memberLastName = group.memberLastName;
-                [[self getViewOfGroup:existingGroup] setContactPicture];
+                if (group.memberIds.count > 1) {
+                    existingGroup.memberIds = group.memberIds;
+                    existingGroup.memberFirstName = group.memberFirstName;
+                    existingGroup.memberLastName = group.memberLastName;
+                    [[self getViewOfGroup:existingGroup] setContactPicture];
+                } else {
+                    [self deleteGroupAndAssociatedView:existingGroup];
+                }
             }
         }
         
@@ -1574,8 +1576,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                     [self resetLastMessagesPlayed];
                     [self resetApplicationBadgeNumber];
                     [contactView playNextMessage];
-                    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-                    [prefs setObject:@"dummy" forKey:kUserReplayedPref];
                     [TrackingUtils trackReplay];
                     break;
                 }
@@ -1783,13 +1783,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ----------------------------------------------------------
 
 - (IBAction)emojiButtonClicked:(id)sender {
-    if (!self.emojiContainer.hidden && self.emojiContainer.frame.origin.y == self.view.frame.size.height - self.emojiContainer.frame.size.height) {
+    if (!self.emojiContainer.hidden && self.emojiContainer.frame.origin.y == self.view.frame.size.height - self.emojiContainer.frame.size.height && self.emojiContainer.alpha == 1) {
         [self.emojiContainer.layer removeAllAnimations];
         [UIView animateWithDuration:0.3 animations:^{
             self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
                                                    self.view.frame.size.height,
                                                    self.emojiContainer.frame.size.width,
                                                    self.emojiContainer.frame.size.height);
+            self.emojiContainer.alpha = 0;
         }];
     } else {
         if ([GeneralUtils isFirstClickOnEmojiButton]) {
@@ -1801,7 +1802,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"emoji_tutorial",kStringFile,@"comment") forOrigin:-100];
         }
         [self.emojiContainer.layer removeAllAnimations];
-        
+        self.emojiContainer.alpha = 1;
         //Emoji container
         self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
                                                self.view.frame.size.height,

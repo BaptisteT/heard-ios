@@ -64,7 +64,7 @@
             }
             CGRect frame = CGRectNull; CAShapeLayer * shapeLayer = nil; UIBezierPath *path = nil;
             if (membersCount == 1) {
-                frame = self.frame;
+                frame = CGRectMake(0, 0, kContactSize, kContactSize);
             } else if (membersCount == 2) {
                 frame = CGRectMake(kkk * kContactSize/2, 0, kContactSize/2, kContactSize);
             } else if (membersCount == 3) {

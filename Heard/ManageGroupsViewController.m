@@ -34,6 +34,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // Sort groups
+    [self.groups sortUsingComparator:^(Group *group1, Group * group2) {
+        if ([group1.groupName compare:group2.groupName] == NSOrderedAscending) {
+            return (NSComparisonResult)NSOrderedAscending;
+        } else {
+            return (NSComparisonResult)NSOrderedDescending;
+        }
+    }];
     self.groupTableView.delegate = self;
     self.groupTableView.dataSource = self;
     self.groupTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];

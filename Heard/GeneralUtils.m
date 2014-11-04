@@ -127,6 +127,18 @@
     }
 }
 
++ (BOOL)displayReplayTuTo
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSInteger nbReplayTuto = [[prefs objectForKey:kUserReplayedPref] integerValue];
+    if(nbReplayTuto >= 10) {
+        return NO;
+    } else {
+        [prefs setObject:[NSNumber numberWithInteger:nbReplayTuto+1] forKey:kUserReplayedPref];
+        return YES;
+    }
+}
+
 + (NSURL *)getPlayedAudioURL
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
