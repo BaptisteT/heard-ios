@@ -80,7 +80,7 @@
 @property (nonatomic, strong) AVAudioPlayer *soundPlayer;
 @property (strong, nonatomic) UILabel *playerLabel;
 @property (nonatomic) BOOL speakerMode;
-@property (strong, nonatomic) UIButton *speakerButton;
+@property (strong, nonatomic) IBOutlet UIButton *speakerButton;
 // Current user
 @property (weak, nonatomic) ContactView *currentUserContactView;
 // Others
@@ -217,6 +217,30 @@
 
     self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:session];
     
+    // Init player container
+    self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, PLAYER_UI_HEIGHT)];
+    self.playerContainer.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.playerContainer];
+    self.playerContainer.hidden = YES;
+    [self.view bringSubviewToFront:self.speakerButton];
+    
+    // player line
+    self.playerLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, PLAYER_UI_HEIGHT)];
+    self.playerLine.backgroundColor = [ImageUtils transparentGreen];
+    [self.playerContainer addSubview:self.playerLine];
+    
+    //player date label
+    self.playerLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 120/2, 25, 120, 25)];
+    self.playerLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15.0];
+    self.playerLabel.textAlignment = NSTextAlignmentCenter;
+    self.playerLabel.textColor = [UIColor grayColor];
+    self.playerLabel.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.8];
+    self.playerLabel.hidden = YES;
+    self.playerLabel.text = @"";
+    self.playerLabel.clipsToBounds = YES;
+    self.playerLabel.layer.cornerRadius = 5;
+    [self.playerContainer addSubview:self.playerLabel];
+    
     // Set the audio file
     NSArray *pathComponents = [NSArray arrayWithObjects:
                                [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
@@ -257,34 +281,6 @@
     self.recorderLabel.layer.cornerRadius = 5;
     self.recorderLabel.text = NSLocalizedStringFromTable(@"recorder_label",kStringFile, @"comment");
     [self.recorderContainer addSubview:self.recorderLabel];
-    
-    // Init player container
-    self.playerContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, PLAYER_UI_HEIGHT)];
-    self.playerContainer.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:self.playerContainer];
-    self.playerContainer.hidden = YES;
-    
-    // player line
-    self.playerLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, PLAYER_UI_HEIGHT)];
-    self.playerLine.backgroundColor = [ImageUtils transparentGreen];
-    [self.playerContainer addSubview:self.playerLine];
-    
-    // Speaker button
-    self.speakerButton = [[UIButton alloc] initWithFrame:CGRectMake(5, 5, 60, 60)];
-    [self.speakerButton addTarget:self action:@selector(speakerButtonClicked) forControlEvents:UIControlEventTouchUpInside];
-    [self.playerContainer addSubview:self.speakerButton];
-    
-    //player date label
-    self.playerLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 120/2, 25, 120, 25)];
-    self.playerLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15.0];
-    self.playerLabel.textAlignment = NSTextAlignmentCenter;
-    self.playerLabel.textColor = [UIColor grayColor];
-    self.playerLabel.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.8];
-    self.playerLabel.hidden = YES;
-    self.playerLabel.text = @"";
-    self.playerLabel.clipsToBounds = YES;
-    self.playerLabel.layer.cornerRadius = 5;
-    [self.playerContainer addSubview:self.playerLabel];
     
     if (self.displayOpeningTuto) {
         [self initOpeningTutoView];
@@ -1116,7 +1112,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
 }
 
-- (void)speakerButtonClicked {
+- (IBAction)speakerButtonClicked:(id)sender {
     if (self.speakerMode) {
         [self tutoMessage:NSLocalizedStringFromTable(@"speaker_button_on_message", kStringFile, "comment") withDuration:1 priority:NO];
         self.speakerMode = NO;

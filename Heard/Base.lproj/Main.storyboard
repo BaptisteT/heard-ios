@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="OIk-2W-hgJ">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -857,11 +856,12 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Waved" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wyC-fx-Tu0">
-                                <rect key="frame" x="100" y="20" width="120" height="31"/>
+                                <rect key="frame" x="100" y="19" width="120" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="ajc-9F-ww8"/>
+                                    <constraint firstAttribute="height" constant="32" id="eGv-eV-AGQ"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="26"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="26"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -945,18 +945,33 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3eZ-vS-6nf">
-                                <rect key="frame" x="5" y="5" width="60" height="60"/>
+                                <rect key="frame" x="213" y="7" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="8EV-bp-hjR"/>
                                     <constraint firstAttribute="height" constant="60" id="UWR-QP-P7u"/>
                                 </constraints>
-                                <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                <inset key="contentEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
                                 <state key="normal" image="group-button-1">
                                     <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="menuButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="4ge-39-XlM"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z1v-bC-fKj">
+                                <rect key="frame" x="0.0" y="5" width="60" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="kPh-mb-XoC"/>
+                                    <constraint firstAttribute="width" constant="60" id="mtI-WJ-QKg"/>
+                                </constraints>
+                                <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                <state key="normal" image="speaker-on">
+                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="speakerButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="mPe-Gc-rIN"/>
                                 </connections>
                             </button>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9c7-Db-Duq">
@@ -982,12 +997,12 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5nA-hz-ajb">
-                                <rect key="frame" x="255" y="5" width="60" height="60"/>
+                                <rect key="frame" x="260" y="5" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="FsB-5T-eXD"/>
                                     <constraint firstAttribute="height" constant="60" id="dgd-n2-UY0"/>
                                 </constraints>
-                                <inset key="contentEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
+                                <inset key="contentEdgeInsets" minX="13" minY="13" maxX="13" maxY="13"/>
                                 <state key="normal" image="emoji-button">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -998,11 +1013,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="3eZ-vS-6nf" secondAttribute="trailing" constant="31" id="0Rd-xW-a9o"/>
                             <constraint firstItem="rAY-VR-0Tm" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="1ie-zI-A1e"/>
                             <constraint firstItem="rAY-VR-0Tm" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" id="2JE-NK-o0C"/>
-                            <constraint firstItem="3eZ-vS-6nf" firstAttribute="centerY" secondItem="wyC-fx-Tu0" secondAttribute="centerY" id="71M-F4-G9F"/>
+                            <constraint firstItem="3eZ-vS-6nf" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="topMargin" constant="7" id="79u-hV-fXl"/>
                             <constraint firstAttribute="trailing" secondItem="rAY-VR-0Tm" secondAttribute="trailing" id="DQg-t5-vJE"/>
                             <constraint firstItem="yFI-qo-N0l" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" id="FbN-UV-Juc"/>
+                            <constraint firstItem="z1v-bC-fKj" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" constant="5" id="GeM-QF-Uyp"/>
                             <constraint firstItem="8bw-fU-Wrq" firstAttribute="top" secondItem="a0u-JM-gz3" secondAttribute="bottom" id="Kb4-YK-pux"/>
                             <constraint firstAttribute="trailing" secondItem="a0u-JM-gz3" secondAttribute="trailing" id="L3M-9u-MGu"/>
                             <constraint firstItem="a0u-JM-gz3" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" constant="70" id="Quf-E0-JVP"/>
@@ -1010,14 +1027,14 @@
                             <constraint firstItem="a0u-JM-gz3" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="bgw-gw-JYp"/>
                             <constraint firstItem="8bw-fU-Wrq" firstAttribute="top" secondItem="rAY-VR-0Tm" secondAttribute="bottom" id="eOb-ap-uQu"/>
                             <constraint firstItem="yFI-qo-N0l" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="egm-9r-NqD"/>
+                            <constraint firstItem="wyC-fx-Tu0" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="topMargin" constant="19" id="fRv-Kh-8KU"/>
                             <constraint firstItem="8bw-fU-Wrq" firstAttribute="top" secondItem="9c7-Db-Duq" secondAttribute="bottom" id="gPz-XV-1Sw"/>
-                            <constraint firstAttribute="trailing" secondItem="5nA-hz-ajb" secondAttribute="trailing" constant="5" id="ga1-bg-zJu"/>
                             <constraint firstAttribute="centerX" secondItem="wyC-fx-Tu0" secondAttribute="centerX" id="ge6-mf-7mS"/>
                             <constraint firstAttribute="trailing" secondItem="9c7-Db-Duq" secondAttribute="trailing" id="gkO-q5-zI7"/>
                             <constraint firstItem="9c7-Db-Duq" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="kSp-eQ-CuV"/>
-                            <constraint firstItem="3eZ-vS-6nf" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" constant="5" id="lDt-3R-qOx"/>
+                            <constraint firstItem="z1v-bC-fKj" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="mhs-tM-X9Y"/>
                             <constraint firstItem="5nA-hz-ajb" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" constant="5" id="oHy-0D-khW"/>
-                            <constraint firstItem="3eZ-vS-6nf" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" constant="5" id="rqK-o1-8Ag"/>
+                            <constraint firstAttribute="trailing" secondItem="5nA-hz-ajb" secondAttribute="trailing" id="rct-bA-MOQ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Fgn-qW-csE"/>
@@ -1033,6 +1050,7 @@
                         <outlet property="permissionImage" destination="3jI-7E-FHp" id="Wh5-Ui-FQe"/>
                         <outlet property="permissionMessage" destination="U0W-zC-Eju" id="2DM-cl-L54"/>
                         <outlet property="permissionNote" destination="BhI-VI-ylP" id="81O-Xs-Ocg"/>
+                        <outlet property="speakerButton" destination="z1v-bC-fKj" id="e9C-5R-e8E"/>
                         <outlet property="titleLabel" destination="wyC-fx-Tu0" id="dgy-dT-1fj"/>
                         <outlet property="topBarBackground" destination="yFI-qo-N0l" id="hqF-6B-oS3"/>
                         <segue destination="pFp-bR-Dlq" kind="modal" identifier="Invite Modal Segue" id="Z5D-EJ-JI9"/>
@@ -1950,6 +1968,7 @@
         <image name="search-icon" width="60" height="60"/>
         <image name="settings-button" width="60" height="60"/>
         <image name="sms-share" width="80" height="80"/>
+        <image name="speaker-on" width="60" height="60"/>
         <image name="welcome-waves" width="320" height="107"/>
         <image name="whatsapp-share" width="80" height="80"/>
     </resources>

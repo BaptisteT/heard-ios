@@ -22,8 +22,6 @@
 
 #define ACTION_SHEET_CANCEL NSLocalizedStringFromTable(@"cancel_button_title",kStringFile,@"comment")
 
-#define ACTION_OTHER_MENU_OPTION_1_ON NSLocalizedStringFromTable(@"speaker_mode_on_menu",kStringFile,@"comment")
-#define ACTION_OTHER_MENU_OPTION_1_OFF NSLocalizedStringFromTable(@"speaker_mode_off_menu",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_2 NSLocalizedStringFromTable(@"hide_contacts_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_3 NSLocalizedStringFromTable(@"edit_profile_button_title",kStringFile,@"comment")
 #define ACTION_OTHER_MENU_OPTION_4 NSLocalizedStringFromTable(@"feedback_button_title",kStringFile,@"comment")
@@ -175,20 +173,12 @@
 }
 
 - (IBAction)settingsButtonClicked:(id)sender {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSString *speakerMenuButton;
-    if ([[prefs objectForKey:kSpeakerPref] isEqualToString:@"Off"]) {
-        speakerMenuButton = ACTION_OTHER_MENU_OPTION_1_ON;
-    } else {
-        speakerMenuButton = ACTION_OTHER_MENU_OPTION_1_OFF;
-    }
-    
     self.menuActionSheet = [[UIActionSheet alloc]
                             initWithTitle:[NSString  stringWithFormat:@"Waved v.%@", [[NSBundle mainBundle]  objectForInfoDictionaryKey:@"CFBundleShortVersionString"]]
                             delegate:self
                             cancelButtonTitle:ACTION_SHEET_CANCEL
                             destructiveButtonTitle:nil
-                            otherButtonTitles: speakerMenuButton, ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
+                            otherButtonTitles: ACTION_OTHER_MENU_OPTION_2, ACTION_OTHER_MENU_OPTION_3, ACTION_OTHER_MENU_OPTION_4, ACTION_OTHER_MENU_OPTION_5, nil];
     [self.menuActionSheet showInView:[UIApplication sharedApplication].keyWindow];
 }
 
@@ -204,18 +194,6 @@
     /* -------------------------------------------------------------------------
      SETTINGS MENU
      --------------------------------------------------------------------------- */
-    
-    //Emoji Mode
-    else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_1_OFF] || [buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_1_ON]) {
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        if ([[prefs objectForKey:kSpeakerPref] isEqualToString:@"Off"]) {
-            [self tutoMessage:NSLocalizedStringFromTable(@"speaker_button_off_message", kStringFile, "comment") withDuration:1];
-            [prefs setObject:@"On" forKey:kSpeakerPref];
-        } else {
-            [self tutoMessage:NSLocalizedStringFromTable(@"speaker_button_on_message", kStringFile, "comment") withDuration:1];
-            [prefs setObject:@"Off" forKey:kSpeakerPref];
-        }
-    }
 
     // Edit contacts
     else if ([buttonTitle isEqualToString:ACTION_OTHER_MENU_OPTION_2]) {
@@ -439,23 +417,6 @@
     }
 }
 
-- (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration
-{
-    self.tutoViewLabel.text = message;
-    [self.tutoView.layer removeAllAnimations];
-    self.tutoView.alpha = 0;
-    
-    [UIView animateWithDuration:1 animations:^{
-        self.tutoView.alpha = 1;
-    } completion:^(BOOL finished) {
-        if (finished && self.tutoView) {
-            if (duration > 0) {
-                [UIView animateWithDuration:1 delay:duration options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                    self.tutoView.alpha = 0;
-                } completion:nil];
-            }
-        }
-    }];
-}
+
 
 @end
