@@ -59,8 +59,13 @@
 
 - (IBAction)nextButtonPressed:(id)sender {
     
-    if (![GeneralUtils validFullname:self.fullNameTextField.text]) {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"full_name_error_message",kStringFile,@"comment") withTitle:nil];
+    if ([self.fullNameTextField.text length] == 0 || [self.fullNameTextField.text length] > 2 * kMaxNameLength) {
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"full_name_length_error_message",kStringFile,@"comment") withTitle:nil];
+        return;
+    }
+    
+    if ([self.fullNameTextField.text componentsSeparatedByString:@" "].count < 2) {
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"full_name_components_error_message",kStringFile,@"comment") withTitle:nil];
         return;
     }
     
@@ -95,7 +100,7 @@
     
     firstName = names[0];
     
-    lastName = @"";
+    lastName = @" ";
     
     NSInteger i = 1;
     

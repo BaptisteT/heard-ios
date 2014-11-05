@@ -74,7 +74,7 @@
 
 + (BOOL)validFullname:(NSString *)name
 {
-    return [name length] > 0 && [name length] <= 2 * kMaxNameLength;
+    return [name length] > 0 && [name length] <= 2 * kMaxNameLength && [name componentsSeparatedByString:@" "].count > 0;
 }
 
 + (void)setProfilePicture:(UIImageView *)imageView fromContact:(Contact *)contact andAddressBook:(ABAddressBookRef)addressBook
