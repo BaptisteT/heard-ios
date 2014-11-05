@@ -115,8 +115,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *topBarBackground;
 // Emoji View
-@property (weak, nonatomic) IBOutlet UIView *emojiContainer;
-@property (weak, nonatomic) IBOutlet UIScrollView *emojiScrollview;
 @property (strong, nonatomic) NSData *emojiData;
 @property (weak, nonatomic) IBOutlet UIButton *emojiButton;
 
@@ -167,7 +165,6 @@
     self.bottomTutoViewLabel.backgroundColor = [UIColor clearColor];
     [self.bottomTutoView addSubview:self.bottomTutoViewLabel];
     [self.view addSubview:self.bottomTutoView];
-    self.emojiContainer.hidden = YES;
     self.bottomTutoView.alpha = 0;
     
     // Get contacts
@@ -297,9 +294,6 @@
                               otherButtonTitles:nil] show];
         }
     }
-    
-    // Emoji views
-    [self addEmojiViewsToContainer];
     
     // Go to access view controller if acces has not yet been granted
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
@@ -1224,7 +1218,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)startedLongPressOnContactView:(ContactView *)contactView
 {
     [self hideOpeningTuto];
-    self.emojiContainer.alpha = 0;
     
     //Show recorder label
     self.recorderLabel.hidden = NO;
@@ -1258,7 +1251,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 //User stop pressing screen
 - (void)endedLongPressRecording
 {
-    self.emojiContainer.alpha = 1;
     //Hide recorder label
     self.recorderLabel.hidden = YES;
     
@@ -1783,50 +1775,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ----------------------------------------------------------
 
 - (IBAction)emojiButtonClicked:(id)sender {
-    if (!self.emojiContainer.hidden && self.emojiContainer.frame.origin.y == self.view.frame.size.height - self.emojiContainer.frame.size.height && self.emojiContainer.alpha == 1) {
-        [self.emojiContainer.layer removeAllAnimations];
-        [UIView animateWithDuration:0.3 animations:^{
-            self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
-                                                   self.view.frame.size.height,
-                                                   self.emojiContainer.frame.size.width,
-                                                   self.emojiContainer.frame.size.height);
-            self.emojiContainer.alpha = 0;
-        }];
-    } else {
-        if ([GeneralUtils isFirstClickOnEmojiButton]) {
-            if (!self.openingTutoView) {
-                [self initOpeningTutoView];
-            }
-            [self.contactScrollView bringSubviewToFront:self.openingTutoView];
-            [self.contactScrollView bringSubviewToFront:self.emojiContainer];
-            [self displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"emoji_tutorial",kStringFile,@"comment") forOrigin:-100];
-        }
-        [self.emojiContainer.layer removeAllAnimations];
-        self.emojiContainer.alpha = 1;
-        //Emoji container
-        self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
-                                               self.view.frame.size.height,
-                                               self.emojiContainer.frame.size.width,
-                                               self.emojiContainer.frame.size.height);
-        self.emojiContainer.hidden = NO;
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.emojiScrollview setContentOffset:CGPointMake(0,0)];
-            self.emojiContainer.frame = CGRectMake(self.emojiContainer.frame.origin.x,
-                                                   self.view.frame.size.height - self.emojiContainer.frame.size.height,
-                                                   self.emojiContainer.frame.size.width,
-                                                   self.emojiContainer.frame.size.height);
-        }];
-    }
+    [self performSegueWithIdentifier:@"Emoji From Dashboard" sender:nil];
 }
 
-- (void)addEmojiViewsToContainer
+- (void)closeEmojiController
 {
-    self.emojiScrollview.contentSize = CGSizeMake(kEmojiSize * kNbEmojis + kEmojiMargin * (kNbEmojis+1), kEmojiSize + 2*kEmojiMargin);
-    for(int i=1;i<=kNbEmojis;i++) {
-        EmojiView *emojiView = [[EmojiView alloc] initWithIdentifier:i];
-        emojiView.delegate = self;
-        [self.emojiScrollview addSubview:emojiView];
-    }
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void)updateEmojiLocation:(CGPoint)location
@@ -1836,7 +1790,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Animation on contact view
     ContactView *contactView = [self findContactViewAtLocation:location];
-    if (contactView && !CGRectContainsPoint(self.emojiContainer.frame, location)) {
+    if (contactView) {
         [contactView addEmojiOverlay];
     }
 }
@@ -1844,7 +1798,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)emojiDropped:(EmojiView *)emojiView atLocation:(CGPoint)location
 {
     ContactView *contactView = [self findContactViewAtLocation:location];
-    if (contactView && !CGRectContainsPoint(self.emojiContainer.frame, location)) {
+    if (contactView) {
         [contactView removeEmojiOverlay];
         NSString *soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",(long)emojiView.identifier,(long)emojiView.soundIndex];
         NSString *soundPath = [[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"];

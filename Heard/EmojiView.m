@@ -12,7 +12,8 @@
 @interface EmojiView()
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panningRecognizer;
-
+@property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
+@property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
 
 @end
 
@@ -25,9 +26,20 @@
     self = [super initWithFrame:[self getInitialFrame]];
     self.identifier = identifier;
     [self addEmojiImage];
+    
     self.panningRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanningGesture:)];
     [self addGestureRecognizer:self.panningRecognizer];
     self.panningRecognizer.delegate = self;
+    
+    self.longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
+    [self addGestureRecognizer:self.longPressRecognizer];
+    self.longPressRecognizer.delegate = self;
+    self.longPressRecognizer.minimumPressDuration = 0.5;
+    
+    self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture)];
+    [self addGestureRecognizer:self.tapGestureRecognizer];
+    self.tapGestureRecognizer.delegate = self;
+    self.tapGestureRecognizer.numberOfTapsRequired = 1;
     
     // User interaction
     self.userInteractionEnabled = YES;
@@ -37,77 +49,49 @@
     return self;
 }
 
+- (void)handleTapGesture
+{
+    // play sound
+    self.soundIndex ++;
+    NSString *soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",(long)self.identifier,(long)self.soundIndex];
+    
+//    if(![[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"]) {
+//        self.soundIndex = 1;
+//        soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",(long)self.identifier,(long)self.soundIndex];
+//    }
+    [self.delegate playSound:soundName ofType:@"m4a"];
+}
+
+- (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer
+{
+    // todo BT
+    // in delegate, close + add subview at location
+    CGPoint location = [recognizer locationInView:self.superview];
+    self.frame = CGRectMake(kEmojiSize * (self.identifier-1)+ kEmojiMargin * self.identifier, kEmojiMargin, kEmojiSize * 2, kEmojiSize * 2);
+}
+
 - (void)handlePanningGesture:(UIPanGestureRecognizer *)recognizer
 {
     static CGPoint initialCenter;
-    static BOOL isSlide = FALSE;
-    CGPoint velocity; CGFloat newCenter = 0;
+    CGFloat newCenter = 0;
     if (recognizer.state == UIGestureRecognizerStateBegan) {
-        velocity = [recognizer velocityInView:self];
-        if (- velocity.y < fabs(velocity.x) / 2 ) {
-            isSlide = TRUE;
-            initialCenter = ((UIScrollView *)self.superview).contentOffset;
-        } else {
-            isSlide = FALSE;
-            initialCenter = self.center;
-            initialCenter = recognizer.view.center;
-            
-            // play sound
-            self.soundIndex ++;
-            NSString *soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",(long)self.identifier,(long)self.soundIndex];
-            
-            if(![[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"]) {
-                self.soundIndex = 1;
-                soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",(long)self.identifier,(long)self.soundIndex];
-            }
-            [self.delegate hideOpeningTuto];
-            [self.delegate playSound:soundName ofType:@"m4a"];
-        }
+        initialCenter = self.center;
+        initialCenter = recognizer.view.center;
     }
     
     if (recognizer.state == UIGestureRecognizerStateChanged) {
-        if (isSlide) {
-            CGPoint translation = [recognizer translationInView:recognizer.view.superview];
-            newCenter = MIN( MAX(((UIScrollView *)self.superview).contentSize.width - self.window.frame.size.width,0),MAX(initialCenter.x - translation.x, 0));
-            ((UIScrollView *)self.superview).contentOffset = CGPointMake(newCenter,0);
-        } else {
-            self.frame = CGRectMake(kEmojiSize * (self.identifier-1)+ kEmojiMargin * self.identifier, kEmojiMargin, kEmojiSize * 2, kEmojiSize * 2);
-
-            
-            CGPoint translation = [recognizer translationInView:recognizer.view.superview];
+        self.frame = CGRectMake(kEmojiSize * (self.identifier-1)+ kEmojiMargin * self.identifier, kEmojiMargin, kEmojiSize * 2, kEmojiSize * 2);
+        CGPoint translation = [recognizer translationInView:recognizer.view.superview];
             recognizer.view.center = CGPointMake(initialCenter.x + translation.x,
                                                  initialCenter.y + translation.y);
             
             // Update contact views animations
             CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview.superview];
             [self.delegate updateEmojiLocation:mainViewCoordinate];
-        }
     }
     else if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled) {
-        if (isSlide) {
-            velocity = [recognizer velocityInView:self];
-            if (fabs(velocity.x) > 100) {
-                CGFloat finalCenter;
-                int decelerationFactor = 3;
-                
-                if (velocity.x > 0) {
-                    finalCenter = MAX(0, initialCenter.x - velocity.x /decelerationFactor);
-                } else {
-                    finalCenter = MIN(((UIScrollView *)self.superview).contentSize.width - self.window.frame.size.width, initialCenter.x - velocity.x /decelerationFactor);
-                }
-
-                NSTimeInterval duration = 0.5;
-                [UIView animateWithDuration:duration delay:0
-                                    options:(UIViewAnimationOptionCurveEaseOut|UIViewAnimationOptionAllowUserInteraction|UIViewAnimationOptionBeginFromCurrentState)
-                                 animations:^ {
-                                     ((UIScrollView *)self.superview).contentOffset = CGPointMake(finalCenter,0);
-                                 }
-                                 completion:NULL];
-            }
-        } else {
-            CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview.superview];
-            [self.delegate emojiDropped:self atLocation:mainViewCoordinate];
-        }
+        CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview.superview];
+        [self.delegate emojiDropped:self atLocation:mainViewCoordinate];
     }
 }
 
