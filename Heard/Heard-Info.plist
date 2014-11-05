@@ -13,7 +13,7 @@
 	<key>CFBundleIcons~ipad</key>
 	<dict/>
 	<key>CFBundleIdentifier</key>
-	<string>com.heard.HeardInHouse</string>
+	<string>com.streetshout.Waved</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -34,7 +34,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>15</string>
+	<string>17</string>
 	<key>FacebookAppID</key>
 	<string>1548299158734966</string>
 	<key>FacebookDisplayName</key>

@@ -301,6 +301,10 @@
     // Emoji views
     [self addEmojiViewsToContainer];
     
+    // Init address book
+    self.addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
+    ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
+    
     // Go to access view controller if acces has not yet been granted
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         [self displayContactAuthView];
@@ -398,54 +402,9 @@
     }
 }
 
-- (void)initIndexedContacts
-{
-    //Structure: @{ "A": @[ @[@"Artois", @"Jonathan", @"(415)-509-9382", @"not selected], @["Azta", "Lorainne", @"06 92 83 48 58", @"selected"]], "B": etc.
-    self.indexedContacts = [[NSMutableDictionary alloc] init];
-    [self initAddressBookFormattedContacts];
-    for (NSString *phoneNumber in self.addressBookFormattedContacts) {
-        Contact *contact = (Contact *)[self.addressBookFormattedContacts objectForKey:phoneNumber];
-        
-        NSMutableArray *contactArray = [[NSMutableArray alloc] initWithObjects:contact.lastName && [contact.lastName length] > 0 ? contact.lastName : contact.firstName,
-                                   contact.firstName && contact.lastName && [contact.lastName length] > 0 ? contact.firstName : @"",
-                                   contact.phoneNumber,
-                                   @"not selected", nil];
-        if (((NSString *)contactArray[0]).length > 0) {
-            NSString *key = [(NSString *)[contactArray[0] substringToIndex:1] uppercaseString];
-            if ([self.indexedContacts objectForKey:key]) {
-                [[self.indexedContacts objectForKey:key] addObject:contactArray];
-            } else {
-                [self.indexedContacts setValue:[[NSMutableArray alloc] initWithObjects:contactArray, nil]
-                                            forKey:key];
-            }
-        }
-    }
-        
-    //Order contacts alphabetically
-    for (NSString *key in [self.indexedContacts allKeys]) {
-        [self.indexedContacts setObject:[[self.indexedContacts objectForKey:key]
-                                                sortedArrayUsingComparator:^NSComparisonResult(NSArray *contact1, NSArray *contact2) {
-                                                    return [contact1[0] localizedCaseInsensitiveCompare:contact2[0]];
-                                                }]
-                                        forKey:key];
-    }
-}
-
-- (void)initAddressBookFormattedContacts
-{
-    if (!self.addressBook) {
-        // Init address book
-        self.addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
-        ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
-    }
-    if (!self.addressBookFormattedContacts) {
-        self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
-    }
-}
-
 - (void)matchPhoneContactsWithHeardUsers
 {
-    [self initAddressBookFormattedContacts];
+    self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
     NSMutableDictionary *contactsInfo = [[NSMutableDictionary alloc] init];
     NSMutableDictionary * adressBookWithFormattedKey = [NSMutableDictionary new];
     for (NSString* phoneNumber in self.addressBookFormattedContacts) {
