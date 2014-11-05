@@ -1245,7 +1245,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     float finalWidth = self.recorderContainer.bounds.size.width;
     
-    [UIView animateWithDuration:30
+    [UIView animateWithDuration:kMaxAudioDuration
                           delay:0
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{

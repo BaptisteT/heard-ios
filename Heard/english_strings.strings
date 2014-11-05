@@ -86,7 +86,8 @@
 "back_to_phone_verification_confirmation_message" = "Are you sure you want to go back to phone verification?";
 "first_name_error_message" = "First name must be between 1 and 20 characters.";
 "last_name_error_message" = "Last name must be between 1 and 20 characters.";
-"full_name_error_message" = "Name must be between 1 and 40 characters.";
+"full_name_length_error_message" = "Name must be between 1 and 40 characters.";
+"full_name_components_error_message" = "Please enter first name AND last name.";
 "profile_picture_error_message" = "Sorry, we need a picture for your contacts to see you!";
 "camera_and_library_access_error_message" = "Your camera and photo library are not available";
 "sign_up_error_message" = "We failed to sign you up, please try again.";

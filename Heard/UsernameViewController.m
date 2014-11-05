@@ -34,8 +34,8 @@
 }
 
 - (IBAction)nextButtonPressed:(id)sender {
-    if (self.fullNameTextField.text.length == 0) {
-        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"full_name_error_message",kStringFile,@"comment") withTitle:nil];
+    if (self.fullNameTextField.text.length == 0 || self.fullNameTextField.text.length > 20) {
+        [GeneralUtils showMessage:NSLocalizedStringFromTable(@"full_name_length_error_message",kStringFile,@"comment") withTitle:nil];
         return;
     }
     
