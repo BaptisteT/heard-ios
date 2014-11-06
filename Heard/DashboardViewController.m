@@ -1526,6 +1526,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         } else if (self.lastMessagesPlayed && self.lastMessagesPlayed.count > 0){
             if ([self.mainPlayer isPlaying]) {
                 [self.mainPlayer stop];
+                self.mainPlayer.currentTime = 0;
+                [self.playerLine.layer removeAllAnimations];
                 [self endPlayerUIForAllContactViews];
             }
             // Add last messages played to contact view
