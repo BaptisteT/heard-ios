@@ -142,7 +142,7 @@
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    [mixpanel.people set:@{@"Contacts": [NSNumber numberWithInt:nbrOfContacts]}];
+    [mixpanel.people set:@{@"Contacts": [NSNumber numberWithLong:nbrOfContacts]}];
 }
 
 + (void)trackInvite:(NSString *)option Success:(NSString *)success;
