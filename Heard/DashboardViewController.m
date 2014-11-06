@@ -117,6 +117,7 @@
 // Emoji View
 @property (strong, nonatomic) NSData *emojiData;
 @property (weak, nonatomic) IBOutlet UIButton *emojiButton;
+@property (strong, nonatomic) UIScrollView *emojiScrollView;
 
 @end
 
@@ -294,9 +295,6 @@
                               otherButtonTitles:nil] show];
         }
     }
-
-    // Emoji views
-    [self addEmojiViewsToContainer];
     
     // Init address book
     self.addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
@@ -1521,6 +1519,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         } else if (self.lastMessagesPlayed && self.lastMessagesPlayed.count > 0){
             if ([self.mainPlayer isPlaying]) {
                 [self.mainPlayer stop];
+                [self.playerLine.layer removeAllAnimations];
                 [self endPlayerUIForAllContactViews];
             }
             // Add last messages played to contact view
@@ -1737,12 +1736,33 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ----------------------------------------------------------
 
 - (IBAction)emojiButtonClicked:(id)sender {
-    [self performSegueWithIdentifier:@"Emoji From Dashboard" sender:nil];
+    // todo bt
+    // display emoji scroll view
+    if (!self.emojiScrollView) {
+        [self initEmojiScrollView];
+    }
+    self.emojiScrollView.hidden = !self.emojiScrollView.hidden;
 }
 
-- (void)closeEmojiController
+- (void)hideEmojiScrollView
 {
-    [self dismissViewControllerAnimated:NO completion:nil];
+    self.emojiScrollView.hidden = YES;
+}
+
+- (void)initEmojiScrollView
+{
+    self.emojiScrollView = [[UIScrollView alloc] initWithFrame:self.contactScrollView.frame];
+    self.emojiScrollView.contentSize = CGSizeMake(kEmojiSize * kNbEmojis + kEmojiMargin * (kNbEmojis+1), kEmojiSize + 2*kEmojiMargin);
+    self.emojiScrollView.hidden = YES;
+    self.emojiScrollView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.emojiScrollView];
+//    self.emojiScrollView.contentSize = CGSizeMake(self.screenWidth, MAX(self.screenHeight - self.contactScrollView.frame.origin.y, rows * rowHeight + self.contactsPerRow * kContactMinimumMargin))
+    for(int i=1;i<=kNbEmojis;i++) {
+        EmojiView *emojiView = [[EmojiView alloc] initWithIdentifier:i];
+        emojiView.delegate = self;
+        [self.emojiScrollView addSubview:emojiView];
+    }
+
 }
 
 - (void)updateEmojiLocation:(CGPoint)location

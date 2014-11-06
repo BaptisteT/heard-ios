@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="OIk-2W-hgJ">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -974,28 +975,6 @@
                                     <action selector="speakerButtonClicked:" destination="2uU-ai-Tsy" eventType="touchUpInside" id="mPe-Gc-rIN"/>
                                 </connections>
                             </button>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9c7-Db-Duq">
-                                <rect key="frame" x="0.0" y="488" width="320" height="80"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="light-blue-bar" translatesAutoresizingMaskIntoConstraints="NO" id="Ej0-rM-jvW">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
-                                    </imageView>
-                                    <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBT-dz-oUj">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
-                                    </scrollView>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="Ej0-rM-jvW" firstAttribute="leading" secondItem="9c7-Db-Duq" secondAttribute="leading" id="0dY-cU-bUc"/>
-                                    <constraint firstAttribute="trailing" secondItem="Ej0-rM-jvW" secondAttribute="trailing" id="9ex-5C-hKw"/>
-                                    <constraint firstItem="dBT-dz-oUj" firstAttribute="leading" secondItem="9c7-Db-Duq" secondAttribute="leading" id="Ith-op-vnm"/>
-                                    <constraint firstItem="Ej0-rM-jvW" firstAttribute="top" secondItem="9c7-Db-Duq" secondAttribute="top" id="XCp-cW-HDW"/>
-                                    <constraint firstAttribute="height" constant="80" id="h9X-Df-CbU"/>
-                                    <constraint firstItem="dBT-dz-oUj" firstAttribute="top" secondItem="9c7-Db-Duq" secondAttribute="top" id="pyL-zG-EKn"/>
-                                    <constraint firstAttribute="bottom" secondItem="dBT-dz-oUj" secondAttribute="bottom" id="rXG-hk-8uE"/>
-                                    <constraint firstAttribute="bottom" secondItem="Ej0-rM-jvW" secondAttribute="bottom" id="urF-03-l4O"/>
-                                    <constraint firstAttribute="trailing" secondItem="dBT-dz-oUj" secondAttribute="trailing" id="zYD-Os-z2d"/>
-                                </constraints>
-                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5nA-hz-ajb">
                                 <rect key="frame" x="260" y="5" width="60" height="60"/>
                                 <constraints>
@@ -1026,10 +1005,7 @@
                             <constraint firstItem="a0u-JM-gz3" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="bgw-gw-JYp"/>
                             <constraint firstItem="8bw-fU-Wrq" firstAttribute="top" secondItem="rAY-VR-0Tm" secondAttribute="bottom" id="eOb-ap-uQu"/>
                             <constraint firstItem="yFI-qo-N0l" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="egm-9r-NqD"/>
-                            <constraint firstItem="8bw-fU-Wrq" firstAttribute="top" secondItem="9c7-Db-Duq" secondAttribute="bottom" id="gPz-XV-1Sw"/>
                             <constraint firstAttribute="centerX" secondItem="wyC-fx-Tu0" secondAttribute="centerX" id="ge6-mf-7mS"/>
-                            <constraint firstAttribute="trailing" secondItem="9c7-Db-Duq" secondAttribute="trailing" id="gkO-q5-zI7"/>
-                            <constraint firstItem="9c7-Db-Duq" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="kSp-eQ-CuV"/>
                             <constraint firstItem="z1v-bC-fKj" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="mhs-tM-X9Y"/>
                             <constraint firstItem="5nA-hz-ajb" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" constant="5" id="oHy-0D-khW"/>
                             <constraint firstAttribute="trailing" secondItem="5nA-hz-ajb" secondAttribute="trailing" id="rct-bA-MOQ"/>
@@ -1044,8 +1020,6 @@
                         <outlet property="authRequestView" destination="rAY-VR-0Tm" id="KNt-GX-wkw"/>
                         <outlet property="contactScrollView" destination="a0u-JM-gz3" id="7ew-mq-LGy"/>
                         <outlet property="emojiButton" destination="5nA-hz-ajb" id="hHb-fz-GaC"/>
-                        <outlet property="emojiContainer" destination="9c7-Db-Duq" id="eAA-lN-xCw"/>
-                        <outlet property="emojiScrollview" destination="dBT-dz-oUj" id="Lzh-Ht-8gh"/>
                         <outlet property="menuButton" destination="3eZ-vS-6nf" id="DVk-PZ-hkG"/>
                         <outlet property="permissionImage" destination="3jI-7E-FHp" id="Wh5-Ui-FQe"/>
                         <outlet property="permissionMessage" destination="U0W-zC-Eju" id="2DM-cl-L54"/>
@@ -1056,30 +1030,11 @@
                         <segue destination="pFp-bR-Dlq" kind="modal" identifier="Invite Modal Segue" id="Z5D-EJ-JI9"/>
                         <segue destination="auT-7X-aYh" kind="modal" identifier="Manage Groups From Dashboard" id="Kkt-6B-Ols"/>
                         <segue destination="XOa-fb-gen" kind="modal" identifier="Create Group From Dashboard" id="lXU-Fa-FA3"/>
-                        <segue destination="VeM-UF-X5M" kind="modal" identifier="Emoji From Dashboard" id="wc6-zN-gDc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kJk-FM-4rk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2563" y="99"/>
-        </scene>
-        <!--Emoji View Controller-->
-        <scene sceneID="CEo-XH-RcI">
-            <objects>
-                <viewController id="VeM-UF-X5M" customClass="EmojiViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="fuK-8A-dIC"/>
-                        <viewControllerLayoutGuide type="bottom" id="bt9-Ry-PTz"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="biU-Ao-Qay">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="tXb-Uh-UcZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2916" y="233"/>
         </scene>
         <!--Manage Groups View Controller-->
         <scene sceneID="i4u-kd-eHF">

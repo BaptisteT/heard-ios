@@ -73,24 +73,24 @@
 - (void)handlePanningGesture:(UIPanGestureRecognizer *)recognizer
 {
     static CGPoint initialCenter;
-    CGFloat newCenter = 0;
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         initialCenter = self.center;
         initialCenter = recognizer.view.center;
+        self.frame = CGRectMake(kEmojiSize * (self.identifier-1)+ kEmojiMargin * self.identifier, kEmojiMargin, kEmojiSize * 2, kEmojiSize * 2);
+        [self.delegate hideEmojiScrollView];
     }
     
     if (recognizer.state == UIGestureRecognizerStateChanged) {
-        self.frame = CGRectMake(kEmojiSize * (self.identifier-1)+ kEmojiMargin * self.identifier, kEmojiMargin, kEmojiSize * 2, kEmojiSize * 2);
         CGPoint translation = [recognizer translationInView:recognizer.view.superview];
-            recognizer.view.center = CGPointMake(initialCenter.x + translation.x,
+        recognizer.view.center = CGPointMake(initialCenter.x + translation.x,
                                                  initialCenter.y + translation.y);
             
-            // Update contact views animations
-            CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview.superview];
-            [self.delegate updateEmojiLocation:mainViewCoordinate];
+        // Update contact views animations
+        CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview.superview];
+        [self.delegate updateEmojiLocation:mainViewCoordinate];
     }
     else if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled) {
-        CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview.superview];
+        CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];
         [self.delegate emojiDropped:self atLocation:mainViewCoordinate];
     }
 }
