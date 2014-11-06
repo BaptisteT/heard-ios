@@ -49,10 +49,10 @@
         
         // Replace YOUR_API_KEY with the api key in the downloaded package
         [Flurry startSession:kProdFlurryToken];
+        
+        //Crash report with Fabric
+        [Fabric with:@[CrashlyticsKit]];
     }
-    
-    //Crash report with Fabric
-    [Fabric with:@[CrashlyticsKit]];
     
     // Contacts & groups
     self.contacts = [ContactUtils retrieveContactsInMemory];
