@@ -1336,11 +1336,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (volumeViewSlider.value < 0.5f)
         [volumeViewSlider setValue:0.5f animated:YES];
     
-    // Set loud speaker and proximity check
-    if (self.speakerMode) {
-        self.disableProximityObserver = NO;
-        [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
-    }
+    // Set proximity check
+    self.disableProximityObserver = NO;
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
     
     //Hide menu and title
     [self hideStatusBarComponents:YES];

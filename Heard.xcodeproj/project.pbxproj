@@ -1065,7 +1065,7 @@
 						DevelopmentTeam = 9688VHJV6U;
 					};
 					0BD758BB1950F91B00CF0D85 = {
-						DevelopmentTeam = U4TN2H6FNK;
+						DevelopmentTeam = Y7RQR83KUE;
 					};
 				};
 			};
@@ -1544,8 +1544,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Waved Inc. (U4TN2H6FNK)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Waved Inc. (U4TN2H6FNK)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: LINCS";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1565,7 +1565,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f2ab2810-35df-486f-a392-2a845e654f97";
+				PROVISIONING_PROFILE = "9FADCC52-2A13-45FE-967E-06E0B8B26653";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1575,8 +1575,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Waved Inc. (U4TN2H6FNK)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Waved Inc. (U4TN2H6FNK)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: LINCS";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: LINCS";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1596,7 +1596,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "f2ab2810-35df-486f-a392-2a845e654f97";
+				PROVISIONING_PROFILE = "9FADCC52-2A13-45FE-967E-06E0B8B26653";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
