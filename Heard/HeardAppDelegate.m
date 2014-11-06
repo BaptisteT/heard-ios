@@ -18,11 +18,11 @@
 #import "Constants.h"
 #import "TrackingUtils.h"
 #import "ContactUtils.h"
-#import <CrashReporter/CrashReporter.h>
-#import "CrashReportUtils.h"
 #import "Flurry.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "GroupUtils.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 @interface HeardAppDelegate()
 
@@ -51,15 +51,8 @@
         [Flurry startSession:kProdFlurryToken];
     }
     
-    // Crash report
-    PLCrashReporter *crashReporter = [PLCrashReporter sharedReporter];
-    NSError *error;
-    // Check if we previously crashed
-    if ([crashReporter hasPendingCrashReport])
-        [CrashReportUtils handleCrashReport];
-    // Enable the Crash Reporter
-    if (![crashReporter enableCrashReporterAndReturnError: &error])
-        NSLog(@"Warning: Could not enable crash reporter: %@", error);
+    //Crash report with Fabric
+    [Fabric with:@[CrashlyticsKit]];
     
     // Contacts & groups
     self.contacts = [ContactUtils retrieveContactsInMemory];
