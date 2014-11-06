@@ -301,6 +301,10 @@
     // Emoji views
     [self addEmojiViewsToContainer];
     
+    // Init address book
+    self.addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
+    ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
+    
     // Go to access view controller if acces has not yet been granted
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
         [self displayContactAuthView];
@@ -311,7 +315,6 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    
     [self setScrollViewSizeForContactCount:(int)MAX([self.contactViews count],[ContactUtils numberOfNonHiddenContacts:self.contacts])];
 }
 
@@ -398,169 +401,128 @@
     }
 }
 
-- (void)initIndexedContacts
-{
-    //Structure: @{ "A": @[ @[@"Artois", @"Jonathan", @"(415)-509-9382", @"not selected], @["Azta", "Lorainne", @"06 92 83 48 58", @"selected"]], "B": etc.
-    self.indexedContacts = [[NSMutableDictionary alloc] init];
-    [self initAddressBookFormattedContacts];
-    for (NSString *phoneNumber in self.addressBookFormattedContacts) {
-        Contact *contact = (Contact *)[self.addressBookFormattedContacts objectForKey:phoneNumber];
-        
-        NSMutableArray *contactArray = [[NSMutableArray alloc] initWithObjects:contact.lastName && [contact.lastName length] > 0 ? contact.lastName : contact.firstName,
-                                   contact.firstName && contact.lastName && [contact.lastName length] > 0 ? contact.firstName : @"",
-                                   contact.phoneNumber,
-                                   @"not selected", nil];
-        if (((NSString *)contactArray[0]).length > 0) {
-            NSString *key = [(NSString *)[contactArray[0] substringToIndex:1] uppercaseString];
-            if ([self.indexedContacts objectForKey:key]) {
-                [[self.indexedContacts objectForKey:key] addObject:contactArray];
-            } else {
-                [self.indexedContacts setValue:[[NSMutableArray alloc] initWithObjects:contactArray, nil]
-                                            forKey:key];
-            }
-        }
-    }
-        
-    //Order contacts alphabetically
-    for (NSString *key in [self.indexedContacts allKeys]) {
-        [self.indexedContacts setObject:[[self.indexedContacts objectForKey:key]
-                                                sortedArrayUsingComparator:^NSComparisonResult(NSArray *contact1, NSArray *contact2) {
-                                                    return [contact1[0] localizedCaseInsensitiveCompare:contact2[0]];
-                                                }]
-                                        forKey:key];
-    }
-}
-
-- (void)initAddressBookFormattedContacts
-{
-    if (!self.addressBook) {
-        // Init address book
-        self.addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
-        ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
-    }
-    if (!self.addressBookFormattedContacts) {
-        self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
-    }
-}
-
 - (void)matchPhoneContactsWithHeardUsers
 {
-    [self initAddressBookFormattedContacts];
-    NSMutableDictionary *contactsInfo = [[NSMutableDictionary alloc] init];
-    NSMutableDictionary * adressBookWithFormattedKey = [NSMutableDictionary new];
-    for (NSString* phoneNumber in self.addressBookFormattedContacts) {
-        PotentialContact *object = [self.addressBookFormattedContacts objectForKey:phoneNumber];
-        [adressBookWithFormattedKey setObject:object forKey:object.phoneNumber];
-        
-        [contactsInfo setObject:[NSArray arrayWithObjects:object.facebookId,[NSNumber numberWithBool:object.hasPhoto],[NSNumber numberWithBool:object.isFavorite], nil] forKey:object.phoneNumber];
-    }
-    // The keys are now formatted numbers (to use local names for retrieved contacts)
-    self.addressBookFormattedContacts = adressBookWithFormattedKey;
-    
-    // Get contacts and compare with contact in memory
-    [ApiUtils getMyContacts:contactsInfo atSignUp:self.isSignUp success:^(NSArray *contacts, NSArray *futureContacts, NSArray *groups, BOOL destroyFutures) {
-        for (Contact *contact in contacts) {
-            Contact *existingContact = [ContactUtils findContact:contact inContactsArray:self.contacts];
-            if (!existingContact) {
-                [self.contacts addObject:contact];
-    
-                //Use server name if blank in address book
-                NSString *firstName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
-                if (firstName && [firstName length] > 0) {
-                    contact.firstName = firstName;
-                }
-                contact.lastName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
-                contact.lastMessageDate = 0;
-                [self displayAdditionnalContact:contact];
-            }
-            else if (existingContact.isFutureContact) {
-                existingContact.identifier = contact.identifier;
-                existingContact.isFutureContact = NO;
-            }
-            else if (existingContact.isPending) {
-                // Mark as non pending
-                existingContact.isPending = NO;
-                
-                //Use server name if blank in address book
-                NSString *firstName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
-                if (firstName && [firstName length] > 0) {
-                    contact.firstName = firstName;
-                }
-                contact.lastName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
-                existingContact.phoneNumber = contact.phoneNumber;
-            }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        self.addressBookFormattedContacts = [AddressbookUtils getFormattedPhoneNumbersFromAddressBook:self.addressBook];
+        NSMutableDictionary *contactsInfo = [[NSMutableDictionary alloc] init];
+        NSMutableDictionary * adressBookWithFormattedKey = [NSMutableDictionary new];
+        for (NSString* phoneNumber in self.addressBookFormattedContacts) {
+            PotentialContact *object = [self.addressBookFormattedContacts objectForKey:phoneNumber];
+            [adressBookWithFormattedKey setObject:object forKey:object.phoneNumber];
             
-            //Remove users to create indexedContacts for the InviteContactsViewController
-            [self.addressBookFormattedContacts removeObjectForKey:contact.phoneNumber];
+            [contactsInfo setObject:[NSArray arrayWithObjects:object.facebookId,[NSNumber numberWithBool:object.hasPhoto],[NSNumber numberWithBool:object.isFavorite], nil] forKey:object.phoneNumber];
         }
-        if (destroyFutures) {
-            NSMutableArray *discardedContacts = [NSMutableArray array];
-            for (Contact *contact in self.contacts) {
-                if (contact.isFutureContact) {
-                    [self removeViewOfContact:contact];
-                    [discardedContacts addObject:contact];
-                }
-            }
-            [self.contacts removeObjectsInArray:discardedContacts];
-        } else {
-            for (NSDictionary *futureContact in futureContacts) {
-                NSString *phoneNumber = (NSString *)[futureContact objectForKey:@"phone_number"];
-                Contact *contact = [Contact createContactWithId:0 phoneNumber:phoneNumber
-                                                      firstName:((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).firstName
-                                                       lastName:((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).lastName];
-                contact.facebookId = (NSString *)[futureContact objectForKey:@"facebook_id"];
-                contact.isFutureContact = YES;
-                contact.recordId = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).recordId;
-                // Security check
-                BOOL remove = NO;
-                for (Contact *normalContact in self.contacts) {
-                    if ([normalContact.phoneNumber isEqualToString:phoneNumber] || ([normalContact.firstName isEqualToString:contact.firstName] && [normalContact.lastName isEqualToString:contact.lastName])) {
-                        remove = YES;
-                        break;
-                    }
-                }
-                if (!remove) {
+        // The keys are now formatted numbers (to use local names for retrieved contacts)
+        self.addressBookFormattedContacts = adressBookWithFormattedKey;
+        
+        // Get contacts and compare with contact in memory
+        [ApiUtils getMyContacts:contactsInfo atSignUp:self.isSignUp success:^(NSArray *contacts, NSArray *futureContacts, NSArray *groups, BOOL destroyFutures) {
+            for (Contact *contact in contacts) {
+                Contact *existingContact = [ContactUtils findContact:contact inContactsArray:self.contacts];
+                if (!existingContact) {
                     [self.contacts addObject:contact];
+        
+                    //Use server name if blank in address book
+                    NSString *firstName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
+                    if (firstName && [firstName length] > 0) {
+                        contact.firstName = firstName;
+                    }
+                    contact.lastName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
+                    contact.lastMessageDate = 0;
                     [self displayAdditionnalContact:contact];
                 }
+                else if (existingContact.isFutureContact) {
+                    existingContact.identifier = contact.identifier;
+                    existingContact.isFutureContact = NO;
+                }
+                else if (existingContact.isPending) {
+                    // Mark as non pending
+                    existingContact.isPending = NO;
+                    
+                    //Use server name if blank in address book
+                    NSString *firstName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).firstName;
+                    if (firstName && [firstName length] > 0) {
+                        contact.firstName = firstName;
+                    }
+                    contact.lastName = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:contact.phoneNumber]).lastName;
+                    existingContact.phoneNumber = contact.phoneNumber;
+                }
                 
-                //Remove future users to create indexedContacts for the InviteContactsViewController
-                [self.addressBookFormattedContacts removeObjectForKey:phoneNumber];
+                //Remove users to create indexedContacts for the InviteContactsViewController
+                [self.addressBookFormattedContacts removeObjectForKey:contact.phoneNumber];
             }
-        }
-        for (Group *group in groups) {
-            // Check current user belongs to this group
-            if (![self user:[SessionUtils getCurrentUserId] belongsToGroup:group]) {
-                continue;
-            }
-            Group *existingGroup = [GroupUtils findGroupFromId:group.identifier inGroupsArray:self.groups];
-            if (!existingGroup && group.memberIds.count > 1) {
-                // Add group
-                [self.groups addObject:group];
-                [self createContactViewWithGroup:group andPosition:0];
+            if (destroyFutures) {
+                NSMutableArray *discardedContacts = [NSMutableArray array];
+                for (Contact *contact in self.contacts) {
+                    if (contact.isFutureContact) {
+                        [self removeViewOfContact:contact];
+                        [discardedContacts addObject:contact];
+                    }
+                }
+                [self.contacts removeObjectsInArray:discardedContacts];
             } else {
-                if (group.memberIds.count > 1) {
-                    existingGroup.memberIds = group.memberIds;
-                    existingGroup.memberFirstName = group.memberFirstName;
-                    existingGroup.memberLastName = group.memberLastName;
-                    [[self getViewOfGroup:existingGroup] setContactPicture];
-                } else {
-                    [self deleteGroupAndAssociatedView:existingGroup];
+                for (NSDictionary *futureContact in futureContacts) {
+                    NSString *phoneNumber = (NSString *)[futureContact objectForKey:@"phone_number"];
+                    Contact *contact = [Contact createContactWithId:0 phoneNumber:phoneNumber
+                                                          firstName:((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).firstName
+                                                           lastName:((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).lastName];
+                    contact.facebookId = (NSString *)[futureContact objectForKey:@"facebook_id"];
+                    contact.isFutureContact = YES;
+                    contact.recordId = ((PotentialContact *)[self.addressBookFormattedContacts objectForKey:phoneNumber]).recordId;
+                    // Security check
+                    BOOL remove = NO;
+                    for (Contact *normalContact in self.contacts) {
+                        if ([normalContact.phoneNumber isEqualToString:phoneNumber] || ([normalContact.firstName isEqualToString:contact.firstName] && [normalContact.lastName isEqualToString:contact.lastName])) {
+                            remove = YES;
+                            break;
+                        }
+                    }
+                    if (!remove) {
+                        [self.contacts addObject:contact];
+                        [self displayAdditionnalContact:contact];
+                    }
+                    
+                    //Remove future users to create indexedContacts for the InviteContactsViewController
+                    [self.addressBookFormattedContacts removeObjectForKey:phoneNumber];
                 }
             }
-        }
-        
-        // Distribute non attributed messages
-        [self distributeNonAttributedMessages];
-        
-    } failure: ^void(NSURLSessionDataTask *task){
-        //In this case, 401 means that the auth token is no valid.
-        if ([SessionUtils invalidTokenResponse:task]) {
-            [GeneralUtils showMessage:NSLocalizedStringFromTable(@"authentification_error_message",kStringFile,@"comment") withTitle:NSLocalizedStringFromTable(@"authentification_error_title",kStringFile,@"comment")];
-            [SessionUtils redirectToSignIn:self.navigationController];
-        }
-    }];
-    self.isSignUp = NO;
+            for (Group *group in groups) {
+                // Check current user belongs to this group
+                if (![self user:[SessionUtils getCurrentUserId] belongsToGroup:group]) {
+                    continue;
+                }
+                Group *existingGroup = [GroupUtils findGroupFromId:group.identifier inGroupsArray:self.groups];
+                if (!existingGroup && group.memberIds.count > 1) {
+                    // Add group
+                    [self.groups addObject:group];
+                    [self createContactViewWithGroup:group andPosition:0];
+                } else {
+                    if (group.memberIds.count > 1) {
+                        existingGroup.memberIds = group.memberIds;
+                        existingGroup.memberFirstName = group.memberFirstName;
+                        existingGroup.memberLastName = group.memberLastName;
+                        [[self getViewOfGroup:existingGroup] setContactPicture];
+                    } else {
+                        [self deleteGroupAndAssociatedView:existingGroup];
+                    }
+                }
+            }
+            
+            // Distribute non attributed messages
+            [self distributeNonAttributedMessages];
+            
+        } failure: ^void(NSURLSessionDataTask *task){
+            // todo bt
+            // main thread
+            //In this case, 401 means that the auth token is no valid.
+            if ([SessionUtils invalidTokenResponse:task]) {
+                [GeneralUtils showMessage:NSLocalizedStringFromTable(@"authentification_error_message",kStringFile,@"comment") withTitle:NSLocalizedStringFromTable(@"authentification_error_title",kStringFile,@"comment")];
+                [SessionUtils redirectToSignIn:self.navigationController];
+            }
+        }];
+        self.isSignUp = NO;
+    });
 }
 
 // Address book changes callback
@@ -1374,11 +1336,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (volumeViewSlider.value < 0.5f)
         [volumeViewSlider setValue:0.5f animated:YES];
     
-    // Set loud speaker and proximity check
-    if (self.speakerMode) {
-        self.disableProximityObserver = NO;
-        [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
-    }
+    // Set proximity check
+    self.disableProximityObserver = NO;
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
     
     //Hide menu and title
     [self hideStatusBarComponents:YES];
@@ -1567,6 +1527,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         } else if (self.lastMessagesPlayed && self.lastMessagesPlayed.count > 0){
             if ([self.mainPlayer isPlaying]) {
                 [self.mainPlayer stop];
+                self.mainPlayer.currentTime = 0;
+                [self.playerLine.layer removeAllAnimations];
                 [self endPlayerUIForAllContactViews];
             }
             // Add last messages played to contact view
