@@ -624,6 +624,18 @@
         [self downloadAudio:message];
         [self.unreadMessages addObject:message];
         [self setUnreadMessagesCount:self.unreadMessagesCount+1];
+        
+        if (!self.isPlaying) {
+            // todo BT
+            // Order only on certain conditions ?
+            [self.unreadMessages sortUsingComparator:^(Message *message1, Message * message2) {
+                if (message1.createdAt <= message2.createdAt) {
+                    return (NSComparisonResult)NSOrderedAscending;
+                } else {
+                    return (NSComparisonResult)NSOrderedDescending;
+                }
+            }];
+        }
     }
 }
 

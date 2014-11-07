@@ -513,9 +513,6 @@
             [self distributeNonAttributedMessages];
             
         } failure: ^void(NSURLSessionDataTask *task){
-            // todo bt
-            // main thread
-            //In this case, 401 means that the auth token is no valid.
             if ([SessionUtils invalidTokenResponse:task]) {
                 [GeneralUtils showMessage:NSLocalizedStringFromTable(@"authentification_error_message",kStringFile,@"comment") withTitle:NSLocalizedStringFromTable(@"authentification_error_title",kStringFile,@"comment")];
                 [SessionUtils redirectToSignIn:self.navigationController];

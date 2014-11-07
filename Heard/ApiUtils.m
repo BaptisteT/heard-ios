@@ -215,6 +215,10 @@
     } else {
         path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages.json"];
         [parameters setObject:[NSNumber numberWithLong:[contactView contactIdentifier]] forKey:@"receiver_id"];
+        // todo BT
+        // Issue with time location for groups ?
+        // use gmt
+        [parameters setObject:[NSNumber numberWithLong:(long)[[NSDate date] timeIntervalSince1970]] forKey:@"creation_date"];
         if ([contactView isGroupContactView]) {
             [parameters setObject:@"1" forKey:@"is_group"];
         }
