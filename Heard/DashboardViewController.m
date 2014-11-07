@@ -508,9 +508,6 @@
             [self distributeNonAttributedMessages];
             
         } failure: ^void(NSURLSessionDataTask *task){
-            // todo bt
-            // main thread
-            //In this case, 401 means that the auth token is no valid.
             if ([SessionUtils invalidTokenResponse:task]) {
                 [GeneralUtils showMessage:NSLocalizedStringFromTable(@"authentification_error_message",kStringFile,@"comment") withTitle:NSLocalizedStringFromTable(@"authentification_error_title",kStringFile,@"comment")];
                 [SessionUtils redirectToSignIn:self.navigationController];
@@ -1743,20 +1740,26 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (!self.emojiScrollView) {
         [self initEmojiScrollView];
     }
+    self.emojiScrollView.frame = CGRectMake(self.emojiScrollView.frame.origin.x, self.view.frame.size.height, self.emojiScrollView.frame.size.width, self.emojiScrollView.frame.size.height);
     self.emojiScrollView.hidden = !self.emojiScrollView.hidden;
+    [UIView animateWithDuration:0.3 animations:^{
+        self.emojiScrollView.frame = self.contactScrollView.frame;
+    }];
+
 }
 
-- (void)hideEmojiScrollView
+- (void)hideEmojiScrollViewAndDisplayEmoji:(EmojiView *)emojiView
 {
+    [self.view addSubview:emojiView];
     self.emojiScrollView.hidden = YES;
 }
 
 - (void)initEmojiScrollView
 {
     self.emojiScrollView = [[UIScrollView alloc] initWithFrame:self.contactScrollView.frame];
-    self.emojiScrollView.contentSize = CGSizeMake(kEmojiSize * kNbEmojis + kEmojiMargin * (kNbEmojis+1), kEmojiSize + 2*kEmojiMargin);
+    self.emojiScrollView.contentSize = self.emojiScrollView.frame.size;
     self.emojiScrollView.hidden = YES;
-    self.emojiScrollView.backgroundColor = [UIColor whiteColor];
+    self.emojiScrollView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
     [self.view addSubview:self.emojiScrollView];
 //    self.emojiScrollView.contentSize = CGSizeMake(self.screenWidth, MAX(self.screenHeight - self.contactScrollView.frame.origin.y, rows * rowHeight + self.contactsPerRow * kContactMinimumMargin))
     for(int i=1;i<=kNbEmojis;i++) {
@@ -1784,21 +1787,30 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     ContactView *contactView = [self findContactViewAtLocation:location];
     if (contactView) {
         [contactView removeEmojiOverlay];
-        NSString *soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",(long)emojiView.identifier,(long)emojiView.soundIndex];
+        NSString *soundName = [NSString stringWithFormat:@"%@%lu.%d",@"emoji-sound-",(long)emojiView.identifier,1];
         NSString *soundPath = [[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
         self.emojiData = [NSData dataWithContentsOfURL:soundURL];
-        
+        CGPoint destinationPoint = [emojiView.superview convertPoint:contactView.center fromView:self.contactScrollView];
         [UIView transitionWithView:emojiView
                           duration:0.5f
                            options:UIViewAnimationOptionTransitionNone
-                        animations:^{[emojiView setFrame:CGRectMake(emojiView.center.x,emojiView.center.y,0,0)];}
+                        animations:^{[emojiView setFrame:CGRectMake(destinationPoint.x,destinationPoint.y,0,0)];}
                         completion:^(BOOL completed) {
                             [contactView sendRecording];
+                            [self.emojiScrollView addSubview:emojiView];
                             [emojiView setFrame:[emojiView getInitialFrame]];
                         }];
     } else {
-        emojiView.frame = [emojiView getInitialFrame];
+        CGFloat finalSize = 10;
+        [UIView transitionWithView:emojiView
+                          duration:0.5f
+                           options:UIViewAnimationOptionTransitionNone
+                        animations:^{[emojiView setFrame:CGRectMake(self.emojiButton.center.x - finalSize/2,self.emojiButton.center.y - finalSize/2,finalSize,finalSize)];}
+                        completion:^(BOOL completed) {
+                            [self.emojiScrollView addSubview:emojiView];
+                            emojiView.frame = [emojiView getInitialFrame];
+                        }];
     }
 }
 

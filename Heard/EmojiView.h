@@ -26,6 +26,6 @@
 - (void)updateEmojiLocation:(CGPoint)location;
 - (void)emojiDropped:(EmojiView *)emojiView atLocation:(CGPoint)location;
 - (void)playSound:(NSString *)sound ofType:(NSString *)type;
-- (void)hideEmojiScrollView;
+- (void)hideEmojiScrollViewAndDisplayEmoji:(EmojiView *)emojiView;
 
 @end
