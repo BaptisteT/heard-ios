@@ -344,7 +344,7 @@
         ((CreateGroupsViewController *) [segue destinationViewController]).contacts = [self getGroupPermittedContacts];
     } else if ([segueName isEqualToString:@"Manage Groups From Dashboard"]) {
         ((ManageGroupsViewController *) [segue destinationViewController]).contacts = [self getGroupPermittedContacts];
-        ((ManageGroupsViewController *) [segue destinationViewController]).groups = self.groups;
+        ((ManageGroupsViewController *) [segue destinationViewController]).groups = [NSMutableArray arrayWithArray:self.groups];
         ((ManageGroupsViewController *) [segue destinationViewController]).delegate = self;
     } else if ([segueName isEqualToString:@"Invite Modal Segue"]) {
         ((InviteViewController *) [segue destinationViewController]).contacts = self.contacts;

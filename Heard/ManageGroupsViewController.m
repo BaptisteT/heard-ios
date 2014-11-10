@@ -98,6 +98,7 @@
 // ----------------------------------------------------------
 - (void)addNewGroup:(Group *)group
 {
+    [self.groups addObject:group];
     [self.delegate addNewGroup:group];
     [self reorderContactViews];
     self.selectedIndexPath = nil;
