@@ -26,6 +26,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *groupTableView;
 @property (nonatomic, strong) NSIndexPath *selectedIndexPath;
+@property (nonatomic, strong) NSIndexPath *previousIndexPath;
 @property (nonatomic, strong) Group *selectedGroup;
 
 @end
@@ -174,7 +175,7 @@
          cellIdentifier = NO_GROUPS_TAG;
          UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
         return cell;
-    } else if(self.selectedIndexPath && [indexPath isEqual:self.selectedIndexPath] && ![[tableView cellForRowAtIndexPath:indexPath].reuseIdentifier  isEqualToString: SELECTED_TAG]) {
+    } else if(self.selectedIndexPath && [indexPath isEqual:self.selectedIndexPath]) {
         cellIdentifier = SELECTED_TAG;
         ManageGroupsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         if (!cell) {
@@ -204,9 +205,13 @@
         [self performSegueWithIdentifier:@"Create Group From Manage Groups" sender:nil];
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
     } else {
-        NSIndexPath *previousIndexPath = self.selectedIndexPath;
-        self.selectedIndexPath = indexPath;
-        NSArray *reloadPaths = previousIndexPath && previousIndexPath != indexPath ? @[previousIndexPath,indexPath] : @[indexPath];
+        self.previousIndexPath = self.selectedIndexPath;
+        if ([[tableView cellForRowAtIndexPath:indexPath].reuseIdentifier  isEqualToString: SELECTED_TAG]) {
+            self.selectedIndexPath = nil;
+        } else {
+            self.selectedIndexPath = indexPath;
+        }
+        NSArray *reloadPaths = self.previousIndexPath && self.selectedIndexPath && self.previousIndexPath.row != self.selectedIndexPath.row ? @[self.previousIndexPath,indexPath] : @[indexPath];
         [tableView reloadRowsAtIndexPaths:reloadPaths withRowAnimation: UITableViewRowAnimationNone];
     }
 }
