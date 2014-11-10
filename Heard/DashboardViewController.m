@@ -1753,6 +1753,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         }];
     } else {
         if ([GeneralUtils isFirstClickOnEmojiButton]) {
+            [self.contactScrollView setContentOffset:CGPointMake(0, -self.contactScrollView.contentInset.top) animated:NO];
             if (!self.openingTutoView) {
                 [self initOpeningTutoView];
             }
