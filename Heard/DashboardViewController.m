@@ -806,7 +806,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (NSMutableArray *)getGroupPermittedContacts {
     NSMutableArray *permittedContactsArray = [NSMutableArray new];
     for (Contact *contact in self.contacts) {
-        if (![GeneralUtils isCurrentUser:contact] && !contact.isFutureContact) {
+        if (![GeneralUtils isCurrentUser:contact] && !contact.isFutureContact && ![GeneralUtils isAdminContact:contact]) {
             [permittedContactsArray addObject:contact];
         }
     }

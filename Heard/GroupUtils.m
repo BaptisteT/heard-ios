@@ -55,6 +55,9 @@
     NSMutableArray *membersLastNameArray = [[NSMutableArray alloc] initWithCapacity:groupCount];
     NSMutableArray *lastMessageDateArray = [[NSMutableArray alloc] initWithCapacity:groupCount];
     for (Group * group in groups) {
+        if (!group.identifier || !group.groupName || !group.memberIds || !group.memberFirstName || !group.memberLastName) {
+            continue;
+        }
         [idArray addObject:[NSNumber numberWithInteger:group.identifier]];
         [nameArray addObject:group.groupName];
         [membersIdArray addObject:group.memberIds];

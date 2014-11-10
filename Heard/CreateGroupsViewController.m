@@ -61,8 +61,8 @@
         [contactLastNames addObject:[SessionUtils getCurrentUserLastName]];
         for (Contact *contact in self.selectedContacts) {
             [contactIds addObject:[NSNumber numberWithInteger:contact.identifier]];
-            [contactFirstNames addObject:contact.firstName];
-            [contactLastNames addObject:contact.lastName];
+            [contactFirstNames addObject:contact.firstName ? contact.firstName : @""];
+            [contactLastNames addObject:contact.lastName ? contact.lastName : @""];
         }
         [ApiUtils createGroupWithName:self.groupNameTextField.text
                               members:contactIds
