@@ -182,4 +182,12 @@
     [mixpanel track:@"Sending Failed"];
 }
 
++ (void)trackCreateGroup
+{
+    if (!PRODUCTION || DEBUG)return;
+    
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"Create Group"];
+}
+
 @end

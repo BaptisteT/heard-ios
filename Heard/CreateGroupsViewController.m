@@ -13,6 +13,7 @@
 #import "SessionUtils.h"
 #import "MBProgressHUD.h"
 #import "Group.h"
+#import "TrackingUtils.h"
 
 #define NO_CONTACTS_TAG @"No contacts"
 #define CONTACT_TAG @"Contact Cell"
@@ -75,6 +76,7 @@
                                   [self.delegate addNewGroup:group];
                                   [self.delegate reorderContactViews];
                                   [GeneralUtils showMessage:NSLocalizedStringFromTable(@"group_successfully_created_message", kStringFile, nil) withTitle:nil];
+                                  [TrackingUtils trackCreateGroup];
                                   [MBProgressHUD hideHUDForView:self.view animated:YES];
                                   [self dismissViewControllerAnimated:YES completion:nil];
                               }
