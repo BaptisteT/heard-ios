@@ -182,12 +182,11 @@
     [mixpanel track:@"Sending Failed"];
 }
 
-+ (void)trackCreateGroup
++ (void)trackCreateGroup:(NSInteger)memberCount
 {
     if (!PRODUCTION || DEBUG)return;
-    
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    [mixpanel track:@"Create Group"];
+    [mixpanel track:@"Create Group" properties:@{@"Members count":[NSNumber numberWithInt:memberCount]}];
 }
 
 @end

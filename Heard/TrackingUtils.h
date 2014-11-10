@@ -41,6 +41,6 @@
 
 + (void)trackSendingFailed;
 
-+ (void)trackCreateGroup;
++ (void)trackCreateGroup:(NSInteger)memberCount;
 
 @end

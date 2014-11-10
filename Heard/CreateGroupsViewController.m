@@ -76,7 +76,7 @@
                                   [self.delegate addNewGroup:group];
                                   [self.delegate reorderContactViews];
                                   [GeneralUtils showMessage:NSLocalizedStringFromTable(@"group_successfully_created_message", kStringFile, nil) withTitle:nil];
-                                  [TrackingUtils trackCreateGroup];
+                                  [TrackingUtils trackCreateGroup:group.memberIds.count];
                                   [MBProgressHUD hideHUDForView:self.view animated:YES];
                                   [self dismissViewControllerAnimated:YES completion:nil];
                               }
