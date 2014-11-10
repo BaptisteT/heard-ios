@@ -946,7 +946,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3eZ-vS-6nf">
-                                <rect key="frame" x="213" y="5" width="60" height="60"/>
+                                <rect key="frame" x="212" y="5" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="8EV-bp-hjR"/>
                                     <constraint firstAttribute="height" constant="60" id="UWR-QP-P7u"/>
@@ -1014,7 +1014,6 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="3eZ-vS-6nf" secondAttribute="trailing" constant="31" id="0Rd-xW-a9o"/>
                             <constraint firstItem="rAY-VR-0Tm" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="1ie-zI-A1e"/>
                             <constraint firstItem="rAY-VR-0Tm" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" id="2JE-NK-o0C"/>
                             <constraint firstAttribute="trailing" secondItem="rAY-VR-0Tm" secondAttribute="trailing" id="DQg-t5-vJE"/>
@@ -1029,6 +1028,7 @@
                             <constraint firstItem="yFI-qo-N0l" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="egm-9r-NqD"/>
                             <constraint firstItem="8bw-fU-Wrq" firstAttribute="top" secondItem="9c7-Db-Duq" secondAttribute="bottom" id="gPz-XV-1Sw"/>
                             <constraint firstAttribute="centerX" secondItem="wyC-fx-Tu0" secondAttribute="centerX" id="ge6-mf-7mS"/>
+                            <constraint firstAttribute="trailing" secondItem="3eZ-vS-6nf" secondAttribute="trailing" constant="48" id="gfw-k9-fFC"/>
                             <constraint firstAttribute="trailing" secondItem="9c7-Db-Duq" secondAttribute="trailing" id="gkO-q5-zI7"/>
                             <constraint firstItem="9c7-Db-Duq" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="kSp-eQ-CuV"/>
                             <constraint firstItem="z1v-bC-fKj" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="mhs-tM-X9Y"/>
@@ -1985,7 +1985,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="lrb-7Z-tIJ"/>
-        <segue reference="F0S-J9-DD3"/>
+        <segue reference="lXU-Fa-FA3"/>
         <segue reference="Zmq-7e-32f"/>
     </inferredMetricsTieBreakers>
 </document>
