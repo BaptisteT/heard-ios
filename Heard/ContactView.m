@@ -460,9 +460,6 @@
         // Stock failed message
         [self.failedMessages addObject:audioData];
     } else {
-        // Update last message date
-        [self updateLastMessageDate:[[NSDate date] timeIntervalSince1970]];
-        
         if (!self.isRecording && !self.isPlaying) {
             [self sentAnimation];
             [self.delegate playSound:kSentSound ofType:@"aif"];
@@ -471,6 +468,8 @@
         self.contact.currentUserDidNotAnswerLastMessage = NO;
         self.messageNotReadByContact = YES;
     }
+    // Update last message date
+    [self updateLastMessageDate:[[NSDate date] timeIntervalSince1970]];
     [self resetDiscussionStateAnimated:NO];
 }
 
