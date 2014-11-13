@@ -38,6 +38,7 @@
                                lastName:(NSString *)lastName
                                  gender:(NSString *)gender
                                  locale:(NSString *)locale
+                                  email:(NSString *)email
                                    code:(NSString *)code
                                 success:(void(^)(NSString *authToken, Contact *contact))successBlock
                                 failure:(void(^)())failureBlock;

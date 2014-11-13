@@ -164,6 +164,7 @@
                                lastName:(NSString *)lastName
                                  gender:(NSString *)gender
                                  locale:(NSString *)locale
+                                  email:(NSString *)email
                                    code:(NSString *)code
                                 success:(void(^)(NSString *authToken, Contact *contact))successBlock
                                 failure:(void(^)())failureBlock
@@ -178,6 +179,7 @@
     [parameters setObject:fbId forKey:@"fb_id"];
     [parameters setObject:gender forKey:@"fb_gender"];
     [parameters setObject:locale forKey:@"fb_locale"];
+    [parameters setObject:email forKey:@"email"];
     
     [parameters setObject:code forKey:@"code"];
     
