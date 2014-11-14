@@ -79,7 +79,8 @@
 @property (nonatomic) BOOL isUsingHeadSet;
 @property (nonatomic, strong) AVAudioPlayer *soundPlayer;
 @property (strong, nonatomic) UILabel *playerLabel;
-@property (nonatomic) BOOL speakerMode;
+@property (nonatomic) BOOL LoudSpeakerMode;
+@property (nonatomic) BOOL earDetected;
 @property (strong, nonatomic) IBOutlet UIButton *speakerButton;
 // Current user
 @property (weak, nonatomic) ContactView *currentUserContactView;
@@ -326,9 +327,9 @@
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     if ([[prefs objectForKey:kSpeakerPref] isEqualToString:@"Off"]) {
-        self.speakerMode = NO;
+        self.LoudSpeakerMode = NO;
     } else {
-        self.speakerMode = YES;
+        self.LoudSpeakerMode = YES;
     }
     
     // Retrieve messages & contacts
@@ -1074,22 +1075,22 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 - (IBAction)speakerButtonClicked:(id)sender {
-    if (self.speakerMode) {
+    if (self.LoudSpeakerMode) {
         [self tutoMessage:NSLocalizedStringFromTable(@"speaker_button_on_message", kStringFile, "comment") withDuration:1 priority:NO];
-        self.speakerMode = NO;
+        self.LoudSpeakerMode = NO;
     } else {
         [self tutoMessage:NSLocalizedStringFromTable(@"speaker_button_off_message", kStringFile, "comment") withDuration:1 priority:NO];
-        self.speakerMode = YES;
+        self.LoudSpeakerMode = YES;
     }
     //TODO BB speaker toggle + toast
 }
 
-- (void)setSpeakerMode:(BOOL)speakerMode
+- (void)setLoudSpeakerMode:(BOOL)loudSpeakerMode
 {
-    _speakerMode = speakerMode;
+    _LoudSpeakerMode = loudSpeakerMode;
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    if (speakerMode) {
+    if (loudSpeakerMode) {
         [self.speakerButton setImage:[UIImage imageNamed:@"speaker-on"] forState:UIControlStateNormal];
         [prefs setObject:@"On" forKey:kSpeakerPref];
         //show Toast
@@ -1260,9 +1261,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // play
     [self.mainPlayer play];
-    
-    // MixPanel
-    [TrackingUtils trackPlayWithDuration:duration];
 }
 
 - (BOOL)isRecording {
@@ -1330,8 +1328,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             break;
         }
     }
-    if (volumeViewSlider.value < 0.5f)
+    if (volumeViewSlider.value < 0.5f) {
         [volumeViewSlider setValue:0.5f animated:YES];
+    }
     
     // Set proximity check
     self.disableProximityObserver = NO;
@@ -1344,6 +1343,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.playerContainer.hidden = NO;
     self.playerContainer.alpha = 1;
     [self setPlayerLineWidth:0];
+    self.earDetected = NO;
     
     [UIView animateWithDuration:duration
                           delay:0
@@ -1351,6 +1351,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                      animations:^{
                          [self setPlayerLineWidth:self.playerContainer.bounds.size.width];
                      } completion:^(BOOL finished){
+                         // MixPanel
+                         NSString *speakerMode = self.isUsingHeadSet ? @"HeadSet" : (!self.LoudSpeakerMode ? @"Ear Speaker" : self.earDetected ? @"Ear Detected" : @"Loud Speaker");
+                         [TrackingUtils trackPlayWithDuration:duration andSpeakerMode:speakerMode];
+                         // End player
                          if (finished) {
                              [self endPlayerAtCompletion:YES];
                          }
@@ -1491,11 +1495,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)proximityStateDidChangeCallback {
     BOOL success; NSError* error;
     AVAudioSession *session = [AVAudioSession sharedInstance];
-    if (self.isUsingHeadSet || [UIDevice currentDevice].proximityState || !self.speakerMode) {
+    if (self.isUsingHeadSet || [UIDevice currentDevice].proximityState || !self.LoudSpeakerMode) {
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error];
         if ([UIDevice currentDevice].proximityState) {
             NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
             [prefs setObject:@"dummy" forKey:kUserPhoneToEarPref];
+            self.earDetected = YES;
         }
     } else {
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];

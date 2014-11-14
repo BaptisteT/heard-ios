@@ -74,14 +74,12 @@
     [mixpanel.people increment:@"Future records" by:[NSNumber numberWithInt:1]];
 }
 
-+ (void)trackPlayWithDuration:(NSTimeInterval)duration
++ (void)trackPlayWithDuration:(NSTimeInterval)duration andSpeakerMode:(NSString *)speakerMode
 {
     if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    
-    [mixpanel track:@"Play" properties:@{@"Duration": [NSNumber numberWithInt:duration]}];
-    
+    [mixpanel track:@"Play" properties:@{@"Duration": [NSNumber numberWithInt:duration], @"Speaker Mode": speakerMode}];
     [mixpanel.people increment:@"Plays" by:[NSNumber numberWithInt:1]];
 }
 
@@ -90,7 +88,6 @@
     if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    
     [mixpanel track:@"Replay"];
 }
 
