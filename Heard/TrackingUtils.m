@@ -142,7 +142,7 @@
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    [mixpanel.people set:@{@"Contacts": [NSNumber numberWithInt:nbrOfContacts]}];
+    [mixpanel.people set:@{@"Contacts": [NSNumber numberWithLong:nbrOfContacts]}];
 }
 
 + (void)trackInvite:(NSString *)option Success:(NSString *)success;
@@ -180,6 +180,13 @@
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
     [mixpanel track:@"Sending Failed"];
+}
+
++ (void)trackCreateGroup:(NSInteger)memberCount
+{
+    if (!PRODUCTION || DEBUG)return;
+    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+    [mixpanel track:@"Create Group" properties:@{@"Members count":[NSNumber numberWithInt:memberCount]}];
 }
 
 @end

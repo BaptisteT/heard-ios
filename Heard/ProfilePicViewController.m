@@ -87,7 +87,7 @@
     }
     
     // Display loading
-    [FBSession openActiveSessionWithReadPermissions:@[@"public_profile"]
+    [FBSession openActiveSessionWithReadPermissions:@[@"public_profile",@"email"]
                                        allowLoginUI:YES
                                   completionHandler:
      ^(FBSession *session, FBSessionState state, NSError *error) {
@@ -167,7 +167,7 @@
         [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
             if (!error) {
                 //Get info
-                [self signupUserWithFistName:[result objectForKey:@"first_name"] lastName:[result objectForKey:@"last_name"] fbId:[result objectForKey:@"id"] gender:[result objectForKey:@"gender"] locale:[result objectForKey:@"locale"]];
+                [self signupUserWithFistName:[result objectForKey:@"first_name"] lastName:[result objectForKey:@"last_name"] fbId:[result objectForKey:@"id"] gender:[result objectForKey:@"gender"] locale:[result objectForKey:@"locale"] email:[result objectForKey:@"email"]];
             } else {
                 [GeneralUtils showMessage:NSLocalizedStringFromTable(@"facebook_error",kStringFile,@"comment") withTitle:@""];
             }
@@ -185,6 +185,7 @@
                           fbId:(NSString *)fbId
                         gender:(NSString *)gender
                         locale:(NSString *)locale
+                         email:(NSString *)email
 {
     typedef void (^SuccessBlock)(NSString *authToken, Contact *contact);
     SuccessBlock successBlock = ^(NSString *authToken, Contact *contact) {
@@ -212,6 +213,7 @@
                                      lastName:lastName
                                        gender:gender
                                        locale:locale
+                                        email:email
                                          code:self.smsCode
                                       success:successBlock
                                       failure:failureBlock];

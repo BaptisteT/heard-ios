@@ -13,6 +13,7 @@
 #import "SessionUtils.h"
 #import "MBProgressHUD.h"
 #import "Group.h"
+#import "TrackingUtils.h"
 
 #define NO_CONTACTS_TAG @"No contacts"
 #define CONTACT_TAG @"Contact Cell"
@@ -60,8 +61,8 @@
         [contactLastNames addObject:[SessionUtils getCurrentUserLastName]];
         for (Contact *contact in self.selectedContacts) {
             [contactIds addObject:[NSNumber numberWithInteger:contact.identifier]];
-            [contactFirstNames addObject:contact.firstName];
-            [contactLastNames addObject:contact.lastName];
+            [contactFirstNames addObject:contact.firstName ? contact.firstName : @""];
+            [contactLastNames addObject:contact.lastName ? contact.lastName : @""];
         }
         [ApiUtils createGroupWithName:self.groupNameTextField.text
                               members:contactIds
@@ -75,6 +76,7 @@
                                   [self.delegate addNewGroup:group];
                                   [self.delegate reorderContactViews];
                                   [GeneralUtils showMessage:NSLocalizedStringFromTable(@"group_successfully_created_message", kStringFile, nil) withTitle:nil];
+                                  [TrackingUtils trackCreateGroup:group.memberIds.count];
                                   [MBProgressHUD hideHUDForView:self.view animated:YES];
                                   [self dismissViewControllerAnimated:YES completion:nil];
                               }

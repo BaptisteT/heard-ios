@@ -15,6 +15,8 @@
 
 + (void)trackRecord:(BOOL)isEmoji;
 
++ (void)trackGroupRecord:(BOOL)isEmoji;
+
 + (void)trackFutureRecord:(BOOL)isEmoji;
 
 + (void)trackPlayWithDuration:(NSTimeInterval)duration;
@@ -38,5 +40,7 @@
 + (void)trackFirstOpenApp;
 
 + (void)trackSendingFailed;
+
++ (void)trackCreateGroup:(NSInteger)memberCount;
 
 @end

@@ -130,7 +130,7 @@
     
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:email]];
     
-    [TrackingUtils trackInvite:@"Email" Success:nil];
+    [TrackingUtils trackInvite:@"Email" Success:@""];
 }
 
 - (IBAction)facebookShare:(id)sender {
@@ -149,7 +149,7 @@
                                             }
                                         }];
         
-        [TrackingUtils trackInvite:@"Facebook" Success:nil];
+        [TrackingUtils trackInvite:@"Facebook" Success:@""];
     }  else {
         [GeneralUtils showMessage:NSLocalizedStringFromTable(@"no_fb_messenger",kStringFile,@"comment") withTitle:nil];
     }
@@ -166,7 +166,7 @@
     if ([[UIApplication sharedApplication] canOpenURL: whatsappURL]) {
         [[UIApplication sharedApplication] openURL: whatsappURL];
         
-        [TrackingUtils trackInvite:@"Whatsapp" Success:nil];
+        [TrackingUtils trackInvite:@"Whatsapp" Success:@""];
     } else {
         [GeneralUtils showMessage:NSLocalizedStringFromTable(@"no_whatsapp_messenger",kStringFile,@"comment") withTitle:nil];
     }

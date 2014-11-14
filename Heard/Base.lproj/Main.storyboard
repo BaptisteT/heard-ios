@@ -946,7 +946,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3eZ-vS-6nf">
-                                <rect key="frame" x="213" y="5" width="60" height="60"/>
+                                <rect key="frame" x="212" y="5" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="8EV-bp-hjR"/>
                                     <constraint firstAttribute="height" constant="60" id="UWR-QP-P7u"/>
@@ -992,7 +992,6 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="3eZ-vS-6nf" secondAttribute="trailing" constant="31" id="0Rd-xW-a9o"/>
                             <constraint firstItem="rAY-VR-0Tm" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="1ie-zI-A1e"/>
                             <constraint firstItem="rAY-VR-0Tm" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" id="2JE-NK-o0C"/>
                             <constraint firstAttribute="trailing" secondItem="rAY-VR-0Tm" secondAttribute="trailing" id="DQg-t5-vJE"/>
@@ -1134,7 +1133,6 @@
                         <constraints>
                             <constraint firstItem="jWQ-Fl-WNY" firstAttribute="trailing" secondItem="dfZ-Fx-tOu" secondAttribute="trailing" id="279-8e-ZMa"/>
                             <constraint firstItem="jWQ-Fl-WNY" firstAttribute="leading" secondItem="dfZ-Fx-tOu" secondAttribute="leading" id="7YC-Eb-Vfi"/>
-                            <constraint firstItem="EKm-F2-ENL" firstAttribute="top" secondItem="HrG-09-hCM" secondAttribute="topMargin" constant="5" id="ABn-IY-Amv"/>
                             <constraint firstAttribute="trailing" secondItem="U5S-z2-XLi" secondAttribute="trailing" constant="5" id="GAy-w3-tfg"/>
                             <constraint firstItem="5a7-il-Bwc" firstAttribute="centerY" secondItem="jWQ-Fl-WNY" secondAttribute="centerY" id="Tkw-yC-3Uj"/>
                             <constraint firstItem="oUc-Uc-csq" firstAttribute="bottom" secondItem="oeS-US-Syk" secondAttribute="top" id="VLg-k6-ui1"/>
@@ -1142,6 +1140,7 @@
                             <constraint firstItem="jWQ-Fl-WNY" firstAttribute="trailing" secondItem="5a7-il-Bwc" secondAttribute="trailing" id="XdW-gz-eLB"/>
                             <constraint firstItem="oUc-Uc-csq" firstAttribute="leading" secondItem="oeS-US-Syk" secondAttribute="leading" id="Zu8-bC-5lB"/>
                             <constraint firstItem="oUc-Uc-csq" firstAttribute="top" secondItem="jWQ-Fl-WNY" secondAttribute="bottom" constant="8" symbolic="YES" id="d6w-Ds-9Xe"/>
+                            <constraint firstItem="5a7-il-Bwc" firstAttribute="centerY" secondItem="EKm-F2-ENL" secondAttribute="centerY" id="g6f-28-vXI"/>
                             <constraint firstItem="U5S-z2-XLi" firstAttribute="top" secondItem="HrG-09-hCM" secondAttribute="top" constant="5" id="g9d-ds-vRy"/>
                             <constraint firstItem="EKm-F2-ENL" firstAttribute="leading" secondItem="5a7-il-Bwc" secondAttribute="leading" id="i1h-Wn-qaI"/>
                             <constraint firstAttribute="width" secondItem="5a7-il-Bwc" secondAttribute="width" id="kPv-XJ-ggT"/>
@@ -1337,6 +1336,9 @@
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add New Member" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P2t-EY-cmw">
                                 <rect key="frame" x="0.0" y="10" width="320" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="LDR-B8-dGA"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="22"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -1395,21 +1397,23 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="P2t-EY-cmw" firstAttribute="top" secondItem="ALJ-vk-e9X" secondAttribute="topMargin" constant="10" id="0bX-ge-Yg7"/>
-                            <constraint firstAttribute="width" secondItem="BgL-W6-ajc" secondAttribute="width" id="4If-sO-nYd"/>
+                            <constraint firstAttribute="width" secondItem="BgL-W6-ajc" secondAttribute="width" id="68z-Zg-GH7"/>
                             <constraint firstItem="BgL-W6-ajc" firstAttribute="leading" secondItem="qMB-yW-p5x" secondAttribute="leading" id="FaP-I9-jCQ"/>
+                            <constraint firstItem="BgL-W6-ajc" firstAttribute="top" secondItem="Nbx-Em-w8k" secondAttribute="bottom" id="Jbn-VB-0eo"/>
+                            <constraint firstItem="HxR-WD-4uo" firstAttribute="leading" secondItem="ALJ-vk-e9X" secondAttribute="leading" id="LRh-Ig-lra"/>
+                            <constraint firstItem="BgL-W6-ajc" firstAttribute="leading" secondItem="ALJ-vk-e9X" secondAttribute="leading" id="QoQ-XZ-imA"/>
                             <constraint firstItem="P2t-EY-cmw" firstAttribute="leading" secondItem="BgL-W6-ajc" secondAttribute="leading" id="WtU-Wm-ltp"/>
                             <constraint firstAttribute="width" secondItem="qMB-yW-p5x" secondAttribute="width" id="Wxq-KF-nIz"/>
+                            <constraint firstItem="BgL-W6-ajc" firstAttribute="centerY" secondItem="HxR-WD-4uo" secondAttribute="centerY" id="ZWT-Af-6Rm"/>
                             <constraint firstItem="iYZ-ks-gac" firstAttribute="top" secondItem="qMB-yW-p5x" secondAttribute="bottom" id="aaN-9y-l7m"/>
                             <constraint firstItem="qMB-yW-p5x" firstAttribute="top" secondItem="BgL-W6-ajc" secondAttribute="bottom" id="b8e-2U-GDb"/>
-                            <constraint firstItem="BgL-W6-ajc" firstAttribute="leading" secondItem="ALJ-vk-e9X" secondAttribute="leadingMargin" constant="-16" id="d83-sy-sJd"/>
                             <constraint firstItem="P2t-EY-cmw" firstAttribute="width" secondItem="BgL-W6-ajc" secondAttribute="width" id="gct-XI-g1l"/>
                             <constraint firstItem="P2t-EY-cmw" firstAttribute="centerY" secondItem="BgL-W6-ajc" secondAttribute="centerY" id="gvA-Tb-BG0"/>
-                            <constraint firstItem="BgL-W6-ajc" firstAttribute="top" secondItem="ALJ-vk-e9X" secondAttribute="topMargin" id="jd7-Pv-S18"/>
-                            <constraint firstItem="HxR-WD-4uo" firstAttribute="top" secondItem="ALJ-vk-e9X" secondAttribute="topMargin" constant="5" id="myz-Zi-Rd4"/>
-                            <constraint firstItem="P2t-EY-cmw" firstAttribute="leading" secondItem="HxR-WD-4uo" secondAttribute="leading" id="uQv-f3-vDy"/>
                         </constraints>
                     </view>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="contactTableView" destination="qMB-yW-p5x" id="j9Y-9k-dDV"/>
                     </connections>
@@ -1952,7 +1956,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="qZZ-1Y-ErH"/>
+        <segue reference="lrb-7Z-tIJ"/>
         <segue reference="lXU-Fa-FA3"/>
         <segue reference="Zmq-7e-32f"/>
     </inferredMetricsTieBreakers>

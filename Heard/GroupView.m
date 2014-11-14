@@ -41,7 +41,7 @@
     // Send
     [self.delegate sendMessageToContact:self];
     for (int i=0;i<self.group.memberIds.count -1;i++) {
-        [TrackingUtils trackRecord:isEmoji];
+        [TrackingUtils trackGroupRecord:isEmoji];
     }
 }
 

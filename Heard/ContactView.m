@@ -332,6 +332,14 @@
     if (self.discussionState == PENDING_STATE) {
         [self handlePendingTapGesture];
     } else if (self.discussionState == UNREAD_STATE) {
+        // Sort messages
+        [self.unreadMessages sortUsingComparator:^(Message *message1, Message * message2) {
+            if (message1.createdAt <= message2.createdAt) {
+                return (NSComparisonResult)NSOrderedAscending;
+            } else {
+                return (NSComparisonResult)NSOrderedDescending;
+            }
+        }];
         [self.delegate resetLastMessagesPlayed];
         [self playNextMessage];
     } else if (self.discussionState == FAILED_STATE){
@@ -452,9 +460,6 @@
         // Stock failed message
         [self.failedMessages addObject:audioData];
     } else {
-        // Update last message date
-        [self updateLastMessageDate:[[NSDate date] timeIntervalSince1970]];
-        
         if (!self.isRecording && !self.isPlaying) {
             [self sentAnimation];
             [self.delegate playSound:kSentSound ofType:@"aif"];
@@ -463,6 +468,8 @@
         self.contact.currentUserDidNotAnswerLastMessage = NO;
         self.messageNotReadByContact = YES;
     }
+    // Update last message date
+    [self updateLastMessageDate:[[NSDate date] timeIntervalSince1970]];
     [self resetDiscussionStateAnimated:NO];
 }
 
