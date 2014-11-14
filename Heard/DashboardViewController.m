@@ -1740,11 +1740,19 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (!self.emojiScrollView) {
         [self initEmojiScrollView];
     }
-    self.emojiScrollView.frame = CGRectMake(self.emojiScrollView.frame.origin.x, self.view.frame.size.height, self.emojiScrollView.frame.size.width, self.emojiScrollView.frame.size.height);
-    self.emojiScrollView.hidden = !self.emojiScrollView.hidden;
-    [UIView animateWithDuration:0.3 animations:^{
-        self.emojiScrollView.frame = self.contactScrollView.frame;
-    }];
+    if (self.emojiScrollView.hidden) {
+        self.emojiScrollView.frame = CGRectMake(self.emojiScrollView.frame.origin.x, self.view.frame.size.height, self.emojiScrollView.frame.size.width, self.emojiScrollView.frame.size.height);
+        self.emojiScrollView.hidden = NO;
+        [UIView animateWithDuration:0.3 animations:^{
+            self.emojiScrollView.frame = self.contactScrollView.frame;
+        }];
+    } else {
+        [UIView animateWithDuration:0.3 animations:^{
+            self.emojiScrollView.frame = CGRectMake(self.emojiScrollView.frame.origin.x, self.view.frame.size.height, self.emojiScrollView.frame.size.width, self.emojiScrollView.frame.size.height);
+        } completion:^(BOOL finished) {
+            self.emojiScrollView.hidden = YES;
+        }];
+    }
 }
 
 - (void)hideEmojiScrollViewAndDisplayEmoji:(EmojiView *)emojiView

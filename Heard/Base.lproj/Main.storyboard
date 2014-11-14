@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="OIk-2W-hgJ">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -994,11 +993,13 @@
                         <constraints>
                             <constraint firstItem="rAY-VR-0Tm" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="1ie-zI-A1e"/>
                             <constraint firstItem="rAY-VR-0Tm" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" id="2JE-NK-o0C"/>
+                            <constraint firstItem="3eZ-vS-6nf" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" constant="5" id="34c-BS-qND"/>
                             <constraint firstAttribute="trailing" secondItem="rAY-VR-0Tm" secondAttribute="trailing" id="DQg-t5-vJE"/>
                             <constraint firstItem="yFI-qo-N0l" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" id="FbN-UV-Juc"/>
                             <constraint firstItem="z1v-bC-fKj" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" constant="5" id="GeM-QF-Uyp"/>
                             <constraint firstItem="8bw-fU-Wrq" firstAttribute="top" secondItem="a0u-JM-gz3" secondAttribute="bottom" id="Kb4-YK-pux"/>
                             <constraint firstAttribute="trailing" secondItem="a0u-JM-gz3" secondAttribute="trailing" id="L3M-9u-MGu"/>
+                            <constraint firstAttribute="trailing" secondItem="3eZ-vS-6nf" secondAttribute="trailing" constant="48" id="QZ3-jm-RGE"/>
                             <constraint firstItem="a0u-JM-gz3" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" constant="70" id="Quf-E0-JVP"/>
                             <constraint firstAttribute="trailing" secondItem="yFI-qo-N0l" secondAttribute="trailing" id="SzC-7H-FDP"/>
                             <constraint firstItem="a0u-JM-gz3" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="bgw-gw-JYp"/>
@@ -1008,7 +1009,6 @@
                             <constraint firstItem="z1v-bC-fKj" firstAttribute="leading" secondItem="MZK-2b-38C" secondAttribute="leading" id="mhs-tM-X9Y"/>
                             <constraint firstItem="5nA-hz-ajb" firstAttribute="top" secondItem="MZK-2b-38C" secondAttribute="top" constant="5" id="oHy-0D-khW"/>
                             <constraint firstAttribute="trailing" secondItem="5nA-hz-ajb" secondAttribute="trailing" id="rct-bA-MOQ"/>
-                            <constraint firstItem="3eZ-vS-6nf" firstAttribute="top" secondItem="yFI-qo-N0l" secondAttribute="bottom" constant="-65" id="w5Y-Zj-kkt"/>
                             <constraint firstItem="yFI-qo-N0l" firstAttribute="centerY" secondItem="wyC-fx-Tu0" secondAttribute="centerY" id="zCz-8F-7OL"/>
                         </constraints>
                     </view>
