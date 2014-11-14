@@ -19,7 +19,7 @@
 
 + (void)trackFutureRecord:(BOOL)isEmoji;
 
-+ (void)trackPlayWithDuration:(NSTimeInterval)duration;
++ (void)trackPlayWithDuration:(NSTimeInterval)duration andSpeakerMode:(NSString *)speakerMode;
 
 + (void)trackReplay;
 
