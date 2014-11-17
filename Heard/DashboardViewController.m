@@ -127,6 +127,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *takePictureButton;
 @property (weak, nonatomic) IBOutlet UIButton *cameraControllerButton;
 @property (strong, nonatomic) UIImageView *photoReceivedView;
+@property (strong, nonatomic) NSTimer *photoDisplayTimer;
 // Message
 @property (strong, nonatomic) Message *messageToSend;
 
@@ -142,8 +143,6 @@
 {
     [super viewDidLoad];
     
-    [self initPhotoTakenView];
-    [self initPhotoReceivedView];
     self.retrieveNewContact = YES;
     self.authRequestView.hidden = YES;
     self.openingTutoView.hidden = YES;
@@ -293,6 +292,10 @@
     self.recorderLabel.layer.cornerRadius = 5;
     self.recorderLabel.text = NSLocalizedStringFromTable(@"recorder_label",kStringFile, @"comment");
     [self.recorderContainer addSubview:self.recorderLabel];
+    
+    // Photo views
+    [self initPhotoTakenView];
+    [self initPhotoReceivedView];
     
     if (self.displayOpeningTuto) {
         [self initOpeningTutoView];
@@ -1227,7 +1230,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Stop recording
     [self.recorder stop];
-    self.messageToSend = [Message createMessageWithId:0 senderId:0 receiverId:0 groupId:0 creationTime:[[NSDate date] timeIntervalSince1970] messageData:[[NSData alloc] initWithContentsOfURL:self.recorder.url] messageType:kAudioRecordMessageType];
+    NSInteger receiverId = [self.lastSelectedContactView isGroupContactView] ? 0 : [self.lastSelectedContactView contactIdentifier];
+    NSInteger groupId = [self.lastSelectedContactView isGroupContactView] ? [self.lastSelectedContactView contactIdentifier] : 0;
+    
+    self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:[[NSData alloc] initWithContentsOfURL:self.recorder.url] messageType:kAudioRecordMessageType];
     [self playSound:kEndRecordSound ofType:@""];
 }
 
@@ -1248,7 +1254,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if ([message isPhotoMessage]) {
         // todo BT
         // play sound
-        
+        self.photoReceivedView.image = [UIImage imageWithData:message.messageData];
+        self.photoReceivedView.alpha = 1;
+        self.photoDisplayTimer = [NSTimer scheduledTimerWithTimeInterval:5. target:self selector:@selector(endPhotoDisplay) userInfo:nil repeats:NO];
     } else {
         // Init Audio Player
         self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.messageData error:nil];
@@ -1365,7 +1373,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                      }];
 }
 
-
+- (void)endPhotoDisplay {
+    //
+    [self.photoDisplayTimer invalidate];
+    self.photoReceivedView.alpha = 0;
+    [self endPlayerAtCompletion:YES];
+}
 - (void)endPlayerAtCompletion:(BOOL)completed
 {
     if (self.displayOpeningTuto) {
@@ -1782,7 +1795,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.emojiScrollView.hidden = YES;
     self.emojiScrollView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
     [self.view addSubview:self.emojiScrollView];
-//    self.emojiScrollView.contentSize = CGSizeMake(self.screenWidth, MAX(self.screenHeight - self.contactScrollView.frame.origin.y, rows * rowHeight + self.contactsPerRow * kContactMinimumMargin))
     for(int i=1;i<=kNbEmojis;i++) {
         EmojiView *emojiView = [[EmojiView alloc] initWithIdentifier:i];
         emojiView.delegate = self;
@@ -1810,7 +1822,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         NSString *soundName = [NSString stringWithFormat:@"%@%lu.%d",@"emoji-sound-",(long)emojiView.identifier,1];
         NSString *soundPath = [[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-        self.messageToSend = [Message createMessageWithId:0 senderId:0 receiverId:0 groupId:0 creationTime:[[NSDate date] timeIntervalSince1970] messageData:[NSData dataWithContentsOfURL:soundURL] messageType:kAudioEmojiMessageType];
+        NSInteger receiverId = [contactView isGroupContactView] ? 0 : [contactView contactIdentifier];
+        NSInteger groupId = [contactView isGroupContactView] ? [contactView contactIdentifier] : 0;
+        self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:[NSData dataWithContentsOfURL:soundURL] messageType:kAudioEmojiMessageType];
         CGPoint destinationPoint = [emojiView.superview convertPoint:contactView.center fromView:self.contactScrollView];
         [UIView transitionWithView:emojiView
                           duration:0.5f
@@ -1856,6 +1870,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.topBarBackground.hidden = flag;
     self.menuButton.hidden = flag;
     self.emojiButton.hidden = flag;
+    self.cameraControllerButton.hidden = flag;
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -1864,7 +1879,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 // ----------------------------------------------------------
-#pragma mark Camera
+#pragma mark Photo
 // ----------------------------------------------------------
 
 - (void)initPhotoTakenView {
@@ -1875,7 +1890,18 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)initPhotoReceivedView {
     self.photoReceivedView = [[UIImageView alloc] initWithFrame:self.view.frame];
+    self.photoReceivedView.userInteractionEnabled = YES;
+    self.photoReceivedView.contentMode = UIViewContentModeScaleAspectFill;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureOnPhotoReceived)];
+    tap.delegate = self;
+    tap.numberOfTapsRequired = 1;
+    [self.photoReceivedView addGestureRecognizer:tap];
+    self.photoReceivedView.alpha = 0;
     [self.view addSubview:self.photoReceivedView];
+}
+
+- (void)tapGestureOnPhotoReceived {
+    [self endPhotoDisplay];
 }
 
 - (IBAction)cameraButtonClicked:(id)sender {
@@ -1929,11 +1955,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     ContactView *contactView = [self findContactViewAtLocation:location];
     if (contactView) {
         [contactView removeEmojiOverlay];
-        self.messageToSend = [Message createMessageWithId:0 senderId:0 receiverId:0 groupId:0 creationTime:[[NSDate date] timeIntervalSince1970] messageData:UIImageJPEGRepresentation(photoView.image,0.9) messageType:kPhotoMessageType];
+        NSInteger receiverId = [contactView isGroupContactView] ? 0 : [contactView contactIdentifier];
+        NSInteger groupId = [contactView isGroupContactView] ? [contactView contactIdentifier] : 0;
+        self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:UIImageJPEGRepresentation(photoView.image,0.9) messageType:kPhotoMessageType];
         CGPoint destinationPoint = [photoView.superview convertPoint:contactView.center fromView:self.contactScrollView];
         [UIView transitionWithView:photoView
                           duration:0.5f
-                           options:UIViewAnimationOptionTransitionNone
+                           options:UIViewAnimationOptionCurveEaseOut
                         animations:^{[photoView setFrame:CGRectMake(destinationPoint.x,destinationPoint.y,0,0)];}
                         completion:^(BOOL completed) {
                             [contactView sendRecording];
@@ -1974,7 +2002,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (CGRect)getPhotoViewFrame
 {
     // todo BT
-    return CGRectMake(10, self.view.frame.size.height - 70, 60, 60);
+    return CGRectMake(10, self.view.frame.size.height - 90, 80, 80);
 }
 
 - (IBAction)takePictureButtonClicked:(id)sender {

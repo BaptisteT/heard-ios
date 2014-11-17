@@ -7,6 +7,7 @@
 //
 
 #import "PhotoView.h"
+#import "Constants.h"
 
 @interface PhotoView()
 
@@ -50,9 +51,9 @@
 
 - (void)handleTapGesture
 {
-    // todo BT
-    // tuto or modif
+    [self.delegate tutoMessage:NSLocalizedStringFromTable(@"photo_tuto_message",kStringFile,nil) withDuration:3 priority:NO];
 }
+
 
 - (void)handlePanningGesture:(UIPanGestureRecognizer *)recognizer
 {

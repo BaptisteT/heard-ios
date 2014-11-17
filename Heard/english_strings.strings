@@ -184,6 +184,9 @@
 "speaker_button_off_message" = "Loud speaker mode";
 "speaker_button_on_message" = "Ear speaker mode";
 
+// Photo
+"photo_tuto_message" = "Drag picture & send";
+
 
 
 

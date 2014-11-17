@@ -424,6 +424,7 @@
 {
     Message *messageToSend = [self.delegate messageToSend];
     if ([GeneralUtils isCurrentUser:self.contact]) {
+        
         self.contact.lastMessageDate = messageToSend.createdAt;
         [self addUnreadMessage:messageToSend];
         [self resetDiscussionStateAnimated:NO];
