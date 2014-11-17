@@ -72,7 +72,7 @@
         recognizer.view.center = location;
         // Update contact views animations
         CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview.superview];
-        [self.delegate updateEmojiLocation:mainViewCoordinate];
+        [self.delegate updateEmojiOrPhotoLocation:mainViewCoordinate];
     }
     else if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled) {
         CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];

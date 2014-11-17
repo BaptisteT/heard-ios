@@ -424,16 +424,8 @@
 {
     Message *messageToSend = [self.delegate messageToSend];
     if ([GeneralUtils isCurrentUser:self.contact]) {
-        Message *message = [Message createMessageWithId:arc4random_uniform(1000)
-                                               senderId:[self contactIdentifier]
-                                             receiverId:[self contactIdentifier]
-                                                groupId:0
-                                           creationTime:[[NSDate date] timeIntervalSince1970]
-                                            messageData:messageToSend.messageData
-                                            messageType:messageToSend.messageType];
-
-        self.contact.lastMessageDate = message.createdAt;
-        [self addUnreadMessage:message];
+        self.contact.lastMessageDate = messageToSend.createdAt;
+        [self addUnreadMessage:messageToSend];
         [self resetDiscussionStateAnimated:NO];
         
         if ([self.delegate displayOpeningTuto]) {
@@ -448,11 +440,6 @@
         [self.delegate sendMessageToContact:self];
     }
     [TrackingUtils trackRecord:messageToSend.messageType isGroup:NO];
-//    if (self.contact.isFutureContact) {
-//        [TrackingUtils trackFutureRecord:isEmoji];
-//    } else {
-//        [TrackingUtils trackRecord:isEmoji];
-//    }
 }
 
 - (void)message:(Message *)message sentWithError:(BOOL)error
@@ -536,9 +523,7 @@
     if (self.contact.lastMessageDate <= ((Message *)self.unreadMessages[0]).createdAt) {
         self.contact.currentUserDidNotAnswerLastMessage = YES;
     }
-    // todo BT
-    // different media
-    [self.delegate startedPlayingAudioMessagesOfView:self];
+    [self.delegate startedPlayingMessagesOfView:self];
     self.isPlaying = YES;
     [self resetDiscussionStateAnimated:NO];
 }
@@ -628,7 +613,7 @@
 {
     BOOL addMessage = YES;
     for (Message *unreadMessage in self.unreadMessages) {
-        if (unreadMessage.identifier == message.identifier) {
+        if (unreadMessage.identifier > 0 && unreadMessage.identifier == message.identifier) {
             addMessage = NO;
             break;
         }

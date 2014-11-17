@@ -69,7 +69,7 @@
 
 - (void)sendMessageToContact:(ContactView *)contactView;
 
-- (void)startedPlayingAudioMessagesOfView:(ContactView *)view;
+- (void)startedPlayingMessagesOfView:(ContactView *)view;
 
 - (void)pendingContactClicked:(ContactView *)contactView;
 

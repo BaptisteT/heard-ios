@@ -78,8 +78,6 @@
 
 + (NSURL *)getMessageURL:(NSUInteger)messageId
 {
-    // todo BT
-    // depend on message type
     if (PRODUCTION) {
         return [NSURL URLWithString:[kProdHeardRecordBaseURL stringByAppendingFormat:@"%lu%@",(unsigned long)messageId,@"_record"]];
     } else {
@@ -87,6 +85,13 @@
     }
 }
 
+- (BOOL)isPhotoMessage {
+    if (self.messageType && [self.messageType isEqualToString:kPhotoMessageType]) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
 
 
 @end

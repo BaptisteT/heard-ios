@@ -13,14 +13,13 @@
 @interface PhotoView : UIImageView <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) id<PhotoViewDelegateProtocol> delegate;
-- (void)initPhotoView;
-
+- (id)initPhotoView;
 
 @end
 
 @protocol PhotoViewDelegateProtocol
 
-- (void)updateEmojiLocation:(CGPoint)location;
-//- (void)emojiDropped:(EmojiView *)emojiView atLocation:(CGPoint)location;
+- (void)updateEmojiOrPhotoLocation:(CGPoint)location;
+- (void)photoDropped:(PhotoView *)photoView atLocation:(CGPoint)location;
 
 @end

@@ -123,9 +123,10 @@
 @property (strong, nonatomic) UIImagePickerController * imagePickerController;
 @property (weak, nonatomic) IBOutlet UIButton *cameraFlipButton;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet PhotoView *photoView;
+@property (strong, nonatomic) PhotoView *photoTakenView;
 @property (weak, nonatomic) IBOutlet UIButton *takePictureButton;
 @property (weak, nonatomic) IBOutlet UIButton *cameraControllerButton;
+@property (strong, nonatomic) UIImageView *photoReceivedView;
 // Message
 @property (strong, nonatomic) Message *messageToSend;
 
@@ -141,7 +142,8 @@
 {
     [super viewDidLoad];
     
-    [self initPhotoView];
+    [self initPhotoTakenView];
+    [self initPhotoReceivedView];
     self.retrieveNewContact = YES;
     self.authRequestView.hidden = YES;
     self.openingTutoView.hidden = YES;
@@ -1225,11 +1227,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Stop recording
     [self.recorder stop];
-    self.messageToSend = [Message createMessageWithId:0 senderId:0 receiverId:0 groupId:0 creationTime:0 messageData:[[NSData alloc] initWithContentsOfURL:self.recorder.url] messageType:kAudioRecordMessageType];
+    self.messageToSend = [Message createMessageWithId:0 senderId:0 receiverId:0 groupId:0 creationTime:[[NSDate date] timeIntervalSince1970] messageData:[[NSData alloc] initWithContentsOfURL:self.recorder.url] messageType:kAudioRecordMessageType];
     [self playSound:kEndRecordSound ofType:@""];
 }
 
-- (void)startedPlayingAudioMessagesOfView:(ContactView *)contactView
+- (void)startedPlayingMessagesOfView:(ContactView *)contactView
 {
     [self hideOpeningTuto];
     
@@ -1239,22 +1241,30 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.lastSelectedContactView = contactView;
     [self.playerContainer.layer removeAllAnimations];
     
-    // Init player
+    // Add to last message played
     Message *message = (Message *)contactView.unreadMessages[0];
-    self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.messageData error:nil];
-    [self.mainPlayer prepareToPlay];
     [self addMessagesToLastMessagesPlayed:message];
     
-    //Show message date
-    self.playerLabel.hidden = NO;
-    self.playerLabel.text = [GeneralUtils dateToAgeString:message.createdAt];
-    
-    // Player UI
-    NSTimeInterval duration = self.mainPlayer.duration;
-    [self playerUI:duration ByContactView:contactView];
-    
-    // play
-    [self.mainPlayer play];
+    if ([message isPhotoMessage]) {
+        // todo BT
+        // play sound
+        
+    } else {
+        // Init Audio Player
+        self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.messageData error:nil];
+        [self.mainPlayer prepareToPlay];
+        
+        //Show message date
+        self.playerLabel.hidden = NO;
+        self.playerLabel.text = [GeneralUtils dateToAgeString:message.createdAt];
+        
+        // Player UI
+        NSTimeInterval duration = self.mainPlayer.duration;
+        [self playerUI:duration ByContactView:contactView];
+        
+        // play
+        [self.mainPlayer play];
+    }
 }
 
 - (BOOL)isRecording {
@@ -1780,7 +1790,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
 }
 
-- (void)updateEmojiLocation:(CGPoint)location
+- (void)updateEmojiOrPhotoLocation:(CGPoint)location
 {
     // clean
     [self removeEmojiOverlayOnContactViews];
@@ -1800,7 +1810,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         NSString *soundName = [NSString stringWithFormat:@"%@%lu.%d",@"emoji-sound-",(long)emojiView.identifier,1];
         NSString *soundPath = [[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-        self.messageToSend = [Message createMessageWithId:0 senderId:0 receiverId:0 groupId:0 creationTime:0 messageData:[NSData dataWithContentsOfURL:soundURL] messageType:kAudioEmojiMessageType];
+        self.messageToSend = [Message createMessageWithId:0 senderId:0 receiverId:0 groupId:0 creationTime:[[NSDate date] timeIntervalSince1970] messageData:[NSData dataWithContentsOfURL:soundURL] messageType:kAudioEmojiMessageType];
         CGPoint destinationPoint = [emojiView.superview convertPoint:contactView.center fromView:self.contactScrollView];
         [UIView transitionWithView:emojiView
                           duration:0.5f
@@ -1857,10 +1867,15 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Camera
 // ----------------------------------------------------------
 
-- (void)initPhotoView {
-    [self.photoView initPhotoView];
-    self.photoView.delegate = self;
-    [self.view addSubview:self.photoView];
+- (void)initPhotoTakenView {
+    self.photoTakenView = [[PhotoView alloc] initPhotoView];
+    self.photoTakenView.delegate = self;
+    [self.view addSubview:self.photoTakenView];
+}
+
+- (void)initPhotoReceivedView {
+    self.photoReceivedView = [[UIImageView alloc] initWithFrame:self.view.frame];
+    [self.view addSubview:self.photoReceivedView];
 }
 
 - (IBAction)cameraButtonClicked:(id)sender {
@@ -1896,16 +1911,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     // todo bt
     // Check 4, 5, 6 ; ios 7 / ios 8
     // Transform camera to get full screen (for iphone 5)
-    // ugly code
-    if (self.view.frame.size.height != 480) {
-        double translationFactor = (self.view.frame.size.height - kCameraHeight) / 2;
-        CGAffineTransform translate = CGAffineTransformMakeTranslation(0.0, translationFactor);
-        imagePickerController.cameraViewTransform = translate;
-        
-        double rescalingRatio = self.view.frame.size.height / kCameraHeight;
-        CGAffineTransform scale = CGAffineTransformScale(translate, rescalingRatio, rescalingRatio);
-        imagePickerController.cameraViewTransform = scale;
-    }
+    double translationFactor = (self.view.frame.size.height - kCameraHeight) / 2;
+    CGAffineTransform translate = CGAffineTransformMakeTranslation(0.0, translationFactor);
+    imagePickerController.cameraViewTransform = translate;
+    
+    double rescalingRatio = self.view.frame.size.height / kCameraHeight;
+    CGAffineTransform scale = CGAffineTransformScale(translate, rescalingRatio, rescalingRatio);
+    imagePickerController.cameraViewTransform = scale;
     
     // flash disactivated by default
     imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
@@ -1917,7 +1929,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     ContactView *contactView = [self findContactViewAtLocation:location];
     if (contactView) {
         [contactView removeEmojiOverlay];
-        self.messageToSend = [Message createMessageWithId:0 senderId:0 receiverId:0 groupId:0 creationTime:0 messageData:UIImageJPEGRepresentation(photoView.image,0.9) messageType:kPhotoMessageType];
+        self.messageToSend = [Message createMessageWithId:0 senderId:0 receiverId:0 groupId:0 creationTime:[[NSDate date] timeIntervalSince1970] messageData:UIImageJPEGRepresentation(photoView.image,0.9) messageType:kPhotoMessageType];
         CGPoint destinationPoint = [photoView.superview convertPoint:contactView.center fromView:self.contactScrollView];
         [UIView transitionWithView:photoView
                           duration:0.5f
@@ -1949,20 +1961,20 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     } else {
         orientation = UIImageOrientationRight;
     }
-    self.photoView.frame = self.view.frame;
-    self.photoView.image = [UIImage imageWithCGImage:image.CGImage scale:1 orientation:orientation];;
-    self.photoView.hidden = NO;
+    self.photoTakenView.frame = self.view.frame;
+    self.photoTakenView.image = [UIImage imageWithCGImage:image.CGImage scale:1 orientation:orientation];;
+    self.photoTakenView.hidden = NO;
     [self closeCamera];
     
-    [UIView animateWithDuration:0.3 animations:^{
-        self.photoView.frame = [self getPhotoViewFrame];
+    [UIView animateWithDuration:0.5f animations:^{
+        [self.photoTakenView setFrame:[self getPhotoViewFrame]];
     }];
 }
 
 - (CGRect)getPhotoViewFrame
 {
     // todo BT
-    return self.takePictureButton.frame;
+    return CGRectMake(10, self.view.frame.size.height - 70, 60, 60);
 }
 
 - (IBAction)takePictureButtonClicked:(id)sender {

@@ -23,7 +23,7 @@
 
 @protocol EmojiViewDelegateProtocol
 
-- (void)updateEmojiLocation:(CGPoint)location;
+- (void)updateEmojiOrPhotoLocation:(CGPoint)location;
 - (void)emojiDropped:(EmojiView *)emojiView atLocation:(CGPoint)location;
 - (void)playSound:(NSString *)sound ofType:(NSString *)type;
 - (void)hideEmojiScrollViewAndDisplayEmoji:(EmojiView *)emojiView;

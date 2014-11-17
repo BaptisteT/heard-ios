@@ -19,8 +19,9 @@
 
 @implementation PhotoView
 
-- (void)initPhotoView
+- (id)initPhotoView
 {
+    self = [super init];
     self.contentMode = UIViewContentModeScaleAspectFill;
     // todo BT
     // round
@@ -42,16 +43,15 @@
     // User interaction
     self.userInteractionEnabled = YES;
     self.exclusiveTouch = YES;
-    self.clipsToBounds = NO;
-    self.layer.masksToBounds = NO;
-    
+    self.clipsToBounds = YES;
     self.hidden = YES;
+    return self;
 }
 
 - (void)handleTapGesture
 {
     // todo BT
-    // tuto
+    // tuto or modif
 }
 
 - (void)handlePanningGesture:(UIPanGestureRecognizer *)recognizer
@@ -64,13 +64,14 @@
     }
     if (recognizer.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [recognizer translationInView:self.superview];
-        [self.delegate updateEmojiLocation:translation];
+        CGPoint location = [recognizer locationInView:self.superview];
+        [self.delegate updateEmojiOrPhotoLocation:location];
         CGPoint newCenterPoint = CGPointMake(initialCenter.x + translation.x,initialCenter.y + translation.y);
         self.center = newCenterPoint;
     }
     else if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled) {
         CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];
-//        [self.delegate emojiDropped:self atLocation:mainViewCoordinate];
+        [self.delegate photoDropped:self atLocation:mainViewCoordinate];
     }
 }
 

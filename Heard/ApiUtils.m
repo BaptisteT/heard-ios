@@ -209,24 +209,18 @@
     NSString *path;
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
     [self enrichParametersWithToken:parameters];
-    
-//    if ([contactView isFutureContact]) {
-//        path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages/create_future_messages.json"];
-//        [parameters setObject:[NSArray arrayWithObject:contactView.contact.phoneNumber] forKey:@"future_contact_phones"];
-//        [parameters setObject:contactView.contact.firstName forKey:@"receiver_first_name"];
-//    } else {
+
     path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages.json"];
     [parameters setObject:[NSNumber numberWithLong:[contactView contactIdentifier]] forKey:@"receiver_id"];
     [parameters setObject:[NSNumber numberWithLong:(long)[[NSDate date] timeIntervalSince1970]] forKey:@"creation_date"];
     if ([contactView isGroupContactView]) {
         [parameters setObject:@"1" forKey:@"is_group"];
     }
-    [parameters setObject:message.messageType forKey:@"message_type"];
     
     [[ApiUtils sharedClient] POST:path
                        parameters:parameters
         constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-            [formData appendPartWithFileData:message.messageData name:@"record" fileName:@"data.m4a" mimeType:[GeneralUtils getDataTypeForMessageType:message.messageType]];
+            [formData appendPartWithFileData:message.messageData name:@"record" fileName:message.messageType mimeType:[GeneralUtils getDataTypeForMessageType:message.messageType]];
         }
                           success:^(NSURLSessionDataTask *task, id JSON) {
                               if (successBlock) {
@@ -241,35 +235,6 @@
                           }];
 }
 
-//+ (void)sendFutureMessage:(NSData *)audioData
-//            toFutureUsers:(NSArray *)userPhoneNumbers
-//                  success:(void(^)())successBlock
-//                  failure:(void (^)())failureBlock
-//{
-//    NSString *path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages/create_future_messages.json"];
-//    
-//    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
-//    [parameters setObject:userPhoneNumbers forKey:@"future_contact_phones"];
-//    
-//    [self enrichParametersWithToken:parameters];
-//    
-//    [[ApiUtils sharedClient] POST:path
-//                       parameters:parameters
-//        constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-//            [formData appendPartWithFileData:audioData name:@"record" fileName:@"data.m4a" mimeType:@"audio/m4a"];
-//        }
-//                          success:^(NSURLSessionDataTask *task, id JSON) {
-//                              if (successBlock) {
-//                                  successBlock();
-//                              }
-//                          }failure:^(NSURLSessionDataTask *task, NSError *error) {
-//                              NSLog(@"ERROR: %@, %@", task.description, error);
-//                              if (failureBlock) {
-//                                  failureBlock();
-//                              }
-//                          }];
-//
-//}
 
 // Update token
 + (void)updatePushToken:(NSString *)token success:(void(^)())successBlock failure:(void(^)())failureBlock

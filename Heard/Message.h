@@ -23,6 +23,7 @@
 + (NSURL *)getMessageURL:(NSUInteger)messageId;
 - (NSInteger)getSenderOrGroupIdentifier;
 - (BOOL)isGroupMessage;
+- (BOOL)isPhotoMessage;
 
 @property (nonatomic) NSUInteger identifier;
 @property (nonatomic) NSUInteger senderId;
