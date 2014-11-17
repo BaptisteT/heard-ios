@@ -160,4 +160,13 @@
     return containingLayer;
 }
 
++ (void)outerGlow:(UIView *)view
+{
+    view.layer.shadowColor = [UIColor blackColor].CGColor;
+    view.layer.shadowOffset = CGSizeMake(0.0, 0.0);
+    view.layer.shadowRadius = 1;
+    view.layer.shadowOpacity = 0.3;
+    view.layer.masksToBounds = NO;
+}
+
 @end

@@ -43,15 +43,15 @@
                                 success:(void(^)(NSString *authToken, Contact *contact))successBlock
                                 failure:(void(^)())failureBlock;
 
-+ (void)sendMessage:(NSData *)audioData
++ (void)sendMessage:(Message *)message
       toContactView:(ContactView *)contactView
             success:(void(^)())successBlock
             failure:(void (^)())failureBlock;
 
-+ (void)sendFutureMessage:(NSData *)audioData
-            toFutureUsers:(NSArray *)userPhoneNumbers
-                  success:(void(^)())successBlock
-                  failure:(void (^)())failureBlock;
+//+ (void)sendFutureMessage:(NSData *)audioData
+//            toFutureUsers:(NSArray *)userPhoneNumbers
+//                  success:(void(^)())successBlock
+//                  failure:(void (^)())failureBlock;
 
 + (void)updatePushToken:(NSString *)token success:(void(^)())successBlock failure:(void(^)())failureBlock;
 + (void)updateProfilePicture:(NSString *)picture success:(void(^)())successBlock failure:(void(^)())failureBlock;

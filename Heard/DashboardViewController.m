@@ -36,6 +36,7 @@
 #import "GroupUtils.h"
 #import "ManageGroupsViewController.h"
 #import "InviteViewController.h"
+#import "PhotoView.h"
 
 #define ACTION_PENDING_OPTION_1 NSLocalizedStringFromTable(@"add_to_contact_button_title",kStringFile,@"comment")
 #define ACTION_PENDING_OPTION_2 NSLocalizedStringFromTable(@"block_button_title",kStringFile,@"comment")
@@ -116,9 +117,18 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *topBarBackground;
 // Emoji View
-@property (strong, nonatomic) NSData *emojiData;
 @property (weak, nonatomic) IBOutlet UIButton *emojiButton;
 @property (strong, nonatomic) UIScrollView *emojiScrollView;
+// Camera
+@property (strong, nonatomic) UIImagePickerController * imagePickerController;
+@property (weak, nonatomic) IBOutlet UIButton *cameraFlipButton;
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet PhotoView *photoView;
+@property (weak, nonatomic) IBOutlet UIButton *takePictureButton;
+@property (weak, nonatomic) IBOutlet UIButton *cameraControllerButton;
+// Message
+@property (strong, nonatomic) Message *messageToSend;
+
 
 @end
 
@@ -131,6 +141,7 @@
 {
     [super viewDidLoad];
     
+    [self initPhotoView];
     self.retrieveNewContact = YES;
     self.authRequestView.hidden = YES;
     self.openingTutoView.hidden = YES;
@@ -1136,26 +1147,15 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)sendMessageToContact:(ContactView *)contactView
 {
-    NSData *audioData = [self getLastRecordedData];
-    [ApiUtils sendMessage:audioData toContactView:contactView success:^{
+    Message *message = self.messageToSend;
+    [ApiUtils sendMessage:message toContactView:contactView success:^{
         [contactView message:nil sentWithError:NO]; // no need to pass the message here
     } failure:^{
-        [contactView message:audioData sentWithError:YES];
+        [contactView message:message sentWithError:YES];
     }];
     [self.recorder prepareToRecord];
 }
 
-
-- (NSData *)getLastRecordedData
-{
-    if (self.emojiData) {
-        NSData *lastRecordedData = self.emojiData;
-        self.emojiData = nil;
-        return lastRecordedData;
-    } else {
-        return [[NSData alloc] initWithContentsOfURL:self.recorder.url];
-    }
-}
 
 // ----------------------------------------------------------
 #pragma mark ContactViewDelegate Protocole
@@ -1225,6 +1225,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Stop recording
     [self.recorder stop];
+    self.messageToSend = [Message createMessageWithId:0 senderId:0 receiverId:0 groupId:0 creationTime:0 messageData:[[NSData alloc] initWithContentsOfURL:self.recorder.url] messageType:kAudioRecordMessageType];
     [self playSound:kEndRecordSound ofType:@""];
 }
 
@@ -1240,7 +1241,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Init player
     Message *message = (Message *)contactView.unreadMessages[0];
-    self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.audioData error:nil];
+    self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.messageData error:nil];
     [self.mainPlayer prepareToPlay];
     [self addMessagesToLastMessagesPlayed:message];
     
@@ -1740,8 +1741,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 // ----------------------------------------------------------
 
 - (IBAction)emojiButtonClicked:(id)sender {
-    // todo bt
-    // display emoji scroll view
     if (!self.emojiScrollView) {
         [self initEmojiScrollView];
     }
@@ -1779,7 +1778,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         emojiView.delegate = self;
         [self.emojiScrollView addSubview:emojiView];
     }
-
 }
 
 - (void)updateEmojiLocation:(CGPoint)location
@@ -1802,7 +1800,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         NSString *soundName = [NSString stringWithFormat:@"%@%lu.%d",@"emoji-sound-",(long)emojiView.identifier,1];
         NSString *soundPath = [[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-        self.emojiData = [NSData dataWithContentsOfURL:soundURL];
+        self.messageToSend = [Message createMessageWithId:0 senderId:0 receiverId:0 groupId:0 creationTime:0 messageData:[NSData dataWithContentsOfURL:soundURL] messageType:kAudioEmojiMessageType];
         CGPoint destinationPoint = [emojiView.superview convertPoint:contactView.center fromView:self.contactScrollView];
         [UIView transitionWithView:emojiView
                           duration:0.5f
@@ -1854,5 +1852,142 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     return YES;
 }
+
+// ----------------------------------------------------------
+#pragma mark Camera
+// ----------------------------------------------------------
+
+- (void)initPhotoView {
+    [self.photoView initPhotoView];
+    self.photoView.delegate = self;
+    [self.view addSubview:self.photoView];
+}
+
+- (IBAction)cameraButtonClicked:(id)sender {
+    if (!self.imagePickerController) {
+        [self allocAndInitFullScreenCamera];
+    }
+    [self presentViewController:self.imagePickerController animated:NO completion:NULL];
+}
+
+// Alloc the impage picker controller
+- (void) allocAndInitFullScreenCamera
+{
+    // Create custom camera view
+    UIImagePickerController *imagePickerController = [UIImagePickerController new];
+    imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    imagePickerController.delegate = self;
+
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+    imagePickerController.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+    
+    // Custom buttons
+    imagePickerController.showsCameraControls = NO;
+    imagePickerController.allowsEditing = NO;
+    imagePickerController.navigationBarHidden=YES;
+    
+    NSString *xibName = @"CameraOverlayView";
+    NSArray* nibViews = [[NSBundle mainBundle] loadNibNamed:xibName owner:self options:nil];
+    UIView* myView = [ nibViews objectAtIndex: 0];
+    myView.frame = self.view.frame;
+    
+    imagePickerController.cameraOverlayView = myView;
+    
+    // todo bt
+    // Check 4, 5, 6 ; ios 7 / ios 8
+    // Transform camera to get full screen (for iphone 5)
+    // ugly code
+    if (self.view.frame.size.height != 480) {
+        double translationFactor = (self.view.frame.size.height - kCameraHeight) / 2;
+        CGAffineTransform translate = CGAffineTransformMakeTranslation(0.0, translationFactor);
+        imagePickerController.cameraViewTransform = translate;
+        
+        double rescalingRatio = self.view.frame.size.height / kCameraHeight;
+        CGAffineTransform scale = CGAffineTransformScale(translate, rescalingRatio, rescalingRatio);
+        imagePickerController.cameraViewTransform = scale;
+    }
+    
+    // flash disactivated by default
+    imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
+    self.imagePickerController = imagePickerController;
+}
+
+- (void)photoDropped:(PhotoView *)photoView atLocation:(CGPoint)location
+{
+    ContactView *contactView = [self findContactViewAtLocation:location];
+    if (contactView) {
+        [contactView removeEmojiOverlay];
+        self.messageToSend = [Message createMessageWithId:0 senderId:0 receiverId:0 groupId:0 creationTime:0 messageData:UIImageJPEGRepresentation(photoView.image,0.9) messageType:kPhotoMessageType];
+        CGPoint destinationPoint = [photoView.superview convertPoint:contactView.center fromView:self.contactScrollView];
+        [UIView transitionWithView:photoView
+                          duration:0.5f
+                           options:UIViewAnimationOptionTransitionNone
+                        animations:^{[photoView setFrame:CGRectMake(destinationPoint.x,destinationPoint.y,0,0)];}
+                        completion:^(BOOL completed) {
+                            [contactView sendRecording];
+                            [photoView setFrame:[self getPhotoViewFrame]];
+                        }];
+    } else {
+        [UIView transitionWithView:photoView
+                          duration:0.5f
+                           options:UIViewAnimationOptionTransitionNone
+                        animations:^{
+                            [photoView setFrame:[self getPhotoViewFrame]];
+                            }
+                        completion:nil];
+    }
+}
+
+// Display the relevant part of the photo once taken
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)editInfo
+{
+    UIImage *image =  [editInfo objectForKey:UIImagePickerControllerOriginalImage];
+    UIImageOrientation orientation;
+    if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
+        // Force portrait, and avoid mirror of front camera
+        orientation = self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDeviceFront ? UIImageOrientationLeftMirrored : UIImageOrientationRight;
+    } else {
+        orientation = UIImageOrientationRight;
+    }
+    self.photoView.frame = self.view.frame;
+    self.photoView.image = [UIImage imageWithCGImage:image.CGImage scale:1 orientation:orientation];;
+    self.photoView.hidden = NO;
+    [self closeCamera];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        self.photoView.frame = [self getPhotoViewFrame];
+    }];
+}
+
+- (CGRect)getPhotoViewFrame
+{
+    // todo BT
+    return self.takePictureButton.frame;
+}
+
+- (IBAction)takePictureButtonClicked:(id)sender {
+    [self.imagePickerController takePicture];
+}
+
+- (IBAction)flipCameraButtonClicked:(id)sender
+{
+    if (self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDeviceFront){
+        self.imagePickerController.cameraDevice = UIImagePickerControllerCameraDeviceRear;
+    } else {
+        self.imagePickerController.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+    }
+}
+
+- (IBAction)cancelButtonClicked:(id)sender
+{
+    [self closeCamera];
+}
+
+- (void)closeCamera
+{
+    [self dismissViewControllerAnimated:NO completion:nil];
+}
+
+
 
 @end

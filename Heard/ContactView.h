@@ -37,7 +37,7 @@
 - (void)handleLongPressGesture:(UILongPressGestureRecognizer *)recognizer;
 - (void)addUnreadMessage:(Message *)message;
 - (void)resetUnreadMessages;
-- (void)message:(NSData *)audioData sentWithError:(BOOL)error;
+- (void)message:(Message *)message sentWithError:(BOOL)error;
 - (void)deleteFailedMessages;
 - (void)resendFailedMessages;
 - (void)messageFinishPlaying:(BOOL)completed;
@@ -87,8 +87,6 @@
 
 - (void)resetLastMessagesPlayed;
 
-- (NSData *)getLastRecordedData;
-
 - (BOOL) displayOpeningTuto;
 
 - (void)displayOpeningTutoWithActionLabel:(NSString *)actionLabel forOrigin:(float)x;
@@ -97,8 +95,8 @@
 
 - (void)resetApplicationBadgeNumber;
 
-- (NSData *)emojiData;
-
 - (BOOL) isFirstOpening;
+
+- (Message *)messageToSend;
 
 @end

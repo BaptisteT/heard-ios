@@ -300,5 +300,14 @@
     }
 }
 
++ (NSString *)getDataTypeForMessageType:(NSString *)messageType
+{
+    if ([messageType isEqualToString:kPhotoMessageType]) {
+        return @"image/jpeg";
+    } else {
+        return @"audio/m4a";
+    }
+}
+
 
 @end

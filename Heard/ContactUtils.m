@@ -49,6 +49,8 @@
         contact.isFutureContact = isFutureArray ? [isFutureArray[i] boolValue] : NO;
         
         if (contact.isFutureContact) {
+            // todo BT
+            // remove future
             contact.facebookId = facebookIdArray[i];
             contact.recordId = (ABRecordID)[abRecordIdArray[i] intValue];
         }

@@ -29,50 +29,32 @@
     [mixpanel.people set:@{@"First name": contact.firstName, @"Last name": contact.lastName, @"FB Connected": @"Yes"}];
 }
 
-+ (void)trackRecord:(BOOL)isEmoji
++ (void)trackRecord:(NSString *)messageType isGroup:(BOOL)isGroup
 {
     if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    if (isEmoji) {
-        [mixpanel track:@"Record" properties:@{@"Emoji": @"True", @"Group": @"False"}];
-    } else {
-        [mixpanel track:@"Record" properties:@{@"Emoji": @"False", @"Group": @"False"}];
-    }
+    [mixpanel track:@"Record" properties:@{@"Message Type": messageType, @"Group": [NSNumber numberWithBool:isGroup]}];
     
     [mixpanel.people increment:@"Records" by:[NSNumber numberWithInt:1]];
 }
 
-+ (void)trackGroupRecord:(BOOL)isEmoji
-{
-    if (!PRODUCTION || DEBUG)return;
-    
-    Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    
-    if (isEmoji) {
-        [mixpanel track:@"Record" properties:@{@"Emoji": @"True", @"Group": @"True"}];
-    } else {
-        [mixpanel track:@"Record" properties:@{@"Emoji": @"False", @"Group": @"True"}];
-    }
-    
-    [mixpanel.people increment:@"Records" by:[NSNumber numberWithInt:1]];
-}
 
-+ (void)trackFutureRecord:(BOOL)isEmoji
-{
-    if (!PRODUCTION || DEBUG)return;
-    
-    Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    
-    if (isEmoji) {
-        [mixpanel track:@"Future record" properties:@{@"Emoji": @"True"}];
-    } else {
-        [mixpanel track:@"Future record" properties:@{@"Emoji": @"False"}];
-    }
-    
-    [mixpanel.people increment:@"Future records" by:[NSNumber numberWithInt:1]];
-}
+//+ (void)trackFutureRecord:(BOOL)isEmoji
+//{
+//    if (!PRODUCTION || DEBUG)return;
+//    
+//    Mixpanel *mixpanel = [Mixpanel sharedInstance];
+//    
+//    if (isEmoji) {
+//        [mixpanel track:@"Future record" properties:@{@"Emoji": @"True"}];
+//    } else {
+//        [mixpanel track:@"Future record" properties:@{@"Emoji": @"False"}];
+//    }
+//    
+//    [mixpanel.people increment:@"Future records" by:[NSNumber numberWithInt:1]];
+//}
 
 + (void)trackPlayWithDuration:(NSTimeInterval)duration andSpeakerMode:(NSString *)speakerMode
 {

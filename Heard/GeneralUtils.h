@@ -61,4 +61,6 @@
 
 + (BOOL)hasNeverSentStats;
 
++ (NSString *)getDataTypeForMessageType:(NSString *)messageType;
+
 @end

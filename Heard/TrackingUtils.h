@@ -13,11 +13,9 @@
 
 + (void)identifyWithMixpanel:(Contact *)contact signup:(BOOL)isSigningUp;
 
-+ (void)trackRecord:(BOOL)isEmoji;
++ (void)trackRecord:(NSString *)messageType isGroup:(BOOL)isGroup;
 
-+ (void)trackGroupRecord:(BOOL)isEmoji;
-
-+ (void)trackFutureRecord:(BOOL)isEmoji;
+//+ (void)trackFutureRecord:(BOOL)isEmoji;
 
 + (void)trackPlayWithDuration:(NSTimeInterval)duration andSpeakerMode:(NSString *)speakerMode;
 

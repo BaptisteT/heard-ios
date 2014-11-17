@@ -217,6 +217,10 @@
 		3C1D54B019E8564E00B3AE8B /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C1D54AE19E8564E00B3AE8B /* FacebookSDK.framework */; };
 		3C55FD6D1966AA3500E818D9 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */; };
 		3C55FD701966B11C00E818D9 /* CrashReportUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */; };
+		3C6918021A16616C00A16AB3 /* CameraOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C6918011A16616C00A16AB3 /* CameraOverlayView.xib */; };
+		3C6918031A16616C00A16AB3 /* CameraOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C6918011A16616C00A16AB3 /* CameraOverlayView.xib */; };
+		3C6918061A16716100A16AB3 /* PhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C6918051A16716100A16AB3 /* PhotoView.m */; };
+		3C6918071A16716100A16AB3 /* PhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C6918051A16716100A16AB3 /* PhotoView.m */; };
 		3C91A80D19CD00AC00DCA8BC /* PotentialContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C91A80C19CD00AC00DCA8BC /* PotentialContact.m */; };
 		3C91A80E19CD00AC00DCA8BC /* PotentialContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C91A80C19CD00AC00DCA8BC /* PotentialContact.m */; };
 		3CA16D2919AE407200C1F2A5 /* english_strings.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3CA16D2819AE407200C1F2A5 /* english_strings.strings */; };
@@ -467,6 +471,9 @@
 		3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
 		3C55FD6E1966B11C00E818D9 /* CrashReportUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashReportUtils.h; sourceTree = "<group>"; };
 		3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashReportUtils.m; sourceTree = "<group>"; };
+		3C6918011A16616C00A16AB3 /* CameraOverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraOverlayView.xib; sourceTree = "<group>"; };
+		3C6918041A16716100A16AB3 /* PhotoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoView.h; sourceTree = "<group>"; };
+		3C6918051A16716100A16AB3 /* PhotoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoView.m; sourceTree = "<group>"; };
 		3C91A80B19CD00AC00DCA8BC /* PotentialContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PotentialContact.h; sourceTree = "<group>"; };
 		3C91A80C19CD00AC00DCA8BC /* PotentialContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PotentialContact.m; sourceTree = "<group>"; };
 		3C9BBDFD195345A6001C6C4D /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
@@ -833,6 +840,7 @@
 				0B969127198997700048E4BB /* EditContactsTableViewCell.xib */,
 				3CC2437F19F81E87006973C0 /* ManageGroupsTableViewCell.xib */,
 				0BD758D11950F91B00CF0D85 /* Main.storyboard */,
+				3C6918011A16616C00A16AB3 /* CameraOverlayView.xib */,
 				0BF97B1E19CA6A4E00FFA338 /* PushNoAnimationSegue.h */,
 				0BF97B1F19CA6A4E00FFA338 /* PushNoAnimationSegue.m */,
 			);
@@ -1009,6 +1017,8 @@
 				3CC2436D19F55457006973C0 /* GroupView.m */,
 				3CC2437D19F81E87006973C0 /* ManageGroupsTableViewCell.h */,
 				3CC2437E19F81E87006973C0 /* ManageGroupsTableViewCell.m */,
+				3C6918041A16716100A16AB3 /* PhotoView.h */,
+				3C6918051A16716100A16AB3 /* PhotoView.m */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -1075,7 +1085,7 @@
 				ORGANIZATIONNAME = streetshout;
 				TargetAttributes = {
 					0B72EEA0196C672F00AC5A01 = {
-						DevelopmentTeam = 9688VHJV6U;
+						DevelopmentTeam = U4TN2H6FNK;
 					};
 					0BD758BB1950F91B00CF0D85 = {
 						DevelopmentTeam = U4TN2H6FNK;
@@ -1152,6 +1162,7 @@
 				0B72EEFB196C672F00AC5A01 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
 				3CA4924119E316A600110DEF /* emoji-sound-4.1.m4a in Resources */,
 				3CA4927719E33FC800110DEF /* emoji-sound-10.3.m4a in Resources */,
+				3C6918031A16616C00A16AB3 /* CameraOverlayView.xib in Resources */,
 				3CA4925619E32AB200110DEF /* emoji-sound-6.2.m4a in Resources */,
 				0BA145801997A4A60031716F /* start-record-sound.aif in Resources */,
 				0BA145781997A4A60031716F /* end-record-sound.aif in Resources */,
@@ -1213,6 +1224,7 @@
 				0BDB64CD19521A7C00223093 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
 				3CA4924019E316A600110DEF /* emoji-sound-4.1.m4a in Resources */,
 				3CA4927619E33FC800110DEF /* emoji-sound-10.3.m4a in Resources */,
+				3C6918021A16616C00A16AB3 /* CameraOverlayView.xib in Resources */,
 				3CA4925519E32AB200110DEF /* emoji-sound-6.2.m4a in Resources */,
 				0BA1457F1997A4A60031716F /* start-record-sound.aif in Resources */,
 				0BA145771997A4A60031716F /* end-record-sound.aif in Resources */,
@@ -1277,6 +1289,7 @@
 				3CC2436419F51636006973C0 /* CreateGroupsViewController.m in Sources */,
 				0B72EEB6196C672F00AC5A01 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				0BF97B2119CA6A4E00FFA338 /* PushNoAnimationSegue.m in Sources */,
+				3C6918071A16716100A16AB3 /* PhotoView.m in Sources */,
 				0B72EEB7196C672F00AC5A01 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				0B72EEB8196C672F00AC5A01 /* UIAlertView+AFNetworking.m in Sources */,
 				0B72EEB9196C672F00AC5A01 /* UIButton+AFNetworking.m in Sources */,
@@ -1362,6 +1375,7 @@
 				3CC2436319F51636006973C0 /* CreateGroupsViewController.m in Sources */,
 				0BDB65341953B5EA00223093 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				0BF97B2019CA6A4E00FFA338 /* PushNoAnimationSegue.m in Sources */,
+				3C6918061A16716100A16AB3 /* PhotoView.m in Sources */,
 				0BDB65351953B5EA00223093 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				0BDB65361953B5EA00223093 /* UIAlertView+AFNetworking.m in Sources */,
 				0BDB65371953B5EA00223093 /* UIButton+AFNetworking.m in Sources */,

@@ -39,4 +39,6 @@
                                                Color:(UIColor *)color
                                         subDivisions:(NSInteger)nbSubDivisions;
 
++ (void)outerGlow:(UIView *)view;
+
 @end

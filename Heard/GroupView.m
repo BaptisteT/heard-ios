@@ -34,14 +34,13 @@
 
 - (void)sendRecording
 {
-    BOOL isEmoji = self.delegate.emojiData ? true : false;
     self.sendingMessageCount ++;
     [self resetDiscussionStateAnimated:NO];
         
     // Send
     [self.delegate sendMessageToContact:self];
     for (int i=0;i<self.group.memberIds.count -1;i++) {
-        [TrackingUtils trackGroupRecord:isEmoji];
+        [TrackingUtils trackRecord:[self.delegate messageToSend].messageType isGroup:YES];
     }
 }
 

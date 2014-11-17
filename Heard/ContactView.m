@@ -422,13 +422,16 @@
 
 - (void)sendRecording
 {
-    BOOL isEmoji = self.delegate.emojiData ? true : false;
+    Message *messageToSend = [self.delegate messageToSend];
     if ([GeneralUtils isCurrentUser:self.contact]) {
-        Message *message = [Message new];
-        message.senderId = [self contactIdentifier];
-        message.audioData = [self.delegate getLastRecordedData];
-        message.createdAt = [[NSDate date] timeIntervalSince1970];
-        message.identifier = arc4random_uniform(1000);
+        Message *message = [Message createMessageWithId:arc4random_uniform(1000)
+                                               senderId:[self contactIdentifier]
+                                             receiverId:[self contactIdentifier]
+                                                groupId:0
+                                           creationTime:[[NSDate date] timeIntervalSince1970]
+                                            messageData:messageToSend.messageData
+                                            messageType:messageToSend.messageType];
+
         self.contact.lastMessageDate = message.createdAt;
         [self addUnreadMessage:message];
         [self resetDiscussionStateAnimated:NO];
@@ -444,21 +447,22 @@
         // Send
         [self.delegate sendMessageToContact:self];
     }
-    if (self.contact.isFutureContact) {
-        [TrackingUtils trackFutureRecord:isEmoji];
-    } else {
-        [TrackingUtils trackRecord:isEmoji];
-    }
+    [TrackingUtils trackRecord:messageToSend.messageType isGroup:NO];
+//    if (self.contact.isFutureContact) {
+//        [TrackingUtils trackFutureRecord:isEmoji];
+//    } else {
+//        [TrackingUtils trackRecord:isEmoji];
+//    }
 }
 
-- (void)message:(NSData *)audioData sentWithError:(BOOL)error
+- (void)message:(Message *)message sentWithError:(BOOL)error
 {
     self.sendingMessageCount --;
     
     if (error) {
         [self.delegate playSound:kFailedSound ofType:@"aif"];
         // Stock failed message
-        [self.failedMessages addObject:audioData];
+        [self.failedMessages addObject:message];
     } else {
         if (!self.isRecording && !self.isPlaying) {
             [self sentAnimation];
@@ -486,12 +490,12 @@
 - (void)resendFailedMessages
 {
     // Resend Messages
-    for (NSData *audioData in self.failedMessages) {
+    for (Message *message in self.failedMessages) {
         self.sendingMessageCount ++;
-        [ApiUtils sendMessage:audioData toContactView:self success:^{
+        [ApiUtils sendMessage:message toContactView:self success:^{
             [self message:nil sentWithError:NO];
         } failure:^{
-            [self message:audioData sentWithError:YES];
+            [self message:message sentWithError:YES];
         }];
     }
     
@@ -532,6 +536,8 @@
     if (self.contact.lastMessageDate <= ((Message *)self.unreadMessages[0]).createdAt) {
         self.contact.currentUserDidNotAnswerLastMessage = YES;
     }
+    // todo BT
+    // different media
     [self.delegate startedPlayingAudioMessagesOfView:self];
     self.isPlaying = YES;
     [self resetDiscussionStateAnimated:NO];
@@ -594,7 +600,7 @@
 // ----------------------------------------------------------
 - (void)downloadAudio:(Message *)message
 {
-    if (message.audioData) {
+    if (message.messageData) {
         return;
     }
     self.loadingMessageCount ++;
@@ -602,7 +608,7 @@
     
     // Request data asynch
     [ApiUtils downloadAudioFileAtURL:[message getMessageURL] success:^void(NSData *data) {
-        message.audioData = data;
+        message.messageData = data;
         self.loadingMessageCount --;
         [self resetDiscussionStateAnimated:NO];
     } failure:^(){
@@ -676,7 +682,7 @@
 }
 
 - (BOOL)hasUnreadMessages {
-    return self.unreadMessagesCount > 0 && self.unreadMessages && self.unreadMessages.count>0 && ((Message *)self.unreadMessages[0]).audioData;
+    return self.unreadMessagesCount > 0 && self.unreadMessages && self.unreadMessages.count>0 && ((Message *)self.unreadMessages[0]).messageData;
 }
 
 - (BOOL)hasFailedMessages {
