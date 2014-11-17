@@ -951,8 +951,8 @@
                                     <constraint firstAttribute="width" constant="60" id="e83-0M-cGE"/>
                                     <constraint firstAttribute="height" constant="60" id="yYD-Op-q4d"/>
                                 </constraints>
-                                <inset key="contentEdgeInsets" minX="13" minY="13" maxX="13" maxY="13"/>
-                                <state key="normal" image="emoji-button">
+                                <inset key="contentEdgeInsets" minX="0.0" minY="3" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" image="camera-controller_button">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -1946,6 +1946,7 @@
         <image name="back-button" width="60" height="60"/>
         <image name="blue-back-button" width="60" height="60"/>
         <image name="blue-next-button" width="60" height="60"/>
+        <image name="camera-controller_button" width="50" height="50"/>
         <image name="cancel-blue-button" width="60" height="60"/>
         <image name="cancel-button" width="60" height="60"/>
         <image name="check-button" width="60" height="60"/>
