@@ -27,6 +27,7 @@
                      messageType:(NSString *)messageType
 {
     Message *message = [[Message alloc] init];
+    message.identifier = identifier;
     message.senderId = senderId;
     message.receiverId = receiverId;
     message.groupId = groupId;
