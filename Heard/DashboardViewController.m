@@ -1258,7 +1258,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         self.photoReceivedLabel.text = [NSString stringWithFormat:@"%lu",kPhotoDuration];
         self.photoReceivedView.image = [UIImage imageWithData:message.messageData];
         self.photoReceivedView.alpha = 1;
-        self.photoDisplayTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(endPhotoDisplay) userInfo:nil repeats:YES];
+        self.photoDisplayTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(changePhotoTimeLabel) userInfo:nil repeats:YES];
     } else {
         // Init Audio Player
         self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.messageData error:nil];
@@ -1375,7 +1375,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                      }];
 }
 
-- (void)endPhotoDisplay {
+- (void)changePhotoTimeLabel {
     NSInteger timeRemaining = [self.photoReceivedLabel.text integerValue] - 1;
     if (timeRemaining > 0) {
         [self.photoReceivedLabel setText:[NSString stringWithFormat:@"%lu",timeRemaining]];
@@ -1917,7 +1917,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 - (void)tapGestureOnPhotoReceived {
-    [self endPhotoDisplay];
+    self.photoReceivedLabel.text = @"0";
+    [self changePhotoTimeLabel];
 }
 
 - (IBAction)cameraButtonClicked:(id)sender {
