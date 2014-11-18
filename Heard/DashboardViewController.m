@@ -127,6 +127,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *takePictureButton;
 @property (weak, nonatomic) IBOutlet UIButton *cameraControllerButton;
 @property (strong, nonatomic) UIImageView *photoReceivedView;
+@property (strong, nonatomic) UILabel *photoReceivedLabel;
 @property (strong, nonatomic) NSTimer *photoDisplayTimer;
 // Message
 @property (strong, nonatomic) Message *messageToSend;
@@ -1254,9 +1255,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if ([message isPhotoMessage]) {
         // todo BT
         // play sound
+        self.photoReceivedLabel.text = [NSString stringWithFormat:@"%lu",kPhotoDuration];
         self.photoReceivedView.image = [UIImage imageWithData:message.messageData];
         self.photoReceivedView.alpha = 1;
-        self.photoDisplayTimer = [NSTimer scheduledTimerWithTimeInterval:5. target:self selector:@selector(endPhotoDisplay) userInfo:nil repeats:NO];
+        self.photoDisplayTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(endPhotoDisplay) userInfo:nil repeats:YES];
     } else {
         // Init Audio Player
         self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.messageData error:nil];
@@ -1374,10 +1376,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 - (void)endPhotoDisplay {
-    //
-    [self.photoDisplayTimer invalidate];
-    self.photoReceivedView.alpha = 0;
-    [self endPlayerAtCompletion:YES];
+    NSInteger timeRemaining = [self.photoReceivedLabel.text integerValue] - 1;
+    if (timeRemaining > 0) {
+        [self.photoReceivedLabel setText:[NSString stringWithFormat:@"%lu",timeRemaining]];
+    } else {
+        [self.photoDisplayTimer invalidate];
+        self.photoReceivedView.alpha = 0;
+        [self endPlayerAtCompletion:YES];
+    }
 }
 - (void)endPlayerAtCompletion:(BOOL)completed
 {
@@ -1898,6 +1904,16 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.photoReceivedView addGestureRecognizer:tap];
     self.photoReceivedView.alpha = 0;
     [self.view addSubview:self.photoReceivedView];
+    
+    // counter
+    self.photoReceivedLabel = [[UILabel alloc] initWithFrame:CGRectMake(10,10,50,50)];
+    self.photoReceivedLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:22.0];
+    self.photoReceivedLabel.layer.cornerRadius = self.photoReceivedLabel.bounds.size.height/2;
+    self.photoReceivedLabel.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.photoReceivedLabel.layer.borderWidth = 2.;
+    self.photoReceivedLabel.textAlignment = NSTextAlignmentCenter;
+    self.photoReceivedLabel.textColor = [UIColor whiteColor];
+    [self.photoReceivedView addSubview:self.photoReceivedLabel];
 }
 
 - (void)tapGestureOnPhotoReceived {

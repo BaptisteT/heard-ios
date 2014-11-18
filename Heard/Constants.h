@@ -96,6 +96,7 @@ static const NSUInteger kEmojiMargin = 10;
 // Camera
 static const NSUInteger kCameraHeight = 426;// iphone 5
 static const NSUInteger kScreenWidth = 320;
+static const NSUInteger kPhotoDuration = 5;
 
 // Message types
 static NSString * const kAudioRecordMessageType = @"Audio_Record";
