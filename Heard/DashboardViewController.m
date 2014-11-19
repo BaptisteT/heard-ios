@@ -2019,7 +2019,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (CGRect)getPhotoViewFrame
 {
     // todo BT
-    return CGRectMake(10, self.view.frame.size.height - 90, 80, 80);
+    return CGRectMake(10, self.view.frame.size.height - 70, 60, 60);//CGRectMake(self.cameraControllerButton.frame.origin.x + (self.cameraControllerButton.frame.size.width - 40)/2,self.cameraControllerButton.frame.origin.y + (self.cameraControllerButton.frame.size.height - 40)/2,40,4z0);
 }
 
 - (IBAction)takePictureButtonClicked:(id)sender {

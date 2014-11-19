@@ -24,8 +24,6 @@
 {
     self = [super init];
     self.contentMode = UIViewContentModeScaleAspectFill;
-    // todo BT
-    // round
     
     self.panningRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanningGesture:)];
     [self addGestureRecognizer:self.panningRecognizer];

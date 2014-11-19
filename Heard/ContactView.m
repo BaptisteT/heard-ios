@@ -54,7 +54,8 @@
 
 @property (nonatomic, strong) CAShapeLayer *circleShape;
 @property (nonatomic, strong) CAShapeLayer *loadingCircleShape;
-@property (nonatomic, strong) CAShapeLayer *unreadCircleShape;
+@property (nonatomic, strong) CAShapeLayer *unreadCircleShapeAudio;
+@property (nonatomic, strong) CAShapeLayer *unreadCircleShapePhoto;
 @property (nonatomic, strong) CAShapeLayer *failedCircleShape;
 
 @property (nonatomic, strong) UILabel *unreadMessagesLabel;
@@ -107,7 +108,7 @@
     [self initPendingContactOverlay];
     [self initSentOverlay];
     [self initFailedCircleShape];
-    [self initUnreadCircleShape];
+    [self initUnreadCircleShapes];
     [self initLoadingCircleShape];
     [self initReadStateImageView];
     [self initReadAnimationImageView];
@@ -186,7 +187,7 @@
 
 - (void)setDiscussionState:(NSInteger)discussionState animated:(BOOL)animated
 {
-    if (_discussionState == discussionState)
+    if (_discussionState == discussionState && !discussionState == UNREAD_STATE)
         return;
 
     _discussionState = discussionState;
@@ -211,8 +212,7 @@
     }
     
     else if (discussionState == UNREAD_STATE) {
-        self.unreadMessagesLabel.hidden = NO;
-        [self.layer addSublayer:self.unreadCircleShape];
+        [self setUnreadStateUI];
     }
     
     else if (discussionState == LOADING_STATE) {
@@ -271,8 +271,7 @@
     [self.failedCircleShape removeFromSuperlayer];
     
     //Unread
-    self.unreadMessagesLabel.hidden = YES;
-    [self.unreadCircleShape removeFromSuperlayer];
+    [self removeUnreadStateUI];
     
     //Read animation
     [self.readAnimationIcon.layer removeAllAnimations];
@@ -815,6 +814,39 @@
     self.sentOverlay.alpha = 0;
 }
 
+- (void)setUnreadStateUI {
+    if (![self hasUnreadMessages]) {
+        return;
+    }
+    self.unreadMessagesLabel.textColor = [(Message *)self.unreadMessages[0] isPhotoMessage] ? [ImageUtils green] : [ImageUtils blue];
+    self.unreadMessagesLabel.hidden = NO;
+    
+    CGPoint center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
+    float degreeStep = 360.f / self.unreadMessagesCount;
+    UIBezierPath *audioPath = [UIBezierPath new];
+    UIBezierPath *photoPath = [UIBezierPath new];
+    NSInteger startDegree = -90;
+    for (Message *message in self.unreadMessages) {
+        if ([message isPhotoMessage]) {
+            [photoPath appendPath:[UIBezierPath bezierPathWithArcCenter:center radius:self.frame.size.width/2 + 4 startAngle:DEGREES_TO_RADIANS(startDegree) endAngle:DEGREES_TO_RADIANS(startDegree + degreeStep-1) clockwise:YES]];
+        } else {
+            [audioPath appendPath:[UIBezierPath bezierPathWithArcCenter:center radius:self.frame.size.width/2 + 4 startAngle:DEGREES_TO_RADIANS(startDegree) endAngle:DEGREES_TO_RADIANS(startDegree + degreeStep -1) clockwise:YES]];
+        }
+        startDegree += degreeStep;
+    }
+    self.unreadCircleShapePhoto.path = photoPath.CGPath;
+    self.unreadCircleShapeAudio.path = audioPath.CGPath;
+    
+    [self.layer addSublayer:self.unreadCircleShapeAudio];
+    [self.layer addSublayer:self.unreadCircleShapePhoto];
+}
+
+- (void)removeUnreadStateUI {
+    self.unreadMessagesLabel.hidden = YES;
+    [self.unreadCircleShapePhoto removeFromSuperlayer];
+    [self.unreadCircleShapeAudio removeFromSuperlayer];
+}
+
 // ----------------------------------------------------------
 #pragma mark Init utility
 // ----------------------------------------------------------
@@ -869,7 +901,6 @@
 
 - (void)initPendingContactOverlay {
     self.pendingContactOverlay = [[UIImageView alloc] initWithFrame:CGRectMake(0,0, self.bounds.size.width, self.bounds.size.height)];
-    [self.layer addSublayer:self.unreadCircleShape];
     self.pendingContactOverlay.clipsToBounds = YES;
     self.pendingContactOverlay.layer.cornerRadius = self.bounds.size.height/2;
     [self.pendingContactOverlay setBackgroundColor:[UIColor clearColor]];
@@ -954,7 +985,7 @@
 
 - (void)initFailedCircleShape
 {
-    CGPoint center = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
+    CGPoint center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
     self.failedCircleShape = [CAShapeLayer new];
     self.failedCircleShape.frame = self.frame;
     self.failedCircleShape.fillColor = [UIColor clearColor].CGColor;
@@ -967,19 +998,19 @@
                                                               clockwise:YES].CGPath;
 }
 
-- (void)initUnreadCircleShape
+- (void)initUnreadCircleShapes
 {
-    CGPoint center = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame));
-    self.unreadCircleShape = [CAShapeLayer new];
-    self.unreadCircleShape.frame = self.frame;
-    self.unreadCircleShape.fillColor = [UIColor clearColor].CGColor;
-    self.unreadCircleShape.lineWidth = ACTION_CIRCLE_BORDER;
-    self.unreadCircleShape.strokeColor = [ImageUtils blue].CGColor;
-    self.unreadCircleShape.path = [UIBezierPath bezierPathWithArcCenter:center
-                                                                 radius:self.frame.size.width/2 + 4
-                                                             startAngle:DEGREES_TO_RADIANS(0)
-                                                               endAngle:DEGREES_TO_RADIANS(360)
-                                                              clockwise:YES].CGPath;
+    self.unreadCircleShapeAudio = [CAShapeLayer new];
+    self.unreadCircleShapeAudio.frame = self.frame;
+    self.unreadCircleShapeAudio.fillColor = [UIColor clearColor].CGColor;
+    self.unreadCircleShapeAudio.lineWidth = ACTION_CIRCLE_BORDER;
+    self.unreadCircleShapeAudio.strokeColor = [ImageUtils blue].CGColor;
+    
+    self.unreadCircleShapePhoto = [CAShapeLayer new];
+    self.unreadCircleShapePhoto.frame = self.frame;
+    self.unreadCircleShapePhoto.fillColor = [UIColor clearColor].CGColor;
+    self.unreadCircleShapePhoto.lineWidth = ACTION_CIRCLE_BORDER;
+    self.unreadCircleShapePhoto.strokeColor = [ImageUtils green].CGColor;
 }
 
 - (void)initLoadingCircleShape
