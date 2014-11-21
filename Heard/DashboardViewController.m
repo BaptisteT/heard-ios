@@ -1197,7 +1197,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     [self setRecorderLineWidth:0];
     self.recorderContainer.hidden = NO;
-    
     float finalWidth = self.recorderContainer.bounds.size.width;
     
     [UIView animateWithDuration:kMaxAudioDuration
@@ -1217,7 +1216,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.recorderLabel.hidden = YES;
     
     // Remove UI
-    self.recorderLine.frame = [[self.recorderLine.layer presentationLayer] frame];
     [self.recorderLine.layer removeAllAnimations];
     self.recorderContainer.hidden = YES;
     [self setRecorderLineWidth:0];
