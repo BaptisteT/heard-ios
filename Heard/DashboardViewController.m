@@ -156,7 +156,6 @@
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     self.screenWidth = screenRect.size.width;
     self.screenHeight = screenRect.size.height;
-    
     self.contactsPerRow = self.screenWidth / (kContactSize + kContactMinimumMargin);
     self.contactMargin = (self.screenWidth - (self.contactsPerRow * kContactSize))/(self.contactsPerRow + 1);
     
@@ -165,6 +164,10 @@
     self.authRequestAllowButton.layer.cornerRadius = self.authRequestAllowButton.bounds.size.height/2;
     
     [GeneralUtils addBottomBorder:self.topBarBackground borderSize:0.5];
+    
+    // Init address book
+    self.addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
+    ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
     
     //Init no message view
     self.bottomTutoView = [[UIView alloc] initWithFrame:CGRectMake(self.screenWidth/2 - NO_MESSAGE_VIEW_WIDTH/2, self.view.bounds.size.height - 4 * NO_MESSAGE_VIEW_HEIGHT, NO_MESSAGE_VIEW_WIDTH, NO_MESSAGE_VIEW_HEIGHT)];
@@ -313,10 +316,6 @@
                               otherButtonTitles:nil] show];
         }
     }
-    
-    // Init address book
-    self.addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
-    ABAddressBookRegisterExternalChangeCallback(self.addressBook,MyAddressBookExternalChangeCallback, (__bridge void *)(self));
     
     // Go to access view controller if acces has not yet been granted
     if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {

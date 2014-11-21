@@ -55,12 +55,12 @@
                                                                            firstName:firstName
                                                                             lastName:lastName
                                                                           facebookId:facebookUsername];
-    contact.hasPhoto = ABPersonHasImageData(person);
-    if ([phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeMOBILE) { // Make sure favorites are mobile
-        [contact checkIfFavoriteContact:person andSaveStats:stats];
-    }
 
     if (stats) {
+        contact.hasPhoto = ABPersonHasImageData(person);
+        if ([phoneUtil getNumberType:nbPhoneNumber] == NBEPhoneNumberTypeMOBILE) { // Make sure favorites are mobile
+            [contact checkIfFavoriteContact:person andSaveStats:stats];
+        }
         [GeneralUtils incrementOf:1 objectOfDictionnary:stats forKey:kNbContactKey];
         if (contact.hasPhoto) [GeneralUtils incrementOf:1 objectOfDictionnary:stats forKey:kNbContactPhotoKey];
         if (facebookUsername.length > 0) [GeneralUtils incrementOf:1 objectOfDictionnary:stats forKey:kNbContactFbKey];
