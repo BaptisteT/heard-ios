@@ -40,7 +40,7 @@ static const NSUInteger kMaxNameLength = 20;
 static const NSUInteger kAVSampleRateKey = 32000;
 static const NSUInteger kAVNumberOfChannelsKey = 2;
 static const CGFloat kMaxAudioDuration = 30.; // in sec
-static const CGFloat kMinAudioDuration = 1; // in sec
+static const CGFloat kMinAudioDuration = 0.5; // in sec
 static const CGFloat kLongPressMinDuration = 0.05;
 static const CGFloat kLongPressMinDurationForOneTapMode = 0.5;
 static const CGFloat kAudioPlayerVolume = 1;
@@ -94,7 +94,7 @@ static const NSUInteger kEmojiSize = 60;
 static const NSUInteger kEmojiMargin = 10;
 
 // Camera
-static const NSUInteger kCameraHeight = 426;// iphone 5
+static const float kCameraAspectRatio = 4.0 / 3.0;
 static const NSUInteger kScreenWidth = 320;
 static const NSUInteger kPhotoDuration = 5;
 

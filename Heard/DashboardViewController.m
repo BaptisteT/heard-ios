@@ -1950,12 +1950,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // todo bt
     // Check 4, 5, 6 ; ios 7 / ios 8
-    // Transform camera to get full screen (for iphone 5)
-    double translationFactor = (self.view.frame.size.height - kCameraHeight) / 2;
+    double cameraHeight = self.view.frame.size.width * kCameraAspectRatio;
+    double translationFactor = (self.view.frame.size.height - cameraHeight) / 2;
     CGAffineTransform translate = CGAffineTransformMakeTranslation(0.0, translationFactor);
     imagePickerController.cameraViewTransform = translate;
     
-    double rescalingRatio = self.view.frame.size.height / kCameraHeight;
+    double rescalingRatio = self.view.frame.size.height / cameraHeight;
     CGAffineTransform scale = CGAffineTransformScale(translate, rescalingRatio, rescalingRatio);
     imagePickerController.cameraViewTransform = scale;
     
@@ -2011,6 +2011,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 //    [UIView animateWithDuration:0.5f animations:^{
 //        [self.photoTakenView setFrame:[self getPhotoViewFrame]];
 //    }];
+    
+    // Keyboard + label
 }
 
 - (CGRect)getPhotoViewFrame
