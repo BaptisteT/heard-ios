@@ -1515,6 +1515,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)proximityStateDidChangeCallback {
     BOOL success; NSError* error;
     AVAudioSession *session = [AVAudioSession sharedInstance];
+    if (self.disableProximityObserver) {
+        [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+    }
     if (self.isUsingHeadSet || [UIDevice currentDevice].proximityState || !self.LoudSpeakerMode) {
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error];
         if ([UIDevice currentDevice].proximityState) {
@@ -1524,9 +1527,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         }
     } else {
         success = [session overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
-        if (self.disableProximityObserver) {
-            [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
-        }
     }
     if (!success)
         NSLog(@"AVAudioSession error overrideOutputAudioPort:%@",error);
