@@ -22,4 +22,5 @@
 - (void)updateEmojiOrPhotoLocation:(CGPoint)location;
 - (void)photoDropped:(PhotoView *)photoView atLocation:(CGPoint)location;
 - (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration priority:(BOOL)prority;
+- (CGRect)getPhotoViewFrame;
 @end

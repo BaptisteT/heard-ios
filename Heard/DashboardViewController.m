@@ -1253,8 +1253,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self addMessagesToLastMessagesPlayed:message];
     
     if ([message isPhotoMessage]) {
-        // todo BT
-        // play sound
         self.photoReceivedLabel.text = [NSString stringWithFormat:@"%lu",kPhotoDuration];
         self.photoReceivedView.image = [UIImage imageWithData:message.messageData];
         self.photoReceivedView.alpha = 1;
@@ -2011,15 +2009,15 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.photoTakenView.hidden = NO;
     [self closeCamera];
     
-    [UIView animateWithDuration:0.5f animations:^{
-        [self.photoTakenView setFrame:[self getPhotoViewFrame]];
-    }];
+//    [UIView animateWithDuration:0.5f animations:^{
+//        [self.photoTakenView setFrame:[self getPhotoViewFrame]];
+//    }];
 }
 
 - (CGRect)getPhotoViewFrame
 {
     // todo BT
-    return CGRectMake(10, self.view.frame.size.height - 70, 60, 60);//CGRectMake(self.cameraControllerButton.frame.origin.x + (self.cameraControllerButton.frame.size.width - 40)/2,self.cameraControllerButton.frame.origin.y + (self.cameraControllerButton.frame.size.height - 40)/2,40,4z0);
+    return CGRectMake(10, self.view.frame.size.height - 90, 80, 80);
 }
 
 - (IBAction)takePictureButtonClicked:(id)sender {

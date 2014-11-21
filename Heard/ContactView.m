@@ -818,7 +818,7 @@
     if (![self hasUnreadMessages]) {
         return;
     }
-    self.unreadMessagesLabel.textColor = [(Message *)self.unreadMessages[0] isPhotoMessage] ? [ImageUtils green] : [ImageUtils blue];
+    self.unreadMessagesLabel.textColor = [ImageUtils blue];
     self.unreadMessagesLabel.hidden = NO;
     
     CGPoint center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
@@ -1010,7 +1010,7 @@
     self.unreadCircleShapePhoto.frame = self.frame;
     self.unreadCircleShapePhoto.fillColor = [UIColor clearColor].CGColor;
     self.unreadCircleShapePhoto.lineWidth = ACTION_CIRCLE_BORDER;
-    self.unreadCircleShapePhoto.strokeColor = [ImageUtils green].CGColor;
+    self.unreadCircleShapePhoto.strokeColor = [UIColor lightGrayColor].CGColor;
 }
 
 - (void)initLoadingCircleShape

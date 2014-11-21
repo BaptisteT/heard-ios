@@ -50,6 +50,14 @@
 - (void)handleTapGesture
 {
     [self.delegate tutoMessage:NSLocalizedStringFromTable(@"photo_tuto_message",kStringFile,nil) withDuration:3 priority:NO];
+    
+    if (CGRectEqualToRect(self.frame,self.superview.frame)) {
+        self.frame = [self.delegate getPhotoViewFrame];
+//        self.contentMode = UIViewContentModeScaleAspectFit;
+    } else {
+        self.frame = self.superview.frame;
+//        self.contentMode = UIViewContentModeScaleAspectFill;
+    }
 }
 
 
