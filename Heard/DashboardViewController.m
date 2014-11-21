@@ -1195,11 +1195,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self playSound:kStartRecordSound ofType:@""];
     [self disableAllContactViews];
     
-    // Case where we had a pending message
-    if (!self.recorderContainer.isHidden) {
-        [self setRecorderLineWidth:0];
-    }
-
+    [self setRecorderLineWidth:0];
     self.recorderContainer.hidden = NO;
     
     float finalWidth = self.recorderContainer.bounds.size.width;
