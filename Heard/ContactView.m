@@ -21,6 +21,7 @@
 #define CONTACT_BORDER 0.5
 #define DEGREES_TO_RADIANS(x) (x)/180.0*M_PI
 #define RADIANS_TO_DEGREES(x) (x)/M_PI*180.0
+#define UNREAD_LABEL_START_ANGLE 50
 
 #define EMPTY_STATE 0
 #define PENDING_STATE 1
@@ -56,6 +57,7 @@
 @property (nonatomic, strong) CAShapeLayer *loadingCircleShape;
 @property (nonatomic, strong) CAShapeLayer *unreadCircleShapeAudio;
 @property (nonatomic, strong) CAShapeLayer *unreadCircleShapePhoto;
+@property (nonatomic, strong) CAShapeLayer *unreadCircleStartMark;
 @property (nonatomic, strong) CAShapeLayer *failedCircleShape;
 
 @property (nonatomic, strong) UILabel *unreadMessagesLabel;
@@ -818,14 +820,16 @@
     if (![self hasUnreadMessages]) {
         return;
     }
-    self.unreadMessagesLabel.textColor = [ImageUtils blue];
+    UIColor *firstMessageColor = [(Message *)self.unreadMessages[0] isPhotoMessage]? [UIColor lightGrayColor] : [ImageUtils blue];
+    self.unreadMessagesLabel.textColor = firstMessageColor;
     self.unreadMessagesLabel.hidden = NO;
+    self.unreadCircleStartMark.strokeColor = firstMessageColor.CGColor;
     
     CGPoint center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
     float degreeStep = 360.f / self.unreadMessagesCount;
     UIBezierPath *audioPath = [UIBezierPath new];
     UIBezierPath *photoPath = [UIBezierPath new];
-    NSInteger startDegree = -90;
+    NSInteger startDegree = -UNREAD_LABEL_START_ANGLE;
     for (Message *message in self.unreadMessages) {
         if ([message isPhotoMessage]) {
             [photoPath appendPath:[UIBezierPath bezierPathWithArcCenter:center radius:self.frame.size.width/2 + 4 startAngle:DEGREES_TO_RADIANS(startDegree) endAngle:DEGREES_TO_RADIANS(startDegree + degreeStep-1) clockwise:YES]];
@@ -839,12 +843,14 @@
     
     [self.layer addSublayer:self.unreadCircleShapeAudio];
     [self.layer addSublayer:self.unreadCircleShapePhoto];
+    [self.layer addSublayer:self.unreadCircleStartMark];
 }
 
 - (void)removeUnreadStateUI {
     self.unreadMessagesLabel.hidden = YES;
     [self.unreadCircleShapePhoto removeFromSuperlayer];
     [self.unreadCircleShapeAudio removeFromSuperlayer];
+    [self.unreadCircleStartMark removeFromSuperlayer];
 }
 
 // ----------------------------------------------------------
@@ -1011,6 +1017,13 @@
     self.unreadCircleShapePhoto.fillColor = [UIColor clearColor].CGColor;
     self.unreadCircleShapePhoto.lineWidth = ACTION_CIRCLE_BORDER;
     self.unreadCircleShapePhoto.strokeColor = [UIColor lightGrayColor].CGColor;
+    
+    self.unreadCircleStartMark = [CAShapeLayer new];
+    self.unreadCircleStartMark.frame = self.frame;
+    self.unreadCircleStartMark.fillColor = [UIColor clearColor].CGColor;
+    self.unreadCircleStartMark.lineWidth = ACTION_CIRCLE_BORDER + 3;
+    CGPoint center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
+    self.unreadCircleStartMark.path = [UIBezierPath bezierPathWithArcCenter:center radius:self.frame.size.width/2 + 4 startAngle:DEGREES_TO_RADIANS(-UNREAD_LABEL_START_ANGLE-1.5) endAngle:DEGREES_TO_RADIANS(-UNREAD_LABEL_START_ANGLE+0.5) clockwise:YES].CGPath;
 }
 
 - (void)initLoadingCircleShape
