@@ -25,6 +25,7 @@
                     creationTime:(NSInteger)creationTime
                      messageData:(NSData *)messageData
                      messageType:(NSString *)messageType
+                     messageText:(NSString *)messageText
 {
     Message *message = [[Message alloc] init];
     message.identifier = identifier;
@@ -34,6 +35,7 @@
     message.createdAt = creationTime;
     message.messageData = messageData;
     message.messageType = messageType;
+    message.messageText = messageText;
     return message;
 }
 
@@ -55,7 +57,8 @@
                                             groupId:[rawMessage objectForKey:GROUP_ID] == [NSNull null] ? 0 : [[rawMessage objectForKey:GROUP_ID] integerValue]
                                        creationTime:[[rawMessage objectForKey:CREATED_AT] integerValue]
                                         messageData:nil
-                                        messageType:[rawMessage objectForKey:MESSAGE_TYPE]];
+                                        messageType:[rawMessage objectForKey:MESSAGE_TYPE]
+                                        messageText:[rawMessage objectForKey:MESSAGE_TYPE]];
     return message;
 }
 

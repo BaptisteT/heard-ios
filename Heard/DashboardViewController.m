@@ -37,6 +37,7 @@
 #import "ManageGroupsViewController.h"
 #import "InviteViewController.h"
 #import "PhotoView.h"
+#import "CameraViewController.h"
 
 #define ACTION_PENDING_OPTION_1 NSLocalizedStringFromTable(@"add_to_contact_button_title",kStringFile,@"comment")
 #define ACTION_PENDING_OPTION_2 NSLocalizedStringFromTable(@"block_button_title",kStringFile,@"comment")
@@ -119,17 +120,15 @@
 // Emoji View
 @property (weak, nonatomic) IBOutlet UIButton *emojiButton;
 @property (strong, nonatomic) UIScrollView *emojiScrollView;
-// Camera
-@property (strong, nonatomic) UIImagePickerController * imagePickerController;
-@property (weak, nonatomic) IBOutlet UIButton *cameraFlipButton;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (strong, nonatomic) PhotoView *photoTakenView;
-@property (weak, nonatomic) IBOutlet UIButton *takePictureButton;
+// Photo
+@property (strong, nonatomic) PhotoView *photoToSendView;
+@property (strong, nonatomic) NSString *textToSend;
 @property (weak, nonatomic) IBOutlet UIButton *cameraControllerButton;
 @property (strong, nonatomic) UIImageView *photoReceivedView;
-@property (strong, nonatomic) UILabel *photoReceivedLabel;
-@property (strong, nonatomic) CAShapeLayer *photoReceivedLabelLayer;
+@property (strong, nonatomic) UILabel *photoReceivedTime;
+@property (strong, nonatomic) CAShapeLayer *photoReceivedTimeLayer;
 @property (strong, nonatomic) NSTimer *photoDisplayTimer;
+@property (weak, nonatomic) IBOutlet UITextField *photoReceivedDescriptionField;
 // Message
 @property (strong, nonatomic) Message *messageToSend;
 
@@ -363,9 +362,19 @@
     } else if ([segueName isEqualToString:@"Invite Modal Segue"]) {
         ((InviteViewController *) [segue destinationViewController]).contacts = self.contacts;
         ((InviteViewController *) [segue destinationViewController]).delegate = self;
+    } else if ([segueName isEqualToString:@"Camera From Dashboard Segue"]) {
+        ((CameraViewController *) [segue destinationViewController]).delegate = self;
+        if (sender) {
+            ((CameraViewController *) [segue destinationViewController]).imageView.image = self.photoToSendView.image;
+            ((CameraViewController *) [segue destinationViewController]).photoDescriptionField.text = self.textToSend;
+        }
     }
 }
 
+- (IBAction)cameraButtonClicked:(id)sender {
+    [self performSegueWithIdentifier:@"Camera From Dashboard Segue" sender:nil];
+    self.emojiScrollView.hidden = YES;
+}
 
 // ------------------------------
 #pragma mark UI Modes
@@ -1229,7 +1238,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     NSInteger receiverId = [self.lastSelectedContactView isGroupContactView] ? 0 : [self.lastSelectedContactView contactIdentifier];
     NSInteger groupId = [self.lastSelectedContactView isGroupContactView] ? [self.lastSelectedContactView contactIdentifier] : 0;
     
-    self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:[[NSData alloc] initWithContentsOfURL:self.recorder.url] messageType:kAudioRecordMessageType];
+    self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:[[NSData alloc] initWithContentsOfURL:self.recorder.url] messageType:kAudioRecordMessageType messageText:@""];
     [self playSound:kEndRecordSound ofType:@""];
 }
 
@@ -1248,7 +1257,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self addMessagesToLastMessagesPlayed:message];
     
     if ([message isPhotoMessage]) {
-        self.photoReceivedLabel.text = [NSString stringWithFormat:@"%lu",kPhotoDuration];
+        self.photoReceivedTime.text = [NSString stringWithFormat:@"%lu",kPhotoDuration];
         self.photoReceivedView.image = [UIImage imageWithData:message.messageData];
         self.photoDisplayTimer = [NSTimer scheduledTimerWithTimeInterval:1. target:self selector:@selector(changePhotoTimeLabel) userInfo:nil repeats:YES];
         
@@ -1262,11 +1271,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         drawAnimation.fillMode = kCAFillModeForwards;
         drawAnimation.removedOnCompletion = NO;
         drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-        [self.photoReceivedLabelLayer addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+        [self.photoReceivedTimeLayer addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
         
         // display
         self.photoReceivedView.alpha = 1;
         // todo bt sound + vibration
+        // todo bt text
         
     } else {
         // Init Audio Player
@@ -1389,9 +1399,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 - (void)changePhotoTimeLabel {
-    NSInteger timeRemaining = [self.photoReceivedLabel.text integerValue] - 1;
+    NSInteger timeRemaining = [self.photoReceivedTime.text integerValue] - 1;
     if (timeRemaining > 0) {
-        [self.photoReceivedLabel setText:[NSString stringWithFormat:@"%lu",timeRemaining]];
+        [self.photoReceivedTime setText:[NSString stringWithFormat:@"%lu",timeRemaining]];
     } else {
         [self endPlayerAtCompletion:YES];
     }
@@ -1433,7 +1443,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Stop photo UI
     self.photoReceivedView.alpha = 0;
-    [self.photoReceivedLabelLayer removeAllAnimations];
+    [self.photoReceivedTimeLayer removeAllAnimations];
     [self.photoDisplayTimer invalidate];
     
     if (self.lastSelectedContactView) {
@@ -1848,7 +1858,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
         NSInteger receiverId = [contactView isGroupContactView] ? 0 : [contactView contactIdentifier];
         NSInteger groupId = [contactView isGroupContactView] ? [contactView contactIdentifier] : 0;
-        self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:[NSData dataWithContentsOfURL:soundURL] messageType:kAudioEmojiMessageType];
+        self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:[NSData dataWithContentsOfURL:soundURL] messageType:kAudioEmojiMessageType messageText:@""];
         CGPoint destinationPoint = [emojiView.superview convertPoint:contactView.center fromView:self.contactScrollView];
         [UIView transitionWithView:emojiView
                           duration:0.5f
@@ -1906,10 +1916,20 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Photo
 // ----------------------------------------------------------
 
+- (void)savePhoto:(UIImage *)image andText:(NSString *)text {
+    self.photoToSendView.image = image;
+    self.textToSend = text;
+    self.photoToSendView.frame = self.view.frame;
+    self.photoToSendView.hidden = NO;
+    [UIView animateWithDuration:0.5f animations:^{
+        [self.photoToSendView setFrame:[self getPhotoViewFrame]];
+    }];
+}
+
 - (void)initPhotoTakenView {
-    self.photoTakenView = [[PhotoView alloc] initPhotoView];
-    self.photoTakenView.delegate = self;
-    [self.view addSubview:self.photoTakenView];
+    self.photoToSendView = [[PhotoView alloc] initPhotoView];
+    self.photoToSendView.delegate = self;
+    [self.view addSubview:self.photoToSendView];
 }
 
 - (void)initPhotoReceivedView {
@@ -1924,70 +1944,25 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.view addSubview:self.photoReceivedView];
     
     // counter
-    self.photoReceivedLabel = [[UILabel alloc] initWithFrame:CGRectMake(10,10,50,50)];
-    self.photoReceivedLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:22.0];
-    self.photoReceivedLabel.textAlignment = NSTextAlignmentCenter;
-    self.photoReceivedLabel.textColor = [UIColor whiteColor];
-    [self.photoReceivedView addSubview:self.photoReceivedLabel];
+    self.photoReceivedTime = [[UILabel alloc] initWithFrame:CGRectMake(10,10,50,50)];
+    self.photoReceivedTime.font = [UIFont fontWithName:@"HelveticaNeue" size:22.0];
+    self.photoReceivedTime.textAlignment = NSTextAlignmentCenter;
+    self.photoReceivedTime.textColor = [UIColor whiteColor];
+    [self.photoReceivedView addSubview:self.photoReceivedTime];
     
     // Set up the shape of the photoReceivedLabel
-    self.photoReceivedLabelLayer = [CAShapeLayer layer];
-    self.photoReceivedLabelLayer.path = [UIBezierPath bezierPathWithRoundedRect:[self.self.photoReceivedLabel convertRect:self.photoReceivedLabel.frame fromView:self.photoReceivedView]
-                                                                   cornerRadius:self.photoReceivedLabel.bounds.size.height/2].CGPath;
-    self.photoReceivedLabelLayer.strokeColor = [UIColor whiteColor].CGColor;
-    self.photoReceivedLabelLayer.fillColor = [UIColor clearColor].CGColor;
-    self.photoReceivedLabelLayer.lineWidth = 2.;
-    [self.photoReceivedLabel.layer addSublayer:self.photoReceivedLabelLayer];
+    self.photoReceivedTimeLayer = [CAShapeLayer layer];
+    self.photoReceivedTimeLayer.path = [UIBezierPath bezierPathWithRoundedRect:[self.photoReceivedTime convertRect:self.photoReceivedTime.frame fromView:self.photoReceivedView]
+                                                                   cornerRadius:self.photoReceivedTime.bounds.size.height/2].CGPath;
+    self.photoReceivedTimeLayer.strokeColor = [UIColor whiteColor].CGColor;
+    self.photoReceivedTimeLayer.fillColor = [UIColor clearColor].CGColor;
+    self.photoReceivedTimeLayer.lineWidth = 2.;
+    [self.photoReceivedTime.layer addSublayer:self.photoReceivedTimeLayer];
 }
 
 - (void)tapGestureOnPhotoReceived {
-    self.photoReceivedLabel.text = @"0";
+    self.photoReceivedTime.text = @"0";
     [self changePhotoTimeLabel];
-}
-
-- (IBAction)cameraButtonClicked:(id)sender {
-    if (!self.imagePickerController) {
-        [self allocAndInitFullScreenCamera];
-    }
-    self.emojiScrollView.hidden = YES;
-    [self presentViewController:self.imagePickerController animated:NO completion:NULL];
-}
-
-// Alloc the impage picker controller
-- (void) allocAndInitFullScreenCamera
-{
-    // Create custom camera view
-    UIImagePickerController *imagePickerController = [UIImagePickerController new];
-    imagePickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
-    imagePickerController.delegate = self;
-
-    imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
-    imagePickerController.cameraDevice = UIImagePickerControllerCameraDeviceFront;
-    
-    // Custom buttons
-    imagePickerController.showsCameraControls = NO;
-    imagePickerController.allowsEditing = NO;
-    imagePickerController.navigationBarHidden=YES;
-    
-    NSString *xibName = @"CameraOverlayView";
-    NSArray* nibViews = [[NSBundle mainBundle] loadNibNamed:xibName owner:self options:nil];
-    UIView* myView = [ nibViews objectAtIndex: 0];
-    myView.frame = self.view.frame;
-    
-    imagePickerController.cameraOverlayView = myView;
-
-    double cameraHeight = self.view.frame.size.width * kCameraAspectRatio;
-    double translationFactor = (self.view.frame.size.height - cameraHeight) / 2;
-    CGAffineTransform translate = CGAffineTransformMakeTranslation(0.0, translationFactor);
-    imagePickerController.cameraViewTransform = translate;
-    
-    double rescalingRatio = self.view.frame.size.height / cameraHeight;
-    CGAffineTransform scale = CGAffineTransformScale(translate, rescalingRatio, rescalingRatio);
-    imagePickerController.cameraViewTransform = scale;
-    
-    // flash disactivated by default
-    imagePickerController.cameraFlashMode = UIImagePickerControllerCameraFlashModeOff;
-    self.imagePickerController = imagePickerController;
 }
 
 - (void)photoDropped:(PhotoView *)photoView atLocation:(CGPoint)location
@@ -1997,7 +1972,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [contactView removeEmojiOverlay];
         NSInteger receiverId = [contactView isGroupContactView] ? 0 : [contactView contactIdentifier];
         NSInteger groupId = [contactView isGroupContactView] ? [contactView contactIdentifier] : 0;
-        self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:UIImageJPEGRepresentation(photoView.image,0.9) messageType:kPhotoMessageType];
+        self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:UIImageJPEGRepresentation(photoView.image,0.9) messageType:kPhotoMessageType messageText:@""];
         CGPoint destinationPoint = [photoView.superview convertPoint:contactView.center fromView:self.contactScrollView];
         [UIView transitionWithView:photoView
                           duration:0.5f
@@ -2031,57 +2006,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
 }
 
-// Display the relevant part of the photo once taken
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)editInfo
-{
-    UIImage *image =  [editInfo objectForKey:UIImagePickerControllerOriginalImage];
-    UIImageOrientation orientation;
-    if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
-        // Force portrait, and avoid mirror of front camera
-        orientation = self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDeviceFront ? UIImageOrientationLeftMirrored : UIImageOrientationRight;
-    } else {
-        orientation = UIImageOrientationRight;
-    }
-    self.photoTakenView.frame = self.view.frame;
-    self.photoTakenView.image = [UIImage imageWithCGImage:image.CGImage scale:1 orientation:orientation];;
-    self.photoTakenView.hidden = NO;
-    [self closeCamera];
-    
-    // todo bt
-//    [UIView animateWithDuration:0.5f animations:^{
-//        [self.photoTakenView setFrame:[self getPhotoViewFrame]];
-//    }];
-    
-    // Keyboard + label
-}
-
 - (CGRect)getPhotoViewFrame
 {
     // todo BT
     return CGRectMake(10, self.view.frame.size.height - 90, 80, 80);
-}
-
-- (IBAction)takePictureButtonClicked:(id)sender {
-    [self.imagePickerController takePicture];
-}
-
-- (IBAction)flipCameraButtonClicked:(id)sender
-{
-    if (self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDeviceFront){
-        self.imagePickerController.cameraDevice = UIImagePickerControllerCameraDeviceRear;
-    } else {
-        self.imagePickerController.cameraDevice = UIImagePickerControllerCameraDeviceFront;
-    }
-}
-
-- (IBAction)cancelButtonClicked:(id)sender
-{
-    [self closeCamera];
-}
-
-- (void)closeCamera
-{
-    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void)startDisplayBin

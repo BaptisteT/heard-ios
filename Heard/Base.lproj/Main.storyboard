@@ -1047,11 +1047,72 @@
                         <segue destination="pFp-bR-Dlq" kind="modal" identifier="Invite Modal Segue" id="Z5D-EJ-JI9"/>
                         <segue destination="auT-7X-aYh" kind="modal" identifier="Manage Groups From Dashboard" id="Kkt-6B-Ols"/>
                         <segue destination="XOa-fb-gen" kind="modal" identifier="Create Group From Dashboard" id="lXU-Fa-FA3"/>
+                        <segue destination="YBy-ry-GCo" kind="modal" identifier="Camera From Dashboard Segue" animates="NO" id="CIF-ww-3br"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kJk-FM-4rk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2563" y="99"/>
+        </scene>
+        <!--Camera View Controller-->
+        <scene sceneID="ZNp-D8-dqy">
+            <objects>
+                <viewController id="YBy-ry-GCo" customClass="CameraViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="MwH-Zv-4bK"/>
+                        <viewControllerLayoutGuide type="bottom" id="dt8-cJ-RZD"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Wsf-VT-8dR">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UPz-PF-2OM">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q4n-tp-qKq">
+                                <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                <inset key="contentEdgeInsets" minX="15" minY="15" maxX="15" maxY="15"/>
+                                <state key="normal" image="camera-quit-button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="cancelPhotoButtonClicked:" destination="YBy-ry-GCo" eventType="touchUpInside" id="bc1-wY-dmb"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HL5-i5-s9P">
+                                <rect key="frame" x="260" y="0.0" width="60" height="60"/>
+                                <state key="normal" image="check-button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="checkButtonClicked:" destination="YBy-ry-GCo" eventType="touchUpInside" id="dHV-Ux-zob"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AH7-Zj-QBm">
+                                <rect key="frame" x="78" y="338" width="97" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="UPz-PF-2OM" firstAttribute="top" secondItem="Wsf-VT-8dR" secondAttribute="top" id="DqS-3T-qIR"/>
+                            <constraint firstItem="UPz-PF-2OM" firstAttribute="leading" secondItem="Wsf-VT-8dR" secondAttribute="leading" id="M5j-qx-IRI"/>
+                            <constraint firstItem="dt8-cJ-RZD" firstAttribute="top" secondItem="UPz-PF-2OM" secondAttribute="bottom" id="Vxp-k8-nIh"/>
+                            <constraint firstAttribute="trailing" secondItem="UPz-PF-2OM" secondAttribute="trailing" id="rjF-oO-g3v"/>
+                        </constraints>
+                    </view>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="imageView" destination="UPz-PF-2OM" id="QHs-Zh-uLr"/>
+                        <outlet property="photoDescriptionField" destination="AH7-Zj-QBm" id="Mla-BY-do9"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BS1-nH-752" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3022" y="95"/>
         </scene>
         <!--Manage Groups View Controller-->
         <scene sceneID="i4u-kd-eHF">
@@ -1947,6 +2008,7 @@
         <image name="blue-back-button" width="60" height="60"/>
         <image name="blue-next-button" width="60" height="60"/>
         <image name="camera-controller_button" width="50" height="50"/>
+        <image name="camera-quit-button" width="150" height="151"/>
         <image name="cancel-blue-button" width="60" height="60"/>
         <image name="cancel-button" width="60" height="60"/>
         <image name="check-button" width="60" height="60"/>

@@ -16,7 +16,8 @@
                          groupId:(NSInteger)groupId
                     creationTime:(NSInteger)creationTime
                      messageData:(NSData *)messageData
-                     messageType:(NSString *)messageType;
+                     messageType:(NSString *)messageType
+                     messageText:(NSString *)messageText;
 + (NSArray *)rawMessagesToInstances:(NSArray *)rawMessages;
 + (Message *)rawMessageToInstance:(id)rawMessage;
 - (NSURL *)getMessageURL;
@@ -32,5 +33,6 @@
 @property (nonatomic) NSInteger createdAt;
 @property (nonatomic) NSData *messageData;
 @property (nonatomic) NSString *messageType;
+@property (nonatomic) NSString *messageText;
 
 @end

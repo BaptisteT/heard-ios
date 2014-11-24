@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DashboardViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CameraViewController">
             <connections>
                 <outlet property="cameraFlipButton" destination="AnH-cb-SA8" id="pyD-SQ-LH7"/>
                 <outlet property="cancelButton" destination="ClI-KY-iiZ" id="oc7-j5-bD7"/>
