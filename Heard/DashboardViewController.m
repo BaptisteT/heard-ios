@@ -1495,6 +1495,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     // Dismiss modal
     [self dismissViewControllerAnimated:NO completion:nil];
     
+    // Remove anim
+    [self endPlayerUIForAllContactViews];
+    
+    // Hide tuto
+    self.bottomTutoView.alpha = 0;
 }
 
 -(void)routeChangeCallback:(NSNotification*)notification {
