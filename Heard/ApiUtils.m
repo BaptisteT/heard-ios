@@ -212,7 +212,7 @@
 
     path =  [[ApiUtils getBasePath] stringByAppendingString:@"messages.json"];
     [parameters setObject:[NSNumber numberWithLong:[contactView contactIdentifier]] forKey:@"receiver_id"];
-    [parameters setObject:[NSNumber numberWithLong:(long)[[NSDate date] timeIntervalSince1970]] forKey:@"creation_date"];
+    [parameters setObject:[NSNumber numberWithInteger:message.createdAt] forKey:@"creation_date"];
     if ([contactView isGroupContactView]) {
         [parameters setObject:@"1" forKey:@"is_group"];
     }
