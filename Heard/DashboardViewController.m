@@ -128,6 +128,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *cameraControllerButton;
 @property (strong, nonatomic) UIImageView *photoReceivedView;
 @property (strong, nonatomic) UILabel *photoReceivedLabel;
+@property (strong, nonatomic) CAShapeLayer *photoReceivedLabelLayer;
 @property (strong, nonatomic) NSTimer *photoDisplayTimer;
 // Message
 @property (strong, nonatomic) Message *messageToSend;
@@ -197,8 +198,9 @@
     // Create Groups
     self.groups = ((HeardAppDelegate *)[[UIApplication sharedApplication] delegate]).groups;
     
-    //Create invite contact view
+    //Create invite button
     self.inviteButton = [[UIButton alloc] initWithFrame:CGRectMake(self.contactMargin, kContactMinimumMargin, kContactSize, kContactSize)];
+    [[self.inviteButton imageView] setContentMode: UIViewContentModeScaleAspectFit];
     [self.inviteButton addTarget:self action:@selector(inviteButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     [self.inviteButton setImage:[UIImage imageNamed:@"invite-button"] forState:UIControlStateNormal];
     [self.contactScrollView addSubview:self.inviteButton];
@@ -1248,8 +1250,24 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if ([message isPhotoMessage]) {
         self.photoReceivedLabel.text = [NSString stringWithFormat:@"%lu",kPhotoDuration];
         self.photoReceivedView.image = [UIImage imageWithData:message.messageData];
+        self.photoDisplayTimer = [NSTimer scheduledTimerWithTimeInterval:1. target:self selector:@selector(changePhotoTimeLabel) userInfo:nil repeats:YES];
+        
+        // Configure animation
+        CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeStart"];
+        drawAnimation.beginTime            = 0.0;
+        drawAnimation.duration            = 5.0;
+        drawAnimation.repeatCount         = 1;
+        drawAnimation.fromValue = [NSNumber numberWithFloat:0.0];
+        drawAnimation.toValue   = [NSNumber numberWithFloat:1.0];
+        drawAnimation.fillMode = kCAFillModeForwards;
+        drawAnimation.removedOnCompletion = NO;
+        drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+        [self.photoReceivedLabelLayer addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
+        
+        // display
         self.photoReceivedView.alpha = 1;
-        self.photoDisplayTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(changePhotoTimeLabel) userInfo:nil repeats:YES];
+        // todo bt sound + vibration
+        
     } else {
         // Init Audio Player
         self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.messageData error:nil];
@@ -1270,6 +1288,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (BOOL)isRecording {
     return self.recorder.isRecording;
+}
+
+- (BOOL)isPlaying {
+    return self.mainPlayer.isPlaying || self.photoReceivedView.alpha > 0;
 }
 
 
@@ -1371,8 +1393,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (timeRemaining > 0) {
         [self.photoReceivedLabel setText:[NSString stringWithFormat:@"%lu",timeRemaining]];
     } else {
-        [self.photoDisplayTimer invalidate];
-        self.photoReceivedView.alpha = 0;
         [self endPlayerAtCompletion:YES];
     }
 }
@@ -1410,6 +1430,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.playerLine.layer removeAllAnimations];
     self.playerContainer.hidden = YES;
     [self setPlayerLineWidth:0];
+    
+    // Stop photo UI
+    self.photoReceivedView.alpha = 0;
+    [self.photoReceivedLabelLayer removeAllAnimations];
+    [self.photoDisplayTimer invalidate];
     
     if (self.lastSelectedContactView) {
         [self.lastSelectedContactView messageFinishPlaying:completed];
@@ -1543,15 +1568,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event {
     if (motion == UIEventSubtypeMotionShake)
     {
-        if ([self isRecording]) {
+        if ([self isRecording] || [self isPlaying]) {
             // do nothing
         } else if (self.lastMessagesPlayed && self.lastMessagesPlayed.count > 0){
-            if ([self.mainPlayer isPlaying]) {
-                [self.mainPlayer stop];
-                self.mainPlayer.currentTime = 0;
-                [self.playerLine.layer removeAllAnimations];
-                [self endPlayerUIForAllContactViews];
-            }
             // Add last messages played to contact view
             for (ContactView *contactView in self.contactViews) {
                 if ([self message:(Message *)self.lastMessagesPlayed[0] belongsToContactView:contactView]) {
@@ -1813,6 +1832,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     ContactView *contactView = [self findContactViewAtLocation:location];
     if (contactView) {
         [contactView addEmojiOverlay];
+    } else if (CGRectContainsPoint([self.view convertRect:self.inviteButton.frame fromView:self.contactScrollView],location)) {
+        // todo BT
+        // Animation
     }
 }
 
@@ -1904,12 +1926,18 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     // counter
     self.photoReceivedLabel = [[UILabel alloc] initWithFrame:CGRectMake(10,10,50,50)];
     self.photoReceivedLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:22.0];
-    self.photoReceivedLabel.layer.cornerRadius = self.photoReceivedLabel.bounds.size.height/2;
-    self.photoReceivedLabel.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.photoReceivedLabel.layer.borderWidth = 2.;
     self.photoReceivedLabel.textAlignment = NSTextAlignmentCenter;
     self.photoReceivedLabel.textColor = [UIColor whiteColor];
     [self.photoReceivedView addSubview:self.photoReceivedLabel];
+    
+    // Set up the shape of the photoReceivedLabel
+    self.photoReceivedLabelLayer = [CAShapeLayer layer];
+    self.photoReceivedLabelLayer.path = [UIBezierPath bezierPathWithRoundedRect:[self.self.photoReceivedLabel convertRect:self.photoReceivedLabel.frame fromView:self.photoReceivedView]
+                                                                   cornerRadius:self.photoReceivedLabel.bounds.size.height/2].CGPath;
+    self.photoReceivedLabelLayer.strokeColor = [UIColor whiteColor].CGColor;
+    self.photoReceivedLabelLayer.fillColor = [UIColor clearColor].CGColor;
+    self.photoReceivedLabelLayer.lineWidth = 2.;
+    [self.photoReceivedLabel.layer addSublayer:self.photoReceivedLabelLayer];
 }
 
 - (void)tapGestureOnPhotoReceived {
@@ -1921,6 +1949,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (!self.imagePickerController) {
         [self allocAndInitFullScreenCamera];
     }
+    self.emojiScrollView.hidden = YES;
     [self presentViewController:self.imagePickerController animated:NO completion:NULL];
 }
 
@@ -1946,9 +1975,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     myView.frame = self.view.frame;
     
     imagePickerController.cameraOverlayView = myView;
-    
-    // todo bt
-    // Check 4, 5, 6 ; ios 7 / ios 8
+
     double cameraHeight = self.view.frame.size.width * kCameraAspectRatio;
     double translationFactor = (self.view.frame.size.height - cameraHeight) / 2;
     CGAffineTransform translate = CGAffineTransformMakeTranslation(0.0, translationFactor);
@@ -1977,8 +2004,19 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                            options:UIViewAnimationOptionCurveEaseOut
                         animations:^{[photoView setFrame:CGRectMake(destinationPoint.x,destinationPoint.y,0,0)];}
                         completion:^(BOOL completed) {
+                            [self endDisplayBin];
                             [contactView sendRecording];
                             [photoView setFrame:[self getPhotoViewFrame]];
+                        }];
+    } else if (CGRectContainsPoint([self.view convertRect:self.inviteButton.frame fromView:self.contactScrollView],location)) {
+        CGPoint destinationPoint = [photoView.superview convertPoint:self.inviteButton.center fromView:self.contactScrollView];
+        [UIView transitionWithView:photoView
+                          duration:0.5f
+                           options:UIViewAnimationOptionCurveEaseOut
+                        animations:^{[photoView setFrame:CGRectMake(destinationPoint.x,destinationPoint.y,0,0)];}
+                        completion:^(BOOL completed) {
+                            [self endDisplayBin];
+                            photoView.hidden = YES;
                         }];
     } else {
         [UIView transitionWithView:photoView
@@ -1987,7 +2025,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                         animations:^{
                             [photoView setFrame:[self getPhotoViewFrame]];
                             }
-                        completion:nil];
+                        completion:^(BOOL completed) {
+                            [self endDisplayBin];
+                        }];
     }
 }
 
@@ -2007,6 +2047,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.photoTakenView.hidden = NO;
     [self closeCamera];
     
+    // todo bt
 //    [UIView animateWithDuration:0.5f animations:^{
 //        [self.photoTakenView setFrame:[self getPhotoViewFrame]];
 //    }];
@@ -2043,6 +2084,17 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
+- (void)startDisplayBin
+{
+    self.inviteButton.contentEdgeInsets = UIEdgeInsetsMake(20,20,20,20);
+    [self.inviteButton setImage:[UIImage imageNamed:@"bin-button"] forState:UIControlStateNormal];
+}
+
+- (void)endDisplayBin
+{
+    self.inviteButton.contentEdgeInsets = UIEdgeInsetsMake(0,0,0,0);
+    [self.inviteButton setImage:[UIImage imageNamed:@"invite-button"] forState:UIControlStateNormal];
+}
 
 
 @end
