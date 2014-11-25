@@ -49,12 +49,7 @@
 
 - (void)handleTapGesture
 {
-    if (CGRectEqualToRect(self.frame,self.superview.frame)) {
-        [self.delegate tutoMessage:NSLocalizedStringFromTable(@"photo_tuto_message",kStringFile,nil) withDuration:1 priority:NO];
-        self.frame = [self.delegate getPhotoViewFrame];
-    } else {
-        self.frame = self.superview.frame;
-    }
+    [self.delegate navigateToCameraControllerWithPrefill:YES];
 }
 
 

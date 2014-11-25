@@ -12,14 +12,15 @@
 
 @interface CameraViewController : UIViewController <UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITextViewDelegate>
 
-@property (strong, nonatomic) IBOutlet UIImageView *imageView;
-@property (nonatomic) id<CameraVCDelegate> delegate;
-@property (strong, nonatomic) UITextView *photoDescriptionField;
+@property (strong, nonatomic) id<CameraVCDelegate> delegate;
+@property (strong, nonatomic) UIImage *image;
+@property (strong, nonatomic) NSString *text;
+@property (nonatomic) float textPosition;
 
 @end
 
 @protocol CameraVCDelegate
 
-- (void)savePhoto:(UIImage *)image andText:(NSString *)text;
+- (void)savePhoto:(UIImage *)image text:(NSString *)text andTextPosition:(float)textPosition;
 
 @end

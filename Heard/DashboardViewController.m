@@ -123,12 +123,13 @@
 // Photo
 @property (strong, nonatomic) PhotoView *photoToSendView;
 @property (strong, nonatomic) NSString *textToSend;
+@property (nonatomic) float textToSendPosition;
 @property (weak, nonatomic) IBOutlet UIButton *cameraControllerButton;
 @property (strong, nonatomic) UIImageView *photoReceivedView;
 @property (strong, nonatomic) UILabel *photoReceivedTime;
+@property (strong, nonatomic) UILabel *photoReceivedLabel;
 @property (strong, nonatomic) CAShapeLayer *photoReceivedTimeLayer;
 @property (strong, nonatomic) NSTimer *photoDisplayTimer;
-@property (weak, nonatomic) IBOutlet UITextField *photoReceivedDescriptionField;
 // Message
 @property (strong, nonatomic) Message *messageToSend;
 
@@ -369,16 +370,22 @@
     } else if ([segueName isEqualToString:@"Camera From Dashboard Segue"]) {
         ((CameraViewController *) [segue destinationViewController]).delegate = self;
         if (sender) {
-            ((CameraViewController *) [segue destinationViewController]).imageView.image = self.photoToSendView.image;
-            ((CameraViewController *) [segue destinationViewController]).photoDescriptionField.text = self.textToSend;
+            ((CameraViewController *) [segue destinationViewController]).image = self.photoToSendView.image;
+            ((CameraViewController *) [segue destinationViewController]).text = self.textToSend;
+            ((CameraViewController *) [segue destinationViewController]).textPosition = self.textToSendPosition;
         }
     }
 }
 
 - (IBAction)cameraButtonClicked:(id)sender {
-    [self performSegueWithIdentifier:@"Camera From Dashboard Segue" sender:nil];
+    [self navigateToCameraControllerWithPrefill:NO];
+}
+
+- (void)navigateToCameraControllerWithPrefill:(BOOL)flag {
+    [self performSegueWithIdentifier:@"Camera From Dashboard Segue" sender:flag ? @"ok" : nil];
     self.emojiScrollView.hidden = YES;
 }
+
 
 // ------------------------------
 #pragma mark UI Modes
@@ -1242,7 +1249,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     NSInteger receiverId = [self.lastSelectedContactView isGroupContactView] ? 0 : [self.lastSelectedContactView contactIdentifier];
     NSInteger groupId = [self.lastSelectedContactView isGroupContactView] ? [self.lastSelectedContactView contactIdentifier] : 0;
     
-    self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:[[NSData alloc] initWithContentsOfURL:self.recorder.url] messageType:kAudioRecordMessageType messageText:@""];
+    self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:[[NSData alloc] initWithContentsOfURL:self.recorder.url] messageType:kAudioRecordMessageType messageText:@"" textPosition:0];
     [self playSound:kEndRecordSound ofType:@""];
 }
 
@@ -1265,6 +1272,16 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         self.photoReceivedView.image = [UIImage imageWithData:message.messageData];
         self.photoDisplayTimer = [NSTimer scheduledTimerWithTimeInterval:1. target:self selector:@selector(changePhotoTimeLabel) userInfo:nil repeats:YES];
         
+        // Create label if text
+        if (message.messageText && message.messageText.length > 0) {
+            double yOrigin = (message.textPosition > 0 && message.textPosition < 1) ? message.textPosition * self.photoReceivedView.frame.size.height : self.photoReceivedView.frame.size.height - 40;
+            self.photoReceivedLabel.frame = CGRectMake(0, yOrigin, self.view.frame.size.width, 40);
+            self.photoReceivedLabel.text = message.messageText;
+            [self.photoReceivedView addSubview:self.photoReceivedLabel];
+        } else {
+            [self.photoReceivedLabel removeFromSuperview];
+        }
+
         // Configure animation
         CABasicAnimation *drawAnimation = [CABasicAnimation animationWithKeyPath:@"strokeStart"];
         drawAnimation.beginTime            = 0.0;
@@ -1280,7 +1297,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         // display
         self.photoReceivedView.alpha = 1;
         // todo bt sound + vibration
-        // todo bt text
         
     } else {
         // Init Audio Player
@@ -1866,7 +1882,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
         NSInteger receiverId = [contactView isGroupContactView] ? 0 : [contactView contactIdentifier];
         NSInteger groupId = [contactView isGroupContactView] ? [contactView contactIdentifier] : 0;
-        self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:[NSData dataWithContentsOfURL:soundURL] messageType:kAudioEmojiMessageType messageText:@""];
+        self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:[NSData dataWithContentsOfURL:soundURL] messageType:kAudioEmojiMessageType messageText:@"" textPosition:0];
         CGPoint destinationPoint = [emojiView.superview convertPoint:contactView.center fromView:self.contactScrollView];
         [UIView transitionWithView:emojiView
                           duration:0.5f
@@ -1924,9 +1940,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Photo
 // ----------------------------------------------------------
 
-- (void)savePhoto:(UIImage *)image andText:(NSString *)text {
+- (void)savePhoto:(UIImage *)image text:(NSString *)text andTextPosition:(float)textPosition {
     self.photoToSendView.image = image;
     self.textToSend = text;
+    self.textToSendPosition = textPosition;
     self.photoToSendView.frame = self.view.frame;
     self.photoToSendView.hidden = NO;
     [UIView animateWithDuration:0.5f animations:^{
@@ -1958,7 +1975,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.photoReceivedTime.textColor = [UIColor whiteColor];
     [self.photoReceivedView addSubview:self.photoReceivedTime];
     
-    // Set up the shape of the photoReceivedLabel
+    // Clock
     self.photoReceivedTimeLayer = [CAShapeLayer layer];
     self.photoReceivedTimeLayer.path = [UIBezierPath bezierPathWithRoundedRect:[self.photoReceivedTime convertRect:self.photoReceivedTime.frame fromView:self.photoReceivedView]
                                                                    cornerRadius:self.photoReceivedTime.bounds.size.height/2].CGPath;
@@ -1966,6 +1983,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.photoReceivedTimeLayer.fillColor = [UIColor clearColor].CGColor;
     self.photoReceivedTimeLayer.lineWidth = 2.;
     [self.photoReceivedTime.layer addSublayer:self.photoReceivedTimeLayer];
+    
+    // Message text label
+    self.photoReceivedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-40, self.view.frame.size.width, 40)];
+    self.photoReceivedLabel.textColor = [UIColor whiteColor];
+    self.photoReceivedLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:20];
+    self.photoReceivedLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
+    self.photoReceivedLabel.textAlignment = NSTextAlignmentCenter;
 }
 
 - (void)tapGestureOnPhotoReceived {
@@ -1980,7 +2004,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [contactView removeEmojiOverlay];
         NSInteger receiverId = [contactView isGroupContactView] ? 0 : [contactView contactIdentifier];
         NSInteger groupId = [contactView isGroupContactView] ? [contactView contactIdentifier] : 0;
-        self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:UIImageJPEGRepresentation(photoView.image,0.9) messageType:kPhotoMessageType messageText:@""];
+        self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:UIImageJPEGRepresentation(photoView.image,0.9) messageType:kPhotoMessageType messageText:self.textToSend textPosition:self.textToSendPosition];
         CGPoint destinationPoint = [photoView.superview convertPoint:contactView.center fromView:self.contactScrollView];
         [UIView transitionWithView:photoView
                           duration:0.5f

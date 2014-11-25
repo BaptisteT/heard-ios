@@ -17,7 +17,8 @@
                     creationTime:(NSInteger)creationTime
                      messageData:(NSData *)messageData
                      messageType:(NSString *)messageType
-                     messageText:(NSString *)messageText;
+                     messageText:(NSString *)messageText
+                    textPosition:(float)textPosition;
 + (NSArray *)rawMessagesToInstances:(NSArray *)rawMessages;
 + (Message *)rawMessageToInstance:(id)rawMessage;
 - (NSURL *)getMessageURL;
@@ -34,5 +35,6 @@
 @property (nonatomic) NSData *messageData;
 @property (nonatomic) NSString *messageType;
 @property (nonatomic) NSString *messageText;
+@property (nonatomic) float textPosition;
 
 @end

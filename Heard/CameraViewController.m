@@ -21,6 +21,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *takePictureButton;
 // Edit
+@property (strong, nonatomic) IBOutlet UIImageView *imageView;
+@property (strong, nonatomic) UITextView *photoDescriptionField;
 @property (weak, nonatomic) IBOutlet UIButton *photoConfirmButton;
 @property (nonatomic, strong) UIPanGestureRecognizer *panningRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
@@ -36,16 +38,28 @@
     self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.imageView.backgroundColor = [UIColor blackColor];
     [ImageUtils outerGlow:self.photoConfirmButton];
-    self.displayCamera = !self.imageView.image;
     
-    self.photoDescriptionField = [[UITextView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 40, self.view.frame.size.width, 40)];
+    double yOrigin = (self.textPosition > 0 && self.textPosition < 1) ? self.textPosition * self.view.frame.size.height : self.view.frame.size.height - 40;
+    self.photoDescriptionField = [[UITextView alloc] initWithFrame:CGRectMake(0, yOrigin, self.view.frame.size.width, 40)];
     self.photoDescriptionField.textColor = [UIColor whiteColor];
     self.photoDescriptionField.font = [UIFont fontWithName:@"HelveticaNeue" size:20];
     self.photoDescriptionField.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
     [self.view addSubview:self.photoDescriptionField];
-    self.photoDescriptionField.hidden = YES;
     self.photoDescriptionField.delegate = self;
     self.photoDescriptionField.keyboardAppearance = UIKeyboardAppearanceDark;
+    self.photoDescriptionField.textAlignment = NSTextAlignmentCenter;
+    if (self.text && self.text.length > 0) {
+        self.photoDescriptionField.text = self.text;
+    }
+    
+    if (self.image) {
+        self.displayCamera = NO;
+        self.imageView.image = self.image;
+        self.photoDescriptionField.hidden = NO;
+    } else {
+        self.photoDescriptionField.hidden = YES;
+        self.displayCamera = YES;
+    }
     
     // observe keyboard show notifications to resize the text view appropriately
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -83,7 +97,7 @@
 }
 
 - (IBAction)checkButtonClicked:(id)sender {
-    [self.delegate savePhoto:self.imageView.image andText:self.photoDescriptionField.text];
+    [self.delegate savePhoto:self.imageView.image text:self.photoDescriptionField.text andTextPosition:(float)self.photoDescriptionField.frame.origin.y / self.view.frame.size.height];
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 

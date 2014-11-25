@@ -15,6 +15,8 @@
 #define GROUP_ID @"group_id"
 #define CREATED_AT @"date"
 #define MESSAGE_TYPE @"message_type"
+#define MESSAGE_TEXT @"text"
+#define TEXT_POSITION @"text_position"
 
 @implementation Message
 
@@ -26,6 +28,7 @@
                      messageData:(NSData *)messageData
                      messageType:(NSString *)messageType
                      messageText:(NSString *)messageText
+                    textPosition:(float)textPosition
 {
     Message *message = [[Message alloc] init];
     message.identifier = identifier;
@@ -36,6 +39,7 @@
     message.messageData = messageData;
     message.messageType = messageType;
     message.messageText = messageText;
+    message.textPosition = textPosition;
     return message;
 }
 
@@ -52,13 +56,14 @@
 + (Message *)rawMessageToInstance:(id)rawMessage;
 {
     Message *message = [Message createMessageWithId:[[rawMessage objectForKey:MESSAGE_ID] integerValue]
-                                           senderId:[[rawMessage objectForKey:SENDER_ID] integerValue]
-                                         receiverId:[[rawMessage objectForKey:RECEIVER_ID] integerValue]
-                                            groupId:[rawMessage objectForKey:GROUP_ID] == [NSNull null] ? 0 : [[rawMessage objectForKey:GROUP_ID] integerValue]
-                                       creationTime:[[rawMessage objectForKey:CREATED_AT] integerValue]
-                                        messageData:nil
-                                        messageType:[rawMessage objectForKey:MESSAGE_TYPE]
-                                        messageText:[rawMessage objectForKey:MESSAGE_TYPE]];
+                                            senderId:[[rawMessage objectForKey:SENDER_ID] integerValue]
+                                          receiverId:[[rawMessage objectForKey:RECEIVER_ID] integerValue]
+                                             groupId:[rawMessage objectForKey:GROUP_ID] == [NSNull null] ? 0 : [[rawMessage objectForKey:GROUP_ID] integerValue]
+                                        creationTime:[[rawMessage objectForKey:CREATED_AT] integerValue]
+                                         messageData:nil
+                                         messageType:[rawMessage objectForKey:MESSAGE_TYPE]
+                                         messageText:[rawMessage objectForKey:MESSAGE_TEXT]
+                                        textPosition:[rawMessage objectForKey:TEXT_POSITION] ? [[rawMessage objectForKey:TEXT_POSITION] floatValue] : 0];
     return message;
 }
 
