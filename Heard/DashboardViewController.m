@@ -230,6 +230,10 @@
                                              selector: @selector(willResignActiveCallback)
                                                  name: UIApplicationWillResignActiveNotification
                                                object: nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(willBecomeActiveCallback)
+                                                 name: UIApplicationWillEnterForegroundNotification
+                                               object: nil];
 
     self.isUsingHeadSet = [AudioUtils usingHeadsetInAudioSession:session];
     
@@ -1535,6 +1539,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Hide tuto
     self.bottomTutoView.alpha = 0;
+}
+
+- (void)willBecomeActiveCallback {
+    [self endPlayerUIForAllContactViews];
 }
 
 -(void)routeChangeCallback:(NSNotification*)notification {
