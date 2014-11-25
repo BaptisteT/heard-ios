@@ -10,11 +10,11 @@
 
 @protocol CameraVCDelegate;
 
-@interface CameraViewController : UIViewController <UINavigationControllerDelegate,UIImagePickerControllerDelegate>
+@interface CameraViewController : UIViewController <UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITextViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
 @property (nonatomic) id<CameraVCDelegate> delegate;
-@property (weak, nonatomic) IBOutlet UITextField *photoDescriptionField;
+@property (strong, nonatomic) UITextView *photoDescriptionField;
 
 @end
 

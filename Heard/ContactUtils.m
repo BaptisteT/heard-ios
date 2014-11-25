@@ -66,8 +66,6 @@
     NSMutableArray *lastMessageDateArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
     NSMutableArray *lastMessageNotAnsweredArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
     NSMutableArray *isFutureArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
-    NSMutableArray *facebookIdArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
-    NSMutableArray *abRecordIdArray = [[NSMutableArray alloc] initWithCapacity:contactCount];
     for (Contact * contact in contacts) {
         [idArray addObject:[NSNumber numberWithInteger:contact.identifier]];
         [phoneArray addObject:contact.phoneNumber ? contact.phoneNumber : @""];

@@ -97,6 +97,7 @@ static const NSUInteger kEmojiMargin = 10;
 static const float kCameraAspectRatio = 4.0 / 3.0;
 static const NSUInteger kScreenWidth = 320;
 static const NSUInteger kPhotoDuration = 5;
+static const NSUInteger kPhotoDescriptionMaxLength = 60;
 
 // Message types
 static NSString * const kAudioRecordMessageType = @"Audio_Record";

@@ -1066,7 +1066,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UPz-PF-2OM">
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UPz-PF-2OM">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q4n-tp-qKq">
@@ -1088,11 +1088,6 @@
                                     <action selector="checkButtonClicked:" destination="YBy-ry-GCo" eventType="touchUpInside" id="dHV-Ux-zob"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AH7-Zj-QBm">
-                                <rect key="frame" x="78" y="338" width="97" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -1107,7 +1102,7 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="imageView" destination="UPz-PF-2OM" id="QHs-Zh-uLr"/>
-                        <outlet property="photoDescriptionField" destination="AH7-Zj-QBm" id="Mla-BY-do9"/>
+                        <outlet property="photoConfirmButton" destination="HL5-i5-s9P" id="pNV-4A-Sm5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BS1-nH-752" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2038,7 +2033,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="xdp-at-Nje"/>
-        <segue reference="lXU-Fa-FA3"/>
         <segue reference="Zmq-7e-32f"/>
+        <segue reference="F0S-J9-DD3"/>
     </inferredMetricsTieBreakers>
 </document>
