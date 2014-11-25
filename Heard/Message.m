@@ -61,9 +61,9 @@
                                              groupId:[rawMessage objectForKey:GROUP_ID] == [NSNull null] ? 0 : [[rawMessage objectForKey:GROUP_ID] integerValue]
                                         creationTime:[[rawMessage objectForKey:CREATED_AT] integerValue]
                                          messageData:nil
-                                         messageType:[rawMessage objectForKey:MESSAGE_TYPE]
-                                         messageText:[rawMessage objectForKey:MESSAGE_TEXT]
-                                        textPosition:[rawMessage objectForKey:TEXT_POSITION] ? [[rawMessage objectForKey:TEXT_POSITION] floatValue] : 0];
+                                         messageType:[rawMessage objectForKey:MESSAGE_TYPE] == [NSNull null] ? kAudioRecordMessageType : [rawMessage objectForKey:MESSAGE_TYPE]
+                                         messageText:[rawMessage objectForKey:MESSAGE_TEXT] == [NSNull null] ? @"" : [rawMessage objectForKey:MESSAGE_TEXT]
+                                       textPosition:[rawMessage objectForKey:TEXT_POSITION] == [NSNull null] ? 0 : [[rawMessage objectForKey:TEXT_POSITION] floatValue]];
     return message;
 }
 

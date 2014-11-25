@@ -1555,6 +1555,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     // Hide tuto
     self.bottomTutoView.alpha = 0;
+    
+    // Hide photo
+    self.photoToSendView.hidden = YES;
 }
 
 - (void)willBecomeActiveCallback {
