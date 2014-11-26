@@ -117,9 +117,12 @@
 @property (strong, nonatomic) NSMutableDictionary *indexedContacts;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *topBarBackground;
-// Emoji View
+// Emoji
 @property (weak, nonatomic) IBOutlet UIButton *emojiButton;
 @property (strong, nonatomic) UIScrollView *emojiScrollView;
+@property (strong, nonatomic) NSArray *faceEmojis;
+@property (strong, nonatomic) NSArray *utilEmojis;
+@property (strong, nonatomic) NSArray *animalEmojis;
 // Photo
 @property (strong, nonatomic) PhotoView *photoToSendView;
 @property (strong, nonatomic) NSString *textToSend;
@@ -306,6 +309,9 @@
     // Photo views
     [self initPhotoTakenView];
     [self initPhotoReceivedView];
+    
+    //
+    [self initEmojis];
     
     if (self.displayOpeningTuto) {
         [self initOpeningTutoView];
@@ -1821,6 +1827,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Emoji init and delegate
 // ----------------------------------------------------------
 
+- (void)initEmojis
+{
+    self.faceEmojis = @[@"\ue056", @"\ue057", @"\ue405", @"\ue106", @"\ue418",
+                        @"\ue409", @"\ue40d", @"\ue058", @"\ue412", @"\ue413",
+                        @"\ue403", @"\ue40e", @"\ue059", @"\ue416", @"\ue40b",
+                        @"\ue410", @"\ue107", @"\ue411", @"\ue105", @"\ue40a"];
+}
+
 - (IBAction)emojiButtonClicked:(id)sender {
     if (!self.emojiScrollView) {
         [self initEmojiScrollView];
@@ -1829,7 +1843,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         self.emojiScrollView.frame = CGRectMake(self.emojiScrollView.frame.origin.x, self.view.frame.size.height, self.emojiScrollView.frame.size.width, self.emojiScrollView.frame.size.height);
         self.emojiScrollView.hidden = NO;
         [UIView animateWithDuration:0.3 animations:^{
-            self.emojiScrollView.frame = self.contactScrollView.frame;
+            self.emojiScrollView.frame = CGRectMake(self.emojiScrollView.frame.origin.x, self.view.frame.size.height - self.emojiScrollView.frame.size.height, self.emojiScrollView.frame.size.width, self.emojiScrollView.frame.size.height);
         }];
     } else {
         [UIView animateWithDuration:0.3 animations:^{
@@ -1848,15 +1862,24 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)initEmojiScrollView
 {
-    self.emojiScrollView = [[UIScrollView alloc] initWithFrame:self.contactScrollView.frame];
+    self.emojiScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height * kEmojiContainerHeight)];
     self.emojiScrollView.contentSize = self.emojiScrollView.frame.size;
     self.emojiScrollView.hidden = YES;
     self.emojiScrollView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
     [self.view addSubview:self.emojiScrollView];
-    for(int i=1;i<=kNbEmojis;i++) {
-        EmojiView *emojiView = [[EmojiView alloc] initWithIdentifier:i];
-        emojiView.delegate = self;
-        [self.emojiScrollView addSubview:emojiView];
+    
+    int numberOfRows = kEmojiNumber/kEmojisPerRow;
+    
+    float emojiMargin = 5.0;
+    float emojiSize = (self.emojiScrollView.frame.size.height - (numberOfRows + 1) * emojiMargin)/numberOfRows;
+    float leftMargin = (self.view.frame.size.width - kEmojisPerRow * (emojiSize + emojiMargin) - emojiMargin)/2;
+    
+    for (int i = 0; i < numberOfRows; i++) {
+        for (int j = 0; j < kEmojisPerRow; j++) {
+            EmojiView *emojiView = [[EmojiView alloc] initWithIdentifier:[self.faceEmojis objectAtIndex:(i * 5) + j] andFrame:CGRectMake(leftMargin + j * (emojiSize + emojiMargin), emojiMargin + i * (emojiSize + emojiMargin), emojiSize, emojiSize)];
+            emojiView.delegate = self;
+            [self.emojiScrollView addSubview:emojiView];
+        }
     }
 }
 
@@ -1877,6 +1900,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)emojiDropped:(EmojiView *)emojiView atLocation:(CGPoint)location
 {
+    self.emojiScrollView.hidden = NO;
+    
     ContactView *contactView = [self findContactViewAtLocation:location];
     if (contactView) {
         [contactView removeEmojiOverlay];
@@ -1897,11 +1922,15 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                             [emojiView setFrame:[emojiView getInitialFrame]];
                         }];
     } else {
-        CGFloat finalSize = 10;
         [UIView transitionWithView:emojiView
                           duration:0.5f
                            options:UIViewAnimationOptionTransitionNone
-                        animations:^{[emojiView setFrame:CGRectMake(self.emojiButton.center.x - finalSize/2,self.emojiButton.center.y - finalSize/2,finalSize,finalSize)];}
+                        animations:^{
+                            CGRect frame = [emojiView getInitialFrame];
+                            emojiView.frame = CGRectMake(frame.origin.x,
+                                                         frame.origin.y + (1 - kEmojiContainerHeight) * self.view.frame.size.height,
+                                                         frame.size.width,
+                                                         frame.size.height);}
                         completion:^(BOOL completed) {
                             [self.emojiScrollView addSubview:emojiView];
                             emojiView.frame = [emojiView getInitialFrame];

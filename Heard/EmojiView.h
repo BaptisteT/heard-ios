@@ -13,10 +13,10 @@
 @interface EmojiView : UIImageView <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) id<EmojiViewDelegateProtocol> delegate;
-@property (nonatomic) NSInteger identifier;
+@property (nonatomic) NSString *identifier;
 @property (nonatomic) NSInteger soundIndex;
 
-- (id)initWithIdentifier:(NSInteger)identifier;
+- (id)initWithIdentifier:(NSString *)identifier andFrame:(CGRect)frame;
 - (CGRect)getInitialFrame;
 
 @end

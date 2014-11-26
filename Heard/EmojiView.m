@@ -14,17 +14,21 @@
 @property (nonatomic, strong) UIPanGestureRecognizer *panningRecognizer;
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
+@property (nonatomic) CGRect initialFrame;
 
 @end
 
 @implementation EmojiView
 
-- (id)initWithIdentifier:(NSInteger)identifier
+- (id)initWithIdentifier:(NSString *)identifier andFrame:(CGRect)frame
 {
+    self.initialFrame = frame;
+    
+    //Todo BB: remove, just for testing
+
     self.identifier = identifier;
     self.soundIndex = 0;
-    self = [super initWithFrame:[self getInitialFrame]];
-    self.identifier = identifier;
+    self = [super initWithFrame:frame];
     [self addEmojiImage];
     
     self.panningRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanningGesture:)];
@@ -82,11 +86,11 @@
 
 - (void)addEmojiImage
 {
-    self.image = [UIImage imageNamed:[@"emoji-image-" stringByAppendingFormat:@"%lu",self.identifier]];
+    self.image = [UIImage imageNamed:[@"emoji-image-" stringByAppendingFormat:@"%@",self.identifier]];
 }
 
 - (CGRect)getInitialFrame {
-    return CGRectMake(kEmojiSize * (self.identifier-1)+ kEmojiMargin * self.identifier, kEmojiMargin, kEmojiSize, kEmojiSize);
+    return self.initialFrame;
 }
 
 @end
