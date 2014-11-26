@@ -27,7 +27,6 @@
     //Todo BB: remove, just for testing
 
     self.identifier = identifier;
-    self.soundIndex = 0;
     self = [super initWithFrame:frame];
     [self addEmojiImage];
     
@@ -56,13 +55,12 @@
 - (void)handleTapGesture
 {
     // play sound
-    self.soundIndex ++;
-    NSString *soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",(long)self.identifier,(long)self.soundIndex];
+    NSString *soundName = [NSString stringWithFormat:@"emoji-sound-%@",self.identifier];
     
     if(![[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"]) {
-        self.soundIndex = 1;
-        soundName = [NSString stringWithFormat:@"%@%lu.%lu",@"emoji-sound-",(long)self.identifier,(long)self.soundIndex];
+        soundName = @"emoji-sound-1.1";
     }
+    
     [self.delegate playSound:soundName ofType:@"m4a"];
 }
 
@@ -86,7 +84,7 @@
 
 - (void)addEmojiImage
 {
-    self.image = [UIImage imageNamed:[@"emoji-image-" stringByAppendingFormat:@"%@",self.identifier]];
+    self.image = [UIImage imageNamed:self.identifier];
 }
 
 - (CGRect)getInitialFrame {

@@ -1829,10 +1829,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)initEmojis
 {
-    self.faceEmojis = @[@"\ue056", @"\ue057", @"\ue405", @"\ue106", @"\ue418",
-                        @"\ue409", @"\ue40d", @"\ue058", @"\ue412", @"\ue413",
-                        @"\ue403", @"\ue40e", @"\ue059", @"\ue416", @"\ue40b",
-                        @"\ue410", @"\ue107", @"\ue411", @"\ue105", @"\ue40a"];
+    self.faceEmojis = @[@"ue056", @"ue057", @"ue405", @"ue106", @"ue418",
+                        @"ue409", @"ue40d", @"ue058", @"ue412", @"ue413",
+                        @"ue403", @"ue40e", @"ue059", @"ue416", @"ue40b",
+                        @"ue40d", @"ue107", @"ue411", @"ue108", @"ue40c"];
 }
 
 - (IBAction)emojiButtonClicked:(id)sender {
@@ -1870,13 +1870,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     int numberOfRows = kEmojiNumber/kEmojisPerRow;
     
-    float emojiMargin = 5.0;
-    float emojiSize = (self.emojiScrollView.frame.size.height - (numberOfRows + 1) * emojiMargin)/numberOfRows;
-    float leftMargin = (self.view.frame.size.width - kEmojisPerRow * (emojiSize + emojiMargin) - emojiMargin)/2;
+    float verticalMargin = 5.0;
+    float emojiSize = (self.emojiScrollView.frame.size.height - (numberOfRows + 1) * verticalMargin)/numberOfRows;
+    float horizontalMargin = (self.view.frame.size.width - kEmojisPerRow * emojiSize)/(kEmojisPerRow + 1);
     
     for (int i = 0; i < numberOfRows; i++) {
         for (int j = 0; j < kEmojisPerRow; j++) {
-            EmojiView *emojiView = [[EmojiView alloc] initWithIdentifier:[self.faceEmojis objectAtIndex:(i * 5) + j] andFrame:CGRectMake(leftMargin + j * (emojiSize + emojiMargin), emojiMargin + i * (emojiSize + emojiMargin), emojiSize, emojiSize)];
+            EmojiView *emojiView = [[EmojiView alloc] initWithIdentifier:[self.faceEmojis objectAtIndex:(i * 5) + j] andFrame:CGRectMake(horizontalMargin + j * (emojiSize + horizontalMargin), verticalMargin + i * (emojiSize + verticalMargin), emojiSize, emojiSize)];
             emojiView.delegate = self;
             [self.emojiScrollView addSubview:emojiView];
         }
@@ -1905,7 +1905,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     ContactView *contactView = [self findContactViewAtLocation:location];
     if (contactView) {
         [contactView removeEmojiOverlay];
-        NSString *soundName = [NSString stringWithFormat:@"%@%lu.%d",@"emoji-sound-",(long)emojiView.identifier,1];
+        //TODO: BB replace by real sound
+        NSString *soundName = @"emoji-sound-1.1";
         NSString *soundPath = [[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
         NSInteger receiverId = [contactView isGroupContactView] ? 0 : [contactView contactIdentifier];
