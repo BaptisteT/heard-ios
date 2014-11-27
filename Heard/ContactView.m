@@ -832,7 +832,6 @@
     UIBezierPath *photoPath = [UIBezierPath new];
     CGFloat startDegree = - UNREAD_LABEL_START_ANGLE;
     for (Message *message in self.unreadMessages) {
-        startDegree
         CGFloat endDegree = startDegree + degreeStep - arcGap / 2;
         if ([message isPhotoMessage]) {
             [photoPath appendPath:[UIBezierPath bezierPathWithArcCenter:center radius:self.frame.size.width/2 + 4 startAngle:DEGREES_TO_RADIANS(startDegree + arcGap / 2) endAngle:DEGREES_TO_RADIANS(endDegree) clockwise:YES]];
