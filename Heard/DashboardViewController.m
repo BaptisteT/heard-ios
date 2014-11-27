@@ -149,7 +149,7 @@
     [super viewDidLoad];
     
     // Todo BT Remove
-    self.cameraControllerButton.hidden =  NO;
+    self.cameraControllerButton.hidden =  YES;
     //
     
     self.retrieveNewContact = YES;
@@ -1967,7 +1967,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.topBarBackground.hidden = flag;
     self.menuButton.hidden = flag;
     self.emojiButton.hidden = flag;
-    self.cameraControllerButton.hidden = flag; // todo BT, put flag for next version
+    self.cameraControllerButton.hidden = YES; // todo BT, put flag for next version
 }
 
 - (BOOL)prefersStatusBarHidden
