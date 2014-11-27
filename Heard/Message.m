@@ -102,5 +102,13 @@
     }
 }
 
+- (BOOL)isEmojiMessage {
+    if (self.messageType && [self.messageType isEqualToString:kAudioEmojiMessageType]) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
 
 @end
