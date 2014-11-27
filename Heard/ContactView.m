@@ -827,7 +827,7 @@
     
     CGPoint center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
     float degreeStep = 360.f / self.unreadMessagesCount;
-    float arcGap = 10 / sqrt(self.unreadMessagesCount);
+    float arcGap = 5 / MAX(1,self.unreadMessagesCount-5);
     UIBezierPath *audioPath = [UIBezierPath new];
     UIBezierPath *photoPath = [UIBezierPath new];
     CGFloat startDegree = - UNREAD_LABEL_START_ANGLE;
