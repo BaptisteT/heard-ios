@@ -149,7 +149,7 @@
     [super viewDidLoad];
     
     // Todo BT Remove
-    self.cameraControllerButton.hidden = YES;
+    self.cameraControllerButton.hidden =  NO;
     //
     
     self.retrieveNewContact = YES;
@@ -1917,7 +1917,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
         NSInteger receiverId = [contactView isGroupContactView] ? 0 : [contactView contactIdentifier];
         NSInteger groupId = [contactView isGroupContactView] ? [contactView contactIdentifier] : 0;
-        self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:[NSData dataWithContentsOfURL:soundURL] messageType:kAudioEmojiMessageType messageText:@"" textPosition:0];
+        self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:[NSData dataWithContentsOfURL:soundURL] messageType:kAudioEmojiMessageType messageText:emojiView.identifier textPosition:0];
         CGPoint destinationPoint = [emojiView.superview convertPoint:contactView.center fromView:self.contactScrollView];
         [UIView transitionWithView:emojiView
                           duration:0.5f
@@ -1967,7 +1967,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.topBarBackground.hidden = flag;
     self.menuButton.hidden = flag;
     self.emojiButton.hidden = flag;
-    self.cameraControllerButton.hidden = YES; // todo BT, put flag for next version
+    self.cameraControllerButton.hidden = flag; // todo BT, put flag for next version
 }
 
 - (BOOL)prefersStatusBarHidden
