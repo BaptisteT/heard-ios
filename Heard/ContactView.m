@@ -829,7 +829,7 @@
     float degreeStep = 360.f / self.unreadMessagesCount;
     UIBezierPath *audioPath = [UIBezierPath new];
     UIBezierPath *photoPath = [UIBezierPath new];
-    NSInteger startDegree = -UNREAD_LABEL_START_ANGLE;
+    CGFloat startDegree = -UNREAD_LABEL_START_ANGLE;
     for (Message *message in self.unreadMessages) {
         if ([message isPhotoMessage]) {
             [photoPath appendPath:[UIBezierPath bezierPathWithArcCenter:center radius:self.frame.size.width/2 + 4 startAngle:DEGREES_TO_RADIANS(startDegree) endAngle:DEGREES_TO_RADIANS(startDegree + degreeStep-1) clockwise:YES]];
