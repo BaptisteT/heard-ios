@@ -55,13 +55,13 @@
 - (void)handleTapGesture
 {
     // play sound
-    NSString *soundName = [NSString stringWithFormat:@"emoji-sound-%@",self.identifier];
+    NSString *soundName = [NSString stringWithFormat:@"emoji-%@",self.identifier];
     
-    if(![[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"]) {
-        soundName = @"emoji-sound-1.1";
+    if(![[NSBundle mainBundle] pathForResource:soundName ofType:@"mp3"]) {
+        soundName = @"emoji-1f60a";
     }
     
-    [self.delegate playSound:soundName ofType:@"m4a"];
+    [self.delegate playSound:soundName ofType:@"mp3"];
 }
 
 - (void)handlePanningGesture:(UIPanGestureRecognizer *)recognizer

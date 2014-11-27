@@ -1829,10 +1829,15 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)initEmojis
 {
-    self.faceEmojis = @[@"ue056", @"ue057", @"ue405", @"ue106", @"ue418",
-                        @"ue409", @"ue40d", @"ue058", @"ue412", @"ue413",
-                        @"ue403", @"ue40e", @"ue059", @"ue416", @"ue40b",
-                        @"ue40d", @"ue107", @"ue411", @"ue108", @"ue40c"];
+    self.faceEmojis = @[@"1f60a", @"1f604", @"1f602", @"1f61d", @"1f609",
+                        @"1f60e", @"1f618", @"1f60d", @"1f633", @"1f62e",
+                        @"1f61e", @"1f622", @"1f62d", @"1f623", @"1f612",
+                        @"1f613", @"1f620", @"1f621", @"1f628", @"1f631"];
+    
+    self.utilEmojis = @[@"26a0", @"23f3", @"1f507", @"1f51e", @"1f4f5",
+                        @"1f44f", @"1f44a", @"1f64f", @"1f494", @"2764",
+                        @"1f374", @"1f37a", @"2615", @"1f6ac", @"1f4d3",
+                        @"1f3c0", @"1f3ae", @"1f3b6", @"1f44d", @"1f44e"];
 }
 
 - (IBAction)emojiButtonClicked:(id)sender {
@@ -1906,8 +1911,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (contactView) {
         [contactView removeEmojiOverlay];
         //TODO: BB replace by real sound
-        NSString *soundName = @"emoji-sound-1.1";
-        NSString *soundPath = [[NSBundle mainBundle] pathForResource:soundName ofType:@"m4a"];
+        NSString *soundName = [NSString stringWithFormat:@"emoji-%@",emojiView.identifier];
+        NSString *soundPath = [[NSBundle mainBundle] pathForResource:soundName ofType:@"mp3"];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
         NSInteger receiverId = [contactView isGroupContactView] ? 0 : [contactView contactIdentifier];
         NSInteger groupId = [contactView isGroupContactView] ? [contactView contactIdentifier] : 0;
