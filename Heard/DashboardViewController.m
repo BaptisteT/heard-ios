@@ -149,7 +149,7 @@
     [super viewDidLoad];
     
     // Todo BT Remove
-    self.cameraControllerButton.hidden = YES;
+    self.cameraControllerButton.hidden =  YES;
     //
     
     self.retrieveNewContact = YES;
@@ -1917,7 +1917,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
         NSInteger receiverId = [contactView isGroupContactView] ? 0 : [contactView contactIdentifier];
         NSInteger groupId = [contactView isGroupContactView] ? [contactView contactIdentifier] : 0;
-        self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:[NSData dataWithContentsOfURL:soundURL] messageType:kAudioEmojiMessageType messageText:@"" textPosition:0];
+        self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:[NSData dataWithContentsOfURL:soundURL] messageType:kAudioEmojiMessageType messageText:emojiView.identifier textPosition:0];
         CGPoint destinationPoint = [emojiView.superview convertPoint:contactView.center fromView:self.contactScrollView];
         [UIView transitionWithView:emojiView
                           duration:0.5f
