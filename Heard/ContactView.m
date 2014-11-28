@@ -21,7 +21,7 @@
 #define CONTACT_BORDER 0.5
 #define DEGREES_TO_RADIANS(x) (x)/180.0*M_PI
 #define RADIANS_TO_DEGREES(x) (x)/M_PI*180.0
-#define UNREAD_LABEL_START_ANGLE 50
+#define UNREAD_LABEL_START_ANGLE 90
 
 #define EMPTY_STATE 0
 #define PENDING_STATE 1
@@ -827,14 +827,16 @@
     
     CGPoint center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
     float degreeStep = 360.f / self.unreadMessagesCount;
+    float arcGap = 5 / MAX(1,self.unreadMessagesCount-5);
     UIBezierPath *audioPath = [UIBezierPath new];
     UIBezierPath *photoPath = [UIBezierPath new];
-    CGFloat startDegree = -UNREAD_LABEL_START_ANGLE;
+    CGFloat startDegree = - UNREAD_LABEL_START_ANGLE;
     for (Message *message in self.unreadMessages) {
+        CGFloat endDegree = startDegree + degreeStep - arcGap / 2;
         if ([message isPhotoMessage]) {
-            [photoPath appendPath:[UIBezierPath bezierPathWithArcCenter:center radius:self.frame.size.width/2 + 4 startAngle:DEGREES_TO_RADIANS(startDegree) endAngle:DEGREES_TO_RADIANS(startDegree + degreeStep-1) clockwise:YES]];
+            [photoPath appendPath:[UIBezierPath bezierPathWithArcCenter:center radius:self.frame.size.width/2 + 4 startAngle:DEGREES_TO_RADIANS(startDegree + arcGap / 2) endAngle:DEGREES_TO_RADIANS(endDegree) clockwise:YES]];
         } else {
-            [audioPath appendPath:[UIBezierPath bezierPathWithArcCenter:center radius:self.frame.size.width/2 + 4 startAngle:DEGREES_TO_RADIANS(startDegree) endAngle:DEGREES_TO_RADIANS(startDegree + degreeStep -1) clockwise:YES]];
+            [audioPath appendPath:[UIBezierPath bezierPathWithArcCenter:center radius:self.frame.size.width/2 + 4 startAngle:DEGREES_TO_RADIANS(startDegree + arcGap / 2) endAngle:DEGREES_TO_RADIANS(endDegree) clockwise:YES]];
         }
         startDegree += degreeStep;
     }
@@ -1023,7 +1025,7 @@
     self.unreadCircleStartMark.fillColor = [UIColor clearColor].CGColor;
     self.unreadCircleStartMark.lineWidth = ACTION_CIRCLE_BORDER + 3;
     CGPoint center = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
-    self.unreadCircleStartMark.path = [UIBezierPath bezierPathWithArcCenter:center radius:self.frame.size.width/2 + 4 startAngle:DEGREES_TO_RADIANS(-UNREAD_LABEL_START_ANGLE-1.5) endAngle:DEGREES_TO_RADIANS(-UNREAD_LABEL_START_ANGLE+0.5) clockwise:YES].CGPath;
+    self.unreadCircleStartMark.path = [UIBezierPath bezierPathWithArcCenter:center radius:self.frame.size.width/2 + 4 startAngle:DEGREES_TO_RADIANS(-UNREAD_LABEL_START_ANGLE-1) endAngle:DEGREES_TO_RADIANS(-UNREAD_LABEL_START_ANGLE+1) clockwise:YES].CGPath;
 }
 
 - (void)initLoadingCircleShape

@@ -26,6 +26,7 @@
 - (NSInteger)getSenderOrGroupIdentifier;
 - (BOOL)isGroupMessage;
 - (BOOL)isPhotoMessage;
+- (BOOL)isEmojiMessage;
 
 @property (nonatomic) NSUInteger identifier;
 @property (nonatomic) NSUInteger senderId;
