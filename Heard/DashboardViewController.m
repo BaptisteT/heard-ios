@@ -151,7 +151,7 @@
     [super viewDidLoad];
     
     // Todo BT Remove
-    self.cameraControllerButton.hidden =  YES;
+//    self.cameraControllerButton.hidden =  YES;
     //
     
     self.retrieveNewContact = YES;
@@ -1307,7 +1307,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self.photoReceivedTimeLayer addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
         
         // display
-        self.photoReceivedView.alpha = 1;
+        [self.view addSubview:self.photoReceivedView];
         // todo bt sound + vibration
         
     } else {
@@ -1333,7 +1333,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 - (BOOL)isPlaying {
-    return self.mainPlayer.isPlaying || self.photoReceivedView.alpha > 0;
+    return self.mainPlayer.isPlaying || self.photoReceivedView.superview != nil;
 }
 
 
@@ -1474,9 +1474,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self setPlayerLineWidth:0];
     
     // Stop photo UI
-    self.photoReceivedView.alpha = 0;
     [self.photoReceivedTimeLayer removeAllAnimations];
     [self.photoDisplayTimer invalidate];
+    [self.photoReceivedView removeFromSuperview];
     
     if (self.lastSelectedContactView) {
         [self.lastSelectedContactView messageFinishPlaying:completed];
@@ -2015,7 +2015,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.topBarBackground.hidden = flag;
     self.menuButton.hidden = flag;
     self.emojiButton.hidden = flag;
-    self.cameraControllerButton.hidden = YES; // todo BT, put flag for next version
+    self.cameraControllerButton.hidden = flag;//YES; // todo BT, put flag for next version
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -2052,8 +2052,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     tap.delegate = self;
     tap.numberOfTapsRequired = 1;
     [self.photoReceivedView addGestureRecognizer:tap];
-    self.photoReceivedView.alpha = 0;
-    [self.view addSubview:self.photoReceivedView];
     
     // counter
     self.photoReceivedTime = [[UILabel alloc] initWithFrame:CGRectMake(10,10,50,50)];
