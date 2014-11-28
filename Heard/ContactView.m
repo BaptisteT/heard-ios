@@ -235,7 +235,7 @@
     
     else if (discussionState == LAST_MESSAGE_READ_BY_CONTACT_STATE) {
         if (animated) {
-            [self.delegate playSound:kListenedSound ofType:@"aif"];
+            [self.delegate playSound:kListenedSound ofType:@"aif" completion:nil];
             self.readAnimationIcon.hidden = NO;
             self.readAnimationIcon.alpha = 1;
             self.readStateIcon.hidden = NO;
@@ -449,13 +449,13 @@
     self.sendingMessageCount --;
     
     if (error) {
-        [self.delegate playSound:kFailedSound ofType:@"aif"];
+        [self.delegate playSound:kFailedSound ofType:@"aif" completion:nil];
         // Stock failed message
         [self.failedMessages addObject:message];
     } else {
         if (!self.isRecording && !self.isPlaying) {
             [self sentAnimation];
-            [self.delegate playSound:kSentSound ofType:@"aif"];
+            [self.delegate playSound:kSentSound ofType:@"aif" completion:nil];
         }
         
         self.contact.currentUserDidNotAnswerLastMessage = NO;

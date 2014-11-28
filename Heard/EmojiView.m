@@ -61,7 +61,18 @@
         soundName = @"emoji-1f60a";
     }
     
-    [self.delegate playSound:soundName ofType:@"mp3"];
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
+    [animation setDuration:0.05];
+    [animation setRepeatCount:INFINITY];
+    [animation setAutoreverses:YES];
+    [animation setFromValue:[NSValue valueWithCGPoint: CGPointMake([self center].x - 2.0f, [self center].y)]];
+    [animation setToValue:[NSValue valueWithCGPoint: CGPointMake([self center].x + 2.0f, [self center].y)]];
+    
+    [self.delegate playSound:soundName ofType:@"mp3" completion:^(BOOL completed){
+        [self.layer removeAllAnimations];
+    }];
+    
+    [[self layer] addAnimation:animation forKey:@"position"];
 }
 
 - (void)handlePanningGesture:(UIPanGestureRecognizer *)recognizer

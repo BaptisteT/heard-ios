@@ -25,7 +25,7 @@
 - (void)retrieveUnreadMessagesAndNewContacts;
 - (void)endPlayerAtCompletion:(BOOL)completed;
 - (void)removeViewOfHiddenContacts;
-- (void)playSound:(NSString *)sound ofType:(NSString *)type;
+- (void)playSound:(NSString *)sound ofType:(NSString *)type completion:(void (^)(BOOL finished))completion;
 - (void)message:(NSUInteger)messageId listenedByContact:(NSUInteger)contactId;
 - (void)contact:(NSUInteger)contactId isRecording:(BOOL)flag;
 

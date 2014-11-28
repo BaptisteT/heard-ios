@@ -1226,7 +1226,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self endPlayerAtCompletion:NO];
     }
     
-    [self playSound:kStartRecordSound ofType:@""];
+    [self playSound:kStartRecordSound ofType:@"" completion:nil];
     [self disableAllContactViews];
     
     [self setRecorderLineWidth:0];
@@ -1262,7 +1262,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     NSInteger groupId = [self.lastSelectedContactView isGroupContactView] ? [self.lastSelectedContactView contactIdentifier] : 0;
     
     self.messageToSend = [Message createMessageWithId:0 senderId:[SessionUtils getCurrentUserId] receiverId:receiverId groupId:groupId creationTime:[[NSDate date] timeIntervalSince1970] messageData:[[NSData alloc] initWithContentsOfURL:self.recorder.url] messageType:kAudioRecordMessageType messageText:@"" textPosition:0];
-    [self playSound:kEndRecordSound ofType:@""];
+    [self playSound:kEndRecordSound ofType:@"" completion:nil];
 }
 
 - (void)startedPlayingMessagesOfView:(ContactView *)contactView
@@ -1638,10 +1638,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Sounds
 // ----------------------------------------------------------
 
-- (void)playSound:(NSString *)sound ofType:(NSString *)type
+- (void)playSound:(NSString *)sound ofType:(NSString *)type completion:(void (^)(BOOL finished))completionBlock
 {
     if ([self.soundPlayer isPlaying]) {
         [self.soundPlayer stop];
+        for (EmojiView *emojiView in self.emojiScrollView.subviews) {
+            [emojiView.layer removeAllAnimations];
+        }
     }
     NSError* error;
     if ([sound isEqualToString:kStartRecordSound]) {
@@ -1655,8 +1658,16 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
     if (error || ![self.soundPlayer prepareToPlay]) {
         NSLog(@"%@",error);
+        if (completionBlock) {
+            completionBlock(NO);
+        }
     } else {
         [self.soundPlayer play];
+        if (completionBlock) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, self.soundPlayer.duration * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                    completionBlock(YES);
+            });
+        }
     }
 }
 

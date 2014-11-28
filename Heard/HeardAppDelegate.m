@@ -176,7 +176,7 @@
             UIViewController *visibleController = [self getVisibleController];
             if ([visibleController isKindOfClass:[DashboardViewController class]]) {
                 [(DashboardViewController *)visibleController retrieveUnreadMessagesAndNewContacts];
-                [(DashboardViewController *)visibleController playSound:kReceivedSound ofType:@"aif"];
+                [(DashboardViewController *)visibleController playSound:kReceivedSound ofType:@"aif" completion:nil];
                 AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
             }
         }

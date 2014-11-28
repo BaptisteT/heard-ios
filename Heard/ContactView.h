@@ -83,7 +83,7 @@
 
 - (void)endPlayerAtCompletion:(BOOL)completed;
 
-- (void)playSound:(NSString *)sound ofType:(NSString *)type;
+- (void)playSound:(NSString *)sound ofType:(NSString *)type completion:(void (^)(BOOL finished))completion;
 
 - (void)resetLastMessagesPlayed;
 
