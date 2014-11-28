@@ -1835,10 +1835,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                         @"1f61e", @"1f622", @"1f62d", @"1f623", @"1f612",
                         @"1f613", @"1f620", @"1f621", @"1f628", @"1f631"];
     
-    self.utilEmojis = @[@"26a0", @"23f3", @"1f507", @"1f51e", @"1f4f5",
-                        @"1f44f", @"1f44a", @"1f64f", @"1f494", @"2764",
+    self.faceEmojis = @[@"26a0", @"23f3", @"1f507", @"1f4f5", @"1f51e",
+                        @"1f44f", @"1f44a", @"1f64f", @"1f44d", @"1f44e",
                         @"1f374", @"1f37a", @"2615", @"1f6ac", @"1f4d3",
-                        @"1f3c0", @"1f3ae", @"1f3b6", @"1f44d", @"1f44e"];
+                        @"1f3c0", @"1f3ae", @"1f3b6", @"1f4de", @"1f389"];
 }
 
 - (IBAction)emojiButtonClicked:(id)sender {
