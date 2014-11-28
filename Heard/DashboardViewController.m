@@ -1949,6 +1949,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     } else if (CGRectContainsPoint([self.view convertRect:self.inviteButton.frame fromView:self.contactScrollView],location)) {
         // todo BT
         // Animation
+        // Careful, it's also used for emojis
     }
 }
 
@@ -1983,7 +1984,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                         animations:^{
                             CGRect frame = [emojiView getInitialFrame];
                             emojiView.frame = CGRectMake(frame.origin.x,
-                                                         frame.origin.y + (1 - kEmojiContainerHeight) * self.view.frame.size.height,
+                                                         frame.origin.y + self.emojiScrollView.frame.origin.y,
                                                          frame.size.width,
                                                          frame.size.height);}
                         completion:^(BOOL completed) {
