@@ -65,7 +65,8 @@ static const NSUInteger kContactNameHeight = 30;
 static const NSUInteger kProfilePictureSize = 200;
 
 //Emoji UI
-static const float kEmojiContainerHeight = 1.0/3;
+static const float kEmojiContainerHeight = 150;
+static const float kEmojiButtonsHeight = 50;
 static const NSUInteger kEmojiNumber = 20;
 static const NSUInteger kEmojisPerRow = 5;
 

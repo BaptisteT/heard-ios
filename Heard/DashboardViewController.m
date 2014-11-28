@@ -123,6 +123,8 @@
 @property (strong, nonatomic) NSArray *faceEmojis;
 @property (strong, nonatomic) NSArray *utilEmojis;
 @property (strong, nonatomic) NSArray *animalEmojis;
+@property (strong, nonatomic) UIButton *firstCategoryButton;
+@property (strong, nonatomic) UIButton *secondCategoryButton;
 // Photo
 @property (strong, nonatomic) PhotoView *photoToSendView;
 @property (strong, nonatomic) NSString *textToSend;
@@ -1835,7 +1837,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                         @"1f61e", @"1f622", @"1f62d", @"1f623", @"1f612",
                         @"1f613", @"1f620", @"1f621", @"1f628", @"1f631"];
     
-    self.faceEmojis = @[@"26a0", @"23f3", @"1f507", @"1f4f5", @"1f51e",
+    self.utilEmojis = @[@"26a0", @"23f3", @"1f507", @"1f4f5", @"1f51e",
                         @"1f44f", @"1f44a", @"1f64f", @"1f44d", @"1f44e",
                         @"1f374", @"1f37a", @"2615", @"1f6ac", @"1f4d3",
                         @"1f3c0", @"1f3ae", @"1f3b6", @"1f4de", @"1f389"];
@@ -1868,21 +1870,67 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)initEmojiScrollView
 {
-    self.emojiScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height * kEmojiContainerHeight)];
+    self.emojiScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, kEmojiContainerHeight + kEmojiButtonsHeight)];
     self.emojiScrollView.contentSize = self.emojiScrollView.frame.size;
     self.emojiScrollView.hidden = YES;
-    self.emojiScrollView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
+    self.emojiScrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     [self.view addSubview:self.emojiScrollView];
     
+    //Set emoji buttons
+    self.firstCategoryButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.emojiScrollView.frame.size.width/2, kEmojiButtonsHeight)];
+    self.firstCategoryButton.backgroundColor = [UIColor whiteColor];
+    self.firstCategoryButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.firstCategoryButton.layer.borderWidth = 0.5;
+    [self.firstCategoryButton addTarget:self action:@selector(displayFirstEmojiCategory) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.secondCategoryButton = [[UIButton alloc] initWithFrame:CGRectMake(self.emojiScrollView.frame.size.width/2, 0, self.emojiScrollView.frame.size.width/2, kEmojiButtonsHeight)];
+    self.secondCategoryButton.backgroundColor = [UIColor whiteColor];
+    self.secondCategoryButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.secondCategoryButton.layer.borderWidth = 0.5;
+    [self.secondCategoryButton addTarget:self action:@selector(displaySecondEmojiCategory) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self displayFirstEmojiCategory];
+}
+
+- (void)displayFirstEmojiCategory
+{
+    self.firstCategoryButton.backgroundColor = [UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:1.0];
+    self.secondCategoryButton.backgroundColor = [UIColor whiteColor];
+    
+    self.firstCategoryButton.userInteractionEnabled = NO;
+    self.secondCategoryButton.userInteractionEnabled = YES;
+    
+    [self updateEmojiCategory:self.faceEmojis];
+}
+
+- (void)displaySecondEmojiCategory
+{
+    self.firstCategoryButton.backgroundColor = [UIColor whiteColor];
+    self.secondCategoryButton.backgroundColor = [UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:1.0];
+    
+    self.firstCategoryButton.userInteractionEnabled = YES;
+    self.secondCategoryButton.userInteractionEnabled = NO;
+    
+    [self updateEmojiCategory:self.utilEmojis];
+}
+
+- (void)updateEmojiCategory:(NSArray *)category
+{
+    [[self.emojiScrollView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
+    [self.emojiScrollView addSubview:self.firstCategoryButton];
+    [self.emojiScrollView addSubview:self.secondCategoryButton];
+    
+    //Set emoji views
     int numberOfRows = kEmojiNumber/kEmojisPerRow;
     
     float verticalMargin = 5.0;
-    float emojiSize = (self.emojiScrollView.frame.size.height - (numberOfRows + 1) * verticalMargin)/numberOfRows;
+    float emojiSize = (self.emojiScrollView.frame.size.height - 50 - (numberOfRows + 1) * verticalMargin)/numberOfRows;
     float horizontalMargin = (self.view.frame.size.width - kEmojisPerRow * emojiSize)/(kEmojisPerRow + 1);
     
     for (int i = 0; i < numberOfRows; i++) {
         for (int j = 0; j < kEmojisPerRow; j++) {
-            EmojiView *emojiView = [[EmojiView alloc] initWithIdentifier:[self.faceEmojis objectAtIndex:(i * 5) + j] andFrame:CGRectMake(horizontalMargin + j * (emojiSize + horizontalMargin), verticalMargin + i * (emojiSize + verticalMargin), emojiSize, emojiSize)];
+            EmojiView *emojiView = [[EmojiView alloc] initWithIdentifier:[category objectAtIndex:(i * 5) + j] andFrame:CGRectMake(horizontalMargin + j * (emojiSize + horizontalMargin), kEmojiButtonsHeight + verticalMargin + i * (emojiSize + verticalMargin), emojiSize, emojiSize)];
             emojiView.delegate = self;
             [self.emojiScrollView addSubview:emojiView];
         }
