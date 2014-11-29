@@ -40,7 +40,11 @@
     // Send
     [self.delegate sendMessageToContact:self];
     for (int i=0;i<self.group.memberIds.count -1;i++) {
-        [TrackingUtils trackRecord:[self.delegate messageToSend].messageType isGroup:YES];
+        if ([[self.delegate messageToSend].messageType isEqualToString:kAudioEmojiMessageType]) {
+            [TrackingUtils trackRecord:[self.delegate messageToSend].messageType isGroup:NO emoji:[self.delegate messageToSend].messageText];
+        } else {
+            [TrackingUtils trackRecord:[self.delegate messageToSend].messageType isGroup:NO emoji:@""];
+        }
     }
 }
 

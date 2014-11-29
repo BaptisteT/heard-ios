@@ -29,13 +29,13 @@
     [mixpanel.people set:@{@"First name": contact.firstName, @"Last name": contact.lastName, @"FB Connected": @"Yes"}];
 }
 
-+ (void)trackRecord:(NSString *)messageType isGroup:(BOOL)isGroup
++ (void)trackRecord:(NSString *)messageType isGroup:(BOOL)isGroup emoji:(NSString *)emoji
 {
     if (!PRODUCTION || DEBUG)return;
     
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     
-    [mixpanel track:@"Record" properties:@{@"Message Type": messageType, @"Group": [NSNumber numberWithBool:isGroup]}];
+    [mixpanel track:@"Record" properties:@{@"Message Type": messageType, @"Group": [NSNumber numberWithBool:isGroup], @"Emoji": emoji}];
     
     [mixpanel.people increment:@"Records" by:[NSNumber numberWithInt:1]];
 }

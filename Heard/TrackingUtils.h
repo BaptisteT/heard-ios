@@ -13,7 +13,7 @@
 
 + (void)identifyWithMixpanel:(Contact *)contact signup:(BOOL)isSigningUp;
 
-+ (void)trackRecord:(NSString *)messageType isGroup:(BOOL)isGroup;
++ (void)trackRecord:(NSString *)messageType isGroup:(BOOL)isGroup emoji:(NSString *)emoji;
 
 //+ (void)trackFutureRecord:(BOOL)isEmoji;
 

@@ -441,7 +441,11 @@
         // Send
         [self.delegate sendMessageToContact:self];
     }
-    [TrackingUtils trackRecord:messageToSend.messageType isGroup:NO];
+    if ([messageToSend.messageType isEqualToString:kAudioEmojiMessageType]) {
+        [TrackingUtils trackRecord:messageToSend.messageType isGroup:NO emoji:messageToSend.messageText];
+    } else {
+        [TrackingUtils trackRecord:messageToSend.messageType isGroup:NO emoji:@""];
+    }
 }
 
 - (void)message:(Message *)message sentWithError:(BOOL)error
