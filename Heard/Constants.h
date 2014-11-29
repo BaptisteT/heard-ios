@@ -67,6 +67,7 @@ static const NSUInteger kProfilePictureSize = 200;
 //Emoji UI
 static const float kEmojiContainerHeight = 150;
 static const float kEmojiButtonsHeight = 50;
+static const float kEmojiPageControlHeight = 30;
 static const NSUInteger kEmojiNumber = 20;
 static const NSUInteger kEmojisPerRow = 5;
 

@@ -124,8 +124,6 @@
 @property (strong, nonatomic) NSArray *faceEmojis;
 @property (strong, nonatomic) NSArray *utilEmojis;
 @property (strong, nonatomic) NSArray *animalEmojis;
-@property (strong, nonatomic) UIButton *firstCategoryButton;
-@property (strong, nonatomic) UIButton *secondCategoryButton;
 @property (strong, nonatomic) UIPageControl *emojiPageControl;
 // Photo
 @property (strong, nonatomic) PhotoView *photoToSendView;
@@ -1893,7 +1891,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     self.emojiContainer = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height,
                                                                    self.view.frame.size.width,
-                                                                   kEmojiContainerHeight + kEmojiButtonsHeight)];
+                                                                   kEmojiContainerHeight + kEmojiPageControlHeight)];
     
     self.emojiContainer.hidden = YES;
     
@@ -1917,7 +1915,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self.emojiContainer addSubview:self.emojiScrollView];
     
     //Page control
-    self.emojiPageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.emojiContainer.frame.size.height - kEmojiButtonsHeight, self.view.frame.size.width, kEmojiButtonsHeight)];
+    self.emojiPageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.emojiContainer.frame.size.height - kEmojiPageControlHeight, self.view.frame.size.width, kEmojiPageControlHeight)];
     self.emojiPageControl.numberOfPages = 2;
     self.emojiPageControl.currentPage = 0;
     self.emojiPageControl.pageIndicatorTintColor = [UIColor whiteColor];
@@ -1929,7 +1927,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     int numberOfRows = kEmojiNumber/kEmojisPerRow;
     
     float verticalMargin = 5.0;
-    float emojiSize = (self.emojiScrollView.frame.size.height - 50 - (numberOfRows + 1) * verticalMargin)/numberOfRows;
+    float emojiSize = (kEmojiContainerHeight - (numberOfRows + 1) * verticalMargin)/numberOfRows;
     float horizontalMargin = (self.view.frame.size.width - kEmojisPerRow * emojiSize)/(kEmojisPerRow + 1);
     
     for (int i = 0; i < numberOfRows; i++) {
@@ -2002,13 +2000,13 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                            options:UIViewAnimationOptionTransitionNone
                         animations:^{
                             CGRect frame = [emojiView getInitialFrame];
-                            emojiView.frame = CGRectMake(frame.origin.x,
+                            emojiView.frame = CGRectMake(frame.origin.x - ((self.emojiPageControl.currentPage == 1) ? self.emojiContainer.frame.size.width : 0),
                                                          frame.origin.y + self.emojiContainer.frame.origin.y,
                                                          frame.size.width,
                                                          frame.size.height);}
                         completion:^(BOOL completed) {
                             [self.emojiScrollView addSubview:emojiView];
-                            emojiView.frame = [emojiView getInitialFrame];
+                            [emojiView setFrame:[emojiView getInitialFrame]];
                         }];
     }
 }
