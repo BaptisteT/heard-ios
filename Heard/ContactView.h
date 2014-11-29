@@ -75,7 +75,7 @@
 
 - (void)updateFrameOfContactView:(ContactView *)view;
 
-- (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration priority:(BOOL)prority;
+- (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration priority:(BOOL)prority bottom:(BOOL)bottom;
 
 - (BOOL)isRecording;
 

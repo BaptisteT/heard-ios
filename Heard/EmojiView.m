@@ -66,6 +66,8 @@
         [self.layer removeAllAnimations];
     }];
     
+    [self.delegate tutoMessage:@"Drag emoji to send." withDuration:1 priority:YES bottom:NO];
+    
     [[self layer] addAnimation:animation forKey:@"position"];
 }
 

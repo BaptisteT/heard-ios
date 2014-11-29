@@ -26,5 +26,6 @@
 - (void)emojiDropped:(EmojiView *)emojiView atLocation:(CGPoint)location;
 - (void)playSound:(NSString *)sound ofType:(NSString *)type completion:(void (^)(BOOL finished))completion;
 - (void)hideEmojiScrollViewAndDisplayEmoji:(EmojiView *)emojiView;
+- (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration priority:(BOOL)prority bottom:(BOOL)bottom;
 
 @end

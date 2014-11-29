@@ -319,7 +319,7 @@
                     if ([self.delegate displayOpeningTuto]) {
                         [self.delegate displayOpeningTutoWithActionLabel:NSLocalizedStringFromTable(@"hold_longer_tuto_action_label", kStringFile, @"comment") forOrigin:self.frame.origin.x + self.frame.size.width/2];
                     } else {
-                        [self.delegate tutoMessage:NSLocalizedStringFromTable(@"audio_too_short_error",kStringFile, @"comment") withDuration:1 priority:YES];
+                        [self.delegate tutoMessage:NSLocalizedStringFromTable(@"audio_too_short_error",kStringFile, @"comment") withDuration:1 priority:YES bottom:YES];
                     }
                 } else {
                     [self sendRecording];
@@ -546,7 +546,7 @@
         [self playNextMessage];
     } else {
         if ([GeneralUtils displayReplayTuTo]) {
-            [self.delegate tutoMessage:NSLocalizedStringFromTable(@"shake_to_replay_tuto",kStringFile, @"comment")  withDuration:3 priority:NO];
+            [self.delegate tutoMessage:NSLocalizedStringFromTable(@"shake_to_replay_tuto",kStringFile, @"comment")  withDuration:3 priority:NO bottom:YES];
         }
     }
 }
@@ -566,7 +566,7 @@
 
 - (void)handlePlayingTapGesture {
     [self.delegate endPlayerAtCompletion:NO];
-    [self.delegate tutoMessage:NSLocalizedStringFromTable(@"shake_to_replay_tuto",kStringFile, @"comment") withDuration:1 priority:NO];
+    [self.delegate tutoMessage:NSLocalizedStringFromTable(@"shake_to_replay_tuto",kStringFile, @"comment") withDuration:1 priority:NO bottom:YES];
     self.isPlaying = NO;
     [self resetDiscussionStateAnimated:NO];
 }

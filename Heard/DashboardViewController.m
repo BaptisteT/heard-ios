@@ -404,11 +404,18 @@
 // ------------------------------
 #pragma mark UI Modes
 // ------------------------------
-- (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration priority:(BOOL)prority
+- (void)tutoMessage:(NSString *)message withDuration:(NSTimeInterval)duration priority:(BOOL)prority bottom:(BOOL)bottom
 {
     if ((self.displayOpeningTuto && !prority)) {
         return;
     }
+    
+    if (bottom) {
+        self.bottomTutoView.frame = CGRectMake(self.screenWidth/2 - NO_MESSAGE_VIEW_WIDTH/2, self.view.bounds.size.height - 4 * NO_MESSAGE_VIEW_HEIGHT, NO_MESSAGE_VIEW_WIDTH, NO_MESSAGE_VIEW_HEIGHT);
+    } else {
+        self.bottomTutoView.frame = CGRectMake(self.screenWidth/2 - NO_MESSAGE_VIEW_WIDTH/2, 4 * NO_MESSAGE_VIEW_HEIGHT, NO_MESSAGE_VIEW_WIDTH, NO_MESSAGE_VIEW_HEIGHT);
+    }
+    
     self.bottomTutoViewLabel.text = message;
     
     [self.bottomTutoView.layer removeAllAnimations];
@@ -1123,10 +1130,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (IBAction)speakerButtonClicked:(id)sender {
     if (self.LoudSpeakerMode) {
-        [self tutoMessage:NSLocalizedStringFromTable(@"speaker_button_on_message", kStringFile, "comment") withDuration:1 priority:NO];
+        [self tutoMessage:NSLocalizedStringFromTable(@"speaker_button_on_message", kStringFile, "comment") withDuration:1 priority:NO bottom:YES];
         self.LoudSpeakerMode = NO;
     } else {
-        [self tutoMessage:NSLocalizedStringFromTable(@"speaker_button_off_message", kStringFile, "comment") withDuration:1 priority:NO];
+        [self tutoMessage:NSLocalizedStringFromTable(@"speaker_button_off_message", kStringFile, "comment") withDuration:1 priority:NO bottom:YES];
         self.LoudSpeakerMode = YES;
     }
     //TODO BB speaker toggle + toast
@@ -1631,7 +1638,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                 }
             }
         } else {
-            [self tutoMessage:NSLocalizedStringFromTable(@"no_last_message_played_message",kStringFile, @"comment") withDuration:2 priority:NO];
+            [self tutoMessage:NSLocalizedStringFromTable(@"no_last_message_played_message",kStringFile, @"comment") withDuration:2 priority:NO bottom:YES];
         }
     }
 }
