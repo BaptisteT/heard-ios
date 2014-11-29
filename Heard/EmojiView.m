@@ -77,19 +77,67 @@
 
 - (void)handlePanningGesture:(UIPanGestureRecognizer *)recognizer
 {
+    static CGPoint initialCenter;
+    static BOOL isSlide = FALSE;
+    CGPoint velocity; CGFloat newCenter = 0;
     if (recognizer.state == UIGestureRecognizerStateBegan) {
-        self.frame = CGRectMake(self.superview.frame.origin.x + self.frame.origin.x - kEmojiSize/2, self.superview.frame.origin.y + self.frame.origin.y - kEmojiSize/2, kEmojiSize * 2, kEmojiSize * 2);
-        [self.delegate hideEmojiScrollViewAndDisplayEmoji:self];
+        velocity = [recognizer velocityInView:self];
+        if (- velocity.y < fabs(velocity.x) / 2 ) {
+            isSlide = TRUE;
+            initialCenter = ((UIScrollView *)self.superview).contentOffset;
+        } else {
+            isSlide = FALSE;
+            initialCenter = self.center;
+            initialCenter = recognizer.view.center;
+        }
+    }
+    
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        if (!isSlide) {
+            self.frame = CGRectMake(self.superview.frame.origin.x + self.frame.origin.x - kEmojiSize/2, self.superview.frame.origin.y + self.frame.origin.y - kEmojiSize/2, kEmojiSize * 2, kEmojiSize * 2);
+            [self.delegate hideEmojiScrollViewAndDisplayEmoji:self];
+        }
     } else if (recognizer.state == UIGestureRecognizerStateChanged) {
-        CGPoint location = [recognizer locationInView:recognizer.view.superview];
-        recognizer.view.center = location;
-        // Update contact views animations
-        CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview.superview];
-        [self.delegate updateEmojiOrPhotoLocation:mainViewCoordinate];
+        if (isSlide) {
+            CGPoint translation = [recognizer translationInView:recognizer.view.superview];
+            newCenter = MIN( MAX(((UIScrollView *)self.superview).contentSize.width - self.window.frame.size.width,0),MAX(initialCenter.x - translation.x, 0));
+            ((UIScrollView *)self.superview).contentOffset = CGPointMake(newCenter,0);
+        } else {
+            CGPoint location = [recognizer locationInView:recognizer.view.superview];
+            recognizer.view.center = location;
+            // Update contact views animations
+            CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview.superview];
+            [self.delegate updateEmojiOrPhotoLocation:mainViewCoordinate];
+        }
     }
     else if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled) {
-        CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];
-        [self.delegate emojiDropped:self atLocation:mainViewCoordinate];
+        if (isSlide) {
+            velocity = [recognizer velocityInView:self];
+            CGFloat finalOffset;
+            
+            if (fabs(velocity.x) > 100) {
+                if (velocity.x > 0) {
+                    finalOffset = 0;
+                } else {
+                    finalOffset = self.superview.frame.size.width;
+                }
+            } else {
+                if (((UIScrollView *)self.superview).contentOffset.x > self.superview.frame.size.width/2) {
+                    finalOffset = self.superview.frame.size.width;
+                } else {
+                    finalOffset = 0;
+                }
+            }
+            
+            CGRect frame = ((UIScrollView *)self.superview).frame;
+            frame.origin.x = finalOffset;
+            frame.origin.y = 0;
+            [((UIScrollView *)self.superview) scrollRectToVisible:frame animated:YES];
+            
+        } else {
+            CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];
+            [self.delegate emojiDropped:self atLocation:mainViewCoordinate];
+        }
     }
 }
 

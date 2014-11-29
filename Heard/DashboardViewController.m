@@ -125,6 +125,7 @@
 @property (strong, nonatomic) NSArray *animalEmojis;
 @property (strong, nonatomic) UIButton *firstCategoryButton;
 @property (strong, nonatomic) UIButton *secondCategoryButton;
+@property (strong, nonatomic) UIPageControl *emojiPageControl;
 // Photo
 @property (strong, nonatomic) PhotoView *photoToSendView;
 @property (strong, nonatomic) NSString *textToSend;
@@ -396,6 +397,7 @@
 - (void)navigateToCameraControllerWithPrefill:(BOOL)flag {
     [self performSegueWithIdentifier:@"Camera From Dashboard Segue" sender:flag ? @"ok" : nil];
     self.emojiScrollView.hidden = YES;
+    self.emojiPageControl.hidden = YES;
 }
 
 
@@ -1848,9 +1850,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                         @"1f61e", @"1f622", @"1f62d", @"1f623", @"1f612",
                         @"1f613", @"1f620", @"1f621", @"1f628", @"1f631"];
     
-    self.utilEmojis = @[@"26a0", @"23f3", @"1f507", @"1f4f5", @"1f51e",
+    self.utilEmojis = @[@"1f6a8", @"23f3", @"1f507", @"1f52b", @"1f51e",
                         @"1f44f", @"1f44a", @"1f64f", @"1f44d", @"1f44e",
-                        @"1f374", @"1f37a", @"2615", @"1f6ac", @"1f4d3",
+                        @"1f357", @"1f37a", @"2615", @"1f6ac", @"1f4d3",
                         @"1f3c0", @"1f3ae", @"1f3b6", @"1f4de", @"1f389"];
 }
 
@@ -1861,6 +1863,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     if (self.emojiScrollView.hidden) {
         self.emojiScrollView.frame = CGRectMake(self.emojiScrollView.frame.origin.x, self.view.frame.size.height, self.emojiScrollView.frame.size.width, self.emojiScrollView.frame.size.height);
         self.emojiScrollView.hidden = NO;
+        self.emojiPageControl.hidden = NO;
         [UIView animateWithDuration:0.3 animations:^{
             self.emojiScrollView.frame = CGRectMake(self.emojiScrollView.frame.origin.x, self.view.frame.size.height - self.emojiScrollView.frame.size.height, self.emojiScrollView.frame.size.width, self.emojiScrollView.frame.size.height);
         }];
@@ -1869,6 +1872,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             self.emojiScrollView.frame = CGRectMake(self.emojiScrollView.frame.origin.x, self.view.frame.size.height, self.emojiScrollView.frame.size.width, self.emojiScrollView.frame.size.height);
         } completion:^(BOOL finished) {
             self.emojiScrollView.hidden = YES;
+            self.emojiPageControl.hidden = YES;
         }];
     }
 }
@@ -1877,60 +1881,36 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     [self.view addSubview:emojiView];
     self.emojiScrollView.hidden = YES;
+    self.emojiPageControl.hidden = YES;
 }
 
 - (void)initEmojiScrollView
 {
     self.emojiScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, kEmojiContainerHeight + kEmojiButtonsHeight)];
-    self.emojiScrollView.contentSize = self.emojiScrollView.frame.size;
+    self.emojiScrollView.contentSize = CGSizeMake(self.emojiScrollView.frame.size.width * 2,
+                                                  self.emojiScrollView.frame.size.height);
+    self.emojiScrollView.bounces = NO;
+    self.emojiScrollView.pagingEnabled = YES;
+    self.emojiScrollView.showsHorizontalScrollIndicator = NO;
     self.emojiScrollView.hidden = YES;
     self.emojiScrollView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    
+    self.emojiScrollView.layer.borderWidth = 0.5;
+    self.emojiScrollView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    
+    self.emojiScrollView.delegate = self;
+    
     [self.view addSubview:self.emojiScrollView];
     
-    //Set emoji buttons
-    self.firstCategoryButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.emojiScrollView.frame.size.width/2, kEmojiButtonsHeight)];
-    self.firstCategoryButton.backgroundColor = [UIColor whiteColor];
-    self.firstCategoryButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.firstCategoryButton.layer.borderWidth = 0.5;
-    [self.firstCategoryButton addTarget:self action:@selector(displayFirstEmojiCategory) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.secondCategoryButton = [[UIButton alloc] initWithFrame:CGRectMake(self.emojiScrollView.frame.size.width/2, 0, self.emojiScrollView.frame.size.width/2, kEmojiButtonsHeight)];
-    self.secondCategoryButton.backgroundColor = [UIColor whiteColor];
-    self.secondCategoryButton.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.secondCategoryButton.layer.borderWidth = 0.5;
-    [self.secondCategoryButton addTarget:self action:@selector(displaySecondEmojiCategory) forControlEvents:UIControlEventTouchUpInside];
-    
-    [self displayFirstEmojiCategory];
-}
-
-- (void)displayFirstEmojiCategory
-{
-    self.firstCategoryButton.backgroundColor = [UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:1.0];
-    self.secondCategoryButton.backgroundColor = [UIColor whiteColor];
-    
-    self.firstCategoryButton.userInteractionEnabled = NO;
-    self.secondCategoryButton.userInteractionEnabled = YES;
-    
-    [self updateEmojiCategory:self.faceEmojis];
-}
-
-- (void)displaySecondEmojiCategory
-{
-    self.firstCategoryButton.backgroundColor = [UIColor whiteColor];
-    self.secondCategoryButton.backgroundColor = [UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:1.0];
-    
-    self.firstCategoryButton.userInteractionEnabled = YES;
-    self.secondCategoryButton.userInteractionEnabled = NO;
-    
-    [self updateEmojiCategory:self.utilEmojis];
-}
-
-- (void)updateEmojiCategory:(NSArray *)category
-{
-    [[self.emojiScrollView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    
-    [self.emojiScrollView addSubview:self.firstCategoryButton];
-    [self.emojiScrollView addSubview:self.secondCategoryButton];
+    //Page control
+    self.emojiPageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - kEmojiButtonsHeight, self.view.frame.size.width, kEmojiButtonsHeight)];
+    self.emojiPageControl.numberOfPages = 2;
+    self.emojiPageControl.currentPage = 0;
+    self.emojiPageControl.pageIndicatorTintColor = [UIColor whiteColor];
+    self.emojiPageControl.currentPageIndicatorTintColor = [ImageUtils blue];
+    self.emojiPageControl.userInteractionEnabled = NO;
+    self.emojiPageControl.hidden = YES;
+    [self.view addSubview:self.emojiPageControl];
     
     //Set emoji views
     int numberOfRows = kEmojiNumber/kEmojisPerRow;
@@ -1941,11 +1921,26 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     
     for (int i = 0; i < numberOfRows; i++) {
         for (int j = 0; j < kEmojisPerRow; j++) {
-            EmojiView *emojiView = [[EmojiView alloc] initWithIdentifier:[category objectAtIndex:(i * 5) + j] andFrame:CGRectMake(horizontalMargin + j * (emojiSize + horizontalMargin), kEmojiButtonsHeight + verticalMargin + i * (emojiSize + verticalMargin), emojiSize, emojiSize)];
+            EmojiView *emojiView = [[EmojiView alloc] initWithIdentifier:[self.faceEmojis objectAtIndex:(i * 5) + j] andFrame:CGRectMake(horizontalMargin + j * (emojiSize + horizontalMargin), verticalMargin + i * (emojiSize + verticalMargin), emojiSize, emojiSize)];
             emojiView.delegate = self;
             [self.emojiScrollView addSubview:emojiView];
         }
     }
+    
+    for (int i = 0; i < numberOfRows; i++) {
+        for (int j = 0; j < kEmojisPerRow; j++) {
+            EmojiView *emojiView = [[EmojiView alloc] initWithIdentifier:[self.utilEmojis objectAtIndex:(i * 5) + j] andFrame:CGRectMake(self.emojiScrollView.frame.size.width + horizontalMargin + j * (emojiSize + horizontalMargin), verticalMargin + i * (emojiSize + verticalMargin), emojiSize, emojiSize)];
+            emojiView.delegate = self;
+            [self.emojiScrollView addSubview:emojiView];
+        }
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat pageWidth = self.emojiScrollView.frame.size.width;
+    float fractionalPage = self.emojiScrollView.contentOffset.x / pageWidth;
+    NSInteger page = lround(fractionalPage);
+    self.emojiPageControl.currentPage = page;
 }
 
 - (void)updateEmojiOrPhotoLocation:(CGPoint)location
@@ -1967,6 +1962,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 - (void)emojiDropped:(EmojiView *)emojiView atLocation:(CGPoint)location
 {
     self.emojiScrollView.hidden = NO;
+    self.emojiPageControl.hidden = NO;
     
     ContactView *contactView = [self findContactViewAtLocation:location];
     if (contactView) {
