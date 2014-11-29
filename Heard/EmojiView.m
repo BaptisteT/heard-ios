@@ -12,7 +12,6 @@
 @interface EmojiView()
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panningRecognizer;
-@property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
 @property (nonatomic) CGRect initialFrame;
 
@@ -33,11 +32,6 @@
     self.panningRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanningGesture:)];
     [self addGestureRecognizer:self.panningRecognizer];
     self.panningRecognizer.delegate = self;
-    
-    self.longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanningGesture:)];
-    [self addGestureRecognizer:self.longPressRecognizer];
-    self.longPressRecognizer.delegate = self;
-    self.longPressRecognizer.minimumPressDuration = 0.5;
     
     self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture)];
     [self addGestureRecognizer:self.tapGestureRecognizer];
