@@ -377,6 +377,15 @@
 		3C0D0064196330E40058A0E0 /* ContactUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D0063196330E40058A0E0 /* ContactUtils.m */; };
 		3C1D54AF19E8564E00B3AE8B /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C1D54AE19E8564E00B3AE8B /* FacebookSDK.framework */; };
 		3C1D54B019E8564E00B3AE8B /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C1D54AE19E8564E00B3AE8B /* FacebookSDK.framework */; };
+		3C50281A1A2C6335003695FF /* WatchKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5028191A2C6335003695FF /* WatchKit.framework */; };
+		3C5028211A2C6335003695FF /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5028201A2C6335003695FF /* InterfaceController.m */; };
+		3C5028241A2C6335003695FF /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5028231A2C6335003695FF /* NotificationController.m */; };
+		3C5028271A2C6335003695FF /* GlanceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C5028261A2C6335003695FF /* GlanceController.m */; };
+		3C5028291A2C6335003695FF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C5028281A2C6335003695FF /* Images.xcassets */; };
+		3C50282D1A2C6335003695FF /* com.heard.HeardInHouse Watch App.app in Resources */ = {isa = PBXBuildFile; fileRef = 3C50282C1A2C6335003695FF /* com.heard.HeardInHouse Watch App.app */; };
+		3C5028341A2C6335003695FF /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C5028331A2C6335003695FF /* Interface.storyboard */; };
+		3C5028361A2C6335003695FF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C5028351A2C6335003695FF /* Images.xcassets */; };
+		3C5028391A2C6335003695FF /* com.heard.HeardInHouse WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 3C5028181A2C6335003695FF /* com.heard.HeardInHouse WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		3C55FD6D1966AA3500E818D9 /* CrashReporter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */; };
 		3C55FD701966B11C00E818D9 /* CrashReportUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */; };
 		3C6918021A16616C00A16AB3 /* CameraOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3C6918011A16616C00A16AB3 /* CameraOverlayView.xib */; };
@@ -416,6 +425,37 @@
 		3CEF9EE719DA2F140045D78D /* EmojiView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE619DA2F140045D78D /* EmojiView.m */; };
 		3CEF9EE819DA2F140045D78D /* EmojiView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CEF9EE619DA2F140045D78D /* EmojiView.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3C50282E1A2C6335003695FF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0BD758B41950F91B00CF0D85 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3C50282B1A2C6335003695FF;
+			remoteInfo = "com.heard.HeardInHouse Watch App";
+		};
+		3C5028371A2C6335003695FF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0BD758B41950F91B00CF0D85 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3C5028171A2C6335003695FF;
+			remoteInfo = "com.heard.HeardInHouse WatchKit Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3C5028401A2C6335003695FF /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				3C5028391A2C6335003695FF /* com.heard.HeardInHouse WatchKit Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0B05062D19D257D300CBFA59 /* NoCancelSearchBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoCancelSearchBar.h; sourceTree = "<group>"; };
@@ -657,6 +697,21 @@
 		3C0D0062196330E40058A0E0 /* ContactUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactUtils.h; sourceTree = "<group>"; };
 		3C0D0063196330E40058A0E0 /* ContactUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactUtils.m; sourceTree = "<group>"; };
 		3C1D54AE19E8564E00B3AE8B /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		3C5028181A2C6335003695FF /* com.heard.HeardInHouse WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "com.heard.HeardInHouse WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C5028191A2C6335003695FF /* WatchKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchKit.framework; path = System/Library/Frameworks/WatchKit.framework; sourceTree = SDKROOT; };
+		3C50281D1A2C6335003695FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3C50281E1A2C6335003695FF /* PushNotificationPayload.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PushNotificationPayload.json; sourceTree = "<group>"; };
+		3C50281F1A2C6335003695FF /* InterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceController.h; sourceTree = "<group>"; };
+		3C5028201A2C6335003695FF /* InterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterfaceController.m; sourceTree = "<group>"; };
+		3C5028221A2C6335003695FF /* NotificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationController.h; sourceTree = "<group>"; };
+		3C5028231A2C6335003695FF /* NotificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationController.m; sourceTree = "<group>"; };
+		3C5028251A2C6335003695FF /* GlanceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GlanceController.h; sourceTree = "<group>"; };
+		3C5028261A2C6335003695FF /* GlanceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GlanceController.m; sourceTree = "<group>"; };
+		3C5028281A2C6335003695FF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		3C50282C1A2C6335003695FF /* com.heard.HeardInHouse Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "com.heard.HeardInHouse Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C5028321A2C6335003695FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3C5028331A2C6335003695FF /* Interface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Interface.storyboard; sourceTree = "<group>"; };
+		3C5028351A2C6335003695FF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3C55FD6C1966AA3500E818D9 /* CrashReporter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CrashReporter.framework; sourceTree = "<group>"; };
 		3C55FD6E1966B11C00E818D9 /* CrashReportUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashReportUtils.h; sourceTree = "<group>"; };
 		3C55FD6F1966B11C00E818D9 /* CrashReportUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashReportUtils.m; sourceTree = "<group>"; };
@@ -758,6 +813,14 @@
 				0BD758C21950F91B00CF0D85 /* CoreGraphics.framework in Frameworks */,
 				0BD758C41950F91B00CF0D85 /* UIKit.framework in Frameworks */,
 				0BD758C01950F91B00CF0D85 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3C5028151A2C6335003695FF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3C50281A1A2C6335003695FF /* WatchKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -975,6 +1038,8 @@
 			isa = PBXGroup;
 			children = (
 				0BD758C51950F91B00CF0D85 /* Heard */,
+				3C50281B1A2C6335003695FF /* com.heard.HeardInHouse WatchKit Extension */,
+				3C5028301A2C6335003695FF /* com.heard.HeardInHouse Watch App */,
 				0BD758BE1950F91B00CF0D85 /* Frameworks */,
 				0BD758BD1950F91B00CF0D85 /* Products */,
 			);
@@ -985,6 +1050,8 @@
 			children = (
 				0BD758BC1950F91B00CF0D85 /* Waved.app */,
 				0B72EF01196C672F00AC5A01 /* WavedStaging.app */,
+				3C5028181A2C6335003695FF /* com.heard.HeardInHouse WatchKit Extension.appex */,
+				3C50282C1A2C6335003695FF /* com.heard.HeardInHouse Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1008,6 +1075,7 @@
 				0BD758BF1950F91B00CF0D85 /* Foundation.framework */,
 				0BD758C11950F91B00CF0D85 /* CoreGraphics.framework */,
 				0BD758C31950F91B00CF0D85 /* UIKit.framework */,
+				3C5028191A2C6335003695FF /* WatchKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1231,6 +1299,48 @@
 			name = Emojis;
 			sourceTree = "<group>";
 		};
+		3C50281B1A2C6335003695FF /* com.heard.HeardInHouse WatchKit Extension */ = {
+			isa = PBXGroup;
+			children = (
+				3C50281F1A2C6335003695FF /* InterfaceController.h */,
+				3C5028201A2C6335003695FF /* InterfaceController.m */,
+				3C5028221A2C6335003695FF /* NotificationController.h */,
+				3C5028231A2C6335003695FF /* NotificationController.m */,
+				3C5028251A2C6335003695FF /* GlanceController.h */,
+				3C5028261A2C6335003695FF /* GlanceController.m */,
+				3C5028281A2C6335003695FF /* Images.xcassets */,
+				3C50281C1A2C6335003695FF /* Supporting Files */,
+			);
+			path = "com.heard.HeardInHouse WatchKit Extension";
+			sourceTree = "<group>";
+		};
+		3C50281C1A2C6335003695FF /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3C50281D1A2C6335003695FF /* Info.plist */,
+				3C50281E1A2C6335003695FF /* PushNotificationPayload.json */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3C5028301A2C6335003695FF /* com.heard.HeardInHouse Watch App */ = {
+			isa = PBXGroup;
+			children = (
+				3C5028331A2C6335003695FF /* Interface.storyboard */,
+				3C5028351A2C6335003695FF /* Images.xcassets */,
+				3C5028311A2C6335003695FF /* Supporting Files */,
+			);
+			path = "com.heard.HeardInHouse Watch App";
+			sourceTree = "<group>";
+		};
+		3C5028311A2C6335003695FF /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3C5028321A2C6335003695FF /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		3C9BBDFC195345A6001C6C4D /* UIKit+AFNetworking */ = {
 			isa = PBXGroup;
 			children = (
@@ -1332,15 +1442,50 @@
 				0BD758B91950F91B00CF0D85 /* Frameworks */,
 				0BD758BA1950F91B00CF0D85 /* Resources */,
 				0BDF01021A0C16E8000B4EF5 /* ShellScript */,
+				3C5028401A2C6335003695FF /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				3C5028381A2C6335003695FF /* PBXTargetDependency */,
 			);
 			name = Waved;
 			productName = Heard;
 			productReference = 0BD758BC1950F91B00CF0D85 /* Waved.app */;
 			productType = "com.apple.product-type.application";
+		};
+		3C5028171A2C6335003695FF /* com.heard.HeardInHouse WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3C50283F1A2C6335003695FF /* Build configuration list for PBXNativeTarget "com.heard.HeardInHouse WatchKit Extension" */;
+			buildPhases = (
+				3C5028141A2C6335003695FF /* Sources */,
+				3C5028151A2C6335003695FF /* Frameworks */,
+				3C5028161A2C6335003695FF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3C50282F1A2C6335003695FF /* PBXTargetDependency */,
+			);
+			name = "com.heard.HeardInHouse WatchKit Extension";
+			productName = "com.heard.HeardInHouse WatchKit Extension";
+			productReference = 3C5028181A2C6335003695FF /* com.heard.HeardInHouse WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit-extension";
+		};
+		3C50282B1A2C6335003695FF /* com.heard.HeardInHouse Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3C50283E1A2C6335003695FF /* Build configuration list for PBXNativeTarget "com.heard.HeardInHouse Watch App" */;
+			buildPhases = (
+				3C50282A1A2C6335003695FF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "com.heard.HeardInHouse Watch App";
+			productName = "com.heard.HeardInHouse Watch App";
+			productReference = 3C50282C1A2C6335003695FF /* com.heard.HeardInHouse Watch App.app */;
+			productType = "com.apple.product-type.application.watchapp";
 		};
 /* End PBXNativeTarget section */
 
@@ -1356,6 +1501,14 @@
 						DevelopmentTeam = U4TN2H6FNK;
 					};
 					0BD758BB1950F91B00CF0D85 = {
+						DevelopmentTeam = U4TN2H6FNK;
+					};
+					3C5028171A2C6335003695FF = {
+						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = U4TN2H6FNK;
+					};
+					3C50282B1A2C6335003695FF = {
+						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = U4TN2H6FNK;
 					};
 				};
@@ -1376,6 +1529,8 @@
 			targets = (
 				0BD758BB1950F91B00CF0D85 /* Waved */,
 				0B72EEA0196C672F00AC5A01 /* Waved Staging */,
+				3C5028171A2C6335003695FF /* com.heard.HeardInHouse WatchKit Extension */,
+				3C50282B1A2C6335003695FF /* com.heard.HeardInHouse Watch App */,
 			);
 		};
 /* End PBXProject section */
@@ -1609,6 +1764,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3C5028161A2C6335003695FF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3C5028291A2C6335003695FF /* Images.xcassets in Resources */,
+				3C50282D1A2C6335003695FF /* com.heard.HeardInHouse Watch App.app in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3C50282A1A2C6335003695FF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3C5028341A2C6335003695FF /* Interface.storyboard in Resources */,
+				3C5028361A2C6335003695FF /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -1804,7 +1977,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3C5028141A2C6335003695FF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3C5028241A2C6335003695FF /* NotificationController.m in Sources */,
+				3C5028211A2C6335003695FF /* InterfaceController.m in Sources */,
+				3C5028271A2C6335003695FF /* GlanceController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3C50282F1A2C6335003695FF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3C50282B1A2C6335003695FF /* com.heard.HeardInHouse Watch App */;
+			targetProxy = 3C50282E1A2C6335003695FF /* PBXContainerItemProxy */;
+		};
+		3C5028381A2C6335003695FF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3C5028171A2C6335003695FF /* com.heard.HeardInHouse WatchKit Extension */;
+			targetProxy = 3C5028371A2C6335003695FF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		0BD758C81950F91B00CF0D85 /* InfoPlist.strings */ = {
@@ -2020,6 +2216,88 @@
 			};
 			name = Release;
 		};
+		3C50283A1A2C6335003695FF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Waved Inc. (U4TN2H6FNK)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Waved Inc. (U4TN2H6FNK)";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "com.heard.HeardInHouse WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		3C50283B1A2C6335003695FF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Waved Inc. (U4TN2H6FNK)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Waved Inc. (U4TN2H6FNK)";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "com.heard.HeardInHouse WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		3C50283C1A2C6335003695FF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IBSC_MODULE = com_heard_HeardInHouse_WatchKit_Extension;
+				INFOPLIST_FILE = "com.heard.HeardInHouse Watch App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Debug;
+		};
+		3C50283D1A2C6335003695FF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				IBSC_MODULE = com_heard_HeardInHouse_WatchKit_Extension;
+				INFOPLIST_FILE = "com.heard.HeardInHouse Watch App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2049,6 +2327,22 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		3C50283E1A2C6335003695FF /* Build configuration list for PBXNativeTarget "com.heard.HeardInHouse Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3C50283C1A2C6335003695FF /* Debug */,
+				3C50283D1A2C6335003695FF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		3C50283F1A2C6335003695FF /* Build configuration list for PBXNativeTarget "com.heard.HeardInHouse WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3C50283A1A2C6335003695FF /* Debug */,
+				3C50283B1A2C6335003695FF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
