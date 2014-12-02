@@ -31,6 +31,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *photoConfirmationImage;
 @property (nonatomic, strong) UIPanGestureRecognizer *panningRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
+@property (weak, nonatomic) IBOutlet UIButton *saveToCameraRollButton;
+@property (weak, nonatomic) IBOutlet UIButton *photoDeleteButton;
 //Alert
 @property (nonatomic, strong) UIView *alertView;
 @property (nonatomic, strong) UILabel *alertLabel;
@@ -63,7 +65,7 @@
     if (self.image) {
         self.displayCamera = NO;
         self.imageView.image = self.image;
-        self.photoDescriptionField.hidden = NO;
+        self.photoDescriptionField.hidden = !self.photoDescriptionField.text || self.photoDescriptionField.text.length == 0;
     } else {
         self.photoDescriptionField.hidden = YES;
         self.displayCamera = YES;
@@ -92,6 +94,10 @@
     [super viewWillAppear:animated];
     if (self.displayCamera) {
         [self presentViewController:self.imagePickerController animated:NO completion:NULL];
+    } else {
+        self.photoConfirmButton.hidden = NO;
+        self.photoDeleteButton.hidden = NO;
+        self.saveToCameraRollButton.hidden = NO;
     }
     
     CGRect newFrame = self.photoConfirmationImage.frame;
@@ -178,10 +184,6 @@
     self.imageView.image = [UIImage imageWithCGImage:image.CGImage scale:1 orientation:orientation];;
 
     [self closeCamera];
-    
-    // Open keyboard (dismissed by Bastien)
-//    self.photoDescriptionField.hidden = NO;
-//    [self.photoDescriptionField performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0.05f];
 }
 
 

@@ -13,7 +13,6 @@
 
 @property (nonatomic) CGRect initialFrame;
 @property (nonatomic, strong) UIPanGestureRecognizer *panningRecognizer;
-@property (nonatomic, strong) UILongPressGestureRecognizer *longPressRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
 
 @end
@@ -28,11 +27,6 @@
     self.panningRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanningGesture:)];
     [self addGestureRecognizer:self.panningRecognizer];
     self.panningRecognizer.delegate = self;
-    
-    self.longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanningGesture:)];
-    [self addGestureRecognizer:self.longPressRecognizer];
-    self.longPressRecognizer.delegate = self;
-    self.longPressRecognizer.minimumPressDuration = 0.5;
     
     self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture)];
     [self addGestureRecognizer:self.tapGestureRecognizer];
@@ -63,7 +57,7 @@
     if (recognizer.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [recognizer translationInView:self.superview];
         CGPoint location = [recognizer locationInView:self.superview];
-        [self.delegate updateEmojiOrPhotoLocation:location];
+        [self.delegate updatePhotoLocation:location];
         CGPoint newCenterPoint = CGPointMake(initialCenter.x + translation.x,initialCenter.y + translation.y);
         self.center = newCenterPoint;
     }

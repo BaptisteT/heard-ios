@@ -150,10 +150,6 @@
 {
     [super viewDidLoad];
     
-    // Todo BT Remove
-    self.cameraControllerButton.hidden = NO;
-    //
-    
     self.retrieveNewContact = YES;
     self.authRequestView.hidden = YES;
     self.openingTutoView.hidden = YES;
@@ -1315,7 +1311,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         
         // display
         [self.view addSubview:self.photoReceivedView];
-        // todo bt sound + vibration
+        
+        if ([UIDevice currentDevice].proximityState) {
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+        }
         
     } else {
         // Init Audio Player
@@ -1954,7 +1953,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.emojiPageControl.currentPage = page;
 }
 
-- (void)updateEmojiOrPhotoLocation:(CGPoint)location
+- (void)updateEmojiLocation:(CGPoint)location
 {
     // clean
     [self removeEmojiOverlayOnContactViews];
@@ -1963,10 +1962,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     ContactView *contactView = [self findContactViewAtLocation:location];
     if (contactView) {
         [contactView addEmojiOverlay];
-    } else if (CGRectContainsPoint([self.view convertRect:self.inviteButton.frame fromView:self.contactScrollView],location)) {
-        // todo BT
-        // Animation
-        // Careful, it's also used for emojis
     }
 }
 
@@ -2033,7 +2028,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.topBarBackground.hidden = flag;
     self.menuButton.hidden = flag;
     self.emojiButton.hidden = flag;
-    self.cameraControllerButton.hidden = flag; // todo BT, put flag for next version
+    self.cameraControllerButton.hidden = flag;
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -2105,6 +2100,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     ContactView *contactView = [self findContactViewAtLocation:location];
     if (contactView) {
+        [self.inviteButton.layer removeAllAnimations];
         [contactView removeEmojiOverlay];
         NSInteger receiverId = [contactView isGroupContactView] ? 0 : [contactView contactIdentifier];
         NSInteger groupId = [contactView isGroupContactView] ? [contactView contactIdentifier] : 0;
@@ -2126,10 +2122,12 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                            options:UIViewAnimationOptionCurveEaseOut
                         animations:^{[photoView setFrame:CGRectMake(destinationPoint.x,destinationPoint.y,0,0)];}
                         completion:^(BOOL completed) {
+                            [self.inviteButton.layer removeAllAnimations];
                             [self endDisplayBin];
                             photoView.hidden = YES;
                         }];
     } else {
+        [self.inviteButton.layer removeAllAnimations];
         [UIView transitionWithView:photoView
                           duration:0.5f
                            options:UIViewAnimationOptionTransitionNone
@@ -2141,6 +2139,31 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                         }];
     }
 }
+
+- (void)updatePhotoLocation:(CGPoint)location
+{
+    // clean
+    [self removeEmojiOverlayOnContactViews];
+    [self.inviteButton.layer removeAllAnimations];
+    
+    // Animation on contact view
+    ContactView *contactView = [self findContactViewAtLocation:location];
+    if (contactView) {
+        [contactView addEmojiOverlay];
+    } else if (CGRectContainsPoint([self.view convertRect:self.inviteButton.frame fromView:self.contactScrollView],location)) {
+        // todo BT
+        // Bin Animation
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
+        [animation setDuration:0.05];
+        [animation setRepeatCount:INFINITY];
+        [animation setAutoreverses:YES];
+        [animation setFromValue:[NSValue valueWithCGPoint: CGPointMake([self.inviteButton center].x - 5.0f, [self.inviteButton center].y)]];
+        [animation setToValue:[NSValue valueWithCGPoint: CGPointMake([self.inviteButton center].x + 5.0f, [self.inviteButton center].y)]];
+        [[self.inviteButton layer] addAnimation:animation forKey:@"position"];
+        
+    }
+}
+
 
 - (CGRect)getPhotoViewFrame
 {
