@@ -11,6 +11,10 @@
 #import "Constants.h"
 #import "KeyboardUtils.h"
 #import "ImageUtils.h"
+#import "Constants.h"
+
+#define ALERT_VIEW_HEIGHT 40
+#define ALERT_VIEW_WIDTH 280
 
 @interface CameraViewController ()
 
@@ -27,6 +31,10 @@
 @property (weak, nonatomic) IBOutlet UIImageView *photoConfirmationImage;
 @property (nonatomic, strong) UIPanGestureRecognizer *panningRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
+//Alert
+@property (nonatomic, strong) UIView *alertView;
+@property (nonatomic, strong) UILabel *alertLabel;
+
 
 @end
 
@@ -171,7 +179,7 @@
 
     [self closeCamera];
     
-    // Open keyboard
+    // Open keyboard (dismissed by Bastien)
 //    self.photoDescriptionField.hidden = NO;
 //    [self.photoDescriptionField performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0.05f];
 }
@@ -200,6 +208,71 @@
 {
     self.displayCamera = NO;
     [self dismissViewControllerAnimated:NO completion:nil];
+}
+
+- (IBAction)savePhotoToCameraRoll:(id)sender {
+    if (self.imageView.image.imageOrientation == UIImageOrientationLeftMirrored) {
+        UIImageWriteToSavedPhotosAlbum([UIImage imageWithCGImage:[self.imageView.image CGImage]
+                                                           scale:1.0
+                                                     orientation: UIImageOrientationRight],
+                                       self,
+                                       @selector(photo:hasBeenSaveInPhotoAlbumWithError:usingContextInfo:),
+                                       nil);
+    } else {
+        UIImageWriteToSavedPhotosAlbum(self.imageView.image,
+                                       self,
+                                       @selector(photo:hasBeenSaveInPhotoAlbumWithError:usingContextInfo:),
+                                       nil);
+    }
+}
+
+- (void)photo:(UIImage *)photo hasBeenSaveInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo
+{
+    if (error) {
+        [self displayAlert:@"We could not save to your camera roll."];
+    } else {
+        [self displayAlert:@"Successfully saved!"];
+    }
+}
+
+- (void)displayAlert:(NSString *)alert
+{
+    if (!self.alertView) {
+        [self initAlertView];
+    }
+    
+    self.alertLabel.text = alert;
+    
+    [self.alertView.layer removeAllAnimations];
+    self.alertView.alpha = 0;
+    
+    [UIView animateWithDuration:1 animations:^{
+        self.alertView.alpha = 1;
+    } completion:^(BOOL finished) {
+        if (finished && self.alertView) {
+            [UIView animateWithDuration:1 delay:2 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.alertView.alpha = 0;
+            } completion:nil];
+        }
+    }];
+}
+
+- (void)initAlertView
+{
+    self.alertView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - ALERT_VIEW_WIDTH/2, self.view.bounds.size.height/2 - ALERT_VIEW_HEIGHT/2, ALERT_VIEW_WIDTH, ALERT_VIEW_HEIGHT)];
+    
+    self.alertView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+    self.alertView.clipsToBounds = YES;
+    self.alertView.layer.cornerRadius = 5;
+    self.alertView.alpha = 0;
+    [self.view addSubview:self.alertView];
+    
+    self.alertLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_VIEW_WIDTH, ALERT_VIEW_HEIGHT)];
+    self.alertLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:18.0];
+    self.alertLabel.textAlignment = NSTextAlignmentCenter;
+    self.alertLabel.textColor = [UIColor whiteColor];
+    self.alertLabel.backgroundColor = [UIColor clearColor];
+    [self.alertView addSubview:self.alertLabel];
 }
 
 - (BOOL)prefersStatusBarHidden

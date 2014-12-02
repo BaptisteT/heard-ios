@@ -2144,10 +2144,11 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (CGRect)getPhotoViewFrame
 {
-    float h = kPhotoToSendWidth * (self.photoToSendView.image.size.height/self.photoToSendView.image.size.width);
+    float w = kPhotoToSendWidth;
+    float h = w * (self.photoToSendView.image.size.height/self.photoToSendView.image.size.width);
     float margin = 10;
     
-    return CGRectMake(10, self.view.frame.size.height - (h + margin), kPhotoToSendWidth, h);
+    return CGRectMake(self.view.frame.size.width - (w + 10), self.view.frame.size.height - (h + margin), w, h);
 }
 
 - (void)startDisplayBin

@@ -168,5 +168,4 @@
     view.layer.shadowOpacity = 0.3;
     view.layer.masksToBounds = NO;
 }
-
 @end
