@@ -1084,27 +1084,36 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HL5-i5-s9P">
-                                <rect key="frame" x="260" y="0.0" width="60" height="60"/>
+                                <rect key="frame" x="240" y="488" width="80" height="65"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="60" id="iaY-fD-FIF"/>
-                                    <constraint firstAttribute="height" constant="60" id="y6U-0j-26N"/>
+                                    <constraint firstAttribute="width" constant="80" id="iaY-fD-FIF"/>
+                                    <constraint firstAttribute="height" constant="65" id="y6U-0j-26N"/>
                                 </constraints>
-                                <state key="normal" image="check-button">
+                                <state key="normal">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="checkButtonClicked:" destination="YBy-ry-GCo" eventType="touchUpInside" id="dHV-Ux-zob"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera-validate" translatesAutoresizingMaskIntoConstraints="NO" id="ktw-FX-e7i">
+                                <rect key="frame" x="255" y="488" width="65" height="65"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="65" id="500-k4-rsa"/>
+                                    <constraint firstAttribute="width" constant="65" id="n0D-Gh-665"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Q4n-tp-qKq" firstAttribute="top" secondItem="MwH-Zv-4bK" secondAttribute="bottom" id="1AT-iT-ZN8"/>
+                            <constraint firstItem="dt8-cJ-RZD" firstAttribute="top" secondItem="HL5-i5-s9P" secondAttribute="bottom" constant="15" id="5Af-LE-zYx"/>
                             <constraint firstItem="UPz-PF-2OM" firstAttribute="top" secondItem="Wsf-VT-8dR" secondAttribute="top" id="DqS-3T-qIR"/>
                             <constraint firstItem="UPz-PF-2OM" firstAttribute="leading" secondItem="Wsf-VT-8dR" secondAttribute="leading" id="M5j-qx-IRI"/>
                             <constraint firstItem="dt8-cJ-RZD" firstAttribute="top" secondItem="UPz-PF-2OM" secondAttribute="bottom" id="Vxp-k8-nIh"/>
                             <constraint firstAttribute="trailing" secondItem="HL5-i5-s9P" secondAttribute="trailing" id="X6f-jp-6yr"/>
-                            <constraint firstItem="HL5-i5-s9P" firstAttribute="top" secondItem="MwH-Zv-4bK" secondAttribute="bottom" id="rg0-4D-Gr4"/>
+                            <constraint firstItem="ktw-FX-e7i" firstAttribute="trailing" secondItem="HL5-i5-s9P" secondAttribute="trailing" id="Z5E-7j-PcA"/>
+                            <constraint firstItem="ktw-FX-e7i" firstAttribute="centerY" secondItem="HL5-i5-s9P" secondAttribute="centerY" id="mRY-7c-nLE"/>
                             <constraint firstAttribute="trailing" secondItem="UPz-PF-2OM" secondAttribute="trailing" id="rjF-oO-g3v"/>
                             <constraint firstItem="Q4n-tp-qKq" firstAttribute="leading" secondItem="Wsf-VT-8dR" secondAttribute="leading" id="xBx-R7-1ge"/>
                         </constraints>
@@ -1115,6 +1124,7 @@
                     <connections>
                         <outlet property="imageView" destination="UPz-PF-2OM" id="QHs-Zh-uLr"/>
                         <outlet property="photoConfirmButton" destination="HL5-i5-s9P" id="pNV-4A-Sm5"/>
+                        <outlet property="photoConfirmationImage" destination="ktw-FX-e7i" id="ufu-CP-d82"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BS1-nH-752" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1794,8 +1804,8 @@
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="22"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="numberPad"/>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="clip" translatesAutoresizingMaskIntoConstraints="NO" id="ASy-0p-txT">
-                                        <rect key="frame" x="0.0" y="0.0" width="70" height="70.5"/>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="clip" translatesAutoresizingMaskIntoConstraints="NO" id="ASy-0p-txT">
+                                        <rect key="frame" x="0.0" y="0.0" width="70" height="71"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="70" id="e8J-My-0Oy"/>
                                         </constraints>
@@ -2016,6 +2026,7 @@
         <image name="blue-next-button" width="60" height="60"/>
         <image name="camera-controller_button" width="50" height="50"/>
         <image name="camera-quit-button" width="150" height="151"/>
+        <image name="camera-validate" width="200" height="200"/>
         <image name="cancel-blue-button" width="60" height="60"/>
         <image name="cancel-button" width="60" height="60"/>
         <image name="check-button" width="60" height="60"/>

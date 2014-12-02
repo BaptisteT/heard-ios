@@ -24,6 +24,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
 @property (strong, nonatomic) UITextView *photoDescriptionField;
 @property (weak, nonatomic) IBOutlet UIButton *photoConfirmButton;
+@property (weak, nonatomic) IBOutlet UIImageView *photoConfirmationImage;
 @property (nonatomic, strong) UIPanGestureRecognizer *panningRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
 
@@ -37,13 +38,12 @@
     
     self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.imageView.backgroundColor = [UIColor blackColor];
-    [ImageUtils outerGlow:self.photoConfirmButton];
     
     double yOrigin = (self.textPosition > 0 && self.textPosition < 1) ? self.textPosition * self.view.frame.size.height : self.view.frame.size.height - 40;
     self.photoDescriptionField = [[UITextView alloc] initWithFrame:CGRectMake(0, yOrigin, self.view.frame.size.width, 40)];
     self.photoDescriptionField.textColor = [UIColor whiteColor];
     self.photoDescriptionField.font = [UIFont fontWithName:@"HelveticaNeue" size:20];
-    self.photoDescriptionField.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
+    self.photoDescriptionField.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.65];
     [self.view addSubview:self.photoDescriptionField];
     self.photoDescriptionField.delegate = self;
     self.photoDescriptionField.keyboardAppearance = UIKeyboardAppearanceDark;
@@ -84,7 +84,19 @@
     [super viewWillAppear:animated];
     if (self.displayCamera) {
         [self presentViewController:self.imagePickerController animated:NO completion:NULL];
-    } 
+    }
+    
+    CGRect newFrame = self.photoConfirmationImage.frame;
+    newFrame.origin.x = self.view.frame.size.width - newFrame.size.width;
+    self.photoConfirmationImage.frame = newFrame;
+    
+    [UIView animateWithDuration:0.5 delay:1.0 options:(UIViewAnimationOptionAutoreverse|UIViewAnimationOptionRepeat|UIViewAnimationOptionCurveEaseIn) animations:^{
+        CGRect newFrame = self.photoConfirmationImage.frame;
+        newFrame.origin.x = newFrame.origin.x + 15;
+        self.photoConfirmationImage.frame = newFrame;
+    } completion:^(BOOL finished) {
+
+    }];
 }
 
 // ----------------------------------------------------------
@@ -160,8 +172,8 @@
     [self closeCamera];
     
     // Open keyboard
-    self.photoDescriptionField.hidden = NO;
-    [self.photoDescriptionField performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0.05f];
+//    self.photoDescriptionField.hidden = NO;
+//    [self.photoDescriptionField performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0.05f];
 }
 
 
