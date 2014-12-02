@@ -310,4 +310,15 @@
 }
 
 
++ (UIViewController *)getVisibleController
+{
+    UINavigationController *navigationController = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+    if ([navigationController respondsToSelector:@selector(visibleViewController)]) {
+        return navigationController.visibleViewController;
+    } else {
+        return nil;
+    }
+}
+
+
 @end

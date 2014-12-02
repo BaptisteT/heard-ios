@@ -12,6 +12,8 @@
 #import "KeyboardUtils.h"
 #import "ImageUtils.h"
 #import "Constants.h"
+#import "GeneralUtils.h"
+#import <AssetsLibrary/AssetsLibrary.h>
 
 #define ALERT_VIEW_HEIGHT 40
 #define ALERT_VIEW_WIDTH 280
@@ -87,6 +89,11 @@
     self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture)];
     [self.imageView addGestureRecognizer:self.tapGestureRecognizer];
     self.tapGestureRecognizer.numberOfTapsRequired = 1;
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(willResignActiveCallback)
+                                                 name: UIApplicationWillResignActiveNotification
+                                               object: nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -94,7 +101,7 @@
     [super viewWillAppear:animated];
     if (self.displayCamera) {
         [self presentViewController:self.imagePickerController animated:NO completion:NULL];
-    } else {
+    } else if (self.imageView.image) {
         self.photoConfirmButton.hidden = NO;
         self.photoDeleteButton.hidden = NO;
         self.saveToCameraRollButton.hidden = NO;
@@ -111,6 +118,14 @@
     } completion:^(BOOL finished) {
 
     }];
+}
+
+- (void)willResignActiveCallback {
+    if ([ALAssetsLibrary authorizationStatus] == ALAuthorizationStatusAuthorized && self.imageView.image) {
+        [self.delegate savePhoto:self.imageView.image text:self.photoDescriptionField.text andTextPosition:(float)self.photoDescriptionField.frame.origin.y / self.view.frame.size.height];
+        [self closeCamera];
+        [self dismissViewControllerAnimated:NO completion:nil];
+    }
 }
 
 // ----------------------------------------------------------
@@ -244,7 +259,6 @@
     }
     
     self.alertLabel.text = alert;
-    
     [self.alertView.layer removeAllAnimations];
     self.alertView.alpha = 0;
     

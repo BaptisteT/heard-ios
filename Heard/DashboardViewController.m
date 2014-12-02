@@ -390,6 +390,8 @@
 }
 
 - (void)navigateToCameraControllerWithPrefill:(BOOL)flag {
+    // todo BT
+    // Check access has not been denied
     [self performSegueWithIdentifier:@"Camera From Dashboard Segue" sender:flag ? @"ok" : nil];
     self.emojiContainer.hidden = YES;
 }
@@ -1565,6 +1567,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Observer callback
 // ----------------------------------------------------------
 -(void)willResignActiveCallback {
+    if ([[GeneralUtils getVisibleController] isKindOfClass:[UIImagePickerController class]] || [[GeneralUtils getVisibleController] isKindOfClass:[CameraViewController class]]) {
+        return;
+    }
     // Dismiss modal
     [self dismissViewControllerAnimated:NO completion:nil];
     
