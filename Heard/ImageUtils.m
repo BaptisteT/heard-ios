@@ -164,7 +164,7 @@
 {
     view.layer.shadowColor = [UIColor blackColor].CGColor;
     view.layer.shadowOffset = CGSizeMake(0.0, 0.0);
-    view.layer.shadowRadius = 1;
+    view.layer.shadowRadius = 3;
     view.layer.shadowOpacity = 0.3;
     view.layer.masksToBounds = NO;
 }

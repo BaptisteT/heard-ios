@@ -2053,6 +2053,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.photoToSendView.hidden = NO;
     [UIView animateWithDuration:0.5f animations:^{
         [self.photoToSendView setFrame:[self getPhotoViewFrame]];
+        [ImageUtils outerGlow:self.photoToSendView];
     }];
 }
 
@@ -2143,8 +2144,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (CGRect)getPhotoViewFrame
 {
-    // todo BT
-    return CGRectMake(10, self.view.frame.size.height - 90, 80, 80);
+    float h = kPhotoToSendWidth * (self.photoToSendView.image.size.height/self.photoToSendView.image.size.width);
+    float margin = 10;
+    
+    return CGRectMake(10, self.view.frame.size.height - (h + margin), kPhotoToSendWidth, h);
 }
 
 - (void)startDisplayBin
