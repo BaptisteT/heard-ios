@@ -162,7 +162,7 @@
     }
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if (buttonIndex == 1) {
         [self performSegueWithIdentifier:@"Username Modal Segue From Add Contact" sender:nil];
     }

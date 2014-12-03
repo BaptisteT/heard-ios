@@ -14,12 +14,12 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "EmojiView.h"
 #import "CreateGroupsViewController.h"
-#import "InviteViewController.h"
 #import "ManageGroupsViewController.h"
 #import "PhotoView.h"
 #import "CameraViewController.h"
+#import "EditContactsViewController.h"
 
-@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, UINavigationControllerDelegate, ABPersonViewControllerDelegate, EmojiViewDelegateProtocol, CreateGroupsVCDelegate, ManageGroupsVCDelegateProtocol, InviteViewControllerProtocol, PhotoViewDelegateProtocol,CameraVCDelegate, UIScrollViewDelegate>
+@interface DashboardViewController : UIViewController <UIAlertViewDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, ContactBubbleViewDelegate, UIGestureRecognizerDelegate, UINavigationControllerDelegate, ABPersonViewControllerDelegate, EmojiViewDelegateProtocol, CreateGroupsVCDelegate, ManageGroupsVCDelegateProtocol, PhotoViewDelegateProtocol,CameraVCDelegate, EditContactsVCDelegate, UIScrollViewDelegate>
 
 - (BOOL)attributeMessageToExistingContacts:(Message *)message;
 - (void)retrieveUnreadMessagesAndNewContacts;

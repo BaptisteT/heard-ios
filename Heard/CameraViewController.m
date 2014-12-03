@@ -106,19 +106,13 @@
         self.photoConfirmButton.hidden = NO;
         self.photoDeleteButton.hidden = NO;
         self.saveToCameraRollButton.hidden = NO;
-    }
-    
-    CGRect newFrame = self.photoConfirmationImage.frame;
-    newFrame.origin.x = self.view.frame.size.width - newFrame.size.width;
-    self.photoConfirmationImage.frame = newFrame;
-    
-    [UIView animateWithDuration:0.5 delay:1.0 options:(UIViewAnimationOptionAutoreverse|UIViewAnimationOptionRepeat|UIViewAnimationOptionCurveEaseIn) animations:^{
+        
+        [self.photoConfirmationImage.layer removeAllAnimations];
+        
         CGRect newFrame = self.photoConfirmationImage.frame;
-        newFrame.origin.x = newFrame.origin.x + 15;
+        newFrame.origin.x = self.view.frame.size.width - newFrame.size.width;
         self.photoConfirmationImage.frame = newFrame;
-    } completion:^(BOOL finished) {
-
-    }];
+    }
 }
 
 - (void)willResignActiveCallback {

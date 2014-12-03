@@ -13,17 +13,8 @@
 #import <AddressBookUI/AddressBookUI.h>
 #import "EditContactsViewController.h"
 
-@protocol InviteViewControllerProtocol;
-
-@interface InviteViewController : UIViewController <MFMessageComposeViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
+@interface InviteViewController : UIViewController <MFMessageComposeViewControllerDelegate>
 
 @property (nonatomic, strong) NSArray *contacts;
-@property (nonatomic, weak) id <InviteViewControllerProtocol> delegate;
-
-@end
-
-@protocol InviteViewControllerProtocol <EditContactsVCDelegate>
-
-- (void)updateCurrentUserFirstName:(NSString *)firstName lastName:(NSString *)lastName picture:(UIImage *)picture;
 
 @end

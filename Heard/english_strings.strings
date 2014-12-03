@@ -191,6 +191,10 @@
 // Photo
 "photo_tuto_message" = "Drag picture & send";
 
+//Menu action sheet
+"add_contacts" = "Add contacts";
+"manage_groups" = "Groups";
+"settings" = "Settings";
 
 
 
