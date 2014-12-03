@@ -69,6 +69,10 @@
 // Contact access
 "contact_access_error_message" = "Waved uses your address book to sync your contacts. Please allow contact access in your settings.";
 
+// Camera access
+"camera_access_error_title" = "No camera access.";
+"camera_access_error_message" = "Please allow camera access in settings.";
+
 // Auth
 "authentification_error_title" = "Authentification error";
 "authentification_error_message" = "Please, sign in again";

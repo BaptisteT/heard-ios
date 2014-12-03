@@ -109,7 +109,7 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    UIViewController *visibleController = [self getVisibleController];
+    UIViewController *visibleController = [GeneralUtils getVisibleController];
     
     if ([visibleController isKindOfClass:[DashboardViewController class]]) {
         // Retrieve new messages
@@ -131,7 +131,7 @@
     [ContactUtils saveContactsInMemory:self.contacts];
     [GroupUtils saveGroupsInMemory:self.groups];
     
-    UIViewController *visibleController = [self getVisibleController];
+    UIViewController *visibleController = [GeneralUtils getVisibleController];
     
     // Reorder dashboard
     if ([visibleController isKindOfClass:[DashboardViewController class]]) {
@@ -173,7 +173,7 @@
     if ([userInfo valueForKey:@"message"]) {
         if (state == UIApplicationStateActive) {
             // Add unread message
-            UIViewController *visibleController = [self getVisibleController];
+            UIViewController *visibleController = [GeneralUtils getVisibleController];
             if ([visibleController isKindOfClass:[DashboardViewController class]]) {
                 [(DashboardViewController *)visibleController retrieveUnreadMessagesAndNewContacts];
                 [(DashboardViewController *)visibleController playSound:kReceivedSound ofType:@"aif" completion:nil];
@@ -183,7 +183,7 @@
     //Read message push
     } else if ([userInfo valueForKey:@"receiver_id"] && [userInfo valueForKey:@"message_id"]) {
         if (state == UIApplicationStateActive) {
-            UIViewController *visibleController = [self getVisibleController];
+            UIViewController *visibleController = [GeneralUtils getVisibleController];
             if ([visibleController isKindOfClass:[DashboardViewController class]]) {
                 NSUInteger contactId = [[userInfo valueForKey:@"receiver_id"] unsignedIntegerValue];
                 NSUInteger messageId = [[userInfo valueForKey:@"message_id"] unsignedIntegerValue];
@@ -194,7 +194,7 @@
     //Is Recording push
     } else if ([userInfo valueForKey:@"recorder_id"] && [userInfo valueForKey:@"is_recording"]) {
         if (state == UIApplicationStateActive) {
-            UIViewController *visibleController = [self getVisibleController];
+            UIViewController *visibleController = [GeneralUtils getVisibleController];
             if ([visibleController isKindOfClass:[DashboardViewController class]]) {
                 NSUInteger contactId = [[userInfo valueForKey:@"recorder_id"] unsignedIntegerValue];
                 BOOL isRecording = [[userInfo valueForKey:@"is_recording"] boolValue];
@@ -214,17 +214,6 @@ NSString* stringFromDeviceTokenData(NSData *deviceToken)
     }
     
     return token;
-}
-
-// get visible view controller
-- (UIViewController *)getVisibleController
-{
-    UINavigationController *navigationController = (UINavigationController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-    if ([navigationController respondsToSelector:@selector(visibleViewController)]) {
-        return navigationController.visibleViewController;
-    } else {
-        return nil;
-    }
 }
 
 // API related alert

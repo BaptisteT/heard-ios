@@ -19,7 +19,7 @@
 
 @protocol PhotoViewDelegateProtocol
 
-- (void)updateEmojiOrPhotoLocation:(CGPoint)location;
+- (void)updatePhotoLocation:(CGPoint)location;
 - (void)photoDropped:(PhotoView *)photoView atLocation:(CGPoint)location;
 - (CGRect)getPhotoViewFrame;
 - (void)startDisplayBin;

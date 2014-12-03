@@ -3,16 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "camera-flip-button.png"
+      "filename" : "flip-camera copy 2.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "camera-flip-button@2x~iphone.png"
+      "filename" : "flip-camera copy.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "flip-camera.png"
     }
   ],
   "info" : {

@@ -63,4 +63,6 @@
 
 + (NSString *)getDataTypeForMessageType:(NSString *)messageType;
 
++ (UIViewController *)getVisibleController;
+
 @end

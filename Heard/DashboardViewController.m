@@ -208,6 +208,8 @@
     [[self.inviteButton imageView] setContentMode: UIViewContentModeScaleAspectFit];
     [self.inviteButton addTarget:self action:@selector(inviteButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     [self.inviteButton setImage:[UIImage imageNamed:@"invite-button"] forState:UIControlStateNormal];
+    self.inviteButton.clipsToBounds = YES;
+    self.inviteButton.layer.cornerRadius = self.inviteButton.bounds.size.height/2;
     [self.contactScrollView addSubview:self.inviteButton];
     
     // Create contact views
@@ -386,10 +388,32 @@
 }
 
 - (IBAction)cameraButtonClicked:(id)sender {
-    [self navigateToCameraControllerWithPrefill:NO];
+    if ([AVCaptureDevice respondsToSelector:@selector(requestAccessForMediaType: completionHandler:)]) {
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+            if (granted) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self navigateToCameraControllerWithPrefill:NO];
+                });
+            } else {
+                // Permission has been denied.
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"camera_access_error_title",kStringFile, @"comment")
+                                                message:NSLocalizedStringFromTable(@"camera_access_error_message",kStringFile, @"comment")
+                                               delegate:self
+                                      cancelButtonTitle:@"OK"
+                                      otherButtonTitles:nil] show];
+                });
+            }
+        }];
+    } else {
+        // iOS <= 7
+        [self navigateToCameraControllerWithPrefill:NO];
+    }
 }
 
 - (void)navigateToCameraControllerWithPrefill:(BOOL)flag {
+    // todo BT
+    // Check access has not been denied
     [self performSegueWithIdentifier:@"Camera From Dashboard Segue" sender:flag ? @"ok" : nil];
     self.emojiContainer.hidden = YES;
 }
@@ -1311,7 +1335,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         
         // display
         [self.view addSubview:self.photoReceivedView];
-        // todo bt sound + vibration
+        
+        if ([UIDevice currentDevice].proximityState) {
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+        }
         
     } else {
         // Init Audio Player
@@ -1546,7 +1573,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if ([alertView.message isEqualToString:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment")] || [alertView.message isEqualToString:NSLocalizedStringFromTable(@"notification_error_message",kStringFile, @"comment")]) {
+    if ([alertView.message isEqualToString:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment")] || [alertView.message isEqualToString:NSLocalizedStringFromTable(@"notification_error_message",kStringFile, @"comment")] ||
+        [alertView.message isEqualToString:NSLocalizedStringFromTable(@"camera_access_error_message",kStringFile, @"comment")]) {
         [GeneralUtils openSettings];
     }
     
@@ -1562,6 +1590,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 #pragma mark Observer callback
 // ----------------------------------------------------------
 -(void)willResignActiveCallback {
+    if ([[GeneralUtils getVisibleController] isKindOfClass:[UIImagePickerController class]] || [[GeneralUtils getVisibleController] isKindOfClass:[CameraViewController class]]) {
+        return;
+    }
     // Dismiss modal
     [self dismissViewControllerAnimated:NO completion:nil];
     
@@ -1950,7 +1981,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.emojiPageControl.currentPage = page;
 }
 
-- (void)updateEmojiOrPhotoLocation:(CGPoint)location
+- (void)updateEmojiLocation:(CGPoint)location
 {
     // clean
     [self removeEmojiOverlayOnContactViews];
@@ -1959,10 +1990,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     ContactView *contactView = [self findContactViewAtLocation:location];
     if (contactView) {
         [contactView addEmojiOverlay];
-    } else if (CGRectContainsPoint([self.view convertRect:self.inviteButton.frame fromView:self.contactScrollView],location)) {
-        // todo BT
-        // Animation
-        // Careful, it's also used for emojis
     }
 }
 
@@ -2049,6 +2076,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.photoToSendView.hidden = NO;
     [UIView animateWithDuration:0.5f animations:^{
         [self.photoToSendView setFrame:[self getPhotoViewFrame]];
+        [ImageUtils outerGlow:self.photoToSendView];
     }];
 }
 
@@ -2098,6 +2126,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)photoDropped:(PhotoView *)photoView atLocation:(CGPoint)location
 {
+    [self.inviteButton.layer removeAllAnimations];
     ContactView *contactView = [self findContactViewAtLocation:location];
     if (contactView) {
         [contactView removeEmojiOverlay];
@@ -2137,21 +2166,52 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     }
 }
 
+- (void)updatePhotoLocation:(CGPoint)location
+{
+    // clean
+    [self removeEmojiOverlayOnContactViews];
+    [self.inviteButton setBackgroundColor:[UIColor clearColor]];
+    
+    // Animation on contact view
+    ContactView *contactView = [self findContactViewAtLocation:location];
+    if (contactView) {
+        [contactView addEmojiOverlay];
+    } else if (CGRectContainsPoint([self.view convertRect:self.inviteButton.frame fromView:self.contactScrollView],location)) {
+        [self.inviteButton setBackgroundColor:[ImageUtils slightlyTransparentBlue]];
+    }
+}
+
+
 - (CGRect)getPhotoViewFrame
 {
-    // todo BT
-    return CGRectMake(10, self.view.frame.size.height - 90, 80, 80);
+    float w = kPhotoToSendWidth;
+    float h = w * (self.photoToSendView.image.size.height/self.photoToSendView.image.size.width);
+    float margin = 10;
+    
+    return CGRectMake(self.view.frame.size.width - (w + 10), self.view.frame.size.height - (h + margin), w, h);
 }
 
 - (void)startDisplayBin
 {
     self.inviteButton.contentEdgeInsets = UIEdgeInsetsMake(20,20,20,20);
     [self.inviteButton setImage:[UIImage imageNamed:@"bin-button"] forState:UIControlStateNormal];
+    
+    
+    // todo BT
+    // Bin Animation
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
+    [animation setDuration:0.05];
+    [animation setRepeatCount:INFINITY];
+    [animation setAutoreverses:YES];
+    [animation setFromValue:[NSValue valueWithCGPoint: CGPointMake([self.inviteButton center].x - 1.0f, [self.inviteButton center].y)]];
+    [animation setToValue:[NSValue valueWithCGPoint: CGPointMake([self.inviteButton center].x + 1.0f, [self.inviteButton center].y)]];
+    [[self.inviteButton layer] addAnimation:animation forKey:@"position"];
 }
 
 - (void)endDisplayBin
 {
     self.inviteButton.contentEdgeInsets = UIEdgeInsetsMake(0,0,0,0);
+    [self.inviteButton setBackgroundColor:[UIColor clearColor]];
     [self.inviteButton setImage:[UIImage imageNamed:@"invite-button"] forState:UIControlStateNormal];
 }
 

@@ -11,6 +11,13 @@
 #import "Constants.h"
 #import "KeyboardUtils.h"
 #import "ImageUtils.h"
+#import "Constants.h"
+#import "GeneralUtils.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+
+#define ALERT_VIEW_HEIGHT 40
+#define ALERT_VIEW_WIDTH 280
+#define TEXT_FIELD_HEIGHT 40
 
 @interface CameraViewController ()
 
@@ -24,8 +31,15 @@
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
 @property (strong, nonatomic) UITextView *photoDescriptionField;
 @property (weak, nonatomic) IBOutlet UIButton *photoConfirmButton;
+@property (weak, nonatomic) IBOutlet UIImageView *photoConfirmationImage;
 @property (nonatomic, strong) UIPanGestureRecognizer *panningRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
+@property (weak, nonatomic) IBOutlet UIButton *saveToCameraRollButton;
+@property (weak, nonatomic) IBOutlet UIButton *photoDeleteButton;
+//Alert
+@property (nonatomic, strong) UIView *alertView;
+@property (nonatomic, strong) UILabel *alertLabel;
+
 
 @end
 
@@ -37,13 +51,12 @@
     
     self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.imageView.backgroundColor = [UIColor blackColor];
-    [ImageUtils outerGlow:self.photoConfirmButton];
     
-    double yOrigin = (self.textPosition > 0 && self.textPosition < 1) ? self.textPosition * self.view.frame.size.height : self.view.frame.size.height - 40;
-    self.photoDescriptionField = [[UITextView alloc] initWithFrame:CGRectMake(0, yOrigin, self.view.frame.size.width, 40)];
+    double yOrigin = (self.textPosition > 0 && self.textPosition < 1) ? self.textPosition * self.view.frame.size.height : self.view.frame.size.height - TEXT_FIELD_HEIGHT;
+    self.photoDescriptionField = [[UITextView alloc] initWithFrame:CGRectMake(0, yOrigin, self.view.frame.size.width, TEXT_FIELD_HEIGHT)];
     self.photoDescriptionField.textColor = [UIColor whiteColor];
     self.photoDescriptionField.font = [UIFont fontWithName:@"HelveticaNeue" size:20];
-    self.photoDescriptionField.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
+    self.photoDescriptionField.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.65];
     [self.view addSubview:self.photoDescriptionField];
     self.photoDescriptionField.delegate = self;
     self.photoDescriptionField.keyboardAppearance = UIKeyboardAppearanceDark;
@@ -55,7 +68,7 @@
     if (self.image) {
         self.displayCamera = NO;
         self.imageView.image = self.image;
-        self.photoDescriptionField.hidden = NO;
+        self.photoDescriptionField.hidden = !self.photoDescriptionField.text || self.photoDescriptionField.text.length == 0;
     } else {
         self.photoDescriptionField.hidden = YES;
         self.displayCamera = YES;
@@ -77,6 +90,11 @@
     self.tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture)];
     [self.imageView addGestureRecognizer:self.tapGestureRecognizer];
     self.tapGestureRecognizer.numberOfTapsRequired = 1;
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(willResignActiveCallback)
+                                                 name: UIApplicationWillResignActiveNotification
+                                               object: nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -84,7 +102,31 @@
     [super viewWillAppear:animated];
     if (self.displayCamera) {
         [self presentViewController:self.imagePickerController animated:NO completion:NULL];
-    } 
+    } else if (self.imageView.image) {
+        self.photoConfirmButton.hidden = NO;
+        self.photoDeleteButton.hidden = NO;
+        self.saveToCameraRollButton.hidden = NO;
+    }
+    
+    CGRect newFrame = self.photoConfirmationImage.frame;
+    newFrame.origin.x = self.view.frame.size.width - newFrame.size.width;
+    self.photoConfirmationImage.frame = newFrame;
+    
+    [UIView animateWithDuration:0.5 delay:1.0 options:(UIViewAnimationOptionAutoreverse|UIViewAnimationOptionRepeat|UIViewAnimationOptionCurveEaseIn) animations:^{
+        CGRect newFrame = self.photoConfirmationImage.frame;
+        newFrame.origin.x = newFrame.origin.x + 15;
+        self.photoConfirmationImage.frame = newFrame;
+    } completion:^(BOOL finished) {
+
+    }];
+}
+
+- (void)willResignActiveCallback {
+    if ([ALAssetsLibrary authorizationStatus] == ALAuthorizationStatusAuthorized && self.imageView.image) {
+        [self.delegate savePhoto:self.imageView.image text:self.photoDescriptionField.text andTextPosition:(float)self.photoDescriptionField.frame.origin.y / self.view.frame.size.height];
+        [self closeCamera];
+        [self dismissViewControllerAnimated:NO completion:nil];
+    }
 }
 
 // ----------------------------------------------------------
@@ -158,10 +200,6 @@
     self.imageView.image = [UIImage imageWithCGImage:image.CGImage scale:1 orientation:orientation];;
 
     [self closeCamera];
-    
-    // Open keyboard
-    self.photoDescriptionField.hidden = NO;
-    [self.photoDescriptionField performSelector:@selector(becomeFirstResponder) withObject:nil afterDelay:0.05f];
 }
 
 
@@ -188,6 +226,72 @@
 {
     self.displayCamera = NO;
     [self dismissViewControllerAnimated:NO completion:nil];
+}
+
+- (IBAction)savePhotoToCameraRoll:(id)sender {
+    if (self.imageView.image.imageOrientation == UIImageOrientationLeftMirrored) {
+        UIImageWriteToSavedPhotosAlbum([UIImage imageWithCGImage:[self.imageView.image CGImage]
+                                                           scale:1.0
+                                                     orientation: UIImageOrientationRight],
+                                       self,
+                                       @selector(photo:hasBeenSaveInPhotoAlbumWithError:usingContextInfo:),
+                                       nil);
+    } else {
+        UIImageWriteToSavedPhotosAlbum(self.imageView.image,
+                                       self,
+                                       @selector(photo:hasBeenSaveInPhotoAlbumWithError:usingContextInfo:),
+                                       nil);
+    }
+}
+
+- (void)photo:(UIImage *)photo hasBeenSaveInPhotoAlbumWithError:(NSError *)error usingContextInfo:(void*)ctxInfo
+{
+    if (error) {
+        [self displayAlert:@"We could not save to your camera roll."];
+    } else {
+        [self displayAlert:@"Successfully saved!"];
+    }
+}
+
+- (void)displayAlert:(NSString *)alert
+{
+    if (!self.alertView) {
+        [self initAlertView];
+    }
+    
+    self.alertLabel.text = alert;
+    [self.alertView.layer removeAllAnimations];
+    self.alertView.alpha = 0;
+    
+    [UIView animateWithDuration:1 animations:^{
+        self.alertView.alpha = 1;
+    } completion:^(BOOL finished) {
+        if (finished && self.alertView) {
+            [UIView animateWithDuration:1 delay:2 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                self.alertView.alpha = 0;
+            } completion:nil];
+        }
+    }];
+}
+
+- (void)initAlertView
+{
+    self.alertView = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - ALERT_VIEW_WIDTH/2, self.view.bounds.size.height/2 - ALERT_VIEW_HEIGHT/2, ALERT_VIEW_WIDTH, ALERT_VIEW_HEIGHT)];
+    
+    self.alertView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+    self.alertView.clipsToBounds = YES;
+    self.alertView.layer.cornerRadius = 5;
+    self.alertView.alpha = 0;
+    [self.view addSubview:self.alertView];
+    
+    self.alertLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, ALERT_VIEW_WIDTH, ALERT_VIEW_HEIGHT)];
+    self.alertLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:18.0];
+    self.alertLabel.textAlignment = NSTextAlignmentCenter;
+    self.alertLabel.textColor = [UIColor whiteColor];
+    self.alertLabel.backgroundColor = [UIColor clearColor];
+    self.alertLabel.numberOfLines = 1;
+    self.alertLabel.adjustsFontSizeToFitWidth = YES;
+    [self.alertView addSubview:self.alertLabel];
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -226,6 +330,11 @@
 - (void)keyboardWillShow:(NSNotification *)notification {
     self.photoDescriptionField.hidden = NO;
     self.photoDescriptionField.textAlignment = NSTextAlignmentLeft;
+    if (self.photoDescriptionField.frame.origin.y != self.view.frame.size.height - TEXT_FIELD_HEIGHT) {
+        self.textPosition = (float)self.photoDescriptionField.frame.origin.y / self.view.frame.size.height;
+    } else {
+        self.textPosition = 0;
+    }
     [KeyboardUtils pushUpTopView:self.photoDescriptionField whenKeyboardWillShowNotification:notification];
 }
 
@@ -241,6 +350,14 @@
 - (void)handleTapGesture {
     if ([self.photoDescriptionField isFirstResponder]) {
         [self.photoDescriptionField endEditing:YES];
+        if (self.textPosition > 0) {
+            double yOrigin = self.textPosition * self.view.frame.size.height;
+            NSTimeInterval animationDuration = 0.25;
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDuration:animationDuration];
+            self.photoDescriptionField.frame = CGRectMake(0, yOrigin, self.view.frame.size.width, TEXT_FIELD_HEIGHT);
+            [UIView commitAnimations];
+        }
     } else {
         [self.photoDescriptionField becomeFirstResponder];
     }
