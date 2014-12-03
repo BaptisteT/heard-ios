@@ -24,6 +24,11 @@
     return [UIColor colorWithRed:39/256.0 green:169/256.0 blue:225/256.0 alpha:0.25];
 }
 
++ (UIColor *)slightlyTransparentBlue
+{
+    return [UIColor colorWithRed:39/256.0 green:169/256.0 blue:225/256.0 alpha:0.8];
+}
+
 + (UIColor *)red
 {
     return [UIColor colorWithRed:231/256.0 green:29/256.0 blue:37/256.0 alpha:1.0];

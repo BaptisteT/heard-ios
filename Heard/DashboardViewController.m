@@ -208,6 +208,8 @@
     [[self.inviteButton imageView] setContentMode: UIViewContentModeScaleAspectFit];
     [self.inviteButton addTarget:self action:@selector(inviteButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     [self.inviteButton setImage:[UIImage imageNamed:@"invite-button"] forState:UIControlStateNormal];
+    self.inviteButton.clipsToBounds = YES;
+    self.inviteButton.layer.cornerRadius = self.inviteButton.bounds.size.height/2;
     [self.contactScrollView addSubview:self.inviteButton];
     
     // Create contact views
@@ -2103,9 +2105,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)photoDropped:(PhotoView *)photoView atLocation:(CGPoint)location
 {
+    [self.inviteButton.layer removeAllAnimations];
     ContactView *contactView = [self findContactViewAtLocation:location];
     if (contactView) {
-        [self.inviteButton.layer removeAllAnimations];
         [contactView removeEmojiOverlay];
         NSInteger receiverId = [contactView isGroupContactView] ? 0 : [contactView contactIdentifier];
         NSInteger groupId = [contactView isGroupContactView] ? [contactView contactIdentifier] : 0;
@@ -2127,12 +2129,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
                            options:UIViewAnimationOptionCurveEaseOut
                         animations:^{[photoView setFrame:CGRectMake(destinationPoint.x,destinationPoint.y,0,0)];}
                         completion:^(BOOL completed) {
-                            [self.inviteButton.layer removeAllAnimations];
                             [self endDisplayBin];
                             photoView.hidden = YES;
                         }];
     } else {
-        [self.inviteButton.layer removeAllAnimations];
         [UIView transitionWithView:photoView
                           duration:0.5f
                            options:UIViewAnimationOptionTransitionNone
@@ -2149,23 +2149,14 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     // clean
     [self removeEmojiOverlayOnContactViews];
-    [self.inviteButton.layer removeAllAnimations];
+    [self.inviteButton setBackgroundColor:[UIColor clearColor]];
     
     // Animation on contact view
     ContactView *contactView = [self findContactViewAtLocation:location];
     if (contactView) {
         [contactView addEmojiOverlay];
     } else if (CGRectContainsPoint([self.view convertRect:self.inviteButton.frame fromView:self.contactScrollView],location)) {
-        // todo BT
-        // Bin Animation
-        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
-        [animation setDuration:0.05];
-        [animation setRepeatCount:INFINITY];
-        [animation setAutoreverses:YES];
-        [animation setFromValue:[NSValue valueWithCGPoint: CGPointMake([self.inviteButton center].x - 5.0f, [self.inviteButton center].y)]];
-        [animation setToValue:[NSValue valueWithCGPoint: CGPointMake([self.inviteButton center].x + 5.0f, [self.inviteButton center].y)]];
-        [[self.inviteButton layer] addAnimation:animation forKey:@"position"];
-        
+        [self.inviteButton setBackgroundColor:[ImageUtils slightlyTransparentBlue]];
     }
 }
 
@@ -2183,11 +2174,23 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 {
     self.inviteButton.contentEdgeInsets = UIEdgeInsetsMake(20,20,20,20);
     [self.inviteButton setImage:[UIImage imageNamed:@"bin-button"] forState:UIControlStateNormal];
+    
+    
+    // todo BT
+    // Bin Animation
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
+    [animation setDuration:0.05];
+    [animation setRepeatCount:INFINITY];
+    [animation setAutoreverses:YES];
+    [animation setFromValue:[NSValue valueWithCGPoint: CGPointMake([self.inviteButton center].x - 1.0f, [self.inviteButton center].y)]];
+    [animation setToValue:[NSValue valueWithCGPoint: CGPointMake([self.inviteButton center].x + 1.0f, [self.inviteButton center].y)]];
+    [[self.inviteButton layer] addAnimation:animation forKey:@"position"];
 }
 
 - (void)endDisplayBin
 {
     self.inviteButton.contentEdgeInsets = UIEdgeInsetsMake(0,0,0,0);
+    [self.inviteButton setBackgroundColor:[UIColor clearColor]];
     [self.inviteButton setImage:[UIImage imageNamed:@"invite-button"] forState:UIControlStateNormal];
 }
 

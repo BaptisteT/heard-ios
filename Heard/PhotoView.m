@@ -53,6 +53,7 @@
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         [self.delegate startDisplayBin];
         initialCenter = self.center;
+        self.alpha = 0.8;
     }
     if (recognizer.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [recognizer translationInView:self.superview];
@@ -64,6 +65,7 @@
     else if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled) {
         CGPoint mainViewCoordinate = [recognizer locationInView:self.superview.superview];
         [self.delegate photoDropped:self atLocation:mainViewCoordinate];
+        self.alpha = 1;
     }
 }
 
