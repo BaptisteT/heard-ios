@@ -17,6 +17,7 @@
 
 #define ALERT_VIEW_HEIGHT 40
 #define ALERT_VIEW_WIDTH 280
+#define TEXT_FIELD_HEIGHT 40
 
 @interface CameraViewController ()
 
@@ -51,8 +52,8 @@
     self.imageView.contentMode = UIViewContentModeScaleAspectFill;
     self.imageView.backgroundColor = [UIColor blackColor];
     
-    double yOrigin = (self.textPosition > 0 && self.textPosition < 1) ? self.textPosition * self.view.frame.size.height : self.view.frame.size.height - 40;
-    self.photoDescriptionField = [[UITextView alloc] initWithFrame:CGRectMake(0, yOrigin, self.view.frame.size.width, 40)];
+    double yOrigin = (self.textPosition > 0 && self.textPosition < 1) ? self.textPosition * self.view.frame.size.height : self.view.frame.size.height - TEXT_FIELD_HEIGHT;
+    self.photoDescriptionField = [[UITextView alloc] initWithFrame:CGRectMake(0, yOrigin, self.view.frame.size.width, TEXT_FIELD_HEIGHT)];
     self.photoDescriptionField.textColor = [UIColor whiteColor];
     self.photoDescriptionField.font = [UIFont fontWithName:@"HelveticaNeue" size:20];
     self.photoDescriptionField.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.65];
@@ -288,6 +289,8 @@
     self.alertLabel.textAlignment = NSTextAlignmentCenter;
     self.alertLabel.textColor = [UIColor whiteColor];
     self.alertLabel.backgroundColor = [UIColor clearColor];
+    self.alertLabel.numberOfLines = 1;
+    self.alertLabel.adjustsFontSizeToFitWidth = YES;
     [self.alertView addSubview:self.alertLabel];
 }
 
@@ -327,6 +330,11 @@
 - (void)keyboardWillShow:(NSNotification *)notification {
     self.photoDescriptionField.hidden = NO;
     self.photoDescriptionField.textAlignment = NSTextAlignmentLeft;
+    if (self.photoDescriptionField.frame.origin.y != self.view.frame.size.height - TEXT_FIELD_HEIGHT) {
+        self.textPosition = (float)self.photoDescriptionField.frame.origin.y / self.view.frame.size.height;
+    } else {
+        self.textPosition = 0;
+    }
     [KeyboardUtils pushUpTopView:self.photoDescriptionField whenKeyboardWillShowNotification:notification];
 }
 
@@ -342,6 +350,14 @@
 - (void)handleTapGesture {
     if ([self.photoDescriptionField isFirstResponder]) {
         [self.photoDescriptionField endEditing:YES];
+        if (self.textPosition > 0) {
+            double yOrigin = self.textPosition * self.view.frame.size.height;
+            NSTimeInterval animationDuration = 0.25;
+            [UIView beginAnimations:nil context:NULL];
+            [UIView setAnimationDuration:animationDuration];
+            self.photoDescriptionField.frame = CGRectMake(0, yOrigin, self.view.frame.size.width, TEXT_FIELD_HEIGHT);
+            [UIView commitAnimations];
+        }
     } else {
         [self.photoDescriptionField becomeFirstResponder];
     }

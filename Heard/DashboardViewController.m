@@ -388,7 +388,27 @@
 }
 
 - (IBAction)cameraButtonClicked:(id)sender {
-    [self navigateToCameraControllerWithPrefill:NO];
+    if ([AVCaptureDevice respondsToSelector:@selector(requestAccessForMediaType: completionHandler:)]) {
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+            if (granted) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self navigateToCameraControllerWithPrefill:NO];
+                });
+            } else {
+                // Permission has been denied.
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"camera_access_error_title",kStringFile, @"comment")
+                                                message:NSLocalizedStringFromTable(@"camera_access_error_message",kStringFile, @"comment")
+                                               delegate:self
+                                      cancelButtonTitle:@"OK"
+                                      otherButtonTitles:nil] show];
+                });
+            }
+        }];
+    } else {
+        // iOS <= 7
+        [self navigateToCameraControllerWithPrefill:NO];
+    }
 }
 
 - (void)navigateToCameraControllerWithPrefill:(BOOL)flag {
@@ -1553,7 +1573,8 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if ([alertView.message isEqualToString:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment")] || [alertView.message isEqualToString:NSLocalizedStringFromTable(@"notification_error_message",kStringFile, @"comment")]) {
+    if ([alertView.message isEqualToString:NSLocalizedStringFromTable(@"contact_access_error_message",kStringFile, @"comment")] || [alertView.message isEqualToString:NSLocalizedStringFromTable(@"notification_error_message",kStringFile, @"comment")] ||
+        [alertView.message isEqualToString:NSLocalizedStringFromTable(@"camera_access_error_message",kStringFile, @"comment")]) {
         [GeneralUtils openSettings];
     }
     
