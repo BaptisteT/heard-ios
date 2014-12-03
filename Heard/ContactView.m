@@ -824,7 +824,7 @@
     if (![self hasUnreadMessages]) {
         return;
     }
-    UIColor *firstMessageColor = [(Message *)self.unreadMessages[0] isPhotoMessage]? [UIColor lightGrayColor] : [ImageUtils blue];
+    UIColor *firstMessageColor = [(Message *)self.unreadMessages[0] isPhotoMessage]? [self photoMessageColor] : [self audioMessageColor];
     self.unreadMessagesLabel.textColor = firstMessageColor;
     self.unreadMessagesLabel.hidden = NO;
     self.unreadCircleStartMark.strokeColor = firstMessageColor.CGColor;
@@ -1016,13 +1016,13 @@
     self.unreadCircleShapeAudio.frame = self.frame;
     self.unreadCircleShapeAudio.fillColor = [UIColor clearColor].CGColor;
     self.unreadCircleShapeAudio.lineWidth = ACTION_CIRCLE_BORDER;
-    self.unreadCircleShapeAudio.strokeColor = [ImageUtils blue].CGColor;
+    self.unreadCircleShapeAudio.strokeColor = [self audioMessageColor].CGColor;
     
     self.unreadCircleShapePhoto = [CAShapeLayer new];
     self.unreadCircleShapePhoto.frame = self.frame;
     self.unreadCircleShapePhoto.fillColor = [UIColor clearColor].CGColor;
     self.unreadCircleShapePhoto.lineWidth = ACTION_CIRCLE_BORDER;
-    self.unreadCircleShapePhoto.strokeColor = [UIColor lightGrayColor].CGColor;
+    self.unreadCircleShapePhoto.strokeColor = [self photoMessageColor].CGColor;
     
     self.unreadCircleStartMark = [CAShapeLayer new];
     self.unreadCircleStartMark.frame = self.frame;
@@ -1034,7 +1034,15 @@
 
 - (void)initLoadingCircleShape
 {
-    self.loadingCircleShape = [ImageUtils createGradientCircleLayerWithFrame:self.frame borderWidth:ACTION_CIRCLE_BORDER Color:[ImageUtils blue] subDivisions:100];
+    self.loadingCircleShape = [ImageUtils createGradientCircleLayerWithFrame:self.frame borderWidth:ACTION_CIRCLE_BORDER Color:[self audioMessageColor] subDivisions:100];
+}
+
+- (UIColor *)audioMessageColor {
+    return [ImageUtils blue];
+}
+
+- (UIColor *)photoMessageColor {
+    return [UIColor lightGrayColor];
 }
 
 // ----------------------------------------------------------
