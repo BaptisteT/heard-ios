@@ -1336,10 +1336,16 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         // display
         [self.view addSubview:self.photoReceivedView];
         
-        if ([UIDevice currentDevice].proximityState) {
-            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-        }
+        NSError* error;
+        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"photo-display" ofType:@".m4a"];
+        NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+        self.mainPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:&error];
         
+        if (error || ![self.mainPlayer prepareToPlay]) {
+            NSLog(@"%@",error);
+        } else {
+            [self.mainPlayer play];
+        }
     } else {
         // Init Audio Player
         self.mainPlayer = [[AVAudioPlayer alloc] initWithData:message.messageData error:nil];
