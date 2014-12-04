@@ -97,9 +97,9 @@
                                                object: nil];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
     if (self.displayCamera) {
         [self presentViewController:self.imagePickerController animated:NO completion:NULL];
     } else if (self.imageView.image) {
@@ -129,6 +129,9 @@
 - (IBAction)cancelPhotoButtonClicked:(id)sender {
     self.imageView.image = nil;
     self.photoDescriptionField.text = nil;
+    self.textPosition = 0;
+    self.photoDescriptionField.hidden = YES;
+    self.photoDescriptionField.frame = CGRectMake(0, 0, self.view.frame.size.width, TEXT_FIELD_HEIGHT);
     [self presentViewController:self.imagePickerController animated:NO completion:NULL];
 }
 
