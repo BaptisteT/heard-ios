@@ -1326,18 +1326,16 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self addMessagesToLastMessagesPlayed:message];
     
     if ([message isPhotoMessage]) {
-        self.photoReceivedTime.text = [NSString stringWithFormat:@"%lu",kPhotoDuration];
+        self.photoReceivedTime.text = [NSString stringWithFormat:@"%lu",(unsigned long)kPhotoDuration];
         self.photoReceivedView.image = [UIImage imageWithData:message.messageData];
         self.photoDisplayTimer = [NSTimer scheduledTimerWithTimeInterval:1. target:self selector:@selector(changePhotoTimeLabel) userInfo:nil repeats:YES];
         
         // Create label if text
+        [self.photoReceivedLabel removeFromSuperview];
         if (message.messageText && message.messageText.length > 0) {
             double yOrigin = (message.textPosition > 0 && message.textPosition < 1) ? message.textPosition * self.photoReceivedView.frame.size.height : self.photoReceivedView.frame.size.height - 40;
             self.photoReceivedLabel.frame = CGRectMake(0, yOrigin, self.view.frame.size.width, 40);
             self.photoReceivedLabel.text = message.messageText;
-            [self.photoReceivedView addSubview:self.photoReceivedLabel];
-        } else {
-            [self.photoReceivedLabel removeFromSuperview];
         }
 
         // Configure animation
@@ -1352,18 +1350,37 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         drawAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
         [self.photoReceivedTimeLayer addAnimation:drawAnimation forKey:@"drawCircleAnimation"];
         
-        // display
-        [self.view addSubview:self.photoReceivedView];
+        BOOL isSequenceOfPhoto = self.lastMessagesPlayed && self.lastMessagesPlayed.count > 1 && [(Message *)self.lastMessagesPlayed[self.lastMessagesPlayed.count-2] isPhotoMessage];
         
-        NSError* error;
-        NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"photo-display" ofType:@".m4a"];
-        NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
-        self.mainPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:&error];
-        
-        if (error || ![self.mainPlayer prepareToPlay]) {
-            NSLog(@"%@",error);
+        if (!isSequenceOfPhoto) {
+            self.photoReceivedView.frame = CGRectMake(contactView.center.x,contactView.center.x,1,self.view.frame.size.height/self.view.frame.size.width);
+            [self.view addSubview:self.photoReceivedView];
+            [UIView animateWithDuration:0.2
+                                  delay:0
+                                options:UIViewAnimationOptionCurveLinear
+                             animations:^{
+                                 self.photoReceivedView.frame = self.view.frame;
+                             } completion:^(BOOL flag) {
+                                 if (message.messageText && message.messageText.length > 0) {
+                                     [self.photoReceivedView addSubview:self.photoReceivedLabel];
+                                 }
+                             }];
+            
+            NSError* error;
+            NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"photo-display" ofType:@".m4a"];
+            NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
+            self.mainPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:&error];
+            
+            if (error || ![self.mainPlayer prepareToPlay]) {
+                NSLog(@"%@",error);
+            } else {
+                [self.mainPlayer play];
+            }
         } else {
-            [self.mainPlayer play];
+            if (message.messageText && message.messageText.length > 0) {
+                [self.photoReceivedView addSubview:self.photoReceivedTime];
+            }
+            [self.view addSubview:self.photoReceivedView];
         }
     } else {
         // Init Audio Player
@@ -2316,6 +2333,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     self.photoReceivedTime.font = [UIFont fontWithName:@"HelveticaNeue" size:22.0];
     self.photoReceivedTime.textAlignment = NSTextAlignmentCenter;
     self.photoReceivedTime.textColor = [UIColor whiteColor];
+    self.photoReceivedTime.backgroundColor = [ImageUtils transparentBlack];
+    self.photoReceivedTime.clipsToBounds = YES;
+    self.photoReceivedTime.layer.cornerRadius = self.photoReceivedTime.bounds.size.height/2;
     [self.photoReceivedView addSubview:self.photoReceivedTime];
     
     // Clock
@@ -2353,7 +2373,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [UIView transitionWithView:photoView
                           duration:0.5f
                            options:UIViewAnimationOptionCurveEaseOut
-                        animations:^{[photoView setFrame:CGRectMake(destinationPoint.x,destinationPoint.y,0,0)];}
+                        animations:^{[photoView setFrame:CGRectMake(destinationPoint.x,destinationPoint.y,1,self.view.frame.size.height/self.view.frame.size.width)];}
                         completion:^(BOOL completed) {
                             [self endDisplayBin];
                             [contactView sendRecording];

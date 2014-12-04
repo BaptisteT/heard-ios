@@ -34,6 +34,8 @@
 
 + (UIColor *)transparentWhite;
 
++ (UIColor *)transparentBlack;
+
 + (void)setWithoutCachingImageView:(UIImageView *)imageView withURL:(NSURL *)url;
 
 + (CAShapeLayer *)createGradientCircleLayerWithFrame:(CGRect)frame

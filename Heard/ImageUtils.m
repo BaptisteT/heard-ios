@@ -59,6 +59,11 @@
     return [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
 }
 
++ (UIColor *)transparentBlack
+{
+    return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+}
+
 + (UIImage*) cropBiggestCenteredSquareImageFromImage:(UIImage*)image withSide:(CGFloat)side
 {
     // Get size of current image
