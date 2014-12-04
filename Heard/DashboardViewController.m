@@ -446,6 +446,9 @@
         return;
     }
     
+    if (self.emojiContainer && !self.emojiContainer.hidden) {
+        bottom = NO;
+    }
     if (bottom) {
         self.bottomTutoView.frame = CGRectMake(self.screenWidth/2 - NO_MESSAGE_VIEW_WIDTH/2, self.view.bounds.size.height - 4 * NO_MESSAGE_VIEW_HEIGHT, NO_MESSAGE_VIEW_WIDTH, NO_MESSAGE_VIEW_HEIGHT);
     } else {
@@ -2051,7 +2054,6 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self hideStatusBarComponents:YES];
     self.titleLabel.hidden = NO;
     self.topBarBackground.hidden = NO;
-    
     if (self.openingTutoArrow) {
         [self.openingTutoArrow removeFromSuperview];
     }
