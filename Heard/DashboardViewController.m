@@ -1370,7 +1370,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
             NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"photo-display" ofType:@".m4a"];
             NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
             self.mainPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:&error];
-            
+            self.mainPlayer.volume = 0.2;
             if (error || ![self.mainPlayer prepareToPlay]) {
                 NSLog(@"%@",error);
             } else {
@@ -1518,6 +1518,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [GeneralUtils registerForRemoteNotif];
     }
     
+    self.mainPlayer.volume = 1;
     // Check that audio is playing or completed
     if (![self.mainPlayer isPlaying] && !completed) {
         return;
