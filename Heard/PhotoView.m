@@ -8,6 +8,7 @@
 
 #import "PhotoView.h"
 #import "Constants.h"
+#import "ImageUtils.h"
 
 @interface PhotoView()
 
@@ -32,6 +33,9 @@
     [self addGestureRecognizer:self.tapGestureRecognizer];
     self.tapGestureRecognizer.delegate = self;
     self.tapGestureRecognizer.numberOfTapsRequired = 1;
+    
+    self.layer.borderColor = [ImageUtils blue].CGColor;
+    self.layer.borderWidth = 2.0;
     
     // User interaction
     self.userInteractionEnabled = YES;

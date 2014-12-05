@@ -54,6 +54,11 @@
     return [UIColor colorWithRed:52/256.0 green:180/256.0 blue:74/256.0 alpha:0.25];
 }
 
++ (UIColor *)pink
+{
+    return [UIColor colorWithRed:167/256.0 green:205/256.0 blue:44/256.0 alpha:1];
+}
+
 + (UIColor *)transparentWhite
 {
     return [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
@@ -174,8 +179,8 @@
 {
     view.layer.shadowColor = [UIColor blackColor].CGColor;
     view.layer.shadowOffset = CGSizeMake(0.0, 0.0);
-    view.layer.shadowRadius = 3;
-    view.layer.shadowOpacity = 0.3;
+    view.layer.shadowRadius = 5;
+    view.layer.shadowOpacity = 0.7;
     view.layer.masksToBounds = NO;
 }
 @end

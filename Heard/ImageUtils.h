@@ -32,6 +32,8 @@
 
 + (UIColor *)transparentGreen;
 
++ (UIColor *)pink;
+
 + (UIColor *)transparentWhite;
 
 + (UIColor *)transparentBlack;

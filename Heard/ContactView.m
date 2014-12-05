@@ -1042,7 +1042,7 @@
 }
 
 - (UIColor *)photoMessageColor {
-    return [UIColor lightGrayColor];
+    return [ImageUtils pink];
 }
 
 // ----------------------------------------------------------
