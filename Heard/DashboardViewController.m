@@ -2145,6 +2145,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (void)hideEmojiScrollViewAndDisplayEmoji:(EmojiView *)emojiView
 {
+    emojiView.frame = CGRectMake(self.emojiContainer.frame.origin.x + emojiView.frame.origin.x - kEmojiSize/2, self.emojiContainer.frame.origin.y + emojiView.frame.origin.y - kEmojiSize/2, kEmojiSize * 2, kEmojiSize * 2);
     [self.view addSubview:emojiView];
     self.emojiContainer.hidden = YES;
 }
@@ -2235,7 +2236,7 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     ContactView *contactView = [self findContactViewAtLocation:location];
     if (contactView) {
         [contactView removeEmojiOverlay];
-        //TODO: BB replace by real sound
+        // TODO: BB replace by real sound
         NSString *soundName = [NSString stringWithFormat:@"emoji-%@",emojiView.identifier];
         NSString *soundPath = [[NSBundle mainBundle] pathForResource:soundName ofType:@"mp3"];
         NSURL *soundURL = [NSURL fileURLWithPath:soundPath];
