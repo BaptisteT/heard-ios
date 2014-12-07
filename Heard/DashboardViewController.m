@@ -1167,10 +1167,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
 
 - (IBAction)speakerButtonClicked:(id)sender {
     if (self.LoudSpeakerMode) {
-        [self tutoMessage:NSLocalizedStringFromTable(@"speaker_button_on_message", kStringFile, "comment") withDuration:1 priority:NO bottom:YES];
+        [self tutoMessage:NSLocalizedStringFromTable(@"ear_speaker_message", kStringFile, "comment") withDuration:1 priority:NO bottom:YES];
         self.LoudSpeakerMode = NO;
     } else {
-        [self tutoMessage:NSLocalizedStringFromTable(@"speaker_button_off_message", kStringFile, "comment") withDuration:1 priority:NO bottom:YES];
+        [self tutoMessage:NSLocalizedStringFromTable(@"loud_speaker_message", kStringFile, "comment") withDuration:1 priority:NO bottom:YES];
         self.LoudSpeakerMode = YES;
     }
     //TODO BB speaker toggle + toast
@@ -1182,15 +1182,26 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     if (loudSpeakerMode) {
-        [self.speakerButton setImage:[UIImage imageNamed:@"speaker-on"] forState:UIControlStateNormal];
+        NSString *imageName = self.mainPlayer.isPlaying ? @"grey-speaker-on" : @"speaker-on";
+        [self.speakerButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
         [prefs setObject:@"On" forKey:kSpeakerPref];
-        //show Toast
     } else {
-        [self.speakerButton setImage:[UIImage imageNamed:@"speaker-off"] forState:UIControlStateNormal];
+        NSString *imageName = self.mainPlayer.isPlaying ? @"grey-speaker-off" : @"speaker-off";
+        [self.speakerButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
         [prefs setObject:@"Off" forKey:kSpeakerPref];
-        //show Toast
     }
     [self proximityStateDidChangeCallback];
+}
+
+- (void)changeSpeakerModeButtonToGrey:(BOOL)flag
+{
+    if (self.LoudSpeakerMode) {
+        NSString *imageName = flag ? @"grey-speaker-on" : @"speaker-on";
+        [self.speakerButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    } else {
+        NSString *imageName = flag ? @"grey-speaker-off" : @"speaker-off";
+        [self.speakerButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    }
 }
 
 
@@ -1481,6 +1492,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self hideStatusBarComponents:YES];
     self.contactScrollView.clipsToBounds = NO;
     
+    // Change color speaker button
+    [self changeSpeakerModeButtonToGrey:true];
+    
     self.playerContainer.hidden = NO;
     self.playerContainer.alpha = 1;
     [self setPlayerLineWidth:0];
@@ -1538,6 +1552,9 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
     [self hideStatusBarComponents:NO];
     self.contactScrollView.clipsToBounds = YES;
     self.playerLabel.hidden = YES;
+    
+    // Change color speaker button
+    [self changeSpeakerModeButtonToGrey:false];
     
     // End central player UI
     [self.mainPlayer stop];
