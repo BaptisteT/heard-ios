@@ -73,6 +73,7 @@ static const NSUInteger kEmojisPerRow = 5;
 
 //Photo UI
 static const float kPhotoToSendWidth = 80;
+static const float kPhotoWidth = 600;
 
 //Mixpanel token
 static NSString * const kProdMixPanelToken = @"898ed29f5309c83be61a27a41d55c879";

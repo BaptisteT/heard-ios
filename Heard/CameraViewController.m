@@ -185,7 +185,6 @@
 // Display the relevant part of the photo once taken
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)editInfo
 {
-    UIImage *image =  [editInfo objectForKey:UIImagePickerControllerOriginalImage];
     UIImageOrientation orientation;
     if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
         // Force portrait, and avoid mirror of front camera
@@ -193,8 +192,13 @@
     } else {
         orientation = UIImageOrientationRight;
     }
-
-    self.imageView.image = [UIImage imageWithCGImage:image.CGImage scale:1 orientation:orientation];;
+    
+    CGSize originalSize = ((UIImage *)[editInfo objectForKey:UIImagePickerControllerOriginalImage]).size;
+    CGFloat scaleRatio = kPhotoWidth/MIN(originalSize.width, originalSize.height);
+    
+    UIImage *image = [UIImage imageWithCGImage:((UIImage *)[editInfo objectForKey:UIImagePickerControllerOriginalImage]).CGImage scale:1.0 orientation:orientation];
+    
+    self.imageView.image = [ImageUtils imageWithImage:image scaledToSize:CGSizeMake(image.size.width * scaleRatio, image.size.height * scaleRatio)];
 
     [self closeCamera];
 }
