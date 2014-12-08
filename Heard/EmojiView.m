@@ -22,8 +22,6 @@
 - (id)initWithIdentifier:(NSString *)identifier andFrame:(CGRect)frame
 {
     self.initialFrame = frame;
-    
-    //Todo BB: remove, just for testing
 
     self.identifier = identifier;
     self = [super initWithFrame:frame];
@@ -83,17 +81,11 @@
             initialCenter = ((UIScrollView *)self.superview).contentOffset;
         } else {
             isSlide = FALSE;
-            initialCenter = self.center;
-            initialCenter = recognizer.view.center;
+            [self.delegate hideEmojiScrollViewAndDisplayEmoji:self];
         }
     }
     
-    if (recognizer.state == UIGestureRecognizerStateBegan) {
-        if (!isSlide) {
-            self.frame = CGRectMake(self.superview.frame.origin.x + self.frame.origin.x - kEmojiSize/2, self.superview.frame.origin.y + self.frame.origin.y - kEmojiSize/2, kEmojiSize * 2, kEmojiSize * 2);
-            [self.delegate hideEmojiScrollViewAndDisplayEmoji:self];
-        }
-    } else if (recognizer.state == UIGestureRecognizerStateChanged) {
+    else if (recognizer.state == UIGestureRecognizerStateChanged) {
         if (isSlide) {
             CGPoint translation = [recognizer translationInView:recognizer.view.superview];
             newCenter = MIN( MAX(((UIScrollView *)self.superview).contentSize.width - self.window.frame.size.width,0),MAX(initialCenter.x - translation.x, 0));
