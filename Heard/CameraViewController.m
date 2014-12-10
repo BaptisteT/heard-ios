@@ -118,7 +118,6 @@
 - (void)willResignActiveCallback {
     if ([ALAssetsLibrary authorizationStatus] == ALAuthorizationStatusAuthorized && self.imageView.image) {
         [self.delegate savePhoto:self.imageView.image text:self.photoDescriptionField.text andTextPosition:(float)self.photoDescriptionField.frame.origin.y / self.view.frame.size.height];
-        [self closeCamera];
         [self dismissViewControllerAnimated:NO completion:nil];
     }
 }

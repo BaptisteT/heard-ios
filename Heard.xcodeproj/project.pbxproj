@@ -1969,8 +1969,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (63863BWF5M)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Bastien Beurier (63863BWF5M)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Waved Inc. (U4TN2H6FNK)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Waved Inc. (U4TN2H6FNK)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1990,7 +1990,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "5fcb40b2-ba53-4aaf-bdc2-21ee9d31de68";
+				PROVISIONING_PROFILE = "f2ab2810-35df-486f-a392-2a845e654f97";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2000,8 +2000,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (6S2B78G4YC)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Bastien Beurier (6S2B78G4YC)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Waved Inc. (U4TN2H6FNK)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Waved Inc. (U4TN2H6FNK)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2021,7 +2021,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "61f6bfc2-1493-4c7e-b52c-9ceea81bf91e";
+				PROVISIONING_PROFILE = "f2ab2810-35df-486f-a392-2a845e654f97";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

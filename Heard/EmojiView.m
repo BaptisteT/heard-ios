@@ -75,6 +75,7 @@
     static BOOL isSlide = FALSE;
     CGPoint velocity; CGFloat newCenter = 0;
     if (recognizer.state == UIGestureRecognizerStateBegan) {
+        [self.layer removeAllAnimations];
         velocity = [recognizer velocityInView:self];
         if (- velocity.y < fabs(velocity.x) / 2 ) {
             isSlide = TRUE;
