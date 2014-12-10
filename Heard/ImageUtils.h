@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 
 @interface ImageUtils : NSObject
 
@@ -46,5 +47,9 @@
                                         subDivisions:(NSInteger)nbSubDivisions;
 
 + (void)outerGlow:(UIView *)view;
+
++ (ALAssetOrientation)convertImageOrientationToAssetOrientation:(UIImageOrientation)orientation;
+
++ (UIImageOrientation)convertAssetOrientationToImageOrientation:(ALAssetOrientation)orientation;
 
 @end

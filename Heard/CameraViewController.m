@@ -35,6 +35,7 @@
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
 @property (weak, nonatomic) IBOutlet UIButton *saveToCameraRollButton;
 @property (weak, nonatomic) IBOutlet UIButton *photoDeleteButton;
+@property (weak, nonatomic) IBOutlet UIButton *photoLibraryButton;
 //Alert
 @property (nonatomic, strong) UIView *alertView;
 @property (nonatomic, strong) UILabel *alertLabel;
@@ -73,6 +74,30 @@
         self.photoDescriptionField.hidden = YES;
         self.displayCamera = YES;
     }
+    
+    // Libray Button
+    self.photoLibraryButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    [[self.photoLibraryButton layer] setBorderWidth:0.8f];
+    [[self.photoLibraryButton layer] setBorderColor:[UIColor blackColor].CGColor];
+    ALAssetsLibrary *assetsLibrary = [[ALAssetsLibrary alloc] init];
+    [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupSavedPhotos usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+        if (nil != group) {
+            // Chooses the photo at the last index
+            [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *alAsset, NSUInteger index, BOOL *innerStop) {
+                // The end of the enumeration is signaled by asset == nil.
+                if (alAsset) {
+                    ALAssetRepresentation *representation = [alAsset defaultRepresentation];
+                    UIImage *latestPhoto = [UIImage imageWithCGImage:[representation fullScreenImage]];
+                    [self.photoLibraryButton setImage:latestPhoto forState:UIControlStateNormal];
+                    // Stop the enumerations
+                    *stop = YES; *innerStop = YES;
+                }
+            }];
+        }
+        *stop = NO;
+    } failureBlock:^(NSError *error) {
+        NSLog(@"error: %@", error);
+    }];
     
     // observe keyboard show notifications to resize the text view appropriately
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -125,6 +150,7 @@
     self.textPosition = 0;
     self.photoDescriptionField.hidden = YES;
     self.photoDescriptionField.frame = CGRectMake(0, 0, self.view.frame.size.width, TEXT_FIELD_HEIGHT);
+    self.imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
     [self presentViewController:self.imagePickerController animated:NO completion:NULL];
 }
 
@@ -178,22 +204,37 @@
 // Display the relevant part of the photo once taken
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)editInfo
 {
+    UIImage *originalImage =  [editInfo objectForKey:UIImagePickerControllerOriginalImage];
     UIImageOrientation orientation;
     if (picker.sourceType == UIImagePickerControllerSourceTypeCamera) {
         // Force portrait, and avoid mirror of front camera
         orientation = self.imagePickerController.cameraDevice == UIImagePickerControllerCameraDeviceFront ? UIImageOrientationLeftMirrored : UIImageOrientationRight;
     } else {
-        orientation = UIImageOrientationRight;
+        if(originalImage.size.width <= originalImage.size.height) {
+            orientation = originalImage.imageOrientation;
+        } else {
+            orientation = UIImageOrientationRight;
+        }
     }
     
     CGSize originalSize = ((UIImage *)[editInfo objectForKey:UIImagePickerControllerOriginalImage]).size;
     CGFloat scaleRatio = kPhotoWidth/MIN(originalSize.width, originalSize.height);
     
-    UIImage *image = [UIImage imageWithCGImage:((UIImage *)[editInfo objectForKey:UIImagePickerControllerOriginalImage]).CGImage scale:1.0 orientation:orientation];
+    UIImage *image = [UIImage imageWithCGImage:originalImage.CGImage scale:1.0 orientation:orientation];
     
     self.imageView.image = [ImageUtils imageWithImage:image scaledToSize:CGSizeMake(image.size.width * scaleRatio, image.size.height * scaleRatio)];
 
     [self closeCamera];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    if (self.imagePickerController.sourceType == UIImagePickerControllerSourceTypeSavedPhotosAlbum) {
+        self.displayCamera = NO;
+        self.imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+    } else {
+        [self closeCamera];
+    }
 }
 
 
@@ -216,10 +257,15 @@
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
+- (IBAction)libraryButtonClicked:(id)sender {
+    self.imagePickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+}
+
 - (void)closeCamera
 {
     self.displayCamera = NO;
     [self dismissViewControllerAnimated:NO completion:nil];
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (IBAction)savePhotoToCameraRoll:(id)sender {
@@ -375,6 +421,7 @@
         self.photoDescriptionField.center = newCenterPoint;
     }
 }
+
 
 
 

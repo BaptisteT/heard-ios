@@ -183,4 +183,35 @@
     view.layer.shadowOpacity = 0.7;
     view.layer.masksToBounds = NO;
 }
+
++ (ALAssetOrientation)convertImageOrientationToAssetOrientation:(UIImageOrientation)orientation
+{
+    if (orientation == UIImageOrientationUp) {
+        return ALAssetOrientationUp;
+    } else if (orientation == UIImageOrientationDown) {
+        return ALAssetOrientationDown;
+    } else if (orientation == UIImageOrientationLeft) {
+        return ALAssetOrientationLeft;
+    } else if (orientation == UIImageOrientationRight) {
+        return ALAssetOrientationRight;
+    } else {
+        return 0;
+    }
+}
+
++ (UIImageOrientation)convertAssetOrientationToImageOrientation:(ALAssetOrientation)orientation
+{
+    if (orientation == ALAssetOrientationUp) {
+        return UIImageOrientationUp;
+    } else if (orientation == ALAssetOrientationDown) {
+        return UIImageOrientationDown;
+    } else if (orientation == ALAssetOrientationLeft) {
+        return UIImageOrientationLeft;
+    } else if (orientation == ALAssetOrientationRight) {
+        return UIImageOrientationRight;
+    } else {
+        return 0;
+    }
+}
+
 @end

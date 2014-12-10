@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="cameraFlipButton" destination="AnH-cb-SA8" id="pyD-SQ-LH7"/>
                 <outlet property="cancelButton" destination="ClI-KY-iiZ" id="oc7-j5-bD7"/>
+                <outlet property="photoLibraryButton" destination="10a-ex-krA" id="k1Z-lT-cx1"/>
                 <outlet property="takePictureButton" destination="OwL-xe-4Bp" id="t7z-mI-gbi"/>
             </connections>
         </placeholder>
@@ -18,7 +19,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AnH-cb-SA8">
-                    <rect key="frame" x="260" y="-2" width="60" height="65"/>
+                    <rect key="frame" x="255" y="-2" width="60" height="65"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="65" id="EC2-IH-8Ro"/>
                         <constraint firstAttribute="width" constant="60" id="e9i-dE-0Zf"/>
@@ -31,8 +32,12 @@
                         <action selector="flipCameraButtonClicked:" destination="-1" eventType="touchUpInside" id="kks-YJ-szZ"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ClI-KY-iiZ">
-                    <rect key="frame" x="0.0" y="5" width="50" height="50"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ClI-KY-iiZ">
+                    <rect key="frame" x="5" y="5" width="50" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="aX2-Jl-9eR"/>
+                        <constraint firstAttribute="width" constant="50" id="nhT-ob-q2x"/>
+                    </constraints>
                     <inset key="contentEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                     <state key="normal" image="camera-quit-button">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -54,15 +59,35 @@
                         <action selector="takePictureButtonClicked:" destination="-1" eventType="touchUpInside" id="mXg-uF-ddZ"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="10a-ex-krA">
+                    <rect key="frame" x="5" y="478" width="50" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="50" id="cFy-fG-XNl"/>
+                        <constraint firstAttribute="height" constant="50" id="ydN-Tu-Vgn"/>
+                    </constraints>
+                    <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                    <state key="normal">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="libraryButtonClicked:" destination="-1" eventType="touchUpInside" id="0Gq-D5-kv0"/>
+                    </connections>
+                </button>
             </subviews>
             <gestureRecognizers/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="AnH-cb-SA8" secondAttribute="trailing" id="2Rx-Qy-FJz"/>
+                <constraint firstAttribute="trailing" secondItem="AnH-cb-SA8" secondAttribute="trailing" constant="5" id="2Rx-Qy-FJz"/>
+                <constraint firstItem="ClI-KY-iiZ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="5" id="2dQ-tl-YjG"/>
                 <constraint firstAttribute="centerX" secondItem="OwL-xe-4Bp" secondAttribute="centerX" id="FXd-bH-Duo"/>
+                <constraint firstItem="10a-ex-krA" firstAttribute="centerY" secondItem="OwL-xe-4Bp" secondAttribute="centerY" id="GVn-5W-KY8"/>
                 <constraint firstAttribute="bottom" secondItem="OwL-xe-4Bp" secondAttribute="bottom" constant="5" id="OjJ-ev-FI8"/>
                 <constraint firstItem="AnH-cb-SA8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="-2" id="S4Y-nu-7qd"/>
+                <constraint firstItem="10a-ex-krA" firstAttribute="centerX" secondItem="ClI-KY-iiZ" secondAttribute="centerX" id="SIQ-cf-xUx"/>
+                <constraint firstItem="ClI-KY-iiZ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="5" id="oNy-Jh-dHy"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
         </view>
     </objects>
     <resources>
