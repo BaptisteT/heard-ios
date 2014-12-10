@@ -1345,8 +1345,10 @@ void MyAddressBookExternalChangeCallback (ABAddressBookRef notificationAddressBo
         [self.photoReceivedLabel removeFromSuperview];
         if (message.messageText && message.messageText.length > 0) {
             double yOrigin = (message.textPosition > 0 && message.textPosition < 1) ? message.textPosition * self.photoReceivedView.frame.size.height : self.photoReceivedView.frame.size.height - 40;
-            self.photoReceivedLabel.frame = CGRectMake(0, yOrigin, self.view.frame.size.width, 40);
             self.photoReceivedLabel.text = message.messageText;
+            self.photoReceivedLabel.numberOfLines = 0;
+            [self.photoReceivedLabel sizeToFit];
+            self.photoReceivedLabel.frame = CGRectMake(0, yOrigin, self.view.frame.size.width, MAX(40,self.photoReceivedLabel.frame.size.height));
         }
 
         // Configure animation

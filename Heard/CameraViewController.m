@@ -31,7 +31,6 @@
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
 @property (strong, nonatomic) UITextView *photoDescriptionField;
 @property (weak, nonatomic) IBOutlet UIButton *photoConfirmButton;
-@property (weak, nonatomic) IBOutlet UIImageView *photoConfirmationImage;
 @property (nonatomic, strong) UIPanGestureRecognizer *panningRecognizer;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
 @property (weak, nonatomic) IBOutlet UIButton *saveToCameraRollButton;
@@ -63,6 +62,7 @@
     self.photoDescriptionField.textAlignment = NSTextAlignmentCenter;
     if (self.text && self.text.length > 0) {
         self.photoDescriptionField.text = self.text;
+        [self textViewDidChange:self.photoDescriptionField];
     }
     
     if (self.image) {
@@ -106,12 +106,6 @@
         self.photoConfirmButton.hidden = NO;
         self.photoDeleteButton.hidden = NO;
         self.saveToCameraRollButton.hidden = NO;
-        
-        [self.photoConfirmationImage.layer removeAllAnimations];
-        
-        CGRect newFrame = self.photoConfirmationImage.frame;
-        newFrame.origin.x = self.view.frame.size.width - newFrame.size.width;
-        self.photoConfirmationImage.frame = newFrame;
     }
 }
 
@@ -330,7 +324,7 @@
 - (void)keyboardWillShow:(NSNotification *)notification {
     self.photoDescriptionField.hidden = NO;
     self.photoDescriptionField.textAlignment = NSTextAlignmentLeft;
-    if (self.photoDescriptionField.frame.origin.y != self.view.frame.size.height - TEXT_FIELD_HEIGHT) {
+    if (self.photoDescriptionField.frame.origin.y != self.view.frame.size.height - self.photoDescriptionField.frame.size.height) {
         self.textPosition = (float)self.photoDescriptionField.frame.origin.y / self.view.frame.size.height;
     } else {
         self.textPosition = 0;
@@ -340,6 +334,14 @@
 
 - (void)keyboardWillHide:(NSNotification *)notification {
     self.photoDescriptionField.textAlignment = NSTextAlignmentCenter;
+    if (self.textPosition > 0) {
+        double yOrigin = self.textPosition * self.view.frame.size.height;
+        NSTimeInterval animationDuration = 0.25;
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:animationDuration];
+        self.photoDescriptionField.frame = CGRectMake(0, yOrigin, self.view.frame.size.width, self.photoDescriptionField.frame.size.height);
+        [UIView commitAnimations];
+    }
     if (self.photoDescriptionField.text.length == 0) {
         self.photoDescriptionField.hidden = YES;
         CGRect initialFrame = self.photoDescriptionField.frame;
@@ -350,14 +352,6 @@
 - (void)handleTapGesture {
     if ([self.photoDescriptionField isFirstResponder]) {
         [self.photoDescriptionField endEditing:YES];
-        if (self.textPosition > 0) {
-            double yOrigin = self.textPosition * self.view.frame.size.height;
-            NSTimeInterval animationDuration = 0.25;
-            [UIView beginAnimations:nil context:NULL];
-            [UIView setAnimationDuration:animationDuration];
-            self.photoDescriptionField.frame = CGRectMake(0, yOrigin, self.view.frame.size.width, TEXT_FIELD_HEIGHT);
-            [UIView commitAnimations];
-        }
     } else {
         [self.photoDescriptionField becomeFirstResponder];
     }
