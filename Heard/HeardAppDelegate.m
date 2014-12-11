@@ -149,7 +149,7 @@
     NSString *deviceTokenAsString = stringFromDeviceTokenData(devToken);
     
     // Send push token
-    [ApiUtils updatePushToken:deviceTokenAsString success:nil failure:nil];
+//    [ApiUtils updatePushToken:deviceTokenAsString success:nil failure:nil];
     
     // Update stats
     if ([SessionUtils isSignedIn]) {

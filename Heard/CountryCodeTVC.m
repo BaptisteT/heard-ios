@@ -84,7 +84,6 @@
     NSString *country = [sectionCountries objectAtIndex:indexPath.row];
     
     [self.delegate updateCountryName:country code:[self.countryToCodes objectForKey:country][0] letterCode:[self.countryToCodes objectForKey:country][1]];
-    
 }
 
 - (void)setCountriesAndCodes

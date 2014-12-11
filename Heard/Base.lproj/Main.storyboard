@@ -249,7 +249,6 @@
                         <outlet property="countryCodeButton" destination="iLN-HP-La6" id="h80-nZ-09e"/>
                         <outlet property="countryNameLabel" destination="dpK-W9-QZe" id="CaS-RC-fYR"/>
                         <outlet property="phoneTextField" destination="bBX-6A-nTD" id="cKV-T1-Q3R"/>
-                        <outlet property="textFieldContainer" destination="tA4-ef-24M" id="0sS-wK-HBO"/>
                         <outlet property="titleLabel" destination="Dgq-7K-H9m" id="P0h-Fe-P5m"/>
                         <outlet property="tutoLabel" destination="m9M-i9-amS" id="e1H-VB-VwR"/>
                         <outlet property="validationButton" destination="kGE-SY-eIr" id="5iQ-j0-Krs"/>
@@ -2029,7 +2028,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="xdp-at-Nje"/>
+        <segue reference="6db-EV-Dew"/>
         <segue reference="lXU-Fa-FA3"/>
-        <segue reference="Zmq-7e-32f"/>
     </inferredMetricsTieBreakers>
 </document>

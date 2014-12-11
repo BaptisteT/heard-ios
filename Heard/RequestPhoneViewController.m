@@ -25,7 +25,6 @@
 
 @interface RequestPhoneViewController ()
 
-@property (weak, nonatomic) IBOutlet UIView *textFieldContainer;
 @property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
 @property (weak, nonatomic) IBOutlet UIButton *countryCodeButton;
 @property (nonatomic, strong) NSString *decimalPhoneNumber;
