@@ -430,8 +430,6 @@
 }
 
 - (void)navigateToCameraControllerWithPrefill:(BOOL)flag {
-    // todo BT
-    // Check access has not been denied
     [self performSegueWithIdentifier:@"Camera From Dashboard Segue" sender:flag ? @"ok" : nil];
     self.emojiContainer.hidden = YES;
 }
