@@ -371,6 +371,7 @@
 		0BE8CD691A28056500E506F7 /* emoji-1f60a.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0BE8CD671A28056500E506F7 /* emoji-1f60a.mp3 */; };
 		0BF97B2019CA6A4E00FFA338 /* PushNoAnimationSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BF97B1F19CA6A4E00FFA338 /* PushNoAnimationSegue.m */; };
 		0BF97B2119CA6A4E00FFA338 /* PushNoAnimationSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BF97B1F19CA6A4E00FFA338 /* PushNoAnimationSegue.m */; };
+		3C03B0391A5E83F900E8EE90 /* GSS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C03B0381A5E83F900E8EE90 /* GSS.framework */; };
 		3C06C3A019659C2400B8D70C /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C06C39F19659C2400B8D70C /* MediaPlayer.framework */; };
 		3C0D0061195C5E500058A0E0 /* AudioUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D0060195C5E500058A0E0 /* AudioUtils.m */; };
 		3C0D0064196330E40058A0E0 /* ContactUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D0063196330E40058A0E0 /* ContactUtils.m */; };
@@ -651,6 +652,7 @@
 		0BE8CD671A28056500E506F7 /* emoji-1f60a.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "emoji-1f60a.mp3"; sourceTree = "<group>"; };
 		0BF97B1E19CA6A4E00FFA338 /* PushNoAnimationSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNoAnimationSegue.h; sourceTree = "<group>"; };
 		0BF97B1F19CA6A4E00FFA338 /* PushNoAnimationSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNoAnimationSegue.m; sourceTree = "<group>"; };
+		3C03B0381A5E83F900E8EE90 /* GSS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GSS.framework; path = System/Library/Frameworks/GSS.framework; sourceTree = SDKROOT; };
 		3C06C39F19659C2400B8D70C /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		3C0D005F195C5E500058A0E0 /* AudioUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioUtils.h; sourceTree = "<group>"; };
 		3C0D0060195C5E500058A0E0 /* AudioUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioUtils.m; sourceTree = "<group>"; };
@@ -742,6 +744,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BD758C21950F91B00CF0D85 /* CoreGraphics.framework in Frameworks */,
+				3C03B0391A5E83F900E8EE90 /* GSS.framework in Frameworks */,
 				0B9EC33E19C9255300F520B8 /* Security.framework in Frameworks */,
 				0B9EC33A19C9253400F520B8 /* SystemConfiguration.framework in Frameworks */,
 				3C06C3A019659C2400B8D70C /* MediaPlayer.framework in Frameworks */,
@@ -754,7 +758,6 @@
 				3C1D54AF19E8564E00B3AE8B /* FacebookSDK.framework in Frameworks */,
 				0B58BAFE1954B47700E9FF70 /* AddressBookUI.framework in Frameworks */,
 				0BDF01071A0C173E000B4EF5 /* Fabric.framework in Frameworks */,
-				0BD758C21950F91B00CF0D85 /* CoreGraphics.framework in Frameworks */,
 				0BD758C41950F91B00CF0D85 /* UIKit.framework in Frameworks */,
 				0BD758C01950F91B00CF0D85 /* Foundation.framework in Frameworks */,
 			);
@@ -992,6 +995,7 @@
 		0BD758BE1950F91B00CF0D85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3C03B0381A5E83F900E8EE90 /* GSS.framework */,
 				0BDF01031A0C173E000B4EF5 /* Crashlytics.framework */,
 				0BDF01041A0C173E000B4EF5 /* Fabric.framework */,
 				3C1D54AE19E8564E00B3AE8B /* FacebookSDK.framework */,
@@ -1347,7 +1351,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = Heard;
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = streetshout;
 				TargetAttributes = {
 					0B72EEA0196C672F00AC5A01 = {
@@ -1848,6 +1852,7 @@
 					"$(PROJECT_DIR)/Heard/Flurry",
 				);
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.steetshout.HeardStag4;
 				PRODUCT_NAME = WavedStaging;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -1877,6 +1882,7 @@
 					"$(PROJECT_DIR)/Heard/Flurry",
 				);
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.steetshout.HeardStag4;
 				PRODUCT_NAME = WavedStaging;
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -1902,6 +1908,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer: Bastien Beurier (63863BWF5M)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Bastien Beurier (63863BWF5M)";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1981,6 +1988,7 @@
 					"$(PROJECT_DIR)/FacebookSDK.framework/Versions/A",
 				);
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.streetshout.Waved;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "5fcb40b2-ba53-4aaf-bdc2-21ee9d31de68";
 				WRAPPER_EXTENSION = app;
@@ -2012,6 +2020,7 @@
 					"$(PROJECT_DIR)/FacebookSDK.framework/Versions/A",
 				);
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.streetshout.Waved;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "5fcb40b2-ba53-4aaf-bdc2-21ee9d31de68";
 				WRAPPER_EXTENSION = app;

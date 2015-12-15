@@ -189,7 +189,7 @@
 
 - (void)setDiscussionState:(NSInteger)discussionState animated:(BOOL)animated
 {
-    if (_discussionState == discussionState && !discussionState == UNREAD_STATE)
+    if (_discussionState == discussionState && !(discussionState == UNREAD_STATE))
         return;
 
     _discussionState = discussionState;
@@ -786,7 +786,6 @@
     rotationAnimation.toValue = [NSNumber numberWithFloat:2*M_PI];
     rotationAnimation.duration = 0.7;
     rotationAnimation.repeatCount = INFINITY;
-    
     [self.loadingCircleShape addAnimation:rotationAnimation forKey:@"indeterminateAnimation"];
 }
 

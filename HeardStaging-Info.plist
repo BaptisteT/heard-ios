@@ -13,7 +13,7 @@
 	<key>CFBundleIcons~ipad</key>
 	<dict/>
 	<key>CFBundleIdentifier</key>
-	<string>com.steetshout.HeardStag4</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -61,5 +61,9 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>com.apple.springboard.launchapplications</key>
+	<string>YES</string>
+	<key>com.apple.springboard.ring-vibrate-access</key>
+	<string>YES</string>
 </dict>
 </plist>
